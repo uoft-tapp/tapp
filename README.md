@@ -29,8 +29,6 @@ To get into an interactive shell of any docker image, do `docker run -it <image_
 To keep the Gemfile.lock synced up with what we have on our host machine, run `docker-compose run <image> bundle install` followed by `docker-compose up --build`.
   Example: `docker-compose run tapp bundle install`.
 
-## Known issues
-GWu: Upon `docker-compose up --build`, the postgres messages show up, but not for our rails app. It's not until I hit `localhost:3000` that the messages pop up. Point is that I can't seem to know when rails goes up, unless I just assume that it's always up.
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
