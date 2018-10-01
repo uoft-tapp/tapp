@@ -1,36 +1,26 @@
-# README
+# TAPP
+TA application, assignment, and matching.
 
-## Local Installation:
-To start, we need `rvm` to install ruby. For Ubuntu, follow the instructions here: `https://github.com/rvm/ubuntu_rvm`
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. The entire application is Dockerized, using Ruby 2.5.1 and a Postgres database.
 
-Then, with `rvm`, get ruby version 2.4.1 with `rvm install ruby-2.4.1`. To make sure you're always using version 2.4.1 if you have multiple versions of ruby, please do `echo 2.4.1 > .ruby-version`.
+### Prerequisties
 
-Next is the bundler for our Gemfile. Install it with `gem install bundler`.
+1. [Docker](https://docs.docker.com/install/#supported-platforms)
+2. For Linux users only, [Docker Compose](https://docs.docker.com/compose/install/)
 
-We'll need Postgres in order to run `bundle install`, so we install Postgres
-Now for our database, we use Postgres version 10.5.
-
-To install on Ubuntu, run
+### Running in a Docker Container
+Clone this repo, navigate into the cloned directory, and run 
 ```
-sudo apt-get install postgresql
-sudo apt-get install libpq-dev
+docker-compose-up
 ```
 
-For Mac, look [here](https://wikimatze.de/installing-postgresql-gem-under-ubuntu-and-mac/)
+This will launch two containers: a rails app, and a postgres database. Access the rails app by navigating to `http://localhost:3000`
 
-Once that finishes, run `bundle install`.
-
-## Running Locally
-Do `rails server -p 3000`. You can access the service with `http://localhost:3000`
-
-## Docker installation
-Follow the instructions for installing docker onto your OS [here](https://docs.docker.com/install/#supported-platforms)
-
-## Running in a Docker Container
-Build the image first with `docker build`
-
-Then, once you have the image, run `docker-compose up`, and you should have a running version of the rails app.
-Access it with `http://localhost:3000`
+If you have an existing image on your machine that needs to be updated, run
+```
+docker-compose-up --build
+```
 
 ## Playbook
 To get into an interactive shell of any docker image, do `docker run -it <image_name> /bin/sh` or something like that
