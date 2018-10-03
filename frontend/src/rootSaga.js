@@ -1,11 +1,6 @@
-import { delay } from "redux-saga"
-import { takeLatest, call } from "redux-saga/effects"
-
-function* customLogger(action) {
-    yield call(delay, 1000)
-    console.log("Action Type:", action.type)
-}
+import { all, fork } from "redux-saga/effects"
+import authSaga from "./modules/auth/saga"
 
 export default function* entrySaga() {
-    yield takeLatest("*", customLogger)
+    yield all([fork(authSaga)])
 }
