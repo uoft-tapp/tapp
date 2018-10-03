@@ -1,0 +1,577 @@
+/* global vars */
+:root {
+    --footer-height: 4vh; /* includes margins */
+    --navbar-height: 71px; /* includes margins */
+    --applicant-table-menu-height: calc(34px + 1vh);
+    --main-div-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+    --min-row-height: 32px;
+    --course-list-panel-width: calc(15em + 8px); /* includes margins */
+    --closed-panel-height: 47px; /* includes top margin */
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: var(--footer-height);
+}
+
+/* for footer (sticky bottom fixed-height footer) */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--footer-height) - 1vh);
+    background-color: #f5f5f5;
+    border: 1px solid #e7e7e7;
+    margin-top: 1vh;
+}
+
+footer div {
+    text-align: right;
+}
+
+footer div p {
+    margin: 0;
+}
+
+/* for alerts */
+#alert-container {
+    position: relative;
+    z-index: 5000;
+    margin-top: var(--navbar-height);
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+#alert-container .alert {
+    margin-bottom: 2px;
+    animation-name: fadeout;
+    animation-duration: 10s;
+}
+
+/* for load screen */
+#loader {
+    position: absolute;
+    left: calc(50vw - 100px) !important;
+    top: calc(50vh - 100px) !important;
+    width: 100px !important;
+    height: 100px !important;
+    margin: 0 !important;
+
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* applies to the first div after the navbar, which should be the main div container for the view, between the
+ * navbar and the footer */
+#root nav + div {
+    top: 0;
+    margin-top: var(--navbar-height);
+    position: absolute;
+    height: var(--main-div-height);
+    width: 100%;
+}
+
+/* for ApplicantTableMenu */
+.applicant-table-menu {
+    margin: 0;
+}
+
+/* for CourseMenu and CourseList */
+.course-list-panel {
+    width: 15em;
+    float: left;
+    margin: 0px 8px 0px 0px;
+    height: var(--main-div-height);
+}
+
+.course-list-panel .panel-heading {
+    padding: 5px 15px !important;
+    height: 30px;
+}
+
+/* for contents of CourseMenu and CourseList */
+.course-list-group {
+    height: calc(100% - 30px);
+    overflow: auto;
+}
+
+.course-list-group .list-group-item {
+    height: 2em;
+    padding: 3px;
+}
+
+.course-list-group .list-group-item:hover {
+    background: #eee;
+}
+
+.course-list-group .list-group-item a {
+    color: #333;
+}
+
+.course-list-group .list-group-item .course {
+    width: calc(100% - 15px);
+    float: left;
+}
+.course-list-group .list-group-item .course:hover {
+    text-decoration: none;
+}
+.course-list-group .list-group-item .spinning-icon {
+    display: none;
+}
+.course-list-group .list-group-item .email-icon,
+.course-list-group .list-group-item .spinning-icon {
+    float: right;
+    width: 15px;
+}
+
+/* for CourseList contents in Courses view */
+#courses-grid .course-list-group .list-group-item {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* for CourseMenu contents in ABC view */
+#abc-grid .course-list-group .list-group-item span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#abc-grid .course-list-group .list-group-item .course-code {
+    float: left;
+    max-width: 10em;
+}
+
+#abc-grid .course-list-group .list-group-item .counts {
+    float: right;
+    max-width: calc(100% - 10em);
+}
+
+/* for CourseForm in Courses view */
+#courses-grid #course-form {
+    width: calc(100% - var(--course-list-panel-width));
+    float: left;
+    height: var(--main-div-height);
+    overflow: auto;
+}
+
+.instructor-modal-opener {
+    color: #000;
+    margin-left: 10px;
+}
+
+#instructor-modal-utorid-row i {
+    font-size: 40px;
+    color: #aaa;
+    margin-right: 10px;
+    float: right;
+}
+#instructor-modal-utorid-row i:hover {
+    color: #666;
+}
+#instructor-modal-utorid-row i:active {
+    color: #333;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    opacity: 0.75;
+}
+
+.clickable:active {
+    opacity: 0.9;
+}
+
+/* for ApplicantTable in Assigned/Unassigned view */
+#unassigned-grid .table-container,
+#assigned-grid .table-container {
+    margin-top: 1vh;
+}
+
+#unassigned-grid .table-body,
+#assigned-grid .table-body {
+    /* note that this assumes that the header is at most one row high */
+    max-height: calc(
+        var(--main-div-height) - var(--applicant-table-menu-height) - var(--min-row-height)
+    );
+    overflow: auto;
+}
+
+/* for Applicant modal */
+#applicant-modal .modal-dialog {
+    width: 98vw;
+}
+
+#applicant-modal .modal-body {
+    max-height: calc(
+        98vh - 55px - 60px
+    ); /* modal header is 55px high, modal has 30px top and bottom margin */
+    overflow: auto;
+}
+
+/* for panels in Applicant view */
+#applicant-modal .panel {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+#applicant-modal .panel-heading {
+    padding: 5px 15px;
+}
+
+#applicant-modal .panel_table td + td {
+    padding-left: 40px;
+    margin-top: 0;
+    vertical-align: top;
+}
+
+#applicant-modal .panel_table td p {
+    margin-bottom: 0;
+}
+
+#applicant-modal .panel_table tr + tr > td {
+    padding-top: 5px;
+}
+
+/* for course panel container in ABC view */
+#abc-grid #course-panel-layout {
+    width: calc(100% - var(--course-list-panel-width));
+    float: left;
+    height: var(--main-div-height);
+}
+
+/* for CoursePanels in ABC view */
+#abc-grid .course-panel {
+    border-width: 1px;
+    float: left;
+    margin: 0;
+}
+
+#abc-grid .course-panel .panel-heading {
+    padding: 5px 15px !important;
+    height: 30px;
+    cursor: move;
+}
+
+#abc-grid .course-panel .panel-body {
+    overflow: auto;
+    height: calc(100% - 30px);
+}
+
+/* for "no selected courses" message in ABC view */
+#no-courses-well {
+    text-align: center;
+    color: #555;
+}
+
+/* for ApplicantTables*/
+.unassigned-table table,
+.assigned-table table {
+    margin: 0;
+}
+
+.table-container td,
+.table-container th {
+    word-break: break-all;
+}
+
+.highlightOnHover:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* for body of ApplicantTable of assigned applicants in ABC view */
+#abc-grid .assigned-table.table-body {
+    /* maximum height of 10 rows (assuming rows are all single-height */
+    max-height: calc(var(--min-row-height) * 10);
+    overflow: auto;
+    margin-bottom: 1vh;
+}
+
+/* for container of ApplicantTable of unassigned applicants in ABC view */
+#abc-grid .unassigned-table.table-container {
+    margin-top: 1vh;
+}
+
+/* for CourseForm */
+.course-panel .fa-envelope-o {
+    float: left;
+}
+#courses-grid {
+    --text-input-height: 30px;
+    --sep-width: 10px; /* width of margin between columns */
+    --col-1-width: 220px; /* immutable course information */
+    --col-2-4-width: 80px; /* numerical field labels */
+    --col-3-5-width: 60px; /* numerical fields */
+    --col-6-width: 140px; /* date fields */
+    --col-7-width: 240px; /* instructor form */
+}
+
+.form_table {
+    width: 100%;
+}
+.form_table td {
+    vertical-align: top;
+}
+.form_table .course {
+    font-weight: bold;
+}
+/* margin between text boxes in the first five columns */
+.form_table .col-1 p + p,
+.form_table .col-2 p + p,
+.form_table .col-4 p + p,
+.form_table .col-3 form + form,
+.form_table .col-5 form + form {
+    margin-top: 5px;
+}
+
+/* left padding for all but the left column */
+.form_table td + td {
+    padding-left: var(--sep-width);
+}
+
+.form_table p {
+    margin: 0;
+}
+
+.form_table input {
+    width: 100%;
+    height: var(--text-input-height);
+}
+
+/* immutable course information */
+.form_table .col-1 {
+    width: var(--col-1-width);
+}
+
+/* numerical field labels */
+.form_table .col-2,
+.form_table .col-4 {
+    width: var(--col-2-4-width);
+}
+.form_table .col-2 p,
+.form_table .col-4 p {
+    height: var(--text-input-height);
+    line-height: var(--text-input-height);
+}
+.form_table .col-2 p b,
+.form_table .col-4 p b {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1em;
+}
+
+/* numerical fields */
+.form_table .col-3,
+.form_table .col-5 {
+    width: var(--col-3-5-width);
+}
+
+/* date fields */
+.form_table .col-6,
+.form_table .col-6 input {
+    width: var(--col-6-width);
+}
+
+.form_table .col-7 {
+    width: var(--col-7-width);
+}
+
+/* instructor form */
+.instructor_form {
+    border: #ccc 1px solid;
+    height: 80px;
+    overflow-y: auto;
+}
+.instructor_form td {
+    border: red 1px solid;
+    float: left;
+    padding: 0;
+    border-collapse: collapse;
+    white-space: nowrap;
+    width: auto !important;
+}
+.instructor_form input[type="text"] {
+    border: none;
+    float: left;
+    padding: 0 2px;
+    vertical-align: text-bottom;
+}
+.instructor_form input[type="text"]:focus {
+    outline: 0;
+}
+.instructor_form div {
+    width: 100% !important;
+    min-height: calc(100% - 2px);
+    float: left;
+}
+.instructor_form button {
+    background: none;
+    border: none;
+}
+
+/* last 3 columns */
+.form_table textarea {
+    width: 100%;
+    height: 80px;
+    float: left;
+    resize: none;
+}
+
+/* for summary view */
+#summary-grid .panel-group {
+    max-height: var(--main-div-height);
+    margin-bottom: 0;
+}
+
+#summary-grid .panel {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+/* for utilities panel in summary view */
+#summary-grid #utils {
+    display: flex;
+}
+
+#summary-grid #utils .panel-body {
+    width: 100%;
+    padding: 0;
+}
+
+#summary-grid #utils .btn {
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    border: 0;
+}
+
+#summary-grid #utils .divider {
+    width: 0;
+    height: 0;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    border-left: 30px solid #e3e3e3;
+    float: left;
+    margin-right: 2vw;
+}
+
+#summary-grid #utils form {
+    padding: 12px 0;
+}
+
+#summary-grid #utils input {
+    display: inline;
+}
+
+#summary-grid #utils #import-form-container,
+#summary-grid #utils #export-form-container {
+    height: 60px;
+    width: calc(100% - 60px * 3 - 1vw);
+    float: right;
+
+    display: none;
+}
+
+#summary-grid #utils #year {
+    width: 80px;
+}
+
+/* for statistics panel in summary view */
+#summary-grid #stats .panel-heading {
+    height: 40px;
+}
+
+#summary-grid #stats .panel-body {
+    /* we subtract the height of the utilities panel, the margin below it, and the stats panel header */
+    max-height: calc(var(--main-div-height) - 60px - 10px - 40px);
+    overflow: auto;
+}
+
+#summary-grid #gen-stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#summary-grid #gen-stats span {
+    margin: 0;
+}
+
+#summary-grid #gen-stats .divider {
+    font-size: 40px;
+}
+
+#summary-grid #gen-stats h2 {
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+#summary-grid #per-course {
+    margin-bottom: 0;
+}
+.info-button {
+    padding: 0;
+    border: none;
+    background: none;
+    outline: 0;
+}
+#help {
+    top: 76px !important;
+}
+#help .popover-content {
+    padding: 2px 12px 2px 2px !important;
+    width: 300px;
+    height: 400px;
+}
+#help .popover-content pre {
+    width: calc(100% - 17px);
+    height: 100%;
+    resize: none;
+    outline: 0;
+    border: none;
+    background: none;
+    overflow-y: auto;
+    cursor: default;
+}
+#help .arrow {
+    top: 20px !important;
+}
+#help .arrow::after {
+    border-right-color: #f7f7f7 !important;
+}
+
+#app-drop-down,
+#app-drop-down li a {
+    list-style: none;
+    text-decoration: none;
+    color: #555;
+}

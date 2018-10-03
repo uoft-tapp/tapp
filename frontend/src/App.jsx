@@ -1,20 +1,32 @@
 import React from "react"
 import { Switch } from "react-router-dom"
+import moment from "moment"
+import { openRoutes, privateRoutes } from "./routes"
 import OpenRoute from "./modules/auth/components/OpenRoute"
 import PrivateRoute from "./modules/auth/components/PrivateRoute"
-import { openRoutes, privateRoutes } from "./routes"
+import Header from "./modules/navigation/components/Header"
 
 class App extends React.Component {
     render() {
         return (
-            <Switch>
-                {openRoutes.map(route => (
-                    <OpenRoute key={route.path} exact {...route} />
-                ))}
-                {privateRoutes.map(route => (
-                    <PrivateRoute key={route.path} exact {...route} />
-                ))}
-            </Switch>
+            <React.Fragment>
+                <Header />
+                <Switch>
+                    {openRoutes.map(route => (
+                        <OpenRoute key={route.path} exact {...route} />
+                    ))}
+                    {privateRoutes.map(route => (
+                        <PrivateRoute key={route.path} exact {...route} />
+                    ))}
+                </Switch>
+                <footer>
+                    <div className="container-fluid">
+                        <p className="text-muted">
+                            University of Toronto, {moment().format("YYYY")}
+                        </p>
+                    </div>
+                </footer>
+            </React.Fragment>
         )
     }
 }
