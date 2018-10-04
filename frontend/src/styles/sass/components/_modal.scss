@@ -1,0 +1,56 @@
+// Preceding underscore to differentiate with Bootstrap modal class
+._modal {
+  &.applicant {
+    .modal-dialog {
+      width: 98vw;
+    }
+
+    .modal-body {
+      max-height: calc(
+              98vh - 55px - 60px
+      ); /* modal header is 55px high, modal has 30px top and bottom margin */
+      overflow: auto;
+    }
+
+    /* for panels in Applicant view */
+    .panel {
+      margin-bottom: 0;
+      width: 100%;
+    }
+
+    .panel-heading {
+      padding: 5px 15px;
+    }
+
+    .panel_table td + td {
+      padding-left: 40px;
+      margin-top: 0;
+      vertical-align: top;
+    }
+
+    .panel_table td p {
+      margin-bottom: 0;
+    }
+
+    .panel_table tr + tr > td {
+      padding-top: 5px;
+    }
+  }
+
+  &.instructor {
+    i {
+      font-size: 40px;
+      color: #aaa;
+      margin-right: 10px;
+      float: right;
+
+      &:hover {
+        color: #666;
+      }
+
+      &:active {
+        color: #333;
+      }
+    }
+  }
+}

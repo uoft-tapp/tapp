@@ -1,16 +1,10 @@
-import Welcome from "./modules/welcome/components/Welcome"
-import Private from "./modules/private/components/Private"
+import Positions from "./modules/positions/components/Positions"
 
 export const openRoutes = [
     {
         path: "/",
-        component: Welcome
+        component: Positions
     }
 ]
 
-export const privateRoutes = [
-    {
-        path: "/private",
-        component: Private
-    }
-]
+export const privateRoutes = []

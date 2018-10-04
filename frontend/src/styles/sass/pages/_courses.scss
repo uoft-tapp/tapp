@@ -1,0 +1,164 @@
+/* for CourseList contents in Courses view */
+#courses-grid .course-list-group .list-group-item {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* for CourseForm in Courses view */
+#courses-grid #course-form {
+  width: calc(100% - #{$course-list-panel-width});
+  float: left;
+  height: $main-div-height;
+  overflow: auto;
+}
+
+#course-form .expand-button {
+  border: none;
+  background-color: inherit;
+  padding: 5px 5px 0px 5px;
+  margin: 10px 10px 0px 10px;
+}
+
+/* for CourseForm */
+.course-panel .fa-envelope-o{
+  float: left;
+}
+
+.form-table {
+  $text-input-height: 30px;
+  $sep-width:         10px; /* width of margin between columns */
+  $col-1-width:       220px; /* immutable course information */
+  $col-2-4-width:     80px; /* numerical field labels */
+  $col-3-5-width:     60px; /* numerical fields */
+  $col-6-width:       140px; /* date fields */
+  $col-7-width:       240px; /* instructor form */
+
+  width: 100%;
+  margin-top: 10px;
+
+  td {
+    vertical-align: top;
+  }
+
+  .course {
+    font-weight: bold;
+  }
+
+  /* margin between text boxes in the first five columns */
+  .col-1 p + p,
+  .col-2 p + p,
+  .col-4 p + p,
+  .col-3 form + form,
+  .col-5 form + form {
+    margin-top: 5px;
+  }
+
+  .col-half {
+    width: 50%;
+  }
+
+  .long-text {
+    height: 250px;
+  }
+
+  /* left padding for all but the left column */
+  td + td {
+    padding-left: $sep-width;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  input {
+    width: 100%;
+    height: $text-input-height;
+  }
+
+  /* immutable course information */
+  .col-1 {
+    width: $col-1-width;
+  }
+
+  /* numerical field labels */
+  .col-2,
+  .col-4 {
+    width: $col-2-4-width;
+  }
+
+  .col-2 p,
+  .col-4 p {
+    height: $text-input-height;
+    line-height: $text-input-height;
+  }
+
+  .col-2 p b,
+  .col-4 p b {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1em;
+  }
+
+  /* numerical fields */
+  .col-3,
+  .col-5 {
+    width: $col-3-5-width;
+  }
+
+  /* date fields */
+  .col-6,
+  .col-6 input {
+    width: $col-6-width;
+  }
+
+  .col-7 {
+    width: $col-7-width;
+  }
+
+  /* last 3 columns */
+  textarea {
+    width: 100%;
+    height: 80px;
+    float: left;
+    resize: none;
+  }
+}
+
+.instructor-form {
+  border: #ccc 1px solid;
+  height: 80px;
+  overflow-y: auto;
+
+  td {
+    border: red 1px solid;
+    float: left;
+    padding: 0;
+    border-collapse: collapse;
+    white-space: nowrap;
+    width: auto !important;
+  }
+
+  input[type="text"] {
+    border: none;
+    float: left;
+    padding: 0 2px;
+    vertical-align: text-bottom;
+  }
+
+  input[type="text"]:focus {
+    outline: 0;
+  }
+
+  div {
+    width: 100% !important;
+    min-height: calc(100% - 2px);
+    float: left;
+  }
+
+  button {
+    background: none;
+    border: none;
+  }
+}

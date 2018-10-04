@@ -1,0 +1,21 @@
+.table-container {
+  table {
+    margin: 0;
+  }
+
+  &.assigned {
+    .table-body {
+      max-height: calc(#{$min-row-height} * 10);
+      overflow: auto;
+      margin-bottom: 1vh;
+    }
+  }
+
+  &.unassigned {
+    margin-top: 1vh;
+  }
+
+  td, th {
+    word-break: break-all;
+  }
+}

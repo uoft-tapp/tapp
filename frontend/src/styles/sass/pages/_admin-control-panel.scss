@@ -1,0 +1,77 @@
+#offers-grid {
+  #dropdown-menu {
+    margin-bottom: 1vh;
+  }
+
+  .table-menu > .btn-group:first-child {
+    margin-left: 3vw;
+  }
+
+  table {
+    margin: 0;
+  }
+
+  /* for Table in admin view */
+  .sessions ~ .table-container .table-body {
+    /* note that this assumes that the header is at most two rows high */
+    max-height: calc(
+            #{$main-div-height} - #{$table-menu-height} - #{$min-row-height} -
+            #{$sessions-height} - 25px
+    );
+  }
+
+  .table-body {
+    /* note that this assumes that the header is at most two rows high */
+    max-height: calc(
+            #{$main-div-height} - #{$table-menu-height} - #{$min-row-height} - 25px
+    );
+    overflow: auto;
+  }
+
+  .table-container {
+    th {
+      text-overflow: ellipsis;
+    }
+
+    td, th {
+      word-break: break-all;
+    }
+  }
+
+  /* sessions menu used by hr_assistant */
+  #dropdown-menu #sessions {
+    float: left;
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  .sessions {
+    margin: 0 0 1.5vh 0;
+
+    .panel-body {
+      height: calc(35px + 10px + 10px);
+      padding: 10px 15px;
+    }
+
+    #pay {
+      margin-left: 1vw;
+
+      input {
+        width: 100px;
+      }
+    }
+  }
+
+  #table-total {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+}
+
+#offer-note-popover .popover-content {
+  text-align: right;
+}
+
+#offer-note {
+  max-width: calc(276px - 15px * 2); /* don't allow the text area to be wider than the popover */
+}

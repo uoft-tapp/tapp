@@ -1,0 +1,53 @@
+/* for course panel container in ABC view */
+#abc-grid {
+  #course-panel-layout {
+    width: calc(100% - #{$course-list-panel-width});
+    float: left;
+    height: $main-div-height;
+  }
+
+  /* for CoursePanels in ABC view */
+  .course-panel {
+    border-width: 1px;
+    float: left;
+    margin: 0;
+
+    .panel-heading {
+      padding: 5px 15px !important;
+      height: 30px;
+      cursor: move;
+    }
+
+    .panel-body {
+      overflow: auto;
+      height: calc(100% - 30px);
+    }
+  }
+
+  /* for CourseMenu contents in ABC view */
+  .course-list-group {
+    .list-group-item {
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .course-code {
+        float: left;
+        max-width: 10em;
+      }
+
+      .counts {
+        float: right;
+        max-width: calc(100% - 10em);
+      }
+    }
+  }
+}
+
+/* for "no selected courses" message in ABC view */
+#no-courses-well {
+  text-align: center;
+  color: #555;
+}

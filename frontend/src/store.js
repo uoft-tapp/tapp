@@ -9,7 +9,8 @@ import rootSaga from "./rootSaga"
 const configureStore = () => {
     const persistConfig = {
         key: "root",
-        storage
+        storage,
+        whitelist: ["auth"]
     }
     const persistedReducer = persistReducer(persistConfig, rootReducer)
     const sagaMiddleware = createSagaMiddleware()

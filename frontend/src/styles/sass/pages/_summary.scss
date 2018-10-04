@@ -1,0 +1,125 @@
+/* for summary view */
+#summary-grid {
+  .panel-group {
+    max-height: $main-div-height;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .panel {
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  /* for utilities panel in summary view */
+  #utils {
+    display: flex;
+
+    .panel-body {
+      width: 100%;
+      padding: 0;
+    }
+
+    .btn {
+      height: 60px;
+      width: 60px;
+      padding: 0;
+      border: 0;
+    }
+
+    .divider {
+      width: 0;
+      height: 0;
+      border-top: 30px solid transparent;
+      border-bottom: 30px solid transparent;
+      border-left: 30px solid #e3e3e3;
+      float: left;
+      margin-right: 2vw;
+    }
+
+    form {
+      padding: 12px 0;
+    }
+
+    input {
+      display: inline;
+    }
+
+    #import-form-container,
+    #export-form-container {
+      height: 60px;
+      width: calc(100% - 60px * 3 - 1vw);
+      float: right;
+      display: none;
+    }
+
+    #year {
+      width: 80px;
+    }
+  }
+
+  /* for statistics panel in summary view */
+  #stats {
+    .panel-heading {
+      height: 40px;
+    }
+
+    .panel-body {
+      /* we subtract the height of the utilities panel, the margin below it, and the stats panel header */
+      max-height: calc(#{$main-div-height} - 60px - 10px - 40px);
+      overflow: auto;
+    }
+  }
+
+  #gen-stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    span {
+      margin: 0;
+    }
+
+    .divider {
+      font-size: 40px;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+  }
+
+  #per-course {
+    margin-bottom: 0;
+  }
+}
+
+#help {
+  top: 76px !important;
+
+  .popover-content {
+    padding: 2px 12px 2px 2px !important;
+    width: 300px;
+    height: 400px;
+  }
+
+  .popover-content pre {
+    width: calc(100% - 17px);
+    height: 100%;
+    resize: none;
+    outline: 0;
+    border: none;
+    background: none;
+    overflow-y: auto;
+    cursor: default;
+  }
+
+  .arrow {
+    top: 20px !important;
+
+    &::after {
+      border-right-color: #f7f7f7 !important;
+    }
+  }
+}
