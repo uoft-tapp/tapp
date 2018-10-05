@@ -1,5 +1,5 @@
 import { createReducer } from "redux-create-reducer"
-import { UPDATE_POSITION_VALUE } from "./constants"
+import { UPDATE_POSITION_VALUE_SUCCESS } from "./constants"
 
 const initialState = [
     {
@@ -31,7 +31,7 @@ const initialState = [
 ]
 
 const reducer = createReducer(initialState, {
-    [UPDATE_POSITION_VALUE]: (state, { payload: { positionId, fieldId, value } }) =>
+    [UPDATE_POSITION_VALUE_SUCCESS]: (state, { payload: { positionId, fieldId, value } }) =>
         state.map(
             position => (position.id === positionId ? { ...position, [fieldId]: value } : position)
         )
