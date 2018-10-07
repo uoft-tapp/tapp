@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -14,7 +16,7 @@ module Tapp
     # Create a new logger that writes to stdout.
     logger = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
-    config.log_tags = [:subdomain, :uuid]
+    config.log_tags = %i[subdomain uuid]
     config.logger = ActiveSupport::TaggedLogging.new(logger)
 
     # Settings in config/environments/* take precedence over those specified here.

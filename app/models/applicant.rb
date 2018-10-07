@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class Applicant < ApplicationRecord
   has_many :preferences
   has_many :positions, through: :preferences
-
 end
 
 # == Schema Information
