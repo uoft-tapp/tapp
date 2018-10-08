@@ -29,6 +29,15 @@ docker-compose up --build
 To annotate, please run `bundle exec annotate -p bottom`. Make sure you're in
 the docker container.
 
+## Rubocop
+We use rubocop for linting and code styling. We have a pre-commit hook ready
+that everytime you commit something, rubocop will automatically run on your
+staged file to check for styling issues. The configuration is in `.rubocop.yml`
+and you can add more (or change) or current styling with configurations found
+on the [rubocop](https://rubocop.readthedocs.io/en/latest/) documentation.  To
+run it manually, just call `rubocop` or `bundle exec rubocop`.
+
+
 ## Playbook
 To get into an interactive shell of any docker image, do `docker exec -it
 <image_name> /bin/sh` Example: `docker exec -it tapp_tapp /bin/sh` will allow
@@ -47,7 +56,9 @@ If you need to modify a migration file, please do the following within the docke
 Modify your file
 `rake db:migrate`
 
-It is sometimes possible that you get a `tapp user not created` issue when creating the db. To resolve this, remove the `db` folder from the `tmp` directory
+It is sometimes possible that you get a `tapp user not created` issue when
+creating the db. To resolve this, remove the `db` folder from the `tmp`
+directory
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
