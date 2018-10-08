@@ -1,10 +1,9 @@
+# frozen_string_literal: true
+
 class CreateInstructorsAndPositions < ActiveRecord::Migration[5.1]
   def change
-    create_table :instructors do |t|
+    create_table :instructors, &:timestamps
 
-      t.timestamps
-    end
-    
     create_table :instructors_positions do |t|
       t.belongs_to :instructor
       t.belongs_to :position
@@ -16,4 +15,3 @@ class CreateInstructorsAndPositions < ActiveRecord::Migration[5.1]
     end
   end
 end
-
