@@ -28,7 +28,8 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.text "commentary"
     t.string "dept"
     t.integer "year_in_program"
-    t.string "full_time"
+    t.boolean "is_full_time"
+    t.boolean "is_grad"
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -52,19 +53,14 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "course_code"
-    t.boolean "open"
-    t.integer "campus_code"
     t.text "course_name"
     t.integer "current_enrolment"
     t.text "duties"
-    t.text "qualification"
+    t.text "qualifications"
     t.integer "hours"
-    t.integer "estimated_count"
-    t.integer "estimated"
     t.integer "cap_enrolment"
     t.integer "num_waitlisted"
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.integer "openings"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
 
@@ -83,6 +79,11 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.integer "year"
     t.string "semester"
     t.float "pay"
+    t.integer "round"
+    t.datetime "round_start"
+    t.datetime "round_end"
+    t.datetime "session_start"
+    t.datetime "session_end"
   end
 
 end

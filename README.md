@@ -25,6 +25,15 @@ If you have an existing image on your machine that needs to be updated, run
 docker-compose up --build
 ```
 
+### Setting up DB
+To create and setup your local development database, simply navigate into the rails container and run the rake task:
+```
+docker-compose exec tapp sh
+rake db:setup
+```
+
+This will create your local database, run all migrations, and populate the db with seed data.
+
 ## Annotations
 To annotate, please run `bundle exec annotate -p bottom`. Make sure you're in
 the docker container.

@@ -11,17 +11,18 @@ end
 # Table name: applicants
 #
 #  id              :bigint(8)        not null, primary key
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  utorid          :string
-#  student_number  :string
-#  first_name      :string
-#  last_name       :string
-#  email           :string
-#  phone           :string
 #  address         :text
 #  commentary      :text
 #  dept            :string
+#  email           :string
+#  first_name      :string
+#  is_full_time    :boolean
+#  is_grad         :boolean
+#  last_name       :string
+#  phone           :string
+#  student_number  :string
+#  utorid          :string
 #  year_in_program :integer
-#  full_time       :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
