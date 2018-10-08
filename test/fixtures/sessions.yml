@@ -14,10 +14,15 @@ two: {}
 #
 # Table name: sessions
 #
-#  id         :bigint(8)        not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  year       :integer
-#  semester   :string
-#  pay        :float
+#  id            :bigint(8)        not null, primary key
+#  pay           :float
+#  round         :integer
+#  round_end     :datetime
+#  round_start   :datetime
+#  semester      :string
+#  session_end   :datetime
+#  session_start :datetime
+#  year          :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #

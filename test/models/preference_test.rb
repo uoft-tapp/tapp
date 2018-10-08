@@ -11,6 +11,7 @@ end
 # Table name: preferences
 #
 #  id           :bigint(8)        not null, primary key
+#  priority     :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  applicant_id :bigint(8)

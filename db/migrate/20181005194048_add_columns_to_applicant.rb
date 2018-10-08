@@ -12,6 +12,7 @@ class AddColumnsToApplicant < ActiveRecord::Migration[5.1]
     add_column :applicants, :commentary, :text
     add_column :applicants, :dept, :string
     add_column :applicants, :year_in_program, :integer
-    add_column :applicants, :full_time, :string
+    add_column :applicants, :is_full_time, :boolean
+    add_column :applicants, :is_grad_student, :boolean
   end
 end
