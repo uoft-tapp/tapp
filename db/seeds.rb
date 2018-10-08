@@ -14,7 +14,7 @@ a = Applicant.create(
   address: '130 St. George Street',
   dept: 'Computer Science',
   year_in_program: 4,
-  is_grad: false,
+  is_grad_student: false,
   is_full_time: true
 )
 s = Session.create(

@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.string "dept"
     t.integer "year_in_program"
     t.boolean "is_full_time"
-    t.boolean "is_grad"
+    t.boolean "is_grad_student"
   end
 
   create_table "instructors", force: :cascade do |t|

@@ -17,7 +17,7 @@ end
 #  email           :string
 #  first_name      :string
 #  is_full_time    :boolean
-#  is_grad         :boolean
+#  is_grad_student :boolean
 #  last_name       :string
 #  phone           :string
 #  student_number  :string
