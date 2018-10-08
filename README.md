@@ -25,6 +25,9 @@ If you have an existing image on your machine that needs to be updated, run
 docker-compose up --build
 ```
 
+To view the STDOUT from a docker container of a running server, you can do
+`docker-compose logs -tf <image>`, like: `docker-compose logs -tf tapp`.
+
 ### Initializing DB
 To create and setup your local development database, simply navigate into the rails container and run the rake task:
 ```
