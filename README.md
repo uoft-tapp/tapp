@@ -46,6 +46,10 @@ and you can add more (or change) or current styling with configurations found
 on the [rubocop](https://rubocop.readthedocs.io/en/latest/) documentation.  To
 run it manually, just call `rubocop` or `bundle exec rubocop`.
 
+To set up a precommit-hook, please follow the instructions [here](http://gmodarelli.com/2015/01/code_reviews_rubocop_pre_commit/).
+Make sure you `chmod +x` on the new script for it to run. If you encounter
+errors such as `Please Install Rubocop`, make sure that Ruby and rubocop are
+installed locally. Ensure `bundle install` installs the rubocop gem.
 
 ## Playbook
 To get into an interactive shell of any docker image, do `docker exec -it
