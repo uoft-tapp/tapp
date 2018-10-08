@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,10 +12,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181005194520) do
-
+ActiveRecord::Schema.define(version: 20_181_005_194_520) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
   create_table "applicants", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -32,20 +33,20 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.boolean "is_grad_student"
   end
 
-  create_table "instructors", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "last_name"
-    t.string "first_name"
-    t.string "email"
-    t.string "utorid"
+  create_table 'instructors', force: :cascade do |t|
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'last_name'
+    t.string 'first_name'
+    t.string 'email'
+    t.string 'utorid'
   end
 
-  create_table "instructors_positions", force: :cascade do |t|
-    t.bigint "instructor_id"
-    t.bigint "position_id"
-    t.index ["instructor_id"], name: "index_instructors_positions_on_instructor_id"
-    t.index ["position_id"], name: "index_instructors_positions_on_position_id"
+  create_table 'instructors_positions', force: :cascade do |t|
+    t.bigint 'instructor_id'
+    t.bigint 'position_id'
+    t.index ['instructor_id'], name: 'index_instructors_positions_on_instructor_id'
+    t.index ['position_id'], name: 'index_instructors_positions_on_position_id'
   end
 
   create_table "positions", force: :cascade do |t|
@@ -64,13 +65,13 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
 
-  create_table "preferences", force: :cascade do |t|
-    t.bigint "applicant_id"
-    t.bigint "position_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["applicant_id"], name: "index_preferences_on_applicant_id"
-    t.index ["position_id"], name: "index_preferences_on_position_id"
+  create_table 'preferences', force: :cascade do |t|
+    t.bigint 'applicant_id'
+    t.bigint 'position_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['applicant_id'], name: 'index_preferences_on_applicant_id'
+    t.index ['position_id'], name: 'index_preferences_on_position_id'
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -84,6 +85,4 @@ ActiveRecord::Schema.define(version: 20181005194520) do
     t.datetime "round_end"
     t.datetime "session_start"
     t.datetime "session_end"
-  end
-
 end
