@@ -3,6 +3,9 @@
 # Class representing an instructor. An instructor can teach many positions.
 class Instructor < ApplicationRecord
   has_and_belongs_to_many :positions
+
+  validates_presence_of :last_name, :first_name, :utorid, :email
+  validates_uniqueness_of :utorid
 end
 
 # == Schema Information
