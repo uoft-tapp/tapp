@@ -41,7 +41,8 @@ p = Position.create(
 )
 Preference.create(
   position: p,
-  applicant: a
+  applicant: a,
+  priority: 1
 )
 i = Instructor.create(
   first_name: 'Paul',
