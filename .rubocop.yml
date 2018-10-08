@@ -4,6 +4,7 @@ AllCops:
     - 'db/**/*'
     - 'bin/**/*'
     - 'lib/{assets,tasks}/*'
+    - 'test/**/*'
 
 Metrics/LineLength:
   Max: 120

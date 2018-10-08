@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# This class represents a preference. It is a join between an applicant and a
+# position. An applicant "applies" to a position through preferences.
 class Preference < ApplicationRecord
   belongs_to :applicant
   belongs_to :position

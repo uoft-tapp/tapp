@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# A class representing an applicant. This holds information regarding a student. This class
+# has many preferences (a student can apply to many positions).
 class Applicant < ApplicationRecord
   has_many :preferences
   has_many :positions, through: :preferences
