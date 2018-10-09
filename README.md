@@ -71,25 +71,35 @@ and rubocop are installed locally, **not** just in a Docker container. Ensure
 [here](http://gmodarelli.com/2015/01/code_reviews_rubocop_pre_commit/).
 
 ## Playbook
+### Accessing Docker Images through a shell command
 To get into an interactive shell of any docker image, do `docker exec -it
 <image_name> /bin/sh` Example: `docker exec -it tapp_tapp /bin/sh` will allow
 you to move into a bash shell of the `tapp` application.  From there you can
 inspect the Gemfile, run `rake db:migrate` or open up a rails console.
 
+### Gemfile.lock sycnrhonization
 To keep the Gemfile.lock synced up with what we have on our host machine, run
 `docker-compose run <image> bundle install` followed by `docker-compose up
 --build`.  
 
 Example: `docker-compose run tapp bundle install`.
 
+### Migration modifications
 If you need to modify a migration file, please do the following within the
-docker image: `docker run -it <image_name> sh` `rake db:down VERSION=####`
-where the #### is the version you want to down from `rake db:migrate:status`.
-Modify your file `rake db:migrate`
+docker image: 
+```
+docker exec -it <image_name> sh 
 
+# Undo a specific version number
+rake db:down VERSION=####
+```
+where the #### is the version you want to down from `rake db:migrate:status`.
+Modify your database migration file, then run `rake db:migrate`
+
+### Database 'tapp user not created' error
 It is sometimes possible that you get a `tapp user not created` issue when
 creating the db. To resolve this, remove the `db` folder from the `tmp`
-directory
+directory, and then re-create everything with `rake db:setup`
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
