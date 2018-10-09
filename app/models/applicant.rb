@@ -5,6 +5,9 @@
 class Applicant < ApplicationRecord
   has_many :preferences
   has_many :positions, through: :preferences
+
+  validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
+  validates_uniqueness_of :student_number, :utorid
 end
 
 # == Schema Information
@@ -26,4 +29,9 @@ end
 #  year_in_program :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#
+# Indexes
+#
+#  index_applicants_on_student_number  (student_number) UNIQUE
+#  index_applicants_on_utorid          (utorid) UNIQUE
 #

@@ -2,13 +2,16 @@
 
 # A class representing a position. This encapsulates the idea of a "course". Students apply to many positions.
 # For example, a person who applies to Fall 2018, Round 1, CSC148, is applying to the CSC148 position.
-# This has many instructors, because multiple instructors can teach a course, and every session belongs
+# This has many instructors, because multiple instructors can teach a course, and every position belongs
 # to a session.
 class Position < ApplicationRecord
   has_and_belongs_to_many :instructors
   belongs_to :session
   has_many :preferences
   has_many :applicants, through: :preferences
+
+  validates_presence_of :course_code, :openings, :session
+  validates :openings, numericality: { only_integer: true }
 end
 
 # == Schema Information

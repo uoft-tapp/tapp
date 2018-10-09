@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181008185839) do
+ActiveRecord::Schema.define(version: 20181009192639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20181008185839) do
     t.integer "year_in_program"
     t.boolean "is_full_time"
     t.boolean "is_grad_student"
+    t.index ["student_number"], name: "index_applicants_on_student_number", unique: true
+    t.index ["utorid"], name: "index_applicants_on_utorid", unique: true
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -39,6 +41,7 @@ ActiveRecord::Schema.define(version: 20181008185839) do
     t.string "first_name"
     t.string "email"
     t.string "utorid"
+    t.index ["utorid"], name: "index_instructors_on_utorid", unique: true
   end
 
   create_table "instructors_positions", force: :cascade do |t|
@@ -85,6 +88,7 @@ ActiveRecord::Schema.define(version: 20181008185839) do
     t.datetime "round_end"
     t.datetime "session_start"
     t.datetime "session_end"
+    t.index ["year", "round"], name: "index_sessions_on_year_and_round", unique: true
   end
 
 end
