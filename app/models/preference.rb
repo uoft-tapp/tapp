@@ -7,7 +7,7 @@ class Preference < ApplicationRecord
   belongs_to :position
 
   validates_presence_of :priority, :applicant, :position
-  validates :priority, numericality: { only_integer: true, less_than_or_equal_to: 3 }
+  validates :priority, numericality: { only_integer: true, less_than_or_equal_to: 3, greater_than: 0 }
 end
 
 # == Schema Information

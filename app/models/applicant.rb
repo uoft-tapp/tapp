@@ -30,3 +30,8 @@ end
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
+# Indexes
+#
+#  index_applicants_on_student_number  (student_number) UNIQUE
+#  index_applicants_on_utorid          (utorid) UNIQUE
+#

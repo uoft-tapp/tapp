@@ -11,7 +11,7 @@ class Session < ApplicationRecord
   validates_presence_of :round, :semester, :year
   # Every session has a unique semester, year, and round. IE "Fall 2018 round 1".
   validates :semester, uniqueness: { scope: %i[year round] }, inclusion: { in: semesters.keys }
-  validates :year, numericality: { only_integer: true }
+  validates :year, numericality: { only_integer: true, greater_than: 0 }
 end
 
 # == Schema Information
@@ -29,4 +29,8 @@ end
 #  year          :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#
+# Indexes
+#
+#  index_sessions_on_year_and_round  (year,round) UNIQUE
 #

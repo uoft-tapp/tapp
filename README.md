@@ -39,6 +39,15 @@ rake db:setup
 
 This will create your local database, run all migrations, and populate the db with seed data.
 
+To access the dockerized database, you can run:
+```
+docker exec -it tapp_db_1 sh
+
+# Once inside the db shell, access the database
+$ psql tapp_development tapp
+```
+From there you can make modifications and regular SQL operations as necessary.
+
 ## Annotations
 To annotate, please run `bundle exec annotate -p bottom`. Make sure you're in
 the docker container.
