@@ -1,0 +1,16 @@
+AllCops:
+  Exclude:
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'lib/{assets,tasks}/*'
+    - 'test/**/*'
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 100
+
+Style/ClassAndModuleChildren:
+  Enabled: false
