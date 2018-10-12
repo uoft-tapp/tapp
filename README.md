@@ -101,6 +101,9 @@ It is sometimes possible that you get a `tapp user not created` issue when
 creating the db. To resolve this, remove the `db` folder from the `tmp`
 directory, and then re-create everything with `rake db:setup`
 
+If `rake db:setup` fails, do `rake db:create` to create a new database from
+scratch and `rake db:migrate`.
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

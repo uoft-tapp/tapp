@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181009192639) do
+ActiveRecord::Schema.define(version: 20181012205916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20181009192639) do
   end
 
   create_table "positions", force: :cascade do |t|
-    t.bigint "session_id"
+    t.bigint "round_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "course_code"
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20181009192639) do
     t.integer "cap_enrolment"
     t.integer "num_waitlisted"
     t.integer "openings"
-    t.index ["session_id"], name: "index_positions_on_session_id"
+    t.index ["round_id"], name: "index_positions_on_round_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -77,18 +77,24 @@ ActiveRecord::Schema.define(version: 20181009192639) do
     t.index ["position_id"], name: "index_preferences_on_position_id"
   end
 
+  create_table "rounds", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "session_id"
+    t.index ["session_id"], name: "index_rounds_on_session_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "year"
     t.string "semester"
     t.float "pay"
-    t.integer "round"
-    t.datetime "round_start"
-    t.datetime "round_end"
     t.datetime "session_start"
     t.datetime "session_end"
-    t.index ["year", "round"], name: "index_sessions_on_year_and_round", unique: true
   end
 
 end

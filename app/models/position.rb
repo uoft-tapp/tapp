@@ -6,11 +6,11 @@
 # to a session.
 class Position < ApplicationRecord
   has_and_belongs_to_many :instructors
-  belongs_to :session
+  belongs_to :round
   has_many :preferences
   has_many :applicants, through: :preferences
 
-  validates_presence_of :course_code, :openings, :session
+  validates_presence_of :course_code, :openings, :round
   validates :openings, numericality: { only_integer: true }
 end
 
@@ -30,9 +30,9 @@ end
 #  qualifications    :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  session_id        :bigint(8)
+#  round_id          :bigint(8)
 #
 # Indexes
 #
-#  index_positions_on_session_id  (session_id)
+#  index_positions_on_round_id  (round_id)
 #

@@ -19,16 +19,19 @@ a = Applicant.create(
 )
 s = Session.create(
   year: 2018,
-  semester: 'Fall',
+  semester: 'fall',
   pay: 42.25,
-  round: 1,
   session_start: DateTime.new(2018, 9, 1),
   session_end: DateTime.new(2018, 12, 31),
-  round_start: DateTime.new(2018, 7, 10),
-  round_end: DateTime.new(2018, 8, 20)
+)
+r = Round.create(
+  number: 1,
+  start_date: DateTime.new(2018, 7, 10),
+  end_date: DateTime.new(2018, 8, 20),
+  session: s
 )
 p = Position.create(
-  session: s,
+  round: r,
   course_code: 'CSC148H1F',
   course_name: 'Introduction to Computer Science',
   current_enrolment: 500,
@@ -50,4 +53,6 @@ i = Instructor.create(
   email: 'paul.brown.sample@utoronto.ca',
   utorid: 'brownpau'
 )
+
+s.rounds << r
 p.instructors << i
