@@ -19,7 +19,7 @@ a = Applicant.create(
 )
 s = Session.create(
   year: 2018,
-  semester: 'Fall',
+  semester: 'fall',
   pay: 42.25,
   round: 1,
   session_start: DateTime.new(2018, 9, 1),
