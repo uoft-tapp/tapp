@@ -16,6 +16,9 @@ else
 	against=123acdac4c698f24f2352cf34c3b12e246b48af1
 fi
 
+# Check if rubocop is installed for the current project
+bin/bundle exec rubocop -v >/dev/null 2>&1 || { echo >&2 "${red}[Ruby Style][Fatal]: Add rubocop to your Gemfile"; exit 1; }
+
 # Get only the staged files
 FILES="$(git diff --cached --name-only --diff-filter=AMC | grep "\.rb$" | tr '\n' ' ')"
 
@@ -30,7 +33,7 @@ then
 	fi
 	
 	# Run rubocop on the staged files
-	rubocop ${FILES}
+	bin/bundle exec rubocop ${FILES}
 	
 	if [ $? -ne 0 ]; then
 	  echo "${red}[Ruby Style][Error]: Fix the issues and commit again${NC}"
