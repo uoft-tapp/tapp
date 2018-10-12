@@ -12,6 +12,16 @@ class Position < ApplicationRecord
 
   validates_presence_of :course_code, :openings, :session
   validates :openings, numericality: { only_integer: true }
+
+  def as_json(_options = {})
+    super(
+      except: %i[session_id],
+      include: {
+        session: { only: %i[id year round semester] },
+        instructors: { only: %i[id first_name last_name] }
+      }
+    )
+  end
 end
 
 # == Schema Information
