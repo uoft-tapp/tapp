@@ -10,7 +10,7 @@ class CreateInstructorsAndPositions < ActiveRecord::Migration[5.1]
     end
 
     create_table :positions do |t|
-      t.belongs_to :session
+      t.belongs_to :round
       t.timestamps
     end
   end

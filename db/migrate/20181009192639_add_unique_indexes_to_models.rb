@@ -8,6 +8,6 @@ class AddUniqueIndexesToModels < ActiveRecord::Migration[5.1]
     add_index :instructors, :utorid, unique: true
 
     # Session
-    add_index :sessions, %i[year round], unique: true
+    add_index :sessions, %i[year], unique: true
   end
 end
