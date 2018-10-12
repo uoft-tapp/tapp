@@ -19,7 +19,8 @@ module Api::V1
 
     # POST /positions
     def create
-      @position = Position.new(position_params)
+      @position = Position.new(params)
+      @position.session 
 
       if @position.save
         render json: @position, status: :created
@@ -56,7 +57,9 @@ module Api::V1
 
     # Only allow a trusted parameter "white position" through.
     def position_params
-      params.require(:position).permit(:title, :excerpt, :description, :upvotes)
+      params.require(:position).permit(
+        :cap_enrolment, :course_code, :current_enrolment, :duties, :hours,
+        :num_waitlisted, :openings, :qualifications, :session_id)
     end
   end
 end
