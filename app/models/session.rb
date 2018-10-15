@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# A class representing a session. It is a "term" of which an applicant applies to. For example,
-# an applicant that applies to Fall 2018, round 1 applies to the "Fall 2018 Round 1" session.
+# A class representing a school term. For example, "fall 2018".
 class Session < ApplicationRecord
   has_many :rounds
 
