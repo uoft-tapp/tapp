@@ -15,9 +15,14 @@ class Position < ApplicationRecord
 
   def as_json(_options = {})
     super(
-      except: %i[session_id],
+      except: %i[round_id],
       include: {
-        session: { only: %i[id year round semester] },
+        round: {
+          include: {
+            session: { only: %i[id year semester] }
+          },
+          only: %i[id number start_date end_date]
+        },
         instructors: { only: %i[id first_name last_name] }
       }
     )
