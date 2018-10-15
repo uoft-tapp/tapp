@@ -1,0 +1,12 @@
+/* for CourseMenu and CourseList */
+.course-list-panel {
+  width: 15em;
+  float: left;
+  margin: 0px 8px 0px 0px;
+  height: $main-div-height;
+
+  .panel-heading {
+    padding: 5px 15px !important;
+    height: 30px;
+  }
+}

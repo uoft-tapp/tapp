@@ -1,0 +1,36 @@
+/* for contents of CourseMenu and CourseList */
+.course-list-group {
+  height: calc(100% - 30px);
+  overflow: auto;
+
+  .list-group-item {
+    height: 2em;
+    padding: 3px;
+
+    &:hover {
+      background: #EEE;
+    }
+
+    a {
+      color: #333;
+    }
+
+    .course {
+      width: calc(100% - 15px);
+      float: left;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .spinning-icon {
+      display:none;
+    }
+
+    .email-icon, .spinning-icon {
+      float: right;
+      width: 15px;
+    }
+  }
+}

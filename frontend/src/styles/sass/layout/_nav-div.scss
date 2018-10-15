@@ -1,0 +1,9 @@
+/* applies to the first div after the navbar, which should be the main div container for the view, between the
+ * navbar and the footer */
+#root nav + div {
+  top: 0;
+  margin-top: $navbar-height;
+  position: absolute;
+  height: $main-div-height;
+  width: 100%;
+}

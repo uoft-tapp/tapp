@@ -1,0 +1,16 @@
+.button {
+  &.icon {
+    color: #000;
+    margin-left: 10px;
+  }
+
+  cursor: pointer;
+
+  &:hover{
+    opacity: .75;
+  }
+
+  &:active {
+    opacity: .9;
+  }
+}

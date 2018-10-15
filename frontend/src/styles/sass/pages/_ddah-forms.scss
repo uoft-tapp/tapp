@@ -1,0 +1,39 @@
+#ddah-grid {
+  #dropdown-menu {
+    margin-bottom: 1vh;
+  }
+
+  .table-menu > .btn-group:first-child {
+    margin-left: 3vw;
+  }
+
+  table {
+    margin: 0;
+  }
+
+  .table-body {
+    /* note that this assumes that the header is at most two rows high */
+    max-height: calc(#{$main-div-height} - #{$table-menu-height} - #{$min-row-height} - 25px);
+    overflow: auto;
+  }
+
+  .table-container th {
+    text-overflow: ellipsis;
+  }
+
+  .table-container td,
+  .table-container th {
+    word-break: break-all;
+  }
+
+  #table-total {
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  #dropdown-menu #sessions {
+    float: left;
+    display: inline-block;
+    margin: 0 5px;
+  }
+}

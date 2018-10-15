@@ -1,0 +1,43 @@
+/* media queries */
+@media screen and (max-width: 1100px) {
+  .applicant-table-menu {
+    margin-top: 40px;
+  }
+  .panel-group {
+    margin-top: 45px;
+  }
+
+  #course-panel-layout {
+    margin-top: 45px;
+  }
+
+  .course-list-panel {
+    margin-top: 45px;
+  }
+
+  #course-form {
+    margin-top: 45px;
+  }
+
+}
+
+@media screen and (max-width: 767px) {
+  .applicant-table-menu {
+    margin-top: 375px;
+  }
+  .panel-group {
+    margin-top: 375px;
+  }
+  #course-panel-layout {
+    margin-top: 375px;
+  }
+
+  .course-list-panel {
+    margin-top: 375px;
+  }
+
+  #course-form {
+    margin-top: 375px;
+  }
+
+}
