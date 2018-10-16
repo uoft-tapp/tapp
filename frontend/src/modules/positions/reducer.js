@@ -1,36 +1,10 @@
 import { createReducer } from "redux-create-reducer"
-import { UPDATE_POSITION_VALUE_SUCCESS } from "./constants"
+import { UPDATE_POSITION_VALUE_SUCCESS, FETCH_POSITIONS_SUCCESS } from "./constants"
 
-const initialState = [
-    {
-        id: "csc209",
-        code: "CSC209H1",
-        name: "Course Name",
-        campus: "St George",
-        estimatedEnrol: 100,
-        estimatedPositions: 11,
-        cap: 88,
-        waitlist: 23,
-        positionHours: 60,
-        startDate: "2018-09-01",
-        endDate: "2018-12-01"
-    },
-    {
-        id: "csc148",
-        code: "CSC148H1",
-        name: "Course Name",
-        campus: "St George",
-        estimatedEnrol: 100,
-        estimatedPositions: 11,
-        cap: 88,
-        waitlist: 23,
-        positionHours: 60,
-        startDate: "2018-09-01",
-        endDate: "2018-12-01"
-    }
-]
+const initialState = []
 
 const reducer = createReducer(initialState, {
+    [FETCH_POSITIONS_SUCCESS]: (state, action) => action.payload,
     [UPDATE_POSITION_VALUE_SUCCESS]: (state, { payload: { positionId, fieldId, value } }) =>
         state.map(
             position => (position.id === positionId ? { ...position, [fieldId]: value } : position)

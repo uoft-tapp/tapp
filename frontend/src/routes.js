@@ -1,4 +1,4 @@
-import Positions from "./modules/positions/components/Positions"
+import Positions from "./modules/positions/components/index"
 
 export const openRoutes = [
     {

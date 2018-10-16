@@ -6,10 +6,10 @@ class CourseList extends React.Component {
         return (
             <Panel className="course-list-panel" header="Courses">
                 <ListGroup className="course-list-group">
-                    {this.props.positions.map(({ id, code }) => (
-                        <ListGroupItem key={id} title={code} className="course-list-item">
+                    {this.props.positions.map(({ id, course_code }) => (
+                        <ListGroupItem key={id} title={course_code} className="course-list-item">
                             <a className="course" href={"#" + id}>
-                                {code}
+                                {course_code}
                             </a>
                             <a
                                 href="#temp"

@@ -1,10 +1,14 @@
 import React from "react"
 import { connect } from "react-redux"
+import { fetchPositions } from "../actions"
 import { Grid, Panel, ListGroup } from "react-bootstrap"
 import PositionForm from "./PositionForm"
 import PositionList from "./PositionList"
 
 class Positions extends React.Component {
+    componentDidMount() {
+        this.props.fetchPositions()
+    }
     render() {
         return (
             <Grid fluid id="courses-grid">
@@ -21,4 +25,7 @@ class Positions extends React.Component {
     }
 }
 
-export default connect(({ positions }) => ({ positions }))(Positions)
+export default connect(
+    ({ positions }) => ({ positions }),
+    { fetchPositions }
+)(Positions)

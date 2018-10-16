@@ -20,17 +20,22 @@ class CourseForm extends React.Component {
                                 <p>
                                     <input
                                         type="text"
-                                        value={position.code}
+                                        value={position.course_code}
                                         className="course"
                                         readOnly
                                         disabled
                                     />
                                 </p>
                                 <p>
-                                    <input type="text" value={position.name} readOnly disabled />
+                                    <input
+                                        type="text"
+                                        value={position.course_name}
+                                        readOnly
+                                        disabled
+                                    />
                                 </p>
                                 <p>
-                                    <input type="text" value={position.campus} readOnly disabled />
+                                    <input type="text" value="Campus?" readOnly disabled />
                                 </p>
                             </td>
                             <td className="col-2">
@@ -45,35 +50,43 @@ class CourseForm extends React.Component {
                                 </p>
                             </td>
                             <td className="col-3">
-                                <Field fieldId="estimatedEnrol" type="number" position={position} />
-                                <Field fieldId="cap" type="number" position={position} />
-                                <Field fieldId="waitlist" type="number" position={position} />
+                                <Field
+                                    fieldId="estimated_enrol"
+                                    type="number"
+                                    position={position}
+                                />
+                                <Field fieldId="cap_enrolment" type="number" position={position} />
+                                <Field fieldId="num_waitlisted" type="number" position={position} />
                             </td>
                             <td className="col-4">
                                 <p>
-                                    <b>Positions: </b>
+                                    <b>Openings: </b>
                                 </p>
                                 <p>
                                     <b>Hours/Pos.: </b>
                                 </p>
                             </td>
                             <td className="col-5">
-                                <Field
-                                    fieldId="estimatedPositions"
-                                    type="number"
-                                    position={position}
-                                />
-                                <Field fieldId="positionHours" type="number" position={position} />
+                                <Field fieldId="openings" type="number" position={position} />
+                                <Field fieldId="hours" type="number" position={position} />
                             </td>
                             <td className="col-6">
                                 <p>
                                     <b>Start Date: </b>
                                 </p>
-                                <Field fieldId="startDate" type="date" position={position} />
+                                <Field
+                                    fieldId="start_date"
+                                    type="date"
+                                    position={{ ...position, ...position.round }}
+                                />
                                 <p>
                                     <b>End Date: </b>
                                 </p>
-                                <Field fieldId="endDate" type="date" position={position} />
+                                <Field
+                                    fieldId="end_date"
+                                    type="date"
+                                    position={{ ...position, ...position.round }}
+                                />
                             </td>
 
                             <td className="col-7">

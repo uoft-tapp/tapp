@@ -5,6 +5,7 @@ import { persistStore, persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
 import rootReducer from "./rootReducer"
 import rootSaga from "./rootSaga"
+import thunk from "redux-thunk"
 
 const configureStore = () => {
     const persistConfig = {
@@ -16,7 +17,7 @@ const configureStore = () => {
     const sagaMiddleware = createSagaMiddleware()
     const store = createStore(
         persistedReducer,
-        composeWithDevTools(applyMiddleware(sagaMiddleware))
+        composeWithDevTools(applyMiddleware(sagaMiddleware, thunk))
     )
     const persistor = persistStore(store)
     sagaMiddleware.run(rootSaga)
