@@ -58,7 +58,7 @@ module Api::V1
     def position_params
       params.require(:position).permit(
         :cap_enrolment, :course_code, :current_enrolment, :duties, :hours,
-        :num_waitlisted, :openings, :qualifications, :session_id
+        :num_waitlisted, :openings, :qualifications, :session_id, :round_id
       )
     end
   end
