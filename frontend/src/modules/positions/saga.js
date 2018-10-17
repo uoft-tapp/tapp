@@ -1,15 +1,15 @@
 import { takeEvery, put } from "redux-saga/effects"
-import { UPDATE_POSITION_VALUE_REQUEST } from "./constants"
-import { updatePositionValueSuccess, updatePositionValueError } from "./actions"
+import { SAVE_POSITIONS } from "./constants"
+import { savePositionsSuccess, savePositionsError } from "./actions"
 
 function* handleUpdatePosition(action) {
     if (true) {
-        yield put(updatePositionValueSuccess(action.payload))
+        yield put(savePositionsSuccess(action.payload))
     } else {
-        yield put(updatePositionValueError(action.payload))
+        yield put(savePositionsError(action.payload))
     }
 }
 
 export default function*() {
-    yield takeEvery(UPDATE_POSITION_VALUE_REQUEST, handleUpdatePosition)
+    yield takeEvery(SAVE_POSITIONS, handleUpdatePosition)
 }

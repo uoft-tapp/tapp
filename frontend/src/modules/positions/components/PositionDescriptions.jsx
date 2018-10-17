@@ -1,6 +1,5 @@
 import React from "react"
-import { connect } from "react-redux"
-import { updatePositionValueRequest } from "../actions"
+import { Field } from "redux-form"
 
 class Descriptions extends React.Component {
     state = { expanded: false }
@@ -21,32 +20,20 @@ class Descriptions extends React.Component {
                                     <p>
                                         <b>Qualifications: </b>
                                     </p>
-                                    <textarea
+                                    <Field
+                                        name={`positions.${position.id}.qual`}
+                                        component="textarea"
                                         className="long-text"
-                                        onBlur={({ target: { value } }) =>
-                                            updatePositionValueRequest({
-                                                positionId: position.id,
-                                                fieldId: "qual",
-                                                value
-                                            })
-                                        }
-                                        defaultValue={position.qual}
                                     />
                                 </td>
                                 <td className="col-half">
                                     <p>
                                         <b>Responsibilities: </b>
                                     </p>
-                                    <textarea
+                                    <Field
+                                        name={`positions.${position.id}.resp`}
+                                        component="textarea"
                                         className="long-text"
-                                        onBlur={({ target: { value } }) =>
-                                            updatePositionValueRequest({
-                                                positionId: position.id,
-                                                fieldId: "resp",
-                                                value
-                                            })
-                                        }
-                                        defaultValue={position.resp}
                                     />
                                 </td>
                             </tr>
@@ -66,7 +53,4 @@ class Descriptions extends React.Component {
     }
 }
 
-export default connect(
-    null,
-    { updatePositionValueRequest }
-)(Descriptions)
+export default Descriptions

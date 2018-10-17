@@ -4,7 +4,7 @@ import { updatePositionValueRequest } from "../actions"
 
 const getValue = ({ position, fieldId }) => position[fieldId]
 
-class Field extends React.Component {
+class CustomField extends React.Component {
     state = { value: getValue(this.props) }
     handleChange = ({ target: { value } }) => this.setState({ value })
     handleBlur = () =>
@@ -28,4 +28,4 @@ class Field extends React.Component {
 export default connect(
     null,
     { updatePositionValueRequest }
-)(Field)
+)(CustomField)

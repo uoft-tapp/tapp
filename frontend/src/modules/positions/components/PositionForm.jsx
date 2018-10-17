@@ -1,8 +1,8 @@
 import React from "react"
 import { ListGroupItem } from "react-bootstrap"
 import Instructors from "./Instructors"
-import Field from "./Field"
 import PositionDescriptions from "./PositionDescriptions"
+import { Field } from "redux-form"
 
 class CourseForm extends React.Component {
     render() {
@@ -51,12 +51,17 @@ class CourseForm extends React.Component {
                             </td>
                             <td className="col-3">
                                 <Field
-                                    fieldId="estimated_enrol"
-                                    type="number"
-                                    position={position}
+                                    name={`positions.${position.id}.estimated_enrol`}
+                                    component={({ input }) => <input type="number" {...input} />}
                                 />
-                                <Field fieldId="cap_enrolment" type="number" position={position} />
-                                <Field fieldId="num_waitlisted" type="number" position={position} />
+                                <Field
+                                    name={`positions.${position.id}.cap_enrolment`}
+                                    component={({ input }) => <input type="number" {...input} />}
+                                />
+                                <Field
+                                    name={`positions.${position.id}.num_waitlisted`}
+                                    component={({ input }) => <input type="number" {...input} />}
+                                />
                             </td>
                             <td className="col-4">
                                 <p>
@@ -67,25 +72,29 @@ class CourseForm extends React.Component {
                                 </p>
                             </td>
                             <td className="col-5">
-                                <Field fieldId="openings" type="number" position={position} />
-                                <Field fieldId="hours" type="number" position={position} />
+                                <Field
+                                    name={`positions.${position.id}.openings`}
+                                    component={({ input }) => <input type="number" {...input} />}
+                                />
+                                <Field
+                                    name={`positions.${position.id}.hours`}
+                                    component={({ input }) => <input type="number" {...input} />}
+                                />
                             </td>
                             <td className="col-6">
                                 <p>
                                     <b>Start Date: </b>
                                 </p>
                                 <Field
-                                    fieldId="start_date"
-                                    type="date"
-                                    position={{ ...position, ...position.round }}
+                                    name={`positions.${position.id}.round.start_date`}
+                                    component={({ input }) => <input type="date" {...input} />}
                                 />
                                 <p>
                                     <b>End Date: </b>
                                 </p>
                                 <Field
-                                    fieldId="end_date"
-                                    type="date"
-                                    position={{ ...position, ...position.round }}
+                                    name={`positions.${position.id}.round.end_date`}
+                                    component={({ input }) => <input type="date" {...input} />}
                                 />
                             </td>
 
