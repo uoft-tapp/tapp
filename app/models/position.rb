@@ -45,9 +45,9 @@ end
 #  qualifications    :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  round_id          :bigint(8)
+#  session_id        :bigint(8)
 #
 # Indexes
 #
-#  index_positions_on_round_id  (round_id)
+#  index_positions_on_session_id  (session_id)
 #

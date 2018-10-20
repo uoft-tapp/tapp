@@ -17,3 +17,9 @@ end
 #  start_date :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  session_id :bigint(8)
+#
+# Indexes
+#
+#  index_rounds_on_session_id  (session_id)
+#

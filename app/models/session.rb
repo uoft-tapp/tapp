@@ -18,7 +18,7 @@ end
 #
 #  id            :bigint(8)        not null, primary key
 #  pay           :float
-#  semester      :string
+#  semester      :integer          default(0)
 #  session_end   :datetime
 #  session_start :datetime
 #  year          :integer
