@@ -28,28 +28,28 @@ docker-compose up --build
 To view the STDOUT from a docker container of a running server, you can do
 `docker-compose logs -tf <image>`, like: `docker-compose logs -tf tapp`.
 
-### Initializing DB
-To create and setup your local development database, simply navigate into the
-rails container and run the rake task: 
-
+To access the dockerized app, simply run
 ```
 docker-compose exec tapp sh
+```
+
+### Initializing DB
+To create and setup your local development database, simply navigate into the
+rails container and run the following rake task. It will create your local database,
+run all migrations, and populate the db with seed data. 
+
+```
 rake db:setup
 ```
 
-This will create your local database, run all migrations, and populate the db with seed data.
-
-To access the dockerized database, you can run:
+Once your DB is setup, you can have SQL access to it through your docker container by running
 ```
-docker exec -it tapp_db_1 sh
-
-# Once inside the db shell, access the database
 $ psql tapp_development tapp
 ```
-From there you can make modifications and regular SQL operations as necessary.
 
 ## Annotations
-To annotate, please run `bundle exec annotate -p bottom`. Make sure you're in
+We use the annotate gem to automatically annotate our models whenever a migration
+to run. If you need to annotate manually, run `bundle exec annotate -p bottom` inside
 the docker container.
 
 ## Rubocop
@@ -86,10 +86,8 @@ Example: `docker-compose run tapp bundle install`.
 
 ### Migration modifications
 If you need to modify a migration file, please do the following within the
-docker image: 
+docker container: 
 ```
-docker exec -it <image_name> sh 
-
 # Undo a specific version number
 rake db:down VERSION=####
 ```
