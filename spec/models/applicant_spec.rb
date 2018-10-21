@@ -3,42 +3,42 @@
 require 'rails_helper'
 
 describe Applicant do
-  it 'should not save without a first name' do
+  it 'should not be valid without a first name' do
     k = FactoryBot.build(:applicant, first_name: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save without last name' do
+  it 'should not be valid without last name' do
     k = FactoryBot.build(:applicant, last_name: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save without email' do
+  it 'should not be valid without email' do
     k = FactoryBot.build(:applicant, email: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save without student number' do
+  it 'should not be valid without student number' do
     k = FactoryBot.build(:applicant, student_number: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save without utorid' do
+  it 'should not be valid without utorid' do
     k = FactoryBot.build(:applicant, utorid: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save if the student number is already taken' do
+  it 'should not be valid if the student number is already taken' do
     applicant1 = FactoryBot.create(:applicant)
     applicant2 = FactoryBot.build(:applicant, student_number: applicant1.student_number)
 
@@ -46,7 +46,7 @@ describe Applicant do
     expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save if the utorid is already taken' do
+  it 'should not be valid if the utorid is already taken' do
     applicant1 = FactoryBot.create(:applicant)
     applicant2 = FactoryBot.build(:applicant, utorid: applicant1.utorid)
 
