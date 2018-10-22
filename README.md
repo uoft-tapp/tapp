@@ -70,6 +70,20 @@ and rubocop are installed locally, **not** just in a Docker container. Ensure
 `bundle install` installs the rubocop gem. Script adapted from
 [here](http://gmodarelli.com/2015/01/code_reviews_rubocop_pre_commit/).
 
+## Unit tests
+We use RSpec as our testing suite. Our tests for models are located under
+`spec/models`. Factories are provided by `FactoryBot` and are located under
+`spec/factories`.  To run them, go into your local Docker container with
+`docker exec -it <image_name> sh`, and run:
+```
+# Get your test database similar to your development database
+rake db:test:prepare
+
+# Run the actual tests
+rake spec
+```
+The last command can be `bundle exec rspec` or `rspec`.
+
 ## Playbook
 ### Accessing Docker Images through a shell command
 To get into an interactive shell of any docker image, do `docker exec -it

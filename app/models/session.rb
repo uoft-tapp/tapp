@@ -16,12 +16,12 @@ end
 #
 # Table name: sessions
 #
-#  id            :bigint(8)        not null, primary key
-#  pay           :float
-#  semester      :integer          default(0)
-#  session_end   :datetime
-#  session_start :datetime
-#  year          :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id         :bigint(8)        not null, primary key
+#  end_date   :datetime
+#  pay        :float
+#  semester   :integer          default(0)
+#  start_date :datetime
+#  year       :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #

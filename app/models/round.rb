@@ -5,6 +5,10 @@
 class Round < ApplicationRecord
   belongs_to :session
   has_many :positions
+
+  # Every round should have a round number
+  validates_presence_of :number
+  validates :number, numericality: { only_integer: true, greater_than: 0 }
 end
 
 # == Schema Information

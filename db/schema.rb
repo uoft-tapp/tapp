@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181020014241) do
+ActiveRecord::Schema.define(version: 20181022002341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20181020014241) do
   end
 
   create_table "positions", force: :cascade do |t|
-    t.bigint "session_id"
+    t.bigint "round_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "course_code"
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20181020014241) do
     t.integer "cap_enrolment"
     t.integer "num_waitlisted"
     t.integer "openings"
-    t.index ["session_id"], name: "index_positions_on_session_id"
+    t.index ["round_id"], name: "index_positions_on_round_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -93,8 +93,8 @@ ActiveRecord::Schema.define(version: 20181020014241) do
     t.integer "year"
     t.integer "semester", default: 0
     t.float "pay"
-    t.datetime "session_start"
-    t.datetime "session_end"
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
 end

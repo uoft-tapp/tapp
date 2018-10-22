@@ -11,7 +11,7 @@ class Position < ApplicationRecord
   has_many :applicants, through: :preferences
 
   validates_presence_of :course_code, :openings, :round
-  validates :openings, numericality: { only_integer: true }
+  validates :openings, numericality: { only_integer: true, greater_than: 0 }
 
   def as_json(_options = {})
     super(
@@ -45,9 +45,9 @@ end
 #  qualifications    :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  session_id        :bigint(8)
+#  round_id          :bigint(8)
 #
 # Indexes
 #
-#  index_positions_on_session_id  (session_id)
+#  index_positions_on_round_id  (round_id)
 #
