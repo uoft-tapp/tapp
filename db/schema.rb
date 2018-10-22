@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< Updated upstream
 ActiveRecord::Schema.define(version: 20181012205916) do
+=======
+ActiveRecord::Schema.define(version: 20181022202150) do
+>>>>>>> Stashed changes
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +68,8 @@ ActiveRecord::Schema.define(version: 20181012205916) do
     t.integer "cap_enrolment"
     t.integer "num_waitlisted"
     t.integer "openings"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.index ["round_id"], name: "index_positions_on_round_id"
   end
 
@@ -78,8 +84,8 @@ ActiveRecord::Schema.define(version: 20181012205916) do
   end
 
   create_table "rounds", force: :cascade do |t|
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.datetime "open_date"
+    t.datetime "close_date"
     t.integer "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
