@@ -40,11 +40,10 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
-
   # Factories for easy model creation.
   gem 'factory_bot_rails'
-
   # Faker so that we can easily fake our names, addresses, etc.
+  gem 'database_cleaner'
   gem 'faker'
   gem 'rspec'
   gem 'rspec-rails'
