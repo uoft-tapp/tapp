@@ -5,6 +5,10 @@
 class Round < ApplicationRecord
   belongs_to :session
   has_many :positions
+
+  # Every round should have a round number
+  validates_presence_of :number
+  validates :number, numericality: { only_integer: true, greater_than: 0 }
 end
 
 # == Schema Information
@@ -17,3 +21,9 @@ end
 #  open_date  :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  session_id :bigint(8)
+#
+# Indexes
+#
+#  index_rounds_on_session_id  (session_id)
+#

@@ -6,8 +6,9 @@ class Preference < ApplicationRecord
   belongs_to :applicant
   belongs_to :position
 
+  # TODO: Should we convert priority to Enum?
   validates_presence_of :priority, :applicant, :position
-  validates :priority, numericality: { only_integer: true, less_than_or_equal_to: 3, greater_than: 0 }
+  validates :priority, numericality: { only_integer: true, less_than_or_equal_to: 3, greater_than_or_equal_to: 0 }
 end
 
 # == Schema Information

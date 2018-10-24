@@ -36,10 +36,17 @@ gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'annotate'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'annotate'
   gem 'capybara', '~> 2.13'
+  # Factories for easy model creation.
+  gem 'factory_bot_rails'
+  # Faker so that we can easily fake our names, addresses, etc.
+  gem 'database_cleaner'
+  gem 'faker'
+  gem 'rspec'
+  gem 'rspec-rails'
   gem 'selenium-webdriver'
 end
 

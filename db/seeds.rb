@@ -21,8 +21,8 @@ s = Session.create(
   year: 2018,
   semester: 'fall',
   pay: 42.25,
-  session_start: DateTime.new(2018, 9, 1),
-  session_end: DateTime.new(2018, 12, 31),
+  start_date: DateTime.new(2018, 9, 1),
+  end_date: DateTime.new(2018, 12, 31),
 )
 r = Round.create(
   number: 1,
