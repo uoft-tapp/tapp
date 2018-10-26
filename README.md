@@ -73,17 +73,23 @@ and rubocop are installed locally, **not** just in a Docker container. Ensure
 ## Unit tests
 We use RSpec as our testing suite. Our tests for models are located under
 `spec/models`. Factories are provided by `FactoryBot` and are located under
-`spec/factories`.  To run them, go into your local Docker container with
-`docker exec -it <image_name> sh`, and run:
+`spec/factories`.  To run them, go into your local tapp container, and run:
 ```
 # Get your test database similar to your development database
 rake db:test:prepare
 
-# Run the actual tests
+# Run entire test suite
 rake spec
-```
-The last command can be `bundle exec rspec` or `rspec`.
 
+# Run tests for one specific class do rspec {file_name}
+# For example,
+rspec spec/models/position_spec.rb
+
+# To run specific test block for a class, do rspec {file_name}:{line_number}
+# where line number is the first line the block starts on
+# For example,
+rspec spec/models/position_spec.rb:17
+```
 ## Playbook
 ### Accessing Docker Images through a shell command
 To get into an interactive shell of any docker image, do `docker exec -it

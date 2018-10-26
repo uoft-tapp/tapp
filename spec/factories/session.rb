@@ -9,19 +9,19 @@ FactoryBot.define do
     year # Set it to the sequence
 
     trait :fall do
-      start_date { Time.new(year, 9) }
+      start_date { Time.new(year, 9, 1) }
       end_date { Time.new(year, 12, 31) }
       semester { Session.semesters[:fall] }
     end
 
     trait :winter do
-      start_date { Time.new(year, 1) }
-      end_date { Time.new(year, 4, 31) }
+      start_date { Time.new(year, 1, 1) }
+      end_date { Time.new(year, 4, 30) }
       semester { Session.semesters[:winter] }
     end
 
     trait :summer do
-      start_date { Time.new(year, 5) }
+      start_date { Time.new(year, 5, 1) }
       end_date { Time.new(year, 8, 31) }
       semester { Session.semesters[:summer] }
     end

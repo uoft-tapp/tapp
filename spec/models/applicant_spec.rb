@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 describe Applicant do
+  it 'should have a valid factory' do
+    FactoryBot.create(:applicant)
+  end
+
   it 'should not be valid without a first name' do
     k = FactoryBot.build(:applicant, first_name: nil)
     expect(k).to_not be_valid

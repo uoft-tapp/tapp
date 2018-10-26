@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Round do
   it 'should have a valid factory' do
     k = FactoryBot.create(:round, :fall)
-    k.start_date = Time.new(k.session.year, 9)
+    k.start_date = Time.new(k.session.year, 9, 1)
     k.end_date = Time.new(k.session.year, 12, 31)
     k.save!
     FactoryBot.create(:round, :winter)

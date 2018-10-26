@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 describe Instructor do
+  it 'should create a valid instructor object' do
+    FactoryBot.build(:instructor)
+  end
+
   it 'should not be valid without a first name' do
     k = FactoryBot.build(:instructor, first_name: nil)
     expect(k).to_not be_valid
