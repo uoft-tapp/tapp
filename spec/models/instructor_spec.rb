@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe Instructor do
   it 'should create a valid instructor object' do
     FactoryBot.create(:instructor)

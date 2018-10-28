@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe Position do
   it 'should have a valid factory' do
     FactoryBot.create(:position)

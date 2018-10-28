@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe Preference do
   it 'has a valid factory' do
     FactoryBot.create(:preference, :high)

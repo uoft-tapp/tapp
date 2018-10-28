@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 RSpec.describe Api::V1::PositionsController, type: :api do
   let(:round) { FactoryBot.create(:round, :fall) }
   let!(:position) { FactoryBot.create(:position) }
