@@ -43,6 +43,16 @@ describe Preference do
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
+
+  it 'should not save with a duplicated applicant_id and position_id' do
+    original = FactoryBot.create(:preference, :high)
+    new = FactoryBot.build(:preference, :low)
+    new.position_id = original.position_id
+    new.applicant_id = original.applicant_id
+
+    expect(new).to_not be_valid
+    expect { new.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
 end
 
 # == Schema Information
@@ -58,6 +68,7 @@ end
 #
 # Indexes
 #
-#  index_preferences_on_applicant_id  (applicant_id)
-#  index_preferences_on_position_id   (position_id)
+#  index_preferences_on_applicant_id                  (applicant_id)
+#  index_preferences_on_applicant_id_and_position_id  (applicant_id,position_id) UNIQUE
+#  index_preferences_on_position_id                   (position_id)
 #

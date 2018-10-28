@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Instructor do
   it 'should create a valid instructor object' do
-    FactoryBot.build(:instructor)
+    FactoryBot.create(:instructor)
   end
 
   it 'should not be valid without a first name' do

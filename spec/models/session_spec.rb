@@ -67,3 +67,7 @@ end
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_sessions_on_year_and_semester  (year,semester) UNIQUE
+#

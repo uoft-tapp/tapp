@@ -9,6 +9,7 @@ class Round < ApplicationRecord
   # Every round should have a round number
   validates_presence_of :number
   validates :number, numericality: { only_integer: true, greater_than: 0 }
+  validates :number, uniqueness: { scope: :session_id, message: 'is duplicated in the given session' }
 end
 
 # == Schema Information
@@ -25,5 +26,6 @@ end
 #
 # Indexes
 #
-#  index_rounds_on_session_id  (session_id)
+#  index_rounds_on_session_id             (session_id)
+#  index_rounds_on_session_id_and_number  (session_id,number) UNIQUE
 #

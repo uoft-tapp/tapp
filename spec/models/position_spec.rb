@@ -34,6 +34,15 @@ describe Position do
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
+
+  it 'should not save with a duplicated opening date' do
+    original = FactoryBot.create(:position)
+    new = FactoryBot.build(:position)
+    new.round = original.round
+
+    expect(new).to_not be_valid
+    expect { new.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  end
 end
 
 # == Schema Information
@@ -46,15 +55,18 @@ end
 #  course_name       :text
 #  current_enrolment :integer
 #  duties            :text
+#  end_date          :datetime
 #  hours             :integer
 #  num_waitlisted    :integer
 #  openings          :integer
 #  qualifications    :text
+#  start_date        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  round_id          :bigint(8)
 #
 # Indexes
 #
-#  index_positions_on_round_id  (round_id)
+#  index_positions_on_course_code_and_round_id  (course_code,round_id) UNIQUE
+#  index_positions_on_round_id                  (round_id)
 #

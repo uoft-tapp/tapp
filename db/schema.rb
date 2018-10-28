@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181022002341) do
+ActiveRecord::Schema.define(version: 20181028203649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20181022002341) do
     t.integer "openings"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.index ["course_code", "round_id"], name: "index_positions_on_course_code_and_round_id", unique: true
     t.index ["round_id"], name: "index_positions_on_round_id"
   end
 
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 20181022002341) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "priority"
+    t.index ["applicant_id", "position_id"], name: "index_preferences_on_applicant_id_and_position_id", unique: true
     t.index ["applicant_id"], name: "index_preferences_on_applicant_id"
     t.index ["position_id"], name: "index_preferences_on_position_id"
   end
@@ -86,6 +88,7 @@ ActiveRecord::Schema.define(version: 20181022002341) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "session_id"
+    t.index ["session_id", "number"], name: "index_rounds_on_session_id_and_number", unique: true
     t.index ["session_id"], name: "index_rounds_on_session_id"
   end
 
@@ -97,6 +100,7 @@ ActiveRecord::Schema.define(version: 20181022002341) do
     t.float "pay"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.index ["year", "semester"], name: "index_sessions_on_year_and_semester", unique: true
   end
 
 end
