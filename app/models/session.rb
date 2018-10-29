@@ -4,12 +4,11 @@
 class Session < ApplicationRecord
   has_many :rounds
 
-  # TODO: Since we're using enums for semester, we might have to change semester to integer for type.
   enum semesters: %i[fall winter summer]
 
   validates_presence_of :semester, :year
-  # Every session has a unique semester, year, and round. IE "Fall 2018 round 1".
-  validates :semester, uniqueness: { scope: %i[year] }, inclusion: { in: semesters.keys }
+  # Every session has a unique semester, year IE "Fall 2018".
+  validates :semester, uniqueness: { scope: %i[year] }, inclusion: { in: semesters.values }
   validates :year, numericality: { only_integer: true, greater_than: 0 }
 end
 
@@ -17,12 +16,16 @@ end
 #
 # Table name: sessions
 #
-#  id            :bigint(8)        not null, primary key
-#  pay           :float
-#  semester      :string
-#  session_end   :datetime
-#  session_start :datetime
-#  year          :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id         :bigint(8)        not null, primary key
+#  end_date   :datetime
+#  pay        :float
+#  semester   :integer          default(0)
+#  start_date :datetime
+#  year       :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_sessions_on_year_and_semester  (year,semester) UNIQUE
 #
