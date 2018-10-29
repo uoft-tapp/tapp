@@ -1,4 +1,8 @@
 .highlight:hover {
-  font-weight: bold;
-  cursor: pointer;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.navbar a.active {
+    background-color: #e7e7e7 !important;
 }

@@ -56,9 +56,10 @@ module Api::V1
 
     # Only allow a trusted parameter "white position" through.
     def position_params
-      params.require(:position).permit(
+      params.permit(
         :cap_enrolment, :course_code, :current_enrolment, :duties, :hours,
-        :num_waitlisted, :openings, :qualifications, :session_id, :round_id
+        :num_waitlisted, :openings, :qualifications, :session_id, :round_id,
+        :start_date, :end_date
       )
     end
   end
