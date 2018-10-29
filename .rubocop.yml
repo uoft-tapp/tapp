@@ -5,11 +5,15 @@ AllCops:
     - 'bin/**/*'
     - 'lib/{assets,tasks}/*'
     - 'test/**/*'
+    - 'spec/**/*'
 
 Metrics/LineLength:
   Max: 120
 
 Metrics/MethodLength:
+  Max: 100
+
+Metrics/BlockLength:
   Max: 100
 
 Style/ClassAndModuleChildren:

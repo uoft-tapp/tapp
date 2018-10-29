@@ -1,10 +1,26 @@
 import React from "react"
 import { connect } from "react-redux"
-import { fetchPositions, savePositions } from "../actions"
-import { reduxForm } from "redux-form"
-import { Grid, Panel, ListGroup, Alert, Button } from "react-bootstrap"
-import PositionForm from "./PositionForm"
-import PositionList from "./PositionList"
+import { fetchPositions } from "../actions"
+import { Grid } from "react-bootstrap"
+import ReactTable from "react-table"
+import "react-table/react-table.css"
+import EditPositionModal from "./EditPositionModal"
+import RowActions from "./RowActions"
+import DisplayInstructors from "./DisplayInstructors"
+
+const COLUMNS = [
+    { Header: "Code", accessor: "course_code", width: 100 },
+    { Header: "Course", accessor: "course_name" },
+    { Header: "Est/Cur Enrol", accessor: "current_enrolment", width: 100 },
+    { Header: "Enrol Cap", accessor: "cap_enrolment", width: 80 },
+    { Header: "Waitlisted", accessor: "num_waitlisted", width: 80 },
+    { Header: "Positions", accessor: "openings", width: 80 },
+    { Header: "Hours", accessor: "hours", width: 60 },
+    { Header: "Start Date", accessor: "start_date", width: 100 },
+    { Header: "End Date", accessor: "end_date", width: 100 },
+    { Header: "Instructors", id: "instructors", maxWidth: 200, Cell: DisplayInstructors },
+    { Header: "Actions", id: "actions", width: 100, Cell: props => <RowActions {...props} /> }
+]
 
 class Positions extends React.Component {
     componentDidMount() {
@@ -12,54 +28,36 @@ class Positions extends React.Component {
     }
     render() {
         return (
-            <Grid fluid id="courses-grid">
-                <PositionList positions={this.props.positions} />
-                <Panel id="course-form">
-                    {this.props.dirty ? (
-                        <Alert bsStyle="warning">
-                            <strong>You have unsaved changes</strong>
-                            <Button bsStyle="warning" bsSize="sm" onClick={this.props.handleSubmit}>
-                                Save Changes
-                            </Button>
-                        </Alert>
-                    ) : (
-                        <Alert bsStyle="info">Up to date</Alert>
-                    )}
-                    <ListGroup>
-                        {this.props.positions.map(position => (
-                            <PositionForm key={position.id} position={position} />
-                        ))}
-                    </ListGroup>
-                </Panel>
+            <Grid fluid>
+                <div style={{ paddingBottom: "50px" }}>
+                    <ReactTable
+                        showPagination={false}
+                        pageSize={this.props.positions.length}
+                        columns={COLUMNS}
+                        data={this.props.positions}
+                        SubComponent={({ original }) => {
+                            return (
+                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <div style={{ flex: "1" }}>
+                                        <label>Qualifications:</label> {original.qualifications}
+                                    </div>
+                                    <div style={{ flex: "1" }}>
+                                        <label>Responsibilities:</label> {original.duties}
+                                    </div>
+                                </div>
+                            )
+                        }}
+                    />
+                </div>
+                <EditPositionModal />
             </Grid>
         )
     }
 }
 
 export default connect(
-    ({ positions }) => ({
-        positions,
-        initialValues: {
-            positions: positions.reduce(
-                (acc, cur) => ({
-                    ...acc,
-                    [cur.id]: {
-                        estimated_enrol: cur.estimated_enrol,
-                        cap_enrolment: cur.cap_enrolment,
-                        num_waitlisted: cur.num_waitlisted,
-                        openings: cur.openings,
-                        hours: cur.hours,
-                        qual: cur.qual,
-                        resp: cur.resp,
-                        round: {
-                            start_date: cur.round.start_date.slice(0, 10),
-                            end_date: cur.round.end_date.slice(0, 10)
-                        }
-                    }
-                }),
-                {}
-            )
-        }
+    ({ positions: { list } }) => ({
+        positions: list
     }),
-    { fetchPositions, onSubmit: savePositions }
-)(reduxForm({ form: "positions", enableReinitialize: true })(Positions))
+    { fetchPositions }
+)(Positions)
