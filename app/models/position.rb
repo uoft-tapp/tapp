@@ -39,10 +39,12 @@ end
 #  course_name       :text
 #  current_enrolment :integer
 #  duties            :text
+#  end_date          :datetime
 #  hours             :integer
 #  num_waitlisted    :integer
 #  openings          :integer
 #  qualifications    :text
+#  start_date        :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  round_id          :bigint(8)

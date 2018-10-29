@@ -26,8 +26,8 @@ s = Session.create(
 )
 r = Round.create(
   number: 1,
-  start_date: DateTime.new(2018, 7, 10),
-  end_date: DateTime.new(2018, 8, 20),
+  open_date: DateTime.new(2018, 7, 10),
+  close_date: DateTime.new(2018, 8, 20),
   session: s
 )
 p = Position.create(
@@ -40,6 +40,8 @@ p = Position.create(
   hours: 54,
   cap_enrolment: 500,
   num_waitlisted: 100,
+  start_date: DateTime.new(2018, 9, 10),
+  end_date: DateTime.new(2018, 12, 10),
   openings: 40
 )
 Preference.create(
