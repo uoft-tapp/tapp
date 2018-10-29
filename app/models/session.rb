@@ -4,7 +4,6 @@
 class Session < ApplicationRecord
   has_many :rounds
 
-  # TODO: Since we're using enums for semester, we might have to change semester to integer for type.
   enum semesters: %i[fall winter summer]
 
   validates_presence_of :semester, :year
