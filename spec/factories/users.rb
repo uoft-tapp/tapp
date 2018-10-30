@@ -3,11 +3,11 @@ FactoryBot.define do
     utorid { "utorid#{Faker::Number.number(2)}" }
     
     trait :admin do
-      role { 0 }
+      role { 'admin' }
     end
 
     trait :instructor do
-      role { 1 }
+      role { 'instructor' }
     end
   end
 end
@@ -21,4 +21,8 @@ end
 #  utorid     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_utorid  (utorid) UNIQUE
 #

@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 20181030155257) do
     t.integer "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["utorid"], name: "index_users_on_utorid", unique: true
   end
 
 end
