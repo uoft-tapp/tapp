@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181028203649) do
+ActiveRecord::Schema.define(version: 20181030155257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,14 @@ ActiveRecord::Schema.define(version: 20181028203649) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.index ["year", "semester"], name: "index_sessions_on_year_and_semester", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "utorid"
+    t.integer "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["utorid"], name: "index_users_on_utorid", unique: true
   end
 
 end
