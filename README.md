@@ -12,6 +12,8 @@ Dockerized, using Ruby 2.5.1 and a Postgres database.
 2. For Linux users only, [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Clone repo and run init script 
+We have an init script that installs a linter (rubocop), as well as sets up a 
+precommit hook to have the linter automatically run whenever you make a commit.
 Clone this repo, navigate into the cloned directory, and run 
 ```
 script/init-setup.sh
