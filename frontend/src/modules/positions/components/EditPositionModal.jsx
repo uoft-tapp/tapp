@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
-import { closeEditPositionModal, savePositions } from "../actions"
+import { closeEditPositionModal, savePositions, deletePosition } from "../actions"
 import moment from "moment"
 import { Modal, Button } from "react-bootstrap"
 
@@ -44,6 +44,10 @@ class EditPositionModal extends React.Component {
         })
         this.props.handleHide()
     }
+    handleDelete = () => {
+        this.props.deletePosition({ positionId: this.props.position.id })
+        this.props.handleHide()
+    }
     getInvalid = () =>
         editableFields.reduce((acc, cur) => {
             if (acc) {
@@ -80,6 +84,9 @@ class EditPositionModal extends React.Component {
                     ))}
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button bsStyle="danger" onClick={this.handleDelete} style={{ float: "left" }}>
+                        Delete
+                    </Button>
                     <Button onClick={handleHide}>Cancel</Button>
                     <Button
                         bsStyle="primary"
@@ -108,5 +115,5 @@ export default connect(
         show: positions.editPosition !== null,
         position: getPosition(positions.list, positions.editPosition)
     }),
-    { handleHide: closeEditPositionModal, savePositions }
+    { handleHide: closeEditPositionModal, savePositions, deletePosition }
 )(({ editPosition, ...rest }) => <EditPositionModal key={editPosition} {...rest} />)

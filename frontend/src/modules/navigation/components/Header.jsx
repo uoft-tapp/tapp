@@ -1,5 +1,5 @@
 import React from "react"
-import { Navbar, Nav } from "react-bootstrap"
+import { Navbar, Nav, NavDropdown } from "react-bootstrap"
 import { Link, Route, NavLink } from "react-router-dom"
 
 const CustomNavItem = ({ href, children }) => (
@@ -31,6 +31,11 @@ class Header extends React.Component {
                 </Navbar.Header>
                 <Route path="/tapp" component={TappNavItems} />
                 <Route path="/cp" component={CpNavItems} />
+                <Nav pullRight>
+                    <NavDropdown eventKey={3} title="Tools" id="tools-dropdown">
+                        <CustomNavItem href="/tapp/positions/new">New Position</CustomNavItem>
+                    </NavDropdown>
+                </Nav>
             </Navbar>
         )
     }
