@@ -5,7 +5,8 @@ AllCops:
     - 'bin/**/*'
     - 'lib/{assets,tasks}/*'
     - 'test/**/*'
-    - 'spec/**/*'
+    - 'frontend/**/**'
+    - 'script/**/**'
 
 Metrics/LineLength:
   Max: 120
@@ -15,6 +16,8 @@ Metrics/MethodLength:
 
 Metrics/BlockLength:
   Max: 100
+  Exclude:
+    - 'spec/**/*'
 
 Style/ClassAndModuleChildren:
   Enabled: false

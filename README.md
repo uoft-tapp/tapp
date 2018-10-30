@@ -11,8 +11,14 @@ Dockerized, using Ruby 2.5.1 and a Postgres database.
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
 2. For Linux users only, [Docker Compose](https://docs.docker.com/compose/install/)
 
-### Running in a Docker Container
+### Clone repo and run init script 
 Clone this repo, navigate into the cloned directory, and run 
+```
+script/init-setup.sh
+```
+
+### Running in a Docker Container
+To launch the app, simply navigate into the cloned directory and run
 ```
 docker-compose up
 ```
@@ -59,16 +65,6 @@ staged file to check for styling issues. The configuration is in `.rubocop.yml`
 and you can add more (or change) or current styling with configurations found
 on the [rubocop](https://rubocop.readthedocs.io/en/latest/) documentation.  To
 run it manually, just call `rubocop` or `bundle exec rubocop`.
-
-There is a pre-commit script set up under `script/pre-commit`. This is to run
-Rubocop on any staged files and report any issues. To install, copy this into
-`.git/hooks/pre-commit` and then run `chmod +x .git/hooks/pre-commit`. Now, on
-every commit you make, rubocop will lint your code.
-
-If you encounter errors such as `Please Install Rubocop`, make sure that Ruby
-and rubocop are installed locally, **not** just in a Docker container. Ensure
-`bundle install` installs the rubocop gem. Script adapted from
-[here](http://gmodarelli.com/2015/01/code_reviews_rubocop_pre_commit/).
 
 ## Unit tests
 We use RSpec as our testing suite. Our tests for models are located under
@@ -124,23 +120,3 @@ scratch and `rake db:migrate`.
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
