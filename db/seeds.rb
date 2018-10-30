@@ -58,3 +58,13 @@ i = Instructor.create(
 
 s.rounds << r
 p.instructors << i
+
+user1 = User.create(
+  utorid: 'brownpau',
+  role: 'instructor'
+)
+
+user2 = User.create(
+  utorid: 'admintes',
+  role: 'admin'
+)
