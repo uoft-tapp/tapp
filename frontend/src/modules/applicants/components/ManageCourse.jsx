@@ -1,6 +1,67 @@
 import React from "react"
+import { connect } from "react-redux"
+import { selectApplicant, removeApplicant } from "../actions"
 import { Panel, Button } from "react-bootstrap"
 import ReactTable from "react-table"
+
+const SelectButton = connect(
+    null,
+    { selectApplicant }
+)(({ selectApplicant, positionId, applicantId }) => (
+    <Button
+        bsSize="xs"
+        style={{ width: "100%" }}
+        onClick={() => selectApplicant({ positionId, applicantId })}
+    >
+        Select
+    </Button>
+))
+
+const RemoveButton = connect(
+    null,
+    {
+        removeApplicant
+    }
+)(({ removeApplicant, positionId, applicantId }) => (
+    <Button
+        bsSize="xs"
+        style={{ width: "100%" }}
+        onClick={() => removeApplicant({ positionId, applicantId })}
+    >
+        Remove
+    </Button>
+))
+
+const promoteColumn = {
+    Header: "Select",
+    id: "promote",
+    Cell: ({ original: { applicantId, positionId } }) => {
+        return <SelectButton applicantId={applicantId} positionId={positionId} />
+    },
+    filterable: false,
+    sortable: false,
+    resizeable: false,
+    width: 75
+}
+
+const demoteColumn = {
+    Header: "Remove",
+    id: "demote",
+    Cell: ({ original: { applicantId, positionId, locked } }) => {
+        if (locked) {
+            return (
+                <Button bsSize="xs" style={{ width: "100%" }} disabled>
+                    <span className="fa fa-lock" /> Locked
+                </Button>
+            )
+        }
+        return <RemoveButton applicantId={applicantId} positionId={positionId} />
+    },
+    filterable: false,
+    sortable: false,
+    resizeable: false,
+    width: 75
+}
 
 const cols = [
     { Header: "Last Name", accessor: "last_name" },
@@ -57,64 +118,13 @@ const cols = [
         )
     }
 ]
-const data1 = [
-    {
-        last_name: "Paul",
-        first_name: "Steve",
-        department: "dept",
-        program: "prog",
-        year: "3",
-        other: []
-    }
-]
-const data2 = [
-    {
-        last_name: "Paul",
-        first_name: "Steve",
-        department: "dept",
-        program: "Undergrad",
-        year: "3",
-        other: []
-    },
-    {
-        last_name: "Smith",
-        first_name: "Harold",
-        department: "dept",
-        program: "Graduate",
-        year: "3",
-        other: []
-    },
-    {
-        last_name: "Jones",
-        first_name: "Harvey",
-        department: "dept",
-        program: "PostDoc",
-        year: "3",
-        other: []
-    },
-    {
-        last_name: "McDonald",
-        first_name: "Adam",
-        department: "dept",
-        program: "Graduate",
-        year: "3",
-        other: ["CSC108"]
-    },
-    {
-        last_name: "Mulligan",
-        first_name: "Anthony",
-        department: "dept",
-        program: "PostDoc",
-        year: "3",
-        other: []
-    }
-]
 
 class ManageCourse extends React.Component {
     state = { filtered: [] }
     handleFilterChange = filtered => this.setState({ filtered })
     resetFilters = () => this.setState({ filtered: [] })
     render() {
+        const { available, selected } = this.props.applicants
         return (
             <div>
                 <Panel>
@@ -122,10 +132,10 @@ class ManageCourse extends React.Component {
                     <Panel.Body>
                         <h3 style={{ marginTop: 0 }}>Selected</h3>
                         <ReactTable
-                            data={data1}
-                            columns={cols}
+                            data={selected}
+                            columns={[demoteColumn, ...cols]}
                             showPagination={false}
-                            pageSize={data1.length}
+                            pageSize={selected.length}
                         />
                         <hr />
                         <h3 style={{ marginTop: 0 }}>Available</h3>
@@ -140,10 +150,10 @@ class ManageCourse extends React.Component {
                                 row[filter.id].toLowerCase().indexOf(filter.value.toLowerCase()) !==
                                 -1
                             }
-                            data={data2}
-                            columns={cols}
+                            data={available}
+                            columns={[promoteColumn, ...cols]}
                             showPagination={false}
-                            pageSize={data2.length}
+                            pageSize={available.length}
                         />
                     </Panel.Body>
                 </Panel>
@@ -152,4 +162,6 @@ class ManageCourse extends React.Component {
     }
 }
 
-export default ManageCourse
+export default connect(({ applicants }, { positionId }) => ({
+    applicants: applicants.positionData[positionId] || { selected: [], available: [] }
+}))(ManageCourse)
