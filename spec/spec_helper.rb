@@ -23,10 +23,6 @@ RSpec.configure do |config|
   # assertions if you prefer.
   config.include FactoryBot::Syntax::Methods
 
-  # config.include Request::JsonHelpers, :type => :controller
-  # config.include Request::HeadersHelpers, :type => :controller
-  # config.include Devise::TestHelpers, :type => :controller
-
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
