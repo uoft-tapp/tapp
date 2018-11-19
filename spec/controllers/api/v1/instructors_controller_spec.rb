@@ -3,7 +3,7 @@
 RSpec.describe Api::V1::InstructorsController, type: :api do
   let!(:instructor) { FactoryBot.create(:instructor) }
 
-  # This is the minimal set of attributes required to create a valid Position.
+  # This is the minimal set of attributes required to create a valid instructor.
   # As you add validations to Instructors, be sure to adjust the attributes
   # here.
   let(:valid_attributes) do
