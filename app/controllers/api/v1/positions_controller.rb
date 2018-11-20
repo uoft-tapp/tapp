@@ -39,7 +39,6 @@ module Api::V1
 
     # DELETE /positions/1
     def destroy
-      @position.destroy
       if @position.destroy
         head :no_content, status: :ok
       else
@@ -57,7 +56,7 @@ module Api::V1
     # Only allow a trusted parameter "white position" through.
     def position_params
       params.permit(
-        :cap_enrolment, :course_code, :current_enrolment, :duties, :hours,
+        :cap_enrolment, :course_code, :course_name, :current_enrolment, :duties, :hours,
         :num_waitlisted, :openings, :qualifications, :session_id, :round_id,
         :start_date, :end_date
       )

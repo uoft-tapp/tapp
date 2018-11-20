@@ -10,13 +10,14 @@ Dockerized, using Ruby 2.5.1 and a Postgres database.
 
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
 2. For Linux users only, [Docker Compose](https://docs.docker.com/compose/install/)
+3. [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
 
 ### Clone repo and run init script 
 We have an init script that installs a linter (rubocop), as well as sets up a 
 precommit hook to have the linter automatically run whenever you make a commit.
 Clone this repo, navigate into the cloned directory, and run 
 ```
-script/init-setup.sh
+./script/init-setup.sh
 ```
 
 ### Running in a Docker Container
@@ -119,6 +120,3 @@ directory, and then re-create everything with `rake db:setup`
 
 If `rake db:setup` fails, do `rake db:create` to create a new database from
 scratch and `rake db:migrate`.
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
