@@ -66,6 +66,7 @@ class EditPositionModal extends React.Component {
         )
     render() {
         const { position, show, handleHide } = this.props
+        console.log(this.props)
         const disabled = this.getDisabled()
         const invalid = this.getInvalid()
         return (

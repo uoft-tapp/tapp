@@ -4,13 +4,15 @@ import { reducer as notificationReducer } from "react-notification-system-redux"
 import authReducer from "./modules/auth/reducer"
 import positionReducer from "./modules/positions/reducer"
 import applicantReducer from "./modules/applicants_by_course/reducer"
+import instructorReducer from "./modules/instructors/reducer"
 
 const reducer = combineReducers({
     notifications: notificationReducer,
     form: formReducer,
     auth: authReducer,
     positions: positionReducer,
-    applicants: applicantReducer
+    applicants: applicantReducer,
+    instructors: instructorReducer
 })
 
 export default reducer
