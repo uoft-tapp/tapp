@@ -1,15 +1,13 @@
 import { createReducer } from "redux-create-reducer"
-import { LOGOUT, LOGIN_SUCCESS, LOGIN_REQUEST } from "./constants"
+import { LOGOUT, LOGIN_SUCCESS } from "./constants"
 
 const initialState = {
-    isLoggedIn: false,
-    loading: false
+    isLoggedIn: false
 }
 
 const reducer = createReducer(initialState, {
-    [LOGIN_REQUEST]: state => ({ ...state, loading: true }),
-    [LOGIN_SUCCESS]: state => ({ ...state, isLoggedIn: true, loading: false }),
-    [LOGOUT]: state => ({ ...state, isLoggedIn: false, loading: false })
+    [LOGIN_SUCCESS]: state => ({ ...state, isLoggedIn: true }),
+    [LOGOUT]: state => ({ ...state, isLoggedIn: false })
 })
 
 export default reducer

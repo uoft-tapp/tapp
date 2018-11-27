@@ -6,7 +6,7 @@ import { Modal, Button } from "react-bootstrap"
 
 const validNumber = val => (val && isNaN(val) ? "Not a valid number" : false)
 const validDate = val =>
-    val && moment(val, "YYYY-MM-DD", true).isValid() ? false : "Not a valid date"
+    val && moment(val, "YYYY/MM/DD", true).isValid() ? false : "Not a valid date"
 
 const editableFields = [
     { label: "Current Enrolment", value: "current_enrolment", validate: [validNumber] },

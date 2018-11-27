@@ -1,5 +1,5 @@
 import { createReducer } from "redux-create-reducer"
-import { SELECT_APPLICANT, REMOVE_APPLICANT } from "./constants"
+import { SELECT_APPLICANT_SUCCESS, REMOVE_APPLICANT_SUCCESS } from "./constants"
 
 const data1 = [
     {
@@ -14,6 +14,7 @@ const data1 = [
         locked: true
     }
 ]
+
 const data2 = [
     {
         positionId: 1,
@@ -78,7 +79,7 @@ const initialState = {
 }
 
 const reducer = createReducer(initialState, {
-    [SELECT_APPLICANT]: (state, { payload: { positionId, applicantId } }) => {
+    [SELECT_APPLICANT_SUCCESS]: (state, { payload: { positionId, applicantId } }) => {
         const { selected, available } = state.positionData[positionId]
         const applicant = available.find(item => item.applicantId === applicantId)
         return {
@@ -91,7 +92,7 @@ const reducer = createReducer(initialState, {
             }
         }
     },
-    [REMOVE_APPLICANT]: (state, { payload: { applicantId, positionId } }) => {
+    [REMOVE_APPLICANT_SUCCESS]: (state, { payload: { applicantId, positionId } }) => {
         const { selected, available } = state.positionData[positionId]
         const applicant = selected.find(item => item.applicantId === applicantId)
         return {

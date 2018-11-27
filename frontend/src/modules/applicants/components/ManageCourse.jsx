@@ -19,9 +19,7 @@ const SelectButton = connect(
 
 const RemoveButton = connect(
     null,
-    {
-        removeApplicant
-    }
+    { removeApplicant }
 )(({ removeApplicant, positionId, applicantId }) => (
     <Button
         bsSize="xs"
@@ -125,6 +123,7 @@ class ManageCourse extends React.Component {
     resetFilters = () => this.setState({ filtered: [] })
     render() {
         const { available, selected } = this.props.applicants
+        const noFilteredApplied = this.state.filtered.length === 0
         return (
             <div>
                 <Panel>
@@ -138,17 +137,27 @@ class ManageCourse extends React.Component {
                             pageSize={selected.length}
                         />
                         <hr />
-                        <h3 style={{ marginTop: 0 }}>Available</h3>
-                        <Button bsStyle="warning" onClick={this.resetFilters}>
-                            Reset Filters
-                        </Button>
+                        <h3 style={{ marginTop: 0 }}>
+                            Available
+                            <Button
+                                disabled={noFilteredApplied}
+                                style={{ marginLeft: "16px" }}
+                                bsSize="sm"
+                                bsStyle={noFilteredApplied ? "default" : "warning"}
+                                onClick={this.resetFilters}
+                            >
+                                {noFilteredApplied ? "No Filters Applied" : "Reset Filters"}
+                            </Button>
+                        </h3>
                         <ReactTable
                             filtered={this.state.filtered}
                             onFilteredChange={this.handleFilterChange}
                             filterable={true}
                             defaultFilterMethod={(filter, row) =>
+                                row[filter.id] &&
+                                filter.value &&
                                 row[filter.id].toLowerCase().indexOf(filter.value.toLowerCase()) !==
-                                -1
+                                    -1
                             }
                             data={available}
                             columns={[promoteColumn, ...cols]}

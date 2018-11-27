@@ -17,14 +17,8 @@ const reducer = createReducer(initialState, {
     [FETCH_POSITIONS_SUCCESS]: (state, action) => ({ ...state, list: action.payload }),
     [SAVE_POSITION_SUCCESS]: (state, action) => ({
         ...state,
-        list: state.list.map(
-            position =>
-                position.id === action.payload.positionId
-                    ? {
-                          ...position,
-                          ...action.payload.newValues
-                      }
-                    : position
+        list: state.list.map(position =>
+            position.id === action.payload.id ? action.payload : position
         )
     }),
     [DELETE_POSITION_SUCCESS]: (state, action) => ({

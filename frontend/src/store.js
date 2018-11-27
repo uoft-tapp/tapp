@@ -1,10 +1,8 @@
 import { createStore, applyMiddleware } from "redux"
-import createSagaMiddleware from "redux-saga"
 import { composeWithDevTools } from "redux-devtools-extension"
 import { persistStore, persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
 import rootReducer from "./rootReducer"
-import rootSaga from "./rootSaga"
 import thunk from "redux-thunk"
 
 const configureStore = () => {
@@ -14,13 +12,8 @@ const configureStore = () => {
         whitelist: ["auth"]
     }
     const persistedReducer = persistReducer(persistConfig, rootReducer)
-    const sagaMiddleware = createSagaMiddleware()
-    const store = createStore(
-        persistedReducer,
-        composeWithDevTools(applyMiddleware(sagaMiddleware, thunk))
-    )
+    const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)))
     const persistor = persistStore(store)
-    sagaMiddleware.run(rootSaga)
 
     if (process.env.NODE_ENV !== "production") {
         if (module.hot) {
