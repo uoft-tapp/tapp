@@ -127,7 +127,11 @@ class ManageCourse extends React.Component {
         return (
             <div>
                 <Panel>
-                    <Panel.Heading>Course Name</Panel.Heading>
+                    <Panel.Heading>
+                        {this.props.position
+                            ? this.props.position.course_code
+                            : "Course Name Unavailable"}
+                    </Panel.Heading>
                     <Panel.Body>
                         <h3 style={{ marginTop: 0 }}>Selected</h3>
                         <ReactTable
@@ -171,6 +175,7 @@ class ManageCourse extends React.Component {
     }
 }
 
-export default connect(({ applicants }, { positionId }) => ({
+export default connect(({ applicants, positions: { list } }, { positionId }) => ({
+    position: list.find(({ id }) => id === positionId),
     applicants: applicants.positionData[positionId] || { selected: [], available: [] }
 }))(ManageCourse)

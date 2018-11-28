@@ -12,7 +12,7 @@ class Applicants extends React.Component {
                     <SelectCourse />
                 </Col>
                 {this.props.openPositions.map(positionId => (
-                    <Col xs={10} key={positionId}>
+                    <Col xs={10 / this.props.openPositions.length} key={positionId}>
                         <ManageCourse positionId={positionId} />
                     </Col>
                 ))}

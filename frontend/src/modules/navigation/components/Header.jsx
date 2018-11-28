@@ -13,7 +13,10 @@ const CustomNavItem = ({ href, children }) => (
 const TappNavItems = () => (
     <Nav>
         <CustomNavItem href="/tapp/positions">Positions</CustomNavItem>
-        <CustomNavItem href="/tapp/applicants">Applicants</CustomNavItem>
+        <CustomNavItem href="/tapp/applicants">Applicants by Course</CustomNavItem>
+        <CustomNavItem href="/tapp/assigned">All Assigned</CustomNavItem>
+        <CustomNavItem href="/tapp/unassigned">All Unassigned</CustomNavItem>
+        <CustomNavItem href="/tapp/summary">Summary</CustomNavItem>
     </Nav>
 )
 
