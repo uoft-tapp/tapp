@@ -59,11 +59,10 @@ export const createNewPosition = payload => async dispatch => {
         dispatch(createNewPositionSuccess(data))
         window.location = "/tapp/positions"
     } else {
-        console.log(res.status)
         dispatch(error({ ...errorProps, message: res.statusText })) 
-        if (!!data.errors) {        
-            Object.keys(data.errors).map( (key) => dispatch(
-                error({ ...errorProps, message: key + ": " + data.errors[key]  }))
+        if (!!data) {        
+            Object.keys(data).map( (key) => dispatch(
+                error({ ...errorProps, message: key + ": " + data[key]  }))
             )
         }
     }

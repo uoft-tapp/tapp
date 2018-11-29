@@ -17,3 +17,4 @@ export const fetchInstructors = () => dispatch => {
       })
       .catch(error => dispatch(fetchInstructorsError(error)))
 }
+

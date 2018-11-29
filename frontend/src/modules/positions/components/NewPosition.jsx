@@ -63,7 +63,6 @@ const InstructorInput = ({ curValue, label, onChange, required }) => <div>
 
 const InstructorList = ({ curValue, instructors, setInstructor }) => {
     const valid = validInstructor(curValue, { instructors })
-    // console.log(thing, curValue, instructors)
     const matchingInstructors = instructors.map(({ first_name, last_name }) => `${first_name} ${last_name}`).filter((name) => name.toLowerCase().indexOf(curValue.toLowerCase()) !== -1)
     return <div>
         {!!valid && <ul>

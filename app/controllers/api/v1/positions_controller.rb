@@ -24,7 +24,7 @@ module Api::V1
       if @position.save
         render json: @position, status: :created
       else
-        render json: { errors: @position.errors }, status: :unprocessable_entity
+        render json: @position.errors, status: :unprocessable_entity
       end
     end
 
@@ -33,7 +33,7 @@ module Api::V1
       if @position.update(position_params)
         render json: @position
       else
-        render json: { errors: @position.errors }, status: :unprocessable_entity
+        render json: @position.errors, status: :unprocessable_entity
       end
     end
 
@@ -42,7 +42,7 @@ module Api::V1
       if @position.destroy
         head :no_content, status: :ok
       else
-        render json: { errors: @position.errors }, status: :unprocessable_entity
+        render json: @position.errors, status: :unprocessable_entity
       end
     end
 
