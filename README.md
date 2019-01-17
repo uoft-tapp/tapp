@@ -17,7 +17,7 @@ We have an init script that installs a linter (rubocop), as well as sets up a
 precommit hook to have the linter automatically run whenever you make a commit.
 Clone this repo, navigate into the cloned directory, and run 
 ```
-./script/init-setup.sh
+./script/init-script.sh
 ```
 
 ### Running in a Docker Container
