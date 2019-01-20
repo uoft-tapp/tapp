@@ -27,7 +27,7 @@ After cloning the repo and navigating into the cloned directory, run the init sc
 in your shell. To do so in bash, for example, invoke:
 
 ```
-bash script/init-setup.sh
+bash script/init-script.sh
 ```
 
 ### Running the backend with Docker
@@ -87,7 +87,7 @@ the DB container, then invoking:
 $ psql tapp_development tapp
 ```
 
-## Running the frontend
+## Running the React frontend
 
 To run the front end, open a new terminal instance and navigate into the `frontend` directory. Once there, invoke
 
