@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { createNewPosition } from "../actions"
 import { fetchInstructors } from "../../instructors/actions"
 import { Grid, Col, Button } from "react-bootstrap"
-import moment from "moment"
+import { moment } from "moment"
 
 const toNames = ({ first_name, last_name }) => `${first_name} ${last_name}`
 
@@ -123,7 +123,7 @@ class NewPosition extends React.Component {
                                                 instructors={this.props.instructors} /> }
                                         </div>
 
-                                case 'qualifications':              
+                                case 'qualifications':        
                                 case 'duties':
                                     return <TextboxInput 
                                         curValue={this.state[value]} 
