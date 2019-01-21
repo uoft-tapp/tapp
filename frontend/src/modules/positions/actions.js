@@ -47,6 +47,25 @@ export const deletePosition = payload => async dispatch => {
 export const deletePositionSuccess = payload => ({ type: DELETE_POSITION_SUCCESS, payload })
 
 export const createNewPosition = payload => async dispatch => {
-    dispatch(createNewPositionSuccess())
+    const res = await fetch("/api/v1/positions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    const data = await res.json()
+    if (res.status === 201) {
+        dispatch(createNewPositionSuccess(data))
+        window.location = "/tapp/positions"
+    } else {
+        dispatch(error({ ...errorProps, message: res.statusText })) 
+        if (!!data) {        
+            Object.keys(data).map( (key) => dispatch(
+                error({ ...errorProps, message: key + ": " + data[key]  }))
+            )
+        }
+    }
 }
+
 export const createNewPositionSuccess = payload => ({ type: CREATE_NEW_POSITION_SUCCESS, payload })

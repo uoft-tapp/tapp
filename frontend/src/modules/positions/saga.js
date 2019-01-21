@@ -1,12 +1,10 @@
 import { takeEvery, put, all } from "redux-saga/effects"
-import { SAVE_POSITION, DELETE_POSITION, CREATE_NEW_POSITION } from "./constants"
+import { SAVE_POSITION, DELETE_POSITION } from "./constants"
 import {
     savePositionsSuccess,
     savePositionsError,
     deletePositionSuccess,
-    deletePositionError,
-    createNewPositionSuccess,
-    createNewPositionError
+    deletePositionError
 } from "./actions"
 
 function* handleUpdatePosition(action) {
@@ -35,26 +33,9 @@ function* handleDeletePosition(action) {
     }
 }
 
-function* handleCreateNewPosition(action) {
-    const res = yield fetch(`/api/v1/positions`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(action.payload)
-    })
-    if (res.status === 200) {
-        const newPosition = yield res.json()
-        yield put(createNewPositionSuccess(newPosition))
-    } else {
-        yield put(createNewPositionError())
-    }
-}
-
 export default function*() {
     yield all([
         takeEvery(SAVE_POSITION, handleUpdatePosition),
-        takeEvery(DELETE_POSITION, handleDeletePosition),
-        takeEvery(CREATE_NEW_POSITION, handleCreateNewPosition)
+        takeEvery(DELETE_POSITION, handleDeletePosition)
     ])
 }
