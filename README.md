@@ -11,13 +11,10 @@ must be run manually.
 
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
 2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)*
-3. [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
-4. [Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-* If you are running OSx or Windows, your Docker installation will have 
-come with docker-compose. 
+* If you are running OSx or Windows, your Docker installation will have come with docker-compose.
 
-### Clone the repo and run the init script 
+### Clone the repo and run the init script
 
 We have an init script that installs a linter (rubocop) and sets up a 
 precommit hook making the linter run automatically whenever you commit.
@@ -30,22 +27,37 @@ in your shell. To do so in bash, for example, invoke:
 bash script/init-script.sh
 ```
 
-### Running the backend with Docker
+### Project Structure
 
-To begin, make sure that Docker is running on your system. Once it is, invoke
+The app is organized into three entities: 
+
+- A rails app, which serves the API
+- A postgress database that the API interacts with directly
+- A React app, which serves as the frontend for the app
+
+### Running the app with Docker
+
+To begin, make sure that Docker is running on your system. Once it is, begin by building all the relevant docker images by invoking
+
+```
+docker-compose build
+```
+
+then invoke
 
 ```
 docker-compose up
 ```
 
-from the cloned directory.
+This will spin up three services: one for the database, one for api and one for the frontend.
 
-This will launch two containers: a rails app, and a postgres database. You can 
-access the rails app from your browser by navigating to `http://localhost:3000`. 
-(Bare in mind that in tapp, rails is meant only to serve the API, not views.)
+You can access the rails app from your browser by navigating to `http://localhost:3000`.
 
-If you already have an existing image running on your machine that you would
-like to rebuild, run
+You will be able to access the frontend at `http://localhost:8000`. Note that
+unlike most traditional rails app, under our project, rails does not serve views.
+It only provides the API which the frontend, served seperately by yarn, pulls from.
+
+In the future, you can collapse these two commands into one with:
 
 ```
 docker-compose up --build
@@ -57,21 +69,20 @@ To view the STDOUT from a docker container of a running server, you can invoke
 
 ### Navigating into the containers from the command line
 
-Currently, we define two services under docker-compose: tapp and db. If you would
-like to interact with either container from the command line, you can do so by 
+Currently, we define three services under docker-compose: frontend, tapp and db. If you would
+like to interact with any of the containers from the command line, you can do so by 
 invoking:
 
 ```
 docker-compose exec [service] sh
 ```
 
-To interact with the rails app, invoke `docker-compose exec tapp sh` and to
-interact with the database, invoke `docker-compose exec [db] sh`.
+For instance, to interact with the rails app, invoke `docker-compose exec tapp sh`.
 
 ### Initializing the Database
 
 To both create and setup your local development database, navigate into the
-rails container and run: 
+rails container and run:
 
 ```
 rake db:setup
@@ -86,24 +97,6 @@ the DB container, then invoking:
 ```
 $ psql tapp_development tapp
 ```
-
-## Running the React frontend
-
-To run the front end, open a new terminal instance and navigate into the `frontend` directory. Once there, invoke
-
-```
-yarn install
-```
-
-to update all packages. With that done, serve the frontend by invoking 
-
-```
-yarn start
-```
-
-You will be able to access it at `http://localhost:8000`. Note that, as mentioned earlier,
-unlike most traditional rails app, under our project, rails does not serve views.
-It only provides the API which the frontend, served seperately by yarn, pulls from.
 
 ## Annotations
 We use the annotate gem to automatically annotate our models whenever a migration

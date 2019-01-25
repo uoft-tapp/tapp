@@ -18,3 +18,9 @@ services:
       - '.:/app'
     env_file:
       - '.env'
+  frontend:
+    build: ./frontend
+    ports:
+      - '8000:8000'
+    volumes:
+      - '.:/frontend'

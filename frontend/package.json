@@ -1,7 +1,7 @@
 {
     "name": "frontend",
     "version": "0.1.0",
-    "proxy": "http://localhost:3000",
+    "proxy": "http://tapp:3000",
     "private": true,
     "dependencies": {
         "bootstrap": "3",
