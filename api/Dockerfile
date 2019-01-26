@@ -9,7 +9,7 @@ RUN apk update && apk add build-base \
 RUN mkdir /app
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile* ./
 
 RUN bundle install
 
