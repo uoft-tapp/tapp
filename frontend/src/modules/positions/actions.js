@@ -42,7 +42,15 @@ export const openPositionEditModal = id => ({ type: OPEN_EDIT_POSITION_MODAL, pa
 export const closeEditPositionModal = () => ({ type: CLOSE_EDIT_POSITION_MODAL })
 
 export const deletePosition = payload => async dispatch => {
-    dispatch(deletePositionSuccess())
+    const res = await fetch(`/api/v1/positions/${payload.positionId}`, {
+        method: "DELETE"
+    })
+    if (res.status === 200) {
+        dispatch(deletePositionSuccess(payload))
+        dispatch(success({ ...successProps, title: `Position ${payload.positionId} Deleted` }))
+    } else {
+        dispatch(error({ ...errorProps, message: res.statusText }))
+    }
 }
 export const deletePositionSuccess = payload => ({ type: DELETE_POSITION_SUCCESS, payload })
 
