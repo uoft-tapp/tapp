@@ -35,6 +35,8 @@ class Positions extends React.Component {
                         pageSize={this.props.positions.length}
                         columns={COLUMNS}
                         data={this.props.positions}
+                        className={'positions-table'}
+                        noDataText={'No positions found'}
                         SubComponent={({ original }) => {
                             return (
                                 <div style={{ display: "flex", justifyContent: "space-between" }}>
