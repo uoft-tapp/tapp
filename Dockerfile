@@ -13,4 +13,6 @@ COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
 
+RUN rails db:migrate
+
 COPY . .
