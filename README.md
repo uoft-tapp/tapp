@@ -97,27 +97,25 @@ adding a new position would always fail.
 - Github's automatic merge commits are acceptable
 - The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
 
-## Getting started with development
+## Getting Started
 These instructions will get a copy of the project up and running on your
-local machine for development and testing purposes. Currently, the backend 
-(using Ruby 2.5.1 and a Postgres database) is dockerized and the frontend 
-must be run manually.
+local machine for development and testing purposes. Currently, the entire app 
+(using React/Redux, Ruby 2.5.1 and a Postgres database) is dockerized.
 
 ### Prerequisties
 
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
 2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)*
+3. Ruby, only if you would like to use the precommit hook
 
 * If you are running OSx or Windows, your Docker installation will have come with docker-compose.
 
-### Clone the repo and run the init script
+### Rubocop precommit hook
 
-We have an init script that installs a linter (rubocop) and sets up a 
+If you want to work on the Rails API, we maintaing a script that installs a linter (rubocop) and sets up a 
 precommit hook making the linter run automatically whenever you commit.
-It is kept under our `script` directory.
 
-After cloning the repo and navigating into the cloned directory, run the init script
-in your shell. To do so in bash, for example, invoke:
+If you would like to install it, first nagivate into the `api` directory and invoke:
 
 ```
 bash script/init-script.sh
@@ -125,7 +123,7 @@ bash script/init-script.sh
 
 ### Project Structure
 
-The app is organized into three entities: 
+The app is organized into three entities:
 
 - A rails app, which serves the API
 - A postgress database that the API interacts with directly
@@ -166,14 +164,13 @@ To view the STDOUT from a docker container of a running server, you can invoke
 ### Navigating into the containers from the command line
 
 Currently, we define three services under docker-compose: frontend, tapp and db. If you would
-like to interact with any of the containers from the command line, you can do so by 
-invoking:
+like to interact with any of the containers from the command line, you can do so by invoking:
 
 ```
 docker-compose exec [service] sh
 ```
 
-For instance, to interact with the rails app, invoke `docker-compose exec tapp sh`.
+For instance, to interact with the rails app, invoke `docker-compose exec api sh`.
 
 ### Initializing the Database
 
