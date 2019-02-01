@@ -1,7 +1,103 @@
 # TAPP
 TA application, assignment, and matching.
 
-## Getting Started
+## Contributing
+
+If you would like to contribute to the project, we ask that you follow the following conventions. 
+
+### Issues
+
+**Scope** 
+
+- Everything you contribute, no matter how small, should always start with a new issue. The scope of these problems can be quite broad, if necessary, and can be decomposed into collection of smaller issues as the team sees fit. This allows us to be both in documented conversation about what work needs to be done, and to be aware of who has taken on different tasks.
+
+**Structure** 
+
+- The issue title and description should be as descriptive as possible. 
+- If you want to take on an issue, assign yourself to it first so that we can track which ones need attending to. 
+- We allow two special kinds of issues, proposal and question. Their issue titles should start with [proposal] or [question] respectively, and are meant for issues that require team input. 
+- Please label issues as appropriate to the labels that already exist. If you would like to add a new one, open a proposal issue for it. 
+
+### Branches
+
+You should **never** push directly to master! Instead, please make a new branch who's name conforms to the following format:
+
+TAPP-[issue number]
+
+i.e. TAPP-1
+
+### Commits
+
+**Scope** 
+
+- An individual commit should always track the smallest unit of work possible, within reason. We want to seperate concerns, as this helps for better debugging, revieweing and log readability. 
+
+**Structure** 
+
+The general structure should always be: 
+
+[change type]([change region]): [short msg]  
+[detailed msg]
+#[issue number]
+
+Where
+**[change type]** is one of:
+
+- feat: A new feature
+- fix: A bug fix
+- ehancement: An improvement on a feature
+- refactor: A code refactor
+- style: A purely stylistic change to the code
+- test: Any change to or addition of tests
+
+**[change region]** is a name of a logical region of code in the project, i.e. 
+- Docker
+- api
+- db
+- frontend
+- documentation
+- ... etc
+
+**[short msg]** Should not exceed 50 chars
+
+**[detailed msg]** should provide a more detailed message on the next lines.
+
+**[issue number]** should match the associated issue, this allows the associated issue to be closed when a PR is merged, and improves log organization. 
+
+Example, of two commits:
+
+```
+enhancement(frontend): Add new view for adding positions
+
+This patch introduces a new front end view for adding positions to the system.
+
+#1
+```
+
+```
+fix(api): Fix api endpoint for adding postions
+
+This patch fixes a bug in the API whereby attempts to hit the endpoint meant for
+adding a new position would always fail.
+
+#1
+```
+
+### Pull Requests
+
+**Scope** 
+
+- The title of PR should either be exactly the issue title, or a rewording
+- The PR description should mention the associated issue with a hashtag, so that it can be linked 
+- All commits meant to resolve an issue must be reviewed by at least one member of the team
+- The reviewer will not merge commits until their changes are addressed, if requests for change apply
+- The reviewee should either rebase their changes onto their commits and push, or push follow up commits addressing reviewer changes
+- The reviewer must be the one to merge the PR after they approve their changes
+- If the PR commits must be rebased, the reviewee is responsible for doing this and should do so in a seperate commit
+- Github's automatic merge commits are acceptable
+- The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
+
+## Getting started with development
 These instructions will get a copy of the project up and running on your
 local machine for development and testing purposes. Currently, the backend 
 (using Ruby 2.5.1 and a Postgres database) is dockerized and the frontend 
