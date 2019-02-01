@@ -51,14 +51,14 @@ Where
 - test: Any change to or addition of tests
 
 **[change region]** is a name of a logical region of code in the project, i.e. 
-- Docker
+- docker
 - api
 - db
 - frontend
 - documentation
 - ... etc
 
-**[short msg]** Should not exceed 50 chars
+**[short msg]** should not exceed 50 chars
 
 **[detailed msg]** should provide a more detailed message on the next lines.
 
@@ -67,7 +67,7 @@ Where
 Example, of two commits:
 
 ```
-enhancement(frontend): Add new view for adding positions
+enhancement(frontend): add new view for adding positions
 
 This patch introduces a new front end view for adding positions to the system.
 
@@ -75,7 +75,7 @@ This patch introduces a new front end view for adding positions to the system.
 ```
 
 ```
-fix(api): Fix api endpoint for adding postions
+fix(api): Fix api endpoint for adding positions
 
 This patch fixes a bug in the API whereby attempts to hit the endpoint meant for
 adding a new position would always fail.
@@ -85,7 +85,7 @@ adding a new position would always fail.
 
 ### Pull Requests
 
-**Scope** 
+**Scope**
 
 - The title of PR should either be exactly the issue title, or a rewording
 - The PR description should mention the associated issue with a hashtag, so that it can be linked 
