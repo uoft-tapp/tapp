@@ -16,7 +16,6 @@ services:
       - '3000:3000'
     volumes:
       - './api:/app'
-      - 'bundler_data:/usr/local/bundle'
     env_file:
       - './api/.env'
   frontend:
@@ -26,8 +25,3 @@ services:
       - '8000:8000'
     volumes:
       - './frontend:/app'
-      - 'node_module_data:/app/node_modules'
-
-volumes:
-  bundler_data:
-  node_module_data:
