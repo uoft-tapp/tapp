@@ -38,7 +38,6 @@ The general structure should always be:
 
 [change type]([change region]): [short msg]  
 [detailed msg]
-#[issue number]
 
 Where
 **[change type]** is one of:
@@ -62,16 +61,12 @@ Where
 
 **[detailed msg]** should provide a more detailed message on the next lines.
 
-**[issue number]** should match the associated issue, this allows the associated issue to be closed when a PR is merged, and improves log organization. 
-
 Example, of two commits:
 
 ```
 enhancement(frontend): add new view for adding positions
 
 This patch introduces a new front end view for adding positions to the system.
-
-#1
 ```
 
 ```
@@ -79,8 +74,6 @@ fix(api): Fix api endpoint for adding positions
 
 This patch fixes a bug in the API whereby attempts to hit the endpoint meant for
 adding a new position would always fail.
-
-#1
 ```
 
 ### Pull Requests
