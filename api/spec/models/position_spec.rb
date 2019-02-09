@@ -19,8 +19,8 @@ describe Position do
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
-  it 'should not save without a round' do
-    k = FactoryBot.build(:position, round: nil)
+  it 'should not save without a session' do
+    k = FactoryBot.build(:position, session: nil)
     expect(k).to_not be_valid
 
     expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
@@ -36,7 +36,7 @@ describe Position do
   it 'should not save with a duplicated opening date' do
     original = FactoryBot.create(:position)
     new = FactoryBot.build(:position)
-    new.round = original.round
+    new.session = original.session
 
     expect(new).to_not be_valid
     expect { new.save! }.to raise_error(ActiveRecord::RecordInvalid)

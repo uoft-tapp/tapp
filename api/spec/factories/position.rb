@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :position do
-    association :round, :fall # Have it be fall by default
+    association :session, :fall # Have it be fall by default
     cap_enrolment { 10 }
     course_code { 'CSC148' }
     course_name { 'Introduction to Computer Science' }
