@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Api::V1::PositionsController, type: :api do
-  let(:round) { FactoryBot.create(:round, :fall) }
+  let(:session) { FactoryBot.create(:session, :fall) }
   let!(:position) { FactoryBot.create(:position) }
 
   # This is the minimal set of attributes required to create a valid
@@ -10,7 +10,7 @@ RSpec.describe Api::V1::PositionsController, type: :api do
   let(:valid_attributes) do
     {
       "openings": 25,
-      "round_id": round.id,
+      "session_id": session.id,
       "course_code": 'CSC108H1F'
     }
   end
@@ -18,8 +18,8 @@ RSpec.describe Api::V1::PositionsController, type: :api do
   let(:invalid_attributes) do
     {
       "openings": -10,
-      "round_id": round.id,
-      "course_code": 'CSC108H1F'
+      "session_id": session.id,
+      "course_code": 'CSC108H1F',
     }
   end
 
