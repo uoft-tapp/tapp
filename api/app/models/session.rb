@@ -2,7 +2,7 @@
 
 # A class representing a school term. For example, "fall 2018".
 class Session < ApplicationRecord
-  has_many :rounds
+  has_many :positions
 
   enum semesters: %i[fall winter summer]
 
