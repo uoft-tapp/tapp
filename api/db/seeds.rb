@@ -24,14 +24,8 @@ s = Session.create(
   start_date: DateTime.new(2018, 9, 1),
   end_date: DateTime.new(2018, 12, 31),
 )
-r = Round.create(
-  number: 1,
-  open_date: DateTime.new(2018, 7, 10),
-  close_date: DateTime.new(2018, 8, 20),
-  session: s
-)
 p = Position.create(
-  round: r,
+  session: s,
   course_code: 'CSC148H1F',
   course_name: 'Introduction to Computer Science',
   current_enrolment: 500,
@@ -56,7 +50,6 @@ i = Instructor.create(
   utorid: 'brownpau'
 )
 
-s.rounds << r
 p.instructors << i
 
 user1 = User.create(
