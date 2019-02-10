@@ -39,5 +39,8 @@
     ],
     "devDependencies": {
         "redux-devtools-extension": "^2.13.5"
-    }
+    },
+    "resolutions": {
+        "ajv": "6.8.1"
+      }
 }
