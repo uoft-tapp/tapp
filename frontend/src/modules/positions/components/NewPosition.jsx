@@ -34,7 +34,7 @@ const newPositionFields = [
     { label: "Duties", value: "duties", validate: [], required: false },
     { label: "Qualifications", value: "qualifications", validate:[], required: false },
     { label: "Instructor", value: "instructor", validate: [validInstructor], required: true },
-    { label: "Round", value: "round_id", validate: [validNumber], required: true },
+    { label: "Session", value: "session_id", validate: [validNumber], required: true },
     { label: "Hours", value: "hours", validate:[validNumber], required: false },
     { label: "Openings", value: "openings", validate: [validNumber], required: true },
     { label: "Start Date", value: "start_date", validate: [validDate], required: false },
