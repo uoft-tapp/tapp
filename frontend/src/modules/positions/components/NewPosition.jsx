@@ -112,7 +112,6 @@ class NewPosition extends React.Component {
                 start_date: data[i][9],
                 end_date: data[i][10]
             });
-            console.log(this.state)
             this.props.importNewPosition(this.state)
         }
         
