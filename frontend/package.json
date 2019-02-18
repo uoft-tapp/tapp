@@ -20,7 +20,8 @@
         "redux-form": "^7.4.2",
         "redux-persist": "^5.10.0",
         "redux-saga": "^0.16.0",
-        "redux-thunk": "^2.3.0"
+        "redux-thunk": "^2.3.0",
+        "react-csv-reader": "^1.2.2"
     },
     "scripts": {
         "start": "PORT=8000 react-scripts start",

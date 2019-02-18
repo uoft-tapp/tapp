@@ -4,7 +4,8 @@ import {
     OPEN_EDIT_POSITION_MODAL,
     CLOSE_EDIT_POSITION_MODAL,
     DELETE_POSITION_SUCCESS,
-    CREATE_NEW_POSITION_SUCCESS
+    CREATE_NEW_POSITION_SUCCESS,
+    IMPORT_NEW_POSITION_SUCCESS
 } from "./constants"
 import { error, success } from "react-notification-system-redux"
 import { errorProps, successProps } from "../notifications/constants"
@@ -76,4 +77,27 @@ export const createNewPosition = payload => async dispatch => {
     }
 }
 
+//used for uploading csv files
+export const importNewPosition = payload => async dispatch => {
+    const res = await fetch("/api/v1/positions/import", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    const data = await res.json()
+    if (res.status === 200) {
+        dispatch(importNewPositionSuccess(data))
+    } else {
+        dispatch(error({ ...errorProps, message: res.statusText })) 
+        if (!!data) {        
+            Object.keys(data).map( (key) => dispatch(
+                error({ ...errorProps, message: "Import call fails  "+ key + ": " + data[key]  }))
+            )
+        }
+    }
+}
+
+export const importNewPositionSuccess = payload => ({ type: IMPORT_NEW_POSITION_SUCCESS, payload })
 export const createNewPositionSuccess = payload => ({ type: CREATE_NEW_POSITION_SUCCESS, payload })

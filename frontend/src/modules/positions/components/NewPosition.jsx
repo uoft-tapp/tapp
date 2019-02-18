@@ -1,9 +1,10 @@
 import React from "react"
 import { connect } from "react-redux"
-import { createNewPosition } from "../actions"
+import { createNewPosition, importNewPosition } from "../actions"
 import { fetchInstructors } from "../../instructors/actions"
 import { Grid, Col, Button } from "react-bootstrap"
 import { moment } from "moment"
+import CSVReader  from "react-csv-reader"
 
 const toNames = ({ first_name, last_name }) => `${first_name} ${last_name}`
 
@@ -95,7 +96,28 @@ class NewPosition extends React.Component {
             return errorMessage ? `${cur.label}: ${errorMessage}` : acc
         }, false)
     setInstructor = name => this.setState({ instructor: name })
-    
+      
+    handleForce = data => {
+        for(var i = 1; i < data.length; i++) {
+            this.setState({
+                course_code: data[i][0],
+                course_name: data[i][1],
+                cap_enrolment: data[i][2],
+                duties: data[i][3],
+                qualifications: data[i][4],
+                instructor: data[i][5],
+                session_id: data[i][6],
+                hours: data[i][7],
+                openings: data[i][8],
+                start_date: data[i][9],
+                end_date: data[i][10]
+            });
+            console.log(this.state)
+            this.props.importNewPosition(this.state)
+        }
+        
+    }
+
     render() {
         const invalid = this.getInvalid()
         return (
@@ -145,6 +167,13 @@ class NewPosition extends React.Component {
                             }
                         })}
                         <br />
+                        <CSVReader
+                            cssClass="csv-reader-input"
+                            label="Select CSV file for new position"
+                            onFileLoaded={this.handleForce}
+                            inputStyle={{color: 'red'}}
+                        />
+                        <br />
                         <Button bsStyle="primary" disabled={!!invalid} type='submit'>
                             {invalid || "Save Changes"}
                         </Button>
@@ -159,5 +188,5 @@ export default connect(
     ({ instructors: { list } }) => ({
         instructors: list
     }),
-    { createNewPosition, fetchInstructors }
+    { createNewPosition, fetchInstructors, importNewPosition }
 )(NewPosition)
