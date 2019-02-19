@@ -28,6 +28,27 @@ module Api::V1
       end
     end
 
+    # POST /positions/import
+    def import
+      @position = Position.new(position_params)
+
+      if @position.valid?
+        if @position.save
+          render json: @position, status: :created
+        else
+          render json: @position.errors, status: :unprocessable_entity
+        end
+      else
+        @already_exists = Position.where('course_code = ? AND session_id = ?', params[:course_code], params[:session_id])
+        if @already_exists.present?
+          @already_exists.update(position_params)
+          render json: @already_exists
+        else
+          render json: @position.errors, status: :unprocessable_entity
+        end
+      end
+    end
+
     # PATCH/PUT /positions/1
     def update
       if @position.update(position_params)
