@@ -45,6 +45,9 @@ end
 #
 # Indexes
 #
-#  index_positions_on_course_code_and_session_id  (course_code,session_id) UNIQUE
-#  index_positions_on_session_id                (session_id)
+#  index_positions_on_session_id  (session_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (session_id => sessions.id)
 #

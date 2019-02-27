@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181030155257) do
+ActiveRecord::Schema.define(version: 2019_02_09_002226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(version: 20181030155257) do
   end
 
   create_table "positions", force: :cascade do |t|
-    t.bigint "round_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "course_code"
@@ -66,8 +65,8 @@ ActiveRecord::Schema.define(version: 20181030155257) do
     t.integer "openings"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.index ["course_code", "round_id"], name: "index_positions_on_course_code_and_round_id", unique: true
-    t.index ["round_id"], name: "index_positions_on_round_id"
+    t.bigint "session_id"
+    t.index ["session_id"], name: "index_positions_on_session_id"
   end
 
   create_table "preferences", force: :cascade do |t|
@@ -79,17 +78,6 @@ ActiveRecord::Schema.define(version: 20181030155257) do
     t.index ["applicant_id", "position_id"], name: "index_preferences_on_applicant_id_and_position_id", unique: true
     t.index ["applicant_id"], name: "index_preferences_on_applicant_id"
     t.index ["position_id"], name: "index_preferences_on_position_id"
-  end
-
-  create_table "rounds", force: :cascade do |t|
-    t.datetime "open_date"
-    t.datetime "close_date"
-    t.integer "number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "session_id"
-    t.index ["session_id", "number"], name: "index_rounds_on_session_id_and_number", unique: true
-    t.index ["session_id"], name: "index_rounds_on_session_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -111,4 +99,5 @@ ActiveRecord::Schema.define(version: 20181030155257) do
     t.index ["utorid"], name: "index_users_on_utorid", unique: true
   end
 
+  add_foreign_key "positions", "sessions"
 end
