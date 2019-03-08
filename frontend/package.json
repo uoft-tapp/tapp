@@ -4,7 +4,7 @@
     "proxy": "http://api:3000",
     "private": true,
     "dependencies": {
-        "bootstrap": "3",
+        "bootstrap": "^3.4.1",
         "moment": "^2.22.2",
         "node-sass": "^4.9.3",
         "react": "^16.5.2",
