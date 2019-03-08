@@ -93,7 +93,7 @@ export const importNewPosition = payload => async dispatch => {
         dispatch(error({ ...errorProps, message: res.statusText })) 
         if (!!data) {        
             Object.keys(data).map( (key) => dispatch(
-                error({ ...errorProps, message: "Import call fails  "+ key + ": " + data[key]  }))
+                error({ ...errorProps, message: JSON.stringify(payload) + "\n" + "Import call fails  "+ key + ": " + data[key]  }))
             )
         }
     }

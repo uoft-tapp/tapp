@@ -99,7 +99,7 @@ class NewPosition extends React.Component {
       
     handleForce = data => {
         for(var i = 1; i < data.length; i++) {
-            this.setState({
+            const position = {
                 course_code: data[i][0],
                 course_name: data[i][1],
                 cap_enrolment: data[i][2],
@@ -111,10 +111,9 @@ class NewPosition extends React.Component {
                 openings: data[i][8],
                 start_date: data[i][9],
                 end_date: data[i][10]
-            });
-            this.props.importNewPosition(this.state)
-        }
-        
+            };
+            this.props.importNewPosition(position);
+        }    
     }
 
     render() {
