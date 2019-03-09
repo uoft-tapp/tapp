@@ -65,12 +65,14 @@ end
 #  address         :text
 #  commentary      :text
 #  dept            :string
+#  dept_fields     :string
 #  email           :string
 #  first_name      :string
 #  is_full_time    :boolean
 #  is_grad_student :boolean
 #  last_name       :string
 #  phone           :string
+#  program         :string
 #  student_number  :string
 #  utorid          :string
 #  year_in_program :integer
