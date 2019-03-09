@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
-import { createNewPosition, importNewPosition } from "../actions"
+import { createNewPosition, importNewPosition, getCount, importResult} from "../actions"
 import { fetchInstructors } from "../../instructors/actions"
 import { Grid, Col, Button } from "react-bootstrap"
 import { moment } from "moment"
@@ -97,7 +97,9 @@ class NewPosition extends React.Component {
         }, false)
     setInstructor = name => this.setState({ instructor: name })
       
-    handleForce = data => {
+    handleForce = async data => {
+        let count_before_import = getCount();
+
         for(var i = 1; i < data.length; i++) {
             const position = {
                 course_code: data[i][0],
@@ -112,8 +114,13 @@ class NewPosition extends React.Component {
                 start_date: data[i][9],
                 end_date: data[i][10]
             };
-            this.props.importNewPosition(position);
-        }    
+            await this.props.importNewPosition(position);
+        }  
+        let count_after_import = getCount();
+        let success_imports = count_after_import.SUCCESS - count_before_import.SUCCESS;
+        let failed_imports = count_after_import.FAILS - count_before_import.FAILS;
+
+        this.props.importResult(success_imports, failed_imports);
     }
 
     render() {
@@ -186,5 +193,5 @@ export default connect(
     ({ instructors: { list } }) => ({
         instructors: list
     }),
-    { createNewPosition, fetchInstructors, importNewPosition }
+    { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition)

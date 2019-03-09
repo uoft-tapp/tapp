@@ -5,9 +5,10 @@ import {
     CLOSE_EDIT_POSITION_MODAL,
     DELETE_POSITION_SUCCESS,
     CREATE_NEW_POSITION_SUCCESS,
-    IMPORT_NEW_POSITION_SUCCESS
+    IMPORT_NEW_POSITION_SUCCESS,
+    IMPORT_NEW_POSITION_RESULT
 } from "./constants"
-import { error, success } from "react-notification-system-redux"
+import { show, error, success } from "react-notification-system-redux"
 import { errorProps, successProps } from "../notifications/constants"
 
 export const fetchPositionsSuccess = payload => ({ type: FETCH_POSITIONS_SUCCESS, payload })
@@ -46,7 +47,7 @@ export const deletePosition = payload => async dispatch => {
     const res = await fetch(`/api/v1/positions/${payload.positionId}`, {
         method: "DELETE"
     })
-    if (res.status === 200) {
+    if (res.status === 204) {
         dispatch(deletePositionSuccess(payload))
         dispatch(success({ ...successProps, title: `Position ${payload.positionId} Deleted` }))
     } else {
@@ -77,6 +78,19 @@ export const createNewPosition = payload => async dispatch => {
     }
 }
 
+//used for checking result of importNewPosition calls
+let SUCCESS_COUNT = 0
+let FAIL_COUNT = 0
+
+export function getCount() {
+    return { type: IMPORT_NEW_POSITION_RESULT, SUCCESS: SUCCESS_COUNT, FAILS: FAIL_COUNT }
+}
+
+export const importResult = (success_imports, failed_imports) => async dispatch => {
+    dispatch(show({ message: success_imports + " CSV Records Imported! " +  
+    failed_imports + " CSV Records Not Imported Due To Errors!"}, "info"))
+}
+
 //used for uploading csv files
 export const importNewPosition = payload => async dispatch => {
     const res = await fetch("/api/v1/positions/import", {
@@ -87,13 +101,15 @@ export const importNewPosition = payload => async dispatch => {
         body: JSON.stringify(payload)
     })
     const data = await res.json()
-    if (res.status === 200) {
+    if (res.status === 201 || res.status === 200) {     // 200 (OK) and 201 (CREATED) are both good calls
+        SUCCESS_COUNT++;      
         dispatch(importNewPositionSuccess(data))
     } else {
+        FAIL_COUNT++;
         dispatch(error({ ...errorProps, message: res.statusText })) 
         if (!!data) {        
             Object.keys(data).map( (key) => dispatch(
-                error({ ...errorProps, message: JSON.stringify(payload) + "\n" + "Import call fails  "+ key + ": " + data[key]  }))
+                error({ ...errorProps, message: JSON.stringify(payload) + "\nImport call failed:   "+ key + ": " + data[key]  }))
             )
         }
     }
