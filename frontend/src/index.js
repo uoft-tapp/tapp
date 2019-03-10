@@ -26,9 +26,12 @@ render(App)
 
 // Hot module reloading
 // https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642
+
+/*eslint-disable */
 if (module.hot) {
     module.hot.accept("./App", () => {
         const NextApp = require("./App").default
         render(NextApp)
     })
 }
+/*eslint-enable */
