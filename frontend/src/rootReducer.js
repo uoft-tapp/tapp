@@ -5,6 +5,7 @@ import authReducer from "./modules/auth/reducer"
 import positionReducer from "./modules/positions/reducer"
 import applicantReducer from "./modules/applicants_by_course/reducer"
 import instructorReducer from "./modules/instructors/reducer"
+import applicationReducer from "./modules/application/reducer"
 
 const reducer = combineReducers({
     notifications: notificationReducer,
@@ -12,7 +13,8 @@ const reducer = combineReducers({
     auth: authReducer,
     positions: positionReducer,
     applicants: applicantReducer,
-    instructors: instructorReducer
+    instructors: instructorReducer,
+    application: applicationReducer
 })
 
 export default reducer
