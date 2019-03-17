@@ -6,6 +6,7 @@ import NewPosition from "./modules/positions/components/NewPosition"
 import AllAssigned from "./modules/all_applicants/components/AllAssigned"
 import AllUnassigned from "./modules/all_applicants/components/AllUnassigned"
 import Summary from "./modules/tapp_summary/components/Summary"
+import ApplicationForm from "./modules/application/components/ApplicationForm"
 
 export const openRoutes = [
     {
@@ -39,6 +40,10 @@ export const openRoutes = [
     {
         path: "/cp",
         component: Screen
+    },
+    {
+        path: "/application",
+        component: ApplicationForm
     }
 ]
 

@@ -9,7 +9,7 @@ const configureStore = () => {
     const persistConfig = {
         key: "root",
         storage,
-        whitelist: ["auth"]
+        whitelist: ["auth", "application"]
     }
     const persistedReducer = persistReducer(persistConfig, rootReducer)
     const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)))
