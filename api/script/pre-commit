@@ -1,6 +1,0 @@
-#!/bin/bash
-
-ruby api/script/rubocop.rb --index -Ra --fail-level convention
-RUBOCOP_EXIT=$?
-git add -u
-exit $RUBOCOP_EXIT

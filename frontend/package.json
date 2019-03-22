@@ -4,7 +4,7 @@
     "proxy": "http://api:3000",
     "private": true,
     "dependencies": {
-        "bootstrap": "3",
+        "bootstrap": "^3.4.1",
         "moment": "^2.22.2",
         "node-sass": "^4.9.3",
         "react": "^16.5.2",
@@ -20,7 +20,8 @@
         "redux-form": "^7.4.2",
         "redux-persist": "^5.10.0",
         "redux-saga": "^0.16.0",
-        "redux-thunk": "^2.3.0"
+        "redux-thunk": "^2.3.0",
+        "react-csv-reader": "^1.2.2"
     },
     "scripts": {
         "start": "PORT=8000 react-scripts start",
@@ -38,6 +39,8 @@
         "not op_mini all"
     ],
     "devDependencies": {
+        "eslint": "^5.15.1",
+        "eslint-plugin-react": "^7.12.4",
         "redux-devtools-extension": "^2.13.5"
     }
 }
