@@ -28,6 +28,33 @@ module Api::V1
       end
     end
 
+     # POST /positions/import
+     def import
+      @position = Position.new(position_params)
+
+      if @position.valid?
+        if @position.save
+          render json: @position, status: :created
+        else
+          render json: @position.errors, status: :unprocessable_entity
+        end
+      else
+        #check whether the error lies in uniqueness alone
+        if @position.errors.details.length == 1 &&  @position.errors["course_code"] == ["course duplicated in same session"]
+          # safe to update since there's no other errors
+          @exists = Position.where('course_code = ? AND session_id = ?', params[:course_code], params[:session_id])
+          if @exists.update(position_params)
+            render json: @exists
+          else
+            render json: @exists.errors, status: :unprocessable_entity
+          end
+          
+        else
+          render json: @position.errors, status: :unprocessable_entity
+        end
+      end
+    end
+
     # PATCH/PUT /positions/1
     def update
       if @position.update(position_params)
