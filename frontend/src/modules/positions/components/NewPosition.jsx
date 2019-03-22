@@ -1,9 +1,10 @@
 import React from "react"
 import { connect } from "react-redux"
-import { createNewPosition } from "../actions"
+import { createNewPosition, importNewPosition, getCount, importResult} from "../actions"
 import { fetchInstructors } from "../../instructors/actions"
 import { Grid, Col, Button } from "react-bootstrap"
 import { moment } from "moment"
+import CSVReader  from "react-csv-reader"
 
 const toNames = ({ first_name, last_name }) => `${first_name} ${last_name}`
 
@@ -95,7 +96,33 @@ class NewPosition extends React.Component {
             return errorMessage ? `${cur.label}: ${errorMessage}` : acc
         }, false)
     setInstructor = name => this.setState({ instructor: name })
-    
+      
+    handleForce = async data => {
+        let count_before_import = getCount();
+
+        for(var i = 1; i < data.length; i++) {
+            const position = {
+                course_code: data[i][0],
+                course_name: data[i][1],
+                cap_enrolment: data[i][2],
+                duties: data[i][3],
+                qualifications: data[i][4],
+                instructor: data[i][5],
+                session_id: data[i][6],
+                hours: data[i][7],
+                openings: data[i][8],
+                start_date: data[i][9],
+                end_date: data[i][10]
+            };
+            await this.props.importNewPosition(position);
+        }  
+        let count_after_import = getCount();
+        let success_imports = count_after_import.SUCCESS - count_before_import.SUCCESS;
+        let failed_imports = count_after_import.FAILS - count_before_import.FAILS;
+
+        this.props.importResult(success_imports, failed_imports);
+    }
+
     render() {
         const invalid = this.getInvalid()
         return (
@@ -145,6 +172,13 @@ class NewPosition extends React.Component {
                             }
                         })}
                         <br />
+                        <CSVReader
+                            cssClass="csv-reader-input"
+                            label="Select CSV file for new position"
+                            onFileLoaded={this.handleForce}
+                            inputStyle={{color: 'red'}}
+                        />
+                        <br />
                         <Button bsStyle="primary" disabled={!!invalid} type='submit'>
                             {invalid || "Save Changes"}
                         </Button>
@@ -159,5 +193,5 @@ export default connect(
     ({ instructors: { list } }) => ({
         instructors: list
     }),
-    { createNewPosition, fetchInstructors }
+    { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition)
