@@ -9,6 +9,7 @@
         "node-sass": "^4.9.3",
         "react": "^16.5.2",
         "react-bootstrap": "^0.32.4",
+        "react-csv-reader": "^1.2.2",
         "react-dom": "^16.5.2",
         "react-notification-system-redux": "^1.2.0",
         "react-redux": "^5.0.7",
@@ -20,8 +21,7 @@
         "redux-form": "^7.4.2",
         "redux-persist": "^5.10.0",
         "redux-saga": "^0.16.0",
-        "redux-thunk": "^2.3.0",
-        "react-csv-reader": "^1.2.2"
+        "redux-thunk": "^2.3.0"
     },
     "scripts": {
         "start": "PORT=8000 react-scripts start",
@@ -39,8 +39,6 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "eslint": "^5.15.1",
-        "eslint-plugin-react": "^7.12.4",
         "redux-devtools-extension": "^2.13.5"
     }
 }
