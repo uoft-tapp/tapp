@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
-import { updateField } from "../actions"
+import { updateField, createNewApplication } from "../actions"
+import { Button } from "react-bootstrap"
 
 import { personalInformationFields, 
     currentProgramInformationFields, 
@@ -40,9 +41,9 @@ class ApplicationForm extends React.Component {
                                 "value": event.target.value})
     }
 
-    // TODO TAPP-67: used for submitting the form and saving it in the backend
     handleSubmit = (e) => {
         e.preventDefault()
+        this.props.createNewApplication(this.props.fields)
     }
 
     // Renders a simple field component
@@ -104,6 +105,7 @@ class ApplicationForm extends React.Component {
                         {customQuestions.map(
                                 ({ field_name, label, required, type }) => 
                                 this.render_field_type({ field_name, label, required, type }))}
+                    <Button bsStyle="primary" type="submit"> Submit </Button>
                 </form>
                 <br/>
                 <br/>
@@ -119,5 +121,5 @@ export default connect(
     ({ application: { fields } }) => ({
         fields: fields
     }),
-    { updateField }
+    { updateField, createNewApplication}
 )(ApplicationForm)
