@@ -12,7 +12,7 @@ if [[ ! "$STAGED_JS_FILES" = "" ]]; then
 
     printf "\nValidating Javascript:\n"
 
-    ESLINT="$(git rev-parse --show-toplevel)/frontend/node_modules/.bin/eslint"
+    ESLINT="$(git rev-parse --show-toplevel)/frontend/node_modules/eslint/bin/eslint.js"
 
     # Check for eslint
     if [[ ! -x "$ESLINT" ]]; then
