@@ -1,5 +1,5 @@
 import { UPDATE_FIELD } from "./constants"
-import { error } from "react-notification-system-redux"
+import { error, success  } from "react-notification-system-redux"
 import { errorProps } from "../notifications/constants"
 
 // an action generator function that returns an action object
@@ -15,9 +15,9 @@ export const createNewApplication = payload => async dispatch => {
     })
     const data = await res.json()
     if (res.status === 201) {
-        window.location = "/tapp/"
+        dispatch(success({title: "Success!", message: "Your application was submitted succesfully!",}))
     } else {
-        dispatch(error({ ...errorProps, message: res.statusText })) 
+        dispatch(error({ ...errorProps, message: "An error occured with your submission: " + res.statusText })) 
         if (!!data) {        
             Object.keys(data).map( (key) => dispatch(
                 error({ ...errorProps, message: key + ": " + data[key]  }))
