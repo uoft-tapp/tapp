@@ -45,9 +45,6 @@ class PositionsApplied extends React.Component {
     }
 }
     
-  
-
-
 export default connect(
     ({ applicantsPositions: { list }}) => ({
         applicantsPositions: list
