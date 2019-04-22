@@ -245,3 +245,11 @@ directory, and then re-create everything with `rake db:setup`
 
 If `rake db:setup` fails, invoke `rake db:create` to create a new database from
 scratch and `rake db:migrate`.
+
+## Common Issues
+
+1. Docker believes that a server is already running, and fails to run the api container. 
+
+After `running docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail. 
+
+To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
