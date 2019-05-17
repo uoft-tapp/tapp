@@ -156,7 +156,7 @@ To view the STDOUT from a docker container of a running server, you can invoke
 
 ### Navigating into the containers from the command line
 
-Currently, we define three services under docker-compose: frontend, tapp and db. If you would
+Currently, we define three services under docker-compose: frontend, api and db. If you would
 like to interact with any of the containers from the command line, you can do so by invoking:
 
 ```
@@ -172,6 +172,12 @@ rails container and run:
 
 ```
 rake db:setup
+```
+
+or from the host environment run
+
+```
+docker-compose run api rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB 

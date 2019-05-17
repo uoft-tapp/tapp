@@ -4,7 +4,7 @@ services:
   db:
     image: 'postgres:10.5-alpine'
     volumes:
-      - './tmp/db:/var/lib/postgresql/data'
+      - 'tapp-db-data:/var/lib/postgresql/data'
     env_file:
       - './api/.env'
   api:
@@ -13,7 +13,7 @@ services:
     command: bundle exec rails s -p 3000 -b "0.0.0.0"
     build: ./api
     ports:
-      - '3000:3000'
+      - '3023:3000'
     volumes:
       - './api:/app'
     env_file:
@@ -25,3 +25,7 @@ services:
       - '8000:8000'
     volumes:
       - './frontend:/app'
+
+volumes:
+  tapp-db-data:
+    driver: local
