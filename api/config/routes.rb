@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :positions, :instructors
       resources :applicants, only: [:create, :update]
+      resources :assignments, only: [:index, :show, :create, :update]
+	  resources :offers, only: [:index, :show]
 
       match 'positions/import' => 'positions#import', :via => :post
     end
