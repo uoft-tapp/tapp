@@ -4,8 +4,8 @@
 # applicant and position.
 class Assignment < ApplicationRecord
   has_many :offers
-  belongs_to :applicants
-  belongs_to :positions
+  belongs_to :applicant
+  belongs_to :position
 
   validates_uniqueness_of :applicant_id, :scope => [:position_id]
 end
