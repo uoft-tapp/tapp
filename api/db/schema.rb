@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_16_205813) do
+ActiveRecord::Schema.define(version: 2019_05_17_025521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2019_05_16_205813) do
     t.date "start_date"
     t.date "end_date"
     t.integer "status"
+    t.index ["applicant_id", "position_id"], name: "index_assignments_on_applicant_id_and_position_id", unique: true
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
     t.index ["position_id"], name: "index_assignments_on_position_id"
   end
