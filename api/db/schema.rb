@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_09_205032) do
+ActiveRecord::Schema.define(version: 2019_05_16_205813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,21 @@ ActiveRecord::Schema.define(version: 2019_03_09_205032) do
     t.index ["utorid"], name: "index_applicants_on_utorid", unique: true
   end
 
+  create_table "assignments", force: :cascade do |t|
+    t.bigint "applicants_id"
+    t.bigint "positions_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "hours"
+    t.float "pay1"
+    t.float "pay2"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "status"
+    t.index ["applicants_id"], name: "index_assignments_on_applicants_id"
+    t.index ["positions_id"], name: "index_assignments_on_positions_id"
+  end
+
   create_table "instructors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -51,6 +66,23 @@ ActiveRecord::Schema.define(version: 2019_03_09_205032) do
     t.bigint "position_id"
     t.index ["instructor_id"], name: "index_instructors_positions_on_instructor_id"
     t.index ["position_id"], name: "index_instructors_positions_on_position_id"
+  end
+
+  create_table "offers", force: :cascade do |t|
+    t.bigint "applicants_id"
+    t.bigint "positions_id"
+    t.bigint "assignments_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "hours"
+    t.float "pay1"
+    t.float "pay2"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "status"
+    t.index ["applicants_id"], name: "index_offers_on_applicants_id"
+    t.index ["assignments_id"], name: "index_offers_on_assignments_id"
+    t.index ["positions_id"], name: "index_offers_on_positions_id"
   end
 
   create_table "positions", force: :cascade do |t|
