@@ -2,7 +2,7 @@
 
 module Api::V1
   # Controller for Assignments
-	class AssignmentsController < ApplicationController
+  class AssignmentsController < ApplicationController
     before_action :set_assignment, only: %i[show update]
     # GET /assignments
     def index
@@ -45,12 +45,12 @@ module Api::V1
       end
     end
 
-   	private
+    private
     def set_assignment
       @assignment = Assignment.find(params[:id])
     end
 
-   	def assignment_params
+    def assignment_params
       params.permit(
         :id,
         :applicant_id,
@@ -87,5 +87,5 @@ module Api::V1
         render json: offer.errors, status: :unprocessable_entity
       end
     end
-	end
+  end
 end
