@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 2019_05_16_205813) do
   end
 
   create_table "assignments", force: :cascade do |t|
-    t.bigint "applicants_id"
-    t.bigint "positions_id"
+    t.bigint "applicant_id"
+    t.bigint "position_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "hours"
@@ -47,8 +47,8 @@ ActiveRecord::Schema.define(version: 2019_05_16_205813) do
     t.date "start_date"
     t.date "end_date"
     t.integer "status"
-    t.index ["applicants_id"], name: "index_assignments_on_applicants_id"
-    t.index ["positions_id"], name: "index_assignments_on_positions_id"
+    t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
+    t.index ["position_id"], name: "index_assignments_on_position_id"
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(version: 2019_05_16_205813) do
   end
 
   create_table "offers", force: :cascade do |t|
-    t.bigint "applicants_id"
-    t.bigint "positions_id"
-    t.bigint "assignments_id"
+    t.bigint "applicant_id"
+    t.bigint "position_id"
+    t.bigint "assignment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "hours"
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 2019_05_16_205813) do
     t.date "start_date"
     t.date "end_date"
     t.integer "status"
-    t.index ["applicants_id"], name: "index_offers_on_applicants_id"
-    t.index ["assignments_id"], name: "index_offers_on_assignments_id"
-    t.index ["positions_id"], name: "index_offers_on_positions_id"
+    t.index ["applicant_id"], name: "index_offers_on_applicant_id"
+    t.index ["assignment_id"], name: "index_offers_on_assignment_id"
+    t.index ["position_id"], name: "index_offers_on_position_id"
   end
 
   create_table "positions", force: :cascade do |t|
