@@ -16,8 +16,6 @@ services:
     build: ./api
     ports:
       - '3000:3000'
-    volumes:
-        - './api:/app'
     env_file:
       - './api/.env'
   frontend:
