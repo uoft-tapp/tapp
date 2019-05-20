@@ -4,5 +4,5 @@ docker-compose -f docker-compose.frontend.yml up --build
 docker run frontend:latest yarn build
 cp -a frontend/build/. api/public/
 docker-compose rm -f -s -v frontend
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 docker-compose exec api sh -c "rails db:migrate"
