@@ -6,6 +6,6 @@ ENV PATH=$PATH:/node_modules/.bin
 RUN mkdir /app
 WORKDIR /app
 
-COPY package.json .
+COPY . ./
 
 RUN yarn
