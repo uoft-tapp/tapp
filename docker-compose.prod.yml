@@ -1,28 +1,7 @@
 version: '3'
 
 services:
-  db:
-    image: 'postgres:10.5-alpine'
-    container_name: 'db'
-    volumes:
-      - './tmp/db:/var/lib/postgresql/data'
-    env_file:
-      - './api/.env'
   api:
-    depends_on:
-      - 'db'
-    container_name: 'tapp_api'
-    command: bundle exec rails s -p 3000 -b "0.0.0.0"
-    build: ./api
-    ports:
-      - '3000:3000'
-    env_file:
-      - './api/.env'
-  frontend:
-    container_name: 'tapp_fe'
-    command: yarn start
-    build: ./frontend
-    ports:
-      - '8000:8000'
-    volumes:
-      - './frontend:/app'
+    restart: always
+    environment:
+      - RAILS_ENV=production

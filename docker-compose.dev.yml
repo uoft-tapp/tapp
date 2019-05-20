@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: 'tapp_fe'
+    command: yarn start
+    build: ./frontend
+    ports:
+      - '8000:8000'
+    volumes:
+      - './frontend:/app'
+  api:
+    volumes:
+      - './api:/app'
+    environment:
+      - RAILS_ENV=development
