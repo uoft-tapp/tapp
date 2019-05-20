@@ -3,7 +3,6 @@ version: '3'
 services:
   frontend:
     container_name: 'tapp_fe'
-    command: yarn build
     build: ./frontend
     volumes:
       - './frontend:/app'
