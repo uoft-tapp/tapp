@@ -1,0 +1,16 @@
+{
+    "instructor": [
+        {
+            "first_name": "Paul",
+            "last_name": "Brown",
+            "email": "paul.brown.sample@utoronto.ca",
+            "utorid": "brownpau"
+        },
+        {
+            "first_name": "David",
+            "last_name": "Horton",
+            "email": "david.horton.sample@utoronto.ca",
+            "utorid": "dividhor"
+        }
+    ]
+}

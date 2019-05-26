@@ -25,7 +25,7 @@ s = Session.create(
   end_date: DateTime.new(2018, 12, 31),
 )
 p = Position.create(
-  session: s,
+  session: s, # session is a ruby obj ref
   course_code: 'CSC148H1F',
   course_name: 'Introduction to Computer Science',
   current_enrolment: 500,
@@ -38,6 +38,8 @@ p = Position.create(
   end_date: DateTime.new(2018, 12, 10),
   openings: 40
 )
+
+# perference is assembled by ref
 Preference.create(
   position: p,
   applicant: a,
@@ -61,3 +63,6 @@ user2 = User.create(
   utorid: 'admintes',
   role: 'admin'
 )
+
+tables = ['applicant', 'session', 'position', 'preference', 'instructor']
+seed_data_dir = Rails.root.join('db', 'seed')

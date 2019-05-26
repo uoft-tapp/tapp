@@ -1,0 +1,30 @@
+{
+    "position": [
+        {
+            "course_code": "CSC148H1F",
+            "course_name": "Introduction to Computer Science",
+            "current_enrolment": 500,
+            "duties": "Lead labs",
+            "qualifications": "Well versed in Python",
+            "hours": 54,
+            "cap_enrolment": 500,
+            "num_waitlisted": 100,
+            "start_date": "2018-9-10",
+            "end_date": "2018-12-10",
+            "openings": 40
+        },
+        {
+            "course_code": "CSC369H1W",
+            "course_name": "Operating System",
+            "current_enrolment": 200,
+            "duties": "Lead labs",
+            "qualifications": "Well versed in Operating System",
+            "hours": 54,
+            "cap_enrolment": 200,
+            "num_waitlisted": 50,
+            "start_date": "2019-01-01",
+            "end_date": "2018-04-30",
+            "openings": 20
+        }
+    ]
+}
