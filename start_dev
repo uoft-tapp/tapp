@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+cp dev.env .env 
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+docker-compose exec api sh -c "rails db:migrate RAILS_ENV=development"
+

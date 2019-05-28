@@ -11,11 +11,12 @@ default: &default
   host: db
   encoding: unicode
   pool: 5
+  user: <%= ENV.fetch("POSTGRES_USER") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") %>
 
 development:
   <<: *default
-  database: <%= ENV['POSTGRES_DB'] %>
-  user: <%= ENV['POSTGRES_USER'] %>
+  database: <%= ENV.fetch("POSTGRES_DB") %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,9 +24,8 @@ development:
 test:
   <<: *default
   database: tapp_test
-  user: tapp
 
 production:
   <<: *default
-  database: tapp_production
-  user: tapp
+  database: <%= ENV.fetch("POSTGRES_DB") %>
+
