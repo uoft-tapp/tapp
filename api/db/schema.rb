@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_30_070351) do
+ActiveRecord::Schema.define(version: 2019_05_30_071857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,12 @@ ActiveRecord::Schema.define(version: 2019_05_30_070351) do
     t.datetime "contract_end"
     t.text "note"
     t.string "offer_override_pdf"
+  end
+
+  create_table "create_preference_levels", force: :cascade do |t|
+    t.integer "preference_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "instructors", force: :cascade do |t|
