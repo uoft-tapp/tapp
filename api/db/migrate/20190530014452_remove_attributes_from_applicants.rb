@@ -1,4 +1,4 @@
-class RemoveAttributesFromPositions < ActiveRecord::Migration[5.2]
+class RemoveAttributesFromApplicants < ActiveRecord::Migration[5.2]
   def change
 	remove_column :applicants, :address
 	remove_column :applicants, :commentary
