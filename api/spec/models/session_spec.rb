@@ -58,14 +58,7 @@ end
 #
 #  id         :bigint(8)        not null, primary key
 #  end_date   :datetime
-#  pay        :float
-#  semester   :integer          default(0)
 #  start_date :datetime
-#  year       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_sessions_on_year_and_semester  (year,semester) UNIQUE
 #
