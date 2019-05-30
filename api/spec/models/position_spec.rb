@@ -47,21 +47,10 @@ end
 #
 # Table name: positions
 #
-#  id                :bigint(8)        not null, primary key
-#  cap_enrolment     :integer
-#  course_code       :string
-#  course_name       :text
-#  current_enrolment :integer
-#  duties            :text
-#  end_date          :datetime
-#  hours             :integer
-#  num_waitlisted    :integer
-#  openings          :integer
-#  qualifications    :text
-#  start_date        :datetime
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  session_id        :bigint(8)
+#  id         :bigint(8)        not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  session_id :bigint(8)
 #
 # Indexes
 #
