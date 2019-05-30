@@ -4,12 +4,12 @@
 
 # A class representing a preference_level, which represents the
 # 	different preference level possible for each postion_application.
-class CreatePreferenceLevel < ApplicationRecord
+class PreferenceLevel < ApplicationRecord
 end
 
 # == Schema Information
 #
-# Table name: create_preference_levels
+# Table name: preference_levels
 #
 #  id               :bigint(8)        not null, primary key
 #  preference_level :integer
