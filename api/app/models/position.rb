@@ -28,10 +28,16 @@ end
 #
 # Table name: positions
 #
-#  id         :bigint(8)        not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  session_id :bigint(8)
+#  id                       :bigint(8)        not null, primary key
+#  est_end_date             :datetime
+#  est_hours_per_assignment :float
+#  est_start_date           :datetime
+#  position_code            :string
+#  position_title           :string
+#  position_type            :string
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  session_id               :bigint(8)
 #
 # Indexes
 #
