@@ -58,6 +58,9 @@ end
 #
 #  id         :bigint(8)        not null, primary key
 #  end_date   :datetime
+#  name       :string
+#  rate1      :float
+#  rate2      :float
 #  start_date :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
