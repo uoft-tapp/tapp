@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_30_074444) do
+ActiveRecord::Schema.define(version: 2019_05_30_074729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,26 @@ ActiveRecord::Schema.define(version: 2019_05_30_074444) do
     t.bigint "assignment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "offer_template"
+    t.string "offer_override_pdf"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "position_code"
+    t.string "position_title"
+    t.datetime "position_start_date"
+    t.datetime "position_end_date"
+    t.boolean "first_time_ta"
+    t.string "instructor_contact_desc"
+    t.string "pay_period_desc"
+    t.integer "installments"
+    t.string "ta_coordinator_name"
+    t.string "ta_coordinator_email"
+    t.datetime "emailed_date"
+    t.string "signature"
+    t.datetime "accepted_date"
+    t.datetime "rejected_date"
+    t.datetime "withdrawn_date"
     t.index ["assignment_id"], name: "index_offers_on_assignment_id"
   end
 
