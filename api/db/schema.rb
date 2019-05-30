@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_30_060319) do
+ActiveRecord::Schema.define(version: 2019_05_30_070351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,13 +31,10 @@ ActiveRecord::Schema.define(version: 2019_05_30_060319) do
   create_table "assignments", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hours"
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "status"
-    t.index ["applicant_id", "position_id"], name: "index_assignments_on_applicant_id_and_position_id", unique: true
-    t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
-    t.index ["position_id"], name: "index_assignments_on_position_id"
+    t.datetime "contract_start"
+    t.datetime "contract_end"
+    t.text "note"
+    t.string "offer_override_pdf"
   end
 
   create_table "instructors", force: :cascade do |t|
