@@ -3,6 +3,7 @@
 
 # A class representing a wage chunk for an assignment.
 class WageChunk < ApplicationRecord
+	has_many :reporting_tags
 end
 
 # == Schema Information

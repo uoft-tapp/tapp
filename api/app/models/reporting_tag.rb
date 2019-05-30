@@ -4,6 +4,7 @@
 # A class representing a reporting tag for tables such as 
 # 	wage_chunk and position.
 class ReportingTag < ApplicationRecord
+	belongs_to :wage_chunk
 end
 
 # == Schema Information
