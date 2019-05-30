@@ -10,10 +10,6 @@ end
 # Table name: offers
 #
 #  id            :bigint(8)        not null, primary key
-#  end_date      :date
-#  hours         :integer
-#  start_date    :date
-#  status        :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  assignment_id :bigint(8)
