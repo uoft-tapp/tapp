@@ -52,22 +52,6 @@ ActiveRecord::Schema.define(version: 2019_05_24_054519) do
     t.index ["position_id"], name: "index_assignments_on_position_id"
   end
 
-  create_table "funding_sources", force: :cascade do |t|
-    t.bigint "assignment_id"
-    t.bigint "position_id"
-    t.bigint "offer_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.float "hours"
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "ddah_type"
-    t.float "rates"
-    t.index ["assignment_id"], name: "index_funding_sources_on_assignment_id"
-    t.index ["offer_id"], name: "index_funding_sources_on_offer_id"
-    t.index ["position_id"], name: "index_funding_sources_on_position_id"
-  end
-
   create_table "instructors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
