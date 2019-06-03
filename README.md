@@ -175,7 +175,8 @@ rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB 
-with seed data. 
+with seed data. Note that seed data is loaded from `api/db/seed/` folder where
+each json file represents a table.
 
 Once your DB is setup, you can gain SQL access to it by first navigating into 
 the DB container, then invoking:
