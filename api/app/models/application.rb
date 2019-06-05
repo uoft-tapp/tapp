@@ -2,6 +2,7 @@
 
 # A class representing an application of an applicant.
 class Application < ApplicationRecord
+	belongs_to :session
 end
 
 # == Schema Information
@@ -12,4 +13,9 @@ end
 #  comments   :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  session_id :bigint(8)
+#
+# Indexes
+#
+#  index_applications_on_session_id  (session_id)
 #

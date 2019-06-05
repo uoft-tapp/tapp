@@ -4,6 +4,7 @@
 class Session < ApplicationRecord
   has_many :positions
   has_many :position_templates
+  has_many :applications
 
   enum semesters: %i[fall winter summer]
 
