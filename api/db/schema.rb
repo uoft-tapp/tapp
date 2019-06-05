@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_051404) do
+ActiveRecord::Schema.define(version: 2019_06_05_052244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,12 +48,6 @@ ActiveRecord::Schema.define(version: 2019_06_05_051404) do
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
     t.index ["position_id", "applicant_id"], name: "index_assignments_on_position_id_and_applicant_id", unique: true
     t.index ["position_id"], name: "index_assignments_on_position_id"
-  end
-
-  create_table "create_preference_levels", force: :cascade do |t|
-    t.integer "preference_level"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -132,6 +126,12 @@ ActiveRecord::Schema.define(version: 2019_06_05_051404) do
     t.datetime "est_end_date"
     t.string "position_type"
     t.index ["session_id"], name: "index_positions_on_session_id"
+  end
+
+  create_table "preference_levels", force: :cascade do |t|
+    t.integer "preference_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "reporting_tags", force: :cascade do |t|
