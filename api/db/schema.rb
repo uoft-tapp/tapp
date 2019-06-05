@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_050906) do
+ActiveRecord::Schema.define(version: 2019_06_05_051404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,17 +132,6 @@ ActiveRecord::Schema.define(version: 2019_06_05_050906) do
     t.datetime "est_end_date"
     t.string "position_type"
     t.index ["session_id"], name: "index_positions_on_session_id"
-  end
-
-  create_table "preferences", force: :cascade do |t|
-    t.bigint "applicant_id"
-    t.bigint "position_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "priority"
-    t.index ["applicant_id", "position_id"], name: "index_preferences_on_applicant_id_and_position_id", unique: true
-    t.index ["applicant_id"], name: "index_preferences_on_applicant_id"
-    t.index ["position_id"], name: "index_preferences_on_position_id"
   end
 
   create_table "reporting_tags", force: :cascade do |t|
