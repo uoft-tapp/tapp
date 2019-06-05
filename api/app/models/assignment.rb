@@ -27,6 +27,7 @@ end
 #
 # Indexes
 #
-#  index_assignments_on_applicant_id  (applicant_id)
-#  index_assignments_on_position_id   (position_id)
+#  index_assignments_on_applicant_id                  (applicant_id)
+#  index_assignments_on_position_id                   (position_id)
+#  index_assignments_on_position_id_and_applicant_id  (position_id,applicant_id) UNIQUE
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_044517) do
+ActiveRecord::Schema.define(version: 2019_06_05_050345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_044517) do
     t.bigint "position_id"
     t.bigint "applicant_id"
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
+    t.index ["position_id", "applicant_id"], name: "index_assignments_on_position_id_and_applicant_id", unique: true
     t.index ["position_id"], name: "index_assignments_on_position_id"
   end
 
