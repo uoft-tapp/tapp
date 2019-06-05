@@ -103,15 +103,16 @@ local machine for development and testing purposes. Currently, the entire app
 
 * If you are running OSx or Windows, your Docker installation will have come with docker-compose.
 
-### Rubocop precommit hook
+### Rubocop and eslint precommit hook
 
-If you want to work on the Rails API, we maintaing a script that installs a linter (rubocop) and sets up a 
+
+If you want to work on the Rails API, we maintain a script that installs a linter (rubocop) and sets up a 
 precommit hook making the linter run automatically whenever you commit.
 
-If you would like to install it, first nagivate into the `api` directory and invoke:
+If you would like to install it, invoke:
 
 ```
-bash script/init-script.sh
+bash ./init.sh
 ```
 
 ### Project Structure
