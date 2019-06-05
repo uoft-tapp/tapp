@@ -4,6 +4,9 @@
 # A class representing a position_preference for an application 
 # 	to a position with a preference level.
 class PositionPreference < ApplicationRecord
+	belongs_to :application
+	belongs_to :position
+	belongs_to :preference_level
 end
 
 # == Schema Information

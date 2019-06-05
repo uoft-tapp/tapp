@@ -3,6 +3,8 @@
 # A class representing an application of an applicant.
 class Application < ApplicationRecord
 	belongs_to :session
+	has_many :position_preferences
+  	has_many :positions, through: :position_preferences
 end
 
 # == Schema Information

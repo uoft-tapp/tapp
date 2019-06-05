@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-
-
 # A class representing a preference_level, which represents the
 # 	different preference level possible for each postion_application.
 class PreferenceLevel < ApplicationRecord
+	has_many :position_preferences
 end
 
 # == Schema Information
