@@ -21,4 +21,11 @@ end
 #  offer_override_pdf :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  applicant_id       :bigint(8)
+#  position_id        :bigint(8)
+#
+# Indexes
+#
+#  index_assignments_on_applicant_id  (applicant_id)
+#  index_assignments_on_position_id   (position_id)
 #

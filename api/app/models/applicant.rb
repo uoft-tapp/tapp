@@ -5,6 +5,7 @@
 class Applicant < ApplicationRecord
   has_many :preferences
   has_many :positions, through: :preferences
+  has_many :assignments
 
   validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
   validates_uniqueness_of :student_number, :utorid

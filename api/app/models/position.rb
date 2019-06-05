@@ -10,6 +10,7 @@ class Position < ApplicationRecord
   has_many :preferences
   has_many :applicants, through: :preferences
   has_many :reporting_tags
+  has_many :assignments
 
   validates_presence_of :course_code, :openings, :session
   validates :openings, numericality: { only_integer: true, greater_than: 0 }
