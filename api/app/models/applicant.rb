@@ -4,6 +4,7 @@
 # has many preferences (a student can apply to many positions).
 class Applicant < ApplicationRecord
   has_many :assignments
+  has_many :applicant_data_for_matchings
 
   validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
   validates_uniqueness_of :student_number, :utorid
