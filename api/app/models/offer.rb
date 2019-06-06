@@ -12,8 +12,6 @@ end
 #  id            :bigint(8)        not null, primary key
 #  end_date      :date
 #  hours         :integer
-#  pay1          :float
-#  pay2          :float
 #  start_date    :date
 #  status        :integer
 #  created_at    :datetime         not null
