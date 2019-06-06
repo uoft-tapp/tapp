@@ -6,12 +6,6 @@ class Session < ApplicationRecord
   has_many :position_templates
   has_many :applications
 
-  enum semesters: %i[fall winter summer]
-
-  validates_presence_of :semester, :year
-  # Every session has a unique semester, year IE "Fall 2018".
-  validates :semester, uniqueness: { scope: %i[year] }, inclusion: { in: semesters.values }
-  validates :year, numericality: { only_integer: true, greater_than: 0 }
 end
 
 # == Schema Information
