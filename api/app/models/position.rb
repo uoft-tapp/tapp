@@ -13,6 +13,7 @@ class Position < ApplicationRecord
   has_many :assignments
   has_many :position_preferences
   has_many :applications, through: :position_preferences
+  has_one :position_data_for_ad
 
 
   validates_presence_of :course_code, :openings, :session

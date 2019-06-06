@@ -3,6 +3,7 @@
 
 # A class representing the ad portion of a position.
 class PositionDataForAd < ApplicationRecord
+	belongs_to :positions
 end
 
 # == Schema Information
@@ -18,4 +19,9 @@ end
 #  qualifications          :text
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  position_id             :bigint(8)
+#
+# Indexes
+#
+#  index_position_data_for_ads_on_position_id  (position_id)
 #

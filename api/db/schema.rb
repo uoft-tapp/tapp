@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_06_151443) do
+ActiveRecord::Schema.define(version: 2019_06_06_152400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(version: 2019_06_06_151443) do
     t.datetime "ad_close_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "position_id"
+    t.index ["position_id"], name: "index_position_data_for_ads_on_position_id"
   end
 
   create_table "position_preferences", force: :cascade do |t|
