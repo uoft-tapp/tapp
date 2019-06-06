@@ -7,8 +7,6 @@
 class Position < ApplicationRecord
   has_and_belongs_to_many :instructors
   belongs_to :session
-  has_many :preferences
-  has_many :applicants, through: :preferences
   has_many :reporting_tags
   has_many :assignments
   has_many :position_preferences
