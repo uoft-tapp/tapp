@@ -3,7 +3,7 @@
 
 # A class representing the ad portion of a position.
 class PositionDataForAd < ApplicationRecord
-	belongs_to :positions
+	belongs_to :position
 end
 
 # == Schema Information
