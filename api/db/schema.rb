@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_06_155913) do
+ActiveRecord::Schema.define(version: 2019_06_06_203328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "applicant_data_for_matchings", force: :cascade do |t|
+    t.string "program"
+    t.string "department"
+    t.text "previous_uoft_ta_experience"
+    t.integer "yip"
+    t.string "annotation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "applicants", force: :cascade do |t|
     t.datetime "created_at", null: false
