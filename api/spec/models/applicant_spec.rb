@@ -61,23 +61,15 @@ end
 #
 # Table name: applicants
 #
-#  id              :bigint(8)        not null, primary key
-#  address         :text
-#  commentary      :text
-#  dept            :string
-#  dept_fields     :string
-#  email           :string
-#  first_name      :string
-#  is_full_time    :boolean
-#  is_grad_student :boolean
-#  last_name       :string
-#  phone           :string
-#  program         :string
-#  student_number  :string
-#  utorid          :string
-#  year_in_program :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id             :bigint(8)        not null, primary key
+#  email          :string           not null
+#  first_name     :string           not null
+#  last_name      :string           not null
+#  phone          :string
+#  student_number :string           not null
+#  utorid         :string           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #

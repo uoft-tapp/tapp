@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_24_061229) do
+ActiveRecord::Schema.define(version: 2019_06_06_155913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,45 +18,45 @@ ActiveRecord::Schema.define(version: 2019_05_24_061229) do
   create_table "applicants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "utorid"
-    t.string "student_number"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
+    t.string "utorid", null: false
+    t.string "student_number", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "email", null: false
     t.string "phone"
-    t.text "address"
-    t.text "commentary"
-    t.string "dept"
-    t.integer "year_in_program"
-    t.boolean "is_full_time"
-    t.boolean "is_grad_student"
-    t.string "program"
-    t.string "dept_fields"
     t.index ["student_number"], name: "index_applicants_on_student_number", unique: true
     t.index ["utorid"], name: "index_applicants_on_utorid", unique: true
   end
 
-  create_table "assignments", force: :cascade do |t|
-    t.bigint "applicant_id"
-    t.bigint "position_id"
+  create_table "applications", force: :cascade do |t|
+    t.text "comments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hours"
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "status"
-    t.index ["applicant_id", "position_id"], name: "index_assignments_on_applicant_id_and_position_id", unique: true
+    t.bigint "session_id"
+    t.index ["session_id"], name: "index_applications_on_session_id"
+  end
+
+  create_table "assignments", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "contract_start"
+    t.datetime "contract_end"
+    t.text "note"
+    t.string "offer_override_pdf"
+    t.bigint "position_id"
+    t.bigint "applicant_id"
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
+    t.index ["position_id", "applicant_id"], name: "index_assignments_on_position_id_and_applicant_id", unique: true
     t.index ["position_id"], name: "index_assignments_on_position_id"
   end
 
   create_table "instructors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "last_name"
-    t.string "first_name"
-    t.string "email"
-    t.string "utorid"
+    t.string "last_name", null: false
+    t.string "first_name", null: false
+    t.string "email", null: false
+    t.string "utorid", null: false
     t.index ["utorid"], name: "index_instructors_on_utorid", unique: true
   end
 
@@ -71,59 +71,129 @@ ActiveRecord::Schema.define(version: 2019_05_24_061229) do
     t.bigint "assignment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hours"
-    t.date "start_date"
-    t.date "end_date"
-    t.integer "status"
+    t.string "offer_template"
+    t.string "offer_override_pdf"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "position_code"
+    t.string "position_title"
+    t.datetime "position_start_date"
+    t.datetime "position_end_date"
+    t.boolean "first_time_ta"
+    t.string "instructor_contact_desc"
+    t.string "pay_period_desc"
+    t.integer "installments"
+    t.string "ta_coordinator_name"
+    t.string "ta_coordinator_email"
+    t.datetime "emailed_date"
+    t.string "signature"
+    t.datetime "accepted_date"
+    t.datetime "rejected_date"
+    t.datetime "withdrawn_date"
     t.index ["assignment_id"], name: "index_offers_on_assignment_id"
+  end
+
+  create_table "position_data_for_ads", force: :cascade do |t|
+    t.text "duties"
+    t.text "qualifications"
+    t.float "ad_hours_per_assignment"
+    t.integer "ad_num_assignments"
+    t.datetime "ad_open_date"
+    t.datetime "ad_close_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "position_id"
+    t.index ["position_id"], name: "index_position_data_for_ads_on_position_id"
+  end
+
+  create_table "position_data_for_matchings", force: :cascade do |t|
+    t.integer "desired_num_assignments"
+    t.integer "current_enrollment"
+    t.integer "current_waitlisted"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "position_id"
+    t.index ["position_id"], name: "index_position_data_for_matchings_on_position_id"
+  end
+
+  create_table "position_preferences", force: :cascade do |t|
+    t.bigint "position_id"
+    t.bigint "preference_level_id"
+    t.bigint "application_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["application_id"], name: "index_position_preferences_on_application_id"
+    t.index ["position_id", "application_id"], name: "index_position_preferences_on_position_id_and_application_id", unique: true
+    t.index ["position_id"], name: "index_position_preferences_on_position_id"
+    t.index ["preference_level_id"], name: "index_position_preferences_on_preference_level_id"
+  end
+
+  create_table "position_templates", force: :cascade do |t|
+    t.string "position_type"
+    t.string "offer_template"
+    t.bigint "session_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_position_templates_on_session_id"
   end
 
   create_table "positions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "course_code"
-    t.text "course_name"
-    t.integer "current_enrolment"
-    t.text "duties"
-    t.text "qualifications"
-    t.integer "hours"
-    t.integer "cap_enrolment"
-    t.integer "num_waitlisted"
-    t.integer "openings"
-    t.datetime "start_date"
-    t.datetime "end_date"
     t.bigint "session_id"
+    t.string "position_code"
+    t.string "position_title"
+    t.float "est_hours_per_assignment"
+    t.datetime "est_start_date"
+    t.datetime "est_end_date"
+    t.string "position_type"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
 
-  create_table "preferences", force: :cascade do |t|
-    t.bigint "applicant_id"
-    t.bigint "position_id"
+  create_table "preference_levels", force: :cascade do |t|
+    t.integer "preference_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "priority"
-    t.index ["applicant_id", "position_id"], name: "index_preferences_on_applicant_id_and_position_id", unique: true
-    t.index ["applicant_id"], name: "index_preferences_on_applicant_id"
-    t.index ["position_id"], name: "index_preferences_on_position_id"
+  end
+
+  create_table "reporting_tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "position_id"
+    t.bigint "wage_chunk_id"
+    t.index ["position_id"], name: "index_reporting_tags_on_position_id"
+    t.index ["wage_chunk_id"], name: "index_reporting_tags_on_wage_chunk_id"
   end
 
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "year"
-    t.integer "semester", default: 0
-    t.float "pay"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.index ["year", "semester"], name: "index_sessions_on_year_and_semester", unique: true
+    t.string "name"
+    t.float "rate1"
+    t.float "rate2"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "utorid"
+    t.string "utorid", null: false
     t.integer "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["utorid"], name: "index_users_on_utorid", unique: true
+  end
+
+  create_table "wage_chunks", force: :cascade do |t|
+    t.float "hours"
+    t.float "rate"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "assignment_id"
+    t.index ["assignment_id"], name: "index_wage_chunks_on_assignment_id"
   end
 
   add_foreign_key "positions", "sessions"

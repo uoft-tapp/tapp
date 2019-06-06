@@ -9,10 +9,14 @@ class Position < ApplicationRecord
   belongs_to :session
   has_many :preferences
   has_many :applicants, through: :preferences
+  has_many :reporting_tags
+  has_many :assignments
+  has_many :position_preferences
+  has_many :applications, through: :position_preferences
+  has_one :position_data_for_ad
+  has_one :position_data_for_matching
 
-  validates_presence_of :course_code, :openings, :session
-  validates :openings, numericality: { only_integer: true, greater_than: 0 }
-  validates :course_code, uniqueness: { scope: :session_id, message: 'course duplicated in same session'}
+
 
   def as_json(_options = {})
     super(
@@ -27,21 +31,16 @@ end
 #
 # Table name: positions
 #
-#  id                :bigint(8)        not null, primary key
-#  cap_enrolment     :integer
-#  course_code       :string
-#  course_name       :text
-#  current_enrolment :integer
-#  duties            :text
-#  end_date          :datetime
-#  hours             :integer
-#  num_waitlisted    :integer
-#  openings          :integer
-#  qualifications    :text
-#  start_date        :datetime
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  session_id        :bigint(8)
+#  id                       :bigint(8)        not null, primary key
+#  est_end_date             :datetime
+#  est_hours_per_assignment :float
+#  est_start_date           :datetime
+#  position_code            :string
+#  position_title           :string
+#  position_type            :string
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  session_id               :bigint(8)
 #
 # Indexes
 #
