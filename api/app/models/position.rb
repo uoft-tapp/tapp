@@ -17,9 +17,6 @@ class Position < ApplicationRecord
   has_one :position_data_for_matching
 
 
-  validates_presence_of :course_code, :openings, :session
-  validates :openings, numericality: { only_integer: true, greater_than: 0 }
-  validates :course_code, uniqueness: { scope: :session_id, message: 'course duplicated in same session'}
 
   def as_json(_options = {})
     super(
