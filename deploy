@@ -4,4 +4,3 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-or
 docker-compose -f docker-compose.frontend.yml up --build --force-recreate
 cp -a frontend/build/. api/public/
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build --force-recreate -d
-docker-compose exec api sh -c "rails db:migrate RAILS_ENV=production"
