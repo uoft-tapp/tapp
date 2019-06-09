@@ -4,4 +4,8 @@
 class ApplicationController < ActionController::Base
   include Response
   include ExceptionHandler
+
+  def index
+    render :file => 'public/index.html'
+  end  
 end

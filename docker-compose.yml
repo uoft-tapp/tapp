@@ -3,10 +3,10 @@ version: '3'
 services:
   db:
     image: 'postgres:10.5-alpine'
-    volumes:
-      - './tmp/db:/var/lib/postgresql/data'
-    env_file:
-      - './api/.env'
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   api:
     depends_on:
       - 'db'
@@ -14,14 +14,12 @@ services:
     build: ./api
     ports:
       - '3000:3000'
-    volumes:
-      - './api:/app'
-    env_file:
-      - './api/.env'
-  frontend:
-    command: yarn start
-    build: ./frontend
-    ports:
-      - '8000:8000'
-    volumes:
-      - './frontend:/app'
+    environment:
+      RAILS_ENV: ${RAILS_ENV}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_SERVE_STATIC_FILES: ${RAILS_SERVE_STATIC_FILES}
+      RAILS_LOG_TO_STDOUT: ${RAILS_LOG_TO_STDOUT}
+

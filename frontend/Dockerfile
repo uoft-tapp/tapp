@@ -9,4 +9,3 @@ RUN yarn
 
 RUN mkdir /app
 WORKDIR /app
-

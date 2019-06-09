@@ -98,7 +98,7 @@ local machine for development and testing purposes. Currently, the entire app
 ### Prerequisties
 
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
-2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)*
+2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)
 3. Ruby, only if you would like to use the precommit hook
 
 * If you are running OSx or Windows, your Docker installation will have come with docker-compose.
@@ -125,40 +125,43 @@ The app is organized into three entities:
 
 ### Running the app with Docker
 
-To begin, make sure that Docker is running on your system. Once it is, begin by building all the relevant docker images by invoking
+#### Overview
+We have three docker compose files that are important to know:
+1. `docker-compose.yml` is our base docker-compose file. This by itself will
+   build the db and the API
+2. `docker-compose.dev.yml` is our development docker-compose file. This will
+   build the front end.
+3. `docker-compose.prod.yml` is our production docker-compose file. This will
+   also build the db and API, but not the front end
+
+To begin, make sure that Docker is running on your system. Begin by invoking:
 
 ```
-docker-compose build
+chmod u+x ./start_local.sh
+./start_local.sh
 ```
+This script will build the front end, database and api by combining the base
+file and development
 
-then invoke
-
-```
-docker-compose up
-```
-
-This will spin up three services: one for the database, one for api and one for the frontend.
-
-You can access the rails app from your browser by navigating to `http://localhost:3000`.
+You can access the rails app from your browser by navigating to
+`http://localhost:3000`.
 
 You will be able to access the frontend at `http://localhost:8000`. Note that
-unlike most traditional rails app, under our project, rails does not serve views.
-It only provides the API which the frontend, served seperately by yarn, pulls from.
-
-In the future, you can collapse these two commands into one with:
-
-```
-docker-compose up --build
-```
+unlike most traditional rails app, under our project, rails does not serve
+views.  It only provides the API which the frontend, served seperately by yarn,
+pulls from.
 
 To view the STDOUT from a docker container of a running server, you can invoke
 
 ```docker-compose logs -tf <image>```
 
+To stop everything, use `docker-compose down`.
+
 ### Navigating into the containers from the command line
 
-Currently, we define three services under docker-compose: frontend, tapp and db. If you would
-like to interact with any of the containers from the command line, you can do so by invoking:
+Currently, we define three services under docker-compose: frontend, tapp and
+db. If you would like to interact with any of the containers from the command
+line, you can do so by invoking:
 
 ```
 docker-compose exec [service] sh
@@ -255,3 +258,9 @@ scratch and `rake db:migrate`.
 After `running docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail. 
 
 To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
+
+2. Docker cannot start up a front-end service, complaining that it can't find an image.
+
+You can resolve this by using `docker containers ls -a`, finding all
+deactivated containers, and then removing them with `docker container rm
+[container ID]`. Then, you should be able to run `./start_local.sh`
