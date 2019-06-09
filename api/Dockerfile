@@ -4,7 +4,8 @@ FROM ruby:2.5-alpine
 RUN apk update && apk add build-base \
   nodejs \
   postgresql-dev \
-  tzdata
+  tzdata \
+  graphviz
 
 RUN mkdir /app
 WORKDIR /app

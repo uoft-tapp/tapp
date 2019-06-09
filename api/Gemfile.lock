@@ -62,6 +62,7 @@ GEM
       xpath (~> 3.2)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+    choice (0.2.0)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -122,6 +123,7 @@ GEM
     rack (2.0.6)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    railroady (1.5.3)
     rails (5.2.2.1)
       actioncable (= 5.2.2.1)
       actionmailer (= 5.2.2.1)
@@ -138,6 +140,11 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-erd (1.6.0)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     railties (5.2.2.1)
@@ -181,6 +188,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.4.0)
+    ruby-graphviz (1.2.4)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.2)
@@ -248,7 +256,9 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   pg (~> 1.1.4)
   puma (~> 3.7)
+  railroady
   rails (~> 5.2.2)
+  rails-erd
   rspec
   rspec-rails
   rubocop
@@ -262,4 +272,4 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 BUNDLED WITH
-   1.16.5
+   1.17.3
