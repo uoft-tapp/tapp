@@ -1,4 +1,5 @@
-import { createReducer } from "redux-create-reducer";
+import { createReducer } from "redux-create-reducer"
+
 import {
     OPEN_EDIT_POSITION_MODAL,
     CLOSE_EDIT_POSITION_MODAL,
