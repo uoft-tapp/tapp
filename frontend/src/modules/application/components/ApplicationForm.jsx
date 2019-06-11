@@ -3,21 +3,12 @@ import { connect } from "react-redux";
 import { updateField, createNewApplication } from "../actions";
 import { Button } from "react-bootstrap";
 
-<<<<<<< HEAD
-import {
-    personalInformationFields,
-    currentProgramInformationFields,
-    currentStatusFields,
-    customQuestions
-} from "./FormFields";
-=======
 import { 
     personalInformationFields, 
     currentProgramInformationFields, 
     currentStatusFields, 
     customQuestions 
 } from "./FormFields"
->>>>>>> fix(frontend) merge applicant positions into applicants
 
 const DefaultInput = ({ label, curValue, onChange, required }) => (
     <div>
@@ -194,10 +185,5 @@ export default connect(
     ({ application: { fields } }) => ({
         fields: fields
     }),
-<<<<<<< HEAD
     { updateField, createNewApplication }
 )(ApplicationForm);
-=======
-    {updateField, createNewApplication}
-)(ApplicationForm)
->>>>>>> fix(frontend) merge applicant positions into applicants

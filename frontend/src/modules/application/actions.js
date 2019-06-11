@@ -42,3 +42,15 @@ export const fetchPositions = () => async dispatch => {
     }
 }
 
+// action used by applicant positions view
+export const fetchPositionsSuccess = payload => ({ type: FETCH_POSITIONS_SUCCESS, payload })
+export const fetchPositions = () => async dispatch => {
+    const res = await fetch("/api/v1/positions")
+    const data = await res.json()
+    if (res.status === 200) {
+        dispatch(fetchPositionsSuccess(data))
+    } else {
+        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }))
+    }
+}
+
