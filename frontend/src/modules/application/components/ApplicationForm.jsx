@@ -3,10 +3,12 @@ import { connect } from "react-redux"
 import { updateField, createNewApplication } from "../actions"
 import { Button } from "react-bootstrap"
 
-import { personalInformationFields, 
+import { 
+    personalInformationFields, 
     currentProgramInformationFields, 
     currentStatusFields, 
-    customQuestions } from "./FormFields"
+    customQuestions 
+} from "./FormFields"
 
 const DefaultInput = ({ label, curValue, onChange, required }) => <div>
     <label style={{ width: "20vw" }}>{required ? label + ':' : label}</label>
@@ -121,5 +123,5 @@ export default connect(
     ({ application: { fields } }) => ({
         fields: fields
     }),
-    { updateField, createNewApplication}
+    {updateField, createNewApplication}
 )(ApplicationForm)

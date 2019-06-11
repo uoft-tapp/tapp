@@ -43,11 +43,11 @@ export const openRoutes = [
         component: Screen
     },
     {
-        path: "/application",
+        path: "/applicant/form",
         component: ApplicationForm
     },
     {
-        path: "/application/positionApplied",
+        path: "/applicant/positions",
         component: PositionsApplied
     }
 ]
