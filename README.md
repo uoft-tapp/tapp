@@ -138,7 +138,7 @@ To begin, make sure that Docker is running on your system. Begin by invoking:
 
 ```
 chmod u+x ./start_dev
-./start_local
+./start_dev
 ```
 This script will build the front end, database and api by combining the base
 file and development
