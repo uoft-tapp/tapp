@@ -20,6 +20,9 @@ import AllUnassigned from "./modules/all_applicants/components/AllUnassigned"
 import Summary from "./modules/tapp_summary/components/Summary"
 import ApplicationForm from "./modules/application/components/ApplicationForm"
 import PositionsApplied from "./modules/application/components/PositionsApplied"
+<<<<<<< HEAD
+>>>>>>> refactor(frontend) move components from applicants_positions to applicants
+=======
 >>>>>>> refactor(frontend) move components from applicants_positions to applicants
 
 export const openRoutes = [
