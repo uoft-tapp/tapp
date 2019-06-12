@@ -7,7 +7,7 @@ import AllAssigned from "./modules/all_applicants/components/AllAssigned"
 import AllUnassigned from "./modules/all_applicants/components/AllUnassigned"
 import Summary from "./modules/tapp_summary/components/Summary"
 import ApplicationForm from "./modules/application/components/ApplicationForm"
-import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied"
+import PositionsApplied from "./modules/application/components/PositionsApplied"
 
 export const openRoutes = [
     {
