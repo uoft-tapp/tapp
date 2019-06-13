@@ -2,9 +2,9 @@
 TA application, assignment, and matching.
 
 ## Contributing
-
-If you would like to contribute to the project, we ask that you follow the following conventions. 
-
+<details>
+<summary>If you would like to contribute to the project, we ask that you follow the following conventions.</summary>
+<p>
 ### Issues
 
 **Scope** 
@@ -89,6 +89,8 @@ adding a new position would always fail.
 - If the PR commits must be rebased, the reviewee is responsible for doing this and should do so in a seperate commit
 - Github's automatic merge commits are acceptable
 - The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
+</p>
+</details>
 
 ## Getting Started
 These instructions will get a copy of the project up and running on your
@@ -101,7 +103,7 @@ local machine for development and testing purposes. Currently, the entire app
 2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)
 3. Ruby, only if you would like to use the precommit hook
 
-* If you are running OSx or Windows, your Docker installation will have come with docker-compose.
+*If you are running OSx or Windows, your Docker installation will have come with docker-compose.*
 
 ### Rubocop and eslint precommit hook
 
@@ -126,30 +128,70 @@ The app is organized into three entities:
 ### Running the app with Docker
 
 #### Overview
-We have three docker compose files that are important to know:
+We have four docker compose files that are important to know:
 1. `docker-compose.yml` is our base docker-compose file. This by itself will
    build the db and the API
-2. `docker-compose.dev.yml` is our development docker-compose file. This will
-   build the front end.
+2. `docker-compose.dev.yml` is our development docker-compose file (`docker-compose.override.yml` is
+    a symbolic link to this file). This will
+   dynamically serve the frontend via a local webpack dev server.
 3. `docker-compose.prod.yml` is our production docker-compose file. This will
    also build the db and API, but not the front end
+3. `docker-compose.frontend.yml` This will use webpack to build
+   the frontend for serving as a static asset.
 
-To begin, make sure that Docker is running on your system. Begin by invoking:
+#### Development Environment First Install
+
+The first time you run docker, you must build the docker images. First, ensure no
+docker images are running with
 
 ```
-chmod u+x ./start_dev
-./start_dev
+docker-compose down
 ```
-This script will build the front end, database and api by combining the base
-file and development
 
-You can access the rails app from your browser by navigating to
-`http://localhost:3000`.
+Set up the local environment with
 
-You will be able to access the frontend at `http://localhost:8000`. Note that
-unlike most traditional rails app, under our project, rails does not serve
-views.  It only provides the API which the frontend, served seperately by yarn,
-pulls from.
+```
+cp dev.env .env
+```
+
+In development mode, the frontend is served via nodejs on port `8000` while the backend/api
+is served on a different port. To prevent confusion if you try to access TAPP through the wrong
+port, set up a static asset to be served by rails.
+
+```
+mkdir api/public && echo "Please go to localhost:8000 for frontend" > api/public/index.html
+```
+
+Finally, we can build the docker images and migrate the database
+
+```
+docker-compose build
+docker-compose run api rake db:setup
+docker-compose run api rake db:migrate
+```
+
+Now you can run the project with
+
+```
+docker-compose up
+```
+
+Access the frontend by navigating to [http://localhost:8000](http://localhost:8000)
+
+#### Development Environment
+
+The development environment can be started with
+
+```
+docker-compose up
+```
+
+This is equivalent to the command `docker-compose -f docker-compose.yml -f docker-compose.override.yml up`
+or `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
+since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`.
+
+
+#### Debugging
 
 To view the STDOUT from a docker container of a running server, you can invoke
 
