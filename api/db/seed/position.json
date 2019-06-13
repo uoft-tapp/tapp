@@ -1,32 +1,20 @@
-{
-    "position": [
-        {
-            "course_code": "CSC148H1F",
-            "course_name": "Introduction to Computer Science",
-            "current_enrolment": 500,
-            "duties": "Lead labs",
-            "qualifications": "Well versed in Python",
-            "hours": 54,
-            "cap_enrolment": 500,
-            "num_waitlisted": 100,
-            "start_date": "2018-9-10",
-            "end_date": "2018-12-10",
-            "openings": 40,
-            "session_index": 0
-        },
-        {
-            "course_code": "CSC369H1W",
-            "course_name": "Operating System",
-            "current_enrolment": 200,
-            "duties": "Lead labs",
-            "qualifications": "Well versed in Operating System",
-            "hours": 54,
-            "cap_enrolment": 200,
-            "num_waitlisted": 50,
-            "start_date": "2019-01-01",
-            "end_date": "2018-04-30",
-            "openings": 20,
-            "session_index": 1
-        }
-    ]
-}
+[
+    {
+        "position_code": "CSC148H1F",
+        "position_title": "Introduction to Computer Science",
+        "est_hours_per_assignment": 54,
+        "est_start_date": "2018-9-10",
+        "est_end_date": "2018-12-10",
+        "position_type": null,
+        "session_id": 0
+    },
+    {
+        "position_code": "CSC369H1W",
+        "position_title": "Operating System",
+        "est_hours_per_assignment": 54,
+        "est_start_date": "2019-01-01",
+        "est_end_date": "2018-04-30",
+        "position_type": null,
+        "session_id": 1
+    }
+]
