@@ -66,3 +66,8 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+# for rendering html templates to pdfs
+gem 'wicked_pdf'
+gem 'liquid'
+gem 'combine_pdf'
