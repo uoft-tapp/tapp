@@ -48,11 +48,11 @@ class PositionsApplied extends React.Component {
                 <div style={{ paddingBottom: "50px" }}>
                     <ReactTable
                         showPagination={false}
-                        pageSize={this.props.applicantsPositions.length}
+                        pageSize={this.props.positions.length}
                         columns={COLUMNS}
-                        data={this.props.applicantsPositions}
-                        className={"positions-table"}
-                        noDataText={"No positions found"}
+                        data={this.props.positions.data}
+                        className={'positions-table'}
+                        noDataText={'No positions found'}
                     />
                 </div>
             </Container>
@@ -61,8 +61,8 @@ class PositionsApplied extends React.Component {
 }
 
 export default connect(
-    ({ applicantsPositions: { list } }) => ({
-        applicantsPositions: list
+    ({ application: { list }}) => ({
+        positions: list
     }),
     { fetchPositions }
 )(PositionsApplied);
