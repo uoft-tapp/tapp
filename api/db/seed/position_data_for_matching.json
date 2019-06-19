@@ -1,20 +1,20 @@
 [
-	{
-		"desired_num_assignments": 15,
-		"current_enrollment": 500,
-		"current_waitlisted": 100,
-		"position_id": 0
-	},
-	{
-		"desired_num_assignments": 15,
-		"current_enrollment": 500,
-		"current_waitlisted": 100,
-		"position_id": 1
-	},
-	{
-		"desired_num_assignments": 10,
-		"current_enrollment": 200,
-		"current_waitlisted": 50,
-		"position_id": 2
-	}
+    {
+        "desired_num_assignments": 15,
+        "current_enrollment": 500,
+        "current_waitlisted": 100,
+        "position_id": 0
+    },
+    {
+        "desired_num_assignments": 15,
+        "current_enrollment": 500,
+        "current_waitlisted": 100,
+        "position_id": 1
+    },
+    {
+        "desired_num_assignments": 10,
+        "current_enrollment": 200,
+        "current_waitlisted": 50,
+        "position_id": 2
+    }
 ]

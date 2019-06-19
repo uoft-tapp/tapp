@@ -1,17 +1,17 @@
 [
-	{
-		"preference_level": 1
-	},
-	{
-		"preference_level": 2
-	},
-	{
-		"preference_level": 3
-	},
-	{
-		"preference_level": 4
-	},
-	{
-		"preference_level": 5
-	}
+    {
+        "preference_level": 1
+    },
+    {
+        "preference_level": 2
+    },
+    {
+        "preference_level": 3
+    },
+    {
+        "preference_level": 4
+    },
+    {
+        "preference_level": 5
+    }
 ]

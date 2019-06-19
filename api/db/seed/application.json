@@ -1,42 +1,42 @@
 [
-	{
-		"comments": "applicant 0 comment",
-		"session_id": 0
-	},
-	{
-		"comments": "applicant 1 comment",
-		"session_id": 0
-	},
-	{
-		"comments": "applicant 2 comment",
-		"session_id": 0
-	},
-	{
-		"comments": "applicant 3 comment",
-		"session_id": 0
-	},
-	{
-		"comments": "applicant 4 comment",
-		"session_id": 0
-	},
-	{
-		"comments": "applicant 5 comment",
-		"session_id": 1
-	},
-	{
-		"comments": "applicant 6 comment",
-		"session_id": 1
-	},
-	{
-		"comments": "applicant 7 comment",
-		"session_id": 1
-	},
-	{
-		"comments": "applicant 8 comment",
-		"session_id": 1
-	},
-	{
-		"comments": "applicant 9 comment",
-		"session_id": 1
-	}
+    {
+        "comments": "applicant 0 comment",
+        "session_id": 0
+    },
+    {
+        "comments": "applicant 1 comment",
+        "session_id": 0
+    },
+    {
+        "comments": "applicant 2 comment",
+        "session_id": 0
+    },
+    {
+        "comments": "applicant 3 comment",
+        "session_id": 0
+    },
+    {
+        "comments": "applicant 4 comment",
+        "session_id": 0
+    },
+    {
+        "comments": "applicant 5 comment",
+        "session_id": 1
+    },
+    {
+        "comments": "applicant 6 comment",
+        "session_id": 1
+    },
+    {
+        "comments": "applicant 7 comment",
+        "session_id": 1
+    },
+    {
+        "comments": "applicant 8 comment",
+        "session_id": 1
+    },
+    {
+        "comments": "applicant 9 comment",
+        "session_id": 1
+    }
 ]
