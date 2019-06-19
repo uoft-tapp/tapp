@@ -1,0 +1,65 @@
+[
+	{
+		"hours": 54,
+		"rate": 42.25,
+		"start_date": "2018-9-10",
+		"end_date": "2018-12-10",
+		"assignment_id": 0
+	},
+	{
+		"hours": 54,
+		"rate": 42.25,
+		"start_date": "2018-9-10",
+		"end_date": "2018-12-10",
+		"assignment_id": 1
+	},
+	{
+		"hours": 54,
+		"rate": 42.25,
+		"start_date": "2018-9-10",
+		"end_date": "2018-12-10",
+		"assignment_id": 2
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 3
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 4
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 5
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 6
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 7
+	},
+	{
+		"hours": 48,
+		"rate": 42.50,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30", 
+		"assignment_id": 8
+	}
+]

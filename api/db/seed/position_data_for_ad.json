@@ -1,0 +1,29 @@
+[
+	{
+		"duties": "Lead labs",
+		"qualifications": "Well versed in Python",
+		"ad_hours_per_assignment": 54,
+		"ad_num_assignments": 15,
+		"ad_open_date": "2018-7-10",
+		"ad_close_date": "2018-8-10",
+		"position_id": 0
+	},
+	{
+		"duties": "Lead labs",
+		"qualifications": "Well versed in Python",
+		"ad_hours_per_assignment": 48,
+		"ad_num_assignments": 15,
+		"ad_open_date": "2018-11-10",
+		"ad_close_date": "2018-12-10",
+		"position_id": 1
+	},
+	{
+		"duties": "Lead labs",
+		"qualifications": "Well versed in Operating System",
+		"ad_hours_per_assignment": 54,
+		"ad_num_assignments": 10,
+		"ad_open_date": "2018-11-10",
+		"ad_close_date": "2018-12-10",
+		"position_id": 2
+	}
+]

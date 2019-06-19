@@ -42,6 +42,46 @@ seedData = [
 			{
 				table: Session,
 				fk: :session_id,
+			},
+			{
+				table: Instructor,
+				fk: :instructors,
+			}
+		],
+	},
+	{
+		table: PositionDataForAd,
+		dataSource: "/position_data_for_ad.json",
+		uniqueKeys: [:position_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Position,
+				fk: :position_id,
+			}
+		],
+	},
+	{
+		table: PositionDataForMatching,
+		dataSource: "/position_data_for_matching.json",
+		uniqueKeys: [:position_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Position,
+				fk: :position_id,
+			}
+		],
+	},
+	{
+		table: PositionTemplate,
+		dataSource: "/position_template.json",
+		uniqueKeys: [:position_type, :session_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Session,
+				fk: :session_id,
 			}
 		],
 	},
@@ -51,6 +91,106 @@ seedData = [
 		uniqueKeys: [:utorid, :student_number],
 		hashKeys: [],
 		foreignKeys: [],
+	},
+	{
+		table: Application,
+		dataSource: "/application.json",
+		uniqueKeys: [:comments, :session_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Session,
+				fk: :session_id,
+			}
+		],
+	},
+	{
+		table: ApplicantDataForMatching,
+		dataSource: "/applicant_data_for_matching.json",
+		uniqueKeys: [:applicant_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Applicant,
+				fk: :applicant_id,
+			},
+			{
+				table: Application,
+				fk: :application_id,
+			}
+		],
+	},
+	{
+		table: PositionPreference,
+		dataSource: "/position_preference.json",
+		uniqueKeys: [:application_id, :position_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Position,
+				fk: :position_id,
+			},
+			{
+				table: Application,
+				fk: :application_id,
+			}
+		],
+	},
+	{
+		table: Assignment,
+		dataSource: "/assignment.json",
+		uniqueKeys: [:applicant_id, :position_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Position,
+				fk: :position_id,
+			},
+			{
+				table: Applicant,
+				fk: :applicant_id,
+			}
+		],
+	},
+	{
+		table: WageChunk,
+		dataSource: "/wage_chunk.json",
+		uniqueKeys: [:assignment_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Assignment,
+				fk: :assignment_id,
+			}
+		],
+	},
+	{
+		table: ReportingTag,
+		dataSource: "/reporting_tag.json",
+		uniqueKeys: [:wage_chunk_id, :position_id],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: WageChunk,
+				fk: :wage_chunk_id,
+			},
+			{
+				table: Position,
+				fk: :position_id,
+			}
+		],
+	},
+	{
+		table: Offer,
+		dataSource: "/offer.json",
+		uniqueKeys: [:assignment_id, :emailed_date, :accepted_date, :rejected_date, :withdrawn_date],
+		hashKeys: [],
+		foreignKeys: [
+			{
+				table: Assignment,
+				fk: :assignment_id,
+			}
+		],
 	}
 ]
 
@@ -59,7 +199,6 @@ def insert_data(seeds)
 	log = []
 	seeds.each do |seed|
 		update = false
-		curr_t = seed[:table].to_s.to_sym
 		tables[seed[:table]] = readJson(seed[:dataSource])
 		success = 0
 		tables[seed[:table]].each do |entry|
@@ -84,7 +223,7 @@ def insert_data(seeds)
 				success += 1
 			end
 		end
-		if success == tables[seed[:table]].length
+		if success == tables[seed[:table]].length and success > 0
 			update = update ? "updated" : "inserted"
 			log.push("#{seed[:table].to_s} data #{update}.")
 		else
@@ -99,21 +238,48 @@ def processFK(entry, foreignKeys, tables)
 		fk = keyVal[:fk].to_s
 		if entry.keys.include?(fk)
 			table = keyVal[:table]
-			if entry[fk] >= 0 and entry[fk] < tables[table].length
-				parent = table.find_by(tables[table][entry[fk]])
-				if parent
-					entry[fk] = parent.id
-				else
-					puts "There't no #{entry[fk]}th entry in the JSON file for #{table.to_s}"
-					return nil
+			if fk[-1] == 's'
+				ids = []
+				entry[fk].each do |id|
+					val = fkHelper(id, tables, table)
+					if val
+						ids.push(val)
+					end
 				end
+				entry[fk] = ids
 			else
-				puts "#{entry[fk]} is an invalid for the table #{table.to_s}."
-				return nil
+				val = fkHelper(entry[fk], tables, table)
+				if not val
+					return nil
+				else
+					entry[fk] = val.id
+				end
 			end
 		end
 	end
 	return entry
+end
+
+def fkHelper(id, tables, table)
+	if id >= 0 and id < tables[table].length
+		entry = {}
+		curr = tables[table][id]
+		curr.keys.each do |hashKey|
+			if not curr[hashKey].kind_of?(Array)
+				entry[hashKey] = curr[hashKey]
+			end
+		end
+		parent = table.find_by(entry)
+		if parent
+			return parent
+		else
+			puts "The #{id}th entry in the JSON file for #{table.to_s} was not inserted into the database."
+			return nil
+		end
+	else
+		puts "#{id} is an invalid for the table #{table.to_s}."
+		return nil
+	end	
 end
 
 def hashEntry(entry, hashKeys)

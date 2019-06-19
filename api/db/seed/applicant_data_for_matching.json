@@ -1,0 +1,92 @@
+[
+	{
+		"program": "U",
+		"department": "Computer Science",
+		"previous_uoft_ta_experience": "N/A",
+		"yip": 4,
+		"annotation": "",
+		"applicant_id": 0,
+		"application_id": 0
+	},
+	{
+		"program": "U",
+		"department": "Computer Science",
+		"previous_uoft_ta_experience": "",
+		"yip": 3,
+		"annotation": "",
+		"applicant_id": 1,
+		"application_id": 1
+	},
+	{
+		"program": "P",
+		"department": "Mathematics",
+		"previous_uoft_ta_experience": "N/A",
+		"yip": 1,
+		"annotation": "",
+		"applicant_id": 2,
+		"application_id": 2
+	},
+	{
+		"program": "M",
+		"department": "Mathematics",
+		"previous_uoft_ta_experience": "N/A",
+		"yip": 3,
+		"annotation": "",
+		"applicant_id": 3,
+		"application_id": 3
+	},
+	{
+		"program": "P",
+		"department": "Computer Science",
+		"previous_uoft_ta_experience": "",
+		"yip": 1,
+		"annotation": "",
+		"applicant_id": 4,
+		"application_id": 4
+	},
+	{
+		"program": "M",
+		"department": "Mathematics",
+		"previous_uoft_ta_experience": "N/A",
+		"yip": 2,
+		"annotation": "",
+		"applicant_id": 5,
+		"application_id": 5
+	},
+	{
+		"program": "M",
+		"department": "Computer Science",
+		"previous_uoft_ta_experience": "N/A",
+		"yip": 2,
+		"annotation": "",
+		"applicant_id": 6,
+		"application_id": 6
+	},
+	{
+		"program": "U",
+		"department": "Biology",
+		"previous_uoft_ta_experience": "",
+		"yip": 4,
+		"annotation": "",
+		"applicant_id": 7,
+		"application_id": 7
+	},
+	{
+		"program": "U",
+		"department": "Engineering",
+		"previous_uoft_ta_experience": "",
+		"yip": 4,
+		"annotation": "",
+		"applicant_id": 8,
+		"application_id": 8
+	},
+	{
+		"program": "U",
+		"department": "Computer Science",
+		"previous_uoft_ta_experience": "",
+		"yip": 1,
+		"annotation": "",
+		"applicant_id": 9,
+		"application_id": 9
+	}
+]

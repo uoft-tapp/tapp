@@ -6,15 +6,27 @@
         "est_start_date": "2018-9-10",
         "est_end_date": "2018-12-10",
         "position_type": null,
-        "session_id": 0
+        "session_id": 0,
+        "instructors": [0]
     },
     {
-        "position_code": "CSC369H1W",
+        "position_code": "CSC148H1S",
+        "position_title": "Introduction to Computer Science",
+        "est_hours_per_assignment": 48,
+        "est_start_date": "2019-01-01",
+        "est_end_date": "2019-04-30",
+        "position_type": null,
+        "session_id": 1,
+        "instructors": [0]
+    },
+    {
+        "position_code": "CSC369H1S",
         "position_title": "Operating System",
         "est_hours_per_assignment": 54,
         "est_start_date": "2019-01-01",
-        "est_end_date": "2018-04-30",
+        "est_end_date": "2019-04-30",
         "position_type": null,
-        "session_id": 1
+        "session_id": 1,
+        "instructors": [1]
     }
 ]
