@@ -1,0 +1,14 @@
+sudo: required
+
+language: ruby
+
+services:
+  - docker
+
+before_script:
+  - docker-compose up --build -d
+  - docker ps -a
+  - sleep 30  # wait for PostgreSQl to start
+
+after_script:
+  - docker-compose down
