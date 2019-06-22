@@ -1,19 +1,27 @@
 sudo: required
 
-language: ruby
+matrix:
+  include:
+    # run the code linters/formatters
+    -language: node_js
+     cache: yarn
+     before_script:
+       - yarn install prettier
+       - yarn install eslint
+     script:
+       - ./tests/unit-tests.sh
 
-services:
-  - docker
-
-before_script:
-  - cp dev.env .env
-  - docker-compose up --build -d
-  - docker ps -a
-  - docker-compose run api rake db:create
-  - docker-compose run api rake db:migrate
-
-script:
-  - ./tests/source-checks.sh
-
-after_script:
-  - docker-compose down
+    # run the development build and test suites
+    -language: ruby
+     services:
+       - docker
+     before_script:
+       - cp dev.env .env
+       - docker-compose up --build -d
+       - docker ps -a
+       - docker-compose run api rake db:create
+       - docker-compose run api rake db:migrate
+     script:
+       - ./tests/unit-tests.sh
+     after_script:
+       - docker-compose down
