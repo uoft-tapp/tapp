@@ -6,9 +6,11 @@ services:
   - docker
 
 before_script:
+  - cp dev.env .env
   - docker-compose up --build -d
   - docker ps -a
-  - sleep 30  # wait for PostgreSQl to start
+    #- sleep 30  # wait for PostgreSQl to start
+  - docker-compose run api rake db:setup
   - docker-compose run api rake db:migrate
 
 script:
