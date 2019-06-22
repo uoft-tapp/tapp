@@ -7,7 +7,8 @@ services:
 matrix:
   include:
     # run the code linters/formatters
-    - language: node_js
+    - name: "Code Formatting Tests"
+      language: node_js
       cache: yarn
       before_script:
         - yarn add eslint prettier prettier-check
@@ -15,7 +16,8 @@ matrix:
         - ./tests/unit-tests.sh
 
     # run the development build and test suites
-    - language: ruby
+    - name: "Unit Tests"
+      language: ruby
       services:
         - docker
       before_script:
@@ -25,6 +27,6 @@ matrix:
         - docker-compose run api rake db:create
         - docker-compose run api rake db:migrate
       script:
-        - ./tests/unit-tests.sh
+        - ./tests/run-unit-tests.sh
       after_script:
         - docker-compose down
