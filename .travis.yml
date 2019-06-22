@@ -6,8 +6,7 @@ matrix:
     -language: node_js
      cache: yarn
      before_script:
-       - yarn install prettier
-       - yarn install eslint
+       - yarn add eslint prettier prettier-check
      script:
        - ./tests/unit-tests.sh
 
