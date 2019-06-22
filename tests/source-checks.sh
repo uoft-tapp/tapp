@@ -2,4 +2,5 @@
 
 # Run all code formatting tests
 echo "Running Code Formatting Tests..."
-exit 1
+yarn run prettier-check "frontend/src/**/*.js"
+yarn run prettier-check "frontend/src/**/*.jsx"
