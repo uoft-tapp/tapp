@@ -5,4 +5,3 @@ echo "If they are not, please run `docker-compose up` and rerun this script."
 
 # Run all tapp unit tests
 echo "Running Unit Tests..."
-exit 0
