@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :positions, :instructors, except: [:new, :edit]
+      resources :instructors, only: [:index, :create]
       resources :applicants, only: [:create, :update]
       resources :assignments, only: [:index, :show, :create, :update]
       resources :offers, only: [:index, :show]
