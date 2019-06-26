@@ -1,5 +1,12 @@
-import React from "react"
-import { ButtonGroup, Button, Container, Card, Row, Col } from "react-bootstrap"
+import React from "react";
+import {
+    ButtonGroup,
+    Button,
+    Container,
+    Card,
+    Row,
+    Col
+} from "react-bootstrap";
 
 class Summary extends React.Component {
     render() {
@@ -11,12 +18,18 @@ class Summary extends React.Component {
                             <Card.Header>Utilities</Card.Header>
                             <ButtonGroup>
                                 <Button id="import-btn">
-                                    <i className="fa fa-upload" style={{ fontSize: "20px" }} />
+                                    <i
+                                        className="fa fa-upload"
+                                        style={{ fontSize: "20px" }}
+                                    />
                                     <br />
                                     <small>Import</small>
                                 </Button>
                                 <Button id="export-btn">
-                                    <i className="fa fa-download" style={{ fontSize: "20px" }} />
+                                    <i
+                                        className="fa fa-download"
+                                        style={{ fontSize: "20px" }}
+                                    />
                                     <br />
                                     <small>Export</small>
                                 </Button>
@@ -56,15 +69,16 @@ class Summary extends React.Component {
                                 </span>
                                 <span className="divider">/</span>
                                 <span className="stat">
-                                    <h2>0</h2> unassigned DCS graduate applicants
+                                    <h2>0</h2> unassigned DCS graduate
+                                    applicants
                                 </span>
                             </Container>
                         </Card>
                     </Col>
                 </Row>
             </Container>
-        )
+        );
     }
 }
 
-export default Summary
+export default Summary;

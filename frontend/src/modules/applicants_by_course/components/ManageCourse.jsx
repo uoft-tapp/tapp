@@ -1,8 +1,8 @@
-import React from "react"
-import { connect } from "react-redux"
-import { selectApplicant, removeApplicant } from "../actions"
-import { Button, Card } from "react-bootstrap"
-import ReactTable from "react-table"
+import React from "react";
+import { connect } from "react-redux";
+import { selectApplicant, removeApplicant } from "../actions";
+import { Button, Card } from "react-bootstrap";
+import ReactTable from "react-table";
 
 const SelectButton = connect(
     null,
@@ -16,7 +16,7 @@ const SelectButton = connect(
     >
         Select
     </Button>
-))
+));
 
 const RemoveButton = connect(
     null,
@@ -30,19 +30,21 @@ const RemoveButton = connect(
     >
         Remove
     </Button>
-))
+));
 
 const promoteColumn = {
     Header: "Select",
     id: "promote",
     Cell: ({ original: { applicantId, positionId } }) => {
-        return <SelectButton applicantId={applicantId} positionId={positionId} />
+        return (
+            <SelectButton applicantId={applicantId} positionId={positionId} />
+        );
     },
     filterable: false,
     sortable: false,
     resizeable: false,
     width: 90
-}
+};
 
 const demoteColumn = {
     Header: "Remove",
@@ -50,22 +52,25 @@ const demoteColumn = {
     Cell: ({ original: { applicantId, positionId, locked } }) => {
         if (locked) {
             return (
-                <Button 
+                <Button
                     variant="outline-secondary"
                     size="sm"
-                    style={{ width: "100%" }} disabled
+                    style={{ width: "100%" }}
+                    disabled
                 >
                     <span className="fa fa-lock" /> Locked
                 </Button>
-            )
+            );
         }
-        return <RemoveButton applicantId={applicantId} positionId={positionId} />
+        return (
+            <RemoveButton applicantId={applicantId} positionId={positionId} />
+        );
     },
     filterable: false,
     sortable: false,
     resizeable: false,
     width: 90
-}
+};
 
 const cols = [
     { Header: "Last Name", accessor: "last_name" },
@@ -76,9 +81,9 @@ const cols = [
         accessor: "program",
         filterMethod: (filter, row) => {
             if (filter.value === "not-undergrad") {
-                return row[filter.id] !== "Undergrad"
+                return row[filter.id] !== "Undergrad";
             }
-            return filter.value === "all" || filter.value === row[filter.id]
+            return filter.value === "all" || filter.value === row[filter.id];
         },
         Filter: ({ filter, onChange }) => (
             <select
@@ -103,11 +108,11 @@ const cols = [
         Cell: ({ value }) => <span>{value.join(", ")}</span>,
         filterMethod: (filter, row) => {
             if (filter.value === "assigned") {
-                return row[filter.id].length > 0
+                return row[filter.id].length > 0;
             } else if (filter.value === "unassigned") {
-                return row[filter.id].length === 0
+                return row[filter.id].length === 0;
             }
-            return true
+            return true;
         },
         Filter: ({ filter, onChange }) => (
             <select
@@ -121,15 +126,15 @@ const cols = [
             </select>
         )
     }
-]
+];
 
 class ManageCourse extends React.Component {
-    state = { filtered: [] }
-    handleFilterChange = filtered => this.setState({ filtered })
-    resetFilters = () => this.setState({ filtered: [] })
+    state = { filtered: [] };
+    handleFilterChange = filtered => this.setState({ filtered });
+    resetFilters = () => this.setState({ filtered: [] });
     render() {
-        const { available, selected } = this.props.applicants
-        const noFilteredApplied = this.state.filtered.length === 0
+        const { available, selected } = this.props.applicants;
+        const noFilteredApplied = this.state.filtered.length === 0;
         return (
             <div>
                 <Card>
@@ -153,10 +158,16 @@ class ManageCourse extends React.Component {
                                 disabled={noFilteredApplied}
                                 style={{ marginLeft: "16px" }}
                                 size="sm"
-                                variant={noFilteredApplied ? "outline-secondary" : "warning"}
+                                variant={
+                                    noFilteredApplied
+                                        ? "outline-secondary"
+                                        : "warning"
+                                }
                                 onClick={this.resetFilters}
                             >
-                                {noFilteredApplied ? "No Filters Applied" : "Reset Filters"}
+                                {noFilteredApplied
+                                    ? "No Filters Applied"
+                                    : "Reset Filters"}
                             </Button>
                         </h3>
                         <ReactTable
@@ -166,8 +177,9 @@ class ManageCourse extends React.Component {
                             defaultFilterMethod={(filter, row) =>
                                 row[filter.id] &&
                                 filter.value &&
-                                row[filter.id].toLowerCase().indexOf(filter.value.toLowerCase()) !==
-                                    -1
+                                row[filter.id]
+                                    .toLowerCase()
+                                    .indexOf(filter.value.toLowerCase()) !== -1
                             }
                             data={available}
                             columns={[promoteColumn, ...cols]}
@@ -177,11 +189,16 @@ class ManageCourse extends React.Component {
                     </Card.Body>
                 </Card>
             </div>
-        )
+        );
     }
 }
 
-export default connect(({ applicants, positions: { list } }, { positionId }) => ({
-    position: list.find(({ id }) => id === positionId),
-    applicants: applicants.positionData[positionId] || { selected: [], available: [] }
-}))(ManageCourse)
+export default connect(
+    ({ applicants, positions: { list } }, { positionId }) => ({
+        position: list.find(({ id }) => id === positionId),
+        applicants: applicants.positionData[positionId] || {
+            selected: [],
+            available: []
+        }
+    })
+)(ManageCourse);

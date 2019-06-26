@@ -1,10 +1,10 @@
-import { createReducer } from "redux-create-reducer"
+import { createReducer } from "redux-create-reducer";
 import {
     SELECT_APPLICANT_SUCCESS,
     REMOVE_APPLICANT_SUCCESS,
     VIEW_POSITION,
     SWITCH_POSITIONS
-} from "./constants"
+} from "./constants";
 
 const data1 = [
     {
@@ -18,7 +18,7 @@ const data1 = [
         other: [],
         locked: true
     }
-]
+];
 
 const data2 = [
     {
@@ -71,7 +71,7 @@ const data2 = [
         year: "3",
         other: []
     }
-]
+];
 
 const initialState = {
     openPositions: [],
@@ -93,58 +93,80 @@ const initialState = {
             available: data2
         }
     }
-}
+};
 
 const reducer = createReducer(initialState, {
-    [SELECT_APPLICANT_SUCCESS]: (state, { payload: { positionId, applicantId } }) => {
-        const { selected, available } = state.positionData[positionId]
-        const applicant = available.find(item => item.applicantId === applicantId)
+    [SELECT_APPLICANT_SUCCESS]: (
+        state,
+        { payload: { positionId, applicantId } }
+    ) => {
+        const { selected, available } = state.positionData[positionId];
+        const applicant = available.find(
+            item => item.applicantId === applicantId
+        );
         return {
             ...state,
             positionData: {
                 [positionId]: {
                     selected: [...selected, applicant],
-                    available: available.filter(item => item.applicantId !== applicantId)
+                    available: available.filter(
+                        item => item.applicantId !== applicantId
+                    )
                 }
             }
-        }
+        };
     },
-    [REMOVE_APPLICANT_SUCCESS]: (state, { payload: { applicantId, positionId } }) => {
-        const { selected, available } = state.positionData[positionId]
-        const applicant = selected.find(item => item.applicantId === applicantId)
+    [REMOVE_APPLICANT_SUCCESS]: (
+        state,
+        { payload: { applicantId, positionId } }
+    ) => {
+        const { selected, available } = state.positionData[positionId];
+        const applicant = selected.find(
+            item => item.applicantId === applicantId
+        );
         return {
             ...state,
             positionData: {
                 [positionId]: {
-                    selected: selected.filter(item => item.applicantId !== applicantId),
+                    selected: selected.filter(
+                        item => item.applicantId !== applicantId
+                    ),
                     available: [...available, applicant]
                 }
             }
-        }
+        };
     },
     [VIEW_POSITION]: (state, action) => {
         if (state.openPositions.indexOf(action.payload) !== -1) {
             return {
                 ...state,
-                openPositions: state.openPositions.filter(item => item !== action.payload)
-            }
+                openPositions: state.openPositions.filter(
+                    item => item !== action.payload
+                )
+            };
         }
         switch (state.openPositions.length) {
             case 0:
-                return { ...state, openPositions: [action.payload] }
+                return { ...state, openPositions: [action.payload] };
             case 1:
             case 2:
-                return { ...state, openPositions: [action.payload, state.openPositions[0]] }
+                return {
+                    ...state,
+                    openPositions: [action.payload, state.openPositions[0]]
+                };
             default:
-                return state
+                return state;
         }
     },
     [SWITCH_POSITIONS]: (state, action) => {
         if (state.openPositions.length === 2) {
-            return { ...state, openPositions: [state.openPositions[1], state.openPositions[0]] }
+            return {
+                ...state,
+                openPositions: [state.openPositions[1], state.openPositions[0]]
+            };
         }
-        return state
+        return state;
     }
-})
+});
 
-export default reducer
+export default reducer;

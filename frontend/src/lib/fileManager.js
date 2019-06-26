@@ -6,8 +6,8 @@ export const readFile = (component, loadDataFunc) => {
         reader.readAsText(files[0]);
         reader.onload = event => importFunc(event.target.result);
     }
-    component.value = '';
-}
+    component.value = "";
+};
 
 export const downloadFile = async (route, loadMessage) => {
     try {
@@ -17,14 +17,13 @@ export const downloadFile = async (route, loadMessage) => {
             let filename = getFilename(res);
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(blob, filename); //special case for Edge & IE
-            }
-            else{
+            } else {
                 let url = URL.createObjectURL(blob),
-                    a = document.createElement('a');
+                    a = document.createElement("a");
                 a.href = url;
                 a.download = filename;
-                a.target = "_self" ; //required in FF
-                a.style.display = 'none';
+                a.target = "_self"; //required in FF
+                a.style.display = "none";
                 document.body.appendChild(a); //required in FF
                 a.click();
                 URL.revokeObjectURL(url);
@@ -35,47 +34,47 @@ export const downloadFile = async (route, loadMessage) => {
             const err = await res.json();
             loadMessage(optSuccess(false, err));
         }
-    } catch(err){
+    } catch (err) {
         loadMessage(optSuccess(false, err));
     }
-}
+};
 
-const optSuccess = (success, content) =>{
+const optSuccess = (success, content) => {
     return {
-        'success': success,
-        'content': content
-    }
-}
+        success: success,
+        content: content
+    };
+};
 
-const getFilename = (res) =>{
-    try{
-        return res.headers.get('Content-Disposition').match(/filename="(.*)"/)[1];
-    } catch(err){
-        return 'Untitled';
+const getFilename = res => {
+    try {
+        return res.headers
+            .get("Content-Disposition")
+            .match(/filename="(.*)"/)[1];
+    } catch (err) {
+        return "Untitled";
     }
-}
+};
 
-const importChoices = (file, loadDataFunc) =>{
-    switch(getExtension(file)){
-        case '.json':
-            return data =>{
-                try{
+const importChoices = (file, loadDataFunc) => {
+    switch (getExtension(file)) {
+        case ".json":
+            return data => {
+                try {
                     loadDataFunc(optSuccess(true, JSON.parse(data)));
-                }catch(err){
+                } catch (err) {
                     loadDataFunc(optSuccess(false, err));
                 }
-            }
+            };
         default:
-            return data =>{
+            return data => {
                 loadDataFunc(optSuccess(true, data));
-            }
+            };
     }
-}
+};
 
-const getExtension = (file) => {
-    let extension = file.match(/\.\w+$/g)
-    if(extension.length > 0)
-        return extension[0];
-    else
-        return null;
-}
+const getExtension = file => {
+    let extension = file.match(/\.\w+$/g);
+    if (extension.length > 0) return extension[0];
+    else return null;
+};

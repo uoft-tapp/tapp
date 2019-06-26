@@ -1,13 +1,13 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import { Provider } from "react-redux"
-import { BrowserRouter } from "react-router-dom"
-import { PersistGate } from "redux-persist/integration/react"
-import "./styles/sass/main.scss"
-import App from "./App"
-import configureStore from "./store"
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
+import "./styles/sass/main.scss";
+import App from "./App";
+import configureStore from "./store";
 
-const { store, persistor } = configureStore()
+const { store, persistor } = configureStore();
 
 const render = Component => {
     return ReactDOM.render(
@@ -19,10 +19,10 @@ const render = Component => {
             </PersistGate>
         </Provider>,
         document.getElementById("root")
-    )
-}
+    );
+};
 
-render(App)
+render(App);
 
 // Hot module reloading
 // https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642
@@ -30,8 +30,8 @@ render(App)
 /*eslint-disable */
 if (module.hot) {
     module.hot.accept("./App", () => {
-        const NextApp = require("./App").default
-        render(NextApp)
-    })
+        const NextApp = require("./App").default;
+        render(NextApp);
+    });
 }
 /*eslint-enable */

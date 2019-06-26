@@ -1,14 +1,14 @@
-import React from "react"
-import { connect } from "react-redux"
-import { fetchPositions } from "../../positions/actions"
-import { viewPosition, switchPositions } from "../actions"
-import { Card, ListGroup, ListGroupItem } from "react-bootstrap"
+import React from "react";
+import { connect } from "react-redux";
+import { fetchPositions } from "../../positions/actions";
+import { viewPosition, switchPositions } from "../actions";
+import { Card, ListGroup, ListGroupItem } from "react-bootstrap";
 
 class SelectCourse extends React.Component {
     componentDidMount() {
-        this.props.fetchPositions()
+        this.props.fetchPositions();
     }
-    getActive = item => this.props.openPositions.indexOf(item.id) !== -1
+    getActive = item => this.props.openPositions.indexOf(item.id) !== -1;
     render() {
         const dummyPositions = [
             {
@@ -27,7 +27,7 @@ class SelectCourse extends React.Component {
                 id: 4,
                 course_code: "temp4"
             }
-        ]
+        ];
         return (
             <Card>
                 <Card.Header>
@@ -52,7 +52,7 @@ class SelectCourse extends React.Component {
                     ))}
                 </ListGroup>
             </Card>
-        )
+        );
     }
 }
 
@@ -62,4 +62,4 @@ export default connect(
         openPositions
     }),
     { fetchPositions, viewPosition, switchPositions }
-)(SelectCourse)
+)(SelectCourse);

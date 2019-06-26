@@ -1,8 +1,8 @@
-import React from "react"
-import { connect } from "react-redux"
-import { Col, Container, Row } from "react-bootstrap"
-import SelectCourse from "./SelectCourse"
-import ManageCourse from "./ManageCourse"
+import React from "react";
+import { connect } from "react-redux";
+import { Col, Container, Row } from "react-bootstrap";
+import SelectCourse from "./SelectCourse";
+import ManageCourse from "./ManageCourse";
 
 class Applicants extends React.Component {
     render() {
@@ -13,14 +13,19 @@ class Applicants extends React.Component {
                         <SelectCourse />
                     </Col>
                     {this.props.openPositions.map(positionId => (
-                        <Col xs={10 / this.props.openPositions.length} key={positionId}>
+                        <Col
+                            xs={10 / this.props.openPositions.length}
+                            key={positionId}
+                        >
                             <ManageCourse positionId={positionId} />
                         </Col>
                     ))}
                 </Row>
             </Container>
-        )
+        );
     }
 }
 
-export default connect(({ applicants: { openPositions } }) => ({ openPositions }))(Applicants)
+export default connect(({ applicants: { openPositions } }) => ({
+    openPositions
+}))(Applicants);

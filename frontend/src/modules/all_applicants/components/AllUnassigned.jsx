@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 
 class AllUnassigned extends React.Component {
     render() {
-        return null
+        return null;
     }
 }
 
-export default AllUnassigned
+export default AllUnassigned;

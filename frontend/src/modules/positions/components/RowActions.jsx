@@ -1,6 +1,6 @@
-import React from "react"
-import { connect } from "react-redux"
-import { openPositionEditModal } from "../actions"
+import React from "react";
+import { connect } from "react-redux";
+import { openPositionEditModal } from "../actions";
 
 const RowActions = connect(
     null,
@@ -22,7 +22,7 @@ const RowActions = connect(
                 onClick={() => openPositionEditModal(id)}
             />
         </div>
-    )
-})
+    );
+});
 
-export default RowActions
+export default RowActions;
