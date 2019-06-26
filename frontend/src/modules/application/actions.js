@@ -1,9 +1,6 @@
-import { 
-    UPDATE_FIELD, 
-    FETCH_POSITIONS_SUCCESS
-} from "./constants"
-import { error, success  } from "react-notification-system-redux"
-import { errorProps } from "../notifications/constants"
+import { UPDATE_FIELD, FETCH_POSITIONS_SUCCESS } from "./constants";
+import { error, success } from "react-notification-system-redux";
+import { errorProps } from "../notifications/constants";
 
 // an action generator function that returns an action object
 export const updateField = data => ({ type: UPDATE_FIELD, data });
@@ -40,25 +37,27 @@ export const fetchPositions = () => async dispatch => {
     } else {
         dispatch(error({ ...errorProps, message: "Fetch Position Failure" }))
     }
-}
+};
 
 // action used by applicant positions view
-export const fetchPositionsSuccess = payload => ({ type: FETCH_POSITIONS_SUCCESS, payload })
+export const fetchPositionsSuccess = payload => ({
+    type: FETCH_POSITIONS_SUCCESS,
+    payload
+});
 export const fetchPositions = () => async dispatch => {
-    try{
-        var res = await fetch("/api/v1/positions")
-    } catch(err) {
+    try {
+        var res = await fetch("/api/v1/positions");
+    } catch (err) {
         alert(err);
     }
     if (res.status === 200) {
-        try{
-            const data = await res.json()
-            dispatch(fetchPositionsSuccess(data))
-        } catch(err) {
+        try {
+            const data = await res.json();
+            dispatch(fetchPositionsSuccess(data));
+        } catch (err) {
             alert(err);
         }
     } else {
-        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }))
+        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }));
     }
-}
-
+};

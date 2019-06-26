@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { updateField, createNewApplication } from "../actions";
 import { Button } from "react-bootstrap";
 
-import { 
-    personalInformationFields, 
-    currentProgramInformationFields, 
-    currentStatusFields, 
-    customQuestions 
-} from "./FormFields"
+import {
+    personalInformationFields,
+    currentProgramInformationFields,
+    currentStatusFields,
+    customQuestions
+} from "./FormFields";
 
 const DefaultInput = ({ label, curValue, onChange, required }) => (
     <div>
