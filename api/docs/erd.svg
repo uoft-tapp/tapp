@@ -115,15 +115,15 @@
 <!-- m_PositionPreference -->
 <g id="node12" class="node">
 <title>m_PositionPreference</title>
-<path fill="none" stroke="#000000" d="M428,-462C428,-462 550,-462 550,-462 556,-462 562,-468 562,-474 562,-474 562,-519 562,-519 562,-525 556,-531 550,-531 550,-531 428,-531 428,-531 422,-531 416,-525 416,-519 416,-519 416,-474 416,-474 416,-468 422,-462 428,-462"/>
+<path fill="none" stroke="#000000" d="M429,-462C429,-462 549,-462 549,-462 555,-462 561,-468 561,-474 561,-474 561,-519 561,-519 561,-525 555,-531 549,-531 549,-531 429,-531 429,-531 423,-531 417,-525 417,-519 417,-519 417,-474 417,-474 417,-468 423,-462 429,-462"/>
 <text text-anchor="start" x="436.5" y="-518.2" font-family="Arial Bold" font-size="11.00" fill="#000000">PositionPreference</text>
-<polyline fill="none" stroke="#000000" points="416,-511 562,-511 "/>
-<text text-anchor="start" x="423" y="-497.5" font-family="Arial" font-size="10.00" fill="#000000">position_id </text>
-<text text-anchor="start" x="473" y="-497.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="423" y="-484.5" font-family="Arial" font-size="10.00" fill="#000000">preference_level_id </text>
-<text text-anchor="start" x="511" y="-484.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8)</text>
-<text text-anchor="start" x="423" y="-471.5" font-family="Arial" font-size="10.00" fill="#000000">application_id </text>
-<text text-anchor="start" x="486" y="-471.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<polyline fill="none" stroke="#000000" points="417,-511 561,-511 "/>
+<text text-anchor="start" x="424" y="-497.5" font-family="Arial" font-size="10.00" fill="#000000">position_id </text>
+<text text-anchor="start" x="474" y="-497.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="424" y="-484.5" font-family="Arial" font-size="10.00" fill="#000000">application_id </text>
+<text text-anchor="start" x="487" y="-484.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="424" y="-471.5" font-family="Arial" font-size="10.00" fill="#000000">preference_level </text>
+<text text-anchor="start" x="499" y="-471.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
 </g>
 <!-- m_Application&#45;&gt;m_PositionPreference -->
 <g id="edge17" class="edge">
