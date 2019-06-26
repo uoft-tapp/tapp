@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { fetchPositions } from "../actions"
-import { Grid } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 import ReactTable from "react-table"
 import "react-table/react-table.css"
 import EditPositionModal from "./EditPositionModal"
@@ -28,7 +28,7 @@ class Positions extends React.Component {
     }
     render() {
         return (
-            <Grid fluid>
+            <Container fluid>
                 <div style={{ paddingBottom: "50px" }}>
                     <ReactTable
                         showPagination={false}
@@ -52,7 +52,7 @@ class Positions extends React.Component {
                     />
                 </div>
                 <EditPositionModal />
-            </Grid>
+            </Container>
         )
     }
 }

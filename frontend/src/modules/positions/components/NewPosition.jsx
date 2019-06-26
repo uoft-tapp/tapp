@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import { createNewPosition, importNewPosition, getCount, importResult} from "../actions"
 import { fetchInstructors } from "../../instructors/actions"
-import { Grid, Col, Button } from "react-bootstrap"
+import { Col, Container, Button } from "react-bootstrap"
 import { moment } from "moment"
 import CSVReader  from "react-csv-reader"
 
@@ -126,8 +126,8 @@ class NewPosition extends React.Component {
     render() {
         const invalid = this.getInvalid()
         return (
-            <Grid>
-                <Col xs={8} xsOffset={2}>
+            <Container>
+                <Col xs={8} md={{ offset: 1 }}>
                     <h2>New Position</h2>
                     <form onSubmit={this.handleSubmit}>
                         {newPositionFields.map(({ value, label, required }) => {
@@ -179,12 +179,12 @@ class NewPosition extends React.Component {
                             inputStyle={{color: 'red'}}
                         />
                         <br />
-                        <Button bsStyle="primary" disabled={!!invalid} type='submit'>
+                        <Button variant="primary" disabled={!!invalid} type='submit'>
                             {invalid || "Save Changes"}
                         </Button>
                     </form>
                 </Col>
-            </Grid>
+            </Container>
         )
     }
 }

@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { selectApplicant, removeApplicant } from "../actions"
-import { Panel, Button } from "react-bootstrap"
+import { Button, Card } from "react-bootstrap"
 import ReactTable from "react-table"
 
 const SelectButton = connect(
@@ -9,7 +9,8 @@ const SelectButton = connect(
     { selectApplicant }
 )(({ selectApplicant, positionId, applicantId }) => (
     <Button
-        bsSize="xs"
+        variant="outline-secondary"
+        size="sm"
         style={{ width: "100%" }}
         onClick={() => selectApplicant({ positionId, applicantId })}
     >
@@ -22,7 +23,8 @@ const RemoveButton = connect(
     { removeApplicant }
 )(({ removeApplicant, positionId, applicantId }) => (
     <Button
-        bsSize="xs"
+        variant="outline-secondary"
+        size="sm"
         style={{ width: "100%" }}
         onClick={() => removeApplicant({ positionId, applicantId })}
     >
@@ -39,7 +41,7 @@ const promoteColumn = {
     filterable: false,
     sortable: false,
     resizeable: false,
-    width: 75
+    width: 90
 }
 
 const demoteColumn = {
@@ -48,7 +50,11 @@ const demoteColumn = {
     Cell: ({ original: { applicantId, positionId, locked } }) => {
         if (locked) {
             return (
-                <Button bsSize="xs" style={{ width: "100%" }} disabled>
+                <Button 
+                    variant="outline-secondary"
+                    size="sm"
+                    style={{ width: "100%" }} disabled
+                >
                     <span className="fa fa-lock" /> Locked
                 </Button>
             )
@@ -58,7 +64,7 @@ const demoteColumn = {
     filterable: false,
     sortable: false,
     resizeable: false,
-    width: 75
+    width: 90
 }
 
 const cols = [
@@ -126,13 +132,13 @@ class ManageCourse extends React.Component {
         const noFilteredApplied = this.state.filtered.length === 0
         return (
             <div>
-                <Panel>
-                    <Panel.Heading>
+                <Card>
+                    <Card.Header>
                         {this.props.position
                             ? this.props.position.course_code
                             : "Course Name Unavailable"}
-                    </Panel.Heading>
-                    <Panel.Body>
+                    </Card.Header>
+                    <Card.Body>
                         <h3 style={{ marginTop: 0 }}>Selected</h3>
                         <ReactTable
                             data={selected}
@@ -146,8 +152,8 @@ class ManageCourse extends React.Component {
                             <Button
                                 disabled={noFilteredApplied}
                                 style={{ marginLeft: "16px" }}
-                                bsSize="sm"
-                                bsStyle={noFilteredApplied ? "default" : "warning"}
+                                size="sm"
+                                variant={noFilteredApplied ? "outline-secondary" : "warning"}
                                 onClick={this.resetFilters}
                             >
                                 {noFilteredApplied ? "No Filters Applied" : "Reset Filters"}
@@ -168,8 +174,8 @@ class ManageCourse extends React.Component {
                             showPagination={false}
                             pageSize={available.length}
                         />
-                    </Panel.Body>
-                </Panel>
+                    </Card.Body>
+                </Card>
             </div>
         )
     }

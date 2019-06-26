@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { fetchPositions } from "../actions"
-import { Grid } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 import DisplayInstructors from "./DisplayInstructors"
 import ReactTable from "react-table"
 import "react-table/react-table.css"
@@ -29,7 +29,7 @@ class PositionsApplied extends React.Component {
 
     render() {
         return (
-            <Grid fluid>
+            <Container fluid>
                 <div style={{ paddingBottom: "50px" }}>
                     <ReactTable
                         showPagination={false}
@@ -40,7 +40,7 @@ class PositionsApplied extends React.Component {
                         noDataText={'No positions found'}
                     />
                 </div>
-            </Grid>
+            </Container>
         )
     }
 }
