@@ -1,13 +1,13 @@
-import Positions from "./modules/positions/components/index"
-import Applicants from "./modules/applicants_by_course/components/index"
-import RootRedirect from "./modules/auth/components/RootRedirect"
-import Screen from "./modules/cp/components/index"
-import NewPosition from "./modules/positions/components/NewPosition"
-import AllAssigned from "./modules/all_applicants/components/AllAssigned"
-import AllUnassigned from "./modules/all_applicants/components/AllUnassigned"
-import Summary from "./modules/tapp_summary/components/Summary"
-import ApplicationForm from "./modules/application/components/ApplicationForm"
-import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied"
+import Positions from "./modules/positions/components/index";
+import Applicants from "./modules/applicants_by_course/components/index";
+import RootRedirect from "./modules/auth/components/RootRedirect";
+import Screen from "./modules/cp/components/index";
+import NewPosition from "./modules/positions/components/NewPosition";
+import AllAssigned from "./modules/all_applicants/components/AllAssigned";
+import AllUnassigned from "./modules/all_applicants/components/AllUnassigned";
+import Summary from "./modules/tapp_summary/components/Summary";
+import ApplicationForm from "./modules/application/components/ApplicationForm";
+import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
 
 export const openRoutes = [
     {
@@ -50,6 +50,6 @@ export const openRoutes = [
         path: "/application/positionApplied",
         component: PositionsApplied
     }
-]
+];
 
-export const privateRoutes = []
+export const privateRoutes = [];

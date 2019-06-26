@@ -1,6 +1,6 @@
-import React from "react"
-import { Route } from "react-router-dom"
+import React from "react";
+import { Route } from "react-router-dom";
 
-const OpenRoute = props => <Route {...props} />
+const OpenRoute = props => <Route {...props} />;
 
-export default OpenRoute
+export default OpenRoute;

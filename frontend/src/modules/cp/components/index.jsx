@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 
 class Screen extends React.Component {
     render() {
-        return <div />
+        return <div />;
     }
 }
 
-export default Screen
+export default Screen;

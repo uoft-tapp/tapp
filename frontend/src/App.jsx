@@ -1,11 +1,11 @@
-import React from "react"
-import { Switch } from "react-router-dom"
-import moment from "moment"
-import CustomNotifications from "./modules/notifications/components/CustomNotifications"
-import { openRoutes, privateRoutes } from "./routes"
-import OpenRoute from "./modules/auth/components/OpenRoute"
-import PrivateRoute from "./modules/auth/components/PrivateRoute"
-import Header from "./modules/navigation/components/Header"
+import React from "react";
+import { Switch } from "react-router-dom";
+import moment from "moment";
+import CustomNotifications from "./modules/notifications/components/CustomNotifications";
+import { openRoutes, privateRoutes } from "./routes";
+import OpenRoute from "./modules/auth/components/OpenRoute";
+import PrivateRoute from "./modules/auth/components/PrivateRoute";
+import Header from "./modules/navigation/components/Header";
 
 class App extends React.Component {
     render() {
@@ -29,8 +29,8 @@ class App extends React.Component {
                 </footer>
                 <CustomNotifications />
             </React.Fragment>
-        )
+        );
     }
 }
 
-export default App
+export default App;
