@@ -6,8 +6,6 @@
 class PositionPreference < ApplicationRecord
 	belongs_to :application
 	belongs_to :position
-	belongs_to :preference_level
-
 
   	validates_uniqueness_of :application_id, :scope => [:position_id]
 end
@@ -16,17 +14,16 @@ end
 #
 # Table name: position_preferences
 #
-#  id                  :bigint(8)        not null, primary key
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  application_id      :bigint(8)
-#  position_id         :bigint(8)
-#  preference_level_id :bigint(8)
+#  id               :bigint(8)        not null, primary key
+#  preference_level :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  application_id   :bigint(8)
+#  position_id      :bigint(8)
 #
 # Indexes
 #
 #  index_position_preferences_on_application_id                  (application_id)
 #  index_position_preferences_on_position_id                     (position_id)
 #  index_position_preferences_on_position_id_and_application_id  (position_id,application_id) UNIQUE
-#  index_position_preferences_on_preference_level_id             (preference_level_id)
 #
