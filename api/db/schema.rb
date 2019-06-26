@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_26_034548) do
+ActiveRecord::Schema.define(version: 2019_06_26_035320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,8 @@ ActiveRecord::Schema.define(version: 2019_06_26_034548) do
     t.datetime "accepted_date"
     t.datetime "rejected_date"
     t.datetime "withdrawn_date"
+    t.integer "nag_count"
+    t.integer "email_count"
     t.index ["assignment_id"], name: "index_offers_on_assignment_id"
   end
 
