@@ -1,0 +1,35 @@
+sudo: required
+
+language: ruby
+services:
+  - docker
+
+matrix:
+  include:
+    # run the code linters/formatters
+    - name: "Code Formatting Tests"
+      language: node_js
+      node_js:
+        - "10"
+      cache: yarn
+      before_script:
+        - yarn add eslint babel-eslint eslint-plugin-react prettier prettier-check
+      script:
+        # allow these tests to fail for now...
+        - (./tests/run-formatting-tests.sh || true)
+
+    # run the development build and test suites
+    - name: "Unit Tests"
+      language: ruby
+      services:
+        - docker
+      before_script:
+        - cp dev.env .env
+        - docker-compose up --build -d
+        - docker ps -a
+        - docker-compose run api rake db:create
+        - docker-compose run api rake db:migrate
+      script:
+        - ./tests/run-unit-tests.sh
+      after_script:
+        - docker-compose down
