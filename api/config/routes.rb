@@ -10,9 +10,9 @@ Rails.application.routes.draw do
       resources :positions, :instructors, except: [:new, :edit]
       resources :applicants, only: [:create, :update]
       resources :assignments, only: [:index, :show, :create, :update]
-	  resources :offers, only: [:index, :show]
+      resources :offers, only: [:index, :show]
+      resources :sessions, only: [:index, :create]
 
-      match 'positions/import' => 'positions#import', :via => :post
     end
   end
 

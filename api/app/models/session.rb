@@ -6,6 +6,7 @@ class Session < ApplicationRecord
   has_many :position_templates
   has_many :applications
 
+  validates_uniqueness_of :name
 end
 
 # == Schema Information
