@@ -12,14 +12,14 @@ end
 #  id                      :bigint(8)        not null, primary key
 #  accepted_date           :datetime
 #  email                   :string
-#  email_count             :integer
+#  email_count             :integer          default(0)
 #  emailed_date            :datetime
 #  first_name              :string
 #  first_time_ta           :boolean
 #  installments            :integer
 #  instructor_contact_desc :string
 #  last_name               :string
-#  nag_count               :integer
+#  nag_count               :integer          default(0)
 #  offer_override_pdf      :string
 #  offer_template          :string
 #  pay_period_desc         :string
