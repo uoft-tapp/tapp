@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       resources :assignments, only: [:index, :show, :create, :update]
       resources :offers, only: [:index, :show]
       resources :sessions, only: [:index, :create]
+      resources :sessions, :position_templates, only: [:index, :create]
+      get '/available_position_templates', to: 'position_templates#available'
 
     end
   end
