@@ -12,7 +12,6 @@ end
 #  id                      :bigint(8)        not null, primary key
 #  accepted_date           :datetime
 #  email                   :string
-#  email_count             :integer          default(0)
 #  emailed_date            :datetime
 #  first_name              :string
 #  first_time_ta           :boolean
