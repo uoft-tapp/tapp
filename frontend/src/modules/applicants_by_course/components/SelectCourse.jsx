@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import { fetchPositions } from "../../positions/actions"
 import { viewPosition, switchPositions } from "../actions"
-import { ListGroup, ListGroupItem, Panel } from "react-bootstrap"
+import { Card, ListGroup, ListGroupItem } from "react-bootstrap"
 
 class SelectCourse extends React.Component {
     componentDidMount() {
@@ -29,8 +29,8 @@ class SelectCourse extends React.Component {
             }
         ]
         return (
-            <Panel>
-                <Panel.Heading>
+            <Card>
+                <Card.Header>
                     Courses{" "}
                     {this.props.openPositions.length === 2 && (
                         <span
@@ -39,7 +39,7 @@ class SelectCourse extends React.Component {
                             onClick={this.props.switchPositions}
                         />
                     )}
-                </Panel.Heading>
+                </Card.Header>
                 <ListGroup>
                     {dummyPositions.map(item => (
                         <ListGroupItem
@@ -51,7 +51,7 @@ class SelectCourse extends React.Component {
                         </ListGroupItem>
                     ))}
                 </ListGroup>
-            </Panel>
+            </Card>
         )
     }
 }

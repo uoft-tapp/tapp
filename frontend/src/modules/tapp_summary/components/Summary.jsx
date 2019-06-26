@@ -1,14 +1,14 @@
 import React from "react"
-import { Panel, ButtonGroup, Button, Well, Grid, Row, Col } from "react-bootstrap"
+import { ButtonGroup, Button, Container, Card, Row, Col } from "react-bootstrap"
 
 class Summary extends React.Component {
     render() {
         return (
-            <Grid>
+            <Container>
                 <Row>
                     <Col xs={12}>
-                        <Panel id="utils">
-                            <Panel.Heading>Utilities</Panel.Heading>
+                        <Card id="utils">
+                            <Card.Header>Utilities</Card.Header>
                             <ButtonGroup>
                                 <Button id="import-btn">
                                     <i className="fa fa-upload" style={{ fontSize: "20px" }} />
@@ -29,9 +29,9 @@ class Summary extends React.Component {
                                     <small>Release</small>
                                 </Button>
                             </ButtonGroup>
-                        </Panel>
-                        <Panel header="Assignment Statistics" id="stats">
-                            <Well
+                        </Card>
+                        <Card header="Assignment Statistics" id="stats">
+                            <Container
                                 id="gen-stats"
                                 style={{
                                     display: "flex",
@@ -58,11 +58,11 @@ class Summary extends React.Component {
                                 <span className="stat">
                                     <h2>0</h2> unassigned DCS graduate applicants
                                 </span>
-                            </Well>
-                        </Panel>
+                            </Container>
+                        </Card>
                     </Col>
                 </Row>
-            </Grid>
+            </Container>
         )
     }
 }

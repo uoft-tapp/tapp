@@ -105,7 +105,7 @@ class ApplicationForm extends React.Component {
                         {customQuestions.map(
                                 ({ field_name, label, required, type }) => 
                                 this.render_field_type({ field_name, label, required, type }))}
-                    <Button bsStyle="primary" type="submit"> Submit </Button>
+                    <Button variant="primary" type="submit"> Submit </Button>
                 </form>
                 <br/>
                 <br/>
