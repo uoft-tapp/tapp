@@ -16,7 +16,7 @@ matrix:
         - yarn add eslint babel-eslint eslint-plugin-react prettier prettier-check
       script:
         # allow these tests to fail for now...
-        - (./tests/run-formatting-tests.sh || true)
+        - ./tests/run-formatting-tests.sh
 
     # run the development build and test suites
     - name: "Unit Tests"
