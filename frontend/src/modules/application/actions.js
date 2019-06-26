@@ -29,7 +29,7 @@ export const createNewApplication = payload => async dispatch => {
                     "An error occured with your submission: " + res.statusText
             })
         );
-        if (!!data) {
+        if (data) {
             Object.keys(data).map(key =>
                 dispatch(
                     error({ ...errorProps, message: key + ": " + data[key] })

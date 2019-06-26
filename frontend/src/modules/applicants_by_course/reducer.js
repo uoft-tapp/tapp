@@ -158,7 +158,7 @@ const reducer = createReducer(initialState, {
                 return state;
         }
     },
-    [SWITCH_POSITIONS]: (state, action) => {
+    [SWITCH_POSITIONS]: state => {
         if (state.openPositions.length === 2) {
             return {
                 ...state,

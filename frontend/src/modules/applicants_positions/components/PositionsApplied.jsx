@@ -13,7 +13,7 @@ const COLUMNS = [
         Header: "Preference",
         accessor: "prefence",
         height: 100,
-        Cell: row => (
+        Cell: () => (
             <div>
                 <select
                     id="dropdown-basic-button"

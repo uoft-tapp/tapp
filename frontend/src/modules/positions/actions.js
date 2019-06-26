@@ -89,7 +89,7 @@ export const createNewPosition = payload => async dispatch => {
         window.location = "/tapp/positions";
     } else {
         dispatch(error({ ...errorProps, message: res.statusText }));
-        if (!!data) {
+        if (data) {
             Object.keys(data).map(key =>
                 dispatch(
                     error({ ...errorProps, message: key + ": " + data[key] })
@@ -146,7 +146,7 @@ export const importNewPosition = payload => async dispatch => {
     } else {
         FAIL_COUNT++;
         dispatch(error({ ...errorProps, message: res.statusText }));
-        if (!!data) {
+        if (data) {
             Object.keys(data).map(key =>
                 dispatch(
                     error({
