@@ -13,14 +13,14 @@
         "react-dom": "^16.8.6",
         "react-notification-system-redux": "^2.0.0",
         "react-redux": "^7.1.0",
-        "react-router-dom": "^4.3.1",
-        "react-scripts": "2.0.3",
+        "react-router-dom": "^5.0.1",
+        "react-scripts": "3.0.1",
         "react-table": "^6.8.6",
         "redux": "^4.0.1",
-        "redux-create-reducer": "^1.1.3",
+        "redux-create-reducer": "^2.0.0",
         "redux-form": "^8.2.4",
         "redux-persist": "^5.10.0",
-        "redux-saga": "^0.16.0",
+        "redux-saga": "^1.0.3",
         "redux-thunk": "^2.3.0"
     },
     "scripts": {
@@ -33,8 +33,7 @@
     "eslintConfig": {
         "extends": "react-app"
     },
-    "browserslist": [
-    ],
+    "browserslist": [],
     "devDependencies": {
         "redux-devtools-extension": "^2.13.5"
     }
