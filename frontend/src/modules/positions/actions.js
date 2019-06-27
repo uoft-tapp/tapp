@@ -10,37 +10,34 @@ import {
 } from "./constants";
 import { show, error, success } from "react-notification-system-redux";
 import { errorProps, successProps } from "../notifications/constants";
+import { apiGET, apiPOST } from "../../libs/apiUtils";
 
 export const fetchPositionsSuccess = payload => ({
     type: FETCH_POSITIONS_SUCCESS,
     payload
 });
 export const fetchPositions = () => async dispatch => {
-    const res = await fetch("/api/v1/positions");
-    const data = await res.json();
-    if (res.status === 200) {
+    try {
+        const data = apiGET("/positions");
         dispatch(fetchPositionsSuccess(data));
-    } else {
-        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }));
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
 
 export const savePositions = payload => async dispatch => {
-    const res = await fetch(`/api/v1/positions/${payload.positionId}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload.newValues)
-    });
-    const data = await res.json();
-    if (res.status === 200) {
+    try {
+        const data = await apiPOST(
+            "/positions/" + payload.positionId,
+            payload.newValues
+        );
         dispatch(savePositionsSuccess(data));
         dispatch(success({ ...successProps, title: "Position Updated" }));
-    } else {
-        dispatch(error({ ...errorProps, message: res.statusText }));
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
+
 export const savePositionsSuccess = payload => ({
     type: SAVE_POSITION_SUCCESS,
     payload
@@ -50,6 +47,7 @@ export const openPositionEditModal = id => ({
     type: OPEN_EDIT_POSITION_MODAL,
     payload: { id }
 });
+
 export const closeEditPositionModal = () => ({
     type: CLOSE_EDIT_POSITION_MODAL
 });
@@ -70,32 +68,19 @@ export const deletePosition = payload => async dispatch => {
         dispatch(error({ ...errorProps, message: res.statusText }));
     }
 };
+
 export const deletePositionSuccess = payload => ({
     type: DELETE_POSITION_SUCCESS,
     payload
 });
 
 export const createNewPosition = payload => async dispatch => {
-    const res = await fetch("/api/v1/positions", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (res.status === 201) {
+    try {
+        const data = await apiPOST("/positions", payload);
         dispatch(createNewPositionSuccess(data));
         window.location = "/tapp/positions";
-    } else {
-        dispatch(error({ ...errorProps, message: res.statusText }));
-        if (data) {
-            Object.keys(data).map(key =>
-                dispatch(
-                    error({ ...errorProps, message: key + ": " + data[key] })
-                )
-            );
-        }
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
 
@@ -131,36 +116,17 @@ export const importResult = (
 
 //used for uploading csv files
 export const importNewPosition = payload => async dispatch => {
-    const res = await fetch("/api/v1/positions/import", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (res.status === 201 || res.status === 200) {
-        // 200 (OK) and 201 (CREATED) are both good calls
+    try {
+        const data = await apiPOST("/positions/import", payload);
         SUCCESS_COUNT++;
         dispatch(importNewPositionSuccess(data));
-    } else {
-        FAIL_COUNT++;
-        dispatch(error({ ...errorProps, message: res.statusText }));
-        if (data) {
-            Object.keys(data).map(key =>
-                dispatch(
-                    error({
-                        ...errorProps,
-                        message:
-                            JSON.stringify(payload) +
-                            "\nImport call failed:   " +
-                            key +
-                            ": " +
-                            data[key]
-                    })
-                )
-            );
-        }
+    } catch (e) {
+        dispatch(
+            error({
+                ...errorProps,
+                message: e.toString()
+            })
+        );
     }
 };
 
