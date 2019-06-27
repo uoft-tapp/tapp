@@ -18,7 +18,7 @@ export const fetchPositionsSuccess = payload => ({
 });
 export const fetchPositions = () => async dispatch => {
     try {
-        const data = apiGET("/positions");
+        const data = await apiGET("/positions");
         dispatch(fetchPositionsSuccess(data));
     } catch (e) {
         dispatch(error({ ...errorProps, message: e.toString() }));

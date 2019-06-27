@@ -20,7 +20,9 @@ class ApiError extends Error {
     constructor(resp) {
         const errorMessage = resp.message;
         super(errorMessage);
-        Error.captureStackTrace(this, ApiFetchError);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, ApiFetchError);
+        }
         this.response = resp;
         this.status = resp.status;
     }
@@ -39,7 +41,9 @@ class ApiFetchError extends ApiError {
             resp.statusText
         } when fetching ${API_URL + path}`;
         super(errorMessage);
-        Error.captureStackTrace(this, ApiFetchError);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, ApiFetchError);
+        }
         this.response = resp;
         this.status = resp.status;
     }
@@ -53,13 +57,19 @@ function _ensurePath(path) {
 // Process a `fetch` response from the API.
 // Successful responses from the API should be of
 // the form `{status: ("success"|"error"), message: "...", payload: ...}.
-// Throw an error on a failed HTTP request or a `status === "error"`
+// Throw an error on a failed HTTP request or a `status !== "success"`
 // response from the API.
 async function _processFetchResponse(resp, path) {
     if (resp.status === 200) {
         const json = await resp.json();
-        if (json.status === "error") {
-            throw new ApiError(json);
+        if (json.status !== "success") {
+            // If we got random JSON instead of {status: ..., message: ..., payload: ...}
+            // There will be no `json.message`. Provide a default message that will get
+            // overridden in this case
+            throw new ApiError({
+                message: "Server response did not have `status === 'success`",
+                ...json
+            });
         }
         return resp.payload;
     }

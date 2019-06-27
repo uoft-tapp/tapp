@@ -37,14 +37,15 @@ class Positions extends React.Component {
         this.props.fetchPositions();
     }
     render() {
+        const { positions = [] } = this.props;
         return (
             <Container fluid>
                 <div style={{ paddingBottom: "50px" }}>
                     <ReactTable
                         showPagination={false}
-                        pageSize={this.props.positions.length}
+                        pageSize={positions.length}
                         columns={COLUMNS}
-                        data={this.props.positions}
+                        data={positions}
                         className={"positions-table"}
                         noDataText={"No positions found"}
                         SubComponent={({ original }) => {
