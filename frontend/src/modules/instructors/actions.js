@@ -20,6 +20,6 @@ export const fetchInstructors = () => async dispatch => {
         const data = await apiGET("/instructors");
         dispatch(fetchInstructorsSuccess(data));
     } catch (e) {
-        return dispatch(fetchInstructorsError(e.toString()));
+        dispatch(fetchInstructorsError(e.toString()));
     }
 };

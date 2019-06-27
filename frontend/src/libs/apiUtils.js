@@ -73,19 +73,16 @@ async function _processFetchResponse(resp, path) {
  *
  * @param {string} path
  * @returns {Promise<object>} Promise containing the processed JSON response
+ * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
 async function apiGET(path) {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path);
-    try {
-        const resp = await fetch(API_URL + path, {
-            ...FETCH_INIT,
-            method: "GET"
-        });
-        return await _processFetchResponse(resp, path);
-    } catch (e) {
-        throw e;
-    }
+    const resp = await fetch(API_URL + path, {
+        ...FETCH_INIT,
+        method: "GET"
+    });
+    return await _processFetchResponse(resp, path);
 }
 
 /**
@@ -94,20 +91,17 @@ async function apiGET(path) {
  * @param {string} path
  * @param {object} [body={}]
  * @returns {Promise<object>} Promise containing the processed JSON response
+ * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
 async function apiPOST(path, body = {}) {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path);
-    try {
-        const resp = await fetch(API_URL + path, {
-            ...FETCH_INIT,
-            method: "POST",
-            body: JSON.stringify(body)
-        });
-        return await _processFetchResponse(resp, path);
-    } catch (e) {
-        throw e;
-    }
+    const resp = await fetch(API_URL + path, {
+        ...FETCH_INIT,
+        method: "POST",
+        body: JSON.stringify(body)
+    });
+    return await _processFetchResponse(resp, path);
 }
 
 export { API_URL, ApiError, ApiFetchError, apiGET, apiPOST };

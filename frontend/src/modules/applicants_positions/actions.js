@@ -34,6 +34,7 @@ export const savePositions = payload => async dispatch => {
         dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
+
 export const savePositionsSuccess = payload => ({
     type: SAVE_POSITION_SUCCESS,
     payload
@@ -43,6 +44,7 @@ export const openPositionEditModal = id => ({
     type: OPEN_EDIT_POSITION_MODAL,
     payload: { id }
 });
+
 export const closeEditPositionModal = () => ({
     type: CLOSE_EDIT_POSITION_MODAL
 });
