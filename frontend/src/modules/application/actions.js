@@ -38,3 +38,4 @@ export const createNewApplication = payload => async dispatch => {
         }
     }
 };
+
