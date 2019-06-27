@@ -6,35 +6,32 @@ import {
 } from "./constants";
 import { error, success } from "react-notification-system-redux";
 import { errorProps, successProps } from "../notifications/constants";
+import { apiGET, apiPOST } from "../../libs/apiUtils";
 
 export const fetchPositionsSuccess = payload => ({
     type: FETCH_POSITIONS_SUCCESS,
     payload
 });
 export const fetchPositions = () => async dispatch => {
-    const res = await fetch("/api/v1/positions");
-    const data = await res.json();
-    if (res.status === 200) {
+    try {
+        const data = await apiGET("/positions");
+
         dispatch(fetchPositionsSuccess(data));
-    } else {
-        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }));
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
 
 export const savePositions = payload => async dispatch => {
-    const res = await fetch(`/api/v1/positions/${payload.positionId}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload.newValues)
-    });
-    const data = await res.json();
-    if (res.status === 200) {
+    try {
+        const data = await apiPOST(
+            "/positions/" + payload.positionId,
+            payload.newValues
+        );
         dispatch(savePositionsSuccess(data));
         dispatch(success({ ...successProps, title: "Position Updated" }));
-    } else {
-        dispatch(error({ ...errorProps, message: res.statusText }));
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
 export const savePositionsSuccess = payload => ({
