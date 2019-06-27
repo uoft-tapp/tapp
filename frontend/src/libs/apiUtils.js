@@ -47,7 +47,7 @@ class ApiFetchError extends ApiError {
 
 // Ensure that `path` starts with a `/`
 function _ensurePath(path) {
-    return path.starsWith("/") ? path : "/" + path;
+    return path.startsWith("/") ? path : "/" + path;
 }
 
 // Process a `fetch` response from the API.
