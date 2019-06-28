@@ -3,7 +3,9 @@ import { DropdownItem, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, Route } from "react-router-dom";
 
 const CustomNavItem = ({ href, children }) => (
-    <Link to={href}><Nav.Link as="span">{children}</Nav.Link></Link>
+    <Link to={href}>
+        <Nav.Link as="span">{children}</Nav.Link>
+    </Link>
 );
 
 const TappNavItems = () => (
