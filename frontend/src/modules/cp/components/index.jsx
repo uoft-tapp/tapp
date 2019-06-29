@@ -1,9 +1,49 @@
 import React from "react";
+import { connect } from "react-redux";
+import { Button, ButtonGroup } from "react-bootstrap";
+import {
+    fetchSessions,
+    setActiveSession,
+    sessionsSelector
+} from "../../../api/actions";
 
-class Screen extends React.Component {
+class SessionSelect extends React.Component {
+    componentDidMount() {
+        this.props.fetchSessions();
+    }
     render() {
-        return <div />;
+        const { sessions, activeSession, setActiveSession } = this.props;
+        const activeSessionId = (activeSession || {}).id;
+        return (
+            <div>
+                <div>Select Session</div>
+                <ButtonGroup>
+                    {sessions.map(s => (
+                        <Button
+                            key={s.id}
+                            onClick={() => setActiveSession(s)}
+                            variant={
+                                activeSessionId === s.id
+                                    ? "primary"
+                                    : "secondary"
+                            }
+                        >
+                            {s.name}
+                        </Button>
+                    ))}
+                </ButtonGroup>
+            </div>
+        );
     }
 }
 
-export default Screen;
+const mapStateToProps = ({ model: { sessions } }) => ({
+    sessions: sessionsSelector(sessions),
+    activeSession: sessions.activeSession
+});
+const mapDispatchToProps = { fetchSessions, setActiveSession };
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SessionSelect);

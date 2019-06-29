@@ -21,7 +21,8 @@
         "redux-form": "^8.2.4",
         "redux-persist": "^5.10.0",
         "redux-saga": "^1.0.3",
-        "redux-thunk": "^2.3.0"
+        "redux-thunk": "^2.3.0",
+        "reselect": "^4.0.0"
     },
     "scripts": {
         "start": "PORT=8000 react-scripts start",

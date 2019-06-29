@@ -298,7 +298,11 @@ class NewPosition extends React.Component {
 }
 
 export default connect(
-    ({ instructors: { list } }) => ({
+    ({
+        ui: {
+            instructors: { list }
+        }
+    }) => ({
         instructors: list
     }),
     { createNewPosition, fetchInstructors, importNewPosition, importResult }

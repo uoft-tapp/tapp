@@ -57,7 +57,12 @@ class SelectCourse extends React.Component {
 }
 
 export default connect(
-    ({ applicants: { openPositions }, positions: { list } }) => ({
+    ({
+        ui: {
+            applicants: { openPositions },
+            positions: { list }
+        }
+    }) => ({
         positions: list,
         openPositions
     }),

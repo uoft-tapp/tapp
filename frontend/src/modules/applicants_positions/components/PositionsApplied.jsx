@@ -61,7 +61,11 @@ class PositionsApplied extends React.Component {
 }
 
 export default connect(
-    ({ applicantsPositions: { list } }) => ({
+    ({
+        ui: {
+            applicantsPositions: { list }
+        }
+    }) => ({
         applicantsPositions: list
     }),
     { fetchPositions }

@@ -26,6 +26,10 @@ class Applicants extends React.Component {
     }
 }
 
-export default connect(({ applicants: { openPositions } }) => ({
-    openPositions
-}))(Applicants);
+const mapStateToProps = ({
+    ui: {
+        applicants: { openPositions }
+    }
+}) => ({ openPositions });
+
+export default connect(mapStateToProps)(Applicants);

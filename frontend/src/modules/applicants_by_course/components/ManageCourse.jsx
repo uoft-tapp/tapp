@@ -194,7 +194,15 @@ class ManageCourse extends React.Component {
 }
 
 export default connect(
-    ({ applicants, positions: { list } }, { positionId }) => ({
+    (
+        {
+            ui: {
+                applicants,
+                positions: { list }
+            }
+        },
+        { positionId }
+    ) => ({
         position: list.find(({ id }) => id === positionId),
         applicants: applicants.positionData[positionId] || {
             selected: [],
