@@ -17,7 +17,7 @@ module Api::V1
         def create
             position = Position.find_by(id: params[:position_id])
             if position
-                instructor = position.instructors.create(instructor_params)
+                instructor = position.instructors.new(instructor_params)
                 if instructor.save
                     render json: { status: 'success', message: '', payload: instructors_by_position }
                 else
