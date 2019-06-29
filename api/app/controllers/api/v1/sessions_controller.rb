@@ -11,17 +11,17 @@ module Api::V1
 
         # POST /sessions
         def create
-            if params.include?(:name)
-                session = Session.new(session_params)
-                if session.save
-                    render json: { status: 'success', message: '', payload: session }
-                else
-                    render json: { status: 'error', message: session.errors, payload: {} }
-                end
-            else
+            if not params.include?(:name)
                 render json: { status: 'error', message: 'No name given', payload: {} }
+                return
             end
-       end
+            session = Session.new(session_params)
+            if session.save
+                render json: { status: 'success', message: '', payload: session }
+            else
+                render json: { status: 'error', message: session.errors, payload: {} }
+            end
+        end
 
         private
         def session_params

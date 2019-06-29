@@ -20,15 +20,17 @@ module Api::V1
         # POST /add_instructor
         def create
             position = Position.find_by(id: params[:position_id])
-            if position
-                instructor = position.instructors.new(instructor_params)
-                if instructor.save
-                    render json: { status: 'success', message: '', payload: instructors_by_position }
-                else
-                    render json: { status: 'error', message: instructor.errors, payload: instructors_by_position }
-                end
+            if not position
+                render json: { status: 'error', 
+                    message: 'Invalid position_id', payload: instructors_by_position }
+            end
+            instructor = position.instructors.new(instructor_params)
+            if instructor.save
+                render json: { status: 'success', 
+                    message: '', payload: instructors_by_position }
             else
-                render json: { status: 'error', message: 'Invalid position_id', payload: instructors_by_position }
+                render json: { status: 'error', 
+                    message: instructor.errors, payload: instructors_by_position }
             end
         end
 

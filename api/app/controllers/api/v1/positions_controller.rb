@@ -12,24 +12,24 @@ module Api::V1
         # POST /positions
         def create
             req_keys = [:position_code, :position_title]
-            if Session.exists?(id: params[:session_id])
-                if req_keys & params.keys.map(&:to_sym) == req_keys
-                    position = Position.new(position_params)
-                    if position.save
-                        params[:position_id] = position[:id]
-                        PositionDataForAd.new(position_data_for_ad_params)
-                        PositionDataForMatching.new(position_data_for_matching_params)
-                        render json: { status: 'success', message: '', payload: position }
-                    else
-                        render json: { status: 'error', message: position.errors, payload: {} }
-                    end
-                else
-                    render json: { status: 'error', 
-                        message: 'Missing position_code or position_title', payload: {} }
-                end
-            else
+            if not Session.exists?(id: params[:session_id])
                 render json: { status: 'error', message: 'Invalid session_id', payload: {} }
-            end          
+                return
+            end
+            if (req_keys & params.keys.map(&:to_sym)) != req_keys
+                render json: { status: 'error', 
+                    message: 'Missing position_code or position_title', payload: {} }
+                return
+            end
+            position = Position.new(position_params)
+            if position.save
+                params[:position_id] = position[:id]
+                PositionDataForAd.new(position_data_for_ad_params)
+                PositionDataForMatching.new(position_data_for_matching_params)
+                render json: { status: 'success', message: '', payload: position }
+            else
+                render json: { status: 'error', message: position.errors, payload: {} }
+            end
         end
 
         private

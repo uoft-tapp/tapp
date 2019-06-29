@@ -11,20 +11,23 @@ module Api::V1
 
         # POST /add_position_template
         def create
-            if Session.exists?(id: params[:session_id])
-                if params.include?(:offer_template)
-                    position_template = PositionTemplate.new(position_template_params)
-                    if position_template.save
-                        index
-                    else
-                        render json: { status: 'error', message: position_template.errors, payload: position_templates_by_session }
-                    end
-                else
-                    render json: { status: 'error', message: 'No offer_template given', payload: position_templates_by_session }
-                end
+            if not Session.exists?(id: params[:session_id])
+                render json: { status: 'error', 
+                    message: 'Invalid session_id', payload: position_templates_by_session }
+                return
+            end
+            if not params.include?(:offer_template)
+                render json: { status: 'error', 
+                    message: 'No offer_template given', payload: position_templates_by_session }
+                return
+            end
+            position_template = PositionTemplate.new(position_template_params)
+            if position_template.save
+                index
             else
-                render json: { status: 'error', message: 'Invalid session_id', payload: position_templates_by_session }
-            end          
+                render json: { status: 'error', 
+                    message: position_template.errors, payload: position_templates_by_session }
+            end
         end
 
         # GET /available_position_templates
