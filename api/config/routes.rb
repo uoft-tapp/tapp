@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :instructors, only: [:index]
       resources :positions do 
         resources :instructors, only: [:index]
         post '/add_instructor', to: 'instructors#create'
