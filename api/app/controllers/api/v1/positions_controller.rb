@@ -71,13 +71,9 @@ module Api::V1
         end
 
         def positions_by_session
-            positions = []
-            Position.order(:id).each do |entry|
-                if entry[:session_id] == params[:session_id].to_i
-                    positions.push(entry)
-                end
+            return Position.order(:id).select do |entry|
+                entry[:session_id] == params[:session_id].to_i
             end
-            return positions
         end
     end
 end

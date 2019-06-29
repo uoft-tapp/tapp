@@ -44,13 +44,9 @@ module Api::V1
         end
 
         def position_templates_by_session
-            position_templates = []
-            PositionTemplate.order(:id).each do |entry|
-                if entry[:session_id] == params[:session_id].to_i
-                    position_templates.push(entry)
-                end
+            return PositionTemplate.order(:id).select do |entry|
+                entry[:session_id] == params[:session_id].to_i
             end
-            return position_templates
         end
     end
 end

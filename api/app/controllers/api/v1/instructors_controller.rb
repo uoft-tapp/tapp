@@ -40,13 +40,9 @@ module Api::V1
     end
 
     def instructors_by_position
-        instructors = []
-        Instructor.order(:id).each do |entry|
-            if entry.position_ids.include?(params[:position_id].to_i)
-                instructors.push(entry)
-            end
+        return Instructor.order(:id).each do |entry|
+            entry.position_ids.include?(params[:position_id].to_i)
         end
-        return instructors
     end
   end
 end
