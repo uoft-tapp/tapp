@@ -7,7 +7,11 @@ import applicantReducer from "./modules/applicants_by_course/reducer";
 import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./modules/application/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
-import { sessionsReducer, positionsReducer } from "./api/reducers";
+import {
+    sessionsReducer,
+    positionsReducer,
+    statusReducer
+} from "./api/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -22,6 +26,7 @@ import { sessionsReducer, positionsReducer } from "./api/reducers";
 // When `myReducer(localState)` is called, `localSate == globalState.mypath`.
 const reducer = combineReducers({
     model: combineReducers({
+        status: statusReducer,
         sessions: sessionsReducer,
         positions: positionsReducer
     }),

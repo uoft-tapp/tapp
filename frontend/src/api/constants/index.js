@@ -1,3 +1,6 @@
+export const API_INTERACTION_START = "API_INTERACTION_START";
+export const API_INTERACTION_END = "API_INTERACTION_END";
+
 /* Constants were batch-created with the following code:
 
     let wrap = x => x.map(y => `export const ${y} = "${y}";`);
