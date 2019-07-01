@@ -8,9 +8,14 @@ import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./modules/application/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
 import {
+    statusReducer,
     sessionsReducer,
     positionsReducer,
-    statusReducer
+    applicantsReducer,
+    applicationsReducer,
+    assignmentsReducer,
+    instructorsReducer,
+    positionTemplatesReducer
 } from "./api/reducers";
 
 // When `combineReducers` is used,
@@ -28,7 +33,12 @@ const reducer = combineReducers({
     model: combineReducers({
         status: statusReducer,
         sessions: sessionsReducer,
-        positions: positionsReducer
+        positions: positionsReducer,
+        applicants: applicantsReducer,
+        applications: applicationsReducer,
+        assignments: assignmentsReducer,
+        instructors: instructorsReducer,
+        positionTemplates: positionTemplatesReducer
     }),
     ui: combineReducers({
         notifications: notificationReducer,

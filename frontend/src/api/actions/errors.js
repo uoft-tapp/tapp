@@ -27,3 +27,12 @@ export const deleteError = payload =>
         title: "Error deleting data",
         message: payload
     });
+
+// General error for when a more specific error
+// type is not known
+export const apiError = payload =>
+    error({
+        ...defaultNotifProps,
+        title: "API Error",
+        message: payload
+    });

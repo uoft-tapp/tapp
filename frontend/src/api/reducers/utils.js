@@ -72,4 +72,4 @@ function createBasicReducerObject(
     };
 }
 
-export { createBasicReducerObject };
+export { createBasicReducerObject, upsertItem };

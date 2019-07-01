@@ -6,14 +6,14 @@ export const API_INTERACTION_END = "API_INTERACTION_END";
     let wrap = x => x.map(y => `export const ${y} = "${y}";`);
     console.log(
         [
-            ("session",
+            "session",
             "instructor",
             "position",
             "assignment",
             "offer",
             "position_template",
             "application",
-            "wage_chunk")
+            "wage_chunk"
         ]
             .map(x => {
                 x = x.toUpperCase();
@@ -44,6 +44,8 @@ export const FETCH_INSTRUCTORS_SUCCESS = "FETCH_INSTRUCTORS_SUCCESS";
 export const FETCH_ONE_INSTRUCTOR_SUCCESS = "FETCH_ONE_INSTRUCTOR_SUCCESS";
 export const UPSERT_ONE_INSTRUCTOR_SUCCESS = "UPSERT_ONE_INSTRUCTOR_SUCCESS";
 export const DELETE_ONE_INSTRUCTOR_SUCCESS = "DELETE_ONE_INSTRUCTOR_SUCCESS";
+export const ADD_INSTRUCTOR_TO_POSITION_SUCCESS =
+    "ADD_INSTRUCTOR_TO_POSITION_SUCCESS";
 
 // `position`-related constants
 export const FETCH_POSITIONS_SUCCESS = "FETCH_POSITIONS_SUCCESS";
@@ -72,6 +74,8 @@ export const UPSERT_ONE_POSITION_TEMPLATE_SUCCESS =
     "UPSERT_ONE_POSITION_TEMPLATE_SUCCESS";
 export const DELETE_ONE_POSITION_TEMPLATE_SUCCESS =
     "DELETE_ONE_POSITION_TEMPLATE_SUCCESS";
+export const FETCH_ALL_POSITION_TEMPLATES_SUCCESS =
+    "FETCH_ALL_POSITION_TEMPLATES_SUCCESS";
 
 // `application`-related constants
 export const FETCH_APPLICATIONS_SUCCESS = "FETCH_APPLICATIONS_SUCCESS";
@@ -84,3 +88,11 @@ export const FETCH_WAGE_CHUNKS_SUCCESS = "FETCH_WAGE_CHUNKS_SUCCESS";
 export const FETCH_ONE_WAGE_CHUNK_SUCCESS = "FETCH_ONE_WAGE_CHUNK_SUCCESS";
 export const UPSERT_ONE_WAGE_CHUNK_SUCCESS = "UPSERT_ONE_WAGE_CHUNK_SUCCESS";
 export const DELETE_ONE_WAGE_CHUNK_SUCCESS = "DELETE_ONE_WAGE_CHUNK_SUCCESS";
+
+// `applicant`-related constants
+export const FETCH_APPLICANTS_SUCCESS = "FETCH_APPLICANTS_SUCCESS";
+export const FETCH_ONE_APPLICANT_SUCCESS = "FETCH_ONE_APPLICANT_SUCCESS";
+export const UPSERT_ONE_APPLICANT_SUCCESS = "UPSERT_ONE_APPLICANT_SUCCESS";
+export const DELETE_ONE_APPLICANT_SUCCESS = "DELETE_ONE_APPLICANT_SUCCESS";
+export const ADD_APPLICANT_TO_SESSION_SUCCESS =
+    "ADD_APPLICANT_TO_SESSION_SUCCESS";
