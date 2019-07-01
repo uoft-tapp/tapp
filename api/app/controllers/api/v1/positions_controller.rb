@@ -16,19 +16,21 @@ module Api::V1
                 render json: { status: 'error', message: 'Invalid session_id', payload: {} }
                 return
             end
-            if (req_keys & params.keys.map(&:to_sym)) != req_keys
+            if not params.require(req_keys)
                 render json: { status: 'error', 
                     message: 'Missing position_code or position_title', payload: {} }
                 return
             end
             position = Position.new(position_params)
-            if position.save
-                params[:position_id] = position[:id]
-                PositionDataForAd.new(position_data_for_ad_params)
-                PositionDataForMatching.new(position_data_for_matching_params)
+            if not position.save # does not pass Position model validation
+                render json: { status: 'error', message: position.errors, payload: {} }
+            end
+            params[:position_id] = position[:id]
+            message = valid_ad_and_matching
+            if not message
                 render json: { status: 'success', message: '', payload: position }
             else
-                render json: { status: 'error', message: position.errors, payload: {} }
+                render json: { status: 'success', message: message, payload: {} }
             end
         end
 
@@ -36,7 +38,6 @@ module Api::V1
         # Only allow a trusted parameter "white position" through.
         def position_params
             params.permit(
-                :id,
                 :session_id,
                 :position_code, 
                 :position_title, 
@@ -49,7 +50,6 @@ module Api::V1
 
         def position_data_for_ad_params
             params.permit(
-                :id,
                 :position_id,
                 :duties, 
                 :qualifications, 
@@ -62,7 +62,6 @@ module Api::V1
 
         def position_data_for_matching_params
             params.permit(
-                :id,
                 :position_id,
                 :desired_num_assignments, 
                 :current_enrollment, 
@@ -74,6 +73,20 @@ module Api::V1
             return Position.order(:id).select do |entry|
                 entry[:session_id] == params[:session_id].to_i
             end
+        end
+
+        def valid_ad_and_matching
+            ad = PositionDataForAd.new(position_data_for_ad_params)
+            matching = PositionDataForMatching.new(position_data_for_matching_params)
+            if ad.save and matching.save
+                return nil
+            elsif ad.save and not matching.save
+                return matching.errors
+            elsif not ad.save and matching.save
+                return ad.errors
+            else
+                return ad.errors.messages.deep_merge(matching.errors.messages)
+            end                
         end
     end
 end

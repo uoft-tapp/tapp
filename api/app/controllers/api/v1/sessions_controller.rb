@@ -11,12 +11,12 @@ module Api::V1
 
         # POST /sessions
         def create
-            if not params.include?(:name)
+            if not params.require(:name)
                 render json: { status: 'error', message: 'No name given', payload: {} }
                 return
             end
             session = Session.new(session_params)
-            if session.save
+            if session.save # passes Session model validation
                 render json: { status: 'success', message: '', payload: session }
             else
                 render json: { status: 'error', message: session.errors, payload: {} }

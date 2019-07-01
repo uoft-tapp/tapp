@@ -16,13 +16,13 @@ module Api::V1
                     message: 'Invalid session_id', payload: position_templates_by_session }
                 return
             end
-            if not params.include?(:offer_template)
+            if not params.require(:offer_template)
                 render json: { status: 'error', 
                     message: 'No offer_template given', payload: position_templates_by_session }
                 return
             end
             position_template = PositionTemplate.new(position_template_params)
-            if position_template.save
+            if position_template.save  # passes PostionTemplate model validataion
                 index
             else
                 render json: { status: 'error', 

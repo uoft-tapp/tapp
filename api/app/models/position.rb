@@ -13,6 +13,7 @@ class Position < ApplicationRecord
   has_many :applications, through: :position_preferences
   has_one :position_data_for_ad
   has_one :position_data_for_matching
+  validates :est_hours_per_assignment, numericality: {only_float: true}, allow_nil: true
 
 
 

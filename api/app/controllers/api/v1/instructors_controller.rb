@@ -25,7 +25,7 @@ module Api::V1
                     message: 'Invalid position_id', payload: instructors_by_position }
             end
             instructor = position.instructors.new(instructor_params)
-            if instructor.save
+            if instructor.save # passes Instructor model validation
                 render json: { status: 'success', 
                     message: '', payload: instructors_by_position }
             else
