@@ -6,7 +6,7 @@ module Api::V1
 
         # GET /instructors
         def index
-            if not params.include?(:position_id)
+            if not params.require(:position_id)
                 render json: { status: 'success', message: '', payload: Instructor.order(:id) }
                 return
             end
@@ -23,6 +23,7 @@ module Api::V1
             if not position
                 render json: { status: 'error', 
                     message: 'Invalid position_id', payload: instructors_by_position }
+                return
             end
             instructor = position.instructors.new(instructor_params)
             if instructor.save # passes Instructor model validation
@@ -34,21 +35,21 @@ module Api::V1
             end
         end
 
-    private
-    def instructor_params
-      params.permit(
-        :id,
-        :email, 
-        :first_name, 
-        :last_name, 
-        :utorid
-      )
-    end
+        private
+        def instructor_params
+          params.permit(
+            :id,
+            :email, 
+            :first_name, 
+            :last_name, 
+            :utorid
+          )
+        end
 
-    def instructors_by_position
-        return Instructor.order(:id).each do |entry|
-            entry.position_ids.include?(params[:position_id].to_i)
+        def instructors_by_position
+            return Instructor.order(:id).each do |entry|
+                entry.position_ids.include?(params[:position_id].to_i)
+            end
         end
     end
-  end
 end

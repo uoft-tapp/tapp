@@ -1,91 +1,60 @@
 # frozen_string_literal: true
 
 module Api::V1
-  # Controller for Assignments
-  class AssignmentsController < ApplicationController
-    before_action :set_assignment, only: %i[show update]
-    # GET /assignments
-    def index
-      @assignment = Assignment.order(:id)
+    # Controller for Assignments
+    class AssignmentsController < ApplicationController
 
-      render json: @assignment
-    end
-
-    # GET /assignments/1
-    def show
-      render json: @assignment
-    end
-
-    # POST /assignments
-    def create
-      position = Position.find(params[:position_id])
-      applicant = Applicant.find(params[:applicant_id])
-      params[:start_date] = position[:start_date]
-      params[:end_date] = position[:end_date]
-      params[:status] = 0
-      @assignment = Assignment.new(assignment_params)
-      if @assignment.save
-        render json: @assignment, status: :created
-      else
-        render json: @assignment.errors, status: :unprocessable_entity
-      end
-    end
-
-    # PATCH/PUT /assignments/1
-    def update
-      updated_at = @assignment[:updated_at]
-      if @assignment.update(update_assignment_params)
-        # creates a copy of assignment if changed are made after being sent
-        if @assignment[:status] > 0
-          log_offer
+        # GET /assignments
+        def index
+            if not params.require(:position_id)
+                render json: { status: 'success', message: '', payload: Assignment.order(:id) }
+                return
+            end
+            if Position.exists?(id: params[:position_id])
+                render json: { status: 'success', message: '', payload: assignments_by_position }
+            else
+                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            end
         end
-        render json: @assignment
-      else
-        render json: @assignment.errors, status: :unprocessable_entity
-      end
-    end
 
-    private
-    def set_assignment
-      @assignment = Assignment.find(params[:id])
-    end
+        # POST /assignments
+        def create
+            if not Position.exists?(id: params[:position_id])
+                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+                return
+            end
+            if not params.require(:applicant_id)
+                render json: { status: 'error', message: 'No applicant_id given', payload: {} }
+                return
+            end
+            if not Applicant.exists?(id: params[:applicant_id])
+                render json: { status: 'error', message: 'Invalid applicant_id', payload: {} }
+                return
+            end
+            assignment = Assignment.new(assignment_params)
+            if assignment.save
+                render json: { status: 'success', message: '', payload: assignment }
+            else
+                render json: { status: 'error', message: assignment.errors, payload: {} }
+            end
+        end
 
-    def assignment_params
-      params.permit(
-        :id,
-        :applicant_id,
-        :position_id,
-        :hours,
-        :pay1,  
-        :pay2,
-        :status,
-        :start_date,
-        :end_date,
-      )
-    end
-    def update_assignment_params
-      params.permit(
-        :hours,
-        :pay1,  
-        :pay2,
-        :start_date,
-        :end_date,
-      )
-    end
+        private
+        def assignment_params
+            params.permit(
+                :contract_start,
+                :contract_end,
+                :note,
+                :offer_override_pdf,
+                :applicant_id,
+                :position_id,
+            )
+        end
 
-    def log_offer
-      offer = Offer.new(
-        assignment_id: @assignment[:id],
-        hours: @assignment[:hours],
-        pay1: @assignment[:pay1],  
-        pay2: @assignment[:pay2],
-        status: @assignment[:status],
-        start_date: @assignment[:start_date],
-        end_date: @assignment[:end_date],
-      )
-      if !offer.save
-        render json: offer.errors, status: :unprocessable_entity
-      end
+        def assignments_by_position
+            return Assignment.order(:id).each do |entry|
+                entry[:position_id] == params[:position_id].to_i
+            end
+        end
     end
-  end
 end

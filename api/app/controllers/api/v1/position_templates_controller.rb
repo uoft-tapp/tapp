@@ -39,7 +39,6 @@ module Api::V1
         private
         def position_template_params
             params.permit(
-                :id,
                 :session_id,
                 :offer_template,
                 :position_type,

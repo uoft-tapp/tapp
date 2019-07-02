@@ -26,7 +26,6 @@ module Api::V1
         private
         def session_params
             params.permit(
-                :id,
                 :name,
                 :rate1,
                 :rate2,
