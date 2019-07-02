@@ -1,92 +1,145 @@
 # frozen_string_literal: true
 
 module Api::V1
-  # Controller for Positions
-  class PositionsController < ApplicationController
-    before_action :set_position, only: %i[show update destroy]
+    # Controller for Positions
+    class PositionsController < ApplicationController
 
-    # GET /positions
-    def index
-      @positions = Position.order(:id)
-
-      render json: @positions
-    end
-
-    # GET /positions/1
-    def show
-      render json: @position
-    end
-
-    # POST /positions
-    def create
-      @position = Position.new(position_params)
-
-      if @position.save
-        render json: @position, status: :created
-      else
-        render json: @position.errors, status: :unprocessable_entity
-      end
-    end
-
-     # POST /positions/import
-     def import
-      @position = Position.new(position_params)
-
-      if @position.valid?
-        if @position.save
-          render json: @position, status: :created
-        else
-          render json: @position.errors, status: :unprocessable_entity
+        # GET /positions
+        def index
+            render_success(positions_by_session)
         end
-      else
-        #check whether the error lies in uniqueness alone
-        if @position.errors.details.length == 1 &&  @position.errors["course_code"] == ["course duplicated in same session"]
-          # safe to update since there's no other errors
-          @exists = Position.where('course_code = ? AND session_id = ?', params[:course_code], params[:session_id])
-          if @exists.update(position_params)
-            render json: @exists
-          else
-            render json: @exists.errors, status: :unprocessable_entity
-          end
-          
-        else
-          render json: @position.errors, status: :unprocessable_entity
+
+        # POST /positions
+        def create
+            params.require([:position_code, :position_title])
+            if invalid_id(Session, :session_id) then return end
+            position = Position.new(position_params)
+            if not position.save # does not pass Position model validation
+                position.destroy!
+                render_error(position.errors)
+                return
+            end
+            params[:position_id] = position[:id]
+            message = valid_ad_and_matching(position.errors.messages)
+            if not message
+                render_success(position)
+            else
+                position.destroy!
+                render_error(message)
+            end
         end
-      end
-    end
 
-    # PATCH/PUT /positions/1
-    def update
-      if @position.update(position_params)
-        render json: @position
-      else
-        render json: @position.errors, status: :unprocessable_entity
-      end
-    end
+        # PUT/PATCH /positions/:id
+        def update
+            position = Position.find(params[:id])
+            ad = position.position_data_for_ad
+            matching = position.position_data_for_matching
 
-    # DELETE /positions/1
-    def destroy
-      if @position.destroy
-        head :no_content, status: :ok
-      else
-        render json: @position.errors, status: :unprocessable_entity
-      end
-    end
+            position_res = position.update_attributes!(position_update_params)
+            ad_res = ad.update_attributes!(ad_update_params)
+            matching_res = matching.update_attributes!(matching_update_params)
 
-    private
+            errors = position.errors.messages.deep_merge(ad.errors.messages)
+            errors = errors.deep_merge(matching.errors.messages)
+            if ad_res and position_res and matching_res
+                render_success(position)
+            else
+                render_error(errors)
+            end
+        end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_position
-      @position = Position.find(params[:id])
-    end
+        private
+        # Only allow a trusted parameter "white position" through.
+        def position_params
+            params.permit(
+                :session_id,
+                :position_code, 
+                :position_title, 
+                :est_hours_per_assignment, 
+                :est_start_date, 
+                :est_end_date, 
+                :position_type, 
+            )
+        end
 
-    # Only allow a trusted parameter "white position" through.
-    def position_params
-      params.permit(
-        :cap_enrolment, :course_code, :course_name, :current_enrolment, :duties, :hours,
-        :num_waitlisted, :openings, :qualifications, :session_id,
-        :start_date, :end_date
-      )
+        def position_data_for_ad_params
+            params.permit(
+                :position_id,
+                :duties, 
+                :qualifications, 
+                :ad_hours_per_assignment, 
+                :ad_num_assignments, 
+                :ad_open_date, 
+                :ad_close_date, 
+            )
+        end
+
+        def position_data_for_matching_params
+            params.permit(
+                :position_id,
+                :desired_num_assignments, 
+                :current_enrollment, 
+                :current_waitlisted
+            )
+        end
+
+        def position_update_params
+            params.permit(
+                :position_code, 
+                :position_title, 
+                :est_hours_per_assignment, 
+                :est_start_date, 
+                :est_end_date, 
+                :position_type, 
+            )
+        end
+
+        def ad_update_params
+            params.permit(
+                :duties, 
+                :qualifications, 
+                :ad_hours_per_assignment, 
+                :ad_num_assignments, 
+                :ad_open_date, 
+                :ad_close_date, 
+            )
+        end
+
+        def matching_update_params
+            params.permit(
+                :desired_num_assignments, 
+                :current_enrollment, 
+                :current_waitlisted
+            )
+        end
+
+        def positions_by_session
+            return Position.order(:id).select do |entry|
+                entry[:session_id] == params[:session_id].to_i
+            end
+        end
+
+        def valid_ad_and_matching(errors)
+            ad = PositionDataForAd.new(position_data_for_ad_params)
+            matching = PositionDataForMatching.new(position_data_for_matching_params)
+            ad_save = ad.save
+            matching_save = matching.save
+            if ad_save and matching_save
+                return nil
+            elsif ad_save and not matching_save
+                ad.destroy!
+                matching.destroy!
+                return errors.deep_merge(matching.errors.messages)
+            elsif not ad_save and matching_save
+                ad.destroy!
+                matching.destroy!
+                return errors.deep_merge(ad.errors.messages)
+            else
+                ad.destroy!
+                matching.destroy!
+                errors = errors.deep_merge(ad.errors.messages)
+                return errors.deep_merge(matching.errors.messages)
+            end                
+        end
     end
-  end
 end

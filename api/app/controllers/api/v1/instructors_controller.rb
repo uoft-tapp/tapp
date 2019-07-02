@@ -1,61 +1,64 @@
 # frozen_string_literal: true
 
 module Api::V1
-  # Controller for Instructors
-  class InstructorsController < ApplicationController
-    before_action :set_instructor, only: %i[show update destroy]
+    # Controller for Instructors
+    class InstructorsController < ApplicationController
 
-    # GET /instructors
-    def index
-      @instructors = Instructor.order(:id)
+        # GET /instructors
+        def index
+            if not params.include?(:position_id)
+                render_success(Instructor.order(:id))
+                return
+            end
+            if invalid_id(Position, :position_id) then return end
+            render_success(instructors_by_position)
+        end
 
-      render json: @instructors
+        # POST /add_instructor
+        def create
+            position = Position.find(params[:position_id])
+            instructor = position.instructors.new(instructor_params)
+            if instructor.save # passes Instructor model validation
+                render_success(instructors_by_position)
+            else
+                instructor.destroy!
+                render_error(instructor.errors, instructors_by_position)
+            end
+        end
+
+        # PUT/PATCH /instructors/:id
+        def update
+            instructor = Instructor.find(params[:id])
+            validate_position_ids
+            instructor.position_ids = params[:position_ids] 
+            if instructor.update_attributes!(instructor_params)
+                render_success(instructor)
+            else
+                render_error(instructor.errors)
+            end
+        end
+
+        private
+        def instructor_params
+          params.permit(
+            :email, 
+            :first_name, 
+            :last_name, 
+            :utorid
+          )
+        end
+
+        def instructors_by_position
+            return Instructor.order(:id).each do |entry|
+                entry.position_ids.include?(params[:position_id].to_i)
+            end
+        end
+
+        def validate_position_ids
+            params.require(:position_ids)
+            params[:position_ids].each do |id|
+                Position.find(id)
+            end
+        end
     end
-
-    # GET /instructors/1
-    def show
-      render json: @instructor
-    end
-
-    # POST /instructors
-    def create
-      @instructor = Instructor.new(instructor_params)
-
-      if @instructor.save
-        render json: @instructor, status: :created
-      else
-        render json: @instructor.errors, status: :unprocessable_entity
-      end
-    end
-
-    # PATCH/PUT /instructors/1
-    def update
-      if @instructor.update(instructor_params)
-        render json: @instructor
-      else
-        render json: @instructor.errors, status: :unprocessable_entity
-      end
-    end
-
-    # DELETE /instructors/1
-    def destroy
-      if @instructor.destroy
-        head :no_content, status: :ok
-      else
-        render json: @position.errors, status: :unprocessable_entity
-      end
-    end
-
-    private
-
-    def set_instructor
-      @instructor = Instructor.find(params[:id])
-    end
-
-    def instructor_params
-      params.permit(
-        :email, :first_name, :last_name, :utorid
-      )
-    end
-  end
 end

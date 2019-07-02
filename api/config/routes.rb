@@ -7,12 +7,38 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :positions, :instructors, except: [:new, :edit]
-      resources :applicants, only: [:create, :update]
-      resources :assignments, only: [:index, :show, :create, :update]
-	  resources :offers, only: [:index, :show]
-
-      match 'positions/import' => 'positions#import', :via => :post
+      resources :instructors, only: [:index, :update]
+      resources :positions, only: [:update] do 
+        resources :instructors, only: [:index]
+        resources :assignments, only: [:index, :create]
+        post '/add_instructor', to: 'instructors#create'
+      end
+      resources :applicants, only: [:index, :create, :update]
+      resources :assignments, only: [:index, :update] do
+        resources :wage_chunks, only: [:index]
+        post '/add_wage_chunk', to: 'wage_chunks#create'
+        get '/active_offer', to: 'offers#active_offer'
+      end
+      resources :wage_chunks, only: [:index, :update] do 
+        post '/add_reporting_tag', to: 'reporting_tags#create'
+      end
+      resources :offers, only: [:create]
+      resources :applications, only: [:index, :update] do
+        post '/add_preference', to: 'position_preferences#create'
+      end
+      resources :sessions, only: [:index, :create, :update] do
+        resources :positions, only: [:index, :create]
+        resources :position_templates, only: [:index]
+        resources :applications, only: [:index, :create]
+        resources :applicants, only: [:index]
+        post '/add_position_template', to: 'position_templates#create'
+      end
+      resources :position_templates, only: [:update]
+      resources :reporting_tags, only: [:update]
+      resources :position_preferences, only: [:update]
+      get '/available_position_templates', to: 'position_templates#available'
+      post '/email_offer', to: 'offers#email_offer'
+      post '/ta/offers/:offer_id/respond_to_offer', to: 'offers#respond'
     end
   end
 

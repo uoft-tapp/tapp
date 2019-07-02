@@ -3,53 +3,55 @@
 module Api::V1
     # Controller for Applicants
     class ApplicantsController < ApplicationController
-      before_action :set_applicant, only: %i[show update destroy]
 
-      # POST /applicants
-      def create
-        @applicant = Applicant.new(applicant_params)
-  
-        if @applicant.save
-          render json: @applicant, status: :created
-        else
-          render json: @applicant.errors, status: :unprocessable_entity
+        # GET /applicants
+        def index
+            if not params.include?(:session_id)
+                render_success(Applicant.order(:id))
+                return
+            end
+            if invalid_id(Session, :session_id) then return end
+            render_success(applicants_by_session)
         end
-      end
-  
-      # PATCH/PUT /applicants/1
-      def update
-        if @applicant.update(applicant_params)
-          render json: @applicant
-        else
-          render json: @applicant.errors, status: :unprocessable_entity
+
+        # POST /applicants
+        def create
+            applicant = Applicant.new(applicant_params)
+            if applicant.save # passes Applicant model validation
+                render_success(applicant)
+            else
+                applicant.destroy!
+                render_error(applicant.errors)
+            end
         end
-      end
-  
-      private
-  
-      def set_applicant
-        @applicant = Applicant.find(params[:id])
-      end
-  
-      def applicant_params
-        params.permit(
-          :id,
-          :address,
-          :commentary,
-          :dept,
-          :dept_fields,
-          :email,
-          :first_name,
-          :is_full_time,
-          :is_grad_student,
-          :last_name,
-          :phone,
-          :program,
-          :student_number,
-          :utorid,
-          :year_in_program,
-        )
-      end
+
+        # PUT/PATCH /applicants/:id
+        def update
+            applicant = Applicant.find(params[:id])
+            if applicant.update_attributes!(applicant_params)
+                render_success(applicant)
+            else
+                render_error(applicant.errors)
+            end
+        end
+ 
+        private
+        def applicant_params
+            params.permit(
+                :email,
+                :first_name,
+                :last_name,
+                :phone,
+                :student_number,
+                :utorid,
+            )
+        end
+
+        def applicants_by_session
+            return Applicant.order(:id).select do |entry|
+                entry[:session_id] == params[:session_id].to_i
+            end
+        end
     end
-  end
+end
   
