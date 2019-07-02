@@ -71,7 +71,7 @@ module Api::V1
             ad = PositionDataForAd.new(position_data_for_ad_params)
             matching = PositionDataForMatching.new(position_data_for_matching_params)
             ad_save = ad.save
-            matching_save = matching_save
+            matching_save = matching.save
             if ad_save and matching_save
                 return nil
             elsif ad_save and not matching_save
