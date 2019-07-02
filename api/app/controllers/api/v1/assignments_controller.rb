@@ -7,32 +7,29 @@ module Api::V1
         # GET /assignments
         def index
             if not params.include?(:position_id)
-                render json: { status: 'success', message: '', payload: Assignment.order(:id) }
+                render_success(Assignment.order(:id))
                 return
             end
-            if Position.exists?(id: params[:position_id])
-                render json: { status: 'success', message: '', payload: assignments_by_position }
-            else
-                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            if invalid_primary_key(Position, :position_id)
+                return 
             end
+            render_success(assignments_by_position)
         end
 
         # POST /assignments
         def create
             params.require(:applicant_id)
-            if not Position.exists?(id: params[:position_id])
-                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            if invalid_primary_key(Position, :position_id)
                 return
             end
-            if not Applicant.exists?(id: params[:applicant_id])
-                render json: { status: 'error', message: 'Invalid applicant_id', payload: {} }
+            if invalid_primary_key(Applicant, :applicant_id)
                 return
             end
             assignment = Assignment.new(assignment_params)
             if assignment.save
-                render json: { status: 'success', message: '', payload: assignment }
+                render_success(assignment)
             else
-                render json: { status: 'error', message: assignment.errors, payload: {} }
+                render_error(assignment.errors)
             end
         end
 

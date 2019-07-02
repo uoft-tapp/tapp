@@ -6,30 +6,27 @@ module Api::V1
 
         # GET /position_templates
         def index
-            render json: { status: 'success', message: '', payload: position_templates_by_session }
+            render_success(position_templates_by_session)
         end
 
         # POST /add_position_template
         def create
             params.require(:offer_template)
-            if not Session.exists?(id: params[:session_id])
-                render json: { status: 'error', 
-                    message: 'Invalid session_id', payload: position_templates_by_session }
+            if invalid_primary_key(Session, :session_id, [])
                 return
             end
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index
             else
-                render json: { status: 'error', 
-                    message: position_template.errors, payload: position_templates_by_session }
+                render_error(position_template.errors, position_templates_by_session)
             end
         end
 
         # GET /available_position_templates
         def available
             files = Dir.glob("#{Rails.root}/app/views/position_templates/*")
-            render json: { status: 'success', message: '', payload: files }
+            render_success(files)
         end
 
         private

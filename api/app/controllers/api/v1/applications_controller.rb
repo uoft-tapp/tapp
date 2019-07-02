@@ -7,33 +7,30 @@ module Api::V1
         # GET /applications
         def index
             if not params.include?(:session_id)
-                render json: { status: 'success', message: '', payload: Application.order(:id) }
+                render_success(Application.order(:id))
                 return
             end
-            if Session.exists?(id: params[:session_id])
-                render json: { status: 'success', message: '', payload: applications_by_session }
-            else
-                render json: { status: 'error', message: 'Invalid session_id', payload: {} }
+            if invalid_primary_key(Session, :session_id)
+                return
             end
+            render_success(applications_by_session)
         end
 
         # POST /applications
         def create
-            if not Session.exists?(id: params[:session_id])
-                render json: { status: 'error', 
-                    message: 'Invalid session_id', payload: applications_by_session }
+            if invalid_primary_key(Session, :session_id)
                 return
             end
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
-                render json: { status: 'error', message: application.errors, payload: {} }
+                render_error(application.errors)
             end
             params[:application_id] = application[:id]
             message = valid_applicant_matching_data
             if not message
-                render json: { status: 'success', message: '', payload: application }
+                render_success(application)
             else
-                render json: { status: 'error', message: message, payload: {} }
+                render_error(message)
             end
         end
 
@@ -63,8 +60,8 @@ module Api::V1
         end
 
         def valid_applicant_matching_data
-            if not Applicant.exists?(id: params[:applicant_id])
-                return 'Invalid applicant_id'
+            if invalid_primary_key(Applicant, :applicant_id)
+                return
             end
             matching = ApplicantDataForMatching.new(applicant_data_for_matching_params)
             if matching.save

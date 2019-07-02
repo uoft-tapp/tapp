@@ -7,21 +7,17 @@ module Api::V1
         # POST /add_reporting_tag
         def create
             params.require(:position_id)
-            if not WageChunk.exists?(id: params[:wage_chunk_id])
-                render json: { status: 'error', message: 'Invalid wage_chunk_id', payload: {} }
+            if invalid_primary_key(WageChunk, :wage_chunk_id)
                 return
             end
-            if not Position.exists?(id: params[:position_id])
-                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            if invalid_primary_key(Position, :position_id)
                 return
             end
             reporting_tag = WageChunk.new(reporting_tag_params)
             if reporting_tag.save # passes ReportingTag model validation
-                render json: { status: 'success', 
-                    message: '', payload: reporting_tags_by_wage_chunk }
+                render_success(reporting_tags_by_wage_chunk)
             else
-                render json: { status: 'error', 
-                    message: reporting_tag.errors, payload: reporting_tags_by_wage_chunk }
+                render_error(reporting_tag.errors, reporting_tags_by_wage_chunk)
             end
         end
 

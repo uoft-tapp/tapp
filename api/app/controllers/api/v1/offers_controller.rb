@@ -7,25 +7,25 @@ module Api::V1
         # POST /create_offer
         def create
             # TODO
-            render json: { status: 'error', message: '', payload: {} }
+            render_error('')
         end
 
         # GET /active_offer
         def active_offer
             # TODO
-            render json: { status: 'error', message: '', payload: {} }
+            render_error('')
         end
 
         # POST /email_offer
         def email_offer
             # TODO
-            render json: { status: 'error', message: '', payload: {} }
+            render_error('')
         end
 
         # POST /respond_to_offer
         def respond
             # TODO
-            render json: { status: 'error', message: '', payload: {} }
+            render_error('')
         end
     end
 end

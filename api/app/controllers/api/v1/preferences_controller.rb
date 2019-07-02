@@ -7,22 +7,17 @@ module Api::V1
         # POST /add_preference
         def create
             params.require(:position_id)
-            if not Application.exists?(id: params[:application_id])
-                render json: { status: 'error', message: 'Invalid application_id', payload: {} }
+            if invalid_primary_key(Application, :application_id, [])
                 return
             end
-            if not Position.exists?(id: params[:position_id])
-                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            if invalid_primary_key(Position, :position_id, preferences_by_application)
                 return
             end
             preference = PositionPreference.new(preference_params)
             if preference.save # passes PositionPreference model validation
-                render json: { status: 'success', 
-                    message: '', payload: preferences_by_application }
+                render_success(preferences_by_application)
             else
-                render json: { status: 'error', 
-                    message: preference.errors, 
-                    payload: preferences_by_application }
+                render_error(preference.errors, preferences_by_application)
             end
         end
  

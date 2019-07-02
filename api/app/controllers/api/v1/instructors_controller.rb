@@ -7,38 +7,29 @@ module Api::V1
         # GET /instructors
         def index
             if not params.include?(:position_id)
-                render json: { status: 'success', message: '', payload: Instructor.order(:id) }
+                render_success(Instructor.order(:id))
                 return
             end
-            if Position.exists?(id: params[:position_id])
-                render json: { status: 'success', message: '', payload: instructors_by_position }
-            else
-                render json: { status: 'error', message: 'Invalid position_id', payload: {} }
+            if invalid_primary_key(Position, :position_id)
+                return
             end
+            render_success(instructors_by_position)
         end
 
         # POST /add_instructor
         def create
-            position = Position.find_by(id: params[:position_id])
-            if not position
-                render json: { status: 'error', 
-                    message: 'Invalid position_id', payload: instructors_by_position }
-                return
-            end
+            position = Position.find(params[:position_id])
             instructor = position.instructors.new(instructor_params)
             if instructor.save # passes Instructor model validation
-                render json: { status: 'success', 
-                    message: '', payload: instructors_by_position }
+                render_success(instructors_by_position)
             else
-                render json: { status: 'error', 
-                    message: instructor.errors, payload: instructors_by_position }
+                render_error(instructor.errors, instructors_by_position)
             end
         end
 
         private
         def instructor_params
           params.permit(
-            :id,
             :email, 
             :first_name, 
             :last_name, 

@@ -7,30 +7,25 @@ module Api::V1
         # GET /applicants
         def index
             if not params.include?(:assignment_id)
-                render json: { status: 'success', message: '', payload: WageChunk.order(:id) }
+                render_success(WageChunk.order(:id))
                 return
             end
-            if Assignment.exists?(id: params[:assignment_id])
-                render json: { status: 'success', 
-                    message: '', payload: wage_chunks_by_assignment }
-            else
-                render json: { status: 'error', message: 'Invalid assignment_id', payload: {} }
+            if invalid_primary_key(Assignment, :assignment_id)
+                return
             end
+            render_success(wage_chunks_by_assignment)
         end
 
         # POST /add_wage_chunk
         def create
-            if not Assignment.exists?(id: params[:assignment_id])
-                render json: { status: 'error', message: 'Invalid assignment_id', payload: {} }
+            if invalid_primary_key(Assignment, :assignment_id, [])
                 return
             end
             wage_chunk = WageChunk.new(wage_chunk_params)
             if wage_chunk.save # passes WageChunk model validation
-                render json: { status: 'success', 
-                	message: '', payload: wage_chunks_by_assignment }
+                render_success(wage_chunks_by_assignment)
             else
-                render json: { status: 'error', 
-                	message: wage_chunk.errors, payload: wage_chunks_by_assignment }
+                render_error(wage_chunk.errors, wage_chunks_by_assignment)
             end
         end
 

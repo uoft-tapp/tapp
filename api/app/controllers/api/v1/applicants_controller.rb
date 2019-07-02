@@ -7,23 +7,22 @@ module Api::V1
         # GET /applicants
         def index
             if not params.include?(:session_id)
-                render json: { status: 'success', message: '', payload: Applicant.order(:id) }
+                render_success(Applicant.order(:id))
                 return
             end
-            if Session.exists?(id: params[:session_id])
-                render json: { status: 'success', message: '', payload: applicants_by_session }
-            else
-                render json: { status: 'error', message: 'Invalid session_id', payload: {} }
+            if invalid_primary_key(Session, :session_id)
+                return
             end
+            render_success(applicants_by_session)
         end
 
         # POST /applicants
         def create
             applicant = Applicant.new(applicant_params)
             if applicant.save # passes Session model validation
-                render json: { status: 'success', message: '', payload: applicant }
+                render_success(applicant)
             else
-                render json: { status: 'error', message: applicant.errors, payload: {} }
+                render_error(applicant.errors)
             end
         end
  

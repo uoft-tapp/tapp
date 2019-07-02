@@ -9,8 +9,4 @@ class ApplicationController < ActionController::Base
     	render :file => 'public/index.html'
   	end  
 
-  	rescue_from ActionController::ParameterMissing do |e|
-    	render json: {status: 'error', message: e.message, payload: {}}  
-	end
-
 end

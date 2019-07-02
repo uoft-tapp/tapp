@@ -6,7 +6,7 @@ module Api::V1
 
         # GET /sessions
         def index
-            render json: { status: 'success', message: '', payload: Session.order(:id) }
+            render_success(Session.order(:id))
         end
 
         # POST /sessions
@@ -14,9 +14,9 @@ module Api::V1
             params.require(:name)
             session = Session.new(session_params)
             if session.save # passes Session model validation
-                render json: { status: 'success', message: '', payload: session }
+                render_success(session)
             else
-                render json: { status: 'error', message: session.errors, payload: {} }
+                render_error(session.errors)
             end
         end
 

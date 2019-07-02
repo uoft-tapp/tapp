@@ -6,26 +6,25 @@ module Api::V1
 
         # GET /positions
         def index
-            render json: { status: 'success', message: '', payload: positions_by_session }
+            render_success(positions_by_session)
         end
 
         # POST /positions
         def create
             params.require([:position_code, :position_title])
-            if not Session.exists?(id: params[:session_id])
-                render json: { status: 'error', message: 'Invalid session_id', payload: {} }
+            if invalid_primary_key(Session, :session_id)
                 return
             end
             position = Position.new(position_params)
             if not position.save # does not pass Position model validation
-                render json: { status: 'error', message: position.errors, payload: {} }
+                render_error(position.errors)
             end
             params[:position_id] = position[:id]
             message = valid_ad_and_matching
             if not message
-                render json: { status: 'success', message: '', payload: position }
+                render_success(position)
             else
-                render json: { status: 'success', message: message, payload: {} }
+                render_error(message)
             end
         end
 
