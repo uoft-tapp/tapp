@@ -6,6 +6,7 @@ module Api::V1
 
         # POST /add_reporting_tag
         def create
+            params.require(:position_id)
             if not WageChunk.exists?(id: params[:wage_chunk_id])
                 render json: { status: 'error', message: 'Invalid wage_chunk_id', payload: {} }
                 return

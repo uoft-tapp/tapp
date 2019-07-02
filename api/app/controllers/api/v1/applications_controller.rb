@@ -6,7 +6,7 @@ module Api::V1
 
         # GET /applications
         def index
-            if not params.require(:session_id)
+            if not params.include?(:session_id)
                 render json: { status: 'success', message: '', payload: Application.order(:id) }
                 return
             end

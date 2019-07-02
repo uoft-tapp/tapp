@@ -6,6 +6,7 @@ module Api::V1
 
         # POST /add_preference
         def create
+            params.require(:position_id)
             if not Application.exists?(id: params[:application_id])
                 render json: { status: 'error', message: 'Invalid application_id', payload: {} }
                 return

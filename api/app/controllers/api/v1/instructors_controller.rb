@@ -6,7 +6,7 @@ module Api::V1
 
         # GET /instructors
         def index
-            if not params.require(:position_id)
+            if not params.include?(:position_id)
                 render json: { status: 'success', message: '', payload: Instructor.order(:id) }
                 return
             end

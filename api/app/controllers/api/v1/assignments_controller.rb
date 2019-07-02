@@ -6,7 +6,7 @@ module Api::V1
 
         # GET /assignments
         def index
-            if not params.require(:position_id)
+            if not params.include?(:position_id)
                 render json: { status: 'success', message: '', payload: Assignment.order(:id) }
                 return
             end
@@ -19,12 +19,9 @@ module Api::V1
 
         # POST /assignments
         def create
+            params.require(:applicant_id)
             if not Position.exists?(id: params[:position_id])
                 render json: { status: 'error', message: 'Invalid position_id', payload: {} }
-                return
-            end
-            if not params.require(:applicant_id)
-                render json: { status: 'error', message: 'No applicant_id given', payload: {} }
                 return
             end
             if not Applicant.exists?(id: params[:applicant_id])

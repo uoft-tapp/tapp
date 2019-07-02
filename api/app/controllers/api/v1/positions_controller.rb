@@ -11,14 +11,9 @@ module Api::V1
 
         # POST /positions
         def create
-            req_keys = [:position_code, :position_title]
+            params.require([:position_code, :position_title])
             if not Session.exists?(id: params[:session_id])
                 render json: { status: 'error', message: 'Invalid session_id', payload: {} }
-                return
-            end
-            if not params.require(req_keys)
-                render json: { status: 'error', 
-                    message: 'Missing position_code or position_title', payload: {} }
                 return
             end
             position = Position.new(position_params)
