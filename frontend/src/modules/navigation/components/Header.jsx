@@ -1,6 +1,7 @@
 import React from "react";
 import { DropdownItem, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, Route } from "react-router-dom";
+import { ToggleMockApi } from "../../../components/mockAPI";
 
 const CustomNavItem = ({ href, children }) => (
     <Link to={href}>
@@ -44,6 +45,7 @@ class Header extends React.Component {
                             New Position
                         </DropdownItem>
                     </NavDropdown>
+                    <ToggleMockApi />
                 </Nav>
             </Navbar>
         );
