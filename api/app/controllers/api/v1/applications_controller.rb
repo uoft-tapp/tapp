@@ -29,9 +29,9 @@ module Api::V1
                 render json: { status: 'error', message: application.errors, payload: {} }
             end
             params[:application_id] = application[:id]
-            message = valid_matching
+            message = valid_applicant_matching_data
             if not message
-                render json: { status: 'error', message: '', payload: application }
+                render json: { status: 'success', message: '', payload: application }
             else
                 render json: { status: 'error', message: message, payload: {} }
             end
@@ -62,7 +62,7 @@ module Api::V1
             end
         end
 
-        def valid_matching
+        def valid_applicant_matching_data
             if not Applicant.exists?(id: params[:applicant_id])
                 return 'Invalid applicant_id'
             end
