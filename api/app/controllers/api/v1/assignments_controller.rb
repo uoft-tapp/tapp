@@ -10,21 +10,15 @@ module Api::V1
                 render_success(Assignment.order(:id))
                 return
             end
-            if invalid_primary_key(Position, :position_id)
-                return 
-            end
+            if invalid_id(Position, :position_id) then return end
             render_success(assignments_by_position)
         end
 
         # POST /assignments
         def create
             params.require(:applicant_id)
-            if invalid_primary_key(Position, :position_id)
-                return
-            end
-            if invalid_primary_key(Applicant, :applicant_id)
-                return
-            end
+            if invalid_id(Position, :position_id) then return end
+            if invalid_id(Applicant, :applicant_id) then return end
             assignment = Assignment.new(assignment_params)
             if assignment.save
                 render_success(assignment)

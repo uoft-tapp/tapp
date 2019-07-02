@@ -7,12 +7,9 @@ module Api::V1
         # POST /add_reporting_tag
         def create
             params.require(:position_id)
-            if invalid_primary_key(WageChunk, :wage_chunk_id)
-                return
-            end
-            if invalid_primary_key(Position, :position_id)
-                return
-            end
+            if invalid_id(WageChunk, :wage_chunk_id, []) then return end
+            if invalid_id(Position, :position_id, 
+                reporting_tags_by_wage_chunk) then return end
             reporting_tag = WageChunk.new(reporting_tag_params)
             if reporting_tag.save # passes ReportingTag model validation
                 render_success(reporting_tags_by_wage_chunk)

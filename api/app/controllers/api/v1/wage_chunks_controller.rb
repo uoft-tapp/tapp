@@ -10,17 +10,13 @@ module Api::V1
                 render_success(WageChunk.order(:id))
                 return
             end
-            if invalid_primary_key(Assignment, :assignment_id)
-                return
-            end
+            if invalid_id(Assignment, :assignment_id) then return end
             render_success(wage_chunks_by_assignment)
         end
 
         # POST /add_wage_chunk
         def create
-            if invalid_primary_key(Assignment, :assignment_id, [])
-                return
-            end
+            if invalid_id(Assignment, :assignment_id, []) then return end
             wage_chunk = WageChunk.new(wage_chunk_params)
             if wage_chunk.save # passes WageChunk model validation
                 render_success(wage_chunks_by_assignment)
@@ -31,13 +27,13 @@ module Api::V1
 
         private
         def wage_chunk_params
-        	params.permit(
-        		:end_date,
-				:hours,
-				:rate,
-				:start_date,
-				:assignment_id,
-			)
+            params.permit(
+                :end_date,
+                :hours,
+                :rate,
+                :start_date,
+                :assignment_id,
+            )
         end
 
         def wage_chunks_by_assignment

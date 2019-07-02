@@ -6,9 +6,9 @@ module Response
   	render json: { status: 'success', message: '', payload: payload }
   end
   def render_error(message, payload = {})
-  	render json: { status: 'success', message: message, payload: payload }
+  	render json: { status: 'error', message: message, payload: payload }
   end
-  def invalid_primary_key(table, params_key, payload = {})
+  def invalid_id(table, params_key, payload = {})
   	begin
   	 	table.find(params[params_key])
   	 	return false

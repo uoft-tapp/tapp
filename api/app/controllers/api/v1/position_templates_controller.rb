@@ -12,9 +12,7 @@ module Api::V1
         # POST /add_position_template
         def create
             params.require(:offer_template)
-            if invalid_primary_key(Session, :session_id, [])
-                return
-            end
+            if invalid_id(Session, :session_id, []) then return end
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index

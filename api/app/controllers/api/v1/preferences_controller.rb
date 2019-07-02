@@ -7,12 +7,8 @@ module Api::V1
         # POST /add_preference
         def create
             params.require(:position_id)
-            if invalid_primary_key(Application, :application_id, [])
-                return
-            end
-            if invalid_primary_key(Position, :position_id, preferences_by_application)
-                return
-            end
+            if invalid_id(Application, :application_id, []) then return end
+            if invalid_id(Position, :position_id, preferences_by_application) then return end
             preference = PositionPreference.new(preference_params)
             if preference.save # passes PositionPreference model validation
                 render_success(preferences_by_application)

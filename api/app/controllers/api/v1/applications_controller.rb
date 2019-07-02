@@ -10,17 +10,13 @@ module Api::V1
                 render_success(Application.order(:id))
                 return
             end
-            if invalid_primary_key(Session, :session_id)
-                return
-            end
+            if invalid_id(Session, :session_id) then return end
             render_success(applications_by_session)
         end
 
         # POST /applications
         def create
-            if invalid_primary_key(Session, :session_id)
-                return
-            end
+            if invalid_id(Session, :session_id) then return end
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
                 render_error(application.errors)
@@ -60,9 +56,7 @@ module Api::V1
         end
 
         def valid_applicant_matching_data
-            if invalid_primary_key(Applicant, :applicant_id)
-                return
-            end
+            if invalid_id(Applicant, :applicant_id) then return end
             matching = ApplicantDataForMatching.new(applicant_data_for_matching_params)
             if matching.save
                 return nil

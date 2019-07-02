@@ -10,9 +10,7 @@ module Api::V1
                 render_success(Instructor.order(:id))
                 return
             end
-            if invalid_primary_key(Position, :position_id)
-                return
-            end
+            if invalid_id(Position, :position_id) then return end
             render_success(instructors_by_position)
         end
 
