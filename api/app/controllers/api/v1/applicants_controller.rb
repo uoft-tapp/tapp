@@ -6,7 +6,15 @@ module Api::V1
 
         # GET /applicants
         def index
-            render json: { status: 'success', message: '', payload: Applicant.order(:id) }
+            if not params.include?(:session_id)
+                render json: { status: 'success', message: '', payload: Applicant.order(:id) }
+                return
+            end
+            if Session.exists?(id: params[:session_id])
+                render json: { status: 'success', message: '', payload: applicants_by_session }
+            else
+                render json: { status: 'error', message: 'Invalid session_id', payload: {} }
+            end
         end
 
         # POST /applicants
@@ -30,6 +38,12 @@ module Api::V1
                 :utorid,
             )
         end
+
+        def applicants_by_session
+            return Applicant.order(:id).select do |entry|
+                entry[:session_id] == params[:session_id].to_i
+            end
+        end
     end
-  end
+end
   

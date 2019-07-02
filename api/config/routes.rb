@@ -15,10 +15,11 @@ Rails.application.routes.draw do
       end
       resources :applicants, only: [:index, :create]
       resources :assignments, only: [:index] do
+        resources :wage_chunks, only: [:index]
         post '/add_wage_chunk', to: 'wage_chunks#create'
         get '/active_offer', to: 'offers#active_offer'
       end
-      resources :wage_chunks do 
+      resources :wage_chunks, only: [:index] do 
         post '/add_reporting_tag', to: 'reporting_tags#create'
       end
       resources :offers, only: [:create]
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
         resources :positions, only: [:index, :create]
         resources :position_templates, only: [:index]
         resources :applications, only: [:index, :create]
+        resources :applicants, only: [:index]
         post '/add_position_template', to: 'position_templates#create'
       end
       get '/available_position_templates', to: 'position_templates#available'

@@ -4,6 +4,20 @@ module Api::V1
     # Controller for WageChunks
     class WageChunksController < ApplicationController
 
+        # GET /applicants
+        def index
+            if not params.include?(:assignment_id)
+                render json: { status: 'success', message: '', payload: WageChunk.order(:id) }
+                return
+            end
+            if Assignment.exists?(id: params[:assignment_id])
+                render json: { status: 'success', 
+                    message: '', payload: wage_chunks_by_assignment }
+            else
+                render json: { status: 'error', message: 'Invalid assignment_id', payload: {} }
+            end
+        end
+
         # POST /add_wage_chunk
         def create
             if not Assignment.exists?(id: params[:assignment_id])
