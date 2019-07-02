@@ -16,6 +16,7 @@ module Api::V1
             if session.save # passes Session model validation
                 render_success(session)
             else
+                session.destroy!
                 render_error(session.errors)
             end
         end

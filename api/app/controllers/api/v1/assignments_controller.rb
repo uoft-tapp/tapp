@@ -20,17 +20,16 @@ module Api::V1
             if invalid_id(Position, :position_id) then return end
             if invalid_id(Applicant, :applicant_id) then return end
             assignment = Assignment.new(assignment_params)
-            assignment_save = assignment.save
-            wage_chunk_save = true
-            errors = assignment.errors
-            if params.include?(:hours)
-                wage_chunk = assignment.wage_chunks.new(hours: params[:hours])
-                wage_chunk_save = wage_chunk.save
-                errors = assignment.errors.messages.deep_merge(wage_chunk.errors.messages)
+            if not assignment.save # does not pass Assignment model validation
+                assignment.destroy!
+                render_error(assignment.errors)
+                return
             end
-            if assignment_save and wage_chunk_save
+            message = valid_wage_chunk(assignment.errors.messages)
+            if not message
                 render_success(assignment)
             else
+                assignment.destroy!
                 render_error(errors)
             end
         end
@@ -69,6 +68,20 @@ module Api::V1
         def assignments_by_position
             return Assignment.order(:id).each do |entry|
                 entry[:position_id] == params[:position_id].to_i
+            end
+        end
+
+        def valid_wage_chunk(errors)
+            if params.include?(:hours)
+                wage_chunk = assignment.wage_chunks.new(hours: params[:hours])
+                if wage_chunk.save
+                    return errors.deep_merge(wage_chunk.errors.messages)
+                else
+                    wage_chunk.destroy!
+                    return nil
+                end
+            else
+                return nil
             end
         end
     end

@@ -19,13 +19,16 @@ module Api::V1
             if invalid_id(Session, :session_id) then return end
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
+                application.destroy!
                 render_error(application.errors)
+                return
             end
             params[:application_id] = application[:id]
-            message = valid_applicant_matching_data
+            message = valid_applicant_matching_data(application.errors.messages)
             if not message
                 render_success(application)
             else
+                application.destroy!
                 render_error(message)
             end
         end
@@ -86,13 +89,14 @@ module Api::V1
             end
         end
 
-        def valid_applicant_matching_data
+        def valid_applicant_matching_data(errors)
             if invalid_id(Applicant, :applicant_id) then return end
             matching = ApplicantDataForMatching.new(applicant_data_for_matching_params)
             if matching.save
                 return nil
             else
-                return matching.errors
+                matching.destroy!
+                return errors.deep_merge(matching.errors.messages)
             end
         end
     end

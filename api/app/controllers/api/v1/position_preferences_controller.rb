@@ -13,6 +13,7 @@ module Api::V1
             if preference.save # passes PositionPreference model validation
                 render_success(preferences_by_application)
             else
+                preference.destroy!
                 render_error(preference.errors, preferences_by_application)
             end
         end

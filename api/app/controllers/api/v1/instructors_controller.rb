@@ -21,6 +21,7 @@ module Api::V1
             if instructor.save # passes Instructor model validation
                 render_success(instructors_by_position)
             else
+                instructor.destroy!
                 render_error(instructor.errors, instructors_by_position)
             end
         end

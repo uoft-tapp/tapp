@@ -15,13 +15,16 @@ module Api::V1
             if invalid_id(Session, :session_id) then return end
             position = Position.new(position_params)
             if not position.save # does not pass Position model validation
+                position.destroy!
                 render_error(position.errors)
+                return
             end
             params[:position_id] = position[:id]
-            message = valid_ad_and_matching
+            message = valid_ad_and_matching(position.errors.messages)
             if not message
                 render_success(position)
             else
+                position.destroy!
                 render_error(message)
             end
         end
@@ -116,7 +119,7 @@ module Api::V1
             end
         end
 
-        def valid_ad_and_matching
+        def valid_ad_and_matching(errors)
             ad = PositionDataForAd.new(position_data_for_ad_params)
             matching = PositionDataForMatching.new(position_data_for_matching_params)
             ad_save = ad.save
@@ -124,11 +127,18 @@ module Api::V1
             if ad_save and matching_save
                 return nil
             elsif ad_save and not matching_save
-                return matching.errors
+                ad.destroy!
+                matching.destroy!
+                return errors.deep_merge(matching.errors.messages)
             elsif not ad_save and matching_save
-                return ad.errors
+                ad.destroy!
+                matching.destroy!
+                return errors.deep_merge(ad.errors.messages)
             else
-                return ad.errors.messages.deep_merge(matching.errors.messages)
+                ad.destroy!
+                matching.destroy!
+                errors = errors.deep_merge(ad.errors.messages)
+                return errors.deep_merge(matching.errors.messages)
             end                
         end
     end

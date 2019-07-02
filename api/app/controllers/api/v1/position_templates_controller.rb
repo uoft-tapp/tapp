@@ -17,6 +17,7 @@ module Api::V1
             if position_template.save  # passes PostionTemplate model validataion
                 index
             else
+                position_template.destroy!
                 render_error(position_template.errors, position_templates_by_session)
             end
         end

@@ -14,6 +14,7 @@ module Api::V1
             if reporting_tag.save # passes ReportingTag model validation
                 render_success(reporting_tags_by_wage_chunk)
             else
+                reporting_tag.destroy!
                 render_error(reporting_tag.errors, reporting_tags_by_wage_chunk)
             end                    
         end

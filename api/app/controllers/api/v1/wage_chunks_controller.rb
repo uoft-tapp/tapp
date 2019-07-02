@@ -21,6 +21,7 @@ module Api::V1
             if wage_chunk.save # passes WageChunk model validation
                 render_success(wage_chunks_by_assignment)
             else
+                wage_chunk.destroy!
                 render_error(wage_chunk.errors, wage_chunks_by_assignment)
             end
         end
