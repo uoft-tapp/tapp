@@ -29,6 +29,9 @@ const configureStore = () => {
 
     return { store, persistor };
 };
+<<<<<<< HEAD
 /* eslint-enable */
+=======
+>>>>>>> refactor(frontend) use apiGET, apiPOST for fetching positions, posting applications
 
 export default configureStore;

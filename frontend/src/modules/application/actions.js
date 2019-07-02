@@ -1,6 +1,7 @@
 import { UPDATE_FIELD, FETCH_POSITIONS_SUCCESS } from "./constants";
 import { error, success } from "react-notification-system-redux";
 import { errorProps } from "../notifications/constants";
+import { apiGET, apiPOST } from "../../libs/apiUtils";
 
 // an action generator function that returns an action object
 export const updateField = data => ({ type: UPDATE_FIELD, data });
@@ -9,7 +10,6 @@ export const updateField = data => ({ type: UPDATE_FIELD, data });
 export const createNewApplication = payload => async dispatch => {
     try {
         // if this await finishes, it means the server returned a `status === "success"`
-        // message
         await apiPOST("/applicants", payload);
         dispatch(
             success({
@@ -18,24 +18,7 @@ export const createNewApplication = payload => async dispatch => {
             })
         );
     } catch (e) {
-        dispatch(
-            error({
-                ...errorProps,
-                message: e.toString()
-            })
-        );
-    }
-}
-
-// action used by applicant positions view
-export const fetchPositionsSuccess = payload => ({ type: FETCH_POSITIONS_SUCCESS, payload })
-export const fetchPositions = () => async dispatch => {
-    const res = await fetch("/api/v1/positions")
-    const data = await res.json()
-    if (res.status === 200) {
-        dispatch(fetchPositionsSuccess(data))
-    } else {
-        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }))
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
 
@@ -44,20 +27,12 @@ export const fetchPositionsSuccess = payload => ({
     type: FETCH_POSITIONS_SUCCESS,
     payload
 });
+
 export const fetchPositions = () => async dispatch => {
     try {
-        var res = await fetch("/api/v1/positions");
-    } catch (err) {
-        alert(err);
-    }
-    if (res.status === 200) {
-        try {
-            const data = await res.json();
-            dispatch(fetchPositionsSuccess(data));
-        } catch (err) {
-            alert(err);
-        }
-    } else {
-        dispatch(error({ ...errorProps, message: "Fetch Position Failure" }));
+        const data = await apiGET("/positions");
+        dispatch(fetchPositionsSuccess(data));
+    } catch (e) {
+        dispatch(error({ ...errorProps, message: e.toString() }));
     }
 };
