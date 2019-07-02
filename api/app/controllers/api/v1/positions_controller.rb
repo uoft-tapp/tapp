@@ -78,11 +78,13 @@ module Api::V1
         def valid_ad_and_matching
             ad = PositionDataForAd.new(position_data_for_ad_params)
             matching = PositionDataForMatching.new(position_data_for_matching_params)
-            if ad.save and matching.save
+            ad_save = ad.save
+            matching_save = matching_save
+            if ad_save and matching_save
                 return nil
-            elsif ad.save and not matching.save
+            elsif ad_save and not matching_save
                 return matching.errors
-            elsif not ad.save and matching.save
+            elsif not ad_save and matching_save
                 return ad.errors
             else
                 return ad.errors.messages.deep_merge(matching.errors.messages)
