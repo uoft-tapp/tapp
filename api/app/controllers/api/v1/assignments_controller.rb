@@ -20,10 +20,18 @@ module Api::V1
             if invalid_id(Position, :position_id) then return end
             if invalid_id(Applicant, :applicant_id) then return end
             assignment = Assignment.new(assignment_params)
-            if assignment.save
+            assignment_save = assignment.save
+            wage_chunk_save = true
+            errors = assignment.errors
+            if params.include?(:hours)
+                wage_chunk = assignment.wage_chunks.new(hours: params[:hours])
+                wage_chunk_save = wage_chunk.save
+                errors = assignment.errors.messages.deep_merge(wage_chunk.errors.messages)
+            end
+            if assignment_save and wage_chunk_save
                 render_success(assignment)
             else
-                render_error(assignment.errors)
+                render_error(errors)
             end
         end
 
@@ -36,6 +44,15 @@ module Api::V1
                 :offer_override_pdf,
                 :applicant_id,
                 :position_id,
+            )
+        end
+
+        def assignment_update_params
+            params.permit(
+                :contract_start,
+                :contract_end,
+                :note,
+                :offer_override_pdf,
             )
         end
 
