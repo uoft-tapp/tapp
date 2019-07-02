@@ -7,6 +7,7 @@ class PositionPreference < ApplicationRecord
 	belongs_to :application
 	belongs_to :position
 
+	validates :preference_level, numericality: true, allow_nil: true
   	validates_uniqueness_of :application_id, :scope => [:position_id]
 end
 

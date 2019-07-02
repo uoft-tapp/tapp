@@ -35,6 +35,16 @@ module Api::V1
             end
         end
 
+        # PUT/PATCH /assignments/:id
+        def update
+            assignment = Assignment.find(params[:id])
+            if assignment.update_attributes!(assignment_update_params)
+                render_success(assignment)
+            else
+                render_error(assignment.errors)
+            end
+        end
+
         private
         def assignment_params
             params.permit(

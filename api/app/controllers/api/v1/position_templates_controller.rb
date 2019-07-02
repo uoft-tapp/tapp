@@ -27,10 +27,27 @@ module Api::V1
             render_success(files)
         end
 
+        # PUT/PATCH /position_templates/:id
+        def update
+            position_template = PositionTemplate.find(params[:id])
+            if position_template.update_attributes!(position_template_update_params)
+                render_success(position_template)
+            else
+                render_error(position_template.errors)
+            end
+        end
+
         private
         def position_template_params
             params.permit(
                 :session_id,
+                :offer_template,
+                :position_type,
+            )
+        end
+
+        def position_template_update_params
+            params.permit(
                 :offer_template,
                 :position_type,
             )

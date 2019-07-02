@@ -30,6 +30,20 @@ module Api::V1
             end
         end
 
+        # PUT/PATCH /applications/:id
+        def update
+            application = Application.find(params[:id])
+            matching = ApplicantDataForMatching.find(application[:id])
+            application_res = application.update_attributes!(application_update_params)
+            matching_res = matching.update_attributes!(matching_data_update_params)
+            errors = application.errors.messages.deep_merge(matching.errors.messages)
+            if application_res and matching_res
+                render_success(application)
+            else
+                render_error(errors)
+            end
+        end
+
         private
         def application_params
             params.permit(
@@ -37,6 +51,7 @@ module Api::V1
                 :session_id,
             )
         end
+
         def applicant_data_for_matching_params
             params.permit(
                 :program, 
@@ -49,6 +64,22 @@ module Api::V1
             )
         end
 
+        def application_update_params
+            params.permit(
+                :comments,
+            )
+        end
+
+        def matching_data_update_params
+            params.permit(
+                :program, 
+                :department, 
+                :previous_uoft_ta_experience, 
+                :yip, 
+                :annotation,
+            )
+        end
+        
         def applications_by_session
             return Application.order(:id).select do |entry|
                 entry[:session_id] == params[:session_id].to_i

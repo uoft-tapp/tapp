@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Api::V1
-    # Controller for Preferences
-    class PreferencesController < ApplicationController
+    # Controller for PositionPreferences
+    class PositionPreferencesController < ApplicationController
 
         # POST /add_preference
         def create
@@ -17,11 +17,27 @@ module Api::V1
             end
         end
  
+       # PUT/PATCH /position_preferences/:id
+        def update
+            position_preference = PositionPreference.find(params[:id])
+            if position_preference.update_attributes!(preference_update_params)
+                render_success(position_preference)
+            else
+                render_error(position_preference.errors)
+            end
+        end
+
         private
         def preference_params
             params.permit(
                 :application_id,
                 :position_id,
+                :preference_level,
+            )
+        end
+
+        def preference_update_params
+            params.permit(
                 :preference_level,
             )
         end

@@ -17,7 +17,17 @@ module Api::V1
         # POST /applicants
         def create
             applicant = Applicant.new(applicant_params)
-            if applicant.save # passes Session model validation
+            if applicant.save! # passes Applicant model validation
+                render_success(applicant)
+            else
+                render_error(applicant.errors)
+            end
+        end
+
+        # PUT/PATCH /applicants/:id
+        def update
+            applicant = Applicant.find(params[:id])
+            if applicant.update_attributes!(applicant_params)
                 render_success(applicant)
             else
                 render_error(applicant.errors)

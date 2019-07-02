@@ -25,6 +25,18 @@ module Api::V1
             end
         end
 
+        # PUT/PATCH /instructors/:id
+        def update
+            instructor = Instructor.find(params[:id])
+            validate_position_ids
+            instructor.position_ids = params[:position_ids] 
+            if instructor.update_attributes!(instructor_params)
+                render_success(instructor)
+            else
+                render_error(instructor.errors)
+            end
+        end
+
         private
         def instructor_params
           params.permit(
@@ -38,6 +50,13 @@ module Api::V1
         def instructors_by_position
             return Instructor.order(:id).each do |entry|
                 entry.position_ids.include?(params[:position_id].to_i)
+            end
+        end
+
+        def validate_position_ids
+            params.require(:position_ids)
+            params[:position_ids].each do |id|
+                Position.find(id)
             end
         end
     end

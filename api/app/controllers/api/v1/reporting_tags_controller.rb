@@ -6,7 +6,7 @@ module Api::V1
 
         # POST /add_reporting_tag
         def create
-            params.require(:position_id)
+            params.require([:position_id, :name])
             if invalid_id(WageChunk, :wage_chunk_id, []) then return end
             if invalid_id(Position, :position_id, 
                 reporting_tags_by_wage_chunk) then return end
@@ -15,6 +15,16 @@ module Api::V1
                 render_success(reporting_tags_by_wage_chunk)
             else
                 render_error(reporting_tag.errors, reporting_tags_by_wage_chunk)
+            end                    
+        end
+
+        # PUT/PATCH /reporting_tags/:id
+        def update
+            reporting_tag = ReportingTag.find(params[:id])
+            if reporting_tag.update_attributes!(reporting_tag_update_params)
+                render_success(reporting_tag)
+            else
+                render_error(reporting_tag.errors)
             end
         end
 
@@ -24,6 +34,12 @@ module Api::V1
                 :name,
                 :position_id,
                 :wage_chunk_id,
+            )
+        end
+
+        def reporting_tag_update_params
+            params.permit(
+                :name,
             )
         end
 

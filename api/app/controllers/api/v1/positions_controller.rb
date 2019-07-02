@@ -26,6 +26,25 @@ module Api::V1
             end
         end
 
+        # PUT/PATCH /positions/:id
+        def update
+            position = Position.find(params[:id])
+            ad = position.position_data_for_ad
+            matching = position.position_data_for_matching
+
+            position_res = position.update_attributes!(position_update_params)
+            ad_res = ad.update_attributes!(ad_update_params)
+            matching_res = matching.update_attributes!(matching_update_params)
+
+            errors = position.errors.messages.deep_merge(ad.errors.messages)
+            errors = errors.deep_merge(matching.errors.messages)
+            if ad_res and position_res and matching_res
+                render_success(position)
+            else
+                render_error(errors)
+            end
+        end
+
         private
         # Only allow a trusted parameter "white position" through.
         def position_params
@@ -55,6 +74,36 @@ module Api::V1
         def position_data_for_matching_params
             params.permit(
                 :position_id,
+                :desired_num_assignments, 
+                :current_enrollment, 
+                :current_waitlisted
+            )
+        end
+
+        def position_update_params
+            params.permit(
+                :position_code, 
+                :position_title, 
+                :est_hours_per_assignment, 
+                :est_start_date, 
+                :est_end_date, 
+                :position_type, 
+            )
+        end
+
+        def ad_update_params
+            params.permit(
+                :duties, 
+                :qualifications, 
+                :ad_hours_per_assignment, 
+                :ad_num_assignments, 
+                :ad_open_date, 
+                :ad_close_date, 
+            )
+        end
+
+        def matching_update_params
+            params.permit(
                 :desired_num_assignments, 
                 :current_enrollment, 
                 :current_waitlisted

@@ -20,6 +20,16 @@ module Api::V1
             end
         end
 
+        # PUT/PATCH /sessions/:id
+        def update
+            session = Session.find(params[:id])
+            if session.update_attributes!(session_params)
+                render_success(session)
+            else
+                render_error(session.errors)
+            end
+        end
+
         private
         def session_params
             params.permit(
