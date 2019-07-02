@@ -30,8 +30,11 @@ const configureStore = () => {
     return { store, persistor };
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* eslint-enable */
 =======
 >>>>>>> refactor(frontend) use apiGET, apiPOST for fetching positions, posting applications
+=======
+>>>>>>> cb8e20f819c3c4e9ec4958ca0109b11e597bb6e7
 
 export default configureStore;

@@ -17,7 +17,10 @@ import positionReducer from "./modules/positions/reducer"
 import applicantReducer from "./modules/applicants_by_course/reducer"
 import instructorReducer from "./modules/instructors/reducer"
 import applicationReducer from "./modules/application/reducer"
+<<<<<<< HEAD
 >>>>>>> refactor(frontend) fix routing error, name scope collisions, merge redux store
+=======
+>>>>>>> cb8e20f819c3c4e9ec4958ca0109b11e597bb6e7
 
 const reducer = combineReducers({
     notifications: notificationReducer,
@@ -27,10 +30,13 @@ const reducer = combineReducers({
     applicants: applicantReducer,
     instructors: instructorReducer,
 <<<<<<< HEAD
+<<<<<<< HEAD
     application: applicationReducer,
     applicantsPositions: applicantsPositionReducer
 });
 =======
+=======
+>>>>>>> cb8e20f819c3c4e9ec4958ca0109b11e597bb6e7
     application: applicationReducer
 })
 >>>>>>> refactor(frontend) fix routing error, name scope collisions, merge redux store

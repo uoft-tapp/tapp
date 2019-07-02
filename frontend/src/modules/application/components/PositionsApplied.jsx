@@ -48,7 +48,7 @@ class PositionsApplied extends React.Component {
                 <div style={{ paddingBottom: "50px" }}>
                     <ReactTable
                         showPagination={false}
-                        pageSize={this.props.applicantsPositions.length}
+                        pageSize={this.props.positions.length}
                         columns={COLUMNS}
                         data={this.props.positions.data}
                         className={"positions-table"}

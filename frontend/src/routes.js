@@ -21,9 +21,12 @@ import Summary from "./modules/tapp_summary/components/Summary"
 import ApplicationForm from "./modules/application/components/ApplicationForm"
 import PositionsApplied from "./modules/application/components/PositionsApplied"
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> refactor(frontend) move components from applicants_positions to applicants
 =======
 >>>>>>> refactor(frontend) move components from applicants_positions to applicants
+=======
+>>>>>>> cb8e20f819c3c4e9ec4958ca0109b11e597bb6e7
 
 export const openRoutes = [
     {
