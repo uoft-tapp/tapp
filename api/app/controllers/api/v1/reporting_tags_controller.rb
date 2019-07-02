@@ -10,7 +10,7 @@ module Api::V1
             if invalid_id(WageChunk, :wage_chunk_id, []) then return end
             if invalid_id(Position, :position_id, 
                 reporting_tags_by_wage_chunk) then return end
-            reporting_tag = WageChunk.new(reporting_tag_params)
+            reporting_tag = ReportingTag.new(reporting_tag_params)
             if reporting_tag.save # passes ReportingTag model validation
                 render_success(reporting_tags_by_wage_chunk)
             else
