@@ -2,14 +2,44 @@
 
 module Requests
     module JsonHelpers
+        def valid_session # defines a valid session
+            return []
+        end
+
         def json
             JSON.parse(last_response.body, symbolize_names: true)
         end
 
-        def valid_session
-            return []
+        def entries_to_json(entries)
+            return entries.map do |entry|
+                JSON.parse(entry.to_json, symbolize_names: true)
+            end
         end
 
+        '''
+            INDEX related functions
+        '''
+        def expect_correct_num_entries(route, table)
+            expect_get_success(route)
+            expect(json[:payload].size).to eq(table.count)
+        end
+
+        def expect_correct_single_entry(route, entry)
+            expect_get_success(route)
+            expect(json[:payload]).to eq(entries_to_json([entry]))
+        end
+
+        def expect_correct_multientry(route, record, type)
+            new_record = FactoryBot.create(type)
+            expect_get_success(route)
+            result = json
+            expect(result[:payload]).to eq(entries_to_json([record,new_record]))
+            expect(result[:payload].size).to eq(2)
+        end
+
+        '''
+            CREATE related functions
+        '''
         def expect_create_new_record(route, params, table)
             expect do
               post "/api/v1#{route}", valid_attributes, session: valid_session
@@ -22,12 +52,17 @@ module Requests
             end.to change(table, :count).by(0)
         end
 
-        def expect_update_record(route, params, record)
+        '''
+            UPDATE related functions
+        '''
+        def expect_update_record(route, params, record, excluded = [])
             expect_put_success(route, params)
             record.reload
             result = json
             params.keys.each do |key|
-                expect(result[:payload][key]).to eq(params[key])
+                if not excluded.include?(key)
+                    expect(result[:payload][key]).to eq(params[key])
+                end
             end
         end
 
@@ -37,17 +72,21 @@ module Requests
             expect_no_record_found(table, non_id)
         end
 
-        def expect_no_record_found(table, id)
-            expect_error("Couldn't find #{table.to_s} with 'id'=#{id}")
+        '''
+            REQUEST-related EXPECT functions
+        '''
+        def expect_get_success(route)
+            get "/api/v1#{route}", session: valid_session
+            expect_success
+        end
+
+        def expect_get_error(route, message)
+            get "/api/v1#{route}", session: valid_session
+            expect_error(message)
         end
 
         def expect_post_success(route, params)
             post "/api/v1#{route}", params, session: valid_session
-            expect_success
-        end
-
-        def expect_put_success(route, params)
-            put "/api/v1#{route}", params, session: valid_session
             expect_success
         end
 
@@ -56,11 +95,19 @@ module Requests
             expect_error(message)
         end
 
+        def expect_put_success(route, params)
+            put "/api/v1#{route}", params, session: valid_session
+            expect_success
+        end
+
         def expect_put_error(route, params, message)
             put "/api/v1#{route}", params, session: valid_session
             expect_error(message)
         end
 
+        '''
+            miscellaneous EXPECT functions
+        '''
         def expect_success
             expect(json[:status]).to eq('success')
         end
@@ -69,6 +116,10 @@ module Requests
             result = json
             expect(result[:status]).to eq('error')
             expect(result[:message]).to eq(message)
+        end
+
+        def expect_no_record_found(table, id)
+            expect_error("Couldn't find #{table.to_s} with 'id'=#{id}")
         end
     end
 end

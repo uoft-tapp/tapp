@@ -18,7 +18,7 @@ RSpec.describe Api::V1::ApplicantsController, type: :api do
 
     describe 'POST /applicants' do
         context 'with valid params' do
-            it 'creates a new Applicant' do
+            it 'creates a new applicant' do
                 expect_create_new_record('/applicants', valid_attributes, Applicant)
             end
 
