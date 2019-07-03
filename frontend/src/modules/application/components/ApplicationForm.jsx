@@ -182,7 +182,11 @@ class ApplicationForm extends React.Component {
 
 // connects the redux store to the props of this component
 export default connect(
-    ({ application: { fields } }) => ({
+    ({
+        ui: {
+            application: { fields }
+        }
+    }) => ({
         fields: fields
     }),
     { updateField, createNewApplication }

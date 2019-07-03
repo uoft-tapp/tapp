@@ -76,7 +76,11 @@ class Positions extends React.Component {
 }
 
 export default connect(
-    ({ positions: { list } }) => ({
+    ({
+        ui: {
+            positions: { list }
+        }
+    }) => ({
         positions: list
     }),
     { fetchPositions }

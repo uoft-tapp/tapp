@@ -40,7 +40,7 @@ class ApiFetchError extends ApiError {
         const errorMessage = `Got status ${resp.status} ${
             resp.statusText
         } when fetching ${API_URL + path}`;
-        super(errorMessage);
+        super({ message: errorMessage });
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, ApiFetchError);
         }

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = connect(({ auth }) => ({ auth }))(
+const PrivateRoute = connect(({ ui: { auth } }) => ({ auth }))(
     ({ component: Component, auth, ...rest }) => (
         <Route
             {...rest}

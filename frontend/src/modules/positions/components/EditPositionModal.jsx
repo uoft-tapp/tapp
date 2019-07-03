@@ -142,7 +142,7 @@ const getPosition = (list, id) => {
 };
 
 export default connect(
-    ({ positions }) => ({
+    ({ ui: { positions } }) => ({
         editPosition: positions.editPosition,
         show: positions.editPosition !== null,
         position: getPosition(positions.list, positions.editPosition)
