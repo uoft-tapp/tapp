@@ -16,6 +16,35 @@ module Requests
             end
         end
 
+        def setup_routes(table, factory, data)
+            routes = {
+                table: table,
+                factory: factory,
+                entry: FactoryBot.create(factory),
+            }
+            data.keys.each do |item|
+                if item != :index and item != :nested_index
+                    data[item][:route] = data[item][:route].gsub(':id', 
+                        routes[:entry].id.to_s)
+                end
+                routes[item] = data[item]
+            end
+            return routes
+        end
+
+        def factory_create(table, params, factory, extra = nil)
+            record = table.find_by(params)
+            if record
+                return record
+            else
+                if extra
+                    FactoryBot.create(factory, extra)
+                else
+                    FactoryBot.create(factory)
+                end
+            end
+        end
+
         '''
             INDEX related functions
         '''
@@ -55,7 +84,7 @@ module Requests
         '''
             UPDATE related functions
         '''
-        def expect_update_record(route, params, record, excluded = [])
+        def expect_update_record(route, params, record, excluded)
             expect_put_success(route, params)
             record.reload
             result = json

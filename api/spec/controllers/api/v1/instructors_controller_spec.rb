@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Api::V1::InstructorsController, type: :api do
-    let!(:instructor) { FactoryBot.create(:instructor) }
-
     # This is the minimal set of attributes required to create a valid instructor.
     # As you add validations to Instructors, be sure to adjust the attributes
     # here.
@@ -15,29 +13,30 @@ RSpec.describe Api::V1::InstructorsController, type: :api do
         }
     end
 
-    let(:index) do
+    let(:update_attributes) do
         {
-            route: '/instructors',
-            table: Instructor,
-            entry: instructor,
-            factory: :instructor
+            last_name: valid_attributes[:first_name],
+            first_name: valid_attributes[:last_name],
+            email: valid_attributes[:email],
+            position_ids: []
         }
     end
 
-    let(:create) do
+    let(:routes) do
+        setup_routes(Instructor, :instructor, 
         {
-            route: '/instructors',
-            table: Instructor,
-        }
-    end
-
-    let(:update) do
-        {
-            route: "/instructors/#{instructor.id}",
-            table: Instructor,
-            entry: instructor,
-            exclude: [:position_ids]
-        }
+            index: '/instructors',
+            create: {
+                route: '/instructors',
+                params: valid_attributes
+            },
+            update: {
+                route: '/instructors/:id',
+                params: update_attributes,
+                exclude: [:position_ids]
+            }
+            
+        })
     end
 
     describe 'GET /instructors' do
@@ -49,14 +48,6 @@ RSpec.describe Api::V1::InstructorsController, type: :api do
     end
 
     describe 'PUT /instructors/:id' do
-        let(:update_attributes) do
-            {
-                last_name: valid_attributes[:first_name],
-                first_name: valid_attributes[:last_name],
-                email: valid_attributes[:email],
-                position_ids: []
-            }
-        end
         it_behaves_like "generic update"
     end
 end

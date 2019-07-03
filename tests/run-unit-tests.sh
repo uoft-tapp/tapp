@@ -19,6 +19,6 @@ echo 'If they are not, please run `docker-compose up` and rerun this script.'
 echo "Running Unit Tests..."
 # set the CI variable to true so that `npm test` doesn't run in --watch mode.
 docker-compose run -e CI=true frontend npm test
-docker-compose run api rspec --pattern ./spec/controllers/api/v1/*_spec.rb
+docker-compose exec api rspec --pattern ./spec/controllers/api/v1/*_spec.rb
 
 exit $EXIT_CODE

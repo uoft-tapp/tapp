@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :position do
-    association :session, :fall # Have it be fall by default
-    cap_enrolment { 10 }
-    course_code { 'CSC148' }
-    course_name { 'Introduction to Computer Science' }
-    current_enrolment { 20 }
-    duties { 'Do TA stuff' }
-    hours { 400 }
-    num_waitlisted { 50 }
-    openings { 10 }
-    qualifications { 'Do more stuff' }
-  end
+    year = Time.now.year
+    factory :position do
+        association :session, :fall # Have it be fall by default
+        position_code { 'CSC148' }
+        position_title { 'Introduction to Computer Science' }
+        position_type { 'type name' }
+        est_start_date { Time.new(year, 9, 1) }
+        est_end_date { Time.new(year, 12, 31) }
+        est_hours_per_assignment { 10 }
+    end
 end
