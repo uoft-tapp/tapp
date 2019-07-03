@@ -23,6 +23,7 @@
         "redux-saga": "^1.0.3",
         "redux-thunk": "^2.3.0",
         "reselect": "^4.0.0",
+        "route-parser": "^0.0.5",
         "uuid-random": "^1.0.9"
     },
     "scripts": {
