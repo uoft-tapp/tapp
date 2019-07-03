@@ -2,7 +2,7 @@ import Route from "route-parser";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
- * 
+ *
  * @module
  */
 
@@ -87,7 +87,8 @@ export class MockAPI {
     apiPOST(url, body) {
         return {
             status: "error",
-            message: "Posting to the mock API is not yet implemented"
+            message: "Posting to the mock API is not yet implemented",
+            payload: { url, body }
         };
     }
 
