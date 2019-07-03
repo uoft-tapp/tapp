@@ -1,18 +1,23 @@
-{
-    "session": [
-        {   
-            "year": 2018,
-            "semester": "fall",
-            "pay": 42.25,
-            "start_date": "2018-09-01",
-            "end_date": "2018-12-31" 
-        },
-        {
-            "year": 2019,
-            "semester": "winter",
-            "pay": 43,
-            "start_date": "2019-01-01",
-            "end_date": "2019-04-30" 
-        }
-    ]
-}
+[
+    {   
+        "name": "2018 Fall",
+        "rate1": 42.25,
+        "rate2": 43,
+        "start_date": "2018-09-01",
+        "end_date": "2018-12-31" 
+    },
+    {
+        "name": "2019 Winter",
+        "rate1": 43,
+        "rate2": 44,
+        "start_date": "2019-01-01",
+        "end_date": "2019-04-30" 
+    },
+    {
+        "name": "2019 Summer",
+        "rate1": 42,
+        "rate2": 43,
+        "start_date": "2019-05-01",
+        "end_date": "2019-08-30" 
+    }
+]

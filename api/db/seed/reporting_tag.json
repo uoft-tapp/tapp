@@ -1,0 +1,47 @@
+[
+    {
+        "name": "CSC148H1F",
+        "position_id": 0,
+        "wage_chunk_id": 0
+    },
+    {
+        "name": "CSC148H1F",
+        "position_id": 0,
+        "wage_chunk_id": 1
+    },
+    {
+        "name": "CSC148H1F",
+        "position_id": 0,
+        "wage_chunk_id": 2
+    },
+    {
+        "name": "CSC148H1S",
+        "position_id": 1,
+        "wage_chunk_id": 3
+    },
+    {
+        "name": "CSC148H1S",
+        "position_id": 1,
+        "wage_chunk_id": 4
+    },
+    {
+        "name": "CSC148H1S",
+        "position_id": 1,
+        "wage_chunk_id": 5
+    },
+    {
+        "name": "CSC369H1S",
+        "position_id": 2,
+        "wage_chunk_id": 6
+    },
+    {
+        "name": "CSC369H1S",
+        "position_id": 2,
+        "wage_chunk_id": 7
+    },
+    {
+        "name": "CSC369H1S",
+        "position_id": 2,
+        "wage_chunk_id": 8
+    }
+]

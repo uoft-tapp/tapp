@@ -1,30 +1,82 @@
-{
-    "applicant": [
-        {
-            "first_name": "George",
-            "last_name": "Wu",
-            "utorid": "wugeorge",
-            "student_number": "1000136937",
-            "email": "georgewu.sample@mail.utoronto.ca",
-            "phone": "6473879674",
-            "address": "130 St. George Street",
-            "dept": "Computer Science",
-            "year_in_program": 4,
-            "is_grad_student": false,
-            "is_full_time": true
-        },
-        {
-            "first_name": "Alice",
-            "last_name": "Chen",
-            "utorid": "alice88",
-            "student_number": "1000222222",
-            "email": "alice.sample@mail.utoronto.ca",
-            "phone": "6473877777",
-            "address": "130 St. George Street",
-            "dept": "Computer Science",
-            "year_in_program": 3,
-            "is_grad_student": false,
-            "is_full_time": true
-        }
-    ]
-}
+[
+    {
+        "first_name": "George",
+        "last_name": "Wu",
+        "utorid": "wugeorge",
+        "student_number": "1000136937",
+        "email": "georgewu.sample@mail.utoronto.ca",
+        "phone": "6473879674"
+    },
+    {
+        "first_name": "Alice",
+        "last_name": "Chen",
+        "utorid": "alice88",
+        "student_number": "1000222222",
+        "email": "alice.sample@mail.utoronto.ca",
+        "phone": "6473877777"
+    },
+    {
+        "first_name": "Bryan",
+        "last_name": "Walsh",
+        "utorid": "walbryan",
+        "student_number": "1970070800",
+        "email": "bryan.sample@mail.utoronto.ca",
+        "phone": "7859985697"
+    },
+    {
+        "first_name": "Roy",
+        "last_name": "Lyons",
+        "utorid": "lyonroy",
+        "student_number": "1978122400",
+        "email": "roy.sample@mail.utoronto.ca",
+        "phone": "2762329971"
+    },
+    {
+        "first_name": "Eunice",
+        "last_name": "Carroll",
+        "utorid": "carroeun",
+        "student_number": "1972011700",
+        "email": "eunice.sample@mail.utoronto.ca",
+        "phone": "7398037536"
+    },
+    {
+        "first_name": "Nathan",
+        "last_name": "Barett",
+        "utorid": "nathb967",
+        "student_number": "1992070700",
+        "email": "nathan.sample@mail.utoronto.ca",
+        "phone": "6062590987"
+    },
+    {
+        "first_name": "Lillie",
+        "last_name": "Boyd",
+        "utorid": "lillieb",
+        "student_number": "1996033100",
+        "email": "lillie.sample@mail.utoronto.ca",
+        "phone": "2318920448"
+    },
+    {
+        "first_name": "Jeffery",
+        "last_name": "Rogers",
+        "utorid": "rodgersj",
+        "student_number": "1990082300",
+        "email": "jeffery.sample@mail.utoronto.ca",
+        "phone": "2752376888"
+    },
+    {
+        "first_name": "Marion",
+        "last_name": "Cruz",
+        "utorid": "crmari",
+        "student_number": "1978053000",
+        "email": "marion.sample@mail.utoronto.ca",
+        "phone": "3637349699"
+    },
+    {
+        "first_name": "Jeanette",
+        "last_name": "Valdez",
+        "utorid": "jvald162",
+        "student_number": "1978101300",
+        "email": "jeanette.sample@mail.utoronto.ca",
+        "phone": "6054035915"
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "position_type": "Regular Contract",
+        "offer_template": "reg_contract_0.erb",
+        "session_id": 0
+    },
+    {
+        "position_type": "Year Contract",
+        "offer_template": "year_contract.erb",
+        "session_id": 0
+    },
+    {
+        "position_type": "Emergency Contract",
+        "offer_template": "emergency_contract.rb",
+        "session_id": 0
+    },
+    {
+        "position_type": "Regular Contract",
+        "offer_template": "reg_contract_1.erb",
+        "session_id": 1
+    },
+    {
+        "position_type": "Year Contract",
+        "offer_template": "year_contract.erb",
+        "session_id": 1
+    }
+]
