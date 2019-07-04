@@ -4,9 +4,9 @@ import {
     fetchSessions,
     setActiveSession,
     sessionsSelector,
+    activeSessionSelector,
     applicantsSelector
 } from "../../api/actions";
-import { localStoreSelector as localSessionStoreSelector } from "../../api/actions/sessions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 
@@ -14,7 +14,7 @@ import { ApplicantsList } from "../../components/applicants-list";
 let mapStateToProps = state => {
     return {
         sessions: sessionsSelector(state),
-        activeSession: localSessionStoreSelector(state).activeSession
+        activeSession: activeSessionSelector(state)
     };
 };
 let mapDispatchToProps = { fetchSessions, setActiveSession };

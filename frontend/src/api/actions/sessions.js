@@ -107,3 +107,7 @@ export const sessionsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
 );
+export const activeSessionSelector = createSelector(
+    localStoreSelector,
+    state => state.activeSession
+);
