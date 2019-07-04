@@ -1,11 +1,10 @@
-import { createReducer } from "redux-create-reducer";
 import {
     FETCH_APPLICATIONS_SUCCESS,
     FETCH_ONE_APPLICATION_SUCCESS,
     UPSERT_ONE_APPLICATION_SUCCESS,
     DELETE_ONE_APPLICATION_SUCCESS
 } from "../constants";
-import { createBasicReducerObject } from "./utils";
+import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: []

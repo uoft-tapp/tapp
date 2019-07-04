@@ -13,6 +13,8 @@ import {
     validatedApiDispatcher
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { positionTemplatesReducer } from "../reducers/position_templates";
+import { createSelector } from "reselect";
 
 // actions
 const fetchPositionTemplatesSuccess = actionFactory(
@@ -100,7 +102,16 @@ export const fetchAllPositionTemplates = validatedApiDispatcher({
 });
 
 // selectors
-export const positionTemplatesSelector = state => state._modelData;
+
+// Each reducer is given an isolated state; instead of needed to remember to
+// pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
+// search for and return the isolated state associated with `reducer`. This is not
+// a standard redux function.
+export const localStoreSelector = positionTemplatesReducer._localStoreSelector;
+export const positionTemplatesSelector = createSelector(
+    localStoreSelector,
+    state => state._modelData
+);
 
 // Any time the active session changes, we want to refetch
 // all data. Calling `runOnActiveSessionChange` ensures that

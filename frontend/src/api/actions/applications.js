@@ -12,6 +12,8 @@ import {
     validatedApiDispatcher
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { applicationsReducer } from "../reducers/applications";
+import { createSelector } from "reselect";
 
 // actions
 const fetchApplicationsSuccess = actionFactory(FETCH_APPLICATIONS_SUCCESS);
@@ -80,7 +82,16 @@ export const deleteApplication = validatedApiDispatcher({
 });
 
 // selectors
-export const applicationsSelector = state => state._modelData;
+
+// Each reducer is given an isolated state; instead of needed to remember to
+// pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
+// search for and return the isolated state associated with `reducer`. This is not
+// a standard redux function.
+export const localStoreSelector = applicationsReducer._localStoreSelector;
+export const applicationsSelector = createSelector(
+    localStoreSelector,
+    state => state._modelData
+);
 
 // Any time the active session changes, we want to refetch
 // all data. Calling `runOnActiveSessionChange` ensures that

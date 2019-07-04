@@ -1,4 +1,4 @@
-import { createReducer } from "redux-create-reducer";
+import { createReducer } from "./utils";
 import { API_INTERACTION_START, API_INTERACTION_END } from "../constants";
 
 const initialState = {

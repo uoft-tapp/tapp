@@ -6,22 +6,25 @@ import {
     sessionsSelector,
     applicantsSelector
 } from "../../api/actions";
+import { localStoreSelector as localSessionStoreSelector } from "../../api/actions/sessions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 
 // Connect the SessionSelect component
-let mapStateToProps = ({ model: { sessions } }) => ({
-    sessions: sessionsSelector(sessions),
-    activeSession: sessions.activeSession
-});
+let mapStateToProps = state => {
+    return {
+        sessions: sessionsSelector(state),
+        activeSession: localSessionStoreSelector(state).activeSession
+    };
+};
 let mapDispatchToProps = { fetchSessions, setActiveSession };
 const ConnectedSessionSelect = connect(
     mapStateToProps,
     mapDispatchToProps
 )(SessionSelect);
 
-const ConnectedApplicantList = connect(({ model: { applicants } }) => ({
-    applicants: applicantsSelector(applicants)
+const ConnectedApplicantList = connect(state => ({
+    applicants: applicantsSelector(state)
 }))(ApplicantsList);
 
 /**

@@ -1,4 +1,3 @@
-import { createReducer } from "redux-create-reducer";
 import {
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
@@ -6,7 +5,7 @@ import {
     DELETE_ONE_POSITION_SUCCESS,
     ADD_INSTRUCTOR_TO_POSITION_SUCCESS
 } from "../constants";
-import { createBasicReducerObject } from "./utils";
+import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: []

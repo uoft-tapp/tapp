@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { createSelector } from "reselect";
 import {
     FETCH_SESSIONS_SUCCESS,
     FETCH_ONE_SESSION_SUCCESS,
@@ -13,6 +14,7 @@ import {
     validatedApiDispatcher
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { sessionsReducer } from "../reducers/sessions";
 
 // actions
 const fetchSessionsSuccess = actionFactory(FETCH_SESSIONS_SUCCESS);
@@ -100,4 +102,8 @@ export const setActiveSession = validatedApiDispatcher({
 });
 
 // selectors
-export const sessionsSelector = state => state._modelData;
+export const localStoreSelector = sessionsReducer._localStoreSelector;
+export const sessionsSelector = createSelector(
+    localStoreSelector,
+    state => state._modelData
+);
