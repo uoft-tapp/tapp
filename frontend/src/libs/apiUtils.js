@@ -71,7 +71,7 @@ async function _processFetchResponse(resp, path) {
                 ...json
             });
         }
-        return resp.payload;
+        return json.payload;
     }
     // if we made it this far, there was a bad status
     // returned during fetch

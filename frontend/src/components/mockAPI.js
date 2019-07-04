@@ -14,8 +14,8 @@ let mockAPI = { replaceGlobalFetch: () => {}, restoreGlobalFetch: () => {} };
  * @export
  * @returns {React.ElementType}
  */
-let ToggleMockApi = function ToggleMockApi() {
-    // const { mockAPI } = props;
+let ToggleMockApi = function ToggleMockApi(props) {
+    const { fetchSessions = () => {} } = props;
     const [active, _setActive] = React.useState(mockAPI.active);
     function setActive(state) {
         if (state === active) {
@@ -28,6 +28,9 @@ let ToggleMockApi = function ToggleMockApi() {
             mockAPI.restoreGlobalFetch();
         }
         _setActive(mockAPI.active);
+        // after the mock API has been set, refetch the sessions,
+        // which will trigger a refetch of all the other data.
+        fetchSessions();
     }
 
     return (

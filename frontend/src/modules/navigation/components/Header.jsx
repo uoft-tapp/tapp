@@ -1,7 +1,17 @@
 import React from "react";
+import { connect } from "react-redux";
 import { DropdownItem, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, Route } from "react-router-dom";
+import { fetchSessions } from "../../../api/actions";
 import { ToggleMockApi } from "../../../components/mockAPI";
+
+// When toggled, `ToggleMockApi` will try
+// to refetch all the sessions, so pass it an
+// appropriate dispatcher.
+const ConnectedToggleMockApi = connect(
+    null,
+    { fetchSessions }
+)(ToggleMockApi);
 
 const CustomNavItem = ({ href, children }) => (
     <Link to={href}>
@@ -45,7 +55,7 @@ class Header extends React.Component {
                             New Position
                         </DropdownItem>
                     </NavDropdown>
-                    <ToggleMockApi />
+                    <ConnectedToggleMockApi />
                 </Nav>
             </Navbar>
         );
