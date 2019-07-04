@@ -46,9 +46,14 @@ class Header extends React.Component {
                         path="/cp"
                         render={() => <Link to="/tapp/positions">CP</Link>}
                     />
+                    <Route
+                        path="/dashboard"
+                        render={() => <Link to="/tapp">Dashboard</Link>}
+                    />
                 </Navbar.Brand>
                 <Route path="/tapp" component={TappNavItems} />
                 <Route path="/cp" component={CpNavItems} />
+                <Route path="/dashboard" component={() => "(Dashboard View)"} />
                 <Nav>
                     <NavDropdown title="Tools" id="tools-dropdown">
                         <DropdownItem href="/tapp/positions/new">
