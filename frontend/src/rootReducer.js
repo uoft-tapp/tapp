@@ -1,6 +1,6 @@
-import { combineReducers } from "redux";
 import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
+import { combineReducers } from "./api/reducers/utils";
 import authReducer from "./modules/auth/reducer";
 import positionReducer from "./modules/positions/reducer";
 import applicantReducer from "./modules/applicants_by_course/reducer";

@@ -8,6 +8,7 @@ import AllUnassigned from "./modules/all_applicants/components/AllUnassigned";
 import Summary from "./modules/tapp_summary/components/Summary";
 import ApplicationForm from "./modules/application/components/ApplicationForm";
 import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
+import Dashboard from "./views/dashboard";
 
 export const openRoutes = [
     {
@@ -41,6 +42,10 @@ export const openRoutes = [
     {
         path: "/cp",
         component: Screen
+    },
+    {
+        path: "/dashboard",
+        component: Dashboard
     },
     {
         path: "/application",

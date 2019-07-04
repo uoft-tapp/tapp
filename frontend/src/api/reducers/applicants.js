@@ -1,4 +1,3 @@
-import { createReducer } from "redux-create-reducer";
 import {
     FETCH_APPLICANTS_SUCCESS,
     FETCH_ONE_APPLICANT_SUCCESS,
@@ -6,7 +5,7 @@ import {
     DELETE_ONE_APPLICANT_SUCCESS,
     ADD_APPLICANT_TO_SESSION_SUCCESS
 } from "../constants";
-import { createBasicReducerObject } from "./utils";
+import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: []
