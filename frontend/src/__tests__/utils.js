@@ -15,7 +15,7 @@ function _ensurePath(path) {
 }
 
 /**
- * Make a GET request to the api route specified by `url`. 
+ * Make a GET request to the api route specified by `url`.
  * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessiosn")
  *
  * @export
@@ -27,13 +27,13 @@ export async function apiGET(url) {
     const resp = await axios.get(url);
     isApiSuccessResponse(resp);
 
-    // by this point, we have a valid response, so 
+    // by this point, we have a valid response, so
     // just return the payload
     return resp.data;
 }
 
 /**
- * Make a POST request to the api route specified by `url`. 
+ * Make a POST request to the api route specified by `url`.
  * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessiosn")
  *
  * @export
@@ -41,12 +41,12 @@ export async function apiGET(url) {
  * @param {object} body The body of the post request -- `JSON.stringify` will be called on this object.
  * @returns
  */
-export async function apiPOST(url, body={}) {
+export async function apiPOST(url, body = {}) {
     url = API_URL + _ensurePath(url);
     const resp = await axios.post(url, body);
     isApiSuccessResponse(resp);
 
-    // by this point, we have a valid response, so 
+    // by this point, we have a valid response, so
     // just return the payload
     return resp.data;
 }

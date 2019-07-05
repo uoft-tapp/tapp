@@ -62,7 +62,7 @@ export class MockAPI {
             data.sessions.push(newSession);
             return newSession;
         },
-        "/sessions/delet": (data, params, body) => {
+        "/sessions/delete": (data, params, body) => {
             const matchingSessions = data.sessions.filter(
                 s => s.id === body.id
             );
