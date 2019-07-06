@@ -18,7 +18,8 @@ export class AssignmentsList extends React.Component {
                 <ul>
                     {assignments.map(assignment => (
                         <li key={assignment.id}>
-                            Assigned applicant # {assignment.applicant_id} to position # {assignment.position_id}
+                            Assigned applicant # {assignment.applicant_id} to
+                            position # {assignment.position_id}
                         </li>
                     ))}
                 </ul>

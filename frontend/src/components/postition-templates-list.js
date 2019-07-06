@@ -18,7 +18,11 @@ export class PositionTemplatesList extends React.Component {
                 <ul>
                     {position_templates.map(template => (
                         <li key={template.offer_template}>
-                            <font size="3" color="blue"> {template.position_type}</font>, {template.offer_template}
+                            <font size="3" color="blue">
+                                {" "}
+                                {template.position_type}
+                            </font>
+                            , {template.offer_template}
                         </li>
                     ))}
                 </ul>

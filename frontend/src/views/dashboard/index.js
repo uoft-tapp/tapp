@@ -18,7 +18,6 @@ import { InstructorsList } from "../../components/instructors-list";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
 
-
 // Connect the SessionSelect component
 let mapStateToProps = state => {
     return {
@@ -38,19 +37,19 @@ const ConnectedApplicantList = connect(state => ({
 
 const ConnectedPositionTemplateList = connect(state => ({
     position_templates: positionTemplatesSelector(state)
-}))(PositionTemplatesList)
+}))(PositionTemplatesList);
 
 const ConnectedInstructorsList = connect(state => ({
     instructors: instructorsSelector(state)
-}))(InstructorsList)
+}))(InstructorsList);
 
 const ConnectedPositionsList = connect(state => ({
     positions: positionsSelector(state)
-}))(PositionsList)
+}))(PositionsList);
 
 const ConnectedAssignmentsList = connect(state => ({
     assignments: assignmentsSelector(state)
-}))(AssignmentsList)
+}))(AssignmentsList);
 
 /**
  * Encapsulate a react component in a frame.
