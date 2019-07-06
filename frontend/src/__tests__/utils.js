@@ -107,3 +107,12 @@ export const sessionPropTypes = PropTypes.shape({
     end_date: PropTypes.string,
     name: PropTypes.string
 });
+
+export const offerTemplateMinimalPropTypes = PropTypes.shape({
+    offer_template: PropTypes.string
+});
+
+export const offerTemplatePropTypes = PropTypes.shape({
+    offer_template: PropTypes.string,
+    position_type: PropTypes.string
+});
