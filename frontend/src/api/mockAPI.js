@@ -27,20 +27,54 @@ export class MockAPI {
     // a list of selectors for each route
     getRoutes = {
         "/all_data": data => data,
-        "/sessions": data => data.sessions,
+        "/sessions": data => [...data.sessions],
         "/instructors": data => data.instructors,
-        "/available_position_templates": data =>
-            data.available_position_templates,
-        "/sessions/:session_id/positions": (data, params) =>
-            data.positions[params.session_id],
-        "/sessions/:session_id/assignments": (data, params) =>
-            data.assignments[params.session_id],
-        "/sessions/:session_id/position_templates": (data, params) =>
-            data.position_templates_by_session[params.session_id],
+        "/available_position_templates": data => [
+            ...data.available_position_templates
+        ],
+        "/sessions/:session_id/positions": (data, params) => [
+            ...data.positions[params.session_id]
+        ],
+        "/sessions/:session_id/assignments": (data, params) => [
+            ...data.assignments[params.session_id]
+        ],
+        "/sessions/:session_id/position_templates": (data, params) => [
+            ...data.position_templates_by_session[params.session_id]
+        ],
         "/sessions/:session_id/applicants": (data, params) =>
             data.applicants_by_session[params.session_id].map(utorid =>
                 pickFromArray(data.applicants, utorid, "utorid")
             )
+    };
+    postRoutes = {
+        "/sessions": (data, params, body) => {
+            // body should be a session object. If it contains an id,
+            // update an existing session. Otherwise, create a new one.
+            const matchingSessions = data.sessions.filter(
+                s => s.id === body.id
+            );
+            if (matchingSessions.length > 0) {
+                return Object.assign(matchingSessions[0], body);
+            }
+            // if we're here, we need to create a new session
+            const newId = Math.floor(Math.random() * 1000);
+            const newSession = { ...body, id: newId };
+            data.sessions.push(newSession);
+            return newSession;
+        },
+        "/sessions/delete": (data, params, body) => {
+            const matchingSessions = data.sessions.filter(
+                s => s.id === body.id
+            );
+            if (matchingSessions.length === 0) {
+                throw new Error(
+                    `Could not find session with id=${body.id} to delete`
+                );
+            }
+            // if we found the session with matching id, delete it.
+            data.sessions.splice(data.sessions.indexOf(matchingSessions[0]), 1);
+            return {};
+        }
     };
 
     constructor(seedData) {
@@ -49,9 +83,21 @@ export class MockAPI {
         this._getRoutesParsers = Object.keys(this.getRoutes).map(
             routeStr => new Route(routeStr)
         );
+        this._postRoutesParsers = Object.keys(this.postRoutes).map(
+            routeStr => new Route(routeStr)
+        );
     }
 
-    apiGET(url) {
+    /**
+     * Make a mock `apiGET` call. Always returns an object of
+     * the form
+     * `{status: ..., message: ..., payload: ...}`
+     * This method is bound, so it is safe to pass this function around.
+     *
+     * @memberof MockAPI
+     * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
+     */
+    apiGET = url => {
         for (const route of this._getRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
@@ -82,15 +128,44 @@ export class MockAPI {
             status: "error",
             message: `could not find route matching ${url}`
         };
-    }
+    };
 
-    apiPOST(url, body) {
+    /**
+     * Make a mock `apiPOST` call. Always returns an object of
+     * the form
+     * `{status: ..., message: ..., payload: ...}`
+     * This method is bound, so it is safe to pass this function around.
+     *
+     * @memberof MockAPI
+     * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
+     * @param {object} body The body of a post request. This should be an object, *not* a JSON string.
+     */
+    apiPOST = (url, body) => {
+        for (const route of this._postRoutesParsers) {
+            const match = route.match(url);
+            // if we have a match, run the selector with the parsed data
+            if (match) {
+                try {
+                    const payload = this.postRoutes[route.spec](
+                        this.data,
+                        match,
+                        body
+                    );
+                    return {
+                        status: "success",
+                        message: "",
+                        payload
+                    };
+                } catch (e) {
+                    return { status: "error", message: e.toString() };
+                }
+            }
+        }
         return {
             status: "error",
-            message: "Posting to the mock API is not yet implemented",
-            payload: { url, body }
+            message: `could not find route matching ${url}`
         };
-    }
+    };
 
     /**
      * Replaces the global `window.fetch` object with calls to `apiGET` and

@@ -26,6 +26,10 @@ Rails.application.routes.draw do
       resources :applications, only: [:index, :update] do
         post '/add_preference', to: 'position_preferences#create'
       end
+
+      # session routes
+      post '/sessions/delete' => 'sessions#delete'
+      post '/sessions/:id/delete' => 'sessions#delete'
       resources :sessions, only: [:index, :create, :update] do
         resources :positions, only: [:index, :create]
         resources :position_templates, only: [:index]
