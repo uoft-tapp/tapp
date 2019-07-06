@@ -177,6 +177,72 @@ function templateTests(apiGET, apiPOST) {
     it.todo("throw error when `offer_template` or `position_type` is empty");
     it.todo("throw error when `position_type` is not unique");
 }
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function positionsTests(apiGET, apiPOST) {
+    it.todo("get positions for session");
+    it.todo("create and delete position");
+    it.todo("update a position");
+    it.todo("set the position type");
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function instructorsTests(apiGET, apiPOST) {
+    it.todo("get instructors");
+    it.todo("get instructors for session");
+    it.todo("create and delete instructor");
+    it.todo("update an instructor");
+    it.todo("add and remove instructor from position");
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function assignmentsTests(apiGET, apiPOST) {
+    it.todo("get assignments for session");
+    it.todo("get assignments for position");
+    it.todo("create and delete assignment for position");
+    it.todo("update assignment dates/note/offer_override_pdf");
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function wageChunksTests(apiGET, apiPOST) {
+    it.todo("get wage_chunks for position");
+    it.todo("create and delete wage_chunk for position");
+    it.todo("update wage_chunk");
+    it.todo(
+        "automatic creation of wage chunk for position when `hours` is set"
+    );
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function offersTests(apiGET, apiPOST) {
+    // maybe we don't need this in the API?
+    it.todo("get offers for session");
+    // maybe we don't need this in the API?
+    it.todo("get offers for position");
+    it.todo("get offer for assignment");
+    it.todo("accept/reject/withdraw offer");
+    it.todo("increment nag count");
+    it.todo("error when attempting to update a frozen field");
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function reportingTagsTests(apiGET, apiPOST) {
+    it.todo("get reporting_tags for session");
+    it.todo("get reporting_tags for position");
+    it.todo("get reporting_tags for wage_chunk");
+    it.todo("create and delete reporting_tags for position");
+    it.todo("create and delete reporting_tags for wage_chunk");
+}
+// XXX we need to ignore eslint until we write some
+// actual tests that use `apiGET` and `apiPOST`
+// eslint-disable-next-line
+function applicationsTests(apiGET, apiPOST) {}
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -185,6 +251,27 @@ describe("API tests", () => {
     });
     describe("template tests", () => {
         templateTests(apiGET, apiPOST);
+    });
+    describe("`/positions` tests", () => {
+        positionsTests(apiGET, apiPOST);
+    });
+    describe("`/instructors` tests", () => {
+        instructorsTests(apiGET, apiPOST);
+    });
+    describe("`/assignments` tests", () => {
+        assignmentsTests(apiGET, apiPOST);
+    });
+    describe("wage_chunk tests", () => {
+        wageChunksTests(apiGET, apiPOST);
+    });
+    describe("offers tests", () => {
+        offersTests(apiGET, apiPOST);
+    });
+    describe("reporting_tag tests", () => {
+        reportingTagsTests(apiGET, apiPOST);
+    });
+    describe("`/applications` tests", () => {
+        applicationsTests(apiGET, apiPOST);
     });
 });
 
