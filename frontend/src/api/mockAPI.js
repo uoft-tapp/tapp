@@ -88,7 +88,16 @@ export class MockAPI {
         );
     }
 
-    apiGET(url) {
+    /**
+     * Make a mock `apiGET` call. Always returns an object of
+     * the form
+     * `{status: ..., message: ..., payload: ...}`
+     * This method is bound, so it is safe to pass this function around.
+     *
+     * @memberof MockAPI
+     * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
+     */
+    apiGET = url => {
         for (const route of this._getRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
@@ -119,9 +128,19 @@ export class MockAPI {
             status: "error",
             message: `could not find route matching ${url}`
         };
-    }
+    };
 
-    apiPOST(url, body) {
+    /**
+     * Make a mock `apiPOST` call. Always returns an object of
+     * the form
+     * `{status: ..., message: ..., payload: ...}`
+     * This method is bound, so it is safe to pass this function around.
+     *
+     * @memberof MockAPI
+     * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
+     * @param {object} body The body of a post request. This should be an object, *not* a JSON string.
+     */
+    apiPOST = (url, body) => {
         for (const route of this._postRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
@@ -146,7 +165,7 @@ export class MockAPI {
             status: "error",
             message: `could not find route matching ${url}`
         };
-    }
+    };
 
     /**
      * Replaces the global `window.fetch` object with calls to `apiGET` and

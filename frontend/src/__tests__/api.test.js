@@ -14,7 +14,7 @@ const { describe, it, expect } = global;
  * @param {Function} apiGET
  * @param {Function} apiPOST
  */
-function apiTests(apiGET, apiPOST) {
+function apiSessionsTests(apiGET, apiPOST) {
     it("fetch sessions", async () => {
         const resp = await apiGET("/sessions");
 
@@ -62,14 +62,18 @@ function apiTests(apiGET, apiPOST) {
             createdSession.id
         );
     });
+    it.todo("throw error when `name` is empty");
+    it.todo("throw error when `name` is not unique");
+    it.todo("throw error when deleting item with invalid id");
 }
 describe("API tests", () => {
-    apiTests(apiGET, apiPOST);
+    describe("`/sessions` tests", () => {
+        apiSessionsTests(apiGET, apiPOST);
+    });
 });
 
 describe("Mock API tests", () => {
-    apiTests(
-        (...args) => mockAPI.apiGET(...args),
-        (...args) => mockAPI.apiPOST(...args)
-    );
+    describe("`/sessions` tests", () => {
+        apiSessionsTests(mockAPI.apiGET, mockAPI.apiPOST);
+    });
 });
