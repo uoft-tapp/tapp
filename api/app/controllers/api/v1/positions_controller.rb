@@ -11,12 +11,17 @@ module Api::V1
 
         # POST /positions
         def create
+            # if we passed in an id that exists, we want to update the position
+            if params[:id] && Position.exists?(params[:id])
+                update and return
+            end
+
             params.require([:position_code, :position_title])
             if invalid_id(Session, :session_id) then return end
             position = Position.new(position_params)
             if not position.save # does not pass Position model validation
                 position.destroy!
-                render_error(position.errors)
+                render_error(position.errors.full_messages.join("; "))
                 return
             end
             params[:position_id] = position[:id]
@@ -46,6 +51,16 @@ module Api::V1
             else
                 render_error(errors)
             end
+        end
+
+        # /positions/delete
+        def delete
+                position = Position.find(params[:id])
+                if position.destroy!
+                    render_success(position)
+                else
+                    render_error(position.errors.full_messages.join("; "))
+                end
         end
 
         private

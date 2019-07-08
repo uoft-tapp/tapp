@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :instructors, only: [:index, :update]
-      resources :positions, only: [:update] do 
+
+      post '/positions/delete' => 'positions#delete'
+      resources :positions, only: [:create] do
         resources :instructors, only: [:index]
         resources :assignments, only: [:index, :create]
         post '/add_instructor', to: 'instructors#create'
@@ -30,7 +32,7 @@ Rails.application.routes.draw do
       # session routes
       post '/sessions/delete' => 'sessions#delete'
       post '/sessions/:id/delete' => 'sessions#delete'
-      resources :sessions, only: [:index, :create, :update] do
+      resources :sessions, only: [:index, :create] do
         resources :positions, only: [:index, :create]
         resources :position_templates, only: [:index]
         resources :applications, only: [:index, :create]

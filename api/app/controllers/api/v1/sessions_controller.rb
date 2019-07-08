@@ -13,10 +13,10 @@ module Api::V1
         def create
             # if we passed in an id that exists, we want to update the session
             if params[:id] && Session.exists?(params[:id])
-		update and return
-	    end
+                update and return
+            end
 
-	    # when creating a new session, a name is required
+            # when creating a new session, a name is required
             params.require(:name)
             session = Session.new(session_params)
             if session.save # passes Session model validation
@@ -37,20 +37,20 @@ module Api::V1
             end
         end
 
-	# /sessions/delete or /sessions/:id/delete
-	def delete
-            session = Session.find(params[:id])
-            if session.destroy!
-                render_success(session)
-            else
-                render_error(session.errors.full_messages.join("; "))
-            end
-	end
+        # /sessions/delete or /sessions/:id/delete
+        def delete
+                session = Session.find(params[:id])
+                if session.destroy!
+                    render_success(session)
+                else
+                    render_error(session.errors.full_messages.join("; "))
+                end
+        end
 
         private
         def session_params
             params.permit(
-		:id,
+                :id,
                 :name,
                 :rate1,
                 :rate2,

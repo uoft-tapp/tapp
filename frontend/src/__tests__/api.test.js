@@ -5,11 +5,15 @@ import {
     checkPropTypes,
     sessionPropTypes,
     offerTemplateMinimalPropTypes,
-    offerTemplatePropTypes
+    offerTemplatePropTypes,
+    addSession,
+    deleteSession,
+    positionPropTypes,
+    errorPropTypes
 } from "./utils";
 import { mockAPI } from "../api/mockAPI";
 // eslint-disable-next-line
-const { describe, it, expect } = global;
+const { describe, it, expect, beforeAll, afterAll } = global;
 
 // add a custom `.toContainObject` method to `expect()` to see if an array contains
 // an object with matching props. Taken from
@@ -49,10 +53,12 @@ expect.extend({
  * they may be functions that make actual requests via http or they may
  * be from the mock API.
  *
- * @param {Function} apiGET
- * @param {Function} apiPOST
+ * @param {object} api
+ * @param {Function} api.apiGET A function that when passed a route will return the get response
+ * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
  */
-function sessionsTests(apiGET, apiPOST) {
+function sessionsTests(api = { apiGET, apiPOST }) {
+    const { apiGET, apiPOST } = api;
     it("fetch sessions", async () => {
         const resp = await apiGET("/sessions");
 
@@ -100,11 +106,13 @@ function sessionsTests(apiGET, apiPOST) {
             createdSession.id
         );
     });
+    it.todo("update a session");
     it.todo("throw error when `name` is empty");
     it.todo("throw error when `name` is not unique");
     it.todo("throw error when deleting item with invalid id");
 }
-function templateTests(apiGET, apiPOST) {
+function templateTests(api = { apiGET, apiPOST }) {
+    const { apiGET, apiPOST } = api;
     it("fetch available templates", async () => {
         const resp = await apiGET("/available_position_templates");
 
@@ -174,22 +182,93 @@ function templateTests(apiGET, apiPOST) {
             id: sessionId
         });
     });
+    it.todo("update a template");
     it.todo("throw error when `offer_template` or `position_type` is empty");
     it.todo("throw error when `position_type` is not unique");
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
-function positionsTests(apiGET, apiPOST) {
-    it.todo("get positions for session");
-    it.todo("create and delete position");
-    it.todo("update a position");
-    it.todo("set the position type");
+
+function positionsTests(api = { apiGET, apiPOST }) {
+    const { apiGET, apiPOST } = api;
+    let session = null,
+        position = null;
+    const newPositionData = {
+        position_code: "MAT135F",
+        position_title: "Calculus I",
+        est_hours_per_assignment: 70,
+        est_start_date: "2018/05/09",
+        est_end_date: "2018/09/09",
+        position_type: "Standard"
+    };
+    // set up a session to be available before tests run
+    beforeAll(async () => {
+        // this session will be available for all tests
+        session = await addSession({ apiGET, apiPOST });
+    });
+    // delete the session after the tests run
+    afterAll(async () => {
+        await deleteSession({ apiGET, apiPOST }, session);
+    });
+
+    it("create a position", async () => {
+        const resp1 = await apiPOST(
+            `/sessions/${session.id}/positions`,
+            newPositionData
+        );
+        expect(resp1).toMatchObject({ status: "success" });
+        // make sure we got back what we put in
+        expect(resp1.payload).toMatchObject(newPositionData);
+
+        // save this position for use in later tests
+        position = resp1.payload;
+    });
+
+    it("get positions for session", async () => {
+        const resp1 = await apiGET(`/sessions/${session.id}/positions`);
+        expect(resp1).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(positionPropTypes), resp1.payload);
+
+        // make sure the position we created is in that list
+        expect(resp1.payload).toContainObject(newPositionData);
+    });
+
+    it("update a position", async () => {
+        const id = position.id;
+        const newData = { id, est_hours_per_assignment: 75 };
+        const resp1 = await apiPOST(`/positions`, newData);
+        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1.payload).toMatchObject(newData);
+
+        // get the positions list and make sure we're updated there as well
+        const resp2 = await apiGET(`/sessions/${session.id}/positions`);
+        expect(resp2.payload).toContainObject(newData);
+    });
+
+    it("error when creating two positions with the same position_code", async () => {
+        // we already have a position
+        const resp1 = await apiPOST(
+            `/sessions/${session.id}/positions`,
+            newPositionData
+        );
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+    });
+
+    it.todo(
+        "succeed when creating two positions with the same code but for different sessions"
+    );
+
+    it("delete position", async () => {
+        const resp1 = await apiPOST(`/positions/delete`, position);
+        expect(resp1).toMatchObject({ status: "success" });
+
+        const resp2 = await apiGET(`/sessions${session.id}/positions`);
+        expect(resp2.payload).not.toContainObject(position);
+    });
 }
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function instructorsTests(apiGET, apiPOST) {
+function instructorsTests({ apiGET, apiPOST }) {
     it.todo("get instructors");
     it.todo("get instructors for session");
     it.todo("create and delete instructor");
@@ -199,7 +278,7 @@ function instructorsTests(apiGET, apiPOST) {
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function assignmentsTests(apiGET, apiPOST) {
+function assignmentsTests({ apiGET, apiPOST }) {
     it.todo("get assignments for session");
     it.todo("get assignments for position");
     it.todo("create and delete assignment for position");
@@ -208,7 +287,7 @@ function assignmentsTests(apiGET, apiPOST) {
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function wageChunksTests(apiGET, apiPOST) {
+function wageChunksTests({ apiGET, apiPOST }) {
     it.todo("get wage_chunks for position");
     it.todo("create and delete wage_chunk for position");
     it.todo("update wage_chunk");
@@ -219,7 +298,7 @@ function wageChunksTests(apiGET, apiPOST) {
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function offersTests(apiGET, apiPOST) {
+function offersTests({ apiGET, apiPOST }) {
     // maybe we don't need this in the API?
     it.todo("get offers for session");
     // maybe we don't need this in the API?
@@ -232,7 +311,7 @@ function offersTests(apiGET, apiPOST) {
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function reportingTagsTests(apiGET, apiPOST) {
+function reportingTagsTests({ apiGET, apiPOST }) {
     it.todo("get reporting_tags for session");
     it.todo("get reporting_tags for position");
     it.todo("get reporting_tags for wage_chunk");
@@ -242,41 +321,41 @@ function reportingTagsTests(apiGET, apiPOST) {
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
-function applicationsTests(apiGET, apiPOST) {}
+function applicationsTests({ apiGET, apiPOST }) {}
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
     describe("`/sessions` tests", () => {
-        sessionsTests(apiGET, apiPOST);
+        sessionsTests({ apiGET, apiPOST });
     });
     describe("template tests", () => {
-        templateTests(apiGET, apiPOST);
+        templateTests({ apiGET, apiPOST });
     });
     describe("`/positions` tests", () => {
-        positionsTests(apiGET, apiPOST);
+        positionsTests({ apiGET, apiPOST });
     });
     describe("`/instructors` tests", () => {
-        instructorsTests(apiGET, apiPOST);
+        instructorsTests({ apiGET, apiPOST });
     });
     describe("`/assignments` tests", () => {
-        assignmentsTests(apiGET, apiPOST);
+        assignmentsTests({ apiGET, apiPOST });
     });
     describe("wage_chunk tests", () => {
-        wageChunksTests(apiGET, apiPOST);
+        wageChunksTests({ apiGET, apiPOST });
     });
     describe("offers tests", () => {
-        offersTests(apiGET, apiPOST);
+        offersTests({ apiGET, apiPOST });
     });
     describe("reporting_tag tests", () => {
-        reportingTagsTests(apiGET, apiPOST);
+        reportingTagsTests({ apiGET, apiPOST });
     });
     describe("`/applications` tests", () => {
-        applicationsTests(apiGET, apiPOST);
+        applicationsTests({ apiGET, apiPOST });
     });
 });
 
 describe("Mock API tests", () => {
     describe("`/sessions` tests", () => {
-        sessionsTests(mockAPI.apiGET, mockAPI.apiPOST);
+        sessionsTests(mockAPI);
     });
 });

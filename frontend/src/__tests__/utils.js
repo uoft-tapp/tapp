@@ -25,7 +25,6 @@ function _ensurePath(path) {
 export async function apiGET(url) {
     url = API_URL + _ensurePath(url);
     const resp = await axios.get(url);
-    isApiSuccessResponse(resp);
 
     // by this point, we have a valid response, so
     // just return the payload
@@ -44,7 +43,6 @@ export async function apiGET(url) {
 export async function apiPOST(url, body = {}) {
     url = API_URL + _ensurePath(url);
     const resp = await axios.post(url, body);
-    isApiSuccessResponse(resp);
 
     // by this point, we have a valid response, so
     // just return the payload
@@ -80,6 +78,74 @@ export function isApiErrorResponse(response) {
 }
 
 /**
+ * Add a position template to a session
+ *
+ * @export
+ * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
+ * @param {{id: number}} session session to add to (must have an `id` attribute)
+ * @param {number} [num=1] Number of templates to add
+ * @returns
+ */
+export async function addPositionTemplateToSession(api, session, num = 1) {
+    // generates position template data
+    function generateTemplateData(i = 0) {
+        return {
+            offer_template: `this_is_a_test_template_${i}.html`,
+            position_type:
+                ["Standard", "OTO", "Invigilate"][i] || `Standard v ${i}`
+        };
+    }
+    let resp = {};
+    for (let i = 0; i < num; i++) {
+        resp = await api.apiPOST(
+            `/sessions/${session.id}/add_position_template`,
+            generateTemplateData(i)
+        );
+    }
+    return resp.payload;
+}
+
+/**
+ * Add a new session
+ *
+ * @export
+ * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
+ * @param {object} [include={ position_templates: true }] additional objects to create and attach to the session
+ * @returns
+ */
+export async function addSession(api, include = { position_templates: true }) {
+    const newSessionData = {
+        start_date: "2019/09/09",
+        end_date: "2019/12/31",
+        // add a random string to the session name so we don't accidentally collide with another
+        // session's name
+        name: "Newly Created Sessions (" + Math.random() + ")",
+        rate1: 56.54
+    };
+    let resp = {};
+    resp = await api.apiPOST(`/sessions`, newSessionData);
+    const session = resp.payload;
+    if (include.position_templates) {
+        addPositionTemplateToSession(api, session);
+    }
+    return session;
+}
+
+/**
+ * Delete a session
+ *
+ * @export
+ * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
+ * @param {{id: number}} session session to add to (must have an `id` attribute)
+ * @returns
+ */
+export async function deleteSession(api, session) {
+    let resp = {};
+    resp = await api.apiPOST(`/sessions/delete`, session);
+    return resp.payload;
+}
+
+/**
  * Checks that `data` conforms to the prop types
  * specified by `propTypes`.
  *
@@ -101,6 +167,18 @@ export function checkPropTypes(propTypes, data) {
     expect(wasPropTypeErrors).toBe(false);
 }
 
+export const successPropTypes = PropTypes.shape({
+    status: PropTypes.oneOf(["success"]).isRequired,
+    message: PropTypes.string,
+    payload: PropTypes.any
+});
+
+export const errorPropTypes = PropTypes.shape({
+    status: PropTypes.oneOf(["error"]).isRequired,
+    message: PropTypes.string.isRequired,
+    payload: PropTypes.any
+});
+
 export const sessionPropTypes = PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     start_date: PropTypes.string,
@@ -115,4 +193,16 @@ export const offerTemplateMinimalPropTypes = PropTypes.shape({
 export const offerTemplatePropTypes = PropTypes.shape({
     offer_template: PropTypes.string,
     position_type: PropTypes.string
+});
+
+export const positionPropTypes = PropTypes.shape({
+    position_code: PropTypes.string.isRequired,
+    position_title: PropTypes.string,
+    est_hours_per_assignment: PropTypes.number,
+    est_start_date: PropTypes.string,
+    est_end_date: PropTypes.string,
+    position_type: PropTypes.string,
+    duties: PropTypes.string,
+    qualifications: PropTypes.string
+    // XXX Add the rest of the properties here
 });

@@ -19,6 +19,9 @@ module Tapp
     config.log_tags = %i[subdomain uuid]
     config.logger = ActiveSupport::TaggedLogging.new(logger)
 
+    # Stop the `Cannot render console from ...` error messages in the console
+    config.web_console.whiny_requests = false
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
