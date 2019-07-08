@@ -25,6 +25,7 @@ function _ensurePath(path) {
 export async function apiGET(url) {
     url = API_URL + _ensurePath(url);
     const resp = await axios.get(url);
+    checkPropTypes(apiResponsePropTypes, resp.data);
 
     // by this point, we have a valid response, so
     // just return the payload
@@ -43,6 +44,7 @@ export async function apiGET(url) {
 export async function apiPOST(url, body = {}) {
     url = API_URL + _ensurePath(url);
     const resp = await axios.post(url, body);
+    checkPropTypes(apiResponsePropTypes, resp.data);
 
     // by this point, we have a valid response, so
     // just return the payload
@@ -166,6 +168,12 @@ export function checkPropTypes(propTypes, data) {
     );
     expect(wasPropTypeErrors).toBe(false);
 }
+
+export const apiResponsePropTypes = PropTypes.shape({
+    status: PropTypes.oneOf(["success", "error"]).isRequired,
+    message: PropTypes.string,
+    payload: PropTypes.any
+});
 
 export const successPropTypes = PropTypes.shape({
     status: PropTypes.oneOf(["success"]).isRequired,

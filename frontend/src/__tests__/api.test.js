@@ -261,7 +261,7 @@ function positionsTests(api = { apiGET, apiPOST }) {
         const resp1 = await apiPOST(`/positions/delete`, position);
         expect(resp1).toMatchObject({ status: "success" });
 
-        const resp2 = await apiGET(`/sessions${session.id}/positions`);
+        const resp2 = await apiGET(`/sessions/${session.id}/positions`);
         expect(resp2.payload).not.toContainObject(position);
     });
 }
