@@ -31,5 +31,7 @@ matrix:
         - docker-compose run api rake db:migrate
       script:
         - ./tests/run-unit-tests.sh
+      after_failure:
+        - docker-compose logs
       after_script:
         - docker-compose down
