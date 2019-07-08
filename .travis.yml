@@ -32,6 +32,6 @@ matrix:
       script:
         - ./tests/run-unit-tests.sh
       after_failure:
-        - docker-compose log
+        - docker-compose logs
       after_script:
         - docker-compose down
