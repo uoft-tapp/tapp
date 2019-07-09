@@ -16,18 +16,16 @@ export class PositionTemplatesList extends React.Component {
         let templateList = <div>No Templates...</div>;
         if (position_templates.length > 0) {
             templateList = (
-                <div>
-                    <ul>
-                        {position_templates.map(template => (
-                            <li key={template.offer_template}>
-                                <span className="position-type">
-                                    {template.position_type}
-                                </span>
-                                , {template.offer_template}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <ul>
+                    {position_templates.map(template => (
+                        <li key={template.offer_template}>
+                            <span className="position-type">
+                                {template.position_type}
+                            </span>
+                            , {template.offer_template}
+                        </li>
+                    ))}
+                </ul>
             );
         }
         return (
