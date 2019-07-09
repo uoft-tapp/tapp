@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import './components.css'
+import "./components.css";
 
 export class PositionTemplatesList extends React.Component {
     static propTypes = {
@@ -16,16 +16,18 @@ export class PositionTemplatesList extends React.Component {
         let templateList = <div>No Templates...</div>;
         if (position_templates.length > 0) {
             templateList = (
-                <ul>
-                    {position_templates.map(template => (
-                        <li key={template.offer_template}>
-                            <span className="positionTypeStyle">
-                                {template.position_type}
-                            </span>
-                            , {template.offer_template}
-                        </li>
-                    ))}
-                </ul>
+                <div className="template-list">
+                    <ul>
+                        {position_templates.map(template => (
+                            <li key={template.offer_template}>
+                                <span className="position-type">
+                                    {template.position_type}
+                                </span>
+                                , {template.offer_template}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             );
         }
         return (
