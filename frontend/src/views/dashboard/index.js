@@ -5,10 +5,18 @@ import {
     setActiveSession,
     sessionsSelector,
     activeSessionSelector,
-    applicantsSelector
+    applicantsSelector,
+    positionTemplatesSelector,
+    instructorsSelector,
+    positionsSelector,
+    assignmentsSelector
 } from "../../api/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
+import { PositionTemplatesList } from "../../components/postition-templates-list";
+import { InstructorsList } from "../../components/instructors-list";
+import { PositionsList } from "../../components/positions-list";
+import { AssignmentsList } from "../../components/assignments-list";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -26,6 +34,22 @@ const ConnectedSessionSelect = connect(
 const ConnectedApplicantList = connect(state => ({
     applicants: applicantsSelector(state)
 }))(ApplicantsList);
+
+const ConnectedPositionTemplateList = connect(state => ({
+    position_templates: positionTemplatesSelector(state)
+}))(PositionTemplatesList);
+
+const ConnectedInstructorsList = connect(state => ({
+    instructors: instructorsSelector(state)
+}))(InstructorsList);
+
+const ConnectedPositionsList = connect(state => ({
+    positions: positionsSelector(state)
+}))(PositionsList);
+
+const ConnectedAssignmentsList = connect(state => ({
+    assignments: assignmentsSelector(state)
+}))(AssignmentsList);
 
 /**
  * Encapsulate a react component in a frame.
@@ -64,6 +88,18 @@ function Dashboard() {
             </DashboardWidget>
             <DashboardWidget title="ApplicantsList">
                 <ConnectedApplicantList />
+            </DashboardWidget>
+            <DashboardWidget title="PostitionTemplatesList">
+                <ConnectedPositionTemplateList />
+            </DashboardWidget>
+            <DashboardWidget title="InstuctorsList">
+                <ConnectedInstructorsList />
+            </DashboardWidget>
+            <DashboardWidget title="PositionsList">
+                <ConnectedPositionsList />
+            </DashboardWidget>
+            <DashboardWidget title="AssignmentsList">
+                <ConnectedAssignmentsList />
             </DashboardWidget>
         </div>
     );
