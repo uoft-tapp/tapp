@@ -16,7 +16,7 @@ export class PositionTemplatesList extends React.Component {
         let templateList = <div>No Templates...</div>;
         if (position_templates.length > 0) {
             templateList = (
-                <div className="template-list">
+                <div>
                     <ul>
                         {position_templates.map(template => (
                             <li key={template.offer_template}>
@@ -31,7 +31,7 @@ export class PositionTemplatesList extends React.Component {
             );
         }
         return (
-            <div>
+            <div className="template-list">
                 <h3>Available Templates</h3>
                 {templateList}
             </div>
