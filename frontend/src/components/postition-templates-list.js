@@ -11,6 +11,9 @@ export class PositionTemplatesList extends React.Component {
         ).isRequired
     };
     render() {
+        const positionTypeStyle = {
+            color: "blue"
+        };
         const { position_templates } = this.props;
         let templateList = <div>No Templates...</div>;
         if (position_templates.length > 0) {
@@ -18,10 +21,9 @@ export class PositionTemplatesList extends React.Component {
                 <ul>
                     {position_templates.map(template => (
                         <li key={template.offer_template}>
-                            <font size="3" color="blue">
-                                {" "}
+                            <span style={positionTypeStyle}>
                                 {template.position_type}
-                            </font>
+                            </span>
                             , {template.offer_template}
                         </li>
                     ))}
