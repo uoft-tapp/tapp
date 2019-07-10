@@ -4,6 +4,7 @@
 # pasing json file and create tables from the parsed data. The data can then be loaded with the rails db:seed command (or created alongside the
 # database with db:setup). For testing purpose, use db:reset to reload all the table.
 include SeedsHandler
+include FakeData
 
 seedData = [
     {
@@ -149,4 +150,4 @@ seedData = [
     },
 ]
 
-insert_data(seedData)
+# insert_data(seedData)
