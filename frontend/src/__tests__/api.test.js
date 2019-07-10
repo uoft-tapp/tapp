@@ -59,21 +59,17 @@ expect.extend({
  */
 function sessionsTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
-    it("fetch sessions", async () => {
-        const resp = await apiGET("/sessions");
+    let session = null;
+    const newSessionData = {
+        start_date: "2019/09/09",
+        end_date: "2019/12/31",
+        // add a random string to the session name so we don't accidentally collide with another
+        // session's name
+        name: "Newly Created Sessions (" + Math.random() + ")",
+        rate1: 56.54
+    };
 
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
-    });
-    it("create and delete session", async () => {
-        const newSessionData = {
-            start_date: "2019/09/09",
-            end_date: "2019/12/31",
-            // add a random string to the session name so we don't accidentally collide with another
-            // session's name
-            name: "Newly Created Sessions (" + Math.random() + ")",
-            rate1: 56.54
-        };
+    it("create a session", async () => {
         // get all the sessions so that we can check that our newly inserted session has
         // a unique id.
         const { payload: initialSessions } = await apiGET("/sessions");
@@ -96,20 +92,32 @@ function sessionsTests(api = { apiGET, apiPOST }) {
         // make sure the id of our new session came back
         expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
 
-        // now delete the session and make sure it's gone
-        const resp2 = await apiPOST("/sessions/delete", {
-            id: createdSession.id
-        });
-        expect(resp2).toMatchObject({ status: "success" });
-        const { payload: withoutNewSessions } = await apiGET("/sessions");
-        expect(withoutNewSessions.map(x => x.id)).not.toContain(
-            createdSession.id
-        );
+        // save this session for use in later tests
+        session = resp1.payload
     });
+
+    it("fetch sessions", async () => {
+        const resp = await apiGET("/sessions");
+
+        expect(resp).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
+    });
+
     it.todo("update a session");
     it.todo("throw error when `name` is empty");
     it.todo("throw error when `name` is not unique");
     it.todo("throw error when deleting item with invalid id");
+
+    it("delete session", async () => {
+        const resp1 = await apiPOST("/sessions/delete", {
+            id: session.id
+        });
+        expect(resp1).toMatchObject({ status: "success" });
+        const { payload: withoutNewSessions } = await apiGET("/sessions");
+        expect(withoutNewSessions.map(x => x.id)).not.toContain(
+            session.id
+        );
+    });
 }
 function templateTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
@@ -253,9 +261,41 @@ function positionsTests(api = { apiGET, apiPOST }) {
         checkPropTypes(errorPropTypes, resp1);
     });
 
-    it.todo(
-        "succeed when creating two positions with the same code but for different sessions"
-    );
+    it("succeed when creating two positions with the same code but for different sessions", async () => {
+        const newSessionData = {
+            start_date: "2019/09/09",
+            end_date: "2019/12/31",
+            // add a random string to the session name so we don't accidentally collide with another
+            // session's name
+            name: "Newly Created Sessions (" + Math.random() + ")",
+            rate1: 56.54
+        };
+        const newPositionData2 = {
+            position_code: "MAT135F",
+            position_title: "Calculus I",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019/09/09",
+            est_end_date: "201/12/31",
+            position_type: "Standard"
+        };
+        // create a new session to add a template to
+        const resp1 = await apiPOST("/sessions", newSessionData);
+        expect(resp1).toMatchObject({ status: "success" });
+        const sessionId = resp1.payload.id;
+
+        // create a new position of the same code associated with new session
+        const resp2 = await apiPOST(
+            `/sessions/${sessionId}/positions`,
+            newPositionData2
+        );
+        expect(resp2).toMatchObject({ status: "success" });
+        // make sure we get back what we put in
+        expect(resp2.payload).toMatchObject(newPositionData2);
+
+        // make sure the position is created
+        const resp3 = await apiGET(`/sessions/${sessionId}/positions`);
+        expect(resp3.payload).toContainObject(resp2.payload);
+    });
 
     it("delete position", async () => {
         const resp1 = await apiPOST(`/positions/delete`, position);
