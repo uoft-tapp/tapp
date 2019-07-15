@@ -121,24 +121,18 @@ function sessionsTests(api = { apiGET, apiPOST }) {
     });
 
     it("throw error when `name` is empty", async () => {
-        const id = session.id;
-        const newData = { id, name: "" };
+        // create new session with empty name
+        const newData = { name: "" };
         const resp1 = await apiPOST("/sessions", newData);
+        // expected an error
         expect(resp1).toMatchObject({ status: "error" });
         checkPropTypes(errorPropTypes, resp1);
-
-        // get the sessions list and make sure we're updated there as well
-        const resp2 = await apiGET("/sessions");
-        // filter session list to get the updated session obj
-        const updatedSession = resp2.payload.filter(s => s.id == id);
-        // make sure the `session` is not updated
-        expect(updatedSession).not.objectContaining(newData);
     });
 
     it("throw error when `name` is not unique", async () => {
         // name identical to the exisiting session
         const newData = { name: session.name };
-        // POST to update session
+        // POST to create new session
         const resp1 = await apiPOST("/sessions", newData);
 
         // expected an error as name not unique
