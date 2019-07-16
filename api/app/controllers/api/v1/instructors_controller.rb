@@ -34,8 +34,6 @@ module Api::V1
         # PUT/PATCH /instructors/:id
         def update
             instructor = Instructor.find(params[:id])
-            validate_position_ids
-            instructor.position_ids = params[:position_ids] 
             if instructor.update_attributes!(instructor_params)
                 render_success(instructor)
             else
@@ -70,17 +68,6 @@ module Api::V1
             end
         end
 
-        def validate_position_ids
-            params.require(:position_ids)
-            if params[:position_ids] == ['']
-                return
-            end
-            params[:position_ids].each do |id|
-                Position.find(id)
-            end
-        end
-
-        
         def instructor_create(instructor, filter = false)
             if filter
                 result = error = instructors_by_position

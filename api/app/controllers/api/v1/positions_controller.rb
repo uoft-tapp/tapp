@@ -24,6 +24,7 @@ module Api::V1
                 render_error(position.errors.full_messages.join("; "))
                 return
             end
+            update_instructors_ids(position)
             params[:position_id] = position[:id]
             message = valid_ad_and_matching(position.errors.messages)
             if not message
@@ -39,6 +40,7 @@ module Api::V1
             position = Position.find(params[:id])
             ad = position.position_data_for_ad
             matching = position.position_data_for_matching
+            update_instructors_ids(position)
 
             position_res = position.update_attributes!(position_update_params)
             ad_res = ad.update_attributes!(ad_update_params)
@@ -140,6 +142,18 @@ module Api::V1
         def positions_by_session
             return Position.order(:id).select do |entry|
                 entry[:session_id] == params[:session_id].to_i
+            end
+        end
+
+        def update_instructors_ids(position)
+            if params[:instructor_ids]
+                if params[:instructor_ids] == ['']
+                    return
+                end
+                params[:instructor_ids].each do |id|
+                    Instructor.find(id)
+                end
+                position.instructor_ids = params[:instructor_ids]
             end
         end
 
