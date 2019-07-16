@@ -4,6 +4,11 @@ module Api::V1
     # Controller for ReportingTags
     class ReportingTagsController < ApplicationController
 
+        # GET /reporting_tags
+        def index
+            render_success(ReportingTag.order(:id))
+        end
+
         # POST /add_reporting_tag and /reporting_tags
         def create
             # if we passed in an id that exists, we want to update

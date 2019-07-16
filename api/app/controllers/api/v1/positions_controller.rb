@@ -6,6 +6,11 @@ module Api::V1
 
         # GET /positions
         def index
+            if not params.include?(:session_id)
+                render_success(Position.order(:id))
+                return
+            end
+            if invalid_id(Session, :session_id) then return end
             render_success(positions_by_session)
         end
 

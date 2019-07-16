@@ -4,6 +4,11 @@ module Api::V1
     # Controller for PositionPreferences
     class PositionPreferencesController < ApplicationController
 
+        # GET /position_preferences
+        def index
+            render_success(PositionPreference.order(:id))
+        end
+
         # POST /add_preference and /position_preferences
         def create
             # if we passed in an id that exists, we want to update
