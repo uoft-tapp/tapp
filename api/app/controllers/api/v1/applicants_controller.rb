@@ -43,7 +43,7 @@ module Api::V1
             params.require(:id)
             applicant = Applicant.find(params[:id])
             if applicant.destroy!
-                render_success(applicant)
+               render_success(applicant)
             else
                 render_error(applicant.errors.full_messages.join("; "))
             end
