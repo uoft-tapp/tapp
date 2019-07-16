@@ -27,7 +27,7 @@ chaining = [
         unique: [:session_index, :position_code]
     },
     {
-        get: 'applicants',
+        get: '/applicants',
         create: '/applicants',
         unique: [:utorid]
     },

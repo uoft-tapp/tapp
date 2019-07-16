@@ -40,7 +40,22 @@ module SeedsHandler
             json, log = generate_mock_data(entries, log)
         end
         records = set_available_position_templates(templates, json, records)
+        chaining, records = get_existing_records(chaining, records)
+        p records
         puts log
+    end
+
+    def get_existing_records(chaining, records)
+        chaining.each do |entry, i|
+            route = entry[:get]
+            entry[:label] = get_label(route)
+            records[entry[:label]] = request(:get, route)[:payload]
+        end
+        return chaining, records
+    end
+
+    def get_label(route)
+        return route.scan(/(\/)([\w_]+\Z)/)[0][1].to_sym
     end
 
     def set_available_position_templates(templates, json, records)
