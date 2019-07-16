@@ -4,8 +4,13 @@ module Api::V1
     # Controller for ReportingTags
     class ReportingTagsController < ApplicationController
 
-        # POST /add_reporting_tag
+        # POST /add_reporting_tag and /reporting_tags
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && ReportingTag.exists?(params[:id])
+                update and return
+            end
+
             params.require([:position_id, :name])
             if invalid_id(WageChunk, :wage_chunk_id, []) then return end
             if invalid_id(Position, :position_id, 

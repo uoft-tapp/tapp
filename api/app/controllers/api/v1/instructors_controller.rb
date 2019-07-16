@@ -16,6 +16,11 @@ module Api::V1
 
         # POST /instructors AND /add_instructor
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Instructor.exists?(params[:id])
+                update and return
+            end
+
             if not params.include?(:position_id)
                 instructor = Instructor.new(instructor_params)
                 instructor_create(instructor)

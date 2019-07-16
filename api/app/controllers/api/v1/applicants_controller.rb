@@ -16,6 +16,11 @@ module Api::V1
 
         # POST /applicants
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Applicant.exists?(params[:id])
+                update and return
+            end
+
             applicant = Applicant.new(applicant_params)
             if applicant.save # passes Applicant model validation
                 render_success(applicant)

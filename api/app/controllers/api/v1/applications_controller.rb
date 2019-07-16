@@ -16,6 +16,11 @@ module Api::V1
 
         # POST /applications
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Application.exists?(params[:id])
+                update and return
+            end
+
             params.require(:applicant_id)
             if invalid_id(Session, :session_id) then return end
             if invalid_id(Applicant, :applicant_id) then return end

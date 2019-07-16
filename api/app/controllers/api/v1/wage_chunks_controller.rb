@@ -14,8 +14,13 @@ module Api::V1
             render_success(wage_chunks_by_assignment)
         end
 
-        # POST /add_wage_chunk
+        # POST /add_wage_chunk and /wage_chunks
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && WageChunk.exists?(params[:id])
+                update and return
+            end
+
             if invalid_id(Assignment, :assignment_id, []) then return end
             wage_chunk = WageChunk.new(wage_chunk_params)
             if wage_chunk.save # passes WageChunk model validation

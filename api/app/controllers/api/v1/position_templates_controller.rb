@@ -9,8 +9,13 @@ module Api::V1
             render_success(position_templates_by_session)
         end
 
-        # POST /add_position_template
+        # POST /add_position_template and /reporting_tags
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && PositionTemplate.exists?(params[:id])
+                update and return
+            end
+
             params.require(:offer_template)
             if invalid_id(Session, :session_id, []) then return end
             position_template = PositionTemplate.new(position_template_params)
