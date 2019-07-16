@@ -58,6 +58,11 @@ module Api::V1
         def delete
             params.require(:id)
             application = Application.find(params[:id])
+            if application
+                applicant_data_for_matching = ApplicantDataForMatching.find_by(
+                    application_id: params[:id])
+                applicant_data_for_matching.destroy!
+            end
             if application.destroy!
                 render_success(application)
             else

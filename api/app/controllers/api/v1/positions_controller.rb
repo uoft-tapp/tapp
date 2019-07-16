@@ -57,6 +57,14 @@ module Api::V1
         def delete
             params.require(:id)
             position = Position.find(params[:id])
+            if position
+                position_data_for_matching = PositionDataForMatching.find_by(
+                    position_id: params[:id])
+                position_data_for_ad = PositionDataForAd.find_by(
+                    position_id: params[:id])
+                position_data_for_matching.destroy!
+                position_data_for_ad.destroy!
+            end
             if position.destroy!
                 render_success(position)
             else
