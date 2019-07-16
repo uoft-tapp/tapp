@@ -6,16 +6,56 @@
 include SeedsHandler
 
 chaining = [
-    '/sessions',
-    '/sessions/:session_id/add_position_template',
-    '/instructors',
-    '/sessions/:session_id/positions',
-    '/applicants',
-    '/sessions/:session_id/applications',
-    '/applications/:application_id/add_preference',
-    '/positions/:position_id/assignments',
-    '/assignments/:assignment_id/add_wage_chunk',
-    '/assignments/:assignment_id/add_reporting_tag',
+    {
+        get: '/sessions',
+        create: '/sessions',
+        unique: [:name]
+    },
+    {
+        get: '/position_templates',
+        create: '/sessions/:session_id/add_position_template',
+        unique: [:session_id, :position_type]
+    },
+    {
+        get: '/instructors',
+        create: '/instructors',
+        unique: [:utorid]
+    },
+    {
+        get: '/positions',
+        create: '/sessions/:session_id/positions',
+        unique: [:session_index, :position_code]
+    },
+    {
+        get: 'applicants',
+        create: '/applicants',
+        unique: [:utorid]
+    },
+    {
+        get: '/applications',
+        create: '/sessions/:session_id/applications',
+        unique: [:session_index, :applicant_index]
+    },
+    {
+        get: '/position_preferences',
+        create: '/applications/:application_id/add_preference',
+        unique: [:application_index, :position_index]
+    },
+    {
+        get: '/assignments',
+        create: '/positions/:position_id/assignments',
+        unique: [:position_index]
+    },
+    {
+        get: '/wage_chunks',
+        create: '/assignments/:assignment_id/add_wage_chunk',
+        unique: [:assignment_index]
+    },
+    {
+        get: '/reporting_tags',
+        create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
+        unique: [:wage_chunk_index]
+    }
 ]
 entries = {
     available_position_templates: 5,
@@ -31,5 +71,5 @@ entries = {
     reporting_tags: 5,
 }
 
-# insert_data(chaining, file: 'mock_data.json')
-insert_data(chaining, entries: entries)
+insert_data(chaining, file: 'mock_data.json')
+# insert_data(chaining, entries: entries)
