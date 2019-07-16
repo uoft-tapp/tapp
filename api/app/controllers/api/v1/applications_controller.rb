@@ -16,7 +16,9 @@ module Api::V1
 
         # POST /applications
         def create
+            params.require(:applicant_id)
             if invalid_id(Session, :session_id) then return end
+            if invalid_id(Applicant, :applicant_id) then return end
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
                 application.destroy!
@@ -36,7 +38,7 @@ module Api::V1
         # PUT/PATCH /applications/:id
         def update
             application = Application.find(params[:id])
-            matching = ApplicantDataForMatching.find(application[:id])
+            matching = ApplicantDataForMatching.find_by!(application_id: application[:id])
             application_res = application.update_attributes!(application_update_params)
             matching_res = matching.update_attributes!(matching_data_update_params)
             errors = application.errors.messages.deep_merge(matching.errors.messages)

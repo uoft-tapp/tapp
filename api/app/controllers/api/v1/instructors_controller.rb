@@ -14,15 +14,15 @@ module Api::V1
             render_success(instructors_by_position)
         end
 
-        # POST /add_instructor
+        # POST /instructors AND /add_instructor
         def create
-            position = Position.find(params[:position_id])
-            instructor = position.instructors.new(instructor_params)
-            if instructor.save # passes Instructor model validation
-                render_success(instructors_by_position)
+            if not params.include?(:position_id)
+                instructor = Instructor.new(instructor_params)
+                instructor_create(instructor)
             else
-                instructor.destroy!
-                render_error(instructor.errors, instructors_by_position)
+                position = Position.find(params[:position_id])
+                instructor = position.instructors.new(instructor_params)
+                instructor_create(instructor, true)
             end
         end
 
@@ -56,8 +56,27 @@ module Api::V1
 
         def validate_position_ids
             params.require(:position_ids)
+            if params[:position_ids] == ['']
+                return
+            end
             params[:position_ids].each do |id|
                 Position.find(id)
+            end
+        end
+
+        
+        def instructor_create(instructor, filter = false)
+            if filter
+                result = error = instructors_by_position
+            else
+                result = instructor
+                error = {}
+            end
+            if instructor.save # passes Instructor model validation
+                render_success(result)
+            else
+                instructor.destroy!
+                render_error(instructor.errors, error)
             end
         end
     end
