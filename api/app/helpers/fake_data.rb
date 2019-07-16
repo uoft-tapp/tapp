@@ -1,101 +1,150 @@
 module FakeData
-    def generate(entry)
+    def generate(records, entry, num_entries)
+        entries = []
+        gen_entry_fn = generate_fn(entry)
+        if not gen_entry_fn 
+            return entries
+        end
+        0..num_entries.each do |i|
+            data, records = gen_entry_fn.call(records)
+            entries.push(data)
+        end
+        return entries
+    end
+
+    private
+    def generate_fn(entry)
         case entry
         when :sessions
-            return session
+            return Proc.new do |records|
+                session(records)
+            end
         when :available_position_templates
-            return available_position_template
+            return Proc.new do |records|
+                available_position_template(records)
+            end
         when :position_templates
-            return position_template
+            return Proc.new do |records|
+                position_template(records)
+            end
         when :positions
-            return position
+            return Proc.new do |records|
+                position(records)
+            end
         when :instructors
-            return instructor
+            return Proc.new do |records|
+                instructor(records)
+            end
         when :applicants
-            return applicant
+            return Proc.new do |records|
+                applicant(records)
+            end
         when :applications
-            return application
+            return Proc.new do |records|
+                application(records)
+            end
         when :preferences
-            return preference
+            return Proc.new do |records|
+                preference(records)
+            end
         when :assignments
-            return assignment
+            return Proc.new do |records|
+                assignment(records)
+            end
         when :wage_chunks
-            return wage_chunk
+            return Proc.new do |records|
+                wage_chunk(records)
+            end
         when :reporting_tags
-            return reporting_tag
+            return Proc.new do |records|
+                reporting_tag(records)
+            end
         else
             return nil
         end
     end
 
-    private
-    def session
-        if not @session
-            @session = 0
-            @year = Time.now.year
+    def session(records)
+        if not records[:session]
+            records[:session] = 0
+            records[:year] = Time.now.year
         else
-            @session += 1
+            records[:session] += 1
         end
         rate1 = Faker::Number.normal(50, 3.5).to_d.truncate(2).to_f
         rate2 = Faker::Number.normal(50, 3.5).to_d.truncate(2).to_f
-        case @session%4
+        case records[:session]%4
         when 0
-            return {
-                name: "#{@year} Fall",
-                start_date: Time.new(@year, 9, 1),
-                end_date: Time.new(@year, 12, 31),
+            entry = {
+                name: "#{records[:year]} Fall",
+                start_date: Time.new(records[:year], 9, 1),
+                end_date: Time.new(records[:year], 12, 31),
                 rate1: rate1,
                 rate2: nil,
             }
         when 1
-            return {
-                name: "#{@year} Winter",
-                start_date: Time.new(@year, 1, 1),
-                end_date: Time.new(@year, 4, 30),
+            entry = {
+                name: "#{records[:year]} Winter",
+                start_date: Time.new(records[:year], 1, 1),
+                end_date: Time.new(records[:year], 4, 30),
                 rate1: rate1,
                 rate2: nil,
             }
         when 2
-            return {
-                name: "#{@year} Summer",
-                start_date: Time.new(@year, 5, 1),
-                end_date: Time.new(@year, 8, 31),
+            entry = {
+                name: "#{records[:year]} Summer",
+                start_date: Time.new(records[:year], 5, 1),
+                end_date: Time.new(records[:year], 8, 31),
                 rate1: rate1,
                 rate2: nil,
             }
         else
-            @year += 1
-            return {
-                name: "#{@year-1}-#{@year} Fall-Winter",
-                start_date: Time.new(@year-1, 9, 1),
-                end_date: Time.new(@year, 4, 30),
+            records[:year] += 1
+            entry = {
+                name: "#{records[:year]-1}-#{records[:year]} Fall-Winter",
+                start_date: Time.new(records[:year]-1, 9, 1),
+                end_date: Time.new(records[:year], 4, 30),
                 rate1: rate1,
                 rate2: rate2,
             }
         end
+        if not existing_session(records, entry)
+            return entry, records
+        else
+            return session(records), records
+        end
     end
 
-    def available_position_template
+    def existing_session(records, new_session)
+        records[:sessions].each do |entry|
+            if entry[:name] == new_session[:name]
+                return true
+            end
+        end
+        return false
+    end
+
+    def available_position_template(records)
         dir = "#{Rails.root}/app/views/position_templates/"
-        return "#{dir}#{Faker::Lorem.word}.erb"
+        return "#{dir}#{Faker::Lorem.word}.erb", records
     end
 
-    def position_template
-        session_id = rand_index(:sessions)
-        idx = rand_index(:available_position_templates)
-        template = @record[:available_position_templates][idx]
+    def position_template(records)
+        session_index = rand_index(records, :sessions)
+        idx = rand_index(records, :available_position_templates)
+        template = records[:available_position_templates][idx]
         return {
             position_type: Faker::Lorem.word,
             offer_template: template,
-            session_id: session_id,
-        }
+            session_index: session_index,
+        }, records
     end
 
-    def position
-        session_id = rand_index(:sessions)
+    def position(records)
+        session_index = rand_index(records, :position_templates, :session_index)
         course = Faker::Educator.course_name
-        session = get_record(:sessions, session_id)
-        position_template = rand_entry(:position_templates, :session_id, session_id)
+        session = get_record(records, :sessions, session_index)
+        position_template = rand_entry(records, :position_templates, :session_index, session_index)
         semester = get_semester_type(session)
         hours = Faker::Number.between(50, 80)
         num_assignments = Faker::Number.between(3, 15)
@@ -108,7 +157,7 @@ module FakeData
             est_start_date: session[:start_date],
             est_end_date: session[:end_date],
             position_type: position_template[:position_type],
-            session_id: session_id,
+            session_index: session_index,
             ad_hours_per_assignment: hours,
             ad_num_assignments: num_assignments,
             ad_open_date: open_date,
@@ -118,11 +167,11 @@ module FakeData
             desired_num_assignments: num_assignments,
             current_enrollment: enrollment,
             current_waitlisted: Faker::Number.between(0, (enrollment*0.3).floor),
-            instructor_ids: rand_instructors
-        }
+            instructor_indexes: rand_instructors(records)
+        }, records
     end
 
-    def instructor
+    def instructor(records)
         first_name = Faker::Name.first_name
         last_name = Faker::Name.last_name
         ln = last_name.length > 3 ? last_name[0..2] : last_name
@@ -133,10 +182,10 @@ module FakeData
             email: Faker::Internet.email("#{first_name} #{last_name}", ''),
             utorid: Faker::Internet.slug(
                 "#{ln} #{fn} #{Faker::Number.number(2)}", ''),
-        }
+        }, records
     end
 
-    def applicant
+    def applicant(records)
         first_name = Faker::Name.first_name
         last_name = Faker::Name.last_name
         ln = last_name.length > 3 ? last_name[0..2] : last_name
@@ -149,12 +198,12 @@ module FakeData
             utorid: utorid,
             phone: Faker::PhoneNumber.phone_number,
             student_number: Faker::Number.number(10),
-        }
+        }, records
     end
 
-    def application
-        session_id = rand_index(:sessions)
-        applicant_id = rand_index(:applicants)
+    def application(records)
+        session_index = rand_index(records, :sessions)
+        applicant_index = rand_index(records, :applicants)
         return {
             comments: Faker::Lorem.paragraph,
             program: program,
@@ -162,25 +211,25 @@ module FakeData
             previous_uoft_ta_experience: Faker::Lorem.paragraph,
             yip: Faker::Number.between(1, 10),
             annotation: Faker::Lorem.paragraph,
-            session_id: session_id,
-            applicant_id: applicant_id,
-        }
+            session_index: session_index,
+            applicant_index: applicant_index,
+        }, records
     end
 
-    def preference
-        position_id = rand_index(:positions)
-        application_id = rand_index(:applications)
+    def preference(records)
+        position_index = rand_index(records, :positions)
+        application_index = rand_index(records, :applications)
         return {
-            position_id: position_id,
-            application_id: application_id,
+            position_index: position_index,
+            application_index: application_index,
             preference_level: Faker::Number.between(1, 10),
-        }
+        }, records
     end
 
-    def assignment
-        position_id = rand_index(:positions)
-        applicant_id = rand_index(:applicants)
-        position = get_record(:positions, position_id)
+    def assignment(records)
+        position_index = rand_index(records, :positions)
+        applicant_index = rand_index(records, :applicants)
+        position = get_record(records, :positions, position_index)
         dir = "#{Rails.root}/app/views/position_templates/"
         options = [nil, "#{dir}#{Faker::Lorem.word}.pdf"]
         return {
@@ -188,39 +237,47 @@ module FakeData
             contract_end: position[:est_end_date],
             note: Faker::Lorem.paragraph,
             offer_override_pdf: rand_element(options),
-            position_id: position_id,
-            applicant_id: applicant_id,
-        }
+            position_index: position_index,
+            applicant_index: applicant_index,
+        }, records
     end
 
-    def wage_chunk
-        assignment_id = rand_index(:assignments)
-        assignment = get_record(:assignments, assignment_id)
-        position = get_record(:positions, assignment[:position_index])
-        session = get_record(:sessions, position[:session_index])
+    def wage_chunk(records)
+        assignment_index = rand_index(records, :assignments)
+        assignment = get_record(records, :assignments, assignment_index)
+        position = get_record(records, :positions, assignment[:position_index])
+        session = get_record(records, :sessions, position[:session_index])
         return {
             start_date: assignment[:contract_start],
             end_date: assignment[:contract_end],
             hours: position[:est_hours_per_assignment],
             rate: session[:rate2] ? (session[:rate1]+session[:rate2])/2 : session[:rate1],
-            assignment_index: assignment_id,
-        }
+            assignment_index: assignment_index,
+        }, records
     end
 
-    def reporting_tag
-        wage_chunk_id = rand_index(:wage_chunks)
-        wage_chunk = get_record(:wage_chunks, wage_chunk_id)
-        assignment = get_record(:assignments, wage_chunk[:assignment_index])
-        position = get_record(:positions, assignment[:position_index])
+    def reporting_tag(records)
+        wage_chunk_index = rand_index(records, :wage_chunks)
+        wage_chunk = get_record(records, :wage_chunks, wage_chunk_index)
+        assignment = get_record(records, :assignments, wage_chunk[:assignment_index])
+        position = get_record(records, :positions, assignment[:position_index])
         return {
             name: position[:position_code][0..-5],
             position_index: assignment[:position_index],
-            wage_chunk_index: wage_chunk_id,
-        }
+            wage_chunk_index: wage_chunk_index,
+        }, records
     end
 
-    def rand_index(attribute)
-        return Faker::Number.between(0, @record[attribute].length-1)
+    def rand_index(records, attribute, subattribute = nil)
+        if subattribute
+            indexes = records[attribute].map do |entry|
+                entry[subattribute]
+            end
+            idx = Faker::Number.between(0, indexes.length-1)
+            return indexes[idx]
+        else
+            return Faker::Number.between(0, records[attribute].length-1)
+        end
     end
 
     def rand_element(array)
@@ -233,11 +290,11 @@ module FakeData
         return rand_element(programs)
     end
 
-    def rand_instructors
+    def rand_instructors(records)
         selected = []
-        num_positions = rand_index(:instructors)
+        num_positions = rand_index(records, :instructors)
         (0..num_positions).each do |i|
-            chosen = rand_index(:instructors)
+            chosen = rand_index(records, :instructors)
             if not selected.include?(chosen)
                 selected.push(chosen)
             end
@@ -289,18 +346,17 @@ module FakeData
         return get_date_attr(date, :month) == month
     end
 
-    def get_record(table, id)
-        @record[table].each do |entry|
-            if entry[:id] == id
-                return entry
-            end
+    def get_record(records, table, id)
+        if id >= 0 and id < records[table].length
+            return records[table][id]
+        else
+            return nil
         end
-        return nil
     end
 
-    def get_matches(table, attribute, value)
+    def get_matches(records, table, attribute, value)
         matches = []
-        @record[table].each do |entry|
+        records[table].each_with_index do |entry|
             if entry[attribute] == value
                 matches.push(entry)
             end
@@ -308,8 +364,8 @@ module FakeData
         return matches
     end
 
-    def rand_entry(table, attribute, value)
-        entries = get_matches(table, attribute, value)
+    def rand_entry(records, table, attribute, value)
+        entries = get_matches(records, table, attribute, value)
         if entries.length > 0
             return rand_element(entries)
         else

@@ -260,12 +260,12 @@
 		{
             "position_index": 0,
             "application_index": 1,
-            "preference_level": 3,
+            "preference_level": 3
 		},
 		{
             "position_index": 0,
             "application_index": 6,
-            "preference_level": 3,
+            "preference_level": 3
 		}
 	],
     "assignments": [
@@ -296,5 +296,16 @@
             "assignment_index": 1
     	}
     ],
-    "reporting_tags":[]
+    "reporting_tags":[
+        {
+            "name": "MAT135H1F",
+            "position_index": 0,
+            "wage_chunk_index": 0
+        },
+        {
+            "name": "MAT135H1F",
+            "position_index": 0,
+            "wage_chunk_index": 1
+        }
+    ]
 }
