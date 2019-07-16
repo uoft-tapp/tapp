@@ -13,6 +13,10 @@ module Api::V1
         def create
             params.require(:offer_template)
             if invalid_id(Session, :session_id, []) then return end
+            # if we passed in an id that exists, we want to update the session
+            if params[:id] && PositionTemplate.exists?(params[:id])
+                update and return
+            end
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index
