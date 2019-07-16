@@ -34,6 +34,17 @@ module Api::V1
                 render_error(applicant.errors)
             end
         end
+
+        # /applicants/delete or /applicants/:id/delete
+        def delete
+            params.require(:id)
+            applicant = Applicant.find(params[:id])
+            if session.destroy!
+                render_success(applicant)
+            else
+                render_error(applicant.errors.full_messages.join("; "))
+            end
+        end
  
         private
         def applicant_params

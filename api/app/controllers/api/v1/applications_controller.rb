@@ -49,6 +49,17 @@ module Api::V1
             end
         end
 
+        # /applications/delete or /applications/:id/delete
+        def delete
+            params.require(:id)
+            application = Application.find(params[:id])
+            if application.destroy!
+                render_success(application)
+            else
+                render_error(application.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def application_params
             params.permit(

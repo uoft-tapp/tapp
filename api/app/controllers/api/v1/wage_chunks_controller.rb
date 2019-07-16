@@ -36,6 +36,17 @@ module Api::V1
             end
         end
 
+        # /wage_chunks/delete or /wage_chunks/:id/delete
+        def delete
+            params.require(:id)
+            wage_chunk = WageChunk.find(params[:id])
+            if session.destroy!
+                render_success(wage_chunk)
+            else
+                render_error(wage_chunk.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def wage_chunk_params
             params.permit(

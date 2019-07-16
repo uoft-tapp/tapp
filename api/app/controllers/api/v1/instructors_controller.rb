@@ -38,6 +38,17 @@ module Api::V1
             end
         end
 
+        # /instructors/delete or /instructors/:id/delete
+        def delete
+            params.require(:id)
+            instructor = Instructor.find(params[:id])
+            if session.destroy!
+                render_success(instructor)
+            else
+                render_error(instructor.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def instructor_params
           params.permit(

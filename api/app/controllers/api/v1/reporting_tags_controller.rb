@@ -29,6 +29,17 @@ module Api::V1
             end
         end
 
+        # /reporting_tags/delete or /reporting_tags/:id/delete
+        def delete
+            params.require(:id)
+            reporting_tag = ReportingTag.find(params[:id])
+            if session.destroy!
+                render_success(reporting_tag)
+            else
+                render_error(reporting_tag.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def reporting_tag_params
             params.permit(

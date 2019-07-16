@@ -28,6 +28,17 @@ module Api::V1
             end
         end
 
+        # /position_preferences/delete or /position_preferences/:id/delete
+        def delete
+            params.require(:id)
+            position_preference = PositionPreference.find(params[:id])
+            if position_preference.destroy!
+                render_success(position_preference)
+            else
+                render_error(position_preference.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def preference_params
             params.permit(

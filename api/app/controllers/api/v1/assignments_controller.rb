@@ -44,6 +44,17 @@ module Api::V1
             end
         end
 
+        # /assignments/delete or /assignments/:id/delete
+        def delete
+            params.require(:id)
+            assignment = Assignment.find(params[:id])
+            if session.destroy!
+                render_success(assignment)
+            else
+                render_error(assignment.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def assignment_params
             params.permit(

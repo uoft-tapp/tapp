@@ -53,14 +53,15 @@ module Api::V1
             end
         end
 
-        # /positions/delete
+        # /positions/delete or /positions/:id/delete
         def delete
-                position = Position.find(params[:id])
-                if position.destroy!
-                    render_success(position)
-                else
-                    render_error(position.errors.full_messages.join("; "))
-                end
+            params.require(:id)
+            position = Position.find(params[:id])
+            if position.destroy!
+                render_success(position)
+            else
+                render_error(position.errors.full_messages.join("; "))
+            end
         end
 
         private

@@ -39,12 +39,13 @@ module Api::V1
 
         # /sessions/delete or /sessions/:id/delete
         def delete
-                session = Session.find(params[:id])
-                if session.destroy!
-                    render_success(session)
-                else
-                    render_error(session.errors.full_messages.join("; "))
-                end
+            params.require(:id)
+            session = Session.find(params[:id])
+            if session.destroy!
+                render_success(session)
+            else
+                render_error(session.errors.full_messages.join("; "))
+            end
         end
 
         private

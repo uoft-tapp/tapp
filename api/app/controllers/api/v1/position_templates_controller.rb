@@ -38,6 +38,17 @@ module Api::V1
             end
         end
 
+        # /position_templates/delete or /position_templates/:id/delete
+        def delete
+            params.require(:id)
+            position_template = PostionTemplate.find(params[:id])
+            if session.destroy!
+                render_success(position_template)
+            else
+                render_error(position_template.errors.full_messages.join("; "))
+            end
+        end
+
         private
         def position_template_params
             params.permit(
