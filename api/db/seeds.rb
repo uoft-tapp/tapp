@@ -14,7 +14,7 @@ chaining = [
     {
         get: '/position_templates',
         create: '/sessions/:session_id/add_position_template',
-        unique: [:session_id, :position_type]
+        unique: [:session_index, :position_type]
     },
     {
         get: '/instructors',
