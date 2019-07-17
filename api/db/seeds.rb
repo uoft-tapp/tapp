@@ -65,11 +65,11 @@ entries = {
     positions: 40,
     applicants: 10,
     applications: 15,
-    preferences: 20,
+    position_preferences: 20,
     assignments: 5,
     wage_chunks: 5,
     reporting_tags: 5,
 }
 
 insert_data(chaining, file: 'mock_data.json')
-# insert_data(chaining, entries: entries)
+insert_data(chaining, entries: entries)

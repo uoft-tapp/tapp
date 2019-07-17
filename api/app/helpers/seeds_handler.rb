@@ -48,19 +48,60 @@ module SeedsHandler
     def post_data(chaining, json, records, log)
         chaining.each do |entry|
             key = entry[:label]
+            table_data = []
+            error_count = 0
             json[key].each do |data|
-                data = replace_if_exists(json, data, records[key], entry[:unique])
                 data = replace_all_index(json, data)
+                data = add_id_to_existing_record(data, records[key], entry[:unique])
                 route = get_route(entry[:create], data)
-                res = request(:post, route, data)
-                if res[:status] == 'sucess'
-                    
-                else
-                    break
+                if data.include?(:id)
+                    route = entry[:get]
                 end
+                res = request(:post, route, data)
+                if res[:status] == 'success'
+                    if array_result(route)
+                        table_data.push(get_entry(data, res[:payload], entry[:unique]))
+                    else
+                        table_data.push(res[:payload])
+                    end
+                else
+                    log.push(res[:message])
+                    table_data.push(nil)
+                    error_count+=1
+                end
+            end
+            json[key] = table_data
+            if error_count == 0
+                log.push("Insertions/updates to the table #{key} were successful.")
+            else
+                log.push("There were errors with the insertion/update to table #{key}.")
             end
         end
         return log
+    end
+
+    def get_entry(data, result, unique)
+        result.each do |entry|
+            if match_all_unique_keys(data, entry, unique)
+                return entry
+            end
+        end
+    end
+
+    def match_all_unique_keys(data, entry, unique)
+        unique.each do |key|
+            if is_index(key)
+                key = id_name(key)
+            end
+            if data[key] != entry[key]
+                return false
+            end
+        end
+        return true
+    end
+
+    def array_result(route)
+        return route.scan(/(\/add_)/).length > 0
     end
 
     def get_route(route, data)
@@ -68,17 +109,16 @@ module SeedsHandler
         keys.each do |key|
             key = key[0]
             label = key.gsub(':', '').to_sym
-            route = route.gsub(key, data[label])
+            route = route.gsub(key, data[label].to_s)
         end
         return route
     end
 
-    def replace_if_exists(json, data, records, unique)
+    def add_id_to_existing_record(data, records, unique)
         records.each do |entry|
-            data, matching = matching_entry(json, data, entry, unique)
-            if matching
+            if match_all_unique_keys(data, entry, unique)
                 data[:id] = entry[:id]
-                return
+                return data
             end
         end
         return data
@@ -93,22 +133,6 @@ module SeedsHandler
         return data
     end
 
-    def matching_entry(json, data, entry, unique)
-        unique.each do |key|
-            if is_index(key)
-                data, id_name = sub_out_index(data, json, key)
-                if data[id_name] != entry[id_name]
-                    return false, data
-                end
-            else
-                if data[key] != entry[key]
-                    return false, data
-                end
-            end
-        end
-        return true, data
-    end
-
     def sub_out_index(data, json, key)
         id_name = id_name(key)
         table = table_key(key)
@@ -116,10 +140,10 @@ module SeedsHandler
             data[id_name] = data[key].map do |entry|
                 json[table][entry][:id]
             end
-        else
+        elsif data[key]
             data[id_name] = json[table][data[key]][:id]
-            data.delete(key)
         end
+        data.delete(key)
         return data, id_name
     end
 
@@ -133,7 +157,11 @@ module SeedsHandler
     end
 
     def is_index(key)
-        return key.to_s.scan(/(_index)/).length > 0
+        return key.to_s.scan(/(_indexes|_index)/).length > 0
+    end
+
+    def is_id(key)
+        return key.to_s.scan(/(_id)/).length > 0
     end
 
     def get_existing_records(chaining, records)
