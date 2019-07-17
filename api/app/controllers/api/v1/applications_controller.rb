@@ -7,7 +7,7 @@ module Api::V1
         # GET /applications
         def index
             if not params.include?(:session_id)
-                render_success(Application.order(:id))
+                render_success(all_applications)
                 return
             end
             if invalid_id(Session, :session_id) then return end
@@ -107,8 +107,17 @@ module Api::V1
         end
         
         def applications_by_session
-            return Application.order(:id).select do |entry|
+            return all_applications.select do |entry|
                 entry[:session_id] == params[:session_id].to_i
+            end
+        end
+
+        def all_applications
+            exclusion = [:id, :created_at, :updated_at, :application_id]
+            return Application.order(:id).map do |entry|
+                matching = ApplicantDataForMatching.find_by(application_id: entry[:id])
+                matching = json(matching, except: exclusion)
+                json(entry, include: matching)
             end
         end
 

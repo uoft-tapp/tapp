@@ -7,7 +7,7 @@ module Api::V1
         # GET /positions
         def index
             if not params.include?(:session_id)
-                render_success(Position.order(:id))
+                render_success(all_positions)
                 return
             end
             if invalid_id(Session, :session_id) then return end
@@ -145,8 +145,20 @@ module Api::V1
         end
 
         def positions_by_session
-            return Position.order(:id).select do |entry|
+            return all_positions.select do |entry|
                 entry[:session_id] == params[:session_id].to_i
+            end
+        end
+
+        def all_positions
+            exclusion = [:id, :created_at, :updated_at, :position_id]
+            return Position.order(:id).map do |entry|
+                matching = PositionDataForMatching.find_by(position_id: entry[:id])
+                matching = json(matching, except: exclusion)
+                ad = PositionDataForAd.find_by(position_id: entry[:id])
+                combined = json(ad, include: matching, except: exclusion)
+                combined = json(combined, include: {instructor_ids: entry.instructor_ids})
+                json(entry, include: combined, except: [:instructors])
             end
         end
 
