@@ -286,7 +286,7 @@ function templateTests(api = { apiGET, apiPOST }) {
     });
 
     // Backend API not checking empty props. Comment out the test case for now
-    /* it("throw error when `offer_template` or `position_type` is empty", async () => {
+    it("throw error when `offer_template` or `position_type` is empty", async () => {
         const newTemplateData1 = {
             offer_template: "",
             position_type: "Standard"
@@ -318,10 +318,10 @@ function templateTests(api = { apiGET, apiPOST }) {
         );
         expect(resp3.payload).not.toContainObject(newTemplateData1);
         expect(resp3.payload).not.toContainObject(newTemplateData2);
-    }); */
+    });
 
-    // Backend API not checking empty props. Comment out the test case for now
-    /* it("throw error when `position_type` is not unique", async () => {
+    // Backend API not checking unique `position_type` props => this case would fail
+    it("throw error when `position_type` is not unique", async () => {
         const newTemplateData = {
             offer_template:
                 "this_is_a_test_template_for_pisition_type_uniqueness.html",
@@ -341,7 +341,7 @@ function templateTests(api = { apiGET, apiPOST }) {
             `/sessions/${session.id}/position_templates`
         );
         expect(resp2.payload).not.toContainObject(newTemplateData);
-    }); */
+    });
 }
 
 function positionsTests(api = { apiGET, apiPOST }) {
@@ -485,12 +485,17 @@ function instructorsTests({ apiGET, apiPOST }) {
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
+    // note that sending requests with undefined routes would first hit the backend,
+    // then if the route is not defined, backend will send index page back with a "success" msg 
+    
+    // this instructor session route is not defined in backend
     it("get instructors for session", async () => {
         const resp = await apiGET(`/sessions/${session.id}/instructors`);
         expect(resp).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
+    // this instructor session route is not defined in backend
     it("create instructor", async () => {
         // create a new instructor
         const resp1 = await apiPOST(
@@ -509,6 +514,7 @@ function instructorsTests({ apiGET, apiPOST }) {
         instructor = resp1.payload;
     });
 
+    // this instructor session route is not defined in backend
     it("update an instructor", async () => {
         updateInstructorData = {
             id: instructor.id,
@@ -524,6 +530,7 @@ function instructorsTests({ apiGET, apiPOST }) {
         expect(resp.payload).toContainObject(updateInstructorData);
     });
 
+    // this instructor session route is not defined in backend    
     it("add instrutor to position", async () => {
         const resp = await apiPOST(
             `/positions/${position.id}/add_instructor`,
@@ -535,6 +542,7 @@ function instructorsTests({ apiGET, apiPOST }) {
 
     it.todo("remove instructor from position");
 
+    // this instructor session route is not defined in backend
     it("delete instructor", async () => {
         const resp = await apiPOST(
             `/sessions/${session.id}/instructors/delete`,
