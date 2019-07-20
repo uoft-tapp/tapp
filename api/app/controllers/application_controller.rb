@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
 
   	def index
     	render :file => 'public/index.html'
-  	end  
+		end  
+		
+		def not_found
+			raise ActionController::RoutingError.new('Unknown Route')
+		end
 
 end
