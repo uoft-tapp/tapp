@@ -9,6 +9,7 @@ import Summary from "./modules/tapp_summary/components/Summary";
 import ApplicationForm from "./modules/application/components/ApplicationForm";
 import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
 import Dashboard from "./views/dashboard";
+import Offers from "./modules/offers/components/Offers";
 
 export const openRoutes = [
     {
@@ -54,6 +55,10 @@ export const openRoutes = [
     {
         path: "/application/positionApplied",
         component: PositionsApplied
+    },
+    {
+        path: "/tapp/offers",
+        component: Offers
     }
 ];
 

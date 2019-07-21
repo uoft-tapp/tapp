@@ -28,6 +28,7 @@ const TappNavItems = () => (
         <CustomNavItem href="/tapp/assigned">All Assigned</CustomNavItem>
         <CustomNavItem href="/tapp/unassigned">All Unassigned</CustomNavItem>
         <CustomNavItem href="/tapp/summary">Summary</CustomNavItem>
+        <CustomNavItem href="/tapp/offers">Offers</CustomNavItem>
     </Nav>
 );
 

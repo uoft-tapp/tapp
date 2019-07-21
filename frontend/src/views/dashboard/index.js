@@ -9,7 +9,8 @@ import {
     positionTemplatesSelector,
     instructorsSelector,
     positionsSelector,
-    assignmentsSelector
+    assignmentsSelector,
+    offersSelector
 } from "../../api/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
@@ -17,6 +18,7 @@ import { PositionTemplatesList } from "../../components/postition-templates-list
 import { InstructorsList } from "../../components/instructors-list";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
+import { OffersList } from "../../components/offers-list";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -50,6 +52,10 @@ const ConnectedPositionsList = connect(state => ({
 const ConnectedAssignmentsList = connect(state => ({
     assignments: assignmentsSelector(state)
 }))(AssignmentsList);
+
+const ConnectedOffersList = connect(state => ({
+    offers: offersSelector(state)
+}))(OffersList);
 
 /**
  * Encapsulate a react component in a frame.
@@ -100,6 +106,9 @@ function Dashboard() {
             </DashboardWidget>
             <DashboardWidget title="AssignmentsList">
                 <ConnectedAssignmentsList />
+            </DashboardWidget>
+            <DashboardWidget title="OffersList">
+                <ConnectedOffersList />
             </DashboardWidget>
         </div>
     );
