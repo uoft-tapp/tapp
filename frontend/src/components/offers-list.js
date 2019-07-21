@@ -25,7 +25,7 @@ export class OffersList extends React.Component {
         }
         return (
             <div>
-                <h3>offers</h3>
+                <h3>Available offers</h3>
                 {offersList}
             </div>
         );
