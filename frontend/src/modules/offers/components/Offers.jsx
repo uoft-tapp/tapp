@@ -1,8 +1,8 @@
 import React from "react"
-import { connect } from "react-redux"
+//import { connect } from "react-redux"
 import ReactTable from "react-table"
 import "react-table/react-table.css"
-import { Card, ButtonGroup, Button, Well, Container, Row, Col } from "react-bootstrap"
+import { ButtonGroup, Button, Container } from "react-bootstrap"
 
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },

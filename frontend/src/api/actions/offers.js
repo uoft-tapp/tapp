@@ -1,14 +1,16 @@
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import {
     FETCH_OFFERS_SUCCESS
 } from "../constants";
-import { fetchError, upsertError, deleteError } from "./errors";
+import { fetchError} from "./errors";
+//import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     runOnActiveSessionChange,
     validatedApiDispatcher
 } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET } from "../../libs/apiUtils";
+//import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { offersReducer } from "../reducers/offers";
 import { createSelector } from "reselect";
 
