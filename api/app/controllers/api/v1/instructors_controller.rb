@@ -79,7 +79,7 @@ module Api::V1
                 render_success(result)
             else
                 instructor.destroy!
-                render_error(instructor.errors, error)
+                render_error(instructor.errors.full_messages.join("; "), error)
             end
         end
     end
