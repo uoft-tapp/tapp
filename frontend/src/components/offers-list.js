@@ -16,9 +16,7 @@ export class OffersList extends React.Component {
             offersList = (
                 <ul>
                     {offers.map(offers => (
-                        <li key={offers.id}>
-                            Offer ID#: {offers.offers_id}
-                        </li>
+                        <li key={offers.id}>Offer ID#: {offers.offers_id}</li>
                     ))}
                 </ul>
             );

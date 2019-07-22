@@ -1,8 +1,6 @@
 //import PropTypes from "prop-types";
-import {
-    FETCH_OFFERS_SUCCESS
-} from "../constants";
-import { fetchError} from "./errors";
+import { FETCH_OFFERS_SUCCESS } from "../constants";
+import { fetchError } from "./errors";
 //import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
@@ -28,7 +26,6 @@ export const fetchOffers = validatedApiDispatcher({
         dispatch(fetchOffersSuccess(data));
     }
 });
-
 
 // selectors
 
