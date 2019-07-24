@@ -24,7 +24,10 @@ module Api::V1
 
         # GET /available_position_templates
         def available
-            files = Dir.glob("#{Rails.root}/app/views/position_templates/*")
+            dir = "#{Rails.root}/app/views/position_templates/"
+            files = Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
+                entry.gsub(dir, '')
+            end
             render_success(files)
         end
 
