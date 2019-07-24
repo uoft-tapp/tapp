@@ -324,7 +324,7 @@ function reportingTagsTests({ apiGET, apiPOST }) {
 function applicationsTests({ apiGET, apiPOST }) {}
 
 function unknownRouteTests(api = { apiGet, apiPost }) {
-    const {apiGet, apiPost} = api;
+    const { apiGet, apiPost } = api;
 
     it("should succeed GET request with known '/api' routes", async () => {
         const resp = await apiGET("/sessions");
@@ -332,9 +332,9 @@ function unknownRouteTests(api = { apiGet, apiPost }) {
     });
 
     it("should fail GET request with unknown '/api' routes", async () => {
-        try { 
+        try {
             await apiGET("/some_string");
-        } catch(e) { 
+        } catch (e) {
             expect(e.response.data).toMatchObject({ status: "not_found" });
         }
     });
