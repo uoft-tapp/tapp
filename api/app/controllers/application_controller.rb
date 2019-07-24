@@ -10,6 +10,6 @@ class ApplicationController < ActionController::Base
     end  
 		
 		def not_found
-			render json: {status: 'not_found'}, status: :not_found
+			render_error('unknown route')
 		end
 end

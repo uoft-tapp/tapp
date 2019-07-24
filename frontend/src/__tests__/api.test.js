@@ -332,11 +332,8 @@ function unknownRouteTests(api = { apiGet, apiPost }) {
     });
 
     it("should fail GET request with unknown '/api' routes", async () => {
-        try {
-            await apiGET("/some_string");
-        } catch (e) {
-            expect(e.response.data).toMatchObject({ status: "not_found" });
-        }
+        const resp = await apiGET("/some_string");
+        expect(resp).toMatchObject({ status: "error" });
     });
 }
 
