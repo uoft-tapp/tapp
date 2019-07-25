@@ -16,11 +16,6 @@ module Api::V1
 
         # POST /add_position_template and /position_templates
         def create
-            # if we passed in an id that exists, we want to update
-            if params[:id] && PositionTemplate.exists?(params[:id])
-                update and return
-            end
-
             params.require(:offer_template)
             if invalid_id(Session, :session_id, []) then return end
             position_template = PositionTemplate.new(position_template_params)
