@@ -29,7 +29,7 @@ module Api::V1
             end                    
         end
 
-        # PUT/PATCH /reporting_tags/:id
+        # POST /reporting_tags/:id
         def update
             reporting_tag = ReportingTag.find(params[:id])
             if reporting_tag.update_attributes!(reporting_tag_update_params)

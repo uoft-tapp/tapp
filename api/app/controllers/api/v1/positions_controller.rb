@@ -40,7 +40,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /positions/:id
+        # POST /positions/:id
         def update
             position = Position.find(params[:id])
             ad = position.position_data_for_ad

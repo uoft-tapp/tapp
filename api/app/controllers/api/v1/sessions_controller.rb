@@ -27,7 +27,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /sessions/:id
+        # POST /sessions/:id
         def update
             session = Session.find(params[:id])
             if session.update_attributes!(session_params)

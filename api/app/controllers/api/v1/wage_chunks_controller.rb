@@ -31,7 +31,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /wage_chunks/:id
+        # POST /wage_chunks/:id
         def update
             wage_chunk = WageChunk.find(params[:id])
             if wage_chunk.update_attributes!(wage_chunk_update_params)

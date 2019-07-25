@@ -31,7 +31,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /instructors/:id
+        # POST /instructors/:id
         def update
             instructor = Instructor.find(params[:id])
             if instructor.update_attributes!(instructor_params)
@@ -45,7 +45,7 @@ module Api::V1
         def delete
             params.require(:id)
             instructor = Instructor.find(params[:id])
-            if session.destroy!
+            if instructor.destroy!
                 render_success(instructor)
             else
                 render_error(instructor.errors.full_messages.join("; "))

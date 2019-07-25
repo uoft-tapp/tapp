@@ -40,7 +40,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /applications/:id
+        # POST /applications/:id
         def update
             application = Application.find(params[:id])
             matching = ApplicantDataForMatching.find_by!(application_id: application[:id])

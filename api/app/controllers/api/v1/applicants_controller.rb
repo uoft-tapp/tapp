@@ -30,7 +30,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /applicants/:id
+        # POST /applicants/:id
         def update
             applicant = Applicant.find(params[:id])
             if applicant.update_attributes!(applicant_params)
@@ -44,7 +44,7 @@ module Api::V1
         def delete
             params.require(:id)
             applicant = Applicant.find(params[:id])
-            if session.destroy!
+            if applicant.destroy!
                 render_success(applicant)
             else
                 render_error(applicant.errors.full_messages.join("; "))

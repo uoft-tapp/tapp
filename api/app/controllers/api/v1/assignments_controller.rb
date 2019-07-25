@@ -39,7 +39,7 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /assignments/:id
+        # POST /assignments/:id
         def update
             assignment = Assignment.find(params[:id])
             if assignment.update_attributes!(assignment_update_params)
@@ -53,7 +53,7 @@ module Api::V1
         def delete
             params.require(:id)
             assignment = Assignment.find(params[:id])
-            if session.destroy!
+            if assignment.destroy!
                 render_success(assignment)
             else
                 render_error(assignment.errors.full_messages.join("; "))

@@ -28,7 +28,7 @@ module Api::V1
             end
         end
  
-       # PUT/PATCH /position_preferences/:id
+       # POST /position_preferences/:id
         def update
             position_preference = PositionPreference.find(params[:id])
             if position_preference.update_attributes!(preference_update_params)

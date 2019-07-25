@@ -38,7 +38,7 @@ module Api::V1
             render_success(files)
         end
 
-        # PUT/PATCH /position_templates/:id
+        # POST /position_templates/:id
         def update
             position_template = PositionTemplate.find(params[:id])
             if position_template.update_attributes!(position_template_update_params)
@@ -52,7 +52,7 @@ module Api::V1
         def delete
             params.require(:id)
             position_template = PostionTemplate.find(params[:id])
-            if session.destroy!
+            if position_template.destroy!
                 render_success(position_template)
             else
                 render_error(position_template.errors.full_messages.join("; "))
