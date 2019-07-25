@@ -3,15 +3,12 @@
 # Base class from which most applications use
 module ApplicationHelper
 	def json(data, include: nil, except: nil)
-		data = JSON.parse(data.to_json.to_s, symbolize_names: true)
+		if not data.is_a?(ActiveSupport::HashWithIndifferentAccess)
+			data = data.as_json(except: except).with_indifferent_access
+		end
 		if include
 			include.keys.each do |key|
 				data[key] = include[key]
-			end
-		end
-		if except
-			except.each do |key|
-				data.delete(key)
 			end
 		end
 		return data

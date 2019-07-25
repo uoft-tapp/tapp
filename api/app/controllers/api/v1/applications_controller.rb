@@ -108,7 +108,7 @@ module Api::V1
 
         def all_applications
             return Application.order(:id).map do |entry|
-                application_data(application)
+                application_data(entry)
             end
         end
 

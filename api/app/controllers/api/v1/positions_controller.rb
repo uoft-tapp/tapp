@@ -156,7 +156,7 @@ module Api::V1
             ad = position.position_data_for_ad
             combined = json(ad, include: matching, except: exclusion)
             combined = json(combined, include: {instructor_ids: position.instructor_ids})
-            return json(position, include: combined, except: [:instructors])
+            return json(position, include: combined)
         end
 
         def update_instructors_ids(position)
