@@ -28,7 +28,7 @@ module Api::V1
             params[:application_id] = application[:id]
             message = valid_applicant_matching_data(application.errors.messages)
             if not message
-                render_success(application)
+                render_success(application_data(application))
             else
                 application.destroy!
                 render_error(message)
@@ -38,12 +38,12 @@ module Api::V1
         # POST /applications/:id
         def update
             application = Application.find(params[:id])
-            matching = ApplicantDataForMatching.find_by!(application_id: application[:id])
+            matching = application.applicant_data_for_matching
             application_res = application.update_attributes!(application_update_params)
             matching_res = matching.update_attributes!(matching_data_update_params)
             errors = application.errors.messages.deep_merge(matching.errors.messages)
             if application_res and matching_res
-                render_success(application)
+                render_success(application_data(application))
             else
                 render_error(errors)
             end
@@ -51,15 +51,14 @@ module Api::V1
 
         # POST /applications/:id/delete
         def delete
-            params.require(:id)
             application = Application.find(params[:id])
+            entry = application_data(application)
             if application
-                applicant_data_for_matching = ApplicantDataForMatching.find_by(
-                    application_id: params[:id])
-                applicant_data_for_matching.destroy!
+                matching = application.applicant_data_for_matching
+                matching.destroy!
             end
             if application.destroy!
-                render_success(application)
+                render_success(entry)
             else
                 render_error(application.errors.full_messages.join("; "))
             end
@@ -108,12 +107,16 @@ module Api::V1
         end
 
         def all_applications
-            exclusion = [:id, :created_at, :updated_at, :application_id]
             return Application.order(:id).map do |entry|
-                matching = ApplicantDataForMatching.find_by(application_id: entry[:id])
-                matching = json(matching, except: exclusion)
-                json(entry, include: matching)
+                application_data(application)
             end
+        end
+
+        def application_data(application)
+            exclusion = [:id, :created_at, :updated_at, :application_id]
+            matching = application.applicant_data_for_matching
+            matching = json(matching, except: exclusion)
+            return json(application, include: matching)
         end
 
         def valid_applicant_matching_data(errors)

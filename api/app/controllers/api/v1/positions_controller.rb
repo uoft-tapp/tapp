@@ -28,7 +28,7 @@ module Api::V1
             params[:position_id] = position[:id]
             message = valid_ad_and_matching(position.errors.messages)
             if not message
-                render_success(position)
+                render_success(position_data(position))
             else
                 position.destroy!
                 render_error(message)
@@ -49,7 +49,7 @@ module Api::V1
             errors = position.errors.messages.deep_merge(ad.errors.messages)
             errors = errors.deep_merge(matching.errors.messages)
             if ad_res and position_res and matching_res
-                render_success(position)
+                render_success(position_data(position))
             else
                 render_error(errors)
             end
@@ -58,16 +58,15 @@ module Api::V1
         # POST /positions/:id/delete
         def delete
             position = Position.find(params[:id])
+            entry = position_data(position)
             if position
-                position_data_for_matching = PositionDataForMatching.find_by(
-                    position_id: params[:id])
-                position_data_for_ad = PositionDataForAd.find_by(
-                    position_id: params[:id])
-                position_data_for_matching.destroy!
-                position_data_for_ad.destroy!
+                matching = position.position_data_for_matching
+                ad = position.position_data_for_ad
+                matching.destroy!
+                ad.destroy!
             end
             if position.destroy!
-                render_success(position)
+                render_success(entry)
             else
                 render_error(position.errors.full_messages.join("; "))
             end
@@ -145,15 +144,19 @@ module Api::V1
         end
 
         def all_positions
-            exclusion = [:id, :created_at, :updated_at, :position_id]
             return Position.order(:id).map do |entry|
-                matching = PositionDataForMatching.find_by(position_id: entry[:id])
-                matching = json(matching, except: exclusion)
-                ad = PositionDataForAd.find_by(position_id: entry[:id])
-                combined = json(ad, include: matching, except: exclusion)
-                combined = json(combined, include: {instructor_ids: entry.instructor_ids})
-                json(entry, include: combined, except: [:instructors])
+                position_data(entry)
             end
+        end
+
+        def position_data(position)
+            exclusion = [:id, :created_at, :updated_at, :position_id]
+            matching = position.position_data_for_matching
+            matching = json(matching, except: exclusion)
+            ad = position.position_data_for_ad
+            combined = json(ad, include: matching, except: exclusion)
+            combined = json(combined, include: {instructor_ids: position.instructor_ids})
+            return json(position, include: combined, except: [:instructors])
         end
 
         def update_instructors_ids(position)
