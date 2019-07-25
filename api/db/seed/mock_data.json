@@ -15,13 +15,6 @@
             "rate2": null
         }
     ],
-    "available_position_templates": [
-        "/math/default.html",
-        "/math/default2018.html",
-        "/math/invigilate.html",
-        "/math/invigilate2014.html",
-        "/math/oto.html"
-    ],
     "position_templates": [
         { 
         	"position_type": "standard", 

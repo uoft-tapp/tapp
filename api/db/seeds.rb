@@ -71,5 +71,4 @@ entries = {
     reporting_tags: 5,
 }
 
-insert_data(chaining, file: 'mock_data.json')
-insert_data(chaining, entries: entries)
+insert_data(chaining, 'mock_data.json')
