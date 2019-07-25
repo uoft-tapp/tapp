@@ -10,7 +10,7 @@ module Api::V1
                 render_success(Applicant.order(:id))
                 return
             end
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             render_success(applicants_by_session)
         end
 

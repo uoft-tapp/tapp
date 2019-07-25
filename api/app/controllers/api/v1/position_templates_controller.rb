@@ -10,14 +10,14 @@ module Api::V1
                 render_success(PositionTemplate.order(:id))
                 return
             end
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             render_success(position_templates_by_session)
         end
 
         # POST /add_position_template and /position_templates
         def create
             params.require(:offer_template)
-            if invalid_id(Session, :session_id, []) then return end
+            return if invalid_id(Session, :session_id, [])
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index

@@ -17,8 +17,8 @@ module Api::V1
         # POST /assignments
         def create
             params.require(:applicant_id)
-            if invalid_id(Position, :position_id) then return end
-            if invalid_id(Applicant, :applicant_id) then return end
+            return if invalid_id(Position, :position_id)
+            return if invalid_id(Applicant, :applicant_id)
             assignment = Assignment.new(assignment_params)
             if not assignment.save # does not pass Assignment model validation
                 assignment.destroy!

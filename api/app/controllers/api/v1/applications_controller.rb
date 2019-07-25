@@ -10,15 +10,15 @@ module Api::V1
                 render_success(all_applications)
                 return
             end
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             render_success(applications_by_session)
         end
 
         # POST /applications
         def create
             params.require(:applicant_id)
-            if invalid_id(Session, :session_id) then return end
-            if invalid_id(Applicant, :applicant_id) then return end
+            return if invalid_id(Session, :session_id)
+            return if invalid_id(Applicant, :applicant_id)
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
                 application.destroy!
@@ -117,7 +117,7 @@ module Api::V1
         end
 
         def valid_applicant_matching_data(errors)
-            if invalid_id(Applicant, :applicant_id) then return end
+            return if invalid_id(Applicant, :applicant_id)
             matching = ApplicantDataForMatching.new(applicant_data_for_matching_params)
             if matching.save
                 return nil

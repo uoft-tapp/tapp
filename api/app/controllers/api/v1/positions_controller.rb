@@ -17,7 +17,7 @@ module Api::V1
         # POST /positions
         def create
             params.require([:position_code, :position_title])
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             position = Position.new(position_params)
             if not position.save # does not pass Position model validation
                 position.destroy!
