@@ -25,12 +25,12 @@ module Api::V1
                 render_error(assignment.errors)
                 return
             end
-            message = valid_wage_chunk(assignment.errors.messages)
+            message = valid_wage_chunk(assignment, assignment.errors.messages)
             if not message
                 render_success(assignment)
             else
                 assignment.destroy!
-                render_error(errors)
+                render_error(message)
             end
         end
 
@@ -81,17 +81,17 @@ module Api::V1
             end
         end
 
-        def valid_wage_chunk(errors)
+        def valid_wage_chunk(assignment, errors)
             if params.include?(:hours)
                 wage_chunk = assignment.wage_chunks.new(hours: params[:hours])
                 if wage_chunk.save
-                    return errors.deep_merge(wage_chunk.errors.messages)
+                    return nil
                 else
                     wage_chunk.destroy!
-                    return nil
+                    return errors.deep_merge(wage_chunk.errors.messages)
                 end
             else
-                return nil
+                return errors
             end
         end
     end
