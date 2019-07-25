@@ -55,9 +55,8 @@ module Api::V1
             end
         end
 
-        # /positions/delete or /positions/:id/delete
+        # POST /positions/:id/delete
         def delete
-            params.require(:id)
             position = Position.find(params[:id])
             if position
                 position_data_for_matching = PositionDataForMatching.find_by(

@@ -43,9 +43,8 @@ module Api::V1
             end
         end
 
-        # /position_templates/delete or /position_templates/:id/delete
+        # POST /position_templates/:id/delete
         def delete
-            params.require(:id)
             position_template = PostionTemplate.find(params[:id])
             if position_template.destroy!
                 render_success(position_template)

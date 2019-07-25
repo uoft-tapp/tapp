@@ -8,13 +8,11 @@ Rails.application.routes.draw do
     namespace :api do
         namespace :v1 do
             # instructor routes
-            post '/instructors/delete' => 'instructors#delete'
             post '/instructors/:id/delete' => 'instructors#delete'
             post '/instructors/:id' => 'instructors#update'
             resources :instructors, only: [:index, :create]
 
             # position routes
-            post '/positions/delete' => 'positions#delete'
             post '/positions/:id/delete' => 'positions#delete'
             post '/positions/:id' => 'positions#update'
             resources :positions, only: [:index, :create] do
@@ -24,13 +22,11 @@ Rails.application.routes.draw do
             end
 
             # applicant routes
-            post '/applicants/delete' => 'applicants#delete'
             post '/applicants/:id/delete' => 'applicants#delete'
             post '/applicants/:id' => 'applicants#update'
             resources :applicants, only: [:index, :create]
 
             # assignment routes
-            post '/assignments/delete' => 'assignments#delete'
             post '/assignments/:id/delete' => 'assignments#delete'
             post '/assignments/:id' => 'assignments#update'
             resources :assignments, only: [:index, :create] do
@@ -40,7 +36,6 @@ Rails.application.routes.draw do
             end
 
             # wage_chunk routes
-            post '/wage_chunks/delete' => 'wage_chunks#delete'
             post '/wage_chunks/:id/delete' => 'wage_chunks#delete'
             post '/wage_chunks/:id' => 'wage_chunks#update'
             resources :wage_chunks, only: [:index] do 
@@ -48,7 +43,6 @@ Rails.application.routes.draw do
             end
 
             # application routes
-            post '/applications/delete' => 'applications#delete'
             post '/applications/:id/delete' => 'applications#delete'
             post '/applications/:id' => 'applications#update'
             resources :applications, only: [:index, :create] do
@@ -56,7 +50,6 @@ Rails.application.routes.draw do
             end
 
             # session routes
-            post '/sessions/delete' => 'sessions#delete'
             post '/sessions/:id/delete' => 'sessions#delete'
             post '/sessions/:id' => 'sessions#update'
             resources :sessions, only: [:index, :create] do
@@ -68,20 +61,17 @@ Rails.application.routes.draw do
             end
 
             # position_template routes
-            post '/position_templates/delete' => 'position_templates#delete'
             post '/position_templates/:id/delete' => 'position_templates#delete'
             post '/position_templates/:id' => 'position_templates#update'
             resources :position_templates, only: [:index]
             get '/available_position_templates', to: 'position_templates#available'
 
             # reporting_tag routes
-            post '/reporting_tags/delete' => 'reporting_tags#delete'
             post '/reporting_tags/:id/delete' => 'reporting_tags#delete'
             post '/reporting_tags/:id' => 'reporting_tags#update'
             resources :reporting_tags, only: [:index]
 
             # position_preference routes
-            post '/position_preferences/delete' => 'position_preferences#delete'
             post '/position_preferences/:id/delete' => 'position_preferences#delete'
             post '/position_preferences/:id' => 'position_preferences#update'
             resources :position_preferences, only: [:index]

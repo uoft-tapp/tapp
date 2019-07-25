@@ -35,7 +35,7 @@ module Api::V1
             end
         end
 
-        # /applicants/delete or /applicants/:id/delete
+        # POST /applicants/:id/delete
         def delete
             params.require(:id)
             applicant = Applicant.find(params[:id])

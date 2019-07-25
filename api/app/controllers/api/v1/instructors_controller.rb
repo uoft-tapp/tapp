@@ -36,9 +36,8 @@ module Api::V1
             end
         end
 
-        # /instructors/delete or /instructors/:id/delete
+        # POST /instructors/:id/delete
         def delete
-            params.require(:id)
             instructor = Instructor.find(params[:id])
             if instructor.destroy!
                 render_success(instructor)

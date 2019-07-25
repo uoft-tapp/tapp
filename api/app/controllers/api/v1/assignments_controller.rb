@@ -44,9 +44,8 @@ module Api::V1
             end
         end
 
-        # /assignments/delete or /assignments/:id/delete
+        # POST /assignments/:id/delete
         def delete
-            params.require(:id)
             assignment = Assignment.find(params[:id])
             if assignment.destroy!
                 render_success(assignment)

@@ -36,9 +36,8 @@ module Api::V1
             end
         end
 
-        # /wage_chunks/delete or /wage_chunks/:id/delete
+        # POST /wage_chunks/:id/delete
         def delete
-            params.require(:id)
             wage_chunk = WageChunk.find(params[:id])
             if session.destroy!
                 render_success(wage_chunk)

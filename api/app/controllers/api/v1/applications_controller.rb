@@ -49,7 +49,7 @@ module Api::V1
             end
         end
 
-        # /applications/delete or /applications/:id/delete
+        # POST /applications/:id/delete
         def delete
             params.require(:id)
             application = Application.find(params[:id])

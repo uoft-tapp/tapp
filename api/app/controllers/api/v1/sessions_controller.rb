@@ -32,9 +32,8 @@ module Api::V1
             end
         end
 
-        # /sessions/delete or /sessions/:id/delete
+        # POST /sessions/:id/delete
         def delete
-            params.require(:id)
             session = Session.find(params[:id])
             if session.destroy!
                 render_success(session)
