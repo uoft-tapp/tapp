@@ -160,7 +160,7 @@ module Api::V1
         end
 
         def update_instructors_ids(position)
-            if params[:instructor_ids]
+            if params.include?(:instructor_ids)
                 if params[:instructor_ids] == ['']
                     return
                 end
