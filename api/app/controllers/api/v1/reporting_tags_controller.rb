@@ -37,7 +37,7 @@ module Api::V1
         # POST /reporting_tags/:id/delete
         def delete
             reporting_tag = ReportingTag.find(params[:id])
-            if session.destroy!
+            if reporting_tag.destroy!
                 render_success(reporting_tag)
             else
                 render_error(reporting_tag.errors.full_messages.join("; "))

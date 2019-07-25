@@ -39,7 +39,7 @@ module Api::V1
         # POST /wage_chunks/:id/delete
         def delete
             wage_chunk = WageChunk.find(params[:id])
-            if session.destroy!
+            if wage_chunk.destroy!
                 render_success(wage_chunk)
             else
                 render_error(wage_chunk.errors.full_messages.join("; "))
