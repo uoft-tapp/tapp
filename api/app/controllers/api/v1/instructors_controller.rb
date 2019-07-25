@@ -16,13 +16,11 @@ module Api::V1
 
         # POST /instructors AND /add_instructor
         def create
-            if not params.include?(:position_id)
-                instructor = Instructor.new(instructor_params)
-                instructor_create(instructor)
-            else
+            if params.include?(:position_id)
                 position = Position.find(params[:position_id])
-                instructor = position.instructors.new(instructor_params)
-                instructor_create(instructor, true)
+                instructor_create(position)
+            else
+                instructor_create
             end
         end
 
@@ -62,15 +60,20 @@ module Api::V1
             end
         end
 
-        def instructor_create(instructor, filter = false)
-            if filter
-                result = error = instructors_by_position
+        def instructor_create(position = false)
+            instructor = Instructor.new(instructor_params)
+            if position
+                error = instructors_by_position
             else
-                result = instructor
                 error = {}
             end
             if instructor.save # passes Instructor model validation
-                render_success(result)
+                if position
+                    position.instructors.push(instructor)
+                    render_success(instructors_by_position)
+                else
+                    render_success(instructor)
+                end
             else
                 instructor.destroy!
                 render_error(instructor.errors.full_messages.join("; "), error)
