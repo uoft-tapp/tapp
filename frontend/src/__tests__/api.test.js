@@ -326,11 +326,6 @@ function applicationsTests({ apiGET, apiPOST }) {}
 function unknownRouteTests(api = { apiGet, apiPost }) {
     const { apiGet, apiPost } = api;
 
-    it("should succeed GET request with known '/api' routes", async () => {
-        const resp = await apiGET("/sessions");
-        expect(resp).toMatchObject({ status: "success" });
-    });
-
     it("should fail GET request with unknown '/api' routes", async () => {
         const resp = await apiGET("/some_string");
         expect(resp).toMatchObject({ status: "error" });
@@ -366,7 +361,7 @@ describe("API tests", () => {
     describe("`/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
     });
-    describe("`/404` tests", () => {
+    describe("unknown api route tests", () => {
         unknownRouteTests({ apiGET, apiPOST });
     });
 });
