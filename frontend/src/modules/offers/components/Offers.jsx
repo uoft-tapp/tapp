@@ -3,7 +3,7 @@ import React from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { ButtonGroup, Button, Container } from "react-bootstrap";
-import './offers.css';
+import "./offers.css";
 
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
@@ -41,18 +41,12 @@ class Offers extends React.Component {
             <Container fluid>
                 <ButtonGroup>
                     <Button id="import-btn">
-                        <i
-                            className="fa fa-upload"
-                            id="buttontext"
-                        />
+                        <i className="fa fa-upload" id="buttontext" />
                         <br />
                         <small>Export</small>
                     </Button>
                     <Button id="export-btn">
-                        <i
-                            className="fa fa-download"
-                            id="buttontext"
-                        />
+                        <i className="fa fa-download" id="buttontext" />
                         <br />
                         <small>Import</small>
                     </Button>
@@ -65,10 +59,8 @@ class Offers extends React.Component {
                         data={data}
                         className={"positions-table"}
                         noDataText={"No Offers Found"}
-                        SubComponent={({ original }) => {
-                            return (
-                                <div className="ReactTableDiv"> </div>
-                            );
+                        SubComponent={() => {
+                            return <div className="ReactTableDiv"> </div>;
                         }}
                     />
                 </div>
