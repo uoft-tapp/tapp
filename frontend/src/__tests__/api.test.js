@@ -323,6 +323,15 @@ function reportingTagsTests({ apiGET, apiPOST }) {
 // eslint-disable-next-line
 function applicationsTests({ apiGET, apiPOST }) {}
 
+function unknownRouteTests(api = { apiGet, apiPost }) {
+    const { apiGet, apiPost } = api;
+
+    it("should fail GET request with unknown '/api' routes", async () => {
+        const resp = await apiGET("/some_string");
+        expect(resp).toMatchObject({ status: "error" });
+    });
+}
+
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
     describe("`/sessions` tests", () => {
@@ -351,6 +360,9 @@ describe("API tests", () => {
     });
     describe("`/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
+    });
+    describe("unknown api route tests", () => {
+        unknownRouteTests({ apiGET, apiPOST });
     });
 });
 

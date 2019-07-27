@@ -46,8 +46,19 @@ Rails.application.routes.draw do
       post '/email_offer', to: 'offers#email_offer'
       post '/ta/offers/:offer_id/respond_to_offer', to: 'offers#respond'
     end
+
+    # This route makes sure that any requests with URLs of the form '/api/*' 
+    # with no corresponding route gets a 404 instead of the frontend index file.
+    # Redirecting to a specialized 404 route because this route is namespaced and
+    # cannot call actions from the application controller.
+    get '*path', to: redirect('/404')
   end
 
+  # This route returns a 404 error status by throwing a rails routing error.  
+  get '/404', to: 'application#not_found'
+
+  # This matches all routes that do not begin with '/api' and returns the frontend
+  # index file.  The request URL is then given to react router.  
   get '*path', to: "application#index", constraints: ->(request) do
         !request.xhr? && request.format.html?
   end
