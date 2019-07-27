@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
             # wage_chunk routes
             post '/wage_chunks/delete' => 'wage_chunks#delete'
-            resources :wage_chunks, only: [:index] do 
+            resources :wage_chunks, only: [:index, :create] do 
                 post '/add_reporting_tag', to: 'reporting_tags#create'
             end
 
@@ -55,16 +55,16 @@ Rails.application.routes.draw do
 
             # position_template routes
             post '/position_templates/delete' => 'position_templates#delete'
-            resources :position_templates, only: [:index]
+            resources :position_templates, only: [:index, :create]
             get '/available_position_templates', to: 'position_templates#available'
 
             # reporting_tag routes
             post '/reporting_tags/delete' => 'reporting_tags#delete'
-            resources :reporting_tags, only: [:index]
+            resources :reporting_tags, only: [:index, :create]
 
             # position_preference routes
             post '/position_preferences/delete' => 'position_preferences#delete'
-            resources :position_preferences, only: [:index]
+            resources :position_preferences, only: [:index, :create]
 
             # offer routes
             resources :offers, only: [:create]
