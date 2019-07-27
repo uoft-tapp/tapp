@@ -26,7 +26,9 @@ module Api::V1
         def available
             dir = "#{Rails.root}/app/views/position_templates/"
             files = Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
-                entry.gsub(dir, '')
+                {
+                    offer_template: entry.gsub(dir, '')
+                }
             end
             render_success(files)
         end
