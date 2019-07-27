@@ -17,7 +17,7 @@ module Api::V1
         # POST /positions
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && Position.exists?(params[:id])
+            if params.has_key?(:id) and Position.exists?(params[:id])
                 update and return
             end
             params.require([:position_code, :position_title])

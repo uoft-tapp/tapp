@@ -17,7 +17,7 @@ module Api::V1
         # POST /instructors AND /add_instructor
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && Instructor.exists?(params[:id])
+            if params.has_key?(:id) and Instructor.exists?(params[:id])
                 update and return
             end
             if params.include?(:position_id)

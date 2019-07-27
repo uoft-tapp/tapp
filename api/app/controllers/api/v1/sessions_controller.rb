@@ -12,7 +12,7 @@ module Api::V1
         # POST /sessions
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && Session.exists?(params[:id])
+            if params.has_key?(:id) and Session.exists?(params[:id])
                 update and return
             end
             # when creating a new session, a name is required

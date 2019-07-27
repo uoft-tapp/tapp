@@ -12,7 +12,7 @@ module Api::V1
         # POST /add_reporting_tag
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && ReportingTag.exists?(params[:id])
+            if params.has_key?(:id) and ReportingTag.exists?(params[:id])
                 update and return
             end
             params.require([:position_id, :name])

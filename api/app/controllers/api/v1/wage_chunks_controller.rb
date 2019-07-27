@@ -17,7 +17,7 @@ module Api::V1
         # POST /add_wage_chunk
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && WageChunk.exists?(params[:id])
+            if params.has_key?(:id) and WageChunk.exists?(params[:id])
                 update and return
             end
             return if invalid_id(Assignment, :assignment_id, [])

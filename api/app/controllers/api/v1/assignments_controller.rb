@@ -17,7 +17,7 @@ module Api::V1
         # POST /assignments
         def create
             # if we passed in an id that exists, we want to update
-            if params[:id] && Assignment.exists?(params[:id])
+            if params.has_key?(:id) and Assignment.exists?(params[:id])
                 update and return
             end
             params.require(:applicant_id)
