@@ -121,7 +121,9 @@ module FakeData
 
     def create_available_position_template(records)
         dir = "#{Rails.root}/app/views/position_templates/"
-        return "#{dir}#{Faker::Lorem.word}.erb", records
+        return {
+            offer_template: "#{dir}#{Faker::Lorem.word}.html"
+        }, records
     end
 
     def create_position_template(records)
@@ -130,7 +132,7 @@ module FakeData
         template = records[:available_position_templates][idx]
         return {
             position_type: Faker::Lorem.word,
-            offer_template: template,
+            offer_template: template[:offer_template],
             session_index: session_index,
         }, records
     end

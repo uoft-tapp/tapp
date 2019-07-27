@@ -87,7 +87,10 @@ module SeedsHandler
         '''
         templates = request(:get, '/available_position_templates')[:payload]
         json[:position_templates].each do |entry|
-            if not templates.include?(entry[:offer_template])
+            data = {
+                offer_template: entry[:offer_template]
+            }
+            if not templates.include?(data)
                 log.push("Invalid position_template: #{entry[:offer_template]}")
                 return false, log
             end
