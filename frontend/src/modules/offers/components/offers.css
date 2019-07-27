@@ -1,0 +1,11 @@
+.ReactTableDiv {
+  padding-bottom: 50px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  width:auto;
+}
+#buttontext {
+  font-size: 20px;
+}

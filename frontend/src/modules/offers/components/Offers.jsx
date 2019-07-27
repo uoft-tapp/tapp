@@ -3,6 +3,7 @@ import React from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { ButtonGroup, Button, Container } from "react-bootstrap";
+import './offers.css';
 
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
@@ -42,7 +43,7 @@ class Offers extends React.Component {
                     <Button id="import-btn">
                         <i
                             className="fa fa-upload"
-                            style={{ fontSize: "20px" }}
+                            id="buttontext"
                         />
                         <br />
                         <small>Export</small>
@@ -50,13 +51,13 @@ class Offers extends React.Component {
                     <Button id="export-btn">
                         <i
                             className="fa fa-download"
-                            style={{ fontSize: "20px" }}
+                            id="buttontext"
                         />
                         <br />
                         <small>Import</small>
                     </Button>
                 </ButtonGroup>
-                <div style={{ paddingBottom: "50px" }}>
+                <div className="ReactTableDiv">
                     <ReactTable
                         showPagination={false}
                         pageSize={1}
@@ -66,21 +67,7 @@ class Offers extends React.Component {
                         noDataText={"No Offers Found"}
                         SubComponent={({ original }) => {
                             return (
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-                                    <div style={{ flex: "1" }}>
-                                        <label>Qualifications:</label>{" "}
-                                        {original.qualifications}
-                                    </div>
-                                    <div style={{ flex: "1" }}>
-                                        <label>Responsibilities:</label>{" "}
-                                        {original.duties}
-                                    </div>
-                                </div>
+                                <div className="ReactTableDiv"> </div>
                             );
                         }}
                     />
