@@ -10,31 +10,41 @@ module Api::V1
                 render_success(Instructor.order(:id))
                 return
             end
-            if invalid_id(Position, :position_id) then return end
+            return if invalid_id(Position, :position_id)
             render_success(instructors_by_position)
         end
 
-        # POST /add_instructor
+        # POST /instructors AND /add_instructor
         def create
-            position = Position.find(params[:position_id])
-            instructor = position.instructors.new(instructor_params)
-            if instructor.save # passes Instructor model validation
-                render_success(instructors_by_position)
+            # if we passed in an id that exists, we want to update
+            if params.has_key?(:id) and Instructor.exists?(params[:id])
+                update and return
+            end
+            if params.include?(:position_id)
+                position = Position.find(params[:position_id])
+                instructor_create(position)
             else
-                instructor.destroy!
-                render_error(instructor.errors, instructors_by_position)
+                instructor_create
             end
         end
 
-        # PUT/PATCH /instructors/:id
         def update
             instructor = Instructor.find(params[:id])
-            validate_position_ids
-            instructor.position_ids = params[:position_ids] 
             if instructor.update_attributes!(instructor_params)
                 render_success(instructor)
             else
                 render_error(instructor.errors)
+            end
+        end
+
+        # POST /instructors/delete
+        def delete
+            params.require(:id)
+            instructor = Instructor.find(params[:id])
+            if instructor.destroy!
+                render_success(instructor)
+            else
+                render_error(instructor.errors.full_messages.join("; "))
             end
         end
 
@@ -54,10 +64,23 @@ module Api::V1
             end
         end
 
-        def validate_position_ids
-            params.require(:position_ids)
-            params[:position_ids].each do |id|
-                Position.find(id)
+        def instructor_create(position = false)
+            instructor = Instructor.new(instructor_params)
+            if position
+                error = instructors_by_position
+            else
+                error = {}
+            end
+            if instructor.save # passes Instructor model validation
+                if position
+                    position.instructors.push(instructor)
+                    render_success(instructors_by_position)
+                else
+                    render_success(instructor)
+                end
+            else
+                instructor.destroy!
+                render_error(instructor.errors.full_messages.join("; "), error)
             end
         end
     end

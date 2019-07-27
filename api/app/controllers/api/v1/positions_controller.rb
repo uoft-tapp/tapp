@@ -6,39 +6,44 @@ module Api::V1
 
         # GET /positions
         def index
+            if not params.include?(:session_id)
+                render_success(all_positions)
+                return
+            end
+            if invalid_id(Session, :session_id) then return end
             render_success(positions_by_session)
         end
 
         # POST /positions
         def create
-            # if we passed in an id that exists, we want to update the position
-            if params[:id] && Position.exists?(params[:id])
+            # if we passed in an id that exists, we want to update
+            if params.has_key?(:id) and Position.exists?(params[:id])
                 update and return
             end
-
             params.require([:position_code, :position_title])
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             position = Position.new(position_params)
             if not position.save # does not pass Position model validation
                 position.destroy!
                 render_error(position.errors.full_messages.join("; "))
                 return
             end
+            update_instructors_ids(position)
             params[:position_id] = position[:id]
             message = valid_ad_and_matching(position.errors.messages)
             if not message
-                render_success(position)
+                render_success(position_data(position))
             else
                 position.destroy!
                 render_error(message)
             end
         end
 
-        # PUT/PATCH /positions/:id
         def update
             position = Position.find(params[:id])
             ad = position.position_data_for_ad
             matching = position.position_data_for_matching
+            update_instructors_ids(position)
 
             position_res = position.update_attributes!(position_update_params)
             ad_res = ad.update_attributes!(ad_update_params)
@@ -47,20 +52,28 @@ module Api::V1
             errors = position.errors.messages.deep_merge(ad.errors.messages)
             errors = errors.deep_merge(matching.errors.messages)
             if ad_res and position_res and matching_res
-                render_success(position)
+                render_success(position_data(position))
             else
                 render_error(errors)
             end
         end
 
-        # /positions/delete
+        # POST /positions/delete
         def delete
-                position = Position.find(params[:id])
-                if position.destroy!
-                    render_success(position)
-                else
-                    render_error(position.errors.full_messages.join("; "))
-                end
+            params.require(:id)
+            position = Position.find(params[:id])
+            entry = position_data(position)
+            if position
+                matching = position.position_data_for_matching
+                ad = position.position_data_for_ad
+                matching.destroy!
+                ad.destroy!
+            end
+            if position.destroy!
+                render_success(entry)
+            else
+                render_error(position.errors.full_messages.join("; "))
+            end
         end
 
         private
@@ -129,8 +142,36 @@ module Api::V1
         end
 
         def positions_by_session
-            return Position.order(:id).select do |entry|
+            return all_positions.select do |entry|
                 entry[:session_id] == params[:session_id].to_i
+            end
+        end
+
+        def all_positions
+            return Position.order(:id).map do |entry|
+                position_data(entry)
+            end
+        end
+
+        def position_data(position)
+            exclusion = [:id, :created_at, :updated_at, :position_id]
+            matching = position.position_data_for_matching
+            matching = json(matching, except: exclusion)
+            ad = position.position_data_for_ad
+            combined = json(ad, include: matching, except: exclusion)
+            combined = json(combined, include: {instructor_ids: position.instructor_ids})
+            return json(position, include: combined)
+        end
+
+        def update_instructors_ids(position)
+            if params.include?(:instructor_ids)
+                if params[:instructor_ids] == ['']
+                    return
+                end
+                params[:instructor_ids].each do |id|
+                    Instructor.find(id)
+                end
+                position.instructor_ids = params[:instructor_ids]
             end
         end
 

@@ -4,11 +4,20 @@ module Api::V1
     # Controller for PositionPreferences
     class PositionPreferencesController < ApplicationController
 
+        # GET /position_preferences
+        def index
+            render_success(PositionPreference.order(:id))
+        end
+
         # POST /add_preference
         def create
+            # if we passed in an id that exists, we want to update
+            if params.has_key?(:id) and PositionPreference.exists?(params[:id])
+                update and return
+            end
             params.require(:position_id)
-            if invalid_id(Application, :application_id, []) then return end
-            if invalid_id(Position, :position_id, preferences_by_application) then return end
+            return if invalid_id(Application, :application_id, [])
+            return if invalid_id(Position, :position_id, preferences_by_application)
             preference = PositionPreference.new(preference_params)
             if preference.save # passes PositionPreference model validation
                 render_success(preferences_by_application)
@@ -18,13 +27,23 @@ module Api::V1
             end
         end
  
-       # PUT/PATCH /position_preferences/:id
         def update
             position_preference = PositionPreference.find(params[:id])
             if position_preference.update_attributes!(preference_update_params)
                 render_success(position_preference)
             else
                 render_error(position_preference.errors)
+            end
+        end
+
+        # POST /position_preferences/delete
+        def delete
+            params.require(:id)
+            position_preference = PositionPreference.find(params[:id])
+            if position_preference.destroy!
+                render_success(position_preference)
+            else
+                render_error(position_preference.errors.full_messages.join("; "))
             end
         end
 
