@@ -16,6 +16,10 @@ module Api::V1
 
         # POST /instructors AND /add_instructor
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Instructor.exists?(params[:id])
+                update and return
+            end
             if params.include?(:position_id)
                 position = Position.find(params[:position_id])
                 instructor_create(position)
@@ -24,7 +28,6 @@ module Api::V1
             end
         end
 
-        # POST /instructors/:id
         def update
             instructor = Instructor.find(params[:id])
             if instructor.update_attributes!(instructor_params)
@@ -34,8 +37,9 @@ module Api::V1
             end
         end
 
-        # POST /instructors/:id/delete
+        # POST /instructors/delete
         def delete
+            params.require(:id)
             instructor = Instructor.find(params[:id])
             if instructor.destroy!
                 render_success(instructor)

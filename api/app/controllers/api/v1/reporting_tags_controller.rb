@@ -9,8 +9,12 @@ module Api::V1
             render_success(ReportingTag.order(:id))
         end
 
-        # POST /add_reporting_tag and /reporting_tags
+        # POST /add_reporting_tag
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && ReportingTag.exists?(params[:id])
+                update and return
+            end
             params.require([:position_id, :name])
             return if invalid_id(WageChunk, :wage_chunk_id, [])
             return if invalid_id(Position, :position_id, 
@@ -24,7 +28,6 @@ module Api::V1
             end                    
         end
 
-        # POST /reporting_tags/:id
         def update
             reporting_tag = ReportingTag.find(params[:id])
             if reporting_tag.update_attributes!(reporting_tag_update_params)
@@ -34,8 +37,9 @@ module Api::V1
             end
         end
 
-        # POST /reporting_tags/:id/delete
+        # POST /reporting_tags/delete
         def delete
+            params.require(:id)
             reporting_tag = ReportingTag.find(params[:id])
             if reporting_tag.destroy!
                 render_success(reporting_tag)

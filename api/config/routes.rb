@@ -8,13 +8,11 @@ Rails.application.routes.draw do
     namespace :api do
         namespace :v1 do
             # instructor routes
-            post '/instructors/:id/delete' => 'instructors#delete'
-            post '/instructors/:id' => 'instructors#update'
+            post '/instructors/delete' => 'instructors#delete'
             resources :instructors, only: [:index, :create]
 
             # position routes
-            post '/positions/:id/delete' => 'positions#delete'
-            post '/positions/:id' => 'positions#update'
+            post '/positions/delete' => 'positions#delete'
             resources :positions, only: [:index, :create] do
                 resources :instructors, only: [:index]
                 resources :assignments, only: [:index, :create]
@@ -22,13 +20,11 @@ Rails.application.routes.draw do
             end
 
             # applicant routes
-            post '/applicants/:id/delete' => 'applicants#delete'
-            post '/applicants/:id' => 'applicants#update'
+            post '/applicants/delete' => 'applicants#delete'
             resources :applicants, only: [:index, :create]
 
             # assignment routes
-            post '/assignments/:id/delete' => 'assignments#delete'
-            post '/assignments/:id' => 'assignments#update'
+            post '/assignments/delete' => 'assignments#delete'
             resources :assignments, only: [:index, :create] do
                 resources :wage_chunks, only: [:index]
                 post '/add_wage_chunk', to: 'wage_chunks#create'
@@ -36,22 +32,19 @@ Rails.application.routes.draw do
             end
 
             # wage_chunk routes
-            post '/wage_chunks/:id/delete' => 'wage_chunks#delete'
-            post '/wage_chunks/:id' => 'wage_chunks#update'
+            post '/wage_chunks/delete' => 'wage_chunks#delete'
             resources :wage_chunks, only: [:index] do 
                 post '/add_reporting_tag', to: 'reporting_tags#create'
             end
 
             # application routes
-            post '/applications/:id/delete' => 'applications#delete'
-            post '/applications/:id' => 'applications#update'
+            post '/applications/delete' => 'applications#delete'
             resources :applications, only: [:index, :create] do
                 post '/add_preference', to: 'position_preferences#create'
             end
 
             # session routes
-            post '/sessions/:id/delete' => 'sessions#delete'
-            post '/sessions/:id' => 'sessions#update'
+            post '/sessions/delete' => 'sessions#delete'
             resources :sessions, only: [:index, :create] do
                 resources :positions, only: [:index, :create]
                 resources :position_templates, only: [:index]
@@ -61,19 +54,16 @@ Rails.application.routes.draw do
             end
 
             # position_template routes
-            post '/position_templates/:id/delete' => 'position_templates#delete'
-            post '/position_templates/:id' => 'position_templates#update'
+            post '/position_templates/delete' => 'position_templates#delete'
             resources :position_templates, only: [:index]
             get '/available_position_templates', to: 'position_templates#available'
 
             # reporting_tag routes
-            post '/reporting_tags/:id/delete' => 'reporting_tags#delete'
-            post '/reporting_tags/:id' => 'reporting_tags#update'
+            post '/reporting_tags/delete' => 'reporting_tags#delete'
             resources :reporting_tags, only: [:index]
 
             # position_preference routes
-            post '/position_preferences/:id/delete' => 'position_preferences#delete'
-            post '/position_preferences/:id' => 'position_preferences#update'
+            post '/position_preferences/delete' => 'position_preferences#delete'
             resources :position_preferences, only: [:index]
 
             # offer routes

@@ -11,6 +11,10 @@ module Api::V1
 
         # POST /sessions
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Session.exists?(params[:id])
+                update and return
+            end
             # when creating a new session, a name is required
             params.require(:name)
             session = Session.new(session_params)
@@ -22,7 +26,6 @@ module Api::V1
             end
         end
 
-        # POST /sessions/:id
         def update
             session = Session.find(params[:id])
             if session.update_attributes!(session_params)
@@ -32,8 +35,9 @@ module Api::V1
             end
         end
 
-        # POST /sessions/:id/delete
+        # POST /sessions/delete
         def delete
+            params.require(:id)
             session = Session.find(params[:id])
             if session.destroy!
                 render_success(session)

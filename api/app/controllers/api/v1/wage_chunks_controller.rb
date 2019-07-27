@@ -14,8 +14,12 @@ module Api::V1
             render_success(wage_chunks_by_assignment)
         end
 
-        # POST /add_wage_chunk and /wage_chunks
+        # POST /add_wage_chunk
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && WageChunk.exists?(params[:id])
+                update and return
+            end
             return if invalid_id(Assignment, :assignment_id, [])
             wage_chunk = WageChunk.new(wage_chunk_params)
             if wage_chunk.save # passes WageChunk model validation
@@ -26,7 +30,6 @@ module Api::V1
             end
         end
 
-        # POST /wage_chunks/:id
         def update
             wage_chunk = WageChunk.find(params[:id])
             if wage_chunk.update_attributes!(wage_chunk_update_params)
@@ -36,8 +39,9 @@ module Api::V1
             end
         end
 
-        # POST /wage_chunks/:id/delete
+        # POST /wage_chunks/delete
         def delete
+            params.require(:id)
             wage_chunk = WageChunk.find(params[:id])
             if wage_chunk.destroy!
                 render_success(wage_chunk)

@@ -16,6 +16,10 @@ module Api::V1
 
         # POST /applications
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Application.exists?(params[:id])
+                update and return
+            end
             params.require(:applicant_id)
             return if invalid_id(Session, :session_id)
             return if invalid_id(Applicant, :applicant_id)
@@ -35,7 +39,6 @@ module Api::V1
             end
         end
 
-        # POST /applications/:id
         def update
             application = Application.find(params[:id])
             matching = application.applicant_data_for_matching
@@ -49,8 +52,9 @@ module Api::V1
             end
         end
 
-        # POST /applications/:id/delete
+        # POST /applications/delete
         def delete
+            params.require(:id)
             application = Application.find(params[:id])
             entry = application_data(application)
             if application

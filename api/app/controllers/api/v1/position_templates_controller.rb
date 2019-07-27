@@ -14,8 +14,12 @@ module Api::V1
             render_success(position_templates_by_session)
         end
 
-        # POST /add_position_template and /position_templates
+        # POST /add_position_template
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && PositionTemplate.exists?(params[:id])
+                update and return
+            end
             params.require(:offer_template)
             return if invalid_id(Session, :session_id, [])
             position_template = PositionTemplate.new(position_template_params)
@@ -33,7 +37,6 @@ module Api::V1
             render_success(files)
         end
 
-        # POST /position_templates/:id
         def update
             position_template = PositionTemplate.find(params[:id])
             if position_template.update_attributes!(position_template_update_params)
@@ -43,8 +46,9 @@ module Api::V1
             end
         end
 
-        # POST /position_templates/:id/delete
+        # POST /position_templates/delete
         def delete
+            params.require(:id)
             position_template = PostionTemplate.find(params[:id])
             if position_template.destroy!
                 render_success(position_template)

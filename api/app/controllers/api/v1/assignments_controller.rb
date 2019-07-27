@@ -16,6 +16,10 @@ module Api::V1
 
         # POST /assignments
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Assignment.exists?(params[:id])
+                update and return
+            end
             params.require(:applicant_id)
             return if invalid_id(Position, :position_id)
             return if invalid_id(Applicant, :applicant_id)
@@ -34,7 +38,6 @@ module Api::V1
             end
         end
 
-        # POST /assignments/:id
         def update
             assignment = Assignment.find(params[:id])
             if assignment.update_attributes!(assignment_update_params)
@@ -44,8 +47,9 @@ module Api::V1
             end
         end
 
-        # POST /assignments/:id/delete
+        # POST /assignments/delete
         def delete
+            params.require(:id)
             assignment = Assignment.find(params[:id])
             if assignment.destroy!
                 render_success(assignment)

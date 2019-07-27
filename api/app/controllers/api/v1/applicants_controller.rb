@@ -16,6 +16,10 @@ module Api::V1
 
         # POST /applicants
         def create
+            # if we passed in an id that exists, we want to update
+            if params[:id] && Applicant.exists?(params[:id])
+                update and return
+            end
             applicant = Applicant.new(applicant_params)
             if applicant.save # passes Applicant model validation
                 render_success(applicant)
@@ -25,7 +29,6 @@ module Api::V1
             end
         end
 
-        # POST /applicants/:id
         def update
             applicant = Applicant.find(params[:id])
             if applicant.update_attributes!(applicant_params)
@@ -35,7 +38,7 @@ module Api::V1
             end
         end
 
-        # POST /applicants/:id/delete
+        # POST /applicants/delete
         def delete
             params.require(:id)
             applicant = Applicant.find(params[:id])
