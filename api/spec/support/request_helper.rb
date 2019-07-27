@@ -23,10 +23,6 @@ module Requests
                 entry: FactoryBot.create(factory),
             }
             data.keys.each do |item|
-                if item != :index and item != :nested_index
-                    data[item][:route] = data[item][:route].gsub(':id', 
-                        routes[:entry].id.to_s)
-                end
                 routes[item] = data[item]
             end
             return routes
@@ -71,13 +67,13 @@ module Requests
         '''
         def expect_create_new_record(route, params, table)
             expect do
-              post "/api/v1#{route}", valid_attributes, session: valid_session
+                post "/api/v1#{route}", params, session: valid_session
             end.to change(table, :count).by(1)
         end
 
         def expect_no_new_record(route, params, table)
             expect do
-              post "/api/v1#{route}", valid_attributes, session: valid_session
+              post "/api/v1#{route}", params, session: valid_session
             end.to change(table, :count).by(0)
         end
 
@@ -85,7 +81,7 @@ module Requests
             UPDATE related functions
         '''
         def expect_update_record(route, params, record, excluded)
-            expect_put_success(route, params)
+            expect_post_success(route, params)
             record.reload
             result = json
             params.keys.each do |key|
@@ -97,8 +93,10 @@ module Requests
 
         def update_nonexistent_record(table, params)
             non_id = table.last.id + 1
-            put "/api/v1/#{table.to_s.downcase}s/#{non_id}", params, session: valid_session
-            expect_no_record_found(table, non_id)
+            params[:id] = non_id
+            expect do
+                post "/api/v1/#{table.to_s.downcase}s", params, session: valid_session
+            end.to change(table, :count).by(1)
         end
 
         '''
@@ -121,16 +119,6 @@ module Requests
 
         def expect_post_error(route, params, message)
             post "/api/v1#{route}", params, session: valid_session
-            expect_error(message)
-        end
-
-        def expect_put_success(route, params)
-            put "/api/v1#{route}", params, session: valid_session
-            expect_success
-        end
-
-        def expect_put_error(route, params, message)
-            put "/api/v1#{route}", params, session: valid_session
             expect_error(message)
         end
 

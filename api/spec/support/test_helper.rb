@@ -48,7 +48,7 @@ shared_examples "generic update" do
             end
 
             it 'returns a success response' do
-                expect_put_success(
+                expect_post_success(
                     routes[:update][:route], 
                     routes[:update][:params]
                 )

@@ -27,7 +27,7 @@ RSpec.describe Api::V1::PositionsController, type: :api do
                 params: valid_attributes,
             },
             update: {
-                route: '/positions/:id',
+                route: '/positions',
                 params: valid_attributes,
                 exclude: []
             }
@@ -38,10 +38,10 @@ RSpec.describe Api::V1::PositionsController, type: :api do
     describe 'GET /sessions/:session_id/positions' do
     end
 
-    describe 'POST /sessions/:session_id/positions' do
+    describe 'POST /sessions/:session_id/positions (insert)' do
     end
 
-    describe 'PUT /positions/:id' do
+    describe 'POST /positions (update)' do
     end
 
 end

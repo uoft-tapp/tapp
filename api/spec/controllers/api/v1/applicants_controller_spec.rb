@@ -23,9 +23,9 @@ RSpec.describe Api::V1::ApplicantsController, type: :api do
                 params: valid_attributes
             },
             update: {
-                route: '/applicants/:id',
+                route: '/applicants',
                 params: valid_attributes,
-                exclude: []
+                exclude: [:id]
             }
             
         })
@@ -35,11 +35,11 @@ RSpec.describe Api::V1::ApplicantsController, type: :api do
         it_behaves_like "generic index without nesting"
     end
 
-    describe 'POST /applicants' do
+    describe 'POST /applicants (insert)' do
         it_behaves_like "generic create that returns only the created record"
     end
 
-    describe 'PUT /applicants/:id' do
+    describe 'POST /applicants (update)' do
         it_behaves_like "generic update"
     end
 end
