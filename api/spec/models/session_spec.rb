@@ -7,50 +7,13 @@ describe Session do
     FactoryBot.create(:session, :summer)
   end
 
-  it 'should not be valid without a semester' do
-    k = FactoryBot.build(:session, :fall, semester: nil)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  it 'should not be valid with the same name' do
+    skip "To do"
   end
 
-  it 'should not be valid without a year' do
-    k = FactoryBot.build(:session, :fall)
-    k.year = nil
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+  it 'should have only float rates' do
+    skip "To do"
   end
-
-  it 'should not be valid if we have the two session with the same year and semester' do
-    original = FactoryBot.create(:session, :fall)
-    k = FactoryBot.build(:session, :fall, year: original.year)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we have a semester not in the given values' do
-    k = FactoryBot.build(:session, :fall, semester: 40)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we have a year less than 0' do
-    k = FactoryBot.build(:session, :fall, year: -23)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we do not have an integer for year' do
-    k = FactoryBot.build(:session, :fall, year: 2018.1234)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-end
 
 # == Schema Information
 #

@@ -5,25 +5,32 @@ FactoryBot.define do
   sequence(:year, Time.now.year)
 
   factory :session do
-    pay { 20.00 }
-    year # Set it to the sequence
+    transient do
+      year
+    end
 
     trait :fall do
       start_date { Time.new(year, 9, 1) }
       end_date { Time.new(year, 12, 31) }
-      semester { Session.semesters[:fall] }
+      name { "Fall #{year}" }
+      rate1 { 20.00 }
+      rate2 { 20.00 }
     end
 
     trait :winter do
       start_date { Time.new(year, 1, 1) }
       end_date { Time.new(year, 4, 30) }
-      semester { Session.semesters[:winter] }
+      name { "Winter #{year}" }
+      rate1 { 20.00 }
+      rate2 { 20.00 }
     end
 
     trait :summer do
       start_date { Time.new(year, 5, 1) }
       end_date { Time.new(year, 8, 31) }
-      semester { Session.semesters[:summer] }
+      name {"Summer #{year}"}
+      rate1 { 20.00 }
+      rate2 { 20.00 }
     end
   end
 end
