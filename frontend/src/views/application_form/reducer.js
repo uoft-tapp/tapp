@@ -1,4 +1,5 @@
-import { initialFields, UPDATE_FIELD } from "./constants";
+import { initialFields } from "../../components/application-form";
+import { UPDATE_FIELD } from "./constants";
 import { createReducer } from "redux-create-reducer";
 
 // initialize the states of the application form
