@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :applicant_data_for_matching do
-    association :application
-    association :applicant
+    association :application, factory: :application
+    association :applicant, factory: :applicant
 
     program { "Computer Science" }
     department { "Arts and Science" }

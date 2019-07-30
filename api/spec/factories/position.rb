@@ -3,14 +3,19 @@
 FactoryBot.define do
   factory :position do
     association :session, :fall # Have it be fall by default
-    cap_enrolment { 10 }
-    course_code { 'CSC148' }
-    course_name { 'Introduction to Computer Science' }
-    current_enrolment { 20 }
-    duties { 'Do TA stuff' }
-    hours { 400 }
-    num_waitlisted { 50 }
-    openings { 10 }
-    qualifications { 'Do more stuff' }
+    
+    position_code { 'CSC148' }
+    position_title { 'Introduction to Computer Science' }
+    est_hours_per_assignment { 60.00 }
+    est_start_date { Time.now }
+    est_end_date { Time.now + 120.days }
+    position_type { "Some role" }
+    
+    factory :position_with_instructors do
+      after(:build) do |position, evaluator|
+        instructor = FactoryBot.create(:instructor, positions: [position])
+        position.instructors = [instructor]
+      end
+    end
   end
 end

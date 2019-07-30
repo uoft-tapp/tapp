@@ -14,7 +14,7 @@ describe Session do
   it 'should have only float rates' do
     skip "To do"
   end
-
+end
 # == Schema Information
 #
 # Table name: sessions

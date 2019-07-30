@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :application do
-    association :session
+    association :session, factory: :session
     comments {"Hello there"}
   end
 end
