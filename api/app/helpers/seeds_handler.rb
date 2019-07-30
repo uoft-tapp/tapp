@@ -20,24 +20,23 @@ module SeedsHandler
         end
     end
 
-    def read_json(file, log)
+    def read_json(file)
         '''
-        Returns a JSON with the file content and a log containing messages if any
+        Returns a JSON with the file content 
 
         file: located relative to seed_data_dir
-        log: records error messages
         '''
         seed_data_dir = Rails.root.join('db', 'seed')
         file_dir = seed_data_dir+file
         begin
             data = File.read(file_dir)
-            return JSON.parse(data, symbolize_names: true), log
+            return JSON.parse(data, symbolize_names: true)
         rescue Errno::ENOENT => e
-            log.push(e)
-            return {}, log
+            @log.push(e)
+            return {}
         rescue JSON::ParserError 
-            log.push("#{file_dir} is not a valid JSON file.")
-            return {}, log
+            @log.push("#{file_dir} is not a valid JSON file.")
+            return {}
         end
     end
 
@@ -51,37 +50,37 @@ module SeedsHandler
             index_on: an array of attributes that makes an entry unique in a table
         file: JSON file name containg seed data to be inserted
         '''
-        log = []
-        empty_db, log = empty_records(seed_data_sequence, log)
+        @log = []
+        empty_db = empty_records(seed_data_sequence)
         if empty_db
             if file
-                json, log = read_json(file, log)
-                valid_templates, log = check_templates(json, log)
+                json = read_json(file)
+                valid_templates = check_templates(json)
                 if valid_templates
-                    log = post_data(seed_data_sequence, json, log)
+                    post_data(seed_data_sequence, json)
                 end
             else
-                log.push('No JSON file was given.')
+                @log.push('No JSON file was given.')
             end
         end
-        puts log
+        puts @log
     end
  
-    def empty_records(seed_data_sequence, log)
+    def empty_records(seed_data_sequence)
         '''
         Return whether or not the db is empty
         '''
         seed_data_sequence.each do |entry, i|
             res = request(:get, entry[:get])[:payload]
             if res.length > 0
-                log.push('Database has not been cleared.')
-                return false, log
+                @log.push('Database has not been cleared.')
+                return false
             end
         end
-        return true, log
+        return true
     end
 
-    def check_templates(json, log)
+    def check_templates(json)
         '''
         Return whether or not the templates in the JSON file is valid
         '''
@@ -91,16 +90,16 @@ module SeedsHandler
                 offer_template: entry[:offer_template]
             }
             if not templates.include?(data)
-                log.push("Invalid position_template: #{entry[:offer_template]}")
-                return false, log
+                @log.push("Invalid position_template: #{entry[:offer_template]}")
+                return false
             end
         end
-        return true, log
+        return true
     end
 
-    def post_data(seed_data_sequence, json, log)
+    def post_data(seed_data_sequence, json)
         '''
-        Insert json data according to seed_data_sequence and update log appropriately
+        Insert json data according to seed_data_sequence 
         '''
         insert_error = false
         seed_data_sequence.each do |entry|
@@ -126,15 +125,14 @@ module SeedsHandler
             end
             json[key] = table_data
             if errors.length == 0
-                log.push("Insertions/updates to the table #{key} were successful.")
+                @log.push("Insertions/updates to the table #{key} were successful.")
             else
-                log.push("There were errors with the insertion/update to #{key}.")
-                log += errors.map do |entry|
+                @log.push("There were errors with the insertion/update to #{key}.")
+                @log += errors.map do |entry|
                     entry = "\t"+entry
                 end
             end
         end
-        return log
     end
 
     def replace_all_index(json, data)
@@ -239,7 +237,7 @@ module SeedsHandler
         return key.to_s.scan(/(_indexes|_index)/).length > 0
     end
 
-    def generate_mock_data(entries, log)
+    def generate_mock_data(entries)
         '''
         Returns generated mock data given entries, which is a JSON of
         all the tables as keys and the number of mock entry to generate as value
@@ -250,10 +248,10 @@ module SeedsHandler
                 records[key] = []
                 records[key]= generate(records, key, entries[key])
             end
-            return records, log
+            return records
         else
-            log.append('Error: Unspecified number of entries for mock data.')
-            return {}, log
+            @log.append('Error: Unspecified number of entries for mock data.')
+            return {}
         end
     end
 end
