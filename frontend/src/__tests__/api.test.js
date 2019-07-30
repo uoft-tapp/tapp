@@ -471,10 +471,7 @@ function instructorsTests({ apiGET, apiPOST }) {
         };
 
         // create a new instructor
-        const resp1 = await apiPOST(
-            `/instructors`,
-            newInstructorData
-        );
+        const resp1 = await apiPOST(`/instructors`, newInstructorData);
         expect(resp1).toMatchObject({ status: "success" });
         expect(resp1.payload).toMatchObject(newInstructorData);
 
@@ -486,12 +483,12 @@ function instructorsTests({ apiGET, apiPOST }) {
         // set instructor to used by later test
         instructor = resp1.payload;
     });
- 
+
     it("add instrutor to position", async () => {
-        const resp = await apiPOST(
-            `/positions/${position.id}/add_instructor`,
-            { id: instructor.id, position_id: position.id }
-        );
+        const resp = await apiPOST(`/positions/${position.id}/add_instructor`, {
+            id: instructor.id,
+            position_id: position.id
+        });
         expect(resp).toMatchObject({ status: "success" });
         expect(resp.payload).toMatchObject(instructor);
     });
@@ -503,20 +500,14 @@ function instructorsTests({ apiGET, apiPOST }) {
         };
 
         // update the instructor
-        const resp = await apiPOST(
-            `/instructors`,
-            updateInstructorData
-        );
+        const resp = await apiPOST(`/instructors`, updateInstructorData);
         expect(resp).toMatchObject({ status: "success" });
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
     // delete an instructor
     it("delete instructor", async () => {
-        const resp = await apiPOST(
-            `/instructors/delete`,
-            instructor
-        );
+        const resp = await apiPOST(`/instructors/delete`, instructor);
         expect(resp).toMatchObject({ status: "success" });
     });
 }
