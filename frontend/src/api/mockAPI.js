@@ -65,7 +65,9 @@ export class MockAPI {
                 s => s.name === body.name
             );
             if (duplicateSessions.length > 0) {
-                throw new Error(`Session of same name=${body.name} already exists!`);
+                throw new Error(
+                    `Session of same name=${body.name} already exists!`
+                );
             }
             // create new session
             const newId = Math.floor(Math.random() * 1000);
