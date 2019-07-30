@@ -14,6 +14,18 @@ module Api::V1
             render_success(instructors_by_position)
         end
 
+        # GET /session/:id/instructors
+        def instructor_by_session
+            params.require(:session_id)
+            instructors = Instructor.joins(:positions).where(positions: {session_id: id})
+            if instructors.empty?
+                render_error("No instructors associated with this session #{id}")
+                # render_error(instructors.errors)
+            else
+                render_success(instructors)
+            end
+        end
+
         # POST /instructors AND /add_instructor
         def create
             # if we passed in an id that exists, we want to update
@@ -47,7 +59,7 @@ module Api::V1
                 render_error(instructor.errors.full_messages.join("; "))
             end
         end
-
+            
         private
         def instructor_params
           params.permit(

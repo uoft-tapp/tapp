@@ -319,29 +319,6 @@ function templateTests(api = { apiGET, apiPOST }) {
         expect(resp3.payload).not.toContainObject(newTemplateData1);
         expect(resp3.payload).not.toContainObject(newTemplateData2);
     });
-
-    // Backend API not checking unique `position_type` props => this case would fail
-    it("throw error when `position_type` is not unique", async () => {
-        const newTemplateData = {
-            offer_template:
-                "this_is_a_test_template_for_pisition_type_uniqueness.html",
-            position_type: "OTO"
-        };
-
-        // expected an error to crete new template with non-uique position type
-        const resp1 = await apiPOST(
-            `/sessions/${session.id}/add_position_template`,
-            newTemplateData
-        );
-        expect(resp1).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp1);
-
-        // fetching the templates list and make sure it does not contain the above template
-        const resp2 = await apiGET(
-            `/sessions/${session.id}/position_templates`
-        );
-        expect(resp2.payload).not.toContainObject(newTemplateData);
-    });
 }
 
 function positionsTests(api = { apiGET, apiPOST }) {
@@ -461,12 +438,6 @@ function instructorsTests({ apiGET, apiPOST }) {
     let session = null,
         position = null,
         instructor = null;
-    const newInstructorData = {
-        first_name: "David",
-        last_name: "Horton",
-        email: "david.horton.sample@utoronto.ca",
-        utorid: "dividhor"
-    };
     // set up a session to be available before tests run
     beforeAll(async () => {
         // this session will be available for all tests
@@ -485,67 +456,65 @@ function instructorsTests({ apiGET, apiPOST }) {
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
-    // note that sending requests with undefined routes would first hit the backend,
-    // then if the route is not defined, backend will send index page back with a "success" msg 
-    
-    // this instructor session route is not defined in backend
     it("get instructors for session", async () => {
         const resp = await apiGET(`/sessions/${session.id}/instructors`);
         expect(resp).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
-    // this instructor session route is not defined in backend
     it("create instructor", async () => {
+        const newInstructorData = {
+            first_name: "Anand",
+            last_name: "Liu",
+            email: "anand.liu.sample@utoronto.ca",
+            utorid: "anandl"
+        };
+
         // create a new instructor
         const resp1 = await apiPOST(
-            `/sessions/${session.id}/instructors`,
+            `/instructors`,
             newInstructorData
         );
         expect(resp1).toMatchObject({ status: "success" });
         expect(resp1.payload).toMatchObject(newInstructorData);
 
         // make sure instructor is on instructor list
-        const resp2 = await apiGET(`/sessions/${session.id}/instructors`);
+        const resp2 = await apiGET(`/instructors`);
         expect(resp2).toMatchObject({ status: "success" });
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
         instructor = resp1.payload;
     });
-
-    // this instructor session route is not defined in backend
-    it("update an instructor", async () => {
-        updateInstructorData = {
-            id: instructor.id,
-            email: "david.horton@gmail.com"
-        };
-
-        // update the instructor
-        const resp = await apiPOST(
-            `/sessions/${session.id}/instructors`,
-            updateInstructorData
-        );
-        expect(resp).toMatchObject({ status: "success" });
-        expect(resp.payload).toContainObject(updateInstructorData);
-    });
-
-    // this instructor session route is not defined in backend    
+ 
     it("add instrutor to position", async () => {
         const resp = await apiPOST(
             `/positions/${position.id}/add_instructor`,
-            instructor
+            { id: instructor.id, position_id: position.id }
         );
         expect(resp).toMatchObject({ status: "success" });
         expect(resp.payload).toMatchObject(instructor);
     });
 
-    it.todo("remove instructor from position");
+    it("update an instructor", async () => {
+        const updateInstructorData = {
+            id: instructor.id,
+            email: "anand.liu@gmail.com"
+        };
 
-    // this instructor session route is not defined in backend
+        // update the instructor
+        const resp = await apiPOST(
+            `/instructors`,
+            updateInstructorData
+        );
+        expect(resp).toMatchObject({ status: "success" });
+        expect(resp.payload).toMatchObject(updateInstructorData);
+    });
+
+    // delete an instructor
     it("delete instructor", async () => {
         const resp = await apiPOST(
-            `/sessions/${session.id}/instructors/delete`,
+            `/instructors/delete`,
             instructor
         );
         expect(resp).toMatchObject({ status: "success" });

@@ -20,8 +20,12 @@ module Api::V1
             if params.has_key?(:id) and PositionTemplate.exists?(params[:id])
                 update and return
             end
+            
+            # check required parameters not empty
             params.require(:offer_template)
+            params.require(:position_type)
             return if invalid_id(Session, :session_id, [])
+
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index
