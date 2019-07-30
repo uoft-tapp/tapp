@@ -142,8 +142,7 @@ export async function addSession(api, include = { position_templates: true }) {
  * @returns
  */
 export async function deleteSession(api, session) {
-    let resp = {};
-    resp = await api.apiPOST(`/sessions/delete`, session);
+    const resp = await api.apiPOST(`/sessions/delete`, session);
     return resp.payload;
 }
 
@@ -164,13 +163,11 @@ export async function addPosition(api, session) {
         est_end_date: "2018/09/09",
         position_type: "Standard"
     };
-    let resp = {};
-    resp = await api.apiPOST(
+    const resp = await api.apiPOST(
         `/sessions/${session.id}/positions`,
         newPositionData
     );
-    const position = resp.payload;
-    return position;
+    return resp.payload;
 }
 
 /**
@@ -182,8 +179,7 @@ export async function addPosition(api, session) {
  * @returns
  */
 export async function deletePosition(api, position) {
-    let resp = {};
-    resp = await api.apiPOST(`/positions/delete`, position);
+    const resp = await api.apiPOST(`/positions/delete`, position);
     return resp.payload;
 }
 

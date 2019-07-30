@@ -20,7 +20,6 @@ module Api::V1
             instructors = Instructor.joins(:positions).where(positions: {session_id: id})
             if instructors.empty?
                 render_error("No instructors associated with this session #{id}")
-                # render_error(instructors.errors)
             else
                 render_success(instructors)
             end
@@ -57,6 +56,29 @@ module Api::V1
                 render_success(instructor)
             else
                 render_error(instructor.errors.full_messages.join("; "))
+            end
+        end
+
+        # POST /session/:id/instructors/delete
+        def delete_instructor_by_session
+            # delete an instructor from session is essentially remove 
+            # the instructor from the all positions of that session
+            params.require(:id)
+            params.require(:session_id)
+            instructor = Instructor.find(params[:id])
+            instructor.positions.each do |position|
+                if position.session_id == params[:session_id]
+                    position.instructors = position.instructors.except(params[:id])
+                    position.save!
+                end
+            end
+            instructor.positions = instructor.positions.except(
+                instructor.positions.select { |x| x.session_id == params[:session_id] } 
+            )
+            if instructor.save!
+                render_success(instructor)
+            else 
+                render_error(instructor.errors)
             end
         end
             
