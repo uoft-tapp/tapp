@@ -41,24 +41,24 @@ module SeedsHandler
         end
     end
 
-    def insert_data(chaining, file)
+    def insert_data(seed_data_sequence, file)
         '''
-        Inserts JSON mock data into the routes defined in chaining.
+        Inserts JSON mock data into the routes defined in seed_data_sequence.
 
-        chaining: an array with JSON as elements. Each element contains
+        seed_data_sequence: an array with JSON as elements. Each element contains
             get: route to get all entries for a table
             create: route to create an entry in a specific table
-            unique: an array of attributes that makes an entry unique in a table
+            index_on: an array of attributes that makes an entry unique in a table
         file: JSON file name containg seed data to be inserted
         '''
         log = []
-        empty_db, log = empty_records(chaining, log)
+        empty_db, log = empty_records(seed_data_sequence, log)
         if empty_db
             if file
                 json, log = read_json(file, log)
                 valid_templates, log = check_templates(json, log)
                 if valid_templates
-                    log = post_data(chaining, json, log)
+                    log = post_data(seed_data_sequence, json, log)
                 end
             else
                 log.push('No JSON file was given.')
@@ -67,11 +67,11 @@ module SeedsHandler
         puts log
     end
  
-    def empty_records(chaining, log)
+    def empty_records(seed_data_sequence, log)
         '''
         Return whether or not the db is empty
         '''
-        chaining.each do |entry, i|
+        seed_data_sequence.each do |entry, i|
             res = request(:get, entry[:get])[:payload]
             if res.length > 0
                 log.push('Database has not been cleared.')
@@ -98,12 +98,12 @@ module SeedsHandler
         return true, log
     end
 
-    def post_data(chaining, json, log)
+    def post_data(seed_data_sequence, json, log)
         '''
-        Insert json data according to chaining and update log appropriately
+        Insert json data according to seed_data_sequence and update log appropriately
         '''
         insert_error = false
-        chaining.each do |entry|
+        seed_data_sequence.each do |entry|
             break if insert_error
             key = entry[:label]
             table_data, errors = [], []
@@ -113,7 +113,7 @@ module SeedsHandler
                 res = request(:post, route, data)
                 if res[:status] == 'success'
                     if array_result(route)
-                        table_data.push(get_entry(data, res[:payload], entry[:unique]))
+                        table_data.push(get_entry(data, res[:payload], entry[:index_on]))
                     else
                         table_data.push(res[:payload])
                     end
@@ -181,25 +181,25 @@ module SeedsHandler
         return route
     end
 
-    def get_entry(data, result, unique)
+    def get_entry(data, result, index_on)
         '''
         data: body input for the POST /add_* route
         result: payload value from a successful POST /add_* route
-        unique: array of attributes that can serve as a key for entries
+        index_on: array of attributes that can serve as a key for entries
             in a table
         '''
         result.each do |entry|
-            if match_all_unique_keys(data, entry, unique)
+            if match_all_unique_keys(data, entry, index_on)
                 return entry
             end
         end
     end
 
-    def match_all_unique_keys(data, entry, unique)
+    def match_all_unique_keys(data, entry, index_on)
         '''
-        Returns whether all unique attributes in data matches entry
+        Returns whether all index_on attributes in data matches entry
         '''
-        unique.each do |key|
+        index_on.each do |key|
             if is_index(key)
                 key = id_name(key)
             end

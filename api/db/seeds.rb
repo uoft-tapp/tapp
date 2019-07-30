@@ -5,56 +5,56 @@
 # database with db:setup). For testing purpose, use db:reset to reload all the table.
 include SeedsHandler
 
-chaining = [
+seed_data_sequence = [
     {
         get: '/sessions',
         create: '/sessions',
-        unique: [:name]
+        index_on: [:name]
     },
     {
         get: '/position_templates',
         create: '/sessions/:session_id/add_position_template',
-        unique: [:session_index, :position_type]
+        index_on: [:session_index, :position_type]
     },
     {
         get: '/instructors',
         create: '/instructors',
-        unique: [:utorid]
+        index_on: [:utorid]
     },
     {
         get: '/positions',
         create: '/sessions/:session_id/positions',
-        unique: [:session_index, :position_code]
+        index_on: [:session_index, :position_code]
     },
     {
         get: '/applicants',
         create: '/applicants',
-        unique: [:utorid]
+        index_on: [:utorid]
     },
     {
         get: '/applications',
         create: '/sessions/:session_id/applications',
-        unique: [:session_index, :applicant_index]
+        index_on: [:session_index, :applicant_index]
     },
     {
         get: '/position_preferences',
         create: '/applications/:application_id/add_preference',
-        unique: [:application_index, :position_index]
+        index_on: [:application_index, :position_index]
     },
     {
         get: '/assignments',
         create: '/positions/:position_id/assignments',
-        unique: [:position_index]
+        index_on: [:position_index]
     },
     {
         get: '/wage_chunks',
         create: '/assignments/:assignment_id/add_wage_chunk',
-        unique: [:assignment_index]
+        index_on: [:assignment_index]
     },
     {
         get: '/reporting_tags',
         create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
-        unique: [:wage_chunk_index]
+        index_on: [:wage_chunk_index]
     }
 ]
 entries = {
@@ -71,4 +71,4 @@ entries = {
     reporting_tags: 5,
 }
 
-insert_data(chaining, 'mock_data.json')
+insert_data(seed_data_sequence, 'mock_data.json')
