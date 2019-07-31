@@ -2,18 +2,21 @@ import React from 'react';
 import { PositionsList } from "../../components/positions-list";
 import { connect } from "react-redux";
 import { positionsSelector } from "../../api/actions";
+import { ConnectedSessionSelect } from "../utils"
 
 
-function ControlPanel() {
-  const ConnectedPositionsList = connect(state => ({
-    positions: positionsSelector(state)
-  }))(PositionsList);
+class ControlPanel extends React.Component {
 
-  return (
-    <div>
-      <ConnectedPositionsList></ConnectedPositionsList>
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <ConnectedSessionSelect/>
+        <PositionsList positions={this.props.positions}/>
+      </div>
+    );
+  }
 }
 
-export default ControlPanel;
+
+
+export default connect(state => ({positions: positionsSelector(state)}))(ControlPanel);
