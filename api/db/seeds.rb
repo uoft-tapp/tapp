@@ -3,65 +3,72 @@
 # Seed data is contained in the json files under seed folder. This file serves as the script of 
 # pasing json file and create tables from the parsed data. The data can then be loaded with the rails db:seed command (or created alongside the
 # database with db:setup). For testing purpose, use db:reset to reload all the table.
+include SeedsHandler
 
-seed_data_dir = Rails.root.join('db', 'seed')
+seed_data_sequence = [
+    {
+        get: '/sessions',
+        create: '/sessions',
+        index_on: [:name]
+    },
+    {
+        get: '/position_templates',
+        create: '/sessions/:session_id/add_position_template',
+        index_on: [:session_index, :position_type]
+    },
+    {
+        get: '/instructors',
+        create: '/instructors',
+        index_on: [:utorid]
+    },
+    {
+        get: '/positions',
+        create: '/sessions/:session_id/positions',
+        index_on: [:session_index, :position_code]
+    },
+    {
+        get: '/applicants',
+        create: '/applicants',
+        index_on: [:utorid]
+    },
+    {
+        get: '/applications',
+        create: '/sessions/:session_id/applications',
+        index_on: [:session_index, :applicant_index]
+    },
+    {
+        get: '/position_preferences',
+        create: '/applications/:application_id/add_preference',
+        index_on: [:application_index, :position_index]
+    },
+    {
+        get: '/assignments',
+        create: '/positions/:position_id/assignments',
+        index_on: [:position_index]
+    },
+    {
+        get: '/wage_chunks',
+        create: '/assignments/:assignment_id/add_wage_chunk',
+        index_on: [:assignment_index]
+    },
+    {
+        get: '/reporting_tags',
+        create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
+        index_on: [:wage_chunk_index]
+    }
+]
+entries = {
+    available_position_templates: 5,
+    sessions: 3,
+    position_templates: 5,
+    instructors: 10,
+    positions: 40,
+    applicants: 10,
+    applications: 15,
+    position_preferences: 20,
+    assignments: 5,
+    wage_chunks: 5,
+    reporting_tags: 5,
+}
 
-# applicants
-data = File.read("#{seed_data_dir}/applicant.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("applicant")
-applicants = json_data.map do |row|
-  Applicant.create!(row.with_indifferent_access)
-end
-
-# sessions
-data = File.read("#{seed_data_dir}/session.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("session")
-sessions = json_data.map do |row|
-  Session.create!(row.with_indifferent_access)
-end
-
-# positions
-data = File.read("#{seed_data_dir}/position.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("position")
-positions = json_data.map do |row|
-  s = sessions[row["session_index"]]
-  row = row.except("session_index").merge(session: s)
-  Position.create!(row.with_indifferent_access)
-end
-
-# preference
-data = File.read("#{seed_data_dir}/preference.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("preference")
-preference = json_data.map do |row|
-  a = applicants[row["applicant_index"]]
-  p = positions[row["position_index"]]
-  row = row.except("applicant_index").merge(applicant: a)
-  row = row.except("position_index").merge(position: p)
-  Preference.create!(row.with_indifferent_access)
-end
-
-# instructors
-data = File.read("#{seed_data_dir}/instructor.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("instructor")
-instructors = json_data.map do |row|
-  position_indexes = row["position_index"]
-  row = row.except("position_index")
-  i = Instructor.create!(row.with_indifferent_access)
-  position_indexes.each do |p|
-    i.positions << positions[p]
-    i.save
-  end
-end
-
-# users
-data = File.read("#{seed_data_dir}/user.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("user")
-users = json_data.map do |row|
-  User.create!(row.with_indifferent_access)
-end
+insert_data(seed_data_sequence, 'mock_data.json')
