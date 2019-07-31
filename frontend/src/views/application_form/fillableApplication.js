@@ -2,14 +2,15 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { updateField, createNewApplication } from "./actions";
-import { 
+import {
     DefaultInput,
     TextboxInput,
     BinaryRadioInput,
     personalInformationFields,
     currentProgramInformationFields,
     currentStatusFields,
-    customQuestions } from "../../components/application-form";
+    customQuestions
+} from "../../components/application-form";
 
 class ApplicationForm extends React.Component {
     // dispatches a redux action to update the store
