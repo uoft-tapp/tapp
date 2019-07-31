@@ -5,23 +5,67 @@ module FakeData
         if not gen_entry_fn 
             return entries
         end
-        (0..num_entries).each do |i|
+        (1..num_entries).each do |i|
             data, records = gen_entry_fn.call(records)
+            while existing_entry(entries, data, entry)
+                data, records = gen_entry_fn.call(records)
+            end
             entries.push(data)
         end
         return entries
     end
 
     private
+    def existing_entry(entries, data, type)
+        entries.each do |item|
+            if matching_entry(type, data, item)
+                return true
+            end
+        end
+        return false
+    end
+
+    def matching_entry(type, data, item)
+        index_on(type).each do |key|
+            if item[key] != data[key]
+                return false
+            end
+        end
+        return true
+    end
+
+    def index_on(entry)
+        case entry
+        when :sessions
+            return [:name]
+        when :position_templates
+            return [:session_index, :position_type]
+        when :positions
+            return [:session_index, :position_code]
+        when :instructors
+            return [:utorid]
+        when :applicants
+            return [:utorid]
+        when :applications
+            return [:session_index, :applicant_index]
+        when :preferences
+            return [:application_index, :position_index]
+        when :assignments
+            return [:position_index, :applicant_index]
+        when :wage_chunks
+            return [:assignment_index]
+        when :reporting_tags
+            return [:wage_chunk_index]
+        else
+            return []
+        end
+    end
+
     def generate_fn(entry)
         case entry
         when :sessions
             return Proc.new do |records|
                 create_session(records)
-            end
-        when :available_position_templates
-            return Proc.new do |records|
-                create_available_position_template(records)
             end
         when :position_templates
             return Proc.new do |records|
@@ -110,23 +154,18 @@ module FakeData
         end
     end
 
-    def existing_session(records, new_session)
-        records[:sessions].each do |entry|
-            if entry[:name] == new_session[:name]
-                return true
-            end
-        end
-        return false
-    end
-
-    def create_available_position_template(records)
-        dir = "#{Rails.root}/app/views/position_templates/"
-        return {
-            offer_template: "#{dir}#{Faker::Lorem.word}.html"
-        }, records
+    def available_position_templates
+        env = { method: :get }
+        mock_session = Rack::MockSession.new(Rails.application)
+        session = Rack::Test::Session.new(mock_session)
+        session.request('/api/v1/available_position_templates', env)
+        return JSON.parse(mock_session.last_response.body, symbolize_names: true)[:payload]
     end
 
     def create_position_template(records)
+        if not records.include?(:available_position_templates)
+            records[:available_position_templates] = available_position_templates
+        end
         session_index = rand_index(records, :sessions)
         idx = rand_index(records, :available_position_templates)
         template = records[:available_position_templates][idx]
