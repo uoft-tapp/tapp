@@ -33,7 +33,14 @@ export class CustomTable extends React.Component {
 
     filterMethod = (filter, row) => {
         let value = row[filter.id].toString().toLowerCase();
-        return value && value.indexOf(filter.value.toLowerCase()) !== -1;
+        let filterValue = filter.value.toLowerCase();
+        if (filterValue.includes(" ")) {
+            return filterValue
+                .split(" ")
+                .every(f => value && value.indexOf(f.toLowerCase()) !== -1);
+        } else {
+            return value && value.indexOf(filterValue) !== -1;
+        }
     };
 
     /**
@@ -126,6 +133,10 @@ export class CustomTable extends React.Component {
                 toggleAll={this.toggleAll}
                 isSelected={this.isSelected}
                 getTrProps={this.rowFn}
+                defaultPageSize={20}
+                style={{
+                    height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
+                }}
             />
         );
     }

@@ -102,6 +102,36 @@ const DATA = [
         first_time_ta: false,
         status: "Pending",
         nag_count: 2
+    },
+    {
+        id: 4,
+        first_name: "George",
+        last_name: "Wu",
+        email: "george.wu@mail.utoronto.ca",
+        position_title: "Teaching Assistant",
+        first_time_ta: false,
+        status: "Withdraw",
+        nag_count: 4
+    },
+    {
+        id: 5,
+        first_name: "Zane",
+        last_name: "Huang",
+        email: "zane.huang@mail.utoronto.ca",
+        position_title: "Research Assistant",
+        first_time_ta: true,
+        status: "Accepted",
+        nag_count: 1
+    },
+    {
+        id: 6,
+        first_name: "Michelle",
+        last_name: "Chai",
+        email: "michelle.chai@mail.utoronto.ca",
+        position_title: "Research Assistant",
+        first_time_ta: true,
+        status: "Accepted",
+        nag_count: 1
     }
 ];
 
