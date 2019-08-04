@@ -18,6 +18,7 @@ import { InstructorsList } from "../../components/instructors-list";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
+import { CustomTable } from "../../components/custom-table";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -55,6 +56,54 @@ const ConnectedAssignmentsList = connect(state => ({
 const ConnectedSearchBox = connect(state => ({
     data: applicantsSelector(state)
 }))(SearchBox);
+
+const COLUMNS = [
+    { Header: "First Name", accessor: "first_name", width: 100 },
+    { Header: "Last Name", accessor: "last_name", width: 100 },
+    { Header: "Email", accessor: "email", width: 250 },
+    { Header: "Position title", accessor: "position_title", width: 130 },
+    {
+        Header: "First Time?",
+        accessor: "first_time_ta",
+        Cell: props => <span>{props.value.toString().toUpperCase()}</span>,
+        width: 100
+    }, // boolean
+    { Header: "Status", accessor: "status", width: 100 },
+    { Header: "Nag Count", accessor: "nag_count", width: 100 }
+];
+
+const DATA = [
+    {
+        id: 1,
+        first_name: "Simon",
+        last_name: "Aayani",
+        email: "simon.aayani@mail.utoronto.ca",
+        position_title: "Teaching Assistant",
+        first_time_ta: true,
+        status: "Rejected",
+        nag_count: 1
+    },
+    {
+        id: 2,
+        first_name: "Danny",
+        last_name: "Liu",
+        email: "danny.liu@mail.utoronto.ca",
+        position_title: "Teaching Assistant",
+        first_time_ta: false,
+        status: "Accepted",
+        nag_count: 1
+    },
+    {
+        id: 3,
+        first_name: "Jiahuang",
+        last_name: "Lin",
+        email: "jacob.lin@mail.utoronto.ca",
+        position_title: "Teaching Assistant",
+        first_time_ta: false,
+        status: "Pending",
+        nag_count: 2
+    }
+];
 
 /**
  * Encapsulate a react component in a frame.
@@ -108,6 +157,9 @@ function Dashboard() {
             </DashboardWidget>
             <DashboardWidget title="SearchBox">
                 <ConnectedSearchBox />
+            </DashboardWidget>
+            <DashboardWidget title="OfferTable">
+                <CustomTable data={DATA} columns={COLUMNS} keyField="id" />
             </DashboardWidget>
         </div>
     );
