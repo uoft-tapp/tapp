@@ -9,7 +9,7 @@ import Summary from "./modules/tapp_summary/components/Summary";
 import ApplicationForm from "./modules/application/components/ApplicationForm";
 import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
 import Dashboard from "./views/dashboard";
-import ControlPanel from "./views/cp_control_panel/control-panel"
+import ControlPanel from "./views/cp_control_panel/ControlPanel"
 export const openRoutes = [
     {
         path: "/",
@@ -56,7 +56,7 @@ export const openRoutes = [
         component: PositionsApplied
     },
     {
-        path: "/control_panel",
+        path: "/cp/control_panel",
         component: ControlPanel
     }
 ];

@@ -31,7 +31,11 @@ const TappNavItems = () => (
     </Nav>
 );
 
-const CpNavItems = () => <Nav className="mr-auto" />;
+const CpNavItems = () => (
+    <Nav className="mr-auto" >
+        <CustomNavItem href="/cp/control_panel">Control Panel</CustomNavItem>
+    </Nav>
+);
 
 class Header extends React.Component {
     render() {
