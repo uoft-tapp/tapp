@@ -5,8 +5,8 @@ import {
     setActiveSession,
     sessionsSelector,
     activeSessionSelector
-} from "../api/actions";
-import { SessionSelect } from "../components/session-select";
+} from "../../api/actions";
+import { SessionSelect } from "../../components/session-select";
 
 let mapStateToProps = state => {
     return {
