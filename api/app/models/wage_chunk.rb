@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-
 # A class representing a wage chunk for an assignment.
 class WageChunk < ApplicationRecord
-	has_many :reporting_tags
-	belongs_to :assignment
-	validates :hours, numericality: {only_float: true}, allow_nil: true
-	validates :rate, numericality: {only_float: true}, allow_nil: true
+  has_many :reporting_tags
+  belongs_to :assignment
+  validates :hours, numericality: { only_float: true }, allow_nil: true
+  validates :rate, numericality: { only_float: true }, allow_nil: true
 end
 
 # == Schema Information

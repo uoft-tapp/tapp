@@ -2,10 +2,10 @@
 
 # A class representing the matching portion of a position data.
 class PositionDataForMatching < ApplicationRecord
-	belongs_to :position
-	validates :current_enrollment, numericality: true, allow_nil: true
-	validates :current_waitlisted, numericality: true, allow_nil: true
-	validates :desired_num_assignments, numericality: true, allow_nil: true
+  belongs_to :position
+  validates :current_enrollment, numericality: true, allow_nil: true
+  validates :current_waitlisted, numericality: true, allow_nil: true
+  validates :desired_num_assignments, numericality: true, allow_nil: true
 end
 
 # == Schema Information

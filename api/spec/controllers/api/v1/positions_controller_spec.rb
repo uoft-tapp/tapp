@@ -19,7 +19,7 @@ RSpec.describe Api::V1::PositionsController, type: :api do
     {
       "openings": -10,
       "session_id": session.id,
-      "course_code": 'CSC108H1F',
+      "course_code": 'CSC108H1F'
     }
   end
 

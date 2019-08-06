@@ -11,7 +11,7 @@ RSpec.describe Api::V1::ApplicantsController, type: :api do
       "last_name": 'Loblaw',
       "first_name": 'Bob',
       "utorid": 'blahblah1',
-      "student_number": 1111222333,
+      "student_number": 1_111_222_333,
       "email": 'bobloblaw@mail.utoronto.ca'
     }
   end
@@ -63,5 +63,4 @@ RSpec.describe Api::V1::ApplicantsController, type: :api do
       end
     end
   end
-
 end
