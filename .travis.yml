@@ -25,7 +25,7 @@ matrix:
         - docker
       before_script:
         - cp dev.env .env
-        - docker-compose up --build -d
+        - docker-compose up --build -d api
         - docker ps -a
       script:
         - ./tests/run-ruby-linting-tests.sh

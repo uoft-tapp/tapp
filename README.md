@@ -6,6 +6,14 @@ TA application, assignment, and matching.
 <summary>If you would like to contribute to the project, we ask that you follow the following conventions.</summary>
 <p>
 
+## Travis CI
+We use Travis CI for our continuous integration pipeline. As of right now, we have 3 tests that should pass:
+```
+1. Yarn linting tests for our front end
+2. Rubocop linting tests for our back end
+3. Frontend unit tests
+```
+
 ### Issues
 
 **Scope** 
@@ -313,3 +321,18 @@ To resolve this issue, halt the docker-compose command (killing the other contai
 You can resolve this by using `docker containers ls -a`, finding all
 deactivated containers, and then removing them with `docker container rm
 [container ID]`. Then, you should be able to run `./start_local.sh`
+
+3. Travis CI fails to execute a script.
+
+This issue usually comes up when adding a new executable script on travis. Your
+build fails because the script is `permission denied`. To resolve this, you
+must check in the file with executable permissions.
+
+For example, say `build.sh` is unable to execute. To fix this, you must do:
+```
+git update-index --add --chmod=+x build.sh
+git commit -m "Make build.sh executable"
+git push
+```
+
+This should resolve the issue
