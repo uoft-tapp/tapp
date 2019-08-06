@@ -19,6 +19,21 @@ matrix:
         # allow these tests to fail for now...
         - ./tests/run-formatting-tests.sh
 
+    - name: "Ruby Formatting Tests"
+      language: ruby
+      services:
+        - docker
+      before_script:
+        - cp dev.env .env
+        - docker-compose up --build -d
+        - docker ps -a
+      script:
+        - rubocop
+      after_failure:
+        - docker-compose logs
+      after_script:
+        - docker-compose down
+
     # run the development build and test suites
     - name: "Unit Tests"
       language: ruby
