@@ -28,7 +28,7 @@ matrix:
         - docker-compose up --build -d
         - docker ps -a
       script:
-        - rubocop
+        - ./tests/run-ruby-linting-tests.sh
       after_failure:
         - docker-compose logs
       after_script:
