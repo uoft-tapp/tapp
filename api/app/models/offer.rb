@@ -38,4 +38,5 @@ end
 # Indexes
 #
 #  index_offers_on_assignment_id  (assignment_id)
-#
+# Offer.create({assignment_id: 1, first_name: "Simon",last_name: "Aayani",email: "simon.aayani@mail.utoronto.ca",position_title: "Teaching Assistant",position_start_date: Date(),position_end_date: Date(),first_time_ta: "True",status: "Pending",nag_count: 1})
+# Offer.create({assignment_id: 1, first_name: "Simon",last_name: "Aayani",email: "simon.aayani@mail.utoronto.ca",position_title: "Teaching Assistant",first_time_ta: "True",nag_count: 1})

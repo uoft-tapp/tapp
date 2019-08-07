@@ -15,7 +15,8 @@ import {
     applicationsReducer,
     assignmentsReducer,
     instructorsReducer,
-    positionTemplatesReducer
+    positionTemplatesReducer,
+    offersReducer
 } from "./api/reducers";
 
 // When `combineReducers` is used,
@@ -38,7 +39,8 @@ const reducer = combineReducers({
         applications: applicationsReducer,
         assignments: assignmentsReducer,
         instructors: instructorsReducer,
-        positionTemplates: positionTemplatesReducer
+        positionTemplates: positionTemplatesReducer,
+        offers: offersReducer
     }),
     ui: combineReducers({
         notifications: notificationReducer,

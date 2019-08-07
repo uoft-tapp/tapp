@@ -5,25 +5,28 @@ export class OffersList extends React.Component {
     static propTypes = {
         offers: PropTypes.arrayOf(
             PropTypes.shape({
-                offers_id: PropTypes.string
+                first_name: PropTypes.string,
+                assignment_id: PropTypes.integer
             })
         ).isRequired
     };
     render() {
         const { offers } = this.props;
-        let offersList = <div>No offers...</div>;
-        if (offersList.length > 0) {
+        let offersList = <div>No Offers...</div>;
+        if (offers.length > 0) {
             offersList = (
                 <ul>
-                    {offers.map(offers => (
-                        <li key={offers.id}>Offer ID#: {offers.offers_id}</li>
+                    {offers.map(offer => (
+                        <li key={offer.id}>
+                            Offer ID#: {offer.id} Belongs to Assignment ID# {offer.assignment_id}, First Name: {offer.first_name}
+                        </li>
                     ))}
                 </ul>
             );
         }
         return (
             <div>
-                <h3>Available offers</h3>
+                <h3>All Offers</h3>
                 {offersList}
             </div>
         );
