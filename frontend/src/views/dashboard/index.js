@@ -57,6 +57,10 @@ const ConnectedSearchBox = connect(state => ({
     data: applicantsSelector(state)
 }))(SearchBox);
 
+const ConnectedOfferTable = connect(state => ({
+    data: state.ui.offerTable
+}))(CustomTable);
+
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
     { Header: "Last Name", accessor: "last_name", width: 100 },
@@ -67,6 +71,9 @@ const COLUMNS = [
         accessor: "first_time_ta",
         Cell: props => <span>{props.value.toString().toUpperCase()}</span>,
         width: 100
+        // filterMethod: (filter, row) =>
+        //             row[filter.id].startsWith(filter.value) &&
+        //             row[filter.id].endsWith(filter.value)
     }, // boolean
     { Header: "Status", accessor: "status", width: 100 },
     { Header: "Nag Count", accessor: "nag_count", width: 100 }

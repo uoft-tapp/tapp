@@ -26,18 +26,21 @@ export class CustomTable extends React.Component {
         this.state = {
             keyField: "id",
             data: this.props.data,
-            selection: [],
+            selectedRows: [],
             selectAll: false
         };
     }
 
     filterMethod = (filter, row) => {
+        // filter.id is the column name
+        console.log(filter);
+
         let value = row[filter.id].toString().toLowerCase();
         let filterValue = filter.value.toLowerCase();
         if (filterValue.includes(" ")) {
             return filterValue
                 .split(" ")
-                .every(f => value && value.indexOf(f.toLowerCase()) !== -1);
+                .every(f => value && value.indexOf(f) !== -1);
         } else {
             return value && value.indexOf(filterValue) !== -1;
         }
@@ -48,22 +51,22 @@ export class CustomTable extends React.Component {
      */
     toggleSelection = (key, shift, row) => {
         // start off with the existing state
-        let selection = [...this.state.selection];
-        const keyIndex = selection.indexOf(key);
+        let selectedRows = [...this.state.selectedRows];
+        const keyIndex = selectedRows.indexOf(key);
 
         // check to see if the key exists
         if (keyIndex >= 0) {
             // it does exist so we will remove it using destructing
-            selection = [
-                ...selection.slice(0, keyIndex),
-                ...selection.slice(keyIndex + 1)
+            selectedRows = [
+                ...selectedRows.slice(0, keyIndex),
+                ...selectedRows.slice(keyIndex + 1)
             ];
         } else {
             // it does not exist so add it
-            selection.push(key);
+            selectedRows.push(key);
         }
         // update the state
-        this.setState({ selection });
+        this.setState({ selectedRows });
     };
 
     /**
@@ -72,7 +75,7 @@ export class CustomTable extends React.Component {
     toggleAll = () => {
         const { keyField } = this.props;
         const selectAll = !this.state.selectAll;
-        const selection = [];
+        const selectedRows = [];
 
         if (selectAll) {
             // we need to get at the internals of ReactTable
@@ -80,23 +83,23 @@ export class CustomTable extends React.Component {
             // the 'sortedData' property contains the currently accessible records based on the filter and sort
             const currentRecords = wrappedInstance.getResolvedState()
                 .sortedData;
-            // we just push all the IDs onto the selection array
+            // we just push all the IDs onto the selectedRows array
             currentRecords.forEach(item => {
-                selection.push(`select-${item._original[keyField]}`);
+                selectedRows.push(`select-${item._original[keyField]}`);
             });
         }
-        this.setState({ selectAll, selection });
+        this.setState({ selectAll, selectedRows });
     };
 
     /**
      * Whether or not a row is selected for select table
      */
     isSelected = k => {
-        return this.state.selection.includes(`select-${k}`);
+        return this.state.selectedRows.includes(`select-${k}`);
     };
 
     rowFn = (state, rowInfo, column, instance) => {
-        const { selection } = this.state;
+        const { selectedRows } = this.state;
 
         return {
             onClick: (e, handleOriginal) => {
@@ -114,8 +117,8 @@ export class CustomTable extends React.Component {
             style: {
                 background:
                     rowInfo &&
-                    selection.includes(`select-${rowInfo.original.id}`) &&
-                    "lightgreen"
+                    selectedRows.includes(`select-${rowInfo.original.id}`) &&
+                    "lightblue"
             }
         };
     };
