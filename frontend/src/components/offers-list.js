@@ -18,7 +18,9 @@ export class OffersList extends React.Component {
                 <ul>
                     {offers.map(offer => (
                         <li key={offer.id}>
-                            Offer ID#: {offer.id} Belongs to Assignment ID# {offer.assignment_id}, First Name: {offer.first_name}
+                            Offer ID#: {offer.id} Belongs to Assignment ID#{" "}
+                            {offer.assignment_id}, First Name:{" "}
+                            {offer.first_name}
                         </li>
                     ))}
                 </ul>
