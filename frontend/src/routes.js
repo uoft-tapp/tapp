@@ -10,6 +10,7 @@ import ApplicationForm from "./modules/application/components/ApplicationForm";
 import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
 import Dashboard from "./views/dashboard";
 import ControlPanel from "./views/cp_control_panel/ControlPanel"
+import SessionCreator from "./views/sessions/SessionCreator"
 export const openRoutes = [
     {
         path: "/",
@@ -58,6 +59,10 @@ export const openRoutes = [
     {
         path: "/cp/control_panel",
         component: ControlPanel
+    },
+    {
+        path: "/session",
+        component: SessionCreator
     }
 ];
 
