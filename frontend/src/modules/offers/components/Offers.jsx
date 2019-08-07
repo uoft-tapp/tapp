@@ -9,32 +9,41 @@ const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
     { Header: "Last Name", accessor: "last_name", width: 100 },
     { Header: "Email", accessor: "email", width: 250 },
-    { Header: "Position title", accessor: "position_title", width: 130 },
-    { Header: "Start Date", accessor: "position_start_date", width: 90 },
-    { Header: "End Date", accessor: "position_end_date", width: 90 },
-    { Header: "First Time?", accessor: "first_time_ta", width: 100 }, //First time TA'd?: Boolean
+    { Header: "Student Number", accessor: "student_number", width: 250 },
+    { Header: "Position", accessor: "position_title", width: 130 },
+    { Header: "Hours", accessor: "pay_period_desc", width: 80 },
     { Header: "Status", accessor: "status", width: 100 },
-    {
-        Header: "Offer Override PDF",
-        accessor: "offer_override_pdf",
-        width: 150
-    },
-    { Header: "Nag Count", accessor: "nag_count", width: 100 }
+    { Header: "Contract Send Date", accessor: "emailed_date", width: 180 },
+    { Header: "Nag Count", accessor: "nag_count", width: 100 },
+    { Header: "First Time?", accessor: "first_time_ta", width: 100 } //First time TA'd?: Boolean
 ];
 
 class Offers extends React.Component {
     render() {
+        var date = new Date();
         const data = [
             {
                 first_name: "Simon",
                 last_name: "Aayani",
                 email: "simon.aayani@mail.utoronto.ca",
-                position_title: "Teaching Assistant",
-                position_start_date: "Today", //new Date(),
-                position_end_date: "Tomorrow", //new Date(),
+                student_number: "1001111111",
+                position_title: "CSC165H1Y",
+                pay_period_desc: "60",
+                emailed_date:
+                    date.getDay() +
+                    "/" +
+                    date.getMonth() +
+                    "/" +
+                    date.getFullYear() +
+                    ", " +
+                    date.getHours() +
+                    ":" +
+                    date.getMinutes() +
+                    ":" +
+                    date.getSeconds(),
                 first_time_ta: "True",
                 status: "Pending",
-                nag_count: 1
+                nag_count: undefined
             }
         ];
         return (
