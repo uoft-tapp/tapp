@@ -18,4 +18,4 @@ export function FilteredList(props) {
         </div>
     );
 
-};
+}

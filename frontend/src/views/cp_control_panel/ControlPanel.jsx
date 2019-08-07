@@ -19,6 +19,6 @@ function ControlPanel() {
       <ConnectedFilteredList listRenderer={PositionsList}/>
     </div>
   );
-};
+}
 
 export default ControlPanel;
