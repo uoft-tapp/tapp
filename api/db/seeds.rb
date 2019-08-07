@@ -47,6 +47,26 @@ seed_data_sequence = [
         create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
     }
 ]
+
+```
+entries is used for generating seed data into a JSON file. The 
+command for generating a new seed data file is:
+    generate_mock_data(entries, file)
+
+file: string for the output JSON file. It can be something like 
+    'new_mock_data.json'. This file will be generated in the 
+    /api/db/seed/ folder.
+entries: a hash like the 'entries' below. Each of the key in this
+    hash are tables included in the seed data. Removing any of them
+    will likely cause the generation to crash due to tables being dependent
+    on one another. Also, don't change the order of the keys.
+    The actual values indicate the number of entries for that table 
+    you want to create. Please make sure the number make sense. 
+    e.g. don't have:
+        applicants: 1
+        positions: 1
+        assignments: 40
+```
 entries = {
     sessions: 3,
     position_templates: 3,
@@ -61,3 +81,4 @@ entries = {
 }
 
 insert_data(seed_data_sequence, 'mock_data.json')
+ 
