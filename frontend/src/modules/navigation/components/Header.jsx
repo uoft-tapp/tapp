@@ -32,7 +32,7 @@ const TappNavItems = () => (
 );
 
 const CpNavItems = () => (
-    <Nav className="mr-auto" >
+    <Nav className="mr-auto">
         <CustomNavItem href="/cp/control_panel">Control Panel</CustomNavItem>
     </Nav>
 );
