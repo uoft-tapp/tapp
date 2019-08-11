@@ -81,7 +81,7 @@ module Api::V1
 
     def assignments_by_position
       Assignment.order(:id).each do |entry|
-        entry[:position_id] == params[:position_id].to_i
+        entry[:position_id].should be == params[:position_id].to_i
       end
     end
 

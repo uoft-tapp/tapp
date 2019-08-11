@@ -328,13 +328,10 @@ module FakeData
     start = session[:start_date]
     if matching_month(start, 1)
       return 'H1-S'
+    elsif matching_month(session[:end_date], 12) || matching_month(session[:end_date], 7)
+      return 'H1-F'
     else
-      if matching_month(session[:end_date], 12) ||
-         matching_month(session[:end_date], 7)
-        return 'H1-F'
-      else
-        return 'Y1-Y'
-      end
+      return 'Y1-Y'
     end
   end
 

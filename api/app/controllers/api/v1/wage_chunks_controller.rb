@@ -73,7 +73,7 @@ module Api::V1
 
     def wage_chunks_by_assignment
       WageChunk.order(:id).each do |entry|
-        entry[:assignment_id] == params[:assignment_id].to_i
+        entry[:assignment_id].should be == params[:assignment_id].to_i
       end
     end
   end
