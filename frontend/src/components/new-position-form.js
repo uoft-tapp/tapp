@@ -28,7 +28,7 @@ const validInstructor = (val, props) => {
     return instructors.indexOf(val) !== -1 ? false : "Not a valid instructor";
 };
 
-const newPositionFields = [
+export const newPositionFields = [
     {
         label: "Course Code",
         value: "course_code",
@@ -92,7 +92,7 @@ const newPositionFields = [
     }
 ];
 
-const DefaultInput = ({ label, curValue, onChange, required }) => (
+export const DefaultInput = ({ label, curValue, onChange, required }) => (
     <div>
         <label style={{ width: "100px" }}>
             {required ? label + "*" : label}
@@ -101,7 +101,7 @@ const DefaultInput = ({ label, curValue, onChange, required }) => (
     </div>
 );
 
-const TextboxInput = ({ label, curValue, onChange, required }) => (
+export const TextboxInput = ({ label, curValue, onChange, required }) => (
     <div>
         <label style={{ width: "100px" }}>
             {required ? label + "*" : label}
@@ -115,7 +115,7 @@ const TextboxInput = ({ label, curValue, onChange, required }) => (
     </div>
 );
 
-const InstructorInput = ({ curValue, label, onChange, required }) => (
+export const InstructorInput = ({ curValue, label, onChange, required }) => (
     <div>
         <label style={{ width: "100px" }}>
             {required ? label + "*" : label}
@@ -124,7 +124,7 @@ const InstructorInput = ({ curValue, label, onChange, required }) => (
     </div>
 );
 
-const InstructorList = ({ curValue, instructors, setInstructor }) => {
+export const InstructorList = ({ curValue, instructors, setInstructor }) => {
     const valid = validInstructor(curValue, { instructors });
     const matchingInstructors = instructors
         .map(({ first_name, last_name }) => `${first_name} ${last_name}`)
@@ -145,6 +145,7 @@ const InstructorList = ({ curValue, instructors, setInstructor }) => {
         </div>
     );
 };
-const initialState = {
+
+export const initialState = {
     ...newPositionFields.reduce((acc, cur) => ({ ...acc, [cur.value]: "" }), {})
 };

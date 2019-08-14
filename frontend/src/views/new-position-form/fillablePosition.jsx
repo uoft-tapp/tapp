@@ -5,8 +5,16 @@ import {
     importNewPosition,
     getCount,
     importResult
-} from "../actions";
-import { fetchInstructors } from "../../instructors/actions";
+} from "./actions";
+import {
+    DefaultInput,
+    InstructorInput,
+    InstructorList,
+    TextboxInput,
+    initialState,
+    newPositionFields
+} from "../../components/new-position-form";
+import { fetchInstructors } from "../../modules/instructors/actions";
 import { Col, Container, Button } from "react-bootstrap";
 import CSVReader from "react-csv-reader";
 
