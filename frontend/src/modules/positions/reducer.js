@@ -5,7 +5,6 @@ import {
     OPEN_EDIT_POSITION_MODAL,
     CLOSE_EDIT_POSITION_MODAL,
     DELETE_POSITION_SUCCESS,
-    CREATE_NEW_POSITION_SUCCESS
 } from "./constants";
 
 const initialState = {
@@ -27,10 +26,6 @@ const reducer = createReducer(initialState, {
     [DELETE_POSITION_SUCCESS]: (state, action) => ({
         ...state,
         list: state.list.filter(({ id }) => id !== action.payload.positionId)
-    }),
-    [CREATE_NEW_POSITION_SUCCESS]: (state, action) => ({
-        ...state,
-        list: [...state.list, action.payload]
     }),
     [OPEN_EDIT_POSITION_MODAL]: (state, action) => ({
         ...state,

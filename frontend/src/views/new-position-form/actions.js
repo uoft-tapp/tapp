@@ -3,8 +3,8 @@ import {
     IMPORT_NEW_POSITION_SUCCESS,
     IMPORT_NEW_POSITION_RESULT
 } from "./constants";
-import { show, error, success } from "react-notification-system-redux";
-import { errorProps, successProps } from "../../modules/notifications/constants";
+import { show, error } from "react-notification-system-redux";
+import { errorProps } from "../../modules/notifications/constants";
 import { apiPOST } from "../../libs/apiUtils";
 
 
