@@ -18,22 +18,22 @@
     "position_templates": [
         { 
         	"position_type": "standard", 
-        	"offer_template": "/math/default.html",
+        	"offer_template": "/defaultdepartment/standard.html",
         	"session_index": 0 
         },
         { 
         	"position_type": "oto", 
-        	"offer_template": "/math/oto.html",
+        	"offer_template": "/defaultdepartment/oto.html",
         	"session_index": 0 
         },
         {
             "position_type": "standard",
-            "offer_template": "/math/default2018.html",
+            "offer_template": "/defaultdepartment/default2018.html",
             "session_index": 1
         },
         {
             "position_type": "invigilate",
-            "offer_template": "/math/invigilate.html",
+            "offer_template": "/defaultdepartment/invigilate.html",
             "session_index": 1
         }
     ],
