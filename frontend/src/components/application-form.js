@@ -1,12 +1,59 @@
-/*
-This file contains all of the fields for the application form.  
-Each field is defined as an object with the following attributes:
-    label: the text that appears on the form beside the input
-    type: a string that determines whether the input is a default input field, a textbox, or a binary radio choice
-    field_name: the key name for the field
-    validate: possible validations, not yet implemented
-    required: whether or not the field is required to be filled
-*/
+import React from "react";
+
+export const DefaultInput = ({ label, curValue, onChange, required }) => (
+    <div>
+        <label style={{ width: "20vw" }}>
+            {required ? label + ":" : label}
+        </label>
+        <input
+            style={{ width: "30vw" }}
+            value={curValue}
+            onChange={onChange}
+            required={required}
+        />
+    </div>
+);
+
+export const TextboxInput = ({ label, curValue, onChange, required }) => (
+    <div>
+        <label style={{ width: "20vh" }}>
+            {required ? label + ":" : label}
+        </label>
+        <textarea
+            style={{ width: "30vw" }}
+            value={curValue}
+            onChange={onChange}
+            required={required}
+        />
+    </div>
+);
+
+export const BinaryRadioInput = ({ label, curValue, onChange, required }) => (
+    <div>
+        <label style={{ width: "20vw" }}>
+            {required ? label + ":" : label}
+        </label>
+        <label>
+            <input
+                type="radio"
+                value="true"
+                checked={curValue === "true"}
+                onChange={onChange}
+            />
+            Yes
+        </label>
+        <label>
+            <input
+                type="radio"
+                value="false"
+                checked={curValue === "false"}
+                onChange={onChange}
+            />
+            No
+        </label>
+    </div>
+);
+
 export const personalInformationFields = [
     {
         label: "UTOR / JOIN id",
