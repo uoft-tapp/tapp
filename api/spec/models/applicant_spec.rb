@@ -1,60 +1,60 @@
 # frozen_string_literal: true
 
 describe Applicant do
-  it 'should have a valid factory' do
-    FactoryBot.create(:applicant)
-  end
+    it 'should have a valid factory' do
+        FactoryBot.create(:applicant)
+    end
 
-  it 'should not be valid without a first name' do
-    k = FactoryBot.build(:applicant, first_name: nil)
-    expect(k).to_not be_valid
+    it 'should not be valid without a first name' do
+        k = FactoryBot.build(:applicant, first_name: nil)
+        expect(k).to_not be_valid
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid without last name' do
-    k = FactoryBot.build(:applicant, last_name: nil)
-    expect(k).to_not be_valid
+    it 'should not be valid without last name' do
+        k = FactoryBot.build(:applicant, last_name: nil)
+        expect(k).to_not be_valid
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid without email' do
-    k = FactoryBot.build(:applicant, email: nil)
-    expect(k).to_not be_valid
+    it 'should not be valid without email' do
+        k = FactoryBot.build(:applicant, email: nil)
+        expect(k).to_not be_valid
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid without student number' do
-    k = FactoryBot.build(:applicant, student_number: nil)
-    expect(k).to_not be_valid
+    it 'should not be valid without student number' do
+        k = FactoryBot.build(:applicant, student_number: nil)
+        expect(k).to_not be_valid
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid without utorid' do
-    k = FactoryBot.build(:applicant, utorid: nil)
-    expect(k).to_not be_valid
+    it 'should not be valid without utorid' do
+        k = FactoryBot.build(:applicant, utorid: nil)
+        expect(k).to_not be_valid
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid if the student number is already taken' do
-    applicant1 = FactoryBot.create(:applicant)
-    applicant2 = FactoryBot.build(:applicant, student_number: applicant1.student_number)
+    it 'should not be valid if the student number is already taken' do
+        applicant1 = FactoryBot.create(:applicant)
+        applicant2 = FactoryBot.build(:applicant, student_number: applicant1.student_number)
 
-    expect(applicant2).to_not be_valid
-    expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect(applicant2).to_not be_valid
+        expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 
-  it 'should not be valid if the utorid is already taken' do
-    applicant1 = FactoryBot.create(:applicant)
-    applicant2 = FactoryBot.build(:applicant, utorid: applicant1.utorid)
+    it 'should not be valid if the utorid is already taken' do
+        applicant1 = FactoryBot.create(:applicant)
+        applicant2 = FactoryBot.build(:applicant, utorid: applicant1.utorid)
 
-    expect(applicant2).to_not be_valid
-    expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+        expect(applicant2).to_not be_valid
+        expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
 end
 
 # == Schema Information

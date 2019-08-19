@@ -29,6 +29,9 @@ Metrics/ClassLength:
 Metrics/AbcSize:
   Enabled: false
 
+Layout/IndentationWidth:
+  Width: 4
+
 Metrics/CyclomaticComplexity:
   Enabled: false
 
