@@ -3,30 +3,51 @@
 # A class representing an assignment. This class has many offers and belongs to 
 # applicant and position.
 class Assignment < ApplicationRecord
-		has_many :offers
-		has_one :active_offer
+	has_many :offers
+	has_one :active_offer
   	belongs_to :applicant
   	belongs_to :position
   	has_many :wage_chunks
 
-		validates_uniqueness_of :applicant_id, :scope => [:position_id]
+	validates_uniqueness_of :applicant_id, :scope => [:position_id]
 
-		before_save :check_active_offer_status
-		after_save :rest_active_offer 
+	before_save :check_active_offer_status
+	after_save :rest_active_offer 
 
-		def active_offer
-			self.active_offer_id ? Offer.find(self.active_offer_id) : nil
-		end 
-		
-		private
+	def active_offer
+		self.active_offer_id ? Offer.find(self.active_offer_id) : nil
+	end 
 
-			def check_active_offer_status
-				return false if self.active_offer_id && self.active_offer.withdrawn_date.blank? 
-			end
+	def withdraw_active_offer
+		return if self.active_offer.blank? 
 
-			def reset_active_offer
-				self.update_attribute(:active_offer_id, nil)
-			end
+		self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
+	end
+
+	def create_offer
+		return if self.active_offer.present? 
+
+		applicant = self.applicant
+		position = self.position 
+		instructors = position.instructors 
+		session = position.session
+
+		offer = Offer.new({
+			email: applicant.email,
+			first_name: applicant.first_name,
+			last_name: applicant.last_name,
+		})
+	end 
+	
+	private
+
+		def check_active_offer_status
+			return false if self.active_offer && self.active_offer.withdrawn_date.blank? 
+		end
+
+		def reset_active_offer
+			self.update_attribute(:active_offer_id, nil)
+		end
 end
 
 # == Schema Information
