@@ -1,7 +1,8 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
-import { updateField, createNewApplication } from "./actions";
+import { createNewApplication } from "../../api/actions/application_form"
+import { updateField } from "./actions";
 import {
     DefaultInput,
     TextboxInput,
