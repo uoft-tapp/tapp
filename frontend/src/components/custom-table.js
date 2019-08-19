@@ -33,23 +33,28 @@ export class CustomTable extends React.Component {
 
     filterMethod = (filter, row) => {
         // filter.id is the column name
-        console.log(filter);
 
         let value = row[filter.id].toString().toLowerCase();
         let filterValue = filter.value.toLowerCase();
-        if (filterValue.includes(" ")) {
-            return filterValue
-                .split(" ")
-                .every(f => value && value.indexOf(f) !== -1);
-        } else {
-            return value && value.indexOf(filterValue) !== -1;
-        }
+        // split to array and check if matched filter strings
+        return filterValue
+            .split(" ")
+            .some(f => value && value.indexOf(f) !== -1);
     };
 
     /**
      * Toggle a single checkbox for select table
      */
     toggleSelection = (key, shift, row) => {
+        // key is a str "select-{id}" where id is the data id
+
+        const { keyField } = this.props;
+        // access internal filteredData via: https://github.com/tannerlinsley/react-table/wiki/FAQ#how-do-i-get-at-the-internal-data-so-i-can-do-things-like-exporting-to-a-file
+        const wrappedInstance = this.internalTable.getWrappedInstance();
+        // the 'sortedData' property contains the currently accessible records based on the filter and sort
+        const currentRecords = wrappedInstance.getResolvedState()
+            .sortedData;
+
         // start off with the existing state
         let selectedRows = [...this.state.selectedRows];
         const keyIndex = selectedRows.indexOf(key);
@@ -62,8 +67,17 @@ export class CustomTable extends React.Component {
                 ...selectedRows.slice(keyIndex + 1)
             ];
         } else {
+            if(shift) {
+                let lastId = parseInt(selectedRows[selectedRows.length - 1].replace(/[^0-9.]/g, ''), 10);
+                let lastIndex = currentRecords.findIndex( x => x._original[keyField] === lastId );
+                let currIndex = currentRecords.findIndex( x => x._original[keyField] === row.id );
+                for(let i = Math.min(lastIndex, currIndex) + 1; i < Math.max(lastIndex, currIndex); i++){
+                    selectedRows.push(`select-${currentRecords[i]._original[keyField]}`);
+                }
+            }
             // it does not exist so add it
             selectedRows.push(key);
+            console.log(selectedRows);
         }
         // update the state
         this.setState({ selectedRows });
@@ -78,8 +92,8 @@ export class CustomTable extends React.Component {
         const selectedRows = [];
 
         if (selectAll) {
-            // we need to get at the internals of ReactTable
-            const wrappedInstance = this.checkboxTable.getWrappedInstance();
+            // access internal filteredData via: https://github.com/tannerlinsley/react-table/wiki/FAQ#how-do-i-get-at-the-internal-data-so-i-can-do-things-like-exporting-to-a-file
+            const wrappedInstance = this.internalTable.getWrappedInstance();
             // the 'sortedData' property contains the currently accessible records based on the filter and sort
             const currentRecords = wrappedInstance.getResolvedState()
                 .sortedData;
@@ -129,7 +143,7 @@ export class CustomTable extends React.Component {
                 filterable
                 defaultFilterMethod={this.filterMethod}
                 {...this.props}
-                ref={r => (this.checkboxTable = r)}
+                ref={r => (this.internalTable = r)}
                 toggleSelection={this.toggleSelection}
                 selectAll={this.state.selectAll}
                 selectType="checkbox"
