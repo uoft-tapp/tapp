@@ -28,6 +28,7 @@ const basicReducers = createBasicReducerObject(
  */
 function insertIfMissing(target, source) {
     const missingItems = [];
+    // eslint-disable-next-line
     for (let item of target) {
         if (!source.some(x => x.id === item.id)) {
             // the current item is new

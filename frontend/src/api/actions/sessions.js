@@ -94,6 +94,8 @@ export const setActiveSession = validatedApiDispatcher({
         // Save their return values so that we can await them after they're
         // dispatched. This way the browser can do parallel fetching.
         const promises = [];
+
+        //eslint-disable-next-line
         for (const action of onActiveSessionChangeActions) {
             promises.push(dispatch(action()));
         }
