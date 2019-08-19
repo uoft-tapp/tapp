@@ -122,7 +122,6 @@ function _localStoreSelector(state, _storePath) {
     }
     try {
         let localState = state;
-        // eslint-disable-next-line
         for (const dir of _storePath.path) {
             localState = localState[dir];
         }
@@ -180,13 +179,11 @@ export function combineReducers(model) {
     // recursively call all `pushToPath` functions.
     // They have been stored in `pushToPathCallbacks`
     function pushToPath(dir) {
-        // eslint-disable-next-line
         for (const func of pushToPathCallbacks) {
             func(dir);
         }
     }
 
-    // eslint-disable-next-line
     for (const [dir, reducer] of Object.entries(model)) {
         if (reducer._storePath) {
             reducer._storePath.pushToPath(dir);

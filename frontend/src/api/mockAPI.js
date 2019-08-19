@@ -15,7 +15,6 @@ import Route from "route-parser";
  * @returns
  */
 function pickFromArray(array, id, key = "id") {
-    // eslint-disable-next-line
     for (let elm of array) {
         if (elm[key] === id) {
             return elm;
@@ -109,7 +108,6 @@ export class MockAPI {
      * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
      */
     apiGET = url => {
-        // eslint-disable-next-line
         for (const route of this._getRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
@@ -153,7 +151,6 @@ export class MockAPI {
      * @param {object} body The body of a post request. This should be an object, *not* a JSON string.
      */
     apiPOST = (url, body) => {
-        // eslint-disable-next-line
         for (const route of this._postRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
