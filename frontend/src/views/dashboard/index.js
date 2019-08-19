@@ -18,6 +18,7 @@ import { InstructorsList } from "../../components/instructors-list";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
+import { EmailButton } from "../../components/email-button";
 import { CustomTable } from "../../components/custom-table";
 
 // Connect the SessionSelect component
@@ -57,9 +58,9 @@ const ConnectedSearchBox = connect(state => ({
     data: applicantsSelector(state)
 }))(SearchBox);
 
-const ConnectedOfferTable = connect(state => ({
-    data: state.ui.offerTable
-}))(CustomTable);
+const ConnectedEmailButton = connect(state => ({
+    data: applicantsSelector(state)
+}))(EmailButton);
 
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
@@ -194,6 +195,9 @@ function Dashboard() {
             </DashboardWidget>
             <DashboardWidget title="SearchBox">
                 <ConnectedSearchBox />
+            </DashboardWidget>
+            <DashboardWidget title="EmailButton">
+                <ConnectedEmailButton />
             </DashboardWidget>
             <DashboardWidget title="OfferTable">
                 <CustomTable data={DATA} columns={COLUMNS} keyField="id" />

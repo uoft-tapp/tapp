@@ -12,7 +12,7 @@ export class CustomTable extends React.Component {
                 id: PropTypes.number,
                 first_name: PropTypes.string,
                 last_name: PropTypes.string,
-                emily: PropTypes.string,
+                email: PropTypes.string,
                 position_title: PropTypes.string,
                 first_time_ta: PropTypes.bool,
                 status: PropTypes.string,
@@ -24,7 +24,7 @@ export class CustomTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyField: "id",
+            keyField:this.props.keyField,
             data: this.props.data,
             selectedRows: [],
             selectAll: false
