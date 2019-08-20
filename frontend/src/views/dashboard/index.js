@@ -11,6 +11,7 @@ import {
     positionsSelector,
     assignmentsSelector
 } from "../../api/actions";
+import { sendSelectedRows } from "../offertable/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
@@ -19,6 +20,7 @@ import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
 import { EmailButton } from "../../components/email-button";
+import { ImportButton } from "../../components/import-button";
 import { CustomTable } from "../../components/custom-table";
 
 // Connect the SessionSelect component
@@ -59,8 +61,13 @@ const ConnectedSearchBox = connect(state => ({
 }))(SearchBox);
 
 const ConnectedEmailButton = connect(state => ({
-    data: applicantsSelector(state)
+    data: state.ui.offerTable.selectedIds
 }))(EmailButton);
+
+const ConnectedOfferTable = connect(
+    null,
+    { sendSelectedRows }
+)(CustomTable);
 
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
@@ -196,11 +203,14 @@ function Dashboard() {
             <DashboardWidget title="SearchBox">
                 <ConnectedSearchBox />
             </DashboardWidget>
+            <DashboardWidget title="ImportButton">
+                <ImportButton />
+            </DashboardWidget>
             <DashboardWidget title="EmailButton">
                 <ConnectedEmailButton />
             </DashboardWidget>
             <DashboardWidget title="OfferTable">
-                <CustomTable data={DATA} columns={COLUMNS} keyField="id" />
+                <ConnectedOfferTable data={DATA} columns={COLUMNS} keyField="id" />
             </DashboardWidget>
         </div>
     );

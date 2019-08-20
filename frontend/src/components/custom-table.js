@@ -24,9 +24,10 @@ export class CustomTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            keyField:this.props.keyField,
+            keyField: this.props.keyField,
             data: this.props.data,
             selectedRows: [],
+            selectedIds: [],
             selectAll: false
         };
     }
@@ -52,11 +53,11 @@ export class CustomTable extends React.Component {
         // access internal filteredData via: https://github.com/tannerlinsley/react-table/wiki/FAQ#how-do-i-get-at-the-internal-data-so-i-can-do-things-like-exporting-to-a-file
         const wrappedInstance = this.internalTable.getWrappedInstance();
         // the 'sortedData' property contains the currently accessible records based on the filter and sort
-        const currentRecords = wrappedInstance.getResolvedState()
-            .sortedData;
+        const currentRecords = wrappedInstance.getResolvedState().sortedData;
 
         // start off with the existing state
         let selectedRows = [...this.state.selectedRows];
+        let selectedIds = [...this.state.selectedIds];
         const keyIndex = selectedRows.indexOf(key);
 
         // check to see if the key exists
@@ -66,21 +67,38 @@ export class CustomTable extends React.Component {
                 ...selectedRows.slice(0, keyIndex),
                 ...selectedRows.slice(keyIndex + 1)
             ];
+            selectedIds = [
+                ...selectedIds.slice(0, keyIndex),
+                ...selectedIds.slice(keyIndex + 1)
+            ];
         } else {
-            if(shift) {
-                let lastId = parseInt(selectedRows[selectedRows.length - 1].replace(/[^0-9.]/g, ''), 10);
-                let lastIndex = currentRecords.findIndex( x => x._original[keyField] === lastId );
-                let currIndex = currentRecords.findIndex( x => x._original[keyField] === row.id );
-                for(let i = Math.min(lastIndex, currIndex) + 1; i < Math.max(lastIndex, currIndex); i++){
-                    selectedRows.push(`select-${currentRecords[i]._original[keyField]}`);
+            if (shift) {
+                let lastId = selectedIds[selectedIds.length - 1];
+                let lastIndex = currentRecords.findIndex(
+                    x => x._original[keyField] === lastId
+                );
+                let currIndex = currentRecords.findIndex(
+                    x => x._original[keyField] === row[keyField]
+                );
+                for (
+                    let i = Math.min(lastIndex, currIndex) + 1;
+                    i < Math.max(lastIndex, currIndex);
+                    i++
+                ) {
+                    selectedRows.push(
+                        `select-${currentRecords[i]._original[keyField]}`
+                    );
+                    selectedIds.push(currentRecords[i]._original[keyField]);
                 }
             }
             // it does not exist so add it
             selectedRows.push(key);
-            console.log(selectedRows);
+            selectedIds.push(row[keyField]);
+            // console.log(selectedRows);
         }
-        // update the state
-        this.setState({ selectedRows });
+        // update the state and send selected rows
+        this.setState({ selectedRows, selectedIds });
+        this.props.sendSelectedRows(selectedIds);
     };
 
     /**
@@ -90,6 +108,7 @@ export class CustomTable extends React.Component {
         const { keyField } = this.props;
         const selectAll = !this.state.selectAll;
         const selectedRows = [];
+        const selectedIds = [];
 
         if (selectAll) {
             // access internal filteredData via: https://github.com/tannerlinsley/react-table/wiki/FAQ#how-do-i-get-at-the-internal-data-so-i-can-do-things-like-exporting-to-a-file
@@ -100,9 +119,11 @@ export class CustomTable extends React.Component {
             // we just push all the IDs onto the selectedRows array
             currentRecords.forEach(item => {
                 selectedRows.push(`select-${item._original[keyField]}`);
+                selectedIds.push(item._original[keyField]);
             });
         }
-        this.setState({ selectAll, selectedRows });
+        this.setState({ selectAll, selectedRows, selectedIds });
+        this.props.sendSelectedRows(selectedIds);
     };
 
     /**

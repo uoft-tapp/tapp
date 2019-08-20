@@ -5,17 +5,14 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 export class EmailButton extends React.Component {
     static propTypes = {
         data: PropTypes.arrayOf(
-            PropTypes.shape({
-                first_name: PropTypes.string,
-                last_name: PropTypes.string,
-                email: PropTypes.string
-            })
+            PropTypes.number
         ).isRequired
     };
 
     // email applicants
-    email = offers => {
-        let emails = this.props.data.map(x => x.email);
+    email = () => {
+        console.log(this.props.data);
+        let emails = [...this.props.data];
 
         var a = document.createElement("a");
         a.href =
@@ -26,51 +23,17 @@ export class EmailButton extends React.Component {
     };
 
     // email contract link to a single applicant
-    emailContract = offers => {
-        if (offers.length === 0) {
-            this.alert("<b>Error</b>: No offer selected");
-            return;
-        }
-        if (offers.length !== 1) {
-            this.alert(
-                "<b>Error:</b> Can only email a contract link to a single applicant."
-            );
-            return;
-        }
+    emailContract = (offers) => {
 
-        let offer = this.getOffersList().get(offers[0]);
-        if (!offer.get("link")) {
-            // offer does not have a contract link
-            this.alert(
-                "<b>Error:</b> Offer to " +
-                    offer.get("lastName") +
-                    ", " +
-                    offer.get("firstName") +
-                    " does not have an associated contract"
-            );
-            return;
-        }
-
-        var a = document.createElement("a");
-        a.href =
-            "mailto:" +
-            offer.get("email") +
-            "?body=Link%20to%20contract:%20" +
-            offer.get("link");
-        a.click();
     };
 
-    nagOffers(offers) {
-        if (offers.length === 0) {
-            this.alert("<b>Error</b>: No offer selected");
-            return;
-        }
+    nagOffers = (offers) => {
         // do nag offer thing
     }
 
     render() {
         return (
-            <DropdownButton id="dropdown-basic-button" title="Email Button">
+            <DropdownButton id="dropdown-basic-button" title="Email">
                 <Dropdown.Item onClick={() => this.email(this.props.data)}>Email Blank</Dropdown.Item>
                 <Dropdown.Item onClick={() => this.emailContract(this.props.data)}>Email Contract</Dropdown.Item>
                 <Dropdown.Item onClick={() => this.nagOffers(this.props.data)}>Nag Offers</Dropdown.Item>

@@ -1,12 +1,7 @@
-import { UPDATE_SELECTED_ROWS, UPDATE_SEARCH_TEXT } from "./constants";
+import { SEND_SELECTED_ROWS } from "./constants";
 
-export const updateSelectedRows = data => ({
-    type: UPDATE_SELECTED_ROWS,
-    rows: data
+export const sendSelectedRows = data => ({
+    type: SEND_SELECTED_ROWS,
+    payload: data
 });
 
-export const updateSearchText = (colunmName, searchBoxInput) => ({
-    type: UPDATE_SEARCH_TEXT,
-    column: colunmName,
-    value: searchBoxInput
-});
