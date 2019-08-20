@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 
 /**
  * Renders a component that filters and renders a list of objects.
- * 
+ *
  * The data is filtered based on the filter prop function, which takes
- * as input the data and the query from the search box.  
- * 
- * The filtered data is rendered using the listRenderer prop. 
+ * as input the data and the query from the search box.
+ *
+ * The filtered data is rendered using the listRenderer prop.
  *
  * @export
  * @param {list[object]} props.data
@@ -17,21 +17,23 @@ import PropTypes from "prop-types";
 export function FilteredList(props) {
     const { data, listRenderer, filterFunc, ...rest } = props;
     const Renderer = listRenderer;
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState("");
 
     let filteredData = filterFunc(data, query);
 
     return (
         <div>
-            <input type="text" value={query} onChange={e => setQuery(e.target.value)}/>
+            <input
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+            />
             <Renderer data={filteredData} {...rest} />
         </div>
     );
 }
 
 FilteredList.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.any
-    ),
+    data: PropTypes.arrayOf(PropTypes.any),
     listRenderer: PropTypes.func
-}
+};

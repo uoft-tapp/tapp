@@ -11,7 +11,6 @@ const ConnectedFilteredList = connect((state, ownProps) => ({
 }))(FilteredList);
 
 function ControlPanel() {
-
     // dummy filter function
     const filter = (data, query) => {
         console.log(query);
@@ -21,7 +20,10 @@ function ControlPanel() {
     return (
         <div>
             <ConnectedSessionSelect />
-            <ConnectedFilteredList listRenderer={PositionsList} filterFunc={filter} />
+            <ConnectedFilteredList
+                listRenderer={PositionsList}
+                filterFunc={filter}
+            />
         </div>
     );
 }
