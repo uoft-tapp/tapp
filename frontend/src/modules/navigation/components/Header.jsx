@@ -31,7 +31,7 @@ const TappNavItems = () => (
     </Nav>
 );
 
-const CpNavItems = () => (
+const NavItems = () => (
     <Nav className="mr-auto">
         <CustomNavItem href="/cp/control_panel">Control Panel</CustomNavItem>
     </Nav>
@@ -56,7 +56,7 @@ class Header extends React.Component {
                     />
                 </Navbar.Brand>
                 <Route path="/tapp" component={TappNavItems} />
-                <Route path="/cp" component={CpNavItems} />
+                <Route path="/cp" component={NavItems} />
                 <Route path="/dashboard" component={() => "(Dashboard View)"} />
                 <Nav>
                     <NavDropdown title="Tools" id="tools-dropdown">
