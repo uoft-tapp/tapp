@@ -27,11 +27,6 @@
         	"session_index": 0 
         },
         {
-            "position_type": "standard",
-            "offer_template": "/defaultdepartment/default2018.html",
-            "session_index": 1
-        },
-        {
             "position_type": "invigilate",
             "offer_template": "/defaultdepartment/invigilate.html",
             "session_index": 1
@@ -89,7 +84,7 @@
             "est_hours_per_assignment": 70,
             "est_start_date": "2019-09-08T00:00:00.000Z",
             "est_end_date": "2019-12-31T00:00:00.000Z",
-            "position_type": "invigilation",
+            "position_type": "invigilate",
             "instructor_indexes": [],
             "session_index": 0
         },
@@ -110,7 +105,7 @@
             "est_hours_per_assignment": 70,
             "est_start_date": "2019-09-08T00:00:00.000Z",
             "est_end_date": "2019-12-31T00:00:00.000Z",
-            "position_type": "invigilation",
+            "position_type": "invigilate",
             "instructor_indexes": [2],
             "session_index": 1
         }

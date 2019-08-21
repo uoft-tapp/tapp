@@ -1,5 +1,6 @@
 module SeedsHandler
     include FakeData
+    require 'json'
     def request(action, path, params = nil)
         '''
         Returns the result of calling the API path using action and given params
@@ -51,7 +52,7 @@ module SeedsHandler
         file: JSON file name containg seed data to be inserted
         '''
         @log = []
-        empty_db = empty_records(seed_data_sequence)
+        empty_db, seed_data_sequence = empty_records(seed_data_sequence)
         if empty_db
             if file
                 json = read_json(file)
@@ -71,13 +72,14 @@ module SeedsHandler
         Return whether or not the db is empty
         '''
         seed_data_sequence.each do |entry, i|
+            entry[:label] = entry[:get][1..-1].to_sym
             res = request(:get, entry[:get])[:payload]
             if res.length > 0
                 @log.push('Database has not been cleared.')
-                return false
+                return false, seed_data_sequence
             end
         end
-        return true
+        return true, seed_data_sequence
     end
 
     def check_templates(json)
@@ -112,7 +114,7 @@ module SeedsHandler
                 res = request(:post, route, data)
                 if res[:status] == 'success'
                     if array_result(route)
-                        table_data.push(get_entry(data, res[:payload], entry[:index_on]))
+                        table_data.push(get_entry(data, res[:payload], index_on(key)))
                     else
                         table_data.push(res[:payload])
                     end
@@ -237,21 +239,22 @@ module SeedsHandler
         return key.to_s.scan(/(_indexes|_index)/).length > 0
     end
 
-    def generate_mock_data(entries)
+    def generate_mock_data(entries, file)
         '''
         Returns generated mock data given entries, which is a JSON of
         all the tables as keys and the number of mock entry to generate as value
         '''
+        seed_data_dir = Rails.root.join('db', 'seed')
+        file = File.open(seed_data_dir+file, "w")
         records = {}
         if entries
             entries.keys.each do |key|
                 records[key] = []
                 records[key]= generate(records, key, entries[key])
             end
-            return records
+            file.puts(JSON.pretty_generate(records))
         else
-            @log.append('Error: Unspecified number of entries for mock data.')
-            return {}
+            puts 'Error: Unspecified number of entries for mock data.'
         end
     end
 end

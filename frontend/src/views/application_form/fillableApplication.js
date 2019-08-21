@@ -1,68 +1,17 @@
 import React from "react";
-import { connect } from "react-redux";
-import { updateField, createNewApplication } from "../actions";
 import { Button } from "react-bootstrap";
-
+import { connect } from "react-redux";
+import { createNewApplication } from "../../api/actions/application_form";
+import { updateField } from "./actions";
 import {
+    DefaultInput,
+    TextboxInput,
+    BinaryRadioInput,
     personalInformationFields,
     currentProgramInformationFields,
     currentStatusFields,
     customQuestions
-} from "./FormFields";
-
-const DefaultInput = ({ label, curValue, onChange, required }) => (
-    <div>
-        <label style={{ width: "20vw" }}>
-            {required ? label + ":" : label}
-        </label>
-        <input
-            style={{ width: "30vw" }}
-            value={curValue}
-            onChange={onChange}
-            required={required}
-        />
-    </div>
-);
-
-const TextboxInput = ({ label, curValue, onChange, required }) => (
-    <div>
-        <label style={{ width: "20vh" }}>
-            {required ? label + ":" : label}
-        </label>
-        <textarea
-            style={{ width: "30vw" }}
-            value={curValue}
-            onChange={onChange}
-            required={required}
-        />
-    </div>
-);
-
-const BinaryRadioInput = ({ label, curValue, onChange, required }) => (
-    <div>
-        <label style={{ width: "20vw" }}>
-            {required ? label + ":" : label}
-        </label>
-        <label>
-            <input
-                type="radio"
-                value="true"
-                checked={curValue === "true"}
-                onChange={onChange}
-            />
-            Yes
-        </label>
-        <label>
-            <input
-                type="radio"
-                value="false"
-                checked={curValue === "false"}
-                onChange={onChange}
-            />
-            No
-        </label>
-    </div>
-);
+} from "../../components/application-form";
 
 class ApplicationForm extends React.Component {
     // dispatches a redux action to update the store
