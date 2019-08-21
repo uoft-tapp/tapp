@@ -63,8 +63,8 @@ module Api::V1
         end
 
         def reporting_tags_by_wage_chunk
-            ReportingTag.order(:id).each do |entry|
-                entry[:wage_chunk_id].should be == params[:wage_chunk_id].to_i
+            ReportingTag.order(:id).select do |entry|
+                entry[:wage_chunk_id] == params[:wage_chunk_id].to_i
             end
         end
     end
