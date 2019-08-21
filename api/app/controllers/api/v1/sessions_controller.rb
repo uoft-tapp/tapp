@@ -3,7 +3,6 @@
 module Api::V1
     # Controller for Sessions
     class SessionsController < ApplicationController
-
         # GET /sessions
         def index
             render_success(Session.order(:id))
@@ -12,9 +11,7 @@ module Api::V1
         # POST /sessions
         def create
             # if we passed in an id that exists, we want to update
-            if params.has_key?(:id) and Session.exists?(params[:id])
-                update and return
-            end
+            update && return if params.key?(:id) && Session.exists?(params[:id])
             # when creating a new session, a name is required
             params.require(:name)
             session = Session.new(session_params)
@@ -22,7 +19,7 @@ module Api::V1
                 render_success(session)
             else
                 session.destroy!
-                render_error(session.errors.full_messages.join("; "))
+                render_error(session.errors.full_messages.join('; '))
             end
         end
 
@@ -31,7 +28,7 @@ module Api::V1
             if session.update_attributes!(session_params)
                 render_success(session)
             else
-                render_error(session.errors.full_messages.join("; "))
+                render_error(session.errors.full_messages.join('; '))
             end
         end
 
@@ -42,11 +39,12 @@ module Api::V1
             if session.destroy!
                 render_success(session)
             else
-                render_error(session.errors.full_messages.join("; "))
+                render_error(session.errors.full_messages.join('; '))
             end
         end
 
         private
+
         def session_params
             params.permit(
                 :id,
@@ -54,7 +52,7 @@ module Api::V1
                 :rate1,
                 :rate2,
                 :start_date,
-                :end_date,
+                :end_date
             )
         end
     end

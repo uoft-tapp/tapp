@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-
 # A class representing a position template, which represents the
-# 	location of the template associated with a position contract.
+#   location of the template associated with a position contract.
 class PositionTemplate < ApplicationRecord
-	belongs_to :session
+    belongs_to :session
 end
 
 # == Schema Information
