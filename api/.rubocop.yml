@@ -43,3 +43,6 @@ Style/ClassAndModuleChildren:
 
 Style/GuardClause:
   Enabled: false
+
+Style/OneLineConditiona:
+  Enabled: false
