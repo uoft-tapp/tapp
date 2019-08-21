@@ -280,7 +280,7 @@ that is pointed to under the `URL` property, and update the existing YAML
 there.
 
 OpenAPI 3.0.2 specifications are located
-[here](https://github.com/OAI/OpenApi-Specification/blob/master/versions/3.0.2.md)
+[here](https://github.com/OAI/OpenApi-Specification/blob/master/versions/3.0.2.md).
 ## Playbook
 
 ### Gemfile.lock synchronization
