@@ -3,7 +3,6 @@
 module Api::V1
     # Controller for Offers
     class OffersController < ApplicationController
-
         # POST /create_offer
         def create
             # TODO

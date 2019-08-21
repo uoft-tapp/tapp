@@ -3,23 +3,21 @@
 module Api::V1
     # Controller for Applicants
     class ApplicantsController < ApplicationController
-
         # GET /applicants
         def index
-            if not params.include?(:session_id)
+            unless params.include?(:session_id)
                 render_success(Applicant.order(:id))
                 return
             end
             return if invalid_id(Session, :session_id)
+
             render_success(applicants_by_session)
         end
 
         # POST /applicants
         def create
             # if we passed in an id that exists, we want to update
-            if params.has_key?(:id) and Applicant.exists?(params[:id])
-                update and return
-            end
+            update && return if params.key?(:id) && Applicant.exists?(params[:id])
             applicant = Applicant.new(applicant_params)
             if applicant.save # passes Applicant model validation
                 render_success(applicant)
@@ -45,11 +43,12 @@ module Api::V1
             if applicant.destroy!
                 render_success(applicant)
             else
-                render_error(applicant.errors.full_messages.join("; "))
+                render_error(applicant.errors.full_messages.join('; '))
             end
         end
- 
+
         private
+
         def applicant_params
             params.permit(
                 :email,
@@ -57,15 +56,14 @@ module Api::V1
                 :last_name,
                 :phone,
                 :student_number,
-                :utorid,
+                :utorid
             )
         end
 
         def applicants_by_session
-            return Applicant.order(:id).select do |entry|
+            Applicant.order(:id).select do |entry|
                 entry[:session_id] == params[:session_id].to_i
             end
         end
     end
 end
-  

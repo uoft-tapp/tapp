@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A class representing an assignment. This class has many offers and belongs to 
+# A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
 	has_many :offers

@@ -3,24 +3,23 @@
 module Api::V1
     # Controller for WageChunks
     class WageChunksController < ApplicationController
-
         # GET /applicants
         def index
-            if not params.include?(:assignment_id)
+            unless params.include?(:assignment_id)
                 render_success(WageChunk.order(:id))
                 return
             end
             return if invalid_id(Assignment, :assignment_id)
+
             render_success(wage_chunks_by_assignment)
         end
 
         # POST /add_wage_chunk
         def create
             # if we passed in an id that exists, we want to update
-            if params.has_key?(:id) and WageChunk.exists?(params[:id])
-                update and return
-            end
+            update && return if params.key?(:id) && WageChunk.exists?(params[:id])
             return if invalid_id(Assignment, :assignment_id, [])
+
             wage_chunk = WageChunk.new(wage_chunk_params)
             if wage_chunk.save # passes WageChunk model validation
                 render_success(wage_chunks_by_assignment)
@@ -46,18 +45,19 @@ module Api::V1
             if wage_chunk.destroy!
                 render_success(wage_chunk)
             else
-                render_error(wage_chunk.errors.full_messages.join("; "))
+                render_error(wage_chunk.errors.full_messages.join('; '))
             end
         end
 
         private
+
         def wage_chunk_params
             params.permit(
                 :end_date,
                 :hours,
                 :rate,
                 :start_date,
-                :assignment_id,
+                :assignment_id
             )
         end
 
@@ -67,12 +67,12 @@ module Api::V1
                 :hours,
                 :rate,
                 :start_date,
-                :assignment_id,
+                :assignment_id
             )
         end
 
         def wage_chunks_by_assignment
-            return WageChunk.order(:id).each do |entry|
+            WageChunk.order(:id).select do |entry|
                 entry[:assignment_id] == params[:assignment_id].to_i
             end
         end
