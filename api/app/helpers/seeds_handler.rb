@@ -65,30 +65,16 @@ module SeedsHandler
     end
 
     def empty_records(seed_data_sequence)
-<<<<<<< HEAD
-        '''
-        Return whether or not the db is empty
-        '''
-        seed_data_sequence.each do |entry, i|
-=======
         # Return whether or not the db is empty
         seed_data_sequence.each do |entry|
->>>>>>> master
             entry[:label] = entry[:get][1..-1].to_sym
             res = request(:get, entry[:get])[:payload]
             unless res.empty?
                 @log.push('Database has not been cleared.')
-<<<<<<< HEAD
-                return false, seed_data_sequence
-            end
-        end
-        return true, seed_data_sequence
-=======
                 return [false, seed_data_sequence]
             end
         end
         [true, seed_data_sequence]
->>>>>>> master
     end
 
     def check_templates(json)
@@ -221,19 +207,10 @@ module SeedsHandler
     end
 
     def generate_mock_data(entries, file)
-<<<<<<< HEAD
-        '''
-        Returns generated mock data given entries, which is a JSON of
-        all the tables as keys and the number of mock entry to generate as value
-        '''
-        seed_data_dir = Rails.root.join('db', 'seed')
-        file = File.open(seed_data_dir+file, "w")
-=======
         # Returns generated mock data given entries, which is a JSON of
         # all the tables as keys and the number of mock entry to generate as value
         seed_data_dir = Rails.root.join('db', 'seed')
         file = File.open(seed_data_dir + file, 'w')
->>>>>>> master
         records = {}
         if entries
             entries.keys.each do |key|

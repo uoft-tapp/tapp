@@ -5,87 +5,35 @@ module FakeData
     def generate(records, entry, num_entries)
         entries = []
         gen_entry_fn = generate_fn(entry)
-<<<<<<< HEAD
-        if not gen_entry_fn 
-            return entries
-        end
-        (1..num_entries).each do |i|
-            data, records = gen_entry_fn.call(records)
-            while existing_entry(entries, data, entry)
-                data, records = gen_entry_fn.call(records)
-            end
-=======
         return entries unless gen_entry_fn
 
         (1..num_entries).each do
             data, records = gen_entry_fn.call(records)
             data, records = gen_entry_fn.call(records) while existing_entry(entries, data, entry)
->>>>>>> master
             entries.push(data)
         end
         entries
     end
 
     private
-<<<<<<< HEAD
-    def existing_entry(entries, data, type)
-        entries.each do |item|
-            if matching_entry(type, data, item)
-                return true
-            end
-        end
-        return false
-=======
 
     def existing_entry(entries, data, type)
         entries.each do |item|
             return true if matching_entry(type, data, item)
         end
         false
->>>>>>> master
     end
 
     def matching_entry(type, data, item)
         index_on(type).each do |key|
-<<<<<<< HEAD
-            if item[key] != data[key]
-                return false
-            end
-        end
-        return true
-=======
             return false if item[key] != data[key]
         end
         true
->>>>>>> master
     end
 
     def index_on(entry)
         case entry
         when :sessions
-<<<<<<< HEAD
-            return [:name]
-        when :position_templates
-            return [:session_index, :position_type]
-        when :positions
-            return [:session_index, :position_code]
-        when :instructors
-            return [:utorid]
-        when :applicants
-            return [:utorid]
-        when :applications
-            return [:session_index, :applicant_index]
-        when :preferences
-            return [:application_index, :position_index]
-        when :assignments
-            return [:position_index, :applicant_index]
-        when :wage_chunks
-            return [:assignment_index]
-        when :reporting_tags
-            return [:wage_chunk_index]
-        else
-            return []
-=======
             %i[name]
         when :position_templates
             %i[session_index position_type]
@@ -107,7 +55,6 @@ module FakeData
             %i[wage_chunk_index]
         else
             []
->>>>>>> master
         end
     end
 
@@ -197,13 +144,8 @@ module FakeData
                 start_date: Time.new(records[:year] - 1, 9, 1),
                 end_date: Time.new(records[:year], 4, 30),
                 rate1: rate1,
-<<<<<<< HEAD
-                rate2: rate2,
-            }, records
-=======
                 rate2: rate2
             }, records]
->>>>>>> master
         end
     end
 
@@ -212,19 +154,11 @@ module FakeData
         mock_session = Rack::MockSession.new(Rails.application)
         session = Rack::Test::Session.new(mock_session)
         session.request('/api/v1/available_position_templates', env)
-<<<<<<< HEAD
-        return JSON.parse(mock_session.last_response.body, symbolize_names: true)[:payload]
-    end
-
-    def create_position_template(records)
-        if not records.include?(:available_position_templates)
-=======
         JSON.parse(mock_session.last_response.body, symbolize_names: true)[:payload]
     end
 
     def create_position_template(records)
         unless records.include?(:available_position_templates)
->>>>>>> master
             records[:available_position_templates] = available_position_templates
         end
         session_index = rand_index(records, :sessions)
