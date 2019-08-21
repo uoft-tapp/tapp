@@ -103,6 +103,52 @@ module FakeData
         end
     end
 
+    def create_session(records)
+        if !records[:session]
+            records[:session] = 0
+            records[:year] = Time.now.year
+        else
+            records[:session] += 1
+        end
+        rate1 = Faker::Number.normal(50, 3.5).to_d.truncate(2).to_f
+        rate2 = Faker::Number.normal(50, 3.5).to_d.truncate(2).to_f
+        case records[:session] % 4
+        when 0
+            return [{
+                name: "#{records[:year]} Fall",
+                start_date: Time.new(records[:year], 9, 1),
+                end_date: Time.new(records[:year], 12, 31),
+                rate1: rate1,
+                rate2: nil
+            }, records]
+        when 1
+            return [{
+                name: "#{records[:year]} Winter",
+                start_date: Time.new(records[:year], 1, 1),
+                end_date: Time.new(records[:year], 4, 30),
+                rate1: rate1,
+                rate2: nil
+            }, records]
+        when 2
+            return [{
+                name: "#{records[:year]} Summer",
+                start_date: Time.new(records[:year], 5, 1),
+                end_date: Time.new(records[:year], 8, 31),
+                rate1: rate1,
+                rate2: nil
+            }, records]
+        else
+            records[:year] += 1
+            return [{
+                name: "#{records[:year] - 1}-#{records[:year]} Fall-Winter",
+                start_date: Time.new(records[:year] - 1, 9, 1),
+                end_date: Time.new(records[:year], 4, 30),
+                rate1: rate1,
+                rate2: rate2
+            }, records]
+        end
+    end
+
     def available_position_templates
         env = { method: :get }
         mock_session = Rack::MockSession.new(Rails.application)

@@ -120,7 +120,7 @@ module SeedsHandler
             end
             json[key] = table_data
             if errors.empty?
-                @log.push("Insertions/updates to the table #{key} were successful.")
+                @log.push("Insertions to the table #{key} were successful.")
             else
                 @log.push("There were errors with the insertion to #{key}.")
                 @log += errors.map do |item|
@@ -187,7 +187,7 @@ module SeedsHandler
 
     def array_result(route)
         # Returns whether route is of the /add_* variety
-        route.scan(%r{/(\/add_)/}).length.positive?
+        route.scan(%r{(\/add_)}).length.positive?
     end
 
     def id_name(key)
