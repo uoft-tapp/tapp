@@ -20,8 +20,12 @@ module Api::V1
             if params.has_key?(:id) and PositionTemplate.exists?(params[:id])
                 update and return
             end
+            
+            # check required parameters not empty
             params.require(:offer_template)
+            params.require(:position_type)
             return if invalid_id(Session, :session_id, [])
+
             position_template = PositionTemplate.new(position_template_params)
             if position_template.save  # passes PostionTemplate model validataion
                 index
@@ -33,7 +37,12 @@ module Api::V1
 
         # GET /available_position_templates
         def available
-            files = Dir.glob("#{Rails.root}/app/views/position_templates/*")
+            dir = "#{Rails.root}/app/views/position_templates/"
+            files = Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
+                {
+                    offer_template: entry.sub(dir, '')
+                }
+            end
             render_success(files)
         end
 

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-import { 
+import {
     fetchSessions,
     setActiveSession,
     sessionsSelector,
@@ -21,4 +21,3 @@ export const ConnectedSessionSelect = connect(
     mapStateToProps,
     mapDispatchToProps
 )(SessionSelect);
-

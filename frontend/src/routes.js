@@ -6,11 +6,12 @@ import NewPosition from "./modules/positions/components/NewPosition";
 import AllAssigned from "./modules/all_applicants/components/AllAssigned";
 import AllUnassigned from "./modules/all_applicants/components/AllUnassigned";
 import Summary from "./modules/tapp_summary/components/Summary";
-import ApplicationForm from "./modules/application/components/ApplicationForm";
+import ApplicationForm from "./views/application_form/fillableApplication";
 import PositionsApplied from "./modules/applicants_positions/components/PositionsApplied";
 import Dashboard from "./views/dashboard";
-import ControlPanel from "./views/cp_control_panel/ControlPanel"
-import SessionCreator from "./views/sessions/SessionCreator"
+import ControlPanel from "./views/cp_control_panel/ControlPanel";
+import SessionCreator from "./views/sessions/SessionCreator";
+
 export const openRoutes = [
     {
         path: "/",

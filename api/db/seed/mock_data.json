@@ -1,0 +1,299 @@
+{
+	"sessions": [
+        {
+            "start_date": "2019-09-08T00:00:00.000Z",
+            "end_date": "2019-12-31T00:00:00.000Z",
+            "name": "2019 Fall",
+            "rate1": 45.55,
+            "rate2": 47.33
+        },
+        {
+            "start_date": "2020-01-01T00:00:00.000Z",
+            "end_date": "2020-04-30T00:00:00.000Z",
+            "name": "2020 Spring",
+            "rate1": 45.55,
+            "rate2": null
+        }
+    ],
+    "position_templates": [
+        { 
+        	"position_type": "standard", 
+        	"offer_template": "/defaultdepartment/standard.html",
+        	"session_index": 0 
+        },
+        { 
+        	"position_type": "oto", 
+        	"offer_template": "/defaultdepartment/oto.html",
+        	"session_index": 0 
+        },
+        {
+            "position_type": "invigilate",
+            "offer_template": "/defaultdepartment/invigilate.html",
+            "session_index": 1
+        }
+    ],
+    "instructors": [
+        {
+            "last_name": "Smith",
+            "first_name": "Henry",
+            "email": "hery.smith@utoronto.ca",
+            "utorid": "smithh"
+        },
+        {
+            "last_name": "Garcia",
+            "first_name": "Emily",
+            "email": "emily.garcia@utoronto.ca",
+            "utorid": "garciae"
+        },
+        {
+            "last_name": "Miller",
+            "first_name": "Megan",
+            "email": "megan.miller@utoronto.ca",
+            "utorid": "millerm"
+        },
+        {
+            "last_name": "Beera",
+            "first_name": "Lizzy",
+            "email": "lizzy.beera@utoronto.ca",
+            "utorid": "beeral"
+        }
+    ],
+    "positions": [
+        {
+            "position_code": "MAT135H1F",
+            "position_title": "Calculus I",
+            "est_hours_per_assignment": 70,
+            "est_start_date": "2019-09-08T00:00:00.000Z",
+            "est_end_date": "2019-12-31T00:00:00.000Z",
+            "position_type": "standard",
+            "duties": "Tutorials",
+            "qualifications": "Teaching skill",
+            "ad_hours_per_assignment": 70,
+            "ad_num_assignments": 15,
+            "ad_open_date": "2019-08-01T00:00:00.000Z",
+            "ad_close_date": "2019-08-15T00:00:00.000Z",
+            "desired_num_assignments": 15,
+            "current_enrollment": 1200,
+            "current_waitlisted": 200,
+            "instructor_indexes": [0, 1],
+            "session_index": 0
+        },
+        {
+            "position_code": "MAT136H1F",
+            "position_title": "Calculus II",
+            "est_hours_per_assignment": 70,
+            "est_start_date": "2019-09-08T00:00:00.000Z",
+            "est_end_date": "2019-12-31T00:00:00.000Z",
+            "position_type": "invigilate",
+            "instructor_indexes": [],
+            "session_index": 0
+        },
+        {
+            "position_code": "CSC135H1F",
+            "position_title": "Computer Fun",
+            "est_hours_per_assignment": 70,
+            "est_start_date": "2019-09-08T00:00:00.000Z",
+            "est_end_date": "2019-12-31T00:00:00.000Z",
+            "position_type": "standard",
+            "duties": "Tutorials",
+            "instructor_indexes": [0],
+            "session_index": 1
+        },
+        {
+            "position_code": "MAT235H1F",
+            "position_title": "Calculus III",
+            "est_hours_per_assignment": 70,
+            "est_start_date": "2019-09-08T00:00:00.000Z",
+            "est_end_date": "2019-12-31T00:00:00.000Z",
+            "position_type": "invigilate",
+            "instructor_indexes": [2],
+            "session_index": 1
+        }
+    ],
+    "applicants": [
+        {
+            "utorid": "weasleyr",
+            "student_number": "89013443",
+            "first_name": "Ron",
+            "last_name": "Weasley",
+            "email": "ron@potter.com",
+            "phone": "543-223-9993"
+        },
+        {
+            "utorid": "potterh",
+            "student_number": "999666999",
+            "first_name": "Harry",
+            "last_name": "Potter",
+            "email": "harry@potter.com"
+        },
+        {
+            "utorid": "smithb",
+            "email": "smithb@mail.utoronto.ca",
+            "first_name": "Bethany",
+            "last_name": "Smith",
+            "student_number": "131382748"
+        },
+        {
+            "utorid": "wilsonh",
+            "email": "wilsonh@mail.utoronto.ca",
+            "first_name": "Hanna",
+            "last_name": "Wilson",
+            "student_number": "600366904"
+        },
+        {
+            "utorid": "molinat",
+            "email": "molinat@mail.utoronto.ca",
+            "first_name": "Troy",
+            "last_name": "Molina",
+            "student_number": "328333023"
+        },
+        {
+            "utorid": "howeyb",
+            "email": "howeyb@mail.utoronto.ca",
+            "first_name": "Brett",
+            "last_name": "Howey",
+            "student_number": "329613524"
+        },
+        {
+            "utorid": "brownd",
+            "email": "brownd@mail.utoronto.ca",
+            "first_name": "David",
+            "last_name": "Brown",
+            "student_number": "29151485"
+        }
+    ],
+    "applications": [
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 0,
+            "applicant_index": 0
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 0,
+            "applicant_index": 1
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Math",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 0,
+            "applicant_index": 2
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 0,
+            "applicant_index": 5
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 0,
+            "applicant_index": 6
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Math",
+            "previous_uoft_ta_experience": "",
+            "yip": 3,
+            "annotation": "",
+            "session_index": 1,
+            "applicant_index": 2
+	    },
+	    {
+            "comments": "",
+            "program": "MSc",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 2,
+            "annotation": "",
+            "session_index": 1,
+            "applicant_index": 3
+	    },
+	    {
+            "comments": "",
+            "program": "UG",
+            "department": "Computer Science",
+            "previous_uoft_ta_experience": "",
+            "yip": 4,
+            "annotation": "",
+            "session_index": 1,
+            "applicant_index": 4
+	    }
+	],
+	"position_preferences": [
+		{
+            "position_index": 0,
+            "application_index": 1,
+            "preference_level": 3
+		},
+		{
+            "position_index": 0,
+            "application_index": 6,
+            "preference_level": 3
+		}
+	],
+    "assignments": [
+        {
+            "position_index": 0,
+            "applicant_index": 1,
+            "hours": 90
+        },
+        {
+            "position_index": 0,
+            "applicant_index": 3,
+            "hours": 95
+        }
+    ], 
+    "wage_chunks": [
+    	{
+            "start_date": "2019-09-08T00:00:00.000Z",
+            "end_date": "2019-12-31T00:00:00.000Z",
+            "hours": 90,
+            "rate": 46.44,
+            "assignment_index": 0
+    	},
+    	{
+            "start_date": "2019-09-08T00:00:00.000Z",
+            "end_date": "2019-12-31T00:00:00.000Z",
+            "hours": 90,
+            "rate": 46.44,
+            "assignment_index": 1
+    	}
+    ],
+    "reporting_tags":[
+        {
+            "name": "MAT135H1F",
+            "position_index": 0,
+            "wage_chunk_index": 0
+        },
+        {
+            "name": "MAT135H1F",
+            "position_index": 0,
+            "wage_chunk_index": 1
+        }
+    ]
+}

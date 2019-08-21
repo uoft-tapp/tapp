@@ -142,8 +142,44 @@ export async function addSession(api, include = { position_templates: true }) {
  * @returns
  */
 export async function deleteSession(api, session) {
-    let resp = {};
-    resp = await api.apiPOST(`/sessions/delete`, session);
+    const resp = await api.apiPOST(`/sessions/delete`, session);
+    return resp.payload;
+}
+
+/**
+ * Add a new position
+ *
+ * @export
+ * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
+ * @param {{id: number}} session session to add to (must have an `id` attribute)
+ * @returns
+ */
+export async function addPosition(api, session) {
+    const newPositionData = {
+        position_code: "MAT135F",
+        position_title: "Calculus I",
+        est_hours_per_assignment: 70,
+        est_start_date: "2018/05/09",
+        est_end_date: "2018/09/09",
+        position_type: "Standard"
+    };
+    const resp = await api.apiPOST(
+        `/sessions/${session.id}/positions`,
+        newPositionData
+    );
+    return resp.payload;
+}
+
+/**
+ * Delete a position
+ *
+ * @export
+ * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
+ * @param {{id: number}} position position to be deleted (must have an `id` attribute)
+ * @returns
+ */
+export async function deletePosition(api, position) {
+    const resp = await api.apiPOST(`/positions/delete`, position);
     return resp.payload;
 }
 
@@ -191,7 +227,7 @@ export const sessionPropTypes = PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     start_date: PropTypes.string,
     end_date: PropTypes.string,
-    name: PropTypes.string
+    name: PropTypes.string.isRequired
 });
 
 export const offerTemplateMinimalPropTypes = PropTypes.shape({
@@ -213,4 +249,33 @@ export const positionPropTypes = PropTypes.shape({
     duties: PropTypes.string,
     qualifications: PropTypes.string
     // XXX Add the rest of the properties here
+});
+
+export const instructorPropTypes = PropTypes.shape({
+    first_name: PropTypes.string.isRequired,
+    last_name: PropTypes.string.isRequired,
+    email: PropTypes.string,
+    utorid: PropTypes.string.isRequired
+});
+
+export const assignmentPropTypes = PropTypes.shape({
+    contract_start: PropTypes.string,
+    contract_end: PropTypes.string,
+    note: PropTypes.string,
+    offer_override_pdf: PropTypes.string,
+    applicant_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
+    position_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired
+});
+
+export const wageChunkPropTypes = PropTypes.shape({
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    hours: PropTypes.number,
+    rate: PropTypes.number
+});
+
+export const reportingTagsPropTypes = PropTypes.shape({
+    name: PropTypes.string
 });

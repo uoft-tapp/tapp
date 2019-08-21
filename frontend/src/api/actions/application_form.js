@@ -1,10 +1,6 @@
-import { UPDATE_FIELD } from "./constants";
 import { error, success } from "react-notification-system-redux";
-import { errorProps } from "../notifications/constants";
+import { errorProps } from "../../modules/notifications/constants";
 import { apiPOST } from "../../libs/apiUtils";
-
-// an action generator function that returns an action object
-export const updateField = data => ({ type: UPDATE_FIELD, data });
 
 export const createNewApplication = payload => async dispatch => {
     try {

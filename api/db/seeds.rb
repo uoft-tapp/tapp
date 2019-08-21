@@ -3,65 +3,82 @@
 # Seed data is contained in the json files under seed folder. This file serves as the script of 
 # pasing json file and create tables from the parsed data. The data can then be loaded with the rails db:seed command (or created alongside the
 # database with db:setup). For testing purpose, use db:reset to reload all the table.
+include SeedsHandler
 
-seed_data_dir = Rails.root.join('db', 'seed')
+seed_data_sequence = [
+    {
+        get: '/sessions',
+        create: '/sessions',
+    },
+    {
+        get: '/position_templates',
+        create: '/sessions/:session_id/add_position_template',
+    },
+    {
+        get: '/instructors',
+        create: '/instructors',
+    },
+    {
+        get: '/positions',
+        create: '/sessions/:session_id/positions',
+    },
+    {
+        get: '/applicants',
+        create: '/applicants',
+    },
+    {
+        get: '/applications',
+        create: '/sessions/:session_id/applications',
+    },
+    {
+        get: '/position_preferences',
+        create: '/applications/:application_id/add_preference',
+    },
+    {
+        get: '/assignments',
+        create: '/positions/:position_id/assignments',
+    },
+    {
+        get: '/wage_chunks',
+        create: '/assignments/:assignment_id/add_wage_chunk',
+    },
+    {
+        get: '/reporting_tags',
+        create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
+    }
+]
 
-# applicants
-data = File.read("#{seed_data_dir}/applicant.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("applicant")
-applicants = json_data.map do |row|
-  Applicant.create!(row.with_indifferent_access)
-end
+```
+entries is used for generating seed data into a JSON file. The 
+command for generating a new seed data file is:
+    generate_mock_data(entries, file)
 
-# sessions
-data = File.read("#{seed_data_dir}/session.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("session")
-sessions = json_data.map do |row|
-  Session.create!(row.with_indifferent_access)
-end
+file: string for the output JSON file. It can be something like 
+    'new_mock_data.json'. This file will be generated in the 
+    /api/db/seed/ folder.
+entries: a hash like the 'entries' below. Each of the key in this
+    hash are tables included in the seed data. Removing any of them
+    will likely cause the generation to crash due to tables being dependent
+    on one another. Also, don't change the order of the keys.
+    The actual values indicate the number of entries for that table 
+    you want to create. Please make sure the number make sense. 
+    e.g. don't have:
+        applicants: 1
+        positions: 1
+        assignments: 40
+```
+entries = {
+    sessions: 3,
+    position_templates: 3,
+    instructors: 20,
+    positions: 50,
+    applicants: 100,
+    applications: 150,
+    position_preferences: 300,
+    assignments: 100,
+    wage_chunks: 50,
+    reporting_tags: 50,
+}
 
-# positions
-data = File.read("#{seed_data_dir}/position.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("position")
-positions = json_data.map do |row|
-  s = sessions[row["session_index"]]
-  row = row.except("session_index").merge(session: s)
-  Position.create!(row.with_indifferent_access)
-end
-
-# preference
-data = File.read("#{seed_data_dir}/preference.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("preference")
-preference = json_data.map do |row|
-  a = applicants[row["applicant_index"]]
-  p = positions[row["position_index"]]
-  row = row.except("applicant_index").merge(applicant: a)
-  row = row.except("position_index").merge(position: p)
-  Preference.create!(row.with_indifferent_access)
-end
-
-# instructors
-data = File.read("#{seed_data_dir}/instructor.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("instructor")
-instructors = json_data.map do |row|
-  position_indexes = row["position_index"]
-  row = row.except("position_index")
-  i = Instructor.create!(row.with_indifferent_access)
-  position_indexes.each do |p|
-    i.positions << positions[p]
-    i.save
-  end
-end
-
-# users
-data = File.read("#{seed_data_dir}/user.json")
-raise JSON::ParserError.new("the source file is empty") if data.strip.length == 0
-json_data = JSON.parse(data).fetch("user")
-users = json_data.map do |row|
-  User.create!(row.with_indifferent_access)
-end
+insert_data(seed_data_sequence, 'mock_data.json')
+ 
