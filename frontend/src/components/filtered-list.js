@@ -35,5 +35,6 @@ export function FilteredList(props) {
 
 FilteredList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.any),
-    listRenderer: PropTypes.func
+    listRenderer: PropTypes.elementType,
+    filterFunc: PropTypes.func
 };
