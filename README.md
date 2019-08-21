@@ -281,6 +281,9 @@ there.
 
 OpenAPI 3.0.2 specifications are located
 [here](https://github.com/OAI/OpenApi-Specification/blob/master/versions/3.0.2.md).
+
+This online [editor](editor.swagger.io) helps with a live loading of the documentation to write
+documentation. Just copy paste the current YAML into the editor to start editing.
 ## Playbook
 
 ### Gemfile.lock synchronization
