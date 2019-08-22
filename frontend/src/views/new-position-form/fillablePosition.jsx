@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import {
     createNewPosition,
     importNewPosition,
-    getCount,
-    importResult
-} from "./actions";
+    getCount } from "../../api/actions/new_position";
+import { importResult } from "./actions";
 import {
     DefaultInput,
     InstructorInput,
