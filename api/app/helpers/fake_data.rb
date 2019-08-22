@@ -46,6 +46,7 @@ module FakeData
         when :applications
             %i[session_index applicant_index]
         when :preferences
+        when :position_preferences
             %i[application_index position_index]
         when :assignments
             %i[position_index applicant_index]
