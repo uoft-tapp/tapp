@@ -2,7 +2,7 @@
 
 # A class representing an offer. This class belongs to assignment, applicant and position.
 class Offer < ApplicationRecord
-  	belongs_to :assignment
+    belongs_to :assignment
 end
 
 # == Schema Information

@@ -3,34 +3,33 @@
 module Api::V1
     # Controller for Assignments
     class AssignmentsController < ApplicationController
-
         # GET /assignments
         def index
-            if not params.include?(:position_id)
+            unless params.include?(:position_id)
                 render_success(Assignment.order(:id))
                 return
             end
-            if invalid_id(Position, :position_id) then return end
+            return if invalid_id(Position, :position_id)
+
             render_success(assignments_by_position)
         end
 
         # POST /assignments
         def create
             # if we passed in an id that exists, we want to update
-            if params.has_key?(:id) and Assignment.exists?(params[:id])
-                update and return
-            end
+            update && return if params.key?(:id) && Assignment.exists?(params[:id])
             params.require(:applicant_id)
             return if invalid_id(Position, :position_id)
             return if invalid_id(Applicant, :applicant_id)
+
             assignment = Assignment.new(assignment_params)
-            if not assignment.save # does not pass Assignment model validation
+            unless assignment.save # does not pass Assignment model validation
                 assignment.destroy!
                 render_error(assignment.errors)
                 return
             end
             message = valid_wage_chunk(assignment, assignment.errors.messages)
-            if not message
+            if !message
                 render_success(assignment)
             else
                 assignment.destroy!
@@ -54,11 +53,12 @@ module Api::V1
             if assignment.destroy!
                 render_success(assignment)
             else
-                render_error(assignment.errors.full_messages.join("; "))
+                render_error(assignment.errors.full_messages.join('; '))
             end
         end
 
         private
+
         def assignment_params
             params.permit(
                 :contract_start,
@@ -66,7 +66,7 @@ module Api::V1
                 :note,
                 :offer_override_pdf,
                 :applicant_id,
-                :position_id,
+                :position_id
             )
         end
 
@@ -75,12 +75,12 @@ module Api::V1
                 :contract_start,
                 :contract_end,
                 :note,
-                :offer_override_pdf,
+                :offer_override_pdf
             )
         end
 
         def assignments_by_position
-            return Assignment.order(:id).each do |entry|
+            Assignment.order(:id).select do |entry|
                 entry[:position_id] == params[:position_id].to_i
             end
         end
@@ -95,7 +95,7 @@ module Api::V1
                     return errors.deep_merge(wage_chunk.errors.messages)
                 end
             else
-                return errors
+                errors
             end
         end
     end

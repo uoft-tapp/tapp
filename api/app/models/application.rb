@@ -2,11 +2,11 @@
 
 # A class representing an application of an applicant.
 class Application < ApplicationRecord
-	belongs_to :session
-	has_one :applicant_data_for_matching
-	has_one :applicant, through: :applicant_data_for_matching
-	has_many :position_preferences
-  	has_many :positions, through: :position_preferences
+    belongs_to :session
+    has_one :applicant_data_for_matching
+    has_one :applicant, through: :applicant_data_for_matching
+    has_many :position_preferences
+    has_many :positions, through: :position_preferences
 end
 
 # == Schema Information
