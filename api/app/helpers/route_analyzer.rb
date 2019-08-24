@@ -93,4 +93,9 @@ module RouteAnalyzer
 		end
 		output
 	end
+
+	def write_file(destination, data)
+        file = File.open("#{Rails.root}#{destination}", 'w')
+        file.puts(data)
+	end
 end
