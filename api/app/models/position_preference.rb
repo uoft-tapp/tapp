@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-
-# A class representing a position_preference for an application 
-# 	to a position with a preference level.
+# A class representing a position_preference for an application
+#   to a position with a preference level.
 class PositionPreference < ApplicationRecord
-	belongs_to :application
-	belongs_to :position
+    belongs_to :application
+    belongs_to :position
 
-	validates :preference_level, numericality: true, allow_nil: true
-  	validates_uniqueness_of :application_id, :scope => [:position_id]
+    validates :preference_level, numericality: true, allow_nil: true
+    validates_uniqueness_of :application_id, scope: [:position_id]
 end
 
 # == Schema Information

@@ -2,6 +2,7 @@
 
 # A class representing an offer. This class belongs to assignment, applicant and position.
 class Offer < ApplicationRecord
+<<<<<<< HEAD
 		belongs_to :assignment
 		after_save :set_assignment_active_offer 
 
@@ -9,6 +10,9 @@ class Offer < ApplicationRecord
 			def set_assignment_active_offer
 				self.assignment.update_attribute(:active_offer_id, self.id)
 			end 
+=======
+    belongs_to :assignment
+>>>>>>> master
 end
 
 # == Schema Information

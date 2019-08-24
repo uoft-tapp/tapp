@@ -3,7 +3,6 @@
 module Api::V1
     # Controller for PositionPreferences
     class PositionPreferencesController < ApplicationController
-
         # GET /position_preferences
         def index
             render_success(PositionPreference.order(:id))
@@ -12,12 +11,11 @@ module Api::V1
         # POST /add_preference
         def create
             # if we passed in an id that exists, we want to update
-            if params.has_key?(:id) and PositionPreference.exists?(params[:id])
-                update and return
-            end
+            update && return if params.key?(:id) && PositionPreference.exists?(params[:id])
             params.require(:position_id)
             return if invalid_id(Application, :application_id, [])
             return if invalid_id(Position, :position_id, preferences_by_application)
+
             preference = PositionPreference.new(preference_params)
             if preference.save # passes PositionPreference model validation
                 render_success(preferences_by_application)
@@ -26,7 +24,7 @@ module Api::V1
                 render_error(preference.errors, preferences_by_application)
             end
         end
- 
+
         def update
             position_preference = PositionPreference.find(params[:id])
             if position_preference.update_attributes!(preference_update_params)
@@ -43,31 +41,30 @@ module Api::V1
             if position_preference.destroy!
                 render_success(position_preference)
             else
-                render_error(position_preference.errors.full_messages.join("; "))
+                render_error(position_preference.errors.full_messages.join('; '))
             end
         end
 
         private
+
         def preference_params
             params.permit(
                 :application_id,
                 :position_id,
-                :preference_level,
+                :preference_level
             )
         end
 
         def preference_update_params
             params.permit(
-                :preference_level,
+                :preference_level
             )
         end
 
         def preferences_by_application
-            return PositionPreference.order(:id).select do |entry|
+            PositionPreference.order(:id).select do |entry|
                 entry[:application_id] == params[:application_id].to_i
             end
         end
-
     end
-  end
-  
+end

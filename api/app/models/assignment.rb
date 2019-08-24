@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-# A class representing an assignment. This class has many offers and belongs to 
+# A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
+<<<<<<< HEAD
 	has_many :offers
 	has_one :active_offer
   	belongs_to :applicant
@@ -48,6 +49,14 @@ class Assignment < ApplicationRecord
 		def reset_active_offer
 			self.update_attribute(:active_offer_id, nil)
 		end
+=======
+    has_many :offers
+    belongs_to :applicant
+    belongs_to :position
+    has_many :wage_chunks
+
+    validates_uniqueness_of :applicant_id, scope: [:position_id]
+>>>>>>> master
 end
 
 # == Schema Information

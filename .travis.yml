@@ -13,10 +13,26 @@ matrix:
         - "10"
       cache: yarn
       before_script:
-        - yarn add eslint babel-eslint eslint-plugin-react prettier prettier-check
+        # ESLint version is restricted to version 6.1.0 as per issue 209
+        - yarn add eslint@6.1.0 babel-eslint eslint-plugin-react prettier prettier-check
       script:
         # allow these tests to fail for now...
         - ./tests/run-formatting-tests.sh
+
+    - name: "Ruby Formatting Tests"
+      language: ruby
+      services:
+        - docker
+      before_script:
+        - cp dev.env .env
+        - docker-compose up --build -d api
+        - docker ps -a
+      script:
+        - ./tests/run-ruby-linting-tests.sh
+      after_failure:
+        - docker-compose logs
+      after_script:
+        - docker-compose down
 
     # run the development build and test suites
     - name: "Unit Tests"
