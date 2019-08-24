@@ -33,4 +33,64 @@ module RouteAnalyzer
 	def model_attributes(table)
 		table.columns_hash.map { |i, j| { name: i.to_sym, type: j.type } }
 	end
+
+	def format_routes()
+		[]
+	end
+
+	def format_schemas()
+		[]
+	end
+
+	def yaml_format
+		[
+			{
+				name: 'openapi',
+				value: '3.0.2'
+			},
+			{
+				name: 'info',
+				value: [
+					{
+						name: 'title',
+						value: 'Tapp API'
+					},
+					{
+						name: 'description',
+						value: 'Provides information for the frontend to display and add data'
+					},
+					{
+						name: 'version',
+						value: '1.0'
+					}
+				]
+			},
+			{
+				name: 'paths',
+				value: format_routes()
+			},
+			{
+				name: 'components',
+				value: [
+					{
+						name: 'schemas',
+						value: format_schemas()
+					}
+				]
+			}
+		]
+	end
+
+	def convert_to_yaml(data, output = "", tabs = 0)
+		tab = "  "
+		data.each do |item|
+			output += "#{tab * tabs}#{item[:name]}:\n"
+			if item[:value].is_a?(Array)
+				output = convert_to_yaml(item[:value], output, tabs+1)
+			else
+				output += "#{tab * (tabs+1)}\"#{item[:value]}\"\n"
+			end
+		end
+		output
+	end
 end
