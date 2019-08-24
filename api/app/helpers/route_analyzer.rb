@@ -3,12 +3,13 @@ module RouteAnalyzer
 	include SeedsHandler
 	def all_routes
 		routes = Rails.application.routes.routes.map do |route|
+			named_routes = Rails.application.routes.named_routes
 			{
 				path: route.path.spec.to_s.sub('(.:format)', '').sub('/api/v1', ''), 
 				name: route.name, 
 				controller: route.defaults[:controller],
 				action: route.defaults[:action],
-				method: route.name ? Rails.application.routes.named_routes[route.name].verb : nil
+				method: route.name ? named_routes[route.name].verb.downcase.to_sym : nil
 			} 
 		end
 		routes = routes.select do |route|
@@ -24,6 +25,24 @@ module RouteAnalyzer
 			end
 		end
 		routes
+	end
+
+	def routes_documented?(routes)
+		incomplete = []
+		routes.each_with_index do |route, i|
+			ind = i+1
+			if !route[:method] || route[:name] == "api_v1"
+				incomplete.push("#{ind}. #{route[:path]}, action: :#{route[:action]}" +
+					"\n\tPlease set an unique for this route in /config/routes.rb using:" +
+					"\n\t\t get/post {route}, action: {action}, as: {name}")
+			else
+				# TODO: more tests for completeness
+			end
+		end
+		puts incomplete.length.positive? ? "#{incomplete.join("\n\n")}\n\n" : ''
+		puts "API Documentation: #{incomplete.length} todo, " +
+			"#{routes.length - incomplete.length} completed, #{routes.length} total."
+		return !incomplete.length.positive?
 	end
 
 	def min_params(route)
@@ -97,5 +116,10 @@ module RouteAnalyzer
 	def write_file(destination, data)
         file = File.open("#{Rails.root}#{destination}", 'w')
         file.puts(data)
+	end
+
+	def route_name(controller, route_name = nil)
+		route_name = route_name ? route_name : 'create'
+		"#{controller.to_s}_#{route_name}"
 	end
 end

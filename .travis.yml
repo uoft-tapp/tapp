@@ -34,6 +34,22 @@ matrix:
       after_script:
         - docker-compose down
 
+    # build the api documentation
+    - name: "API Documentation"
+      language: ruby
+      services:
+        - docker
+      before_script:
+        - cp dev.env .env
+        - docker-compose up --build -d
+        - docker ps -a
+      script:
+        - ./tests/run-api-documentation.sh
+      after_failure:
+        - docker-compose logs
+      after_script:
+        - docker-compose down
+
     # run the development build and test suites
     - name: "Unit Tests"
       language: ruby
