@@ -95,7 +95,7 @@ module RouteAnalyzer
     end
 
     def controller_to_title(controller)
-        controller.to_s[0..-2].sub('_', ' ').titleize
+        controller.to_s[0..-2].gsub('_', ' ').titleize
     end
 
     def add_details(routes)
@@ -104,7 +104,7 @@ module RouteAnalyzer
             entry[:request] = { params: {}, required: min_params(entry) }
             entry[:response] = { params: {}, required: [] }
             entry[:parameters] = format_required_input(entry[:request][:required])
-            entry[:path] = entry[:path].sub(/(\:)([\w]+)/, '{\2}')
+            entry[:path] = entry[:path].gsub(/(\:)([\w]+)/, '{\2}')
             case entry[:action]
             when :create
                 given = get_given_from_required(entry[:request][:required])
