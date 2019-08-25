@@ -10,37 +10,18 @@ module Api::V1
 
         # POST /sessions
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Session.exists?(params[:id])
-            # when creating a new session, a name is required
+            update && return if update_condition(Session)
             params.require(:name)
-            session = Session.new(session_params)
-            if session.save # passes Session model validation
-                render_success(session)
-            else
-                session.destroy!
-                render_error(session.errors.full_messages.join('; '))
-            end
+            create_entry(Session, session_params)
         end
 
         def update
-            session = Session.find(params[:id])
-            if session.update_attributes!(session_params)
-                render_success(session)
-            else
-                render_error(session.errors.full_messages.join('; '))
-            end
+            update_entry(Session, session_params)
         end
 
         # POST /sessions/delete
         def delete
-            params.require(:id)
-            session = Session.find(params[:id])
-            if session.destroy!
-                render_success(session)
-            else
-                render_error(session.errors.full_messages.join('; '))
-            end
+            delete_entry(Session)
         end
 
         private

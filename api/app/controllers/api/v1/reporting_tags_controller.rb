@@ -10,40 +10,26 @@ module Api::V1
 
         # POST /add_reporting_tag
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && ReportingTag.exists?(params[:id])
-            params.require(%i[name])
-            return if invalid_id(WageChunk, :wage_chunk_id, [])
+            update && return if update_condition(WageChunk)
+            return if invalid_id_check(WageChunk)
 
-            reporting_tag = ReportingTag.new(reporting_tag_params)
-            if reporting_tag.save # passes ReportingTag model validation
-                update_position_ids(reporting_tag)
-                render_success(reporting_tags_by_wage_chunk)
-            else
-                reporting_tag.destroy!
-                render_error(reporting_tag.errors, reporting_tags_by_wage_chunk)
+            params.require(:name)
+            output = proc { reporting_tags_by_wage_chunk }
+            update_fn = proc do |entry|
+                update_position_ids(entry)
+                render_success(output.call)
             end
+            create_entry(ReportingTag, reporting_tag_params, output: output, after_fn: update_fn)
         end
 
         def update
-            reporting_tag = ReportingTag.find(params[:id])
-            if reporting_tag.update_attributes!(reporting_tag_update_params)
-                update_position_ids(reporting_tag)
-                render_success(reporting_tag)
-            else
-                render_error(reporting_tag.errors)
-            end
+            update_fn = proc { |i| update_position_ids(i) }
+            update_entry(ReportingTag, reporting_tag_update_params, update_fn: update_fn)
         end
 
         # POST /reporting_tags/delete
         def delete
-            params.require(:id)
-            reporting_tag = ReportingTag.find(params[:id])
-            if reporting_tag.destroy!
-                render_success(reporting_tag)
-            else
-                render_error(reporting_tag.errors.full_messages.join('; '))
-            end
+            delete_entry(ReportingTag)
         end
 
         private

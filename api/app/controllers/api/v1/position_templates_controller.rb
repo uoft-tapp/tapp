@@ -5,32 +5,17 @@ module Api::V1
     class PositionTemplatesController < ApplicationController
         # GET /position_templates
         def index
-            unless params.include?(:session_id)
-                render_success(PositionTemplate.order(:id))
-                return
-            end
-            return if invalid_id(Session, :session_id)
-
-            render_success(position_templates_by_session)
+            index_response(PositionTemplate, Session, position_templates_by_session)
         end
 
         # POST /add_position_template
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && PositionTemplate.exists?(params[:id])
+            update && return if update_condition(PositionTemplate)
+            return if invalid_id_check(Session)
 
-            # check required parameters not empty
-            params.require(:offer_template)
-            params.require(:position_type)
-            return if invalid_id(Session, :session_id, [])
-
-            position_template = PositionTemplate.new(position_template_params)
-            if position_template.save # passes PostionTemplate model validataion
-                index
-            else
-                position_template.destroy!
-                render_error(position_template.errors, position_templates_by_session)
-            end
+            params.require(%i[offer_template position_type])
+            output = proc { position_templates_by_session }
+            create_entry(PositionTemplate, position_template_params, output: output)
         end
 
         # GET /available_position_templates
@@ -45,23 +30,12 @@ module Api::V1
         end
 
         def update
-            position_template = PositionTemplate.find(params[:id])
-            if position_template.update_attributes!(position_template_update_params)
-                render_success(position_template)
-            else
-                render_error(position_template.errors)
-            end
+            update_entry(PositionTemplate, position_template_update_params)
         end
 
         # POST /position_templates/delete
         def delete
-            params.require(:id)
-            position_template = PostionTemplate.find(params[:id])
-            if position_template.destroy!
-                render_success(position_template)
-            else
-                render_error(position_template.errors.full_messages.join('; '))
-            end
+            delete_entry(PositionTemplate)
         end
 
         private
@@ -82,9 +56,7 @@ module Api::V1
         end
 
         def position_templates_by_session
-            PositionTemplate.order(:id).select do |entry|
-                entry[:session_id] == params[:session_id].to_i
-            end
+            filter_given_id(PositionTemplate.order(:id), :session_id)
         end
     end
 end

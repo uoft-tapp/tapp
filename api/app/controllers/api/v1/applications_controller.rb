@@ -5,66 +5,49 @@ module Api::V1
     class ApplicationsController < ApplicationController
         # GET /applications
         def index
-            unless params.include?(:session_id)
-                render_success(all_applications)
-                return
-            end
-            return if invalid_id(Session, :session_id)
-
-            render_success(applications_by_session)
+            index_response(all_applications, Session, applications_by_session, true)
         end
 
         # POST /applications
         def create
             # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Application.exists?(params[:id])
+            update && return if update_condition(Application)
             params.require(:applicant_id)
             return if invalid_id(Session, :session_id)
             return if invalid_id(Applicant, :applicant_id)
 
-            application = Application.new(application_params)
-            unless application.save # does not pass Application model validation
-                application.destroy!
-                render_error(application.errors)
-                return
+            create_subparts = proc do |application|
+                params[:application_id] = application[:id]
+                message = valid_applicant_matching_data(application.errors.messages)
+                if !message
+                    render_success(application_data(application))
+                else
+                    application.destroy!
+                    render_error(message)
+                end
             end
-            params[:application_id] = application[:id]
-            message = valid_applicant_matching_data(application.errors.messages)
-            if !message
-                render_success(application_data(application))
-            else
-                application.destroy!
-                render_error(message)
-            end
+            create_entry(Application, application_params, after_fn: create_subparts)
         end
 
         def update
-            application = Application.find(params[:id])
-            matching = application.applicant_data_for_matching
-            application_res = application.update_attributes!(application_update_params)
-            matching_res = matching.update_attributes!(matching_data_update_params)
-            errors = application.errors.messages.deep_merge(matching.errors.messages)
-            if application_res && matching_res
-                render_success(application_data(application))
-            else
-                render_error(errors)
+            parts_fn = proc do |application|
+                matching = application.applicant_data_for_matching
+                matching_res = matching.update_attributes!(matching_data_update_params)
+                errors = application.errors.messages.deep_merge(matching.errors.messages)
+                [matching_res, errors]
             end
+            merge_fn = proc { |i| application_data(i) }
+            update_entry(Application, application_update_params,
+                         parts_fn: parts_fn, merge_fn: merge_fn)
         end
 
         # POST /applications/delete
         def delete
-            params.require(:id)
-            application = Application.find(params[:id])
-            entry = application_data(application)
-            if application
+            delete_matching = proc do |application|
                 matching = application.applicant_data_for_matching
                 matching.destroy!
             end
-            if application.destroy!
-                render_success(entry)
-            else
-                render_error(application.errors.full_messages.join('; '))
-            end
+            delete_entry(Application, delete_matching)
         end
 
         private
@@ -105,9 +88,7 @@ module Api::V1
         end
 
         def applications_by_session
-            all_applications.select do |entry|
-                entry[:session_id] == params[:session_id].to_i
-            end
+            filter_given_id(all_applications, :session_id, true)
         end
 
         def all_applications
