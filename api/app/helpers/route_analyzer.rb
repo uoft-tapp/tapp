@@ -82,12 +82,9 @@ module RouteAnalyzer
                 data: controller_attributes(controller),
                 required: []
             }
-            input = schemas[controller][:data].select do |item|
-                item[:name] != :created_at && item[:name] != :updated_at
-            end
             schemas[controller_to_input(controller)] = {
                 title: "JSON for creating #{table}",
-                data: input,
+                data: schemas[controller][:data].except(:created_at, :updated_at),
                 required: index_on(controller).map { |i| id_name(i) }
             }
         end
@@ -186,8 +183,8 @@ module RouteAnalyzer
             model_attributes(Applicant)
         when :applications
             application = model_attributes(Application)
-            application += model_attributes(ApplicantDataForMatching)
-            application.uniq
+            application.merge(model_attributes(ApplicantDataForMatching))
+            application
         when :assignments
             model_attributes(Assignment)
         when :instructors
@@ -200,14 +197,10 @@ module RouteAnalyzer
             model_attributes(PositionTemplate)
         when :positions
             position = model_attributes(Position)
-            position += model_attributes(PositionDataForMatching)
-            position += model_attributes(PositionDataForAd)
-            position.push(
-                name: :instructor_ids,
-                type: :integer,
-                array: true
-            )
-            position.uniq
+            position.merge(model_attributes(PositionDataForMatching))
+            position.merge(model_attributes(PositionDataForAd))
+            position[:instructor_ids] = [:integer]
+            position
         when :reporting_tags
             model_attributes(ReportingTag)
         when :sessions
@@ -364,20 +357,6 @@ module RouteAnalyzer
         ]
     end
 
-    def format_attributes(attributes)
-        attributes.map do |item|
-            data = {
-                name: item[:name],
-                value: [
-                    format_inline('type', get_type(item[:type]))
-                ]
-            }
-            data[:value].push(format_inline('format', 'date-time')) if item[:type] == :datetime
-            data[:value].push(format_inline('format', 'float')) if item[:type] == :float
-            data
-        end
-    end
-
     def yaml_format(routes, schemas)
         routes = routes.keys.map do |key|
             format_routes(key, routes[key], schemas)
@@ -447,15 +426,11 @@ module RouteAnalyzer
             data = {
                 name: key.to_s,
                 value: [
-                    format_inline('title', schemas[key][:title]),
-                    format_inline('type', 'object')
+                    format_inline('title', schemas[key][:title])
                 ]
             }
             data[:value] += required_properties(schemas[key][:required])
-            data[:value].push(
-                name: 'properties',
-                value: format_attributes(schemas[key][:data])
-            )
+            data[:value] += get_type(schemas[key][:data])
             data
         end
     end
@@ -472,25 +447,14 @@ module RouteAnalyzer
             ref = "\'#/components/schemas/#{reference[:params]}\'"
             [format_inline('$ref', ref)]
         else
-            [format_inline('type', 'object')] + format_params(reference)
+            format_params(reference)
         end
     end
 
     def format_params(reference)
         if reference[:params]
-            params = reference[:params].keys.map do |key|
-                type = get_type(reference[:params][key])
-                {
-                    name: key,
-                    value: type.is_a?(Array) ? type : [format_inline('type', type)]
-                }
-            end
-            properties = {
-                name: 'properties',
-                value: params
-            }
             data = required_properties(reference[:required] || [])
-            data.push(properties)
+            data += get_type(reference[:params])
             data
         else
             []
@@ -541,7 +505,12 @@ module RouteAnalyzer
             ]
             data[1][:value] = type.keys.map do |key|
                 value = get_type(type[key])
-                value = value.is_a?(Array) ? value : [format_inline('type', value)]
+                temp = [format_inline('type', value)]
+                if type[key] == :datetime || type[key] == :float
+                    entry = format_inline('format', type[key] == :float ? 'float' : 'date-time')
+                    temp.push(entry)
+                end
+                value = value.is_a?(Array) ? value : temp
                 {
                     name: key,
                     value: value
@@ -576,7 +545,9 @@ module RouteAnalyzer
     end
 
     def model_attributes(table)
-        table.columns_hash.map { |i, j| { name: i.to_sym, type: j.type } }
+        data = {}
+        table.columns_hash.each { |i, j| data[i.to_sym] = j.type }
+        data
     end
 
     def required_properties(required)

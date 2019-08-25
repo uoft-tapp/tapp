@@ -53,7 +53,7 @@ API = {
     available_position_templates: {
         summary: 'Show all available position templates',
         response: {
-            response: :position_templates,
+            params: :position_templates,
             array: true
         }
     },
