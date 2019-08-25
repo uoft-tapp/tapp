@@ -52,7 +52,7 @@ module FakeData
         when :wage_chunks
             %i[assignment_index]
         when :reporting_tags
-            %i[wage_chunk_index]
+            %i[name]
         else
             []
         end
@@ -302,7 +302,6 @@ module FakeData
         position = get_record(records, :positions, assignment[:position_index])
         [{
             name: position[:position_code][0..-5],
-            position_index: assignment[:position_index],
             wage_chunk_index: wage_chunk_index
         }, records]
     end
