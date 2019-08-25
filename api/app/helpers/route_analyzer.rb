@@ -75,7 +75,7 @@ module RouteAnalyzer
     end
 
     def setup_schemas(controller, schemas)
-        table = controller.to_s[0..-2].capitalize
+        table = controller_to_title(controller)
         unless schemas.key?(controller)
             schemas[controller] = {
                 title: "JSON for #{table}",
@@ -92,6 +92,10 @@ module RouteAnalyzer
             }
         end
         schemas
+    end
+
+    def controller_to_title(controller)
+        controller.to_s[0..-2].sub('_', ' ').titleize
     end
 
     def add_details(routes)
@@ -215,7 +219,7 @@ module RouteAnalyzer
         end
     end
 
-    def format_routes(path, route)
+    def format_routes(path, route, schemas)
         data = {
             name: path,
             value: []
@@ -232,7 +236,7 @@ module RouteAnalyzer
                 value: [
                     {
                         name: 'tags',
-                        value: "- #{entry[:controller].to_s.capitalize}",
+                        value: "- #{controller_to_title(entry[:controller])}",
                         no_quotes: true
                     },
                     {
@@ -245,14 +249,14 @@ module RouteAnalyzer
                 if entry[:method] == :post
                     value_entry[:value].push(
                         name: 'requestBody',
-                        value: format_request_body(entry)
+                        value: format_request_body(entry, schemas)
                     )
                 end
             end
             if entry[:response][:params] != {}
                 value_entry[:value].push(
                     name: 'responses',
-                    value: format_response(entry)
+                    value: format_response(entry, schemas)
                 )
             end
             data[:value].push(value_entry)
@@ -282,38 +286,38 @@ module RouteAnalyzer
         data
     end
 
-    def format_request_body(route)
+    def format_request_body(route, schemas)
         [{
             name: 'content',
             value: [{
                 name: 'application/json',
                 value: [{
                     name: 'schema',
-                    value: format_ref(route[:request])
+                    value: format_ref(route[:request], schemas)
                 }]
             }]
         }]
     end
 
-    def format_response(route)
-        payload = route_payload(route)
+    def format_response(route, schemas)
+        payload = route_payload(route, schemas)
         [
             response('200', 'Successful Response', payload),
             response('404', 'Not found', [format_inline('type', 'object')])
         ]
     end
 
-    def route_payload(route)
+    def route_payload(route, schemas)
         if route[:response][:array]
             [
                 format_inline('type', 'array'),
                 {
                     name: 'items',
-                    value: format_ref(route[:response])
+                    value: format_ref(route[:response], schemas)
                 }
             ]
         else
-            format_ref(route[:response])
+            format_ref(route[:response], schemas)
         end
     end
 
@@ -375,7 +379,7 @@ module RouteAnalyzer
 
     def yaml_format(routes, schemas)
         routes = routes.keys.map do |key|
-            format_routes(key, routes[key])
+            format_routes(key, routes[key], schemas)
         end
         schemas = format_schemas(schemas)
         [
@@ -455,8 +459,15 @@ module RouteAnalyzer
         end
     end
 
-    def format_ref(reference)
+    def format_ref(reference, schemas)
         if reference[:params].is_a?(Symbol)
+            unless schemas.key?(reference[:params])
+                abort(
+                    "\'#{reference[:params]}\' is not a valid schema name. " \
+                    "The following are all the available schemas:\n" \
+                    "\t#{schemas.keys.join("\n\t")}"
+                )
+            end
             ref = "\'#/components/schemas/#{reference[:params]}\'"
             [format_inline('$ref', ref)]
         else

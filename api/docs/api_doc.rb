@@ -15,6 +15,19 @@
 #    - :float
 #    - :string
 #    - :datetime
+#
+# The value, params, can sometimes be a symbol that is not one of the types
+# defined above. This is because it is meant to denote a reference to a schema.
+# For example, :instructors is a reference to the model of the Instructor
+# table. Whereas, :positions is a reference to the model of the Position,
+# PositionDataForMatching, and PositionDataForAd.
+#
+# There are two schemas for every controller that deals with a model.
+# For example, Instructor has the schemas: :instructors and :instructor_input
+# The former is the full model completed with attributes such as :created_at and
+# :updated_at. The latter does not contain those attributes, but it does have
+# required parameters for creating a new model entry. Also, note that there is
+# a lack of 's' in the latter schema name.
 
 API = {
     session_instructors: {
