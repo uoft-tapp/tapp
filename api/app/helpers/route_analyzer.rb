@@ -22,6 +22,24 @@ module RouteAnalyzer
         [get_unique_routes(routes), schemas]
     end
 
+    def update_route_documentation(routes, data)
+        ind_map = key_to_index(routes)
+        data.keys.each do |key|
+            label, ind = ind_map[key]
+            routes[label][ind][:summary] = data[key][:summary]
+        end
+    end
+
+    def key_to_index(routes)
+        ind_map = {}
+        routes.keys.each do |key|
+            routes[key].each_with_index do |entry, j|
+                ind_map[entry[:name].to_s.sub('api_v1_', '').to_sym] = [key, j]
+            end
+        end
+        ind_map
+    end
+
     def get_unique_routes(routes)
         unique_routes = {}
         routes.each do |item|

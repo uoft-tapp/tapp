@@ -18,7 +18,8 @@ module Tapp
     logger.formatter = config.log_formatter
     config.log_tags = %i[subdomain uuid]
     config.logger = ActiveSupport::TaggedLogging.new(logger)
-
+    config.autoload_paths += %W(#{config.root}/docs)
+    
     begin
         # Stop the `Cannot render console from ...` error messages in the console
         config.web_console.whiny_requests = false
