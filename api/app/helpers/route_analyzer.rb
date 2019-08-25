@@ -95,7 +95,7 @@ module RouteAnalyzer
     end
 
     def controller_to_title(controller)
-        controller.to_s[0..-2].gsub('_', ' ').titleize
+        controller.to_s[0..-2].tr('_', ' ').titleize
     end
 
     def add_details(routes)
@@ -373,6 +373,7 @@ module RouteAnalyzer
                 ]
             }
             data[:value].push(format_inline('format', 'date-time')) if item[:type] == :datetime
+            data[:value].push(format_inline('format', 'float')) if item[:type] == :float
             data
         end
     end
@@ -553,8 +554,19 @@ module RouteAnalyzer
                 'integer'
             when :float
                 'number'
-            else
+            when :string
                 'string'
+            when :text
+                'string'
+            when :datetime
+                'string'
+            when :boolean
+                'boolean'
+            else
+                abort(
+                    "'#{type}' is not a valid type. The following are the valid types:" \
+                    "\tstring\n\tinteger\nf\tloat\n\tdatetime\n\tboolean"
+                )
             end
         end
     end

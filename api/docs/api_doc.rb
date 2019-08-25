@@ -15,6 +15,7 @@
 #    - :float
 #    - :string
 #    - :datetime
+#    - :boolean
 #
 # The value, params, can sometimes be a symbol that is not one of the types
 # defined above. This is because it is meant to denote a reference to a schema.
