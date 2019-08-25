@@ -534,7 +534,7 @@ module RouteAnalyzer
             else
                 abort(
                     "'#{type}' is not a valid type. The following are the valid types:" \
-                    "\tstring\n\tinteger\nf\tloat\n\tdatetime\n\tboolean"
+                    "\tstring\n\tinteger\n\tfloat\n\tdatetime\n\tboolean"
                 )
             end
         end
