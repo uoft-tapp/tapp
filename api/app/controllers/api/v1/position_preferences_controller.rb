@@ -10,39 +10,23 @@ module Api::V1
 
         # POST /add_preference
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && PositionPreference.exists?(params[:id])
-            params.require(:position_id)
-            return if invalid_id(Application, :application_id, [])
-            return if invalid_id(Position, :position_id, preferences_by_application)
+            update && return if update_condition(PositionPreference)
+            return if invalid_id_check(Application)
 
-            preference = PositionPreference.new(preference_params)
-            if preference.save # passes PositionPreference model validation
-                render_success(preferences_by_application)
-            else
-                preference.destroy!
-                render_error(preference.errors, preferences_by_application)
-            end
+            params.require(:position_id)
+            return if invalid_id_check(Position, preferences_by_application)
+
+            output = proc { preferences_by_application }
+            create_entry(PositionPreference, preference_params, output: output)
         end
 
         def update
-            position_preference = PositionPreference.find(params[:id])
-            if position_preference.update_attributes!(preference_update_params)
-                render_success(position_preference)
-            else
-                render_error(position_preference.errors)
-            end
+            update_entry(PositionPreference, preference_update_params)
         end
 
         # POST /position_preferences/delete
         def delete
-            params.require(:id)
-            position_preference = PositionPreference.find(params[:id])
-            if position_preference.destroy!
-                render_success(position_preference)
-            else
-                render_error(position_preference.errors.full_messages.join('; '))
-            end
+            delete_entry(PositionPreference)
         end
 
         private
@@ -62,9 +46,7 @@ module Api::V1
         end
 
         def preferences_by_application
-            PositionPreference.order(:id).select do |entry|
-                entry[:application_id] == params[:application_id].to_i
-            end
+            filter_given_id(PositionPreference, :application_id)
         end
     end
 end

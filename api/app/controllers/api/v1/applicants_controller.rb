@@ -5,46 +5,22 @@ module Api::V1
     class ApplicantsController < ApplicationController
         # GET /applicants
         def index
-            unless params.include?(:session_id)
-                render_success(Applicant.order(:id))
-                return
-            end
-            return if invalid_id(Session, :session_id)
-
-            render_success(applicants_by_session)
+            index_response(Applicant, Session, applicants_by_session)
         end
 
         # POST /applicants
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Applicant.exists?(params[:id])
-            applicant = Applicant.new(applicant_params)
-            if applicant.save # passes Applicant model validation
-                render_success(applicant)
-            else
-                applicant.destroy!
-                render_error(applicant.errors)
-            end
+            update && return if update_condition(Applicant)
+            create_entry(Applicant, applicant_params)
         end
 
         def update
-            applicant = Applicant.find(params[:id])
-            if applicant.update_attributes!(applicant_params)
-                render_success(applicant)
-            else
-                render_error(applicant.errors)
-            end
+            update_entry(Applicant, applicant_params)
         end
 
         # POST /applicants/delete
         def delete
-            params.require(:id)
-            applicant = Applicant.find(params[:id])
-            if applicant.destroy!
-                render_success(applicant)
-            else
-                render_error(applicant.errors.full_messages.join('; '))
-            end
+            delete_entry(Applicant)
         end
 
         private
@@ -61,9 +37,7 @@ module Api::V1
         end
 
         def applicants_by_session
-            Applicant.order(:id).select do |entry|
-                entry[:session_id] == params[:session_id].to_i
-            end
+            filter_given_id(Applicant, :session_id)
         end
     end
 end

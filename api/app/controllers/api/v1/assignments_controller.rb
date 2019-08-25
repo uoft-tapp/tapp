@@ -5,56 +5,36 @@ module Api::V1
     class AssignmentsController < ApplicationController
         # GET /assignments
         def index
-            unless params.include?(:position_id)
-                render_success(Assignment.order(:id))
-                return
-            end
-            return if invalid_id(Position, :position_id)
-
-            render_success(assignments_by_position)
+            index_response(Assignment, Position, assignments_by_position)
         end
 
         # POST /assignments
         def create
             # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Assignment.exists?(params[:id])
+            update && return if update_condition(Assignment)
             params.require(:applicant_id)
             return if invalid_id(Position, :position_id)
             return if invalid_id(Applicant, :applicant_id)
 
-            assignment = Assignment.new(assignment_params)
-            unless assignment.save # does not pass Assignment model validation
-                assignment.destroy!
-                render_error(assignment.errors)
-                return
+            create_subparts = proc do |assignment|
+                message = valid_wage_chunk(assignment, assignment.errors.messages)
+                if !message
+                    render_success(assignment)
+                else
+                    assignment.destroy!
+                    render_error(message)
+                end
             end
-            message = valid_wage_chunk(assignment, assignment.errors.messages)
-            if !message
-                render_success(assignment)
-            else
-                assignment.destroy!
-                render_error(message)
-            end
+            create_entry(Assignment, assignment_params, after_fn: create_subparts)
         end
 
         def update
-            assignment = Assignment.find(params[:id])
-            if assignment.update_attributes!(assignment_update_params)
-                render_success(assignment)
-            else
-                render_error(assignment.errors)
-            end
+            update_entry(Assignment, assignment_update_params)
         end
 
         # POST /assignments/delete
         def delete
-            params.require(:id)
-            assignment = Assignment.find(params[:id])
-            if assignment.destroy!
-                render_success(assignment)
-            else
-                render_error(assignment.errors.full_messages.join('; '))
-            end
+            delete_entry(Assignment)
         end
 
         private
@@ -80,9 +60,7 @@ module Api::V1
         end
 
         def assignments_by_position
-            Assignment.order(:id).select do |entry|
-                entry[:position_id] == params[:position_id].to_i
-            end
+            filter_given_id(Assignment, :position_id)
         end
 
         def valid_wage_chunk(assignment, errors)

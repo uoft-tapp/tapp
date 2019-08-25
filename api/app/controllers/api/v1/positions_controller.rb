@@ -5,74 +5,56 @@ module Api::V1
     class PositionsController < ApplicationController
         # GET /positions
         def index
-            unless params.include?(:session_id)
-                render_success(all_positions)
-                return
-            end
-            return if invalid_id(Session, :session_id)
-
-            render_success(positions_by_session)
+            index_response(all_positions, Session, positions_by_session, true)
         end
 
         # POST /positions
         def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Position.exists?(params[:id])
-            params.require(%i[position_code position_title])
-            return if invalid_id(Session, :session_id)
+            update && return if update_condition(Position)
+            return if invalid_id_check(Session)
 
-            position = Position.new(position_params)
-            unless position.save # does not pass Position model validation
-                position.destroy!
-                render_error(position.errors.full_messages.join('; '))
-                return
+            params.require(%i[position_code position_title])
+            create_subparts = proc do |position|
+                update_instructors_ids(position)
+                params[:position_id] = position[:id]
+                message = valid_ad_and_matching(position.errors.messages)
+                if !message
+                    render_success(position_data(position))
+                else
+                    position.destroy!
+                    render_error(message)
+                end
             end
-            update_instructors_ids(position)
-            params[:position_id] = position[:id]
-            message = valid_ad_and_matching(position.errors.messages)
-            if !message
-                render_success(position_data(position))
-            else
-                position.destroy!
-                render_error(message)
-            end
+            create_entry(Position, position_params, after_fn: create_subparts)
         end
 
         def update
-            position = Position.find(params[:id])
-            ad = position.position_data_for_ad
-            matching = position.position_data_for_matching
-            update_instructors_ids(position)
+            parts_fn = proc do |position|
+                ad = position.position_data_for_ad
+                matching = position.position_data_for_matching
+                update_instructors_ids(position)
 
-            position_res = position.update_attributes!(position_update_params)
-            ad_res = ad.update_attributes!(ad_update_params)
-            matching_res = matching.update_attributes!(matching_update_params)
+                ad_res = ad.update_attributes!(ad_update_params)
+                matching_res = matching.update_attributes!(matching_update_params)
 
-            errors = position.errors.messages.deep_merge(ad.errors.messages)
-            errors = errors.deep_merge(matching.errors.messages)
-            if ad_res && position_res && matching_res
-                render_success(position_data(position))
-            else
-                render_error(errors)
+                errors = position.errors.messages.deep_merge(ad.errors.messages)
+                errors = errors.deep_merge(matching.errors.messages)
+                [ad_res && matching_res, errors]
             end
+            merge_fn = proc { |i| position_data(i) }
+            update_entry(Position, position_update_params,
+                         parts_fn: parts_fn, merge_fn: merge_fn)
         end
 
         # POST /positions/delete
         def delete
-            params.require(:id)
-            position = Position.find(params[:id])
-            entry = position_data(position)
-            if position
+            delete_matching_and_ad = proc do |position|
                 matching = position.position_data_for_matching
                 ad = position.position_data_for_ad
                 matching.destroy!
                 ad.destroy!
             end
-            if position.destroy!
-                render_success(entry)
-            else
-                render_error(position.errors.full_messages.join('; '))
-            end
+            delete_entry(Position, delete_matching_and_ad)
         end
 
         private
@@ -142,9 +124,7 @@ module Api::V1
         end
 
         def positions_by_session
-            all_positions.select do |entry|
-                entry[:session_id] == params[:session_id].to_i
-            end
+            filter_given_id(all_positions, :session_id, true)
         end
 
         def all_positions
