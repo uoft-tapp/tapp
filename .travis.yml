@@ -43,6 +43,8 @@ matrix:
         - cp dev.env .env
         - docker-compose up --build -d
         - docker ps -a
+        - docker-compose run api rake db:create
+        - docker-compose run api rake db:migrate
       script:
         - ./tests/run-api-documentation.sh
       after_failure:

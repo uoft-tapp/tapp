@@ -25,8 +25,20 @@ module RouteAnalyzer
     def update_route_documentation(routes, data)
         ind_map = key_to_index(routes)
         data.keys.each do |key|
-            label, ind = ind_map[key]
-            routes[label][ind][:summary] = data[key][:summary]
+            if ind_map.key?(key)
+                label, ind = ind_map[key]
+                routes[label][ind][:summary] = data[key][:summary] if data[key][:summary]
+                routes[label][ind][:request] = data[key][:request] if data[key][:request]
+                routes[label][ind][:response] = data[key][:response] if data[key][:response]
+            else
+                all_keys = ind_map.keys.map do |route_name|
+                    label, ind = ind_map[route_name]
+                    "#{routes[label][ind][:method]} #{routes[label][ind][:path]}, "\
+                    "name: #{route_name}"
+                end
+                abort("#{key} is not a valid route name. The following are the "\
+                    "valid route names:\n#{all_keys.join("\n")}")
+            end
         end
     end
 
@@ -277,7 +289,7 @@ module RouteAnalyzer
                 name: 'application/json',
                 value: [{
                     name: 'schema',
-                    value: format_ref(route[:request], true)
+                    value: format_ref(route[:request])
                 }]
             }]
         }]
@@ -443,33 +455,29 @@ module RouteAnalyzer
         end
     end
 
-    def format_ref(reference, is_request = false)
+    def format_ref(reference)
         if reference[:params].is_a?(Symbol)
             ref = "\'#/components/schemas/#{reference[:params]}\'"
             [format_inline('$ref', ref)]
         else
-            [format_inline('type', 'object')] + format_params(reference, is_request)
+            [format_inline('type', 'object')] + format_params(reference)
         end
     end
 
-    def format_params(reference, is_request)
+    def format_params(reference)
         if reference[:params]
             params = reference[:params].keys.map do |key|
                 type = get_type(reference[:params][key])
-                if is_request
-                    {
-                        name: key,
-                        value: [format_inline('type', type)]
-                    }
-                else
-                    format_inline(key, type)
-                end
+                {
+                    name: key,
+                    value: type.is_a?(Array) ? type : [format_inline('type', type)]
+                }
             end
             properties = {
                 name: 'properties',
                 value: params
             }
-            data = required_properties(reference[:required])
+            data = required_properties(reference[:required] || [])
             data.push(properties)
             data
         else
@@ -490,13 +498,53 @@ module RouteAnalyzer
     end
 
     def get_type(type)
-        case type
-        when :integer
-            'integer'
-        when :float
-            'number'
+        if type.is_a?(Array)
+            data = [
+                format_inline('type', 'array'),
+                {
+                    name: 'items',
+                    value: []
+                }
+            ]
+            type.map do |item|
+                value = get_type(item)
+                if value.is_a?(String)
+                    data[1][:value].push(format_inline('type', value))
+                else
+                    data[1][:value] += value
+                end
+            end
+            if data[1][:value].length.positive?
+                data
+            else
+                abort('An array type must have its item type declared')
+            end
+        elsif type.is_a?(Hash)
+            data = [
+                format_inline('type', 'object'),
+                {
+                    name: 'properties',
+                    value: []
+                }
+            ]
+            data[1][:value] = type.keys.map do |key|
+                value = get_type(type[key])
+                value = value.is_a?(Array) ? value : [format_inline('type', value)]
+                {
+                    name: key,
+                    value: value
+                }
+            end
+            data
         else
-            'string'
+            case type
+            when :integer
+                'integer'
+            when :float
+                'number'
+            else
+                'string'
+            end
         end
     end
 

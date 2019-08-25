@@ -6,7 +6,7 @@ namespace :api do
         routes, schemas = all_routes
         update_route_documentation(routes, API)
         passed, routes = routes_documented?(routes)
-        file = '/config/api.yml'
+        file = '/docs/api.yml'
         write_file(file, convert_to_yaml(yaml_format(routes, schemas)))
         if !passed
             abort("Incomplete API documentation created at #{file}")

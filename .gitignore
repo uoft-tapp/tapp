@@ -4,4 +4,4 @@ public
 .env
 node_modules
 .byebug_history
-api/config/api.yml
+api/docs/api.yml
