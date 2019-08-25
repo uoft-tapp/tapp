@@ -28,8 +28,15 @@ module RouteAnalyzer
             if ind_map.key?(key)
                 label, ind = ind_map[key]
                 routes[label][ind][:summary] = data[key][:summary] if data[key][:summary]
-                routes[label][ind][:request] = data[key][:request] if data[key][:request]
-                routes[label][ind][:response] = data[key][:response] if data[key][:response]
+                if data[key][:request]
+                    required_type_check(data[key][:request][:required], key)
+                    params_type_check(data[key][:request][:params], 'request', key)
+                    routes[label][ind][:request] = data[key][:request]
+                end
+                if data[key][:response]
+                    params_type_check(data[key][:response][:params], 'response', key)
+                    routes[label][ind][:response] = data[key][:response]
+                end
             else
                 all_keys = ind_map.keys.map do |route_name|
                     label, ind = ind_map[route_name]
@@ -39,6 +46,26 @@ module RouteAnalyzer
                 abort("#{key} is not a valid route name. The following are the "\
                     "valid route names:\n#{all_keys.join("\n")}")
             end
+        end
+    end
+
+    def params_type_check(params, parent, key)
+        return if params.blank? && parent == 'response'
+
+        if !params.is_a?(Symbol) && !params.is_a?(Hash)
+            abort(
+                "Invalid #{parent} params for \'#{key}\'." \
+                "\n\t:params can only be a symbol or a hash."
+            )
+        end
+    end
+
+    def required_type_check(required, key)
+        unless required.is_a?(Array)
+            abort(
+                "Invalid request params for \'#{key}\'." \
+                "\n\t:required can only be an array."
+            )
         end
     end
 
@@ -161,7 +188,7 @@ module RouteAnalyzer
                     route[:summary] = route[:summary] ? route[:summary].strip : ''
                     if !route[:summary].length.positive?
                         incomplete.push("#{label}No summary set for this route")
-                    elsif route[:response][:params] == {}
+                    elsif route[:response][:params].blank?
                         incomplete.push("#{label}No response set for this route")
                     else
                         completed[key] = [] unless completed.key?(key)
