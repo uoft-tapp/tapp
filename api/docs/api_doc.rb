@@ -18,6 +18,7 @@
 
 API = {
     session_instructors: {
+        summary: 'Show all instructors given session_id',
         response: {
             params: :instructors,
             array: true
