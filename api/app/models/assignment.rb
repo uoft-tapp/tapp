@@ -18,12 +18,29 @@ class Assignment < ApplicationRecord
 	end 
 
 	def withdraw_active_offer
-		return if self.active_offer.blank? 
+		return false if self.active_offer.blank? 
 
-		self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
+		return self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
 	end
 
-	def create_offer
+	def reject_active_offer
+		return false if self.active_offer.blank? 
+
+		return self.active_offer.update_attribute(:rejected_date, Time.zone.now)
+	end
+
+	def accept_active_offer(signature)
+		return false if self.active_offer.blank? 
+
+		return self.active_offer.update_attributes({accepted_date: Time.zone.now, signature: signature})
+	end
+
+	def nag 
+		return false if self.active_offer.blank? 
+		return self.active_offer.update_attribute(:nag, self.active_offer.nag + 1)
+	end 
+
+	def offer_params
 		return if self.active_offer.present? 
 
 		applicant = self.applicant
@@ -35,7 +52,7 @@ class Assignment < ApplicationRecord
 		installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
 		offer_template = session.position_templates.where(position_type: position.position_type).first.offer_template
 		
-		offer = Offer.new({
+		return {
 			email: applicant.email,
 			first_name: applicant.first_name,
 			last_name: applicant.last_name,
@@ -51,8 +68,7 @@ class Assignment < ApplicationRecord
 			position_start_date: start_date,
 			position_title: position.position_title,
 			assignment: self
-		})
-		offer.save!
+		}
 	end 
 	
 	private
