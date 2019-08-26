@@ -12,13 +12,12 @@ module Api::V1
         def create
             # if we passed in an id that exists, we want to update
             update && return if params.key?(:id) && ReportingTag.exists?(params[:id])
-            params.require(%i[position_id name])
+            params.require(%i[name])
             return if invalid_id(WageChunk, :wage_chunk_id, [])
-            return if invalid_id(Position, :position_id,
-                                 reporting_tags_by_wage_chunk)
 
             reporting_tag = ReportingTag.new(reporting_tag_params)
             if reporting_tag.save # passes ReportingTag model validation
+                update_position_ids(reporting_tag)
                 render_success(reporting_tags_by_wage_chunk)
             else
                 reporting_tag.destroy!
@@ -29,6 +28,7 @@ module Api::V1
         def update
             reporting_tag = ReportingTag.find(params[:id])
             if reporting_tag.update_attributes!(reporting_tag_update_params)
+                update_position_ids(reporting_tag)
                 render_success(reporting_tag)
             else
                 render_error(reporting_tag.errors)
@@ -50,9 +50,7 @@ module Api::V1
 
         def reporting_tag_params
             params.permit(
-                :name,
-                :position_id,
-                :wage_chunk_id
+                :name
             )
         end
 
@@ -64,8 +62,22 @@ module Api::V1
 
         def reporting_tags_by_wage_chunk
             ReportingTag.order(:id).select do |entry|
-                entry[:wage_chunk_id] == params[:wage_chunk_id].to_i
+                entry.wage_chunk_ids.include?(params[:wage_chunk_id].to_i)
             end
+        end
+
+        def position_id_by_wage_chunk(reporting_tag)
+            wage_chunk = WageChunk.find(params[:wage_chunk_id])
+            reporting_tag.wage_chunk_ids.push(wage_chunk[:id])
+            reporting_tag.wage_chunk_ids = reporting_tag.wage_chunk_ids.uniq
+            assignment = Assignment.find(wage_chunk[:assignment_id])
+            assignment[:position_id]
+        end
+
+        def update_position_ids(reporting_tag)
+            position_id = position_id_by_wage_chunk(reporting_tag)
+            reporting_tag.position_ids.push(position_id)
+            reporting_tag.position_ids = reporting_tag.position_ids.uniq
         end
     end
 end
