@@ -75,6 +75,9 @@ Rails.application.routes.draw do
             resources :offers, only: [:create]
             post '/email_offer', to: 'offers#email_offer'
             post '/ta/offers/:offer_id/respond_to_offer', to: 'offers#respond'
+
+            get "/pb/:offer_id/pdf" => "offers#get_contract_student"
+            get "/pb/:offer_id/html" => "offers#get_contract_student_html"
         end
 
         # This route makes sure that any requests with URLs of the form '/api/*'

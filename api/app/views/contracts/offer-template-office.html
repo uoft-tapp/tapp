@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Offer Letter</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                width: 8.5in;
+                margin: 0;
+                padding-left: 0.75in;
+                padding-right: 0.75in;
+                hyphens: auto;
+                text-align: justify;
+                box-sizing: border-box;
+                font-family: Helvetica, sans-serif;
+                font-size: 12pt;
+            }
+            .i {
+                font-style: italic;
+            }
+            .emphcolor {
+                color: red;
+            }
+            table.appointment-summary {
+                margin-left: 1in;
+                font-size: 0.9em;
+            }
+            .appointment-summary th {
+                padding-right: 0.5em;
+                text-align: right;
+                font-weight: normal;
+            }
+            .letter-head p {
+                margin-bottom: 0.5in;
+            }
+            .letter-foot {
+                margin-top: 1in;
+            }
+            .signature {
+                font-family: alex_brushregular, cursive;
+                font-size: 30pt;
+                margin-left: 0.5in;
+                margin-bottom: 0.1in;
+            }
+            .applicant .signature {
+                border-bottom: 1px solid black;
+                min-width: 2.5in;
+                display: inline-block;
+                margin-left: 0;
+            }
+
+            @media only screen and (min-width: 9in) {
+                /* when printed, these styles won't show
+				because the "screen" is 8.5in */
+                body {
+                }
+            }
+        </style>
+        <style>
+            .office-area {
+                page-break-before: always;
+            }
+            .office-area h3 {
+                margin-bottom: 0;
+                font-size: 12pt;
+            }
+            .office-area table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                font-size: 10pt;
+            }
+            .office-area table,
+            .office-area th,
+            .office-area td {
+                border: 1px solid black;
+                padding-left: 0.5em;
+                padding-top: 1em;
+                padding-bottom: 1em;
+            }
+            .greyed {
+                background-color: lightgray;
+            }
+        </style>
+        <link rel="stylesheet" href="font.css" />
+        <link rel="stylesheet" href="header.css" />
+        <!-- for rendering with wkhtmltopdf styles need to be inlined; when rendered directly in a browser,
+	this will just be invalid CSS -->
+        <style>
+            {{ style_font }}
+        </style>
+        <style>
+            {{ style_header }}
+        </style>
+    </head>
+    <body>
+        <div class="letter-head">
+            <div class="uoftlogo"></div>
+            <p>{{ date }}</p>
+            <p>
+                {{ applicant.first_name }} {{ applicant.last_name }}<br />
+                c/o Some Department<br />
+                University of Toronto
+            </p>
+            <p>Dear {{ applicant.first_name }},</p>
+        </div>
+        <div class="letter-body">
+            <p>
+                I am pleased to offer you an appointment as a Teaching Assistant
+                in the Some Department. The starting date of your appointment
+                will be {{ start_date | date: "%b %d, %Y" }} and this
+                appointment will end on {{ end_date | date: "%b %d, %Y" }} with
+                no further notice to you.
+            </p>
+            <h3 class="i">Appointment Summary</h3>
+            <table class="appointment-summary">
+                <tr>
+                    <th>Appointment:</th>
+                    <td class="emphcolor">{{ position }}</td>
+                </tr>
+                <tr>
+                    <th>Hours:</th>
+                    <td class="emphcolor">{{ hours }}</td>
+                </tr>
+                <tr>
+                    <th>Start Date:</th>
+                    <td>{{ start_date | date: "%b %d, %Y" }}</td>
+                </tr>
+                <tr>
+                    <th>End Date:</th>
+                    <td>{{ end_date | date: "%b %d, %Y" }}</td>
+                </tr>
+                <tr>
+                    <th>Rate:</th>
+                    <td>{{ session_info.pay }}</td>
+                </tr>
+            </table>
+
+            <p>
+                Your appointment will be for {{ hours }} hours for {{ position
+                }}. Your Course Coordinator will be in contact with you. You
+                will be paid {{ rate }} for this position. You will be paid in
+                {{ installments }} instalments, once per month for the period of
+                your appointment. Your salary will be paid by direct deposit.
+            </p>
+        </div>
+        <div class="letter-foot tacoordinator">
+            <p>Yours sincerely,</p>
+            <div class="signature">Tom Tomson</div>
+            <div class="details">
+                Tom Tomson<br />TA Coordinator<br />Some Department
+            </div>
+        </div>
+        <div class="letter-foot applicant">
+            <p>Please sign below to accept this offer.</p>
+            <div class="signature">{{ signature }}</div>
+            <div class="details">
+                Applicant Signature
+            </div>
+        </div>
+
+        <div class="office-area">
+            <h2>Office Use Only</h2>
+            <h3>Personnel Number Search:</h3>
+            <table>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ applicant.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ applicant.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Student ID Number</th>
+                    <td>{{ applicant.student_number }}</td>
+                </tr>
+            </table>
+
+            <h3>Returning Employee:</h3>
+            <table>
+                <tr>
+                    <th>Personnel Number</th>
+                    <td class="greyed"></td>
+                    <th>Name</th>
+                    <td>{{ applicant.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Start Date</th>
+                    <td>{{ start_date | date: "%Y.%m.%d" }}</td>
+                    <th>End Date</th>
+                    <td>{{ end_date | date: "%Y.%m.%d" }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Wage Type</th>
+                    <td colspan="2">01 15</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Amount/Month</th>
+                    <td colspan="2">{{ }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Number/Unit</th>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <th colspan="2">Assignment Number</th>
+                    <td colspan="2">{{ position }}</td>
+                </tr>
+            </table>
+
+            <h3>New Employee:</h3>
+            <table>
+                <tr>
+                    <th>Personnel Number</th>
+                    <td class="greyed"></td>
+                    <th>Name</th>
+                    <td>{{ applicant.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Start Date</th>
+                    <td>{{ start_date | date: "%Y.%m.%d" }}</td>
+                    <th>End Date</th>
+                    <td>{{ end_date | date: "%Y.%m.%d" }}</td>
+                </tr>
+                <tr>
+                    <th>Form-of-add</th>
+                    <td class="greyed"></td>
+                    <th>Birth date</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>SIN</th>
+                    <td class="greyed"></td>
+                    <th>Gender</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>Home Address</th>
+                    <td colspan="3" class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>City</th>
+                    <td class="greyed"></td>
+                    <th>Postal Code</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>Province</th>
+                    <td class="greyed"></td>
+                    <th>Country</th>
+                    <td class="greyed"></td>
+                </tr>
+            </table>
+
+            <h3>Banking Details (Check one of the below):</h3>
+            <table>
+                <tr>
+                    <th>Void Cheque</th>
+                    <td class="greyed"></td>
+                    <th>Direct Deposit</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>Position</th>
+                    <td class="greyed"></td>
+                    <th>Fund Centre</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>Work Contract</th>
+                    <td class="greyed"></td>
+                    <th>Student Number</th>
+                    <td>{{ applicant.student_number }}</td>
+                </tr>
+                <tr>
+                    <th>Citisenship</th>
+                    <td class="greyed"></td>
+                    <th>Study Permit</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>HRIS Position #</th>
+                    <td>{{ position_num }}</td>
+                    <th>CC</th>
+                    <td class="greyed"></td>
+                </tr>
+                <tr>
+                    <th>CFC</th>
+                    <td class="greyed"></td>
+                    <th>Work Contract</th>
+                    <td>K5</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
