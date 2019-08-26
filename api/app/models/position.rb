@@ -15,16 +15,6 @@ class Position < ApplicationRecord
     has_one :position_data_for_matching
     validates :est_hours_per_assignment, numericality: {only_float: true}, allow_nil: true
     validates :position_code, :presence => true, :uniqueness => {scope: :session}
-
-
-
-    def as_json(_options = {})
-        super(
-            include: {
-                instructors: { only: %i[id first_name last_name] }
-            }
-        )
-    end
 end
 
 # == Schema Information

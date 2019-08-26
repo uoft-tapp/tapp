@@ -2,13 +2,16 @@ import PropTypes from "prop-types";
 import {
     apiGET,
     apiPOST,
+    addSession,
+    deleteSession,
+    addPosition,
+    deletePosition,
     checkPropTypes,
     sessionPropTypes,
     offerTemplateMinimalPropTypes,
     offerTemplatePropTypes,
-    addSession,
-    deleteSession,
     positionPropTypes,
+    instructorPropTypes,
     errorPropTypes
 } from "./utils";
 import { mockAPI } from "../api/mockAPI";
@@ -59,21 +62,17 @@ expect.extend({
  */
 function sessionsTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
-    it("fetch sessions", async () => {
-        const resp = await apiGET("/sessions");
+    let session = null;
+    const newSessionData = {
+        start_date: "2019/09/09",
+        end_date: "2019/12/31",
+        // add a random string to the session name so we don't accidentally collide with another
+        // session's name
+        name: "Newly Created Sessions (" + Math.random() + ")",
+        rate1: 56.54
+    };
 
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
-    });
-    it("create and delete session", async () => {
-        const newSessionData = {
-            start_date: "2019/09/09",
-            end_date: "2019/12/31",
-            // add a random string to the session name so we don't accidentally collide with another
-            // session's name
-            name: "Newly Created Sessions (" + Math.random() + ")",
-            rate1: 56.54
-        };
+    it("create a session", async () => {
         // get all the sessions so that we can check that our newly inserted session has
         // a unique id.
         const { payload: initialSessions } = await apiGET("/sessions");
@@ -96,26 +95,113 @@ function sessionsTests(api = { apiGET, apiPOST }) {
         // make sure the id of our new session came back
         expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
 
-        // now delete the session and make sure it's gone
-        const resp2 = await apiPOST("/sessions/delete", {
-            id: createdSession.id
-        });
-        expect(resp2).toMatchObject({ status: "success" });
-        const { payload: withoutNewSessions } = await apiGET("/sessions");
-        expect(withoutNewSessions.map(x => x.id)).not.toContain(
-            createdSession.id
-        );
+        // save this session for use in later tests
+        session = resp1.payload;
     });
-    it.todo("update a session");
-    it.todo("throw error when `name` is empty");
-    it.todo("throw error when `name` is not unique");
-    it.todo("throw error when deleting item with invalid id");
+
+    it("fetch sessions", async () => {
+        const resp = await apiGET("/sessions");
+
+        expect(resp).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
+    });
+
+    it("update a session", async () => {
+        const newData = { ...session, rate1: 57.75 };
+        const resp1 = await apiPOST("/sessions", newData);
+        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1.payload).toMatchObject(newData);
+
+        // get the sessions list and make sure we're updated there as well
+        const resp2 = await apiGET("/sessions");
+        // filter session list to get the updated session obj
+        const updatedSession = resp2.payload.filter(s => s.id == session.id);
+        expect(updatedSession).toContainObject(newData);
+    });
+
+    it("throw error when `name` is empty", async () => {
+        // create new session with empty name
+        const newData1 = { ...newSessionData, name: "" };
+        const newData2 = { ...newSessionData, name: undefined };
+
+        const resp1 = await apiPOST("/sessions", newData1);
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+
+        const resp2 = await apiPOST("/sessions", newData2);
+        expect(resp2).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp2);
+    });
+
+    it("throw error when `name` is not unique", async () => {
+        // name identical to the exisiting session
+        const newData = { ...newSessionData, name: session.name };
+        // POST to create new session
+        const resp1 = await apiPOST("/sessions", newData);
+
+        // expected an error as name not unique
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+    });
+
+    it("throw error when deleting item with invalid id", async () => {
+        // get the max session id
+        const resp1 = await apiGET("/sessions");
+        expect(resp1).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
+        const maxId = Math.max(...resp1.payload.map(s => s.id));
+
+        // delete with non-existing id
+        const resp2 = await apiPOST("/sessions/delete", {
+            id: maxId + 1 // add 1 to make the id invalid
+        });
+        // expected an error with non-identical session id
+        expect(resp2).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp2);
+
+        // delete with id = null
+        const resp3 = await apiPOST("/sessions/delete", {
+            id: null
+        });
+        // expected an error with non-identical session id
+        expect(resp3).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp3);
+    });
+
+    it("delete session", async () => {
+        const resp1 = await apiPOST("/sessions/delete", {
+            id: session.id
+        });
+        expect(resp1).toMatchObject({ status: "success" });
+        const { payload: withoutNewSessions } = await apiGET("/sessions");
+        expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
+    });
 }
 function templateTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
+    let session = null,
+        testTemplates = null;
+
+    const newTemplateData1 = {
+        offer_template: "this_is_a_test_template.html",
+        position_type: "OTO"
+    };
+    const newTemplateData2 = {
+        offer_template: "this_is_a_test_template.html",
+        position_type: "Invigilate"
+    };
+    // set up a session to be available before tests run
+    beforeAll(async () => {
+        // this session will be available for all tests
+        session = await addSession({ apiGET, apiPOST });
+    });
+    // delete the session after the tests run
+    afterAll(async () => {
+        await deleteSession({ apiGET, apiPOST }, session);
+    });
+
     it("fetch available templates", async () => {
         const resp = await apiGET("/available_position_templates");
-
         expect(resp).toMatchObject({ status: "success" });
         checkPropTypes(
             PropTypes.arrayOf(offerTemplateMinimalPropTypes),
@@ -123,68 +209,110 @@ function templateTests(api = { apiGET, apiPOST }) {
         );
     });
     it("add template to session", async () => {
-        const newSessionData = {
-            start_date: "2019/09/09",
-            end_date: "2019/12/31",
-            // add a random string to the session name so we don't accidentally collide with another
-            // session's name
-            name: "Newly Created Sessions (" + Math.random() + ")",
-            rate1: 56.54
-        };
-        const newTemplateData = {
-            offer_template: "this_is_a_test_template.html",
-            position_type: "OTO"
-        };
-        const newTemplateData2 = {
-            offer_template: "this_is_a_test_template.html",
-            position_type: "Invigilate"
-        };
-        // create a new session to add a template to
-        const resp1 = await apiPOST("/sessions", newSessionData);
-        expect(resp1).toMatchObject({ status: "success" });
-        const sessionId = resp1.payload.id;
-
         // grab the position_templates of the new session. They may have
         // pre-populated.
-        const resp2 = await apiGET(`/sessions/${sessionId}/position_templates`);
+        const resp1 = await apiGET(
+            `/sessions/${session.id}/position_templates`
+        );
+        expect(resp1).toMatchObject({ status: "success" });
+        checkPropTypes(
+            PropTypes.arrayOf(offerTemplatePropTypes),
+            resp1.payload
+        );
+
+        // add the new offer template
+        const resp2 = await apiPOST(
+            `/sessions/${session.id}/add_position_template`,
+            newTemplateData1
+        );
         expect(resp2).toMatchObject({ status: "success" });
         checkPropTypes(
             PropTypes.arrayOf(offerTemplatePropTypes),
             resp2.payload
         );
-
-        // add the new offer template
-        const resp3 = await apiPOST(
-            `/sessions/${sessionId}/add_position_template`,
-            newTemplateData
-        );
-        expect(resp3).toMatchObject({ status: "success" });
-        checkPropTypes(
-            PropTypes.arrayOf(offerTemplatePropTypes),
-            resp3.payload
-        );
-        expect(resp3.payload).toContainObject(newTemplateData);
+        expect(resp2.payload).toContainObject(newTemplateData1);
 
         // another one -- it should contain both of our added templates
-        const resp4 = await apiPOST(
-            `/sessions/${sessionId}/add_position_template`,
+        const resp3 = await apiPOST(
+            `/sessions/${session.id}/add_position_template`,
             newTemplateData2
         );
-        expect(resp4.payload).toContainObject(newTemplateData);
-        expect(resp4.payload).toContainObject(newTemplateData2);
+        expect(resp3.payload).toContainObject(newTemplateData1);
+        expect(resp3.payload).toContainObject(newTemplateData2);
 
         // fetching the templates again should give us the same list
-        const resp5 = await apiGET(`/sessions/${sessionId}/position_templates`);
-        expect(resp5.payload).toEqual(resp4.payload);
+        const resp4 = await apiGET(
+            `/sessions/${session.id}/position_templates`
+        );
+        expect(resp4.payload).toEqual(resp3.payload);
 
-        // clean up by deleting the session
-        await apiPOST("/sessions/delete", {
-            id: sessionId
-        });
+        testTemplates = resp3.payload;
     });
-    it.todo("update a template");
-    it.todo("throw error when `offer_template` or `position_type` is empty");
-    it.todo("throw error when `position_type` is not unique");
+
+    it("update a template", async () => {
+        // create template had been tested
+        const templateToUpdate = testTemplates.filter(t => {
+            return (
+                t.offer_template === newTemplateData2.offer_template &&
+                t.position_type === newTemplateData2.position_type
+            );
+        });
+        expect(templateToUpdate.length).toBe(1);
+
+        // update new template
+        const updateData = {
+            ...templateToUpdate[0],
+            id: templateToUpdate[0].id,
+            position_type: "Standard"
+        };
+        const resp1 = await apiPOST(
+            `/sessions/${session.id}/add_position_template`,
+            updateData
+        );
+        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1.payload).toMatchObject(updateData);
+
+        // make sure the template before update is gone
+        const resp2 = await apiGET(
+            `/sessions/${session.id}/position_templates`
+        );
+        expect(resp2.payload).toContainObject(updateData);
+    });
+
+    // Backend API not checking empty props. Comment out the test case for now
+    it("throw error when `offer_template` or `position_type` is empty", async () => {
+        const newTemplateData1 = {
+            offer_template: "",
+            position_type: "Standard"
+        };
+        const newTemplateData2 = {
+            offer_template: "this_is_a_test_template.html",
+            position_type: ""
+        };
+
+        // expected an error to crete new template with empty offer_template
+        const resp1 = await apiPOST(
+            `/sessions/${session.id}/add_position_template`,
+            newTemplateData1
+        );
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+
+        // expected an error to crete new template with empty position_type
+        const resp2 = await apiPOST(
+            `/sessions/${session.id}/add_position_template`,
+            newTemplateData2
+        );
+        expect(resp2).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp2);
+
+        // fetching the templates list and make sure it does not contain the above templates
+        const resp3 = await apiGET(
+            `/sessions/${session.id}/position_templates`
+        );
+        expect(resp3.payload).not.toContainObject(newTemplateData1);
+        expect(resp3.payload).not.toContainObject(newTemplateData2);
+    });
 }
 
 function positionsTests(api = { apiGET, apiPOST }) {
@@ -243,7 +371,7 @@ function positionsTests(api = { apiGET, apiPOST }) {
         expect(resp2.payload).toContainObject(newData);
     });
 
-    it("error when creating two positions with the same position_code", async () => {
+    it("error when creating two positions with the same position_code in the same session", async () => {
         // we already have a position
         const resp1 = await apiPOST(
             `/sessions/${session.id}/positions`,
@@ -253,9 +381,41 @@ function positionsTests(api = { apiGET, apiPOST }) {
         checkPropTypes(errorPropTypes, resp1);
     });
 
-    it.todo(
-        "succeed when creating two positions with the same code but for different sessions"
-    );
+    it("succeed when creating two positions with the same code but for different sessions", async () => {
+        const newSessionData = {
+            start_date: "2019/09/09",
+            end_date: "2019/12/31",
+            // add a random string to the session name so we don't accidentally collide with another
+            // session's name
+            name: "Newly Created Sessions (" + Math.random() + ")",
+            rate1: 56.54
+        };
+        const newPositionData2 = {
+            position_code: "MAT135F",
+            position_title: "Calculus I",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019/09/09",
+            est_end_date: "2019/12/31",
+            position_type: "Standard"
+        };
+        // create a new session to add a template to
+        const resp1 = await apiPOST("/sessions", newSessionData);
+        expect(resp1).toMatchObject({ status: "success" });
+        const sessionId = resp1.payload.id;
+
+        // create a new position of the same code associated with new session
+        const resp2 = await apiPOST(
+            `/sessions/${sessionId}/positions`,
+            newPositionData2
+        );
+        expect(resp2).toMatchObject({ status: "success" });
+        // make sure we get back what we put in
+        expect(resp2.payload).toMatchObject(newPositionData2);
+
+        // make sure the position is created
+        const resp3 = await apiGET(`/sessions/${sessionId}/positions`);
+        expect(resp3.payload).toContainObject(resp2.payload);
+    });
 
     it("delete position", async () => {
         const resp1 = await apiPOST(`/positions/delete`, position);
@@ -269,11 +429,101 @@ function positionsTests(api = { apiGET, apiPOST }) {
 // actual tests that use `apiGET` and `apiPOST`
 // eslint-disable-next-line
 function instructorsTests({ apiGET, apiPOST }) {
-    it.todo("get instructors");
-    it.todo("get instructors for session");
-    it.todo("create and delete instructor");
-    it.todo("update an instructor");
-    it.todo("add and remove instructor from position");
+    let session = null,
+        position = null,
+        instructor = null;
+    // set up a session to be available before tests run
+    beforeAll(async () => {
+        // this session will be available for all tests
+        session = await addSession({ apiGET, apiPOST });
+        position = await addPosition({ apiGET, apiPOST }, session);
+    });
+    // delete the session after the tests run
+    afterAll(async () => {
+        await deletePosition({ apiGET, apiPOST }, position);
+        await deleteSession({ apiGET, apiPOST }, session);
+    });
+
+    it("create instructor", async () => {
+        const newInstructorData = {
+            first_name: "Anand",
+            last_name: "Liu",
+            email: "anand.liu.sample@utoronto.ca",
+            utorid: "anandl"
+        };
+
+        // create a new instructor
+        const resp1 = await apiPOST(`/instructors`, newInstructorData);
+        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1.payload).toMatchObject(newInstructorData);
+
+        // make sure instructor is on instructor list
+        const resp2 = await apiGET(`/instructors`);
+        expect(resp2).toMatchObject({ status: "success" });
+        expect(resp2.payload).toContainObject(newInstructorData);
+
+        // set instructor to used by later test
+        instructor = resp1.payload;
+    });
+
+    it("get instructors", async () => {
+        const resp = await apiGET("/instructors");
+        expect(resp).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
+    });
+
+    it("get instructors for session", async () => {
+        const resp = await apiGET(`/sessions/${session.id}/instructors`);
+        expect(resp).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
+    });
+
+    it("add instrutor to position", async () => {
+        const resp = await apiPOST(`/positions/${position.id}/add_instructor`, {
+            id: instructor.id,
+            position_id: position.id
+        });
+        expect(resp).toMatchObject({ status: "success" });
+        expect(resp.payload).toMatchObject(instructor);
+    });
+
+    it("update an instructor", async () => {
+        const updateInstructorData = {
+            id: instructor.id,
+            email: "anand.liu@gmail.com"
+        };
+
+        // update the instructor
+        const resp = await apiPOST(`/instructors`, updateInstructorData);
+        expect(resp).toMatchObject({ status: "success" });
+        expect(resp.payload).toMatchObject(updateInstructorData);
+    });
+
+    it("delete instructor from session", async () => {
+        const resp1 = await apiPOST(
+            `/sessions/${session.id}/instructors/delete`,
+            instructor
+        );
+        expect(resp1).toMatchObject({ status: "success" });
+
+        // make sure instructor is not in the session
+        const resp2 = await apiGET(`/sessions/${session.id}/instructors`);
+        expect(resp2).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
+        expect(resp2.payload).not.toContainObject(instructor);
+    });
+
+    // delete an instructor
+    it("delete instructor", async () => {
+        const resp1 = await apiPOST(`/instructors/delete`, instructor);
+        expect(resp1).toMatchObject({ status: "success" });
+
+        // make sure the instructor is deleted
+        const resp2 = await apiGET("/instructors");
+        expect(resp2).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
+        expect(resp2).not.toContainObject(instructor);
+    });
 }
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
@@ -323,6 +573,15 @@ function reportingTagsTests({ apiGET, apiPOST }) {
 // eslint-disable-next-line
 function applicationsTests({ apiGET, apiPOST }) {}
 
+function unknownRouteTests(api = { apiGet, apiPost }) {
+    const { apiGet, apiPost } = api;
+
+    it("should fail GET request with unknown '/api' routes", async () => {
+        const resp = await apiGET("/some_string");
+        expect(resp).toMatchObject({ status: "error" });
+    });
+}
+
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
     describe("`/sessions` tests", () => {
@@ -351,6 +610,9 @@ describe("API tests", () => {
     });
     describe("`/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
+    });
+    describe("unknown api route tests", () => {
+        unknownRouteTests({ apiGET, apiPOST });
     });
 });
 

@@ -7,16 +7,22 @@ module Api::V1
         # GET /applications
         def index
             if not params.include?(:session_id)
-                render_success(Application.order(:id))
+                render_success(all_applications)
                 return
             end
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             render_success(applications_by_session)
         end
 
         # POST /applications
         def create
-            if invalid_id(Session, :session_id) then return end
+            # if we passed in an id that exists, we want to update
+            if params.has_key?(:id) and Application.exists?(params[:id])
+                update and return
+            end
+            params.require(:applicant_id)
+            return if invalid_id(Session, :session_id)
+            return if invalid_id(Applicant, :applicant_id)
             application = Application.new(application_params)
             if not application.save # does not pass Application model validation
                 application.destroy!
@@ -26,24 +32,39 @@ module Api::V1
             params[:application_id] = application[:id]
             message = valid_applicant_matching_data(application.errors.messages)
             if not message
-                render_success(application)
+                render_success(application_data(application))
             else
                 application.destroy!
                 render_error(message)
             end
         end
 
-        # PUT/PATCH /applications/:id
         def update
             application = Application.find(params[:id])
-            matching = ApplicantDataForMatching.find(application[:id])
+            matching = application.applicant_data_for_matching
             application_res = application.update_attributes!(application_update_params)
             matching_res = matching.update_attributes!(matching_data_update_params)
             errors = application.errors.messages.deep_merge(matching.errors.messages)
             if application_res and matching_res
-                render_success(application)
+                render_success(application_data(application))
             else
                 render_error(errors)
+            end
+        end
+
+        # POST /applications/delete
+        def delete
+            params.require(:id)
+            application = Application.find(params[:id])
+            entry = application_data(application)
+            if application
+                matching = application.applicant_data_for_matching
+                matching.destroy!
+            end
+            if application.destroy!
+                render_success(entry)
+            else
+                render_error(application.errors.full_messages.join("; "))
             end
         end
 
@@ -84,13 +105,26 @@ module Api::V1
         end
         
         def applications_by_session
-            return Application.order(:id).select do |entry|
+            return all_applications.select do |entry|
                 entry[:session_id] == params[:session_id].to_i
             end
         end
 
+        def all_applications
+            return Application.order(:id).map do |entry|
+                application_data(entry)
+            end
+        end
+
+        def application_data(application)
+            exclusion = [:id, :created_at, :updated_at, :application_id]
+            matching = application.applicant_data_for_matching
+            matching = json(matching, except: exclusion)
+            return json(application, include: matching)
+        end
+
         def valid_applicant_matching_data(errors)
-            if invalid_id(Applicant, :applicant_id) then return end
+            return if invalid_id(Applicant, :applicant_id)
             matching = ApplicantDataForMatching.new(applicant_data_for_matching_params)
             if matching.save
                 return nil

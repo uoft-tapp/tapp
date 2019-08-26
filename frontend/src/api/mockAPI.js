@@ -57,6 +57,16 @@ export class MockAPI {
                 return Object.assign(matchingSessions[0], body);
             }
             // if we're here, we need to create a new session
+            // but check if the session name is empty or duplicate
+            if (body.name == null || body.name === "") {
+                throw new Error("Session name cannot be empty!");
+            }
+            if (data.sessions.some(s => s.name === body.name)) {
+                throw new Error(
+                    `Session of same name=${body.name} already exists!`
+                );
+            }
+            // create new session
             const newId = Math.floor(Math.random() * 1000);
             const newSession = { ...body, id: newId };
             data.sessions.push(newSession);

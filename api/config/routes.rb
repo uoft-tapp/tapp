@@ -33,7 +33,11 @@ Rails.application.routes.draw do
 
             # wage_chunk routes
             post '/wage_chunks/delete' => 'wage_chunks#delete'
+<<<<<<< HEAD
             resources :wage_chunks, only: [:index, :create] do
+=======
+            resources :wage_chunks, only: [:index, :create] do
+>>>>>>> 7ea299d8ed6b963ba9b6d09b5433eddd1f61b4aa
                 post '/add_reporting_tag', to: 'reporting_tags#create'
             end
 
@@ -51,8 +55,6 @@ Rails.application.routes.draw do
                 resources :applications, only: [:index, :create]
                 resources :applicants, only: [:index]
                 resources :instructors, only: [:index]
-                resources :offers, only: [:index, :create]
-                resources :assignments, only: [:index, :create]
                 post '/add_position_template', to: 'position_templates#create'
                 get '/instructors', to: 'instructors#instructor_by_session'
                 post '/instructors/delete', to: 'instructors#delete_instructor_by_session'

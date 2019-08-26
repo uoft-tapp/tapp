@@ -10,12 +10,16 @@ module Api::V1
                 render_success(Applicant.order(:id))
                 return
             end
-            if invalid_id(Session, :session_id) then return end
+            return if invalid_id(Session, :session_id)
             render_success(applicants_by_session)
         end
 
         # POST /applicants
         def create
+            # if we passed in an id that exists, we want to update
+            if params.has_key?(:id) and Applicant.exists?(params[:id])
+                update and return
+            end
             applicant = Applicant.new(applicant_params)
             if applicant.save # passes Applicant model validation
                 render_success(applicant)
@@ -25,13 +29,23 @@ module Api::V1
             end
         end
 
-        # PUT/PATCH /applicants/:id
         def update
             applicant = Applicant.find(params[:id])
             if applicant.update_attributes!(applicant_params)
                 render_success(applicant)
             else
                 render_error(applicant.errors)
+            end
+        end
+
+        # POST /applicants/delete
+        def delete
+            params.require(:id)
+            applicant = Applicant.find(params[:id])
+            if applicant.destroy!
+                render_success(applicant)
+            else
+                render_error(applicant.errors.full_messages.join("; "))
             end
         end
  

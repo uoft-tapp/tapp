@@ -4,9 +4,13 @@
 class ApplicationController < ActionController::Base
   	include Response
   	include ExceptionHandler
+  	include ApplicationHelper
 
-  	def index
-    	render :file => 'public/index.html'
-  	end  
-
+    def index
+      render :file => 'public/index.html'
+    end  
+		
+    def not_found
+      render_error('unknown route')
+    end
 end
