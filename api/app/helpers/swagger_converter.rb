@@ -125,7 +125,6 @@ module SwaggerConverter
         end
     end
 
-
     def format_parameters(route)
         data = []
         route[:parameters].keys.each do |key|
@@ -226,7 +225,6 @@ module SwaggerConverter
         ]
     end
 
-
     def format_ref(entry, depth = 1)
         if entry[:params].blank?
             if entry[:title]
@@ -236,6 +234,7 @@ module SwaggerConverter
                 get_reference(entry[:reference])
             end
         elsif entry[:params].is_a?(Hash)
+            entry[:params] = entry[:array] ? [entry[:params]] : entry[:params]
             if entry[:reference].blank?
                 data = required_properties(entry[:required] || [])
                 data.push(format_inline('title', entry[:title])) if entry[:title]
