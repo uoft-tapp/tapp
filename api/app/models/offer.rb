@@ -2,14 +2,15 @@
 
 # A class representing an offer. This class belongs to assignment, applicant and position.
 class Offer < ApplicationRecord
-		belongs_to :assignment
-		after_save :set_assignment_active_offer 
+	has_secure_token :url_token
+	belongs_to :assignment
+	after_create :set_assignment_active_offer 
 
-		private
-			def set_assignment_active_offer
-				puts "setting active offer id"
-				self.assignment.update_attribute(:active_offer_id, self.id)
-			end 
+	private
+		def set_assignment_active_offer
+			# update_column skips callbacks
+			self.assignment.update_column(:active_offer_id, self.id)
+		end 
 end
 # Below are the only fields that are updatable:
 #
@@ -46,6 +47,7 @@ end
 #  signature               :string
 #  ta_coordinator_email    :string
 #  ta_coordinator_name     :string
+#  url_token               :string
 #  withdrawn_date          :datetime
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
@@ -54,4 +56,5 @@ end
 # Indexes
 #
 #  index_offers_on_assignment_id  (assignment_id)
+#  index_offers_on_url_token      (url_token) UNIQUE
 #
