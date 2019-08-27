@@ -171,11 +171,11 @@ module RouteAnalyzer
                 entry[:response][:params] = [
                     {
                         array: array_result(entry[:path]),
-                        title: "reponse for creating #{controller}",
+                        title: "response for creating #{controller}",
                         reference: entry[:controller]
                     },
                     {
-                        title: "reponse for updating #{controller}",
+                        title: "response for updating #{controller}",
                         reference: entry[:controller]
                     }
                 ]
