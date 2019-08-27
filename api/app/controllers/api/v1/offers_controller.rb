@@ -3,28 +3,77 @@
 module Api::V1
     # Controller for Offers
     class OffersController < ApplicationController
+        before_action :set_assignment
+
         # POST /create_offer
         def create
-            # TODO
-            render_error('')
+            offer = Offer.new(@assignment.offer_params)
+            if offer.save
+                render_success(offer)
+            else
+                render_error(offer.errors)
+            end
         end
 
         # GET /active_offer
         def active_offer
-            # TODO
-            render_error('')
+            if @assignment.active_offer.present?
+                render_success(@assignment.active_offer)
+            else
+                render_error("no active offer")
+            end
         end
+
+            
 
         # POST /email_offer
         def email_offer
-            # TODO
-            render_error('')
+            if @assignment.active_offer.present?
+                OfferMailer.with(offer: @assignment.active_offer).contract_email.deliver_later
+            end 
         end
 
-        # POST /respond_to_offer
-        def respond
-            # TODO
-            render_error('')
+        def withdraw_offer
+            if @assignment.withdraw_active_offer
+                render_success(@assignment.active_offer)
+            else
+                render_error('no active offer')
+            end
+        end
+
+        def reject_offer
+            if @assignment.reject_active_offer
+                render_success(@assignment.active_offer)
+            else
+                render_error('no active offer')
+            end
+        end 
+
+        def accept_offer
+            params.require(:signature)
+            if @assignment.accept_active_offer(params[:signature])
+                render_success(@assignment.active_offer)
+            else
+                render_error('no active offer')
+            end
+        end
+
+        def nag
+            if @assignment.active_offer.present?
+                OfferMailer.with(offer: @assignment.active_offer).nag_email.deliver_later
+            end 
+        end
+
+        private 
+
+        def set_assignment
+            params.require(:assignment_id)
+            assignment_id = params[:assignment_id]
+            if Assignment.exists?(assignment_id)
+                @assignment = Assignment.find(assignment_id)
+            else
+                render_error("assignment #{assignment_id} does not exist.")
+            end
         end
     end
 end

@@ -7,9 +7,19 @@ class Offer < ApplicationRecord
 
 		private
 			def set_assignment_active_offer
+				puts "setting active offer id"
 				self.assignment.update_attribute(:active_offer_id, self.id)
 			end 
 end
+# Below are the only fields that are updatable:
+#
+# accepted_date
+# emailed_date
+# nag_count
+# rejected_date
+# signature
+# withdrawn_date
+# updated_at
 
 # == Schema Information
 #

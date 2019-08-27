@@ -27,6 +27,11 @@
         	"session_index": 0 
         },
         {
+            "position_type": "standard",
+            "offer_template": "/defaultdepartment/default2018.html",
+            "session_index": 1
+        },
+        {
             "position_type": "invigilate",
             "offer_template": "/defaultdepartment/invigilate.html",
             "session_index": 1

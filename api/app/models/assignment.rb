@@ -11,43 +11,84 @@ class Assignment < ApplicationRecord
 
 	validates_uniqueness_of :applicant_id, :scope => [:position_id]
 
-	before_save :check_active_offer_status
-	after_save :rest_active_offer 
+	before_save :reset_active_offer 
 
 	def active_offer
 		self.active_offer_id ? Offer.find(self.active_offer_id) : nil
 	end 
 
 	def withdraw_active_offer
-		return if self.active_offer.blank? 
+		return false if self.active_offer.blank? 
 
-		self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
+		return self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
 	end
 
-	def create_offer
+	def reject_active_offer
+		return false if self.active_offer.blank? 
+
+		return self.active_offer.update_attribute(:rejected_date, Time.zone.now)
+	end
+
+	def accept_active_offer(signature)
+		return false if self.active_offer.blank? 
+
+		return self.active_offer.update_attributes({accepted_date: Time.zone.now, signature: signature})
+	end
+
+	def offer_params
 		return if self.active_offer.present? 
 
 		applicant = self.applicant
 		position = self.position 
-		instructors = position.instructors 
 		session = position.session
-
-		offer = Offer.new({
+		applicant_data = applicant.applicant_data_for_matchings.last
+		start_date = position.est_start_date
+		end_date = position.est_end_date
+		installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
+		offer_template = session.position_templates.where(position_type: position.position_type).first.offer_template
+		
+		return {
 			email: applicant.email,
 			first_name: applicant.first_name,
 			last_name: applicant.last_name,
-		})
+			first_time_ta: applicant_data.previous_uoft_ta_experience,
+			installments: installments,
+			instructor_contact_desc: instructor_contact_desc,
+			nag_count: 0,
+			offer_override_pdf: self.offer_override_pdf,
+			offer_template: offer_template,
+			pay_period_desc: pay_period_desc,
+			position_code: position.position_code,
+			position_end_date: end_date,
+			position_start_date: start_date,
+			position_title: position.position_title,
+			assignment: self
+		}
 	end 
 	
 	private
 
-		def check_active_offer_status
-			return false if self.active_offer && self.active_offer.withdrawn_date.blank? 
+		def reset_active_offer
+			puts "reset active offer callback"
+			puts self.changes.keys
+			if self.changes.keys != ['active_offer_id'] && self.changes.keys != []
+				self.active_offer_id = nil
+			end 
 		end
 
-		def reset_active_offer
-			self.update_attribute(:active_offer_id, nil)
-		end
+		def instructor_contact_desc
+			contact_info = self.position.instructors.map do |instructor|
+				"#{instructor.first_name.capitalize} #{instructor.last_name.capitalize}: #{instructor.email}"
+			end 
+			return contact_info.join(', ')
+		end 
+
+		def pay_period_desc
+			pay_period_info = self.wage_chunks.map do |wage_chunk| 
+				"#{wage_chunk.hours} hours at #{wage_chunk.rate} per hour"
+			end
+			return pay_period_info.join(', ')
+		end 
 end
 
 # == Schema Information
