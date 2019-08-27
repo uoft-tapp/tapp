@@ -34,7 +34,7 @@ API = {
     session_instructors: {
         summary: 'Show all instructors given session_id',
         response: {
-            params: :instructors,
+            reference: :instructors,
             array: true
         }
     },
@@ -47,20 +47,20 @@ API = {
             }
         },
         response: {
-            params: :instructors
+            reference: :instructors
         }
     },
     available_position_templates: {
         summary: 'Show all available position templates',
         response: {
-            params: :position_templates,
+            reference: :position_templates,
             array: true
         }
     },
     assignment_active_offer: {
         summary: 'Show active offer given assignment_id',
         response: {
-            params: :offers
+            reference: :offers
         }
     },
     offers: {
@@ -80,7 +80,7 @@ API = {
             }
         },
         response: {
-            params: :offers
+            reference: :offers
         }
     },
     offers_respond: {
@@ -93,7 +93,7 @@ API = {
             }
         },
         response: {
-            params: :offers
+            reference: :offers
         }
     }
 }.freeze

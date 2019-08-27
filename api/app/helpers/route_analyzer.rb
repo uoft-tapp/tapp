@@ -49,13 +49,23 @@ module RouteAnalyzer
         end
     end
 
+    def params_value_check(type)
+        valid_types = %i[integer float string text datetime boolean]
+        unless valid_types.include?(type)
+            abort(
+                "'#{type}' is not a valid type. The following are the valid types:" \
+                "\t#{valid_types.join("\n\t")}"
+            )
+        end
+    end
+
     def params_type_check(params, parent, key)
         return if params.blank? && parent == 'response'
 
-        if !params.is_a?(Symbol) && !params.is_a?(Hash)
+        if !params.is_a?(Symbol) && !params.is_a?(Hash) && !params.is_a?(Array)
             abort(
                 "Invalid #{parent} params for \'#{key}\'." \
-                "\n\t:params can only be a symbol or a hash."
+                "\n\t:params can only be a symbol, hash, or array."
             )
         end
     end
@@ -65,6 +75,16 @@ module RouteAnalyzer
             abort(
                 "Invalid request params for \'#{key}\'." \
                 "\n\t:required can only be an array."
+            )
+        end
+    end
+
+    def reference_check(reference, schemas)
+        unless schemas.key?(reference)
+            abort(
+                "\'#{reference}\' is not a valid schema name. " \
+                "The following are all the available schemas:\n" \
+                "\t#{schemas.keys.join("\n\t")}"
             )
         end
     end
@@ -111,7 +131,7 @@ module RouteAnalyzer
             }
             schemas[controller_to_input(controller)] = {
                 title: "JSON for creating #{table}",
-                data: schemas[controller][:data].except(:created_at, :updated_at),
+                data: schemas[controller][:data].except(:id, :created_at, :updated_at),
                 required: index_on(controller).map { |i| id_name(i) }
             }
         end
@@ -133,24 +153,45 @@ module RouteAnalyzer
             when :create
                 given = get_given_from_required(entry[:request][:required])
                 entry[:summary] = "Create new #{controller}#{given} or update #{controller} with id"
-                entry[:request][:params] = controller_to_input(entry[:controller])
-                entry[:response][:array] = true if array_result(entry[:path])
-                entry[:response][:params] = entry[:controller]
+                entry[:request][:params] = [
+                    {
+                        reference: controller_to_input(entry[:controller])
+                    },
+                    {
+                        title: "JSON for updating #{controller}",
+                        reference: controller_to_input(entry[:controller]),
+                        required: %i[id],
+                        params: {
+                            id: :integer
+                        }
+                    }
+                ]
+                entry[:response][:params] = [
+                    {
+                        array: array_result(entry[:path]),
+                        title: "reponse for creating #{controller}",
+                        reference: entry[:controller]
+                    },
+                    {
+                        title: "reponse for updating #{controller}",
+                        reference: entry[:controller]
+                    }
+                ]
             when :index
                 entry[:summary] = "Show all #{controller}s"
                 if entry[:request][:required].length.positive?
                     entry[:summary] += " given #{entry[:request][:required].join(',')}"
                 end
-                entry[:request][:params] = format_required_input(entry[:request][:required])
+                entry[:request][:reference] = format_required_input(entry[:request][:required])
                 entry[:response][:array] = true
-                entry[:response][:params] = entry[:controller]
+                entry[:response][:reference] = entry[:controller]
             when :delete
                 entry[:summary] = "Delete #{controller} given id"
                 entry[:request][:required] = [:id]
                 entry[:request][:params] = {
                     id: :integer
                 }
-                entry[:response][:params] = entry[:controller]
+                entry[:response][:reference] = entry[:controller]
             end
             entry
         end
@@ -188,7 +229,7 @@ module RouteAnalyzer
                     route[:summary] = route[:summary] ? route[:summary].strip : ''
                     if !route[:summary].length.positive?
                         incomplete.push("#{label}No summary set for this route")
-                    elsif route[:response][:params].blank?
+                    elsif route[:response][:params].blank? && route[:response][:reference].blank?
                         incomplete.push("#{label}No response set for this route")
                     else
                         completed[key] = [] unless completed.key?(key)
@@ -239,7 +280,7 @@ module RouteAnalyzer
         end
     end
 
-    def format_routes(path, route, schemas)
+    def format_routes(path, route)
         data = {
             name: path,
             value: []
@@ -265,23 +306,27 @@ module RouteAnalyzer
                     }
                 ]
             }
-            if entry[:request][:params] != {}
+            if valid_body(entry[:request])
                 if entry[:method] == :post
                     value_entry[:value].push(
                         name: 'requestBody',
-                        value: format_request_body(entry, schemas)
+                        value: format_request_body(entry)
                     )
                 end
             end
-            if entry[:response][:params] != {}
+            if valid_body(entry[:response])
                 value_entry[:value].push(
                     name: 'responses',
-                    value: format_response(entry, schemas)
+                    value: format_response(entry)
                 )
             end
             data[:value].push(value_entry)
         end
         data
+    end
+
+    def valid_body(body)
+        !body[:params].blank? || !body[:reference].blank?
     end
 
     def format_parameters(route)
@@ -306,38 +351,38 @@ module RouteAnalyzer
         data
     end
 
-    def format_request_body(route, schemas)
+    def format_request_body(route)
         [{
             name: 'content',
             value: [{
                 name: 'application/json',
                 value: [{
                     name: 'schema',
-                    value: format_ref(route[:request], schemas)
+                    value: format_ref(route[:request])
                 }]
             }]
         }]
     end
 
-    def format_response(route, schemas)
-        payload = route_payload(route, schemas)
+    def format_response(route)
+        payload = route_payload(route)
         [
             response('200', 'Successful Response', payload),
             response('404', 'Not found', [format_inline('type', 'object')])
         ]
     end
 
-    def route_payload(route, schemas)
+    def route_payload(route)
         if route[:response][:array]
             [
                 format_inline('type', 'array'),
                 {
                     name: 'items',
-                    value: format_ref(route[:response], schemas)
+                    value: format_ref(route[:response])
                 }
             ]
         else
-            format_ref(route[:response], schemas)
+            format_ref(route[:response])
         end
     end
 
@@ -386,7 +431,7 @@ module RouteAnalyzer
 
     def yaml_format(routes, schemas)
         routes = routes.keys.map do |key|
-            format_routes(key, routes[key], schemas)
+            format_routes(key, routes[key])
         end
         schemas = format_schemas(schemas)
         [
@@ -462,30 +507,89 @@ module RouteAnalyzer
         end
     end
 
-    def format_ref(reference, schemas)
-        if reference[:params].is_a?(Symbol)
-            unless schemas.key?(reference[:params])
-                abort(
-                    "\'#{reference[:params]}\' is not a valid schema name. " \
-                    "The following are all the available schemas:\n" \
-                    "\t#{schemas.keys.join("\n\t")}"
-                )
+    def format_ref(entry, depth = 1)
+        if entry[:params].blank?
+            if entry[:title]
+                entry[:reference] = [entry[:reference]]
+                get_allof(entry)
+            else
+                get_reference(entry[:reference])
             end
-            ref = "\'#/components/schemas/#{reference[:params]}\'"
-            [format_inline('$ref', ref)]
+        elsif entry[:params].is_a?(Hash)
+            if entry[:reference].blank?
+                data = required_properties(entry[:required] || [])
+                data.push(format_inline('title', entry[:title])) if entry[:title]
+                data += get_type(entry[:params])
+                data
+            else
+                if entry[:reference].is_a?(Array)
+                    entry[:reference].push(entry[:params])
+                else
+                    entry[:reference] = [entry[:reference], entry[:params]]
+                end
+                get_allof(entry)
+            end
+        elsif entry[:params].is_a?(Array) && depth == 1
+            data = [format_inline('type', 'object')]
+            data += get_oneof(entry[:params].map { |i| data.format_ref(i, depth + 1) })
+            data
         else
-            format_params(reference)
+            abort('Illegal formatting in api_doc.rb')
         end
     end
 
-    def format_params(reference)
-        if reference[:params]
-            data = required_properties(reference[:required] || [])
-            data += get_type(reference[:params])
-            data
-        else
-            []
+    def get_reference(reference)
+        if reference.is_a?(Symbol)
+            ref = "\'#/components/schemas/#{reference}\'"
+            [format_inline('$ref', ref)]
+        elsif reference.is_a?(Array)
+            get_allof(reference: reference)
         end
+    end
+
+    def get_oneof(entries)
+        data = []
+        entries.map do |item|
+            data += object_to_point(item)
+        end
+        [{ name: 'oneOf', value: data }]
+    end
+
+    def get_allof(entry)
+        data = [format_inline('type', entry[:array] ? 'array' : 'object')]
+        data += required_properties(entry[:required] || [])
+        data.push(format_inline('title', entry[:title])) if entry[:title]
+        temp = []
+        entry[:reference].each do |item|
+            temp += if item.is_a?(Symbol)
+                        object_to_point(get_reference(item))
+                    else
+                        object_to_point(get_type(item))
+                    end
+        end
+        if entry[:array]
+            data.push(
+                name: 'items', value:
+                [{
+                    name: 'allOf',
+                    value: temp
+                }]
+            )
+        else
+            data.push(name: 'allOf', value: temp)
+        end
+        data
+    end
+
+    def object_to_point(data)
+        data[0][:name] = "- #{data[0][:name]}"
+        if data.length > 1
+            data = [
+                data[0],
+                { value: data[1..-1] }
+            ]
+        end
+        data
     end
 
     def format_point(item, value = nil)
@@ -502,69 +606,68 @@ module RouteAnalyzer
 
     def get_type(type)
         if type.is_a?(Array)
-            data = [
-                format_inline('type', 'array'),
-                {
-                    name: 'items',
-                    value: []
-                }
-            ]
-            type.map do |item|
-                value = get_type(item)
-                if value.is_a?(String)
-                    data[1][:value].push(format_inline('type', value))
-                else
-                    data[1][:value] += value
-                end
-            end
-            if data[1][:value].length.positive?
-                data
-            else
-                abort('An array type must have its item type declared')
-            end
+            process_array_type(type)
         elsif type.is_a?(Hash)
-            data = [
-                format_inline('type', 'object'),
-                {
-                    name: 'properties',
-                    value: []
-                }
-            ]
-            data[1][:value] = type.keys.map do |key|
-                value = get_type(type[key])
-                temp = [format_inline('type', value)]
-                if type[key] == :datetime || type[key] == :float
-                    entry = format_inline('format', type[key] == :float ? 'float' : 'date-time')
-                    temp.push(entry)
-                end
-                value = value.is_a?(Array) ? value : temp
-                {
-                    name: key,
-                    value: value
-                }
-            end
-            data
+            process_hash_type(type)
         else
             case type
             when :integer
                 'integer'
             when :float
                 'number'
-            when :string
-                'string'
-            when :text
-                'string'
-            when :datetime
-                'string'
             when :boolean
                 'boolean'
             else
-                abort(
-                    "'#{type}' is not a valid type. The following are the valid types:" \
-                    "\tstring\n\tinteger\n\tfloat\n\tdatetime\n\tboolean"
-                )
+                'string'
             end
         end
+    end
+
+    def process_array_type(type)
+        data = [
+            format_inline('type', 'array'),
+            {
+                name: 'items',
+                value: []
+            }
+        ]
+        type.map do |item|
+            value = get_type(item)
+            if value.is_a?(String)
+                data[1][:value].push(format_inline('type', value))
+            else
+                data[1][:value] += value
+            end
+        end
+        if data[1][:value].length.positive?
+            data
+        else
+            abort('An array type must have its item type declared')
+        end
+    end
+
+    def process_hash_type(type)
+        data = [
+            format_inline('type', 'object'),
+            {
+                name: 'properties',
+                value: []
+            }
+        ]
+        data[1][:value] = type.keys.map do |key|
+            value = get_type(type[key])
+            temp = [format_inline('type', value)]
+            if type[key] == :datetime || type[key] == :float
+                entry = format_inline('format', type[key] == :float ? 'float' : 'date-time')
+                temp.push(entry)
+            end
+            value = value.is_a?(Array) ? value : temp
+            {
+                name: key,
+                value: value
+            }
+        end
+        data
     end
 
     def min_params(route)
