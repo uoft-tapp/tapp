@@ -64,11 +64,15 @@ API = {
         }
     },
     offers: {
+        summary: 'Create new offer',
         request: {
             required: [:assignment_id],
             params: {
                 assignment_id: :integer
             }
+        },
+        response: {
+            reference: :offers
         }
     },
     email_offer: {
