@@ -21,7 +21,7 @@ Metrics/BlockLength:
     - 'spec/**/*'
 
 Metrics/ModuleLength:
-  Max: 800
+  Max: 500
 
 Metrics/ClassLength:
   Enabled: false
