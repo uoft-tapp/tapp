@@ -35,11 +35,6 @@ class Assignment < ApplicationRecord
 		return self.active_offer.update_attributes({accepted_date: Time.zone.now, signature: signature})
 	end
 
-	def nag 
-		return false if self.active_offer.blank? 
-		return self.active_offer.update_attribute(:nag, self.active_offer.nag + 1)
-	end 
-
 	def offer_params
 		return if self.active_offer.present? 
 

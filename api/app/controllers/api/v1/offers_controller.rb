@@ -24,10 +24,13 @@ module Api::V1
             end
         end
 
+            
+
         # POST /email_offer
         def email_offer
-            # TODO
-            render_error('')
+            if @assignment.active_offer.present?
+                OfferMailer.with(offer: @assignment.active_offer).contract_email.deliver_later
+            end 
         end
 
         def withdraw_offer
@@ -56,11 +59,9 @@ module Api::V1
         end
 
         def nag
-            if @assignment.nag
-                render_success(@assignment.active_offer)
-            else
-                render_error('no active offer')
-            end
+            if @assignment.active_offer.present?
+                OfferMailer.with(offer: @assignment.active_offer).nag_email.deliver_later
+            end 
         end
 
         private 
