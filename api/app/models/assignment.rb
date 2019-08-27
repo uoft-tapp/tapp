@@ -4,14 +4,13 @@
 # applicant and position.
 class Assignment < ApplicationRecord
 	has_many :offers
-	has_one :active_offer
-  	belongs_to :applicant
-  	belongs_to :position
-  	has_many :wage_chunks
+	belongs_to :applicant
+	belongs_to :position
+	has_many :wage_chunks
 
 	validates_uniqueness_of :applicant_id, :scope => [:position_id]
 
-	before_save :reset_active_offer 
+	after_save :reset_active_offer 
 
 	def active_offer
 		self.active_offer_id ? Offer.find(self.active_offer_id) : nil
@@ -21,18 +20,6 @@ class Assignment < ApplicationRecord
 		return false if self.active_offer.blank? 
 
 		return self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
-	end
-
-	def reject_active_offer
-		return false if self.active_offer.blank? 
-
-		return self.active_offer.update_attribute(:rejected_date, Time.zone.now)
-	end
-
-	def accept_active_offer(signature)
-		return false if self.active_offer.blank? 
-
-		return self.active_offer.update_attributes({accepted_date: Time.zone.now, signature: signature})
 	end
 
 	def offer_params
@@ -69,11 +56,8 @@ class Assignment < ApplicationRecord
 	private
 
 		def reset_active_offer
-			puts "reset active offer callback"
-			puts self.changes.keys
-			if self.changes.keys != ['active_offer_id'] && self.changes.keys != []
-				self.active_offer_id = nil
-			end 
+			# update_column skips callbacks
+			self.update_column(:active_offer_id, nil)
 		end
 
 		def instructor_contact_desc

@@ -72,5 +72,7 @@ gem 'combine_pdf'
 gem 'liquid'
 gem 'wicked_pdf'
 
+# active job engine for sending emails
 gem 'sidekiq'
+# helper gem for rate limiting job workers
 gem 'sidekiq-limit_fetch'

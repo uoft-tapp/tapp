@@ -3,9 +3,9 @@
 module Api::V1
     # Controller for Offers
     class OffersController < ApplicationController
-        before_action :set_assignment
-
-        # POST /create_offer
+        before_action :set_assignment, only: [:create, :active_offer, :email_offer, :withdraw_offer, :nag]
+        before_action :set_offer, only: [:reject_offer, :accept_offer]
+        # POST /offers
         def create
             offer = Offer.new(@assignment.offer_params)
             if offer.save
@@ -14,6 +14,17 @@ module Api::V1
                 render_error(offer.errors)
             end
         end
+
+        # GET /offers/:url_token
+        def show 
+            params.require(:id)
+            offer = Offer.find_by(url_token: params[:id])
+            if offer
+                render_success(offer)
+            else
+                render_error("offer does not exist")
+            end
+        end 
 
         # GET /active_offer
         def active_offer
@@ -42,19 +53,19 @@ module Api::V1
         end
 
         def reject_offer
-            if @assignment.reject_active_offer
-                render_success(@assignment.active_offer)
+            if @offer.update_attribute(:rejected_date, Time.zone.now)
+                render_success(@offer)
             else
-                render_error('no active offer')
+                render_error(@offer.errors)
             end
         end 
 
         def accept_offer
             params.require(:signature)
-            if @assignment.accept_active_offer(params[:signature])
-                render_success(@assignment.active_offer)
+            if @offer.update_attributes({signature: params[:signature], accepted_date: Time.zone.now})
+                render_success(@offer)
             else
-                render_error('no active offer')
+                render_error(@offer.errors)
             end
         end
 
@@ -75,5 +86,16 @@ module Api::V1
                 render_error("assignment #{assignment_id} does not exist.")
             end
         end
+
+        def set_offer 
+            params.require(:url_token)
+            offer_token = params[:url_token]
+            if Offer.find_by(url_token: offer_token).present?
+                @offer = Offer.find_by(url_token: offer_token)
+            else 
+                render_error("offer #{offer_token} does not exist.")
+            end 
+        end
+ 
     end
 end

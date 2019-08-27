@@ -1,7 +1,7 @@
 class OfferMailer < ApplicationMailer
     def contract_email
         @offer = params[:offer]
-        @url = "test url"
+        @url = ENV['BASE_URL'] + "/offers/#{@offers.url_token}"
         subject = "TA Position Offer: #{@offer.position_code}"
         mail(to: @offer.email, subject: subject)
         @offer.update_attribute(:emailed_date, Time.zone.now)
@@ -9,7 +9,7 @@ class OfferMailer < ApplicationMailer
 
     def nag_email
         @offer = params[:offer]
-        @url = "test url"
+        @url = ENV['BASE_URL'] + "/offers/#{@offers.url_token}"
         subject = "TA Position Offer: #{@offer.position_code}"
         mail(to: @offer.email, subject: subject)
         @offer.update_attribute(:nag_count, @offer.nag_count + 1)

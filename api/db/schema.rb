@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_17_175945) do
+ActiveRecord::Schema.define(version: 2019_08_27_223527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,7 +108,9 @@ ActiveRecord::Schema.define(version: 2019_08_17_175945) do
     t.datetime "rejected_date"
     t.datetime "withdrawn_date"
     t.integer "nag_count", default: 0
+    t.string "url_token"
     t.index ["assignment_id"], name: "index_offers_on_assignment_id"
+    t.index ["url_token"], name: "index_offers_on_url_token", unique: true
   end
 
   create_table "position_data_for_ads", force: :cascade do |t|
