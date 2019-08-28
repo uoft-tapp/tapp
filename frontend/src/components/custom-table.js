@@ -6,21 +6,6 @@ import selectTableHOC from "react-table/lib/hoc/selectTable";
 const SelectTable = selectTableHOC(Table);
 
 export class CustomTable extends React.Component {
-    static propTypes = {
-        data: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number,
-                first_name: PropTypes.string,
-                last_name: PropTypes.string,
-                email: PropTypes.string,
-                position_title: PropTypes.string,
-                first_time_ta: PropTypes.bool,
-                status: PropTypes.string,
-                nag_count: PropTypes.number
-            })
-        ).isRequired
-    };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -29,8 +14,8 @@ export class CustomTable extends React.Component {
             selectedRows: [],
             selectedIds: [],
             selectAll: false
-        }
-    };
+        };
+    }
 
     filterMethod = (filter, row) => {
         // filter.id is the column name
@@ -135,10 +120,17 @@ export class CustomTable extends React.Component {
 
     rowFn = (state, rowInfo, column, instance) => {
         const { selectedRows } = this.state;
+        const { keyField } = this.props;
 
         return {
             onClick: (e, handleOriginal) => {
+                console.log("A Tr Element was clicked!");
+                console.log("it produced this event:", e);
+                console.log("It was in this column:", column);
                 console.log("It was in this row:", rowInfo);
+                console.log("It was in this table instance:", instance);
+
+                this.toggleSelection(`select-${rowInfo.original[keyField]}`, null, rowInfo.original);
 
                 // IMPORTANT! React-Table uses onClick internally to trigger
                 // events like expanding SubComponents and pivots.

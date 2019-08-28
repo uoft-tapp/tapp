@@ -30,7 +30,7 @@ export class ImportButton extends React.Component {
             } else {
                 uploadDataToBackend(data)
             } */
-        };
+        }
 
         readFile(document.getElementById("file-input"), loadDataFunc);
     };
