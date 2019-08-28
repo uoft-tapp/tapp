@@ -28,7 +28,7 @@ module ApiDocValidator
                         incomplete.push("#{label}No summary set for this route")
                     elsif !valid_res
                         incomplete.push("#{label}#{res}")
-                    elsif !route[:request].blank? && !valid_req
+                    elsif route[:request] && !valid_req
                         incomplete.push("#{label}#{req}")
                     else
                         completed[key] = [] unless completed.key?(key)
@@ -59,7 +59,7 @@ module ApiDocValidator
             return [valid, message] unless valid
 
             valid, message = valid_data(entry, data, schemas)
-            if !valid
+            if valid
                 [true, nil]
             else
                 [valid, message]
@@ -90,8 +90,8 @@ module ApiDocValidator
 
     def valid_data(entry, data, schemas)
         valid_required(entry, data[:required])
-        if data[:params].blank?
-            if data[:reference].blank?
+        if !data[:params]
+            if !data[:reference]
                 [
                     false,
                     "The #{entry} has neither a reference nor params."
@@ -102,6 +102,7 @@ module ApiDocValidator
         elsif data[:params].is_a?(Hash)
             valid_type(entry, data[:params])
         else
+            p data
             [
                 false,
                 "The params for #{entry} can only be a hash."
@@ -179,7 +180,7 @@ module ApiDocValidator
     end
 
     def valid_reference(entry, reference, schemas)
-        unless schemas.key?(reference)
+        if reference.is_a?(Symbol) && !schemas.key?(reference)
             return [
                 false,
                 "There is an invalid reference in #{entry}: " \

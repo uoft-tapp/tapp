@@ -212,11 +212,11 @@ module SwaggerConverter
             get_data_body(entry)
         elsif entry.is_a?(Array)
             if depth == 1
-                data = [format_inline('type', 'object')]
-                entry.map do |item|
-                    data += get_form_data(item, depth + 1)
+                data = []
+                entry.each do |item|
+                    data.push(get_form_data(item, depth + 1))
                 end
-                data
+                get_oneof(data)
             else
                 abort('Illegal formatting in api_doc.rb')
             end
@@ -260,7 +260,7 @@ module SwaggerConverter
 
     def get_oneof(entries)
         data = []
-        entries.map do |item|
+        entries.each do |item|
             data += object_to_point(item)
         end
         [{ name: 'oneOf', value: data }]
