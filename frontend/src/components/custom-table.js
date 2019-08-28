@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Table from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
@@ -126,11 +125,16 @@ export class CustomTable extends React.Component {
             onClick: (e, handleOriginal) => {
                 console.log("A Tr Element was clicked!");
                 console.log("it produced this event:", e);
+                console.log("It was in this column:", state);
                 console.log("It was in this column:", column);
                 console.log("It was in this row:", rowInfo);
                 console.log("It was in this table instance:", instance);
 
-                this.toggleSelection(`select-${rowInfo.original[keyField]}`, null, rowInfo.original);
+                this.toggleSelection(
+                    `select-${rowInfo.original[keyField]}`,
+                    null,
+                    rowInfo.original
+                );
 
                 // IMPORTANT! React-Table uses onClick internally to trigger
                 // events like expanding SubComponents and pivots.

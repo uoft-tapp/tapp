@@ -9,28 +9,36 @@ export class ImportButton extends React.Component {
             data: null,
             dialogContents: "",
             dialogOpen: false
-        }
-    };
+        };
+    }
+
+    /* assume frontend data is up to date
+     *  upload the assignment object
+     *  if there's an part of inconsistency between the imported data and frontend data
+     *  then apiGET that part of data and re-verify it
+     */
 
     handleClose = () => {
         this.setState({ dialogOpen: false });
     };
 
-    uploadDataToBackend = data => {
+    uploadDataToBackend = () => {
         // TODO
     };
 
     importFile = () => {
         let loadDataFunc = data => {
             // passed in data is of json format
+            console.log(data);
+
             /* TODO: 
-            const diffs = getDiffs(data, ...dataFromBackend);
-            if (diffs) {
-                this.setState({ data: data, dialogContents: diffs, dialogOpen: true})
-            } else {
-                uploadDataToBackend(data)
+            * const diffs = getDiffs(data, ...dataFromBackend);
+            * if (diffs) {
+            *     this.setState({ data: data, dialogContents: diffs, dialogOpen: true})
+            * } else {
+            *     uploadDataToBackend(data)
             } */
-        }
+        };
 
         readFile(document.getElementById("file-input"), loadDataFunc);
     };
@@ -72,9 +80,7 @@ export class ImportButton extends React.Component {
                         </Button>
                         <Button
                             variant="primary"
-                            onClick={() =>
-                                this.uploadDataToBackend(this.state.data)
-                            }
+                            onClick={() => this.uploadDataToBackend()}
                         >
                             Proceed
                         </Button>
