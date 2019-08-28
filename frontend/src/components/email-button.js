@@ -24,11 +24,11 @@ export class EmailButton extends React.Component {
 
     // email contract link to a single applicant
     emailContract = (offers) => {
-
+        // TODO
     };
 
     nagOffers = (offers) => {
-        // do nag offer thing
+        // TODO
     }
 
     render() {

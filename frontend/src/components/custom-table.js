@@ -30,7 +30,7 @@ export class CustomTable extends React.Component {
             selectedIds: [],
             selectAll: false
         };
-    }
+    };
 
     filterMethod = (filter, row) => {
         // filter.id is the column name
