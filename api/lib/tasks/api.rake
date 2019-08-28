@@ -18,7 +18,7 @@ namespace :api do
         require 'api_doc.rb'
         include RouteAnalyzer
         routes, schemas = update_route_documentation(API)
-        all_schemas(schemas)
+        puts all_schemas(schemas)
     end
     
     task routes: :environment do
@@ -26,6 +26,6 @@ namespace :api do
         include RouteAnalyzer
         routes, schemas = update_route_documentation(API)
         ind_map = key_to_index(routes)
-        all_route_names(ind_map, routes)
+        puts all_route_names(ind_map, routes)
     end
 end
