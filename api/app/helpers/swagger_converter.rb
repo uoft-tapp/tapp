@@ -158,9 +158,8 @@ module SwaggerConverter
     end
 
     def format_response(route)
-        payload = get_form_data(route[:response])
         [
-            response('200', 'Successful Response', payload),
+            response('200', 'Successful Response', get_form_data(route[:response])),
             response('404', 'Not found', [format_inline('type', 'object')])
         ]
     end
@@ -226,12 +225,12 @@ module SwaggerConverter
     end
 
     def get_data_body(entry)
-        if entry[:params].blank?
+        if !entry[:params]
             entry[:reference] = [entry[:reference]] if entry[:title]
-            get_reference(entry[:reference])
+            get_reference(entry[:reference], entry[:array])
         elsif entry[:params].is_a?(Hash)
-            entry[:params] = entry[:array] ? [entry[:params]] : entry[:params]
-            if entry[:reference].blank?
+            if !entry[:reference]
+                entry[:params] = entry[:array] ? [entry[:params]] : entry[:params]
                 data = required_properties(entry[:required] || [])
                 data.push(format_inline('title', entry[:title])) if entry[:title]
                 data += get_type(entry[:params])
@@ -242,6 +241,7 @@ module SwaggerConverter
                 else
                     entry[:reference] = [entry[:reference], entry[:params]]
                 end
+                entry[:reference] = entry[:reference].reject { |i| i == {} }
                 get_allof(entry)
             end
         else
@@ -249,12 +249,12 @@ module SwaggerConverter
         end
     end
 
-    def get_reference(reference)
+    def get_reference(reference, array = false)
         if reference.is_a?(Symbol)
             ref = "\'#/components/schemas/#{reference}\'"
             [format_inline('$ref', ref)]
         elsif reference.is_a?(Array)
-            get_allof(reference: reference)
+            get_allof(reference: reference, array: array)
         end
     end
 
@@ -263,7 +263,7 @@ module SwaggerConverter
         entries.each do |item|
             data += object_to_point(item)
         end
-        [{ name: 'oneOf', value: data }]
+        [format_inline('type', 'object'), { name: 'oneOf', value: data }]
     end
 
     def get_allof(entry)
