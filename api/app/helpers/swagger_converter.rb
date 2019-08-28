@@ -2,6 +2,7 @@
 
 # This module is responsible for generating the yml in accordance to Swagger
 module SwaggerConverter
+    include ApiDocValidator
     def convert_to_yaml(data, output = '', tabs = 0)
         tab = '  '
         data.each do |item|
@@ -92,20 +93,16 @@ module SwaggerConverter
                     }
                 ]
             }
-            if valid_body(entry[:request])
-                if entry[:method] == :post
-                    value_entry[:value].push(
-                        name: 'requestBody',
-                        value: format_request_body(entry)
-                    )
-                end
-            end
-            if valid_body(entry[:response])
+            if entry[:method] == :post
                 value_entry[:value].push(
-                    name: 'responses',
-                    value: format_response(entry)
+                    name: 'requestBody',
+                    value: format_request_body(entry)
                 )
             end
+            value_entry[:value].push(
+                name: 'responses',
+                value: format_response(entry)
+            )
             data[:value].push(value_entry)
         end
         data
@@ -154,36 +151,21 @@ module SwaggerConverter
                 name: 'application/json',
                 value: [{
                     name: 'schema',
-                    value: format_ref(route[:request])
+                    value: get_form_data(route[:request])
                 }]
             }]
         }]
     end
 
     def format_response(route)
-        payload = route_payload(route)
+        payload = get_form_data(route[:response])
         [
             response('200', 'Successful Response', payload),
             response('404', 'Not found', [format_inline('type', 'object')])
         ]
     end
 
-    def route_payload(route)
-        if route[:response][:array]
-            [
-                format_inline('type', 'array'),
-                {
-                    name: 'items',
-                    value: format_ref(route[:response])
-                }
-            ]
-        else
-            format_ref(route[:response])
-        end
-    end
-
     def response(status_code, message, payload)
-        schema = response_object(payload)
         {
             name: status_code,
             value: [
@@ -194,7 +176,7 @@ module SwaggerConverter
                         name: 'application/json',
                         value: [{
                             name: 'schema',
-                            value: schema
+                            value: response_object(payload)
                         }]
                     }]
                 }
@@ -225,14 +207,28 @@ module SwaggerConverter
         ]
     end
 
-    def format_ref(entry, depth = 1)
-        if entry[:params].blank?
-            if entry[:title]
-                entry[:reference] = [entry[:reference]]
-                get_allof(entry)
+    def get_form_data(entry, depth = 1)
+        if entry.is_a?(Hash)
+            get_data_body(entry)
+        elsif entry.is_a?(Array)
+            if depth == 1
+                data = [format_inline('type', 'object')]
+                entry.map do |item|
+                    data += get_form_data(item, depth + 1)
+                end
+                data
             else
-                get_reference(entry[:reference])
+                abort('Illegal formatting in api_doc.rb')
             end
+        else
+            abort('Illegal formatting in api_doc.rb')
+        end
+    end
+
+    def get_data_body(entry)
+        if entry[:params].blank?
+            entry[:reference] = [entry[:reference]] if entry[:title]
+            get_reference(entry[:reference])
         elsif entry[:params].is_a?(Hash)
             entry[:params] = entry[:array] ? [entry[:params]] : entry[:params]
             if entry[:reference].blank?
@@ -248,10 +244,6 @@ module SwaggerConverter
                 end
                 get_allof(entry)
             end
-        elsif entry[:params].is_a?(Array) && depth == 1
-            data = [format_inline('type', 'object')]
-            data += get_oneof(entry[:params].map { |i| data.format_ref(i, depth + 1) })
-            data
         else
             abort('Illegal formatting in api_doc.rb')
         end
@@ -398,9 +390,5 @@ module SwaggerConverter
             end
         end
         data
-    end
-
-    def valid_body(body)
-        !body[:params].blank? || !body[:reference].blank?
     end
 end

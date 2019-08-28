@@ -7,6 +7,7 @@
 module RouteAnalyzer
     include FakeData
     include SeedsHandler
+    include ApiDocValidator
     include SwaggerConverter
     def all_routes
         routes = Rails.application.routes.routes.map do |route|
@@ -24,71 +25,33 @@ module RouteAnalyzer
         [get_unique_routes(routes), schemas]
     end
 
-    def update_route_documentation(routes, data)
+    def update_route_documentation(data)
+        routes, schemas = all_routes
         ind_map = key_to_index(routes)
         data.keys.each do |key|
             if ind_map.key?(key)
                 label, ind = ind_map[key]
                 routes[label][ind][:summary] = data[key][:summary] if data[key][:summary]
-                if data[key][:request]
-                    required_type_check(data[key][:request][:required], key)
-                    params_type_check(data[key][:request][:params], 'request', key)
-                    routes[label][ind][:request] = data[key][:request]
-                end
-                if data[key][:response]
-                    params_type_check(data[key][:response][:params], 'response', key)
-                    routes[label][ind][:response] = data[key][:response]
-                end
+                routes[label][ind][:request] = data[key][:request] if data[key][:request]
+                routes[label][ind][:response] = data[key][:response] if data[key][:response]
             else
-                all_keys = ind_map.keys.map do |route_name|
-                    label, ind = ind_map[route_name]
-                    "#{routes[label][ind][:method]} #{routes[label][ind][:path]}, "\
-                    "name: #{route_name}"
-                end
-                abort("#{key} is not a valid route name. The following are the "\
-                    "valid route names:\n#{all_keys.join("\n")}")
+                abort("#{key} is not a valid route name. #{all_route_names(ind_map, routes)}")
             end
         end
+        [routes, schemas]
     end
 
-    def params_value_check(type)
-        valid_types = %i[integer float string text datetime boolean]
-        unless valid_types.include?(type)
-            abort(
-                "'#{type}' is not a valid type. The following are the valid types:" \
-                "\t#{valid_types.join("\n\t")}"
-            )
+    def all_route_names(ind_map, routes)
+        all_keys = ind_map.keys.map do |route_name|
+            label, ind = ind_map[route_name]
+            "#{routes[label][ind][:method]} #{routes[label][ind][:path]}, "\
+            "name: #{route_name}"
         end
+        "The following are the valid route names:\n#{all_keys.join("\n")}"
     end
 
-    def params_type_check(params, parent, key)
-        return if params.blank? && parent == 'response'
-
-        if !params.is_a?(Symbol) && !params.is_a?(Hash) && !params.is_a?(Array)
-            abort(
-                "Invalid #{parent} params for \'#{key}\'." \
-                "\n\t:params can only be a symbol, hash, or array."
-            )
-        end
-    end
-
-    def required_type_check(required, key)
-        unless required.is_a?(Array)
-            abort(
-                "Invalid request params for \'#{key}\'." \
-                "\n\t:required can only be an array."
-            )
-        end
-    end
-
-    def reference_check(reference, schemas)
-        unless schemas.key?(reference)
-            abort(
-                "\'#{reference}\' is not a valid schema name. " \
-                "The following are all the available schemas:\n" \
-                "\t#{schemas.keys.join("\n\t")}"
-            )
-        end
+    def all_schemas(schemas)
+        "The following are all the available schemas:\n\t#{schemas.keys.join("\n\t")}"
     end
 
     def key_to_index(routes)
@@ -140,10 +103,6 @@ module RouteAnalyzer
         schemas
     end
 
-    def controller_to_title(controller)
-        controller.to_s[0..-2].tr('_', ' ').titleize
-    end
-
     def add_details(routes)
         routes.map do |entry|
             controller = entry[:controller].to_s[0..-2]
@@ -155,7 +114,7 @@ module RouteAnalyzer
             when :create
                 given = get_given_from_required(entry[:request][:required])
                 entry[:summary] = "Create new #{controller}#{given} or update #{controller} with id"
-                entry[:request][:params] = [
+                entry[:request] = [
                     {
                         reference: controller_to_input(entry[:controller])
                     },
@@ -168,14 +127,14 @@ module RouteAnalyzer
                         }
                     }
                 ]
-                entry[:response][:params] = [
+                entry[:response] = [
                     {
                         array: array_result(entry[:path]),
-                        title: "response for creating #{controller}",
+                        title: "Response for creating #{controller}",
                         reference: entry[:controller]
                     },
                     {
-                        title: "response for updating #{controller}",
+                        title: "Response for updating #{controller}",
                         reference: entry[:controller]
                     }
                 ]
@@ -199,10 +158,6 @@ module RouteAnalyzer
         end
     end
 
-    def get_given_from_required(required)
-        required.length.positive? ? " with given #{required.join(',')}" : ''
-    end
-
     def format_required_input(required)
         data = {}
         required.each do |item|
@@ -213,38 +168,6 @@ module RouteAnalyzer
             end
         end
         data
-    end
-
-    def routes_documented?(routes)
-        route_num = 0
-        incomplete = []
-        completed = {}
-        routes.keys.each do |key|
-            routes[key].each do |route|
-                if !route[:method] || route[:name] == 'api_v1'
-                    incomplete.push("#{route_num + 1}. #{route[:path]}, action: :#{route[:action]}" \
-                        "\n\tPlease set an unique for this route in /config/routes.rb using:" \
-                        "\n\t\t get/post {route}, action: {action}, as: {name}")
-                else
-                    label = "#{route_num + 1}. #{route[:method]} #{route[:path]}" \
-                        ", name: #{route[:name].sub('api_v1_', '')}\n\t"
-                    route[:summary] = route[:summary] ? route[:summary].strip : ''
-                    if !route[:summary].length.positive?
-                        incomplete.push("#{label}No summary set for this route")
-                    elsif route[:response][:params].blank? && route[:response][:reference].blank?
-                        incomplete.push("#{label}No response set for this route")
-                    else
-                        completed[key] = [] unless completed.key?(key)
-                        completed[key].push(route)
-                    end
-                end
-                route_num += 1
-            end
-        end
-        puts incomplete.length.positive? ? "#{incomplete.join("\n\n")}\n\n" : ''
-        puts "API Documentation: #{incomplete.length} todo, " \
-            "#{route_num - incomplete.length} completed, #{route_num} total."
-        [!incomplete.length.positive?, completed]
     end
 
     def controller_attributes(controller)
@@ -280,6 +203,14 @@ module RouteAnalyzer
         else
             []
         end
+    end
+
+    def controller_to_title(controller)
+        controller.to_s[0..-2].tr('_', ' ').titleize
+    end
+
+    def get_given_from_required(required)
+        required.length.positive? ? " with given #{required.join(',')}" : ''
     end
 
     def min_params(route)
