@@ -29,7 +29,7 @@ export class CustomTable extends React.Component {
             selectedRows: [],
             selectedIds: [],
             selectAll: false
-        };
+        }
     };
 
     filterMethod = (filter, row) => {

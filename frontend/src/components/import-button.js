@@ -9,36 +9,30 @@ export class ImportButton extends React.Component {
             data: null,
             dialogContents: "",
             dialogOpen: false
-        };
+        }
     };
 
     handleClose = () => {
-        this.setState({dialogOpen: false});
-    }
+        this.setState({ dialogOpen: false });
+    };
 
-    uploadDataToBackend = (data) => {
+    uploadDataToBackend = data => {
         // TODO
     };
 
     importFile = () => {
-
         let loadDataFunc = data => {
             // passed in data is of json format
-            
             /* TODO: 
             const diffs = getDiffs(data, ...dataFromBackend);
             if (diffs) {
                 this.setState({ data: data, dialogContents: diffs, dialogOpen: true})
             } else {
-                uploadDataToBackend()
+                uploadDataToBackend(data)
             } */
         };
 
-        readFile(
-            document.getElementById("file-input"), 
-            loadDataFunc
-        );
-
+        readFile(document.getElementById("file-input"), loadDataFunc);
     };
 
     render() {
@@ -63,7 +57,9 @@ export class ImportButton extends React.Component {
 
                 <Modal show={this.state.dialogOpen} onHide={this.handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>The following will be overwritten</Modal.Title>
+                        <Modal.Title>
+                            The following will be overwritten
+                        </Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -71,8 +67,17 @@ export class ImportButton extends React.Component {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose} >Cancel</Button>
-                        <Button variant="primary" onClick={() => this.uploadDataToBackend(this.state.data)}>Proceed</Button>
+                        <Button variant="secondary" onClick={this.handleClose}>
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="primary"
+                            onClick={() =>
+                                this.uploadDataToBackend(this.state.data)
+                            }
+                        >
+                            Proceed
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

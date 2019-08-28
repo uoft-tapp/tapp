@@ -4,9 +4,7 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 
 export class EmailButton extends React.Component {
     static propTypes = {
-        data: PropTypes.arrayOf(
-            PropTypes.number
-        ).isRequired
+        data: PropTypes.arrayOf(PropTypes.number).isRequired
     };
 
     // email applicants
@@ -22,21 +20,14 @@ export class EmailButton extends React.Component {
         a.click();
     };
 
-    // email contract link to a single applicant
-    emailContract = (offers) => {
-        // TODO
-    };
-
-    nagOffers = (offers) => {
-        // TODO
-    }
-
     render() {
         return (
             <DropdownButton id="dropdown-basic-button" title="Email">
-                <Dropdown.Item onClick={() => this.email(this.props.data)}>Email Blank</Dropdown.Item>
-                <Dropdown.Item onClick={() => this.emailContract(this.props.data)}>Email Contract</Dropdown.Item>
-                <Dropdown.Item onClick={() => this.nagOffers(this.props.data)}>Nag Offers</Dropdown.Item>
+                <Dropdown.Item onClick={() => this.email(this.props.data)}>
+                    Email Blank
+                </Dropdown.Item>
+                <Dropdown.Item>Email Contract</Dropdown.Item>
+                <Dropdown.Item>Nag Offers</Dropdown.Item>
             </DropdownButton>
         );
     }
