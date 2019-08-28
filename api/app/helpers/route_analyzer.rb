@@ -105,7 +105,7 @@ module RouteAnalyzer
 
     def add_details(routes)
         routes.map do |entry|
-            controller = entry[:controller].to_s[0..-2]
+            controller = controller_to_title(entry[:controller])
             entry[:request] = { params: {}, required: min_params(entry) }
             entry[:response] = { params: {}, required: [] }
             entry[:parameters] = format_required_input(entry[:request][:required])

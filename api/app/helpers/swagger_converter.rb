@@ -227,7 +227,7 @@ module SwaggerConverter
     def get_data_body(entry)
         if !entry[:params]
             entry[:reference] = [entry[:reference]] if entry[:title]
-            get_reference(entry[:reference], entry[:array])
+            get_reference(entry[:reference], entry[:array], entry[:title])
         elsif entry[:params].is_a?(Hash)
             if !entry[:reference]
                 entry[:params] = entry[:array] ? [entry[:params]] : entry[:params]
@@ -249,12 +249,12 @@ module SwaggerConverter
         end
     end
 
-    def get_reference(reference, array = false)
+    def get_reference(reference, array = false, title = nil)
         if reference.is_a?(Symbol)
             ref = "\'#/components/schemas/#{reference}\'"
             [format_inline('$ref', ref)]
         elsif reference.is_a?(Array)
-            get_allof(reference: reference, array: array)
+            get_allof(reference: reference, array: array, title: title)
         end
     end
 
