@@ -210,7 +210,11 @@ function Dashboard() {
                 <ConnectedEmailButton />
             </DashboardWidget>
             <DashboardWidget title="OfferTable">
-                <ConnectedOfferTable data={DATA} columns={COLUMNS} keyField="id" />
+                <ConnectedOfferTable
+                    data={DATA}
+                    columns={COLUMNS}
+                    keyField="id"
+                />
             </DashboardWidget>
         </div>
     );
