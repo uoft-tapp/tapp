@@ -86,11 +86,11 @@
             <div class="uoftlogo"></div>
             <p>{{ date }}</p>
             <p>
-                {{ applicant.first_name }} {{ applicant.last_name }}<br />
+                {{ first_name }} {{ last_name }}<br />
                 c/o Some Department<br />
                 University of Toronto
             </p>
-            <p>Dear {{ applicant.first_name }},</p>
+            <p>Dear {{ first_name }},</p>
         </div>
         <div class="letter-body">
             <p>
@@ -120,7 +120,7 @@
                 </tr>
                 <tr>
                     <th>Rate:</th>
-                    <td>{{ session_info.pay }}</td>
+                    <td>{{ session_info.rate1 }}</td>
                 </tr>
             </table>
 

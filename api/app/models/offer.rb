@@ -1,9 +1,81 @@
 # frozen_string_literal: true
 
 # A class representing an offer. This class belongs to assignment, applicant and position.
+require 'json'
 class Offer < ApplicationRecord
   	belongs_to :assignment
-end
+
+
+    def get_deadline
+      offer = self.as_json
+      if offer[:send_date]
+        DateTime.parse(offer[:send_date]).days_ago(-21)
+      end
+    end
+
+    def format
+      offer = self.as_json
+
+      #These will be removed once I figure out the rate.
+      assignment = Assignment.find(offer["assignment_id"]).as_json
+      position = Position.find(assignment["position_id"]).as_json
+      applicant = Applicant.find(assignment["applicant_id"])
+      session = Session.find(position["session_id"])
+      if offer[:link]
+        offer[:link]= "#{ENV["domain"]}#{offer[:link]}"
+      end
+      data = {
+        position: offer["position_code"],
+        start_date: offer["position_start_date" ],
+        end_date: offer["position_end_date"],
+        hours: offer["pay_period_desc"],
+        first_name: offer["first_name"],
+        last_name: offer["last_name"],
+        session: session,
+        session_info: session.format,
+        deadline: self.get_deadline,
+      }
+      if offer[:send_date]
+        data[:deadline] = self.get_deadline
+      end
+      # the Liquid templating engine assumes strings instead of symbols
+      return offer.merge(data).with_indifferent_access
+    end
+
+    def instructor_format
+      offer = self.as_json
+
+      assignment = Assignment.find(offer["assignment_id"]).as_json
+      position = Position.find(assignment["position_id"]).as_json
+      applicant = Applicant.find(assignment["applicant_id"])
+
+      data = {
+        position: position["position_title"],
+        applicant: applicant.format,
+      }
+      excludes = [
+        :accept_date,
+        :commentary,
+        :hr_status,
+        :link,
+        :nag_count,
+        :print_time,
+        :send_date,
+        :signature,
+        :year,
+        :session,
+      ]
+      # the Liquid templating engine assumes strings instead of symbols
+      return offer.merge(data).except(*excludes).with_indifferent_access
+    end
+
+    private
+    def randomize_id
+      begin
+        self.id = SecureRandom.random_number(1_000_000_000)
+      end while Offer.where(id: self.id).exists?
+    end
+  end
 
 # == Schema Information
 #
@@ -38,5 +110,4 @@ end
 # Indexes
 #
 #  index_offers_on_assignment_id  (assignment_id)
-# Offer.create({assignment_id: 1, first_name: "Simon",last_name: "Aayani",email: "simon.aayani@mail.utoronto.ca",position_title: "Teaching Assistant",position_start_date: Date(),position_end_date: Date(),first_time_ta: "True",status: "Pending",nag_count: 1})
-# Offer.create({assignment_id: 1, first_name: "Simon",last_name: "Aayani",email: "simon.aayani@mail.utoronto.ca",position_title: "Teaching Assistant",first_time_ta: "True",nag_count: 1})
+#

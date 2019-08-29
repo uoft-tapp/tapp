@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-# A class representing an assignment. This class has many offers and belongs to 
+# A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
-  	has_many :offers
-  	belongs_to :applicant
-  	belongs_to :position
-  	has_many :wage_chunks
+    has_many :offers
+    belongs_to :applicant
+    belongs_to :position
+    has_many :wage_chunks
 
-  	validates_uniqueness_of :applicant_id, :scope => [:position_id]
+    validates_uniqueness_of :applicant_id, scope: [:position_id]
 end
 
 # == Schema Information

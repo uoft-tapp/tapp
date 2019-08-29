@@ -33,11 +33,8 @@ Rails.application.routes.draw do
 
             # wage_chunk routes
             post '/wage_chunks/delete' => 'wage_chunks#delete'
-<<<<<<< HEAD
             resources :wage_chunks, only: [:index, :create] do
-=======
-            resources :wage_chunks, only: [:index, :create] do
->>>>>>> 7ea299d8ed6b963ba9b6d09b5433eddd1f61b4aa
+
                 post '/add_reporting_tag', to: 'reporting_tags#create'
             end
 

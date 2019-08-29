@@ -9,6 +9,10 @@ class Session < ApplicationRecord
 	validates :rate1, numericality: {only_float: true}, allow_nil: true
 	validates :rate2, numericality: {only_float: true}, allow_nil: true
   	validates_uniqueness_of :name
+
+  def format
+    self.as_json
+  end
 end
 
 # == Schema Information

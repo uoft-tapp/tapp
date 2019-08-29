@@ -8,6 +8,20 @@ class Applicant < ApplicationRecord
 
   	validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
   	validates_uniqueness_of :student_number, :utorid
+
+    def format
+    applicant = self.as_json
+    excludes = [
+      :address,
+      :app_id,
+      :commentary,
+      :dept,
+      :full_time,
+      :yip,
+    ]
+    # the Liquid templating engine assumes strings instead of symbols
+    return applicant.except(*excludes).with_indifferent_access
+  end
 end
 
 # == Schema Information
