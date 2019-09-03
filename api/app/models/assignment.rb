@@ -10,7 +10,7 @@ class Assignment < ApplicationRecord
 
 	validates_uniqueness_of :applicant_id, :scope => [:position_id]
 
-	after_save :reset_active_offer 
+	after_update :reset_active_offer 
 
 	def active_offer
 		self.active_offer_id ? Offer.find(self.active_offer_id) : nil
@@ -22,7 +22,7 @@ class Assignment < ApplicationRecord
 		applicant = self.applicant
 		position = self.position 
 		session = position.session
-		applicant_data = applicant.applicant_data_for_matchings.joins(:applicantion).where(application: {session: session}).first
+		applicant_data = applicant.applicant_data_for_matchings.joins(:application).where(applications: {session: session}).first
 		start_date = position.est_start_date
 		end_date = position.est_end_date
 		installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
