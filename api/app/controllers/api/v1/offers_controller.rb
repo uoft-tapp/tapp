@@ -20,7 +20,7 @@ module Api::V1
             params.require(:id)
             offer = Offer.find_by(url_token: params[:id])
             if offer
-                render_success(offer)
+                render_success(offer.to_html)
             else
                 render_error("offer does not exist")
             end
@@ -41,6 +41,9 @@ module Api::V1
         def email_offer
             if @assignment.active_offer.present?
                 OfferMailer.with(offer: @assignment.active_offer).contract_email.deliver_later
+                render_success('emailed queued')
+            else
+                render_error('no active offer')
             end 
         end
 
@@ -72,6 +75,9 @@ module Api::V1
         def nag
             if @assignment.active_offer.present?
                 OfferMailer.with(offer: @assignment.active_offer).nag_email.deliver_later
+                render_success('emailed queued')
+            else
+                render_error('no active offer')
             end 
         end
 

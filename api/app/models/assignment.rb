@@ -16,19 +16,13 @@ class Assignment < ApplicationRecord
 		self.active_offer_id ? Offer.find(self.active_offer_id) : nil
 	end 
 
-	def withdraw_active_offer
-		return false if self.active_offer.blank? 
-
-		return self.active_offer.update_attribute(:withdrawn_date, Time.zone.now)
-	end
-
 	def offer_params
 		return if self.active_offer.present? 
 
 		applicant = self.applicant
 		position = self.position 
 		session = position.session
-		applicant_data = applicant.applicant_data_for_matchings.last
+		applicant_data = applicant.applicant_data_for_matchings.joins(:applicantion).where(application: {session: session}).first
 		start_date = position.est_start_date
 		end_date = position.est_end_date
 		installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
