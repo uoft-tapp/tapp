@@ -2,6 +2,7 @@ import { error } from "react-notification-system-redux";
 import { errorProps } from "../../modules/notifications/constants";
 import {
     CREATE_NEW_POSITION_SUCCESS,
+    IMPORT_NEW_POSITION_FAILURE,
     IMPORT_NEW_POSITION_SUCCESS
 } from "../constants/new_position";
 import { apiPOST } from "../../libs/apiUtils";
@@ -24,6 +25,7 @@ export const importNewPosition = payload => async dispatch => {
         const data = await apiPOST("/positions/import", payload);
         dispatch(importNewPositionSuccess(data));
     } catch (e) {
+        dispatch(importNewPositionFailure());
         dispatch(
             error({
                 ...errorProps,
@@ -33,6 +35,10 @@ export const importNewPosition = payload => async dispatch => {
     }
 };
 
+export const importNewPositionFailure = payload => ({
+    type: IMPORT_NEW_POSITION_FAILURE,
+    payload
+});
 export const importNewPositionSuccess = payload => ({
     type: IMPORT_NEW_POSITION_SUCCESS,
     payload
