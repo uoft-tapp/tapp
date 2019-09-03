@@ -3,8 +3,8 @@
 module Api::V1
     # Controller for Offers
     class OffersController < ApplicationController
-        before_action :set_assignment, only: [:create, :active_offer, :email_offer, :withdraw_offer, :nag]
-        before_action :set_offer, only: [:reject_offer, :accept_offer]
+        before_action :set_assignment, only: %i[create active_offer email_offer withdraw_offer nag]
+        before_action :set_offer, only: %i[reject_offer accept_offer]
         # POST /offers
         def create
             offer = Offer.new(@assignment.offer_params)
@@ -16,26 +16,24 @@ module Api::V1
         end
 
         # GET /offers/:url_token
-        def show 
+        def show
             params.require(:id)
             offer = Offer.find_by(url_token: params[:id])
             if offer
                 render_success(offer.to_html)
             else
-                render_error("offer does not exist")
+                render_error('offer does not exist')
             end
-        end 
+        end
 
         # GET /active_offer
         def active_offer
             if @assignment.active_offer.present?
                 render_success(@assignment.active_offer)
             else
-                render_error("no active offer")
+                render_error('no active offer')
             end
         end
-
-            
 
         # POST /email_offer
         def email_offer
@@ -44,7 +42,7 @@ module Api::V1
                 render_success('emailed queued')
             else
                 render_error('no active offer')
-            end 
+            end
         end
 
         def withdraw_offer
@@ -61,11 +59,11 @@ module Api::V1
             else
                 render_error(@offer.errors)
             end
-        end 
+        end
 
         def accept_offer
             params.require(:signature)
-            if @offer.update_attributes({signature: params[:signature], accepted_date: Time.zone.now})
+            if @offer.update_attributes(signature: params[:signature], accepted_date: Time.zone.now)
                 render_success(@offer)
             else
                 render_error(@offer.errors)
@@ -78,10 +76,10 @@ module Api::V1
                 render_success('emailed queued')
             else
                 render_error('no active offer')
-            end 
+            end
         end
 
-        private 
+        private
 
         def set_assignment
             params.require(:assignment_id)
@@ -93,15 +91,14 @@ module Api::V1
             end
         end
 
-        def set_offer 
+        def set_offer
             params.require(:url_token)
             offer_token = params[:url_token]
             if Offer.find_by(url_token: offer_token).present?
                 @offer = Offer.find_by(url_token: offer_token)
-            else 
+            else
                 render_error("offer #{offer_token} does not exist.")
-            end 
+            end
         end
- 
     end
 end

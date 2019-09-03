@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Mailer class for rendering emails related to offers
 class OfferMailer < ApplicationMailer
     def contract_email
         @offer = params[:offer]
