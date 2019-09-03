@@ -2,8 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import {
     createNewPosition,
-    importNewPosition,
-    getCount } from "../../api/actions/new_position";
+    importNewPosition } from "../../api/actions/new_position";
 import { importResult } from "./actions";
 import {
     DefaultInput,
@@ -44,7 +43,8 @@ class NewPosition extends React.Component {
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
-        let count_before_import = getCount();
+        let num_failures_before_import = this.getState().num_failures;
+        let num_successes_before_import = this.getState().num_successes;
 
         for (var i = 1; i < data.length; i++) {
             const position = {
@@ -62,12 +62,11 @@ class NewPosition extends React.Component {
             };
             await this.props.importNewPosition(position);
         }
-        let count_after_import = getCount();
-        let success_imports =
-            count_after_import.SUCCESS - count_before_import.SUCCESS;
-        let failed_imports =
-            count_after_import.FAILS - count_before_import.FAILS;
 
+        let num_failures_after_import = this.getState().num_failures;
+        let num_successes_after_import = this.getState().num_successes;
+        let failed_imports = num_failures_after_import - num_failures_before_import;
+        let success_imports = num_successes_after_import - num_successes_before_import;
         this.props.importResult(success_imports, failed_imports);
     };
 
@@ -161,7 +160,9 @@ export default connect(
             instructors: { list }
         }
     }) => ({
-        instructors: list
+        instructors: list,
+        num_failures: 0,
+        num_success: 0
     }),
     { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition);
