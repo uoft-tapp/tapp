@@ -195,19 +195,19 @@
 <!-- m_WageChunk -->
 <g id="node17" class="node">
 <title>m_WageChunk</title>
-<path fill="none" stroke="#000000" d="M620.5,-323C620.5,-323 740.5,-323 740.5,-323 746.5,-323 752.5,-329 752.5,-335 752.5,-335 752.5,-406 752.5,-406 752.5,-412 746.5,-418 740.5,-418 740.5,-418 620.5,-418 620.5,-418 614.5,-418 608.5,-412 608.5,-406 608.5,-406 608.5,-335 608.5,-335 608.5,-329 614.5,-323 620.5,-323"/>
-<text text-anchor="start" x="646.5" y="-405.2" font-family="Arial Bold" font-size="11.00" fill="#000000">WageChunk</text>
-<polyline fill="none" stroke="#000000" points="608.5,-398 752.5,-398 "/>
-<text text-anchor="start" x="615.5" y="-384.5" font-family="Arial" font-size="10.00" fill="#000000">hours </text>
-<text text-anchor="start" x="643.5" y="-384.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="615.5" y="-371.5" font-family="Arial" font-size="10.00" fill="#000000">rate </text>
-<text text-anchor="start" x="635.5" y="-371.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="615.5" y="-358.5" font-family="Arial" font-size="10.00" fill="#000000">start_date </text>
-<text text-anchor="start" x="662.5" y="-358.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="615.5" y="-345.5" font-family="Arial" font-size="10.00" fill="#000000">end_date </text>
-<text text-anchor="start" x="658.5" y="-345.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="615.5" y="-332.5" font-family="Arial" font-size="10.00" fill="#000000">assignment_id </text>
-<text text-anchor="start" x="682.5" y="-332.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<path fill="none" stroke="#000000" d="M620.5,-238C620.5,-238 740.5,-238 740.5,-238 746.5,-238 752.5,-244 752.5,-250 752.5,-250 752.5,-321 752.5,-321 752.5,-327 746.5,-333 740.5,-333 740.5,-333 620.5,-333 620.5,-333 614.5,-333 608.5,-327 608.5,-321 608.5,-321 608.5,-250 608.5,-250 608.5,-244 614.5,-238 620.5,-238"/>
+<text text-anchor="start" x="646.5" y="-320.2" font-family="Arial Bold" font-size="11.00" fill="#000000">WageChunk</text>
+<polyline fill="none" stroke="#000000" points="608.5,-313 752.5,-313 "/>
+<text text-anchor="start" x="615.5" y="-299.5" font-family="Arial" font-size="10.00" fill="#000000">hours </text>
+<text text-anchor="start" x="643.5" y="-299.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="615.5" y="-286.5" font-family="Arial" font-size="10.00" fill="#000000">rate </text>
+<text text-anchor="start" x="635.5" y="-286.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="615.5" y="-273.5" font-family="Arial" font-size="10.00" fill="#000000">start_date </text>
+<text text-anchor="start" x="662.5" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="615.5" y="-260.5" font-family="Arial" font-size="10.00" fill="#000000">end_date </text>
+<text text-anchor="start" x="658.5" y="-260.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="615.5" y="-247.5" font-family="Arial" font-size="10.00" fill="#000000">assignment_id </text>
+<text text-anchor="start" x="682.5" y="-247.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
 </g>
 <!-- m_Assignment&#45;&gt;m_WageChunk -->
 <g id="edge4" class="edge">
@@ -325,15 +325,11 @@
 <!-- m_ReportingTag -->
 <g id="node14" class="node">
 <title>m_ReportingTag</title>
-<path fill="none" stroke="#000000" d="M802,-290C802,-290 923,-290 923,-290 929,-290 935,-296 935,-302 935,-302 935,-347 935,-347 935,-353 929,-359 923,-359 923,-359 802,-359 802,-359 796,-359 790,-353 790,-347 790,-347 790,-302 790,-302 790,-296 796,-290 802,-290"/>
-<text text-anchor="start" x="824.5" y="-346.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ReportingTag</text>
-<polyline fill="none" stroke="#000000" points="790,-339 935,-339 "/>
-<text text-anchor="start" x="797.5" y="-325.5" font-family="Arial" font-size="10.00" fill="#000000">name </text>
-<text text-anchor="start" x="825.5" y="-325.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="797.5" y="-312.5" font-family="Arial" font-size="10.00" fill="#000000">position_id </text>
-<text text-anchor="start" x="847.5" y="-312.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="797.5" y="-299.5" font-family="Arial" font-size="10.00" fill="#000000">wage_chunk_id </text>
-<text text-anchor="start" x="868.5" y="-299.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<path fill="none" stroke="#000000" d="M429,-264C429,-264 549,-264 549,-264 555,-264 561,-270 561,-276 561,-276 561,-295 561,-295 561,-301 555,-307 549,-307 549,-307 429,-307 429,-307 423,-307 417,-301 417,-295 417,-295 417,-276 417,-276 417,-270 423,-264 429,-264"/>
+<text text-anchor="start" x="451" y="-294.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ReportingTag</text>
+<polyline fill="none" stroke="#000000" points="417,-287 561,-287 "/>
+<text text-anchor="start" x="424" y="-273.5" font-family="Arial" font-size="10.00" fill="#000000">name </text>
+<text text-anchor="start" x="452" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_Position&#45;&gt;m_ReportingTag -->
 <g id="edge7" class="edge">

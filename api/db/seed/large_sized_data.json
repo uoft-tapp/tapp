@@ -48679,2502 +48679,2002 @@
   "reporting_tags": [
     {
       "name": "COM541",
-      "position_index": 225,
       "wage_chunk_index": 451
     },
     {
       "name": "NUR260",
-      "position_index": 402,
       "wage_chunk_index": 280
     },
     {
       "name": "HEA289",
-      "position_index": 473,
       "wage_chunk_index": 182
     },
     {
       "name": "PSY279",
-      "position_index": 95,
       "wage_chunk_index": 164
     },
     {
       "name": "BUS184",
-      "position_index": 481,
       "wage_chunk_index": 296
     },
     {
       "name": "DES585",
-      "position_index": 362,
       "wage_chunk_index": 23
     },
     {
       "name": "DES126",
-      "position_index": 428,
       "wage_chunk_index": 492
     },
     {
       "name": "PSY482",
-      "position_index": 413,
       "wage_chunk_index": 493
     },
     {
       "name": "BIO520",
-      "position_index": 28,
       "wage_chunk_index": 20
     },
     {
       "name": "NUR275",
-      "position_index": 136,
       "wage_chunk_index": 140
     },
     {
       "name": "BUS566",
-      "position_index": 414,
       "wage_chunk_index": 255
     },
     {
       "name": "COM117",
-      "position_index": 80,
       "wage_chunk_index": 143
     },
     {
       "name": "ENG562",
-      "position_index": 8,
       "wage_chunk_index": 312
     },
     {
       "name": "BIO418",
-      "position_index": 51,
       "wage_chunk_index": 21
     },
     {
       "name": "BIO459",
-      "position_index": 22,
       "wage_chunk_index": 459
     },
     {
       "name": "HEA370",
-      "position_index": 347,
       "wage_chunk_index": 0
     },
     {
       "name": "TEA568",
-      "position_index": 419,
       "wage_chunk_index": 160
     },
     {
       "name": "TEA431",
-      "position_index": 409,
       "wage_chunk_index": 111
     },
     {
       "name": "PSY582",
-      "position_index": 393,
       "wage_chunk_index": 137
     },
     {
       "name": "COM566",
-      "position_index": 3,
       "wage_chunk_index": 360
     },
     {
       "name": "ENG145",
-      "position_index": 340,
       "wage_chunk_index": 327
     },
     {
       "name": "BIO193",
-      "position_index": 269,
       "wage_chunk_index": 373
     },
     {
       "name": "CRI188",
-      "position_index": 48,
       "wage_chunk_index": 283
     },
     {
       "name": "EDU334",
-      "position_index": 305,
       "wage_chunk_index": 34
     },
     {
       "name": "CRI344",
-      "position_index": 497,
       "wage_chunk_index": 15
     },
     {
       "name": "MED476",
-      "position_index": 127,
       "wage_chunk_index": 344
     },
     {
       "name": "INF413",
-      "position_index": 222,
       "wage_chunk_index": 364
     },
     {
       "name": "PSY523",
-      "position_index": 281,
       "wage_chunk_index": 357
     },
     {
       "name": "INF274",
-      "position_index": 29,
       "wage_chunk_index": 428
     },
     {
       "name": "APP123",
-      "position_index": 248,
       "wage_chunk_index": 494
     },
     {
       "name": "LAW296",
-      "position_index": 495,
       "wage_chunk_index": 127
     },
     {
       "name": "BUS323",
-      "position_index": 259,
       "wage_chunk_index": 221
     },
     {
       "name": "MED475",
-      "position_index": 422,
       "wage_chunk_index": 250
     },
     {
       "name": "EDU256",
-      "position_index": 104,
       "wage_chunk_index": 13
     },
     {
       "name": "APP531",
-      "position_index": 474,
       "wage_chunk_index": 390
     },
     {
       "name": "BIO418",
-      "position_index": 51,
       "wage_chunk_index": 87
     },
     {
       "name": "NUR216",
-      "position_index": 217,
       "wage_chunk_index": 175
     },
     {
       "name": "FOR158",
-      "position_index": 456,
       "wage_chunk_index": 56
     },
     {
       "name": "BIO159",
-      "position_index": 116,
       "wage_chunk_index": 263
     },
     {
       "name": "COM314",
-      "position_index": 261,
       "wage_chunk_index": 110
     },
     {
       "name": "INF337",
-      "position_index": 296,
       "wage_chunk_index": 237
     },
     {
       "name": "MED188",
-      "position_index": 498,
       "wage_chunk_index": 249
     },
     {
       "name": "BIO461",
-      "position_index": 108,
       "wage_chunk_index": 150
     },
     {
       "name": "EDU523",
-      "position_index": 348,
       "wage_chunk_index": 161
     },
     {
       "name": "COM561",
-      "position_index": 346,
       "wage_chunk_index": 8
     },
     {
       "name": "APP123",
-      "position_index": 248,
       "wage_chunk_index": 123
     },
     {
       "name": "LAW419",
-      "position_index": 184,
       "wage_chunk_index": 454
     },
     {
       "name": "COM560",
-      "position_index": 191,
       "wage_chunk_index": 64
     },
     {
       "name": "INF177",
-      "position_index": 81,
       "wage_chunk_index": 16
     },
     {
       "name": "MED231",
-      "position_index": 9,
       "wage_chunk_index": 384
     },
     {
       "name": "NUR239",
-      "position_index": 466,
       "wage_chunk_index": 252
     },
     {
       "name": "BIO332",
-      "position_index": 385,
       "wage_chunk_index": 328
     },
     {
       "name": "ART154",
-      "position_index": 210,
       "wage_chunk_index": 159
     },
     {
       "name": "BUS547",
-      "position_index": 401,
       "wage_chunk_index": 223
     },
     {
       "name": "COM471",
-      "position_index": 257,
       "wage_chunk_index": 219
     },
     {
       "name": "APP139",
-      "position_index": 424,
       "wage_chunk_index": 228
     },
     {
       "name": "PSY570",
-      "position_index": 475,
       "wage_chunk_index": 393
     },
     {
       "name": "ARC386",
-      "position_index": 61,
       "wage_chunk_index": 22
     },
     {
       "name": "BIO332",
-      "position_index": 385,
       "wage_chunk_index": 260
     },
     {
       "name": "BIO222",
-      "position_index": 121,
       "wage_chunk_index": 147
     },
     {
       "name": "NUR568",
-      "position_index": 146,
       "wage_chunk_index": 166
     },
     {
       "name": "NUR585",
-      "position_index": 168,
       "wage_chunk_index": 153
     },
     {
       "name": "BIO595",
-      "position_index": 492,
       "wage_chunk_index": 299
     },
     {
       "name": "NUR298",
-      "position_index": 133,
       "wage_chunk_index": 308
     },
     {
       "name": "ENG360",
-      "position_index": 172,
       "wage_chunk_index": 117
     },
     {
       "name": "PSY358",
-      "position_index": 368,
       "wage_chunk_index": 325
     },
     {
       "name": "ART188",
-      "position_index": 291,
       "wage_chunk_index": 214
     },
     {
       "name": "COM219",
-      "position_index": 249,
       "wage_chunk_index": 376
     },
     {
       "name": "ENG358",
-      "position_index": 384,
       "wage_chunk_index": 297
     },
     {
       "name": "NUR134",
-      "position_index": 387,
       "wage_chunk_index": 305
     },
     {
       "name": "ART475",
-      "position_index": 323,
       "wage_chunk_index": 395
     },
     {
       "name": "BIO244",
-      "position_index": 135,
       "wage_chunk_index": 227
     },
     {
       "name": "ARC136",
-      "position_index": 246,
       "wage_chunk_index": 367
     },
     {
       "name": "COM374",
-      "position_index": 200,
       "wage_chunk_index": 391
     },
     {
       "name": "APP360",
-      "position_index": 204,
       "wage_chunk_index": 154
     },
     {
       "name": "EDU334",
-      "position_index": 305,
       "wage_chunk_index": 103
     },
     {
       "name": "COM459",
-      "position_index": 17,
       "wage_chunk_index": 258
     },
     {
       "name": "NUR198",
-      "position_index": 39,
       "wage_chunk_index": 419
     },
     {
       "name": "MED190",
-      "position_index": 420,
       "wage_chunk_index": 241
     },
     {
       "name": "BIO173",
-      "position_index": 189,
       "wage_chunk_index": 498
     },
     {
       "name": "COM359",
-      "position_index": 120,
       "wage_chunk_index": 115
     },
     {
       "name": "EDU451",
-      "position_index": 283,
       "wage_chunk_index": 185
     },
     {
       "name": "MED440",
-      "position_index": 153,
       "wage_chunk_index": 152
     },
     {
       "name": "NUR210",
-      "position_index": 446,
       "wage_chunk_index": 141
     },
     {
       "name": "COM117",
-      "position_index": 80,
       "wage_chunk_index": 423
     },
     {
       "name": "CRI297",
-      "position_index": 364,
       "wage_chunk_index": 188
     },
     {
       "name": "COM176",
-      "position_index": 126,
       "wage_chunk_index": 289
     },
     {
       "name": "ART328",
-      "position_index": 75,
       "wage_chunk_index": 55
     },
     {
       "name": "MED564",
-      "position_index": 339,
       "wage_chunk_index": 201
     },
     {
       "name": "BUS413",
-      "position_index": 251,
       "wage_chunk_index": 483
     },
     {
       "name": "ART388",
-      "position_index": 395,
       "wage_chunk_index": 424
     },
     {
       "name": "BIO495",
-      "position_index": 233,
       "wage_chunk_index": 128
     },
     {
       "name": "BUS323",
-      "position_index": 259,
       "wage_chunk_index": 372
     },
     {
       "name": "ENG210",
-      "position_index": 457,
       "wage_chunk_index": 9
     },
     {
       "name": "TEA277",
-      "position_index": 284,
       "wage_chunk_index": 371
     },
     {
       "name": "INF357",
-      "position_index": 69,
       "wage_chunk_index": 276
     },
     {
       "name": "EDU564",
-      "position_index": 26,
       "wage_chunk_index": 178
     },
     {
       "name": "COM152",
-      "position_index": 280,
       "wage_chunk_index": 411
     },
     {
       "name": "MED312",
-      "position_index": 361,
       "wage_chunk_index": 121
     },
     {
       "name": "BIO260",
-      "position_index": 234,
       "wage_chunk_index": 155
     },
     {
       "name": "ART136",
-      "position_index": 209,
       "wage_chunk_index": 176
     },
     {
       "name": "COM412",
-      "position_index": 66,
       "wage_chunk_index": 488
     },
     {
       "name": "BIO418",
-      "position_index": 51,
       "wage_chunk_index": 90
     },
     {
       "name": "ENG482",
-      "position_index": 444,
       "wage_chunk_index": 43
     },
     {
       "name": "COM316",
-      "position_index": 270,
       "wage_chunk_index": 462
     },
     {
       "name": "INF438",
-      "position_index": 467,
       "wage_chunk_index": 303
     },
     {
       "name": "BIO272",
-      "position_index": 158,
       "wage_chunk_index": 248
     },
     {
       "name": "BIO253",
-      "position_index": 152,
       "wage_chunk_index": 224
     },
     {
       "name": "ART271",
-      "position_index": 488,
       "wage_chunk_index": 36
     },
     {
       "name": "NUR298",
-      "position_index": 133,
       "wage_chunk_index": 313
     },
     {
       "name": "PSY111",
-      "position_index": 335,
       "wage_chunk_index": 217
     },
     {
       "name": "PSY131",
-      "position_index": 380,
       "wage_chunk_index": 420
     },
     {
       "name": "BIO294",
-      "position_index": 432,
       "wage_chunk_index": 415
     },
     {
       "name": "INF525",
-      "position_index": 49,
       "wage_chunk_index": 379
     },
     {
       "name": "NUR269",
-      "position_index": 144,
       "wage_chunk_index": 318
     },
     {
       "name": "TEA445",
-      "position_index": 289,
       "wage_chunk_index": 354
     },
     {
       "name": "DES229",
-      "position_index": 256,
       "wage_chunk_index": 375
     },
     {
       "name": "LAW321",
-      "position_index": 243,
       "wage_chunk_index": 26
     },
     {
       "name": "TEA432",
-      "position_index": 63,
       "wage_chunk_index": 244
     },
     {
       "name": "INF172",
-      "position_index": 490,
       "wage_chunk_index": 388
     },
     {
       "name": "NUR260",
-      "position_index": 402,
       "wage_chunk_index": 29
     },
     {
       "name": "EDU269",
-      "position_index": 297,
       "wage_chunk_index": 216
     },
     {
       "name": "MED527",
-      "position_index": 71,
       "wage_chunk_index": 456
     },
     {
       "name": "COM412",
-      "position_index": 66,
       "wage_chunk_index": 290
     },
     {
       "name": "MED472",
-      "position_index": 354,
       "wage_chunk_index": 167
     },
     {
       "name": "INF435",
-      "position_index": 418,
       "wage_chunk_index": 262
     },
     {
       "name": "BIO111",
-      "position_index": 388,
       "wage_chunk_index": 322
     },
     {
       "name": "DES149",
-      "position_index": 160,
       "wage_chunk_index": 145
     },
     {
       "name": "PSY336",
-      "position_index": 45,
       "wage_chunk_index": 383
     },
     {
       "name": "PSY538",
-      "position_index": 199,
       "wage_chunk_index": 165
     },
     {
       "name": "COM572",
-      "position_index": 53,
       "wage_chunk_index": 458
     },
     {
       "name": "COM377",
-      "position_index": 100,
       "wage_chunk_index": 69
     },
     {
       "name": "FOR354",
-      "position_index": 46,
       "wage_chunk_index": 212
     },
     {
       "name": "CRE266",
-      "position_index": 332,
       "wage_chunk_index": 203
     },
     {
       "name": "BIO353",
-      "position_index": 13,
       "wage_chunk_index": 51
     },
     {
       "name": "ARC289",
-      "position_index": 68,
       "wage_chunk_index": 77
     },
     {
       "name": "BIO244",
-      "position_index": 135,
       "wage_chunk_index": 443
     },
     {
       "name": "COM411",
-      "position_index": 151,
       "wage_chunk_index": 396
     },
     {
       "name": "APP353",
-      "position_index": 20,
       "wage_chunk_index": 37
     },
     {
       "name": "CRI332",
-      "position_index": 482,
       "wage_chunk_index": 430
     },
     {
       "name": "COM290",
-      "position_index": 96,
       "wage_chunk_index": 97
     },
     {
       "name": "TEA224",
-      "position_index": 415,
       "wage_chunk_index": 156
     },
     {
       "name": "ARC383",
-      "position_index": 448,
       "wage_chunk_index": 78
     },
     {
       "name": "COM244",
-      "position_index": 47,
       "wage_chunk_index": 343
     },
     {
       "name": "DES511",
-      "position_index": 150,
       "wage_chunk_index": 398
     },
     {
       "name": "ARC354",
-      "position_index": 214,
       "wage_chunk_index": 334
     },
     {
       "name": "ENG310",
-      "position_index": 122,
       "wage_chunk_index": 401
     },
     {
       "name": "HEA492",
-      "position_index": 325,
       "wage_chunk_index": 191
     },
     {
       "name": "BIO520",
-      "position_index": 28,
       "wage_chunk_index": 198
     },
     {
       "name": "ENG562",
-      "position_index": 8,
       "wage_chunk_index": 25
     },
     {
       "name": "COM455",
-      "position_index": 138,
       "wage_chunk_index": 33
     },
     {
       "name": "FOR223",
-      "position_index": 218,
       "wage_chunk_index": 369
     },
     {
       "name": "MED312",
-      "position_index": 361,
       "wage_chunk_index": 197
     },
     {
       "name": "COM560",
-      "position_index": 191,
       "wage_chunk_index": 225
     },
     {
       "name": "DES451",
-      "position_index": 237,
       "wage_chunk_index": 75
     },
     {
       "name": "FOR286",
-      "position_index": 319,
       "wage_chunk_index": 408
     },
     {
       "name": "EDU343",
-      "position_index": 147,
       "wage_chunk_index": 196
     },
     {
       "name": "APP353",
-      "position_index": 20,
       "wage_chunk_index": 442
     },
     {
       "name": "ENG555",
-      "position_index": 106,
       "wage_chunk_index": 399
     },
     {
       "name": "NUR240",
-      "position_index": 328,
       "wage_chunk_index": 205
     },
     {
       "name": "PSY326",
-      "position_index": 322,
       "wage_chunk_index": 173
     },
     {
       "name": "ARC136",
-      "position_index": 246,
       "wage_chunk_index": 142
     },
     {
       "name": "HEA262",
-      "position_index": 83,
       "wage_chunk_index": 287
     },
     {
       "name": "APP437",
-      "position_index": 453,
       "wage_chunk_index": 24
     },
     {
       "name": "ENG210",
-      "position_index": 457,
       "wage_chunk_index": 94
     },
     {
       "name": "NUR210",
-      "position_index": 446,
       "wage_chunk_index": 461
     },
     {
       "name": "NUR198",
-      "position_index": 39,
       "wage_chunk_index": 479
     },
     {
       "name": "BIO260",
-      "position_index": 234,
       "wage_chunk_index": 47
     },
     {
       "name": "COM455",
-      "position_index": 138,
       "wage_chunk_index": 468
     },
     {
       "name": "COM491",
-      "position_index": 276,
       "wage_chunk_index": 457
     },
     {
       "name": "INF281",
-      "position_index": 175,
       "wage_chunk_index": 5
     },
     {
       "name": "MED238",
-      "position_index": 355,
       "wage_chunk_index": 40
     },
     {
       "name": "INF438",
-      "position_index": 467,
       "wage_chunk_index": 245
     },
     {
       "name": "LAW554",
-      "position_index": 274,
       "wage_chunk_index": 301
     },
     {
       "name": "INF435",
-      "position_index": 418,
       "wage_chunk_index": 28
     },
     {
       "name": "CRI330",
-      "position_index": 253,
       "wage_chunk_index": 432
     },
     {
       "name": "EDU538",
-      "position_index": 72,
       "wage_chunk_index": 193
     },
     {
       "name": "ARC289",
-      "position_index": 68,
       "wage_chunk_index": 268
     },
     {
       "name": "CRI122",
-      "position_index": 366,
       "wage_chunk_index": 59
     },
     {
       "name": "BUS284",
-      "position_index": 480,
       "wage_chunk_index": 285
     },
     {
       "name": "BIO462",
-      "position_index": 206,
       "wage_chunk_index": 329
     },
     {
       "name": "BUS410",
-      "position_index": 239,
       "wage_chunk_index": 46
     },
     {
       "name": "INF238",
-      "position_index": 84,
       "wage_chunk_index": 267
     },
     {
       "name": "LAW417",
-      "position_index": 31,
       "wage_chunk_index": 499
     },
     {
       "name": "CRE141",
-      "position_index": 244,
       "wage_chunk_index": 294
     },
     {
       "name": "ART486",
-      "position_index": 134,
       "wage_chunk_index": 409
     },
     {
       "name": "FOR158",
-      "position_index": 456,
       "wage_chunk_index": 386
     },
     {
       "name": "COM312",
-      "position_index": 91,
       "wage_chunk_index": 218
     },
     {
       "name": "MED493",
-      "position_index": 438,
       "wage_chunk_index": 275
     },
     {
       "name": "COM227",
-      "position_index": 320,
       "wage_chunk_index": 407
     },
     {
       "name": "BIO257",
-      "position_index": 92,
       "wage_chunk_index": 113
     },
     {
       "name": "EDU451",
-      "position_index": 283,
       "wage_chunk_index": 333
     },
     {
       "name": "EDU497",
-      "position_index": 353,
       "wage_chunk_index": 174
     },
     {
       "name": "NUR370",
-      "position_index": 383,
       "wage_chunk_index": 58
     },
     {
       "name": "ART453",
-      "position_index": 107,
       "wage_chunk_index": 417
     },
     {
       "name": "DES518",
-      "position_index": 85,
       "wage_chunk_index": 319
     },
     {
       "name": "CRI122",
-      "position_index": 366,
       "wage_chunk_index": 418
     },
     {
       "name": "BUS461",
-      "position_index": 300,
       "wage_chunk_index": 311
     },
     {
       "name": "ARC552",
-      "position_index": 109,
       "wage_chunk_index": 88
     },
     {
       "name": "FOR467",
-      "position_index": 423,
       "wage_chunk_index": 340
     },
     {
       "name": "TEA224",
-      "position_index": 207,
       "wage_chunk_index": 271
     },
     {
       "name": "ENG358",
-      "position_index": 384,
       "wage_chunk_index": 270
     },
     {
       "name": "ENG353",
-      "position_index": 169,
       "wage_chunk_index": 351
     },
     {
       "name": "CRE141",
-      "position_index": 244,
       "wage_chunk_index": 381
     },
     {
       "name": "BUS323",
-      "position_index": 259,
       "wage_chunk_index": 412
     },
     {
       "name": "BUS321",
-      "position_index": 469,
       "wage_chunk_index": 79
     },
     {
       "name": "CRI312",
-      "position_index": 411,
       "wage_chunk_index": 108
     },
     {
       "name": "MED411",
-      "position_index": 171,
       "wage_chunk_index": 437
     },
     {
       "name": "TEA312",
-      "position_index": 381,
       "wage_chunk_index": 70
     },
     {
       "name": "COM552",
-      "position_index": 123,
       "wage_chunk_index": 306
     },
     {
       "name": "COM232",
-      "position_index": 202,
       "wage_chunk_index": 347
     },
     {
       "name": "FOR171",
-      "position_index": 145,
       "wage_chunk_index": 353
     },
     {
       "name": "NUR239",
-      "position_index": 466,
       "wage_chunk_index": 307
     },
     {
       "name": "ENG185",
-      "position_index": 5,
       "wage_chunk_index": 132
     },
     {
       "name": "LAW321",
-      "position_index": 243,
       "wage_chunk_index": 124
     },
     {
       "name": "ARC351",
-      "position_index": 310,
       "wage_chunk_index": 139
     },
     {
       "name": "ARC351",
-      "position_index": 310,
       "wage_chunk_index": 485
     },
     {
       "name": "MED238",
-      "position_index": 355,
       "wage_chunk_index": 414
     },
     {
       "name": "ENG310",
-      "position_index": 122,
       "wage_chunk_index": 63
     },
     {
       "name": "BUS456",
-      "position_index": 215,
       "wage_chunk_index": 31
     },
     {
       "name": "CRE116",
-      "position_index": 333,
       "wage_chunk_index": 416
     },
     {
       "name": "COM270",
-      "position_index": 449,
       "wage_chunk_index": 82
     },
     {
       "name": "BUS265",
-      "position_index": 10,
       "wage_chunk_index": 316
     },
     {
       "name": "INF378",
-      "position_index": 115,
       "wage_chunk_index": 402
     },
     {
       "name": "ART188",
-      "position_index": 291,
       "wage_chunk_index": 265
     },
     {
       "name": "COM374",
-      "position_index": 200,
       "wage_chunk_index": 96
     },
     {
       "name": "BIO446",
-      "position_index": 486,
       "wage_chunk_index": 67
     },
     {
       "name": "HEA165",
-      "position_index": 416,
       "wage_chunk_index": 266
     },
     {
       "name": "COM359",
-      "position_index": 114,
       "wage_chunk_index": 272
     },
     {
       "name": "EDU527",
-      "position_index": 288,
       "wage_chunk_index": 342
     },
     {
       "name": "ENG545",
-      "position_index": 56,
       "wage_chunk_index": 102
     },
     {
       "name": "COM476",
-      "position_index": 255,
       "wage_chunk_index": 236
     },
     {
       "name": "APP123",
-      "position_index": 248,
       "wage_chunk_index": 335
     },
     {
       "name": "ARC382",
-      "position_index": 394,
       "wage_chunk_index": 12
     },
     {
       "name": "COM374",
-      "position_index": 200,
       "wage_chunk_index": 427
     },
     {
       "name": "ART271",
-      "position_index": 488,
       "wage_chunk_index": 425
     },
     {
       "name": "EDU343",
-      "position_index": 147,
       "wage_chunk_index": 65
     },
     {
       "name": "TEA224",
-      "position_index": 207,
       "wage_chunk_index": 92
     },
     {
       "name": "CRI332",
-      "position_index": 482,
       "wage_chunk_index": 138
     },
     {
       "name": "INF238",
-      "position_index": 84,
       "wage_chunk_index": 295
     },
     {
       "name": "CRE141",
-      "position_index": 244,
       "wage_chunk_index": 190
     },
     {
       "name": "INF441",
-      "position_index": 302,
       "wage_chunk_index": 374
     },
     {
       "name": "APP163",
-      "position_index": 374,
       "wage_chunk_index": 475
     },
     {
       "name": "NUR298",
-      "position_index": 133,
       "wage_chunk_index": 85
     },
     {
       "name": "COM544",
-      "position_index": 74,
       "wage_chunk_index": 404
     },
     {
       "name": "BIO173",
-      "position_index": 189,
       "wage_chunk_index": 281
     },
     {
       "name": "INF438",
-      "position_index": 467,
       "wage_chunk_index": 338
     },
     {
       "name": "ART453",
-      "position_index": 107,
       "wage_chunk_index": 202
     },
     {
       "name": "ART154",
-      "position_index": 210,
       "wage_chunk_index": 257
     },
     {
       "name": "BIO244",
-      "position_index": 135,
       "wage_chunk_index": 136
     },
     {
       "name": "EDU343",
-      "position_index": 147,
       "wage_chunk_index": 298
     },
     {
       "name": "BIO461",
-      "position_index": 108,
       "wage_chunk_index": 350
     },
     {
       "name": "COM152",
-      "position_index": 280,
       "wage_chunk_index": 346
     },
     {
       "name": "PSY143",
-      "position_index": 439,
       "wage_chunk_index": 422
     },
     {
       "name": "DES262",
-      "position_index": 407,
       "wage_chunk_index": 400
     },
     {
       "name": "HEA548",
-      "position_index": 12,
       "wage_chunk_index": 2
     },
     {
       "name": "COM541",
-      "position_index": 225,
       "wage_chunk_index": 39
     },
     {
       "name": "CRE194",
-      "position_index": 308,
       "wage_chunk_index": 122
     },
     {
       "name": "HEA441",
-      "position_index": 101,
       "wage_chunk_index": 382
     },
     {
       "name": "CRI564",
-      "position_index": 78,
       "wage_chunk_index": 209
     },
     {
       "name": "PSY279",
-      "position_index": 95,
       "wage_chunk_index": 45
     },
     {
       "name": "COM214",
-      "position_index": 25,
       "wage_chunk_index": 118
     },
     {
       "name": "DES229",
-      "position_index": 256,
       "wage_chunk_index": 109
     },
     {
       "name": "INF270",
-      "position_index": 7,
       "wage_chunk_index": 352
     },
     {
       "name": "APP230",
-      "position_index": 44,
       "wage_chunk_index": 68
     },
     {
       "name": "ARC362",
-      "position_index": 351,
       "wage_chunk_index": 84
     },
     {
       "name": "ART274",
-      "position_index": 149,
       "wage_chunk_index": 66
     },
     {
       "name": "CRE471",
-      "position_index": 260,
       "wage_chunk_index": 429
     },
     {
       "name": "COM234",
-      "position_index": 307,
       "wage_chunk_index": 497
     },
     {
       "name": "NUR210",
-      "position_index": 446,
       "wage_chunk_index": 200
     },
     {
       "name": "EDU343",
-      "position_index": 147,
       "wage_chunk_index": 240
     },
     {
       "name": "BIO173",
-      "position_index": 494,
       "wage_chunk_index": 279
     },
     {
       "name": "COM544",
-      "position_index": 242,
       "wage_chunk_index": 387
     },
     {
       "name": "DES496",
-      "position_index": 11,
       "wage_chunk_index": 61
     },
     {
       "name": "ARC544",
-      "position_index": 52,
       "wage_chunk_index": 106
     },
     {
       "name": "COM524",
-      "position_index": 487,
       "wage_chunk_index": 239
     },
     {
       "name": "ART288",
-      "position_index": 433,
       "wage_chunk_index": 179
     },
     {
       "name": "ENG286",
-      "position_index": 223,
       "wage_chunk_index": 210
     },
     {
       "name": "DES229",
-      "position_index": 256,
       "wage_chunk_index": 207
     },
     {
       "name": "INF525",
-      "position_index": 49,
       "wage_chunk_index": 130
     },
     {
       "name": "ART194",
-      "position_index": 141,
       "wage_chunk_index": 189
     },
     {
       "name": "ARC374",
-      "position_index": 299,
       "wage_chunk_index": 286
     },
     {
       "name": "COM178",
-      "position_index": 196,
       "wage_chunk_index": 292
     },
     {
       "name": "NUR537",
-      "position_index": 67,
       "wage_chunk_index": 187
     },
     {
       "name": "HEA548",
-      "position_index": 12,
       "wage_chunk_index": 480
     },
     {
       "name": "APP247",
-      "position_index": 15,
       "wage_chunk_index": 392
     },
     {
       "name": "COM396",
-      "position_index": 372,
       "wage_chunk_index": 199
     },
     {
       "name": "LAW322",
-      "position_index": 382,
       "wage_chunk_index": 452
     },
     {
       "name": "ARC340",
-      "position_index": 93,
       "wage_chunk_index": 467
     },
     {
       "name": "NUR216",
-      "position_index": 217,
       "wage_chunk_index": 180
     },
     {
       "name": "LAW296",
-      "position_index": 495,
       "wage_chunk_index": 242
     },
     {
       "name": "ARC176",
-      "position_index": 232,
       "wage_chunk_index": 149
     },
     {
       "name": "NUR240",
-      "position_index": 328,
       "wage_chunk_index": 49
     },
     {
       "name": "TEA445",
-      "position_index": 289,
       "wage_chunk_index": 235
     },
     {
       "name": "BUS585",
-      "position_index": 0,
       "wage_chunk_index": 321
     },
     {
       "name": "BUS345",
-      "position_index": 174,
       "wage_chunk_index": 93
     },
     {
       "name": "ARC362",
-      "position_index": 351,
       "wage_chunk_index": 229
     },
     {
       "name": "DES247",
-      "position_index": 102,
       "wage_chunk_index": 491
     },
     {
       "name": "CRE180",
-      "position_index": 378,
       "wage_chunk_index": 17
     },
     {
       "name": "INF172",
-      "position_index": 490,
       "wage_chunk_index": 101
     },
     {
       "name": "BIO257",
-      "position_index": 92,
       "wage_chunk_index": 434
     },
     {
       "name": "LAW360",
-      "position_index": 97,
       "wage_chunk_index": 269
     },
     {
       "name": "FOR455",
-      "position_index": 65,
       "wage_chunk_index": 238
     },
     {
       "name": "DES298",
-      "position_index": 434,
       "wage_chunk_index": 455
     },
     {
       "name": "LAW113",
-      "position_index": 110,
       "wage_chunk_index": 126
     },
     {
       "name": "COM561",
-      "position_index": 346,
       "wage_chunk_index": 183
     },
     {
       "name": "COM192",
-      "position_index": 21,
       "wage_chunk_index": 3
     },
     {
       "name": "ARC196",
-      "position_index": 312,
       "wage_chunk_index": 125
     },
     {
       "name": "PSY358",
-      "position_index": 368,
       "wage_chunk_index": 315
     },
     {
       "name": "CRI188",
-      "position_index": 48,
       "wage_chunk_index": 10
     },
     {
       "name": "HEA548",
-      "position_index": 12,
       "wage_chunk_index": 50
     },
     {
       "name": "LAW360",
-      "position_index": 97,
       "wage_chunk_index": 186
     },
     {
       "name": "EDU363",
-      "position_index": 264,
       "wage_chunk_index": 129
     },
     {
       "name": "MED472",
-      "position_index": 354,
       "wage_chunk_index": 1
     },
     {
       "name": "TEA517",
-      "position_index": 94,
       "wage_chunk_index": 370
     },
     {
       "name": "TEA258",
-      "position_index": 43,
       "wage_chunk_index": 438
     },
     {
       "name": "APP565",
-      "position_index": 245,
       "wage_chunk_index": 41
     },
     {
       "name": "CRI113",
-      "position_index": 294,
       "wage_chunk_index": 119
     },
     {
       "name": "DES585",
-      "position_index": 14,
       "wage_chunk_index": 447
     },
     {
       "name": "PSY326",
-      "position_index": 322,
       "wage_chunk_index": 89
     },
     {
       "name": "ARC358",
-      "position_index": 324,
       "wage_chunk_index": 194
     },
     {
       "name": "BIO253",
-      "position_index": 152,
       "wage_chunk_index": 100
     },
     {
       "name": "BIO380",
-      "position_index": 350,
       "wage_chunk_index": 99
     },
     {
       "name": "PSY511",
-      "position_index": 6,
       "wage_chunk_index": 366
     },
     {
       "name": "HEA117",
-      "position_index": 111,
       "wage_chunk_index": 14
     },
     {
       "name": "TEA258",
-      "position_index": 43,
       "wage_chunk_index": 52
     },
     {
       "name": "MED476",
-      "position_index": 127,
       "wage_chunk_index": 449
     },
     {
       "name": "EDU494",
-      "position_index": 341,
       "wage_chunk_index": 470
     },
     {
       "name": "EDU527",
-      "position_index": 288,
       "wage_chunk_index": 481
     },
     {
       "name": "BIO244",
-      "position_index": 135,
       "wage_chunk_index": 304
     },
     {
       "name": "EDU565",
-      "position_index": 1,
       "wage_chunk_index": 337
     },
     {
       "name": "COM227",
-      "position_index": 2,
       "wage_chunk_index": 134
     },
     {
       "name": "DES247",
-      "position_index": 102,
       "wage_chunk_index": 195
     },
     {
       "name": "BUS333",
-      "position_index": 463,
       "wage_chunk_index": 284
     },
     {
       "name": "DES496",
-      "position_index": 11,
       "wage_chunk_index": 246
     },
     {
       "name": "NUR298",
-      "position_index": 133,
       "wage_chunk_index": 54
     },
     {
       "name": "ENG482",
-      "position_index": 444,
       "wage_chunk_index": 177
     },
     {
       "name": "COM524",
-      "position_index": 487,
       "wage_chunk_index": 487
     },
     {
       "name": "COM576",
-      "position_index": 379,
       "wage_chunk_index": 116
     },
     {
       "name": "BIO332",
-      "position_index": 385,
       "wage_chunk_index": 170
     },
     {
       "name": "EDU351",
-      "position_index": 440,
       "wage_chunk_index": 309
     },
     {
       "name": "DES347",
-      "position_index": 464,
       "wage_chunk_index": 406
     },
     {
       "name": "FOR216",
-      "position_index": 326,
       "wage_chunk_index": 261
     },
     {
       "name": "BUS520",
-      "position_index": 203,
       "wage_chunk_index": 441
     },
     {
       "name": "COM374",
-      "position_index": 200,
       "wage_chunk_index": 232
     },
     {
       "name": "ENG545",
-      "position_index": 56,
       "wage_chunk_index": 378
     },
     {
       "name": "MED190",
-      "position_index": 420,
       "wage_chunk_index": 192
     },
     {
       "name": "BIO353",
-      "position_index": 13,
       "wage_chunk_index": 436
     },
     {
       "name": "CRE480",
-      "position_index": 485,
       "wage_chunk_index": 453
     },
     {
       "name": "EDU256",
-      "position_index": 104,
       "wage_chunk_index": 362
     },
     {
       "name": "EDU158",
-      "position_index": 208,
       "wage_chunk_index": 112
     },
     {
       "name": "CRE116",
-      "position_index": 333,
       "wage_chunk_index": 114
     },
     {
       "name": "EDU565",
-      "position_index": 1,
       "wage_chunk_index": 230
     },
     {
       "name": "NUR380",
-      "position_index": 406,
       "wage_chunk_index": 168
     },
     {
       "name": "ART314",
-      "position_index": 30,
       "wage_chunk_index": 7
     },
     {
       "name": "INF177",
-      "position_index": 81,
       "wage_chunk_index": 389
     },
     {
       "name": "ART396",
-      "position_index": 472,
       "wage_chunk_index": 473
     },
     {
       "name": "HEA492",
-      "position_index": 325,
       "wage_chunk_index": 440
     },
     {
       "name": "TEA224",
-      "position_index": 415,
       "wage_chunk_index": 206
     },
     {
       "name": "BIO446",
-      "position_index": 486,
       "wage_chunk_index": 171
     },
     {
       "name": "COM558",
-      "position_index": 452,
       "wage_chunk_index": 27
     },
     {
       "name": "BIO222",
-      "position_index": 121,
       "wage_chunk_index": 288
     },
     {
       "name": "APP159",
-      "position_index": 113,
       "wage_chunk_index": 72
     },
     {
       "name": "COM524",
-      "position_index": 487,
       "wage_chunk_index": 331
     },
     {
       "name": "TEA316",
-      "position_index": 337,
       "wage_chunk_index": 490
     },
     {
       "name": "TEA382",
-      "position_index": 399,
       "wage_chunk_index": 410
     },
     {
       "name": "DES585",
-      "position_index": 14,
       "wage_chunk_index": 30
     },
     {
       "name": "BIO334",
-      "position_index": 391,
       "wage_chunk_index": 466
     },
     {
       "name": "TEA568",
-      "position_index": 419,
       "wage_chunk_index": 435
     },
     {
       "name": "LAW296",
-      "position_index": 495,
       "wage_chunk_index": 465
     },
     {
       "name": "ARC362",
-      "position_index": 351,
       "wage_chunk_index": 60
     },
     {
       "name": "BUS265",
-      "position_index": 10,
       "wage_chunk_index": 48
     },
     {
       "name": "EDU538",
-      "position_index": 72,
       "wage_chunk_index": 73
     },
     {
       "name": "ARC340",
-      "position_index": 93,
       "wage_chunk_index": 277
     },
     {
       "name": "ARC340",
-      "position_index": 93,
       "wage_chunk_index": 433
     },
     {
       "name": "EDU351",
-      "position_index": 440,
       "wage_chunk_index": 380
     },
     {
       "name": "PSY143",
-      "position_index": 439,
       "wage_chunk_index": 157
     },
     {
       "name": "LAW316",
-      "position_index": 18,
       "wage_chunk_index": 463
     },
     {
       "name": "DES126",
-      "position_index": 428,
       "wage_chunk_index": 18
     },
     {
       "name": "CRI122",
-      "position_index": 366,
       "wage_chunk_index": 131
     },
     {
       "name": "DES458",
-      "position_index": 99,
       "wage_chunk_index": 377
     },
     {
       "name": "ARC354",
-      "position_index": 214,
       "wage_chunk_index": 80
     },
     {
       "name": "MED177",
-      "position_index": 224,
       "wage_chunk_index": 348
     },
     {
       "name": "INF442",
-      "position_index": 285,
       "wage_chunk_index": 330
     },
     {
       "name": "BIO470",
-      "position_index": 105,
       "wage_chunk_index": 460
     },
     {
       "name": "COM117",
-      "position_index": 80,
       "wage_chunk_index": 323
     },
     {
       "name": "NUR198",
-      "position_index": 39,
       "wage_chunk_index": 226
     },
     {
       "name": "CRI581",
-      "position_index": 226,
       "wage_chunk_index": 413
     },
     {
       "name": "PSY328",
-      "position_index": 178,
       "wage_chunk_index": 403
     },
     {
       "name": "EDU499",
-      "position_index": 241,
       "wage_chunk_index": 264
     },
     {
       "name": "APP437",
-      "position_index": 453,
       "wage_chunk_index": 359
     },
     {
       "name": "MED577",
-      "position_index": 331,
       "wage_chunk_index": 211
     },
     {
       "name": "LAW277",
-      "position_index": 201,
       "wage_chunk_index": 421
     },
     {
       "name": "TEA234",
-      "position_index": 437,
       "wage_chunk_index": 11
     },
     {
       "name": "BIO190",
-      "position_index": 198,
       "wage_chunk_index": 135
     },
     {
       "name": "DES456",
-      "position_index": 4,
       "wage_chunk_index": 484
     },
     {
       "name": "CRE266",
-      "position_index": 332,
       "wage_chunk_index": 71
     },
     {
       "name": "LAW360",
-      "position_index": 97,
       "wage_chunk_index": 222
     },
     {
       "name": "TEA432",
-      "position_index": 63,
       "wage_chunk_index": 95
     },
     {
       "name": "EDU564",
-      "position_index": 26,
       "wage_chunk_index": 339
     },
     {
       "name": "ART288",
-      "position_index": 433,
       "wage_chunk_index": 83
     },
     {
       "name": "BIO253",
-      "position_index": 152,
       "wage_chunk_index": 355
     },
     {
       "name": "MED566",
-      "position_index": 219,
       "wage_chunk_index": 302
     },
     {
       "name": "BIO218",
-      "position_index": 429,
       "wage_chunk_index": 397
     },
     {
       "name": "BUS345",
-      "position_index": 174,
       "wage_chunk_index": 259
     },
     {
       "name": "INF337",
-      "position_index": 296,
       "wage_chunk_index": 247
     },
     {
       "name": "MED398",
-      "position_index": 157,
       "wage_chunk_index": 98
     },
     {
       "name": "CRE366",
-      "position_index": 183,
       "wage_chunk_index": 107
     },
     {
       "name": "ART553",
-      "position_index": 205,
       "wage_chunk_index": 326
     },
     {
       "name": "ARC196",
-      "position_index": 312,
       "wage_chunk_index": 243
     },
     {
       "name": "NUR336",
-      "position_index": 318,
       "wage_chunk_index": 496
     },
     {
       "name": "ART112",
-      "position_index": 173,
       "wage_chunk_index": 477
     },
     {
       "name": "COM219",
-      "position_index": 249,
       "wage_chunk_index": 444
     },
     {
       "name": "HEA289",
-      "position_index": 473,
       "wage_chunk_index": 363
     },
     {
       "name": "DES262",
-      "position_index": 407,
       "wage_chunk_index": 300
     },
     {
       "name": "CRI344",
-      "position_index": 497,
       "wage_chunk_index": 57
     },
     {
       "name": "LAW328",
-      "position_index": 62,
       "wage_chunk_index": 251
     },
     {
       "name": "CRE147",
-      "position_index": 228,
       "wage_chunk_index": 163
     },
     {
       "name": "BUS265",
-      "position_index": 10,
       "wage_chunk_index": 476
     },
     {
       "name": "COM476",
-      "position_index": 255,
       "wage_chunk_index": 341
     },
     {
       "name": "CRI441",
-      "position_index": 367,
       "wage_chunk_index": 317
     },
     {
       "name": "FOR223",
-      "position_index": 218,
       "wage_chunk_index": 208
     },
     {
       "name": "DES590",
-      "position_index": 98,
       "wage_chunk_index": 361
     },
     {
       "name": "ENG310",
-      "position_index": 122,
       "wage_chunk_index": 439
     },
     {
       "name": "EDU527",
-      "position_index": 288,
       "wage_chunk_index": 405
     },
     {
       "name": "LAW554",
-      "position_index": 274,
       "wage_chunk_index": 105
     },
     {
       "name": "CRI480",
-      "position_index": 23,
       "wage_chunk_index": 482
     },
     {
       "name": "CRI424",
-      "position_index": 343,
       "wage_chunk_index": 162
     },
     {
       "name": "ENG277",
-      "position_index": 458,
       "wage_chunk_index": 234
     },
     {
       "name": "ART324",
-      "position_index": 441,
       "wage_chunk_index": 495
     },
     {
       "name": "MED190",
-      "position_index": 420,
       "wage_chunk_index": 450
     },
     {
       "name": "TEA312",
-      "position_index": 381,
       "wage_chunk_index": 158
     },
     {
       "name": "COM576",
-      "position_index": 379,
       "wage_chunk_index": 282
     },
     {
       "name": "BIO520",
-      "position_index": 28,
       "wage_chunk_index": 204
     },
     {
       "name": "PSY143",
-      "position_index": 439,
       "wage_chunk_index": 486
     },
     {
       "name": "BUS589",
-      "position_index": 426,
       "wage_chunk_index": 464
     },
     {
       "name": "COM175",
-      "position_index": 268,
       "wage_chunk_index": 273
     },
     {
       "name": "ART112",
-      "position_index": 173,
       "wage_chunk_index": 310
     },
     {
       "name": "BIO275",
-      "position_index": 298,
       "wage_chunk_index": 446
     },
     {
       "name": "TEA312",
-      "position_index": 381,
       "wage_chunk_index": 356
     },
     {
       "name": "LAW417",
-      "position_index": 31,
       "wage_chunk_index": 38
     },
     {
       "name": "CRI564",
-      "position_index": 78,
       "wage_chunk_index": 146
     },
     {
       "name": "TEA277",
-      "position_index": 284,
       "wage_chunk_index": 274
     },
     {
       "name": "BIO595",
-      "position_index": 492,
       "wage_chunk_index": 4
     },
     {
       "name": "COM150",
-      "position_index": 352,
       "wage_chunk_index": 278
     },
     {
       "name": "INF222",
-      "position_index": 356,
       "wage_chunk_index": 213
     },
     {
       "name": "ART194",
-      "position_index": 141,
       "wage_chunk_index": 324
     },
     {
       "name": "PSY466",
-      "position_index": 142,
       "wage_chunk_index": 385
     },
     {
       "name": "TEA316",
-      "position_index": 337,
       "wage_chunk_index": 151
     },
     {
       "name": "EDU351",
-      "position_index": 440,
       "wage_chunk_index": 478
     },
     {
       "name": "BUS547",
-      "position_index": 401,
       "wage_chunk_index": 220
     },
     {
       "name": "NUR298",
-      "position_index": 133,
       "wage_chunk_index": 254
     },
     {
       "name": "INF274",
-      "position_index": 29,
       "wage_chunk_index": 133
     },
     {
       "name": "CRI113",
-      "position_index": 294,
       "wage_chunk_index": 368
     },
     {
       "name": "NUR566",
-      "position_index": 408,
       "wage_chunk_index": 231
     },
     {
       "name": "EDU158",
-      "position_index": 208,
       "wage_chunk_index": 32
     },
     {
       "name": "COM491",
-      "position_index": 276,
       "wage_chunk_index": 86
     },
     {
       "name": "ARC242",
-      "position_index": 179,
       "wage_chunk_index": 293
     },
     {
       "name": "CRE191",
-      "position_index": 159,
       "wage_chunk_index": 120
     },
     {
       "name": "BIO314",
-      "position_index": 156,
       "wage_chunk_index": 181
     },
     {
       "name": "COM440",
-      "position_index": 64,
       "wage_chunk_index": 19
     },
     {
       "name": "MED493",
-      "position_index": 438,
       "wage_chunk_index": 431
     },
     {
       "name": "MED472",
-      "position_index": 354,
       "wage_chunk_index": 215
     },
     {
       "name": "HEA165",
-      "position_index": 416,
       "wage_chunk_index": 332
     },
     {
       "name": "COM244",
-      "position_index": 47,
       "wage_chunk_index": 345
     },
     {
       "name": "NUR568",
-      "position_index": 146,
       "wage_chunk_index": 469
     },
     {
       "name": "INF413",
-      "position_index": 222,
       "wage_chunk_index": 6
     },
     {
       "name": "COM459",
-      "position_index": 17,
       "wage_chunk_index": 253
     },
     {
       "name": "ARC164",
-      "position_index": 338,
       "wage_chunk_index": 81
     },
     {
       "name": "BUS482",
-      "position_index": 496,
       "wage_chunk_index": 358
     },
     {
       "name": "TEA238",
-      "position_index": 369,
       "wage_chunk_index": 426
     },
     {
       "name": "TEA234",
-      "position_index": 437,
       "wage_chunk_index": 144
     },
     {
       "name": "EDU334",
-      "position_index": 305,
       "wage_chunk_index": 233
     },
     {
       "name": "ARC354",
-      "position_index": 214,
       "wage_chunk_index": 169
     },
     {
       "name": "COM176",
-      "position_index": 126,
       "wage_chunk_index": 320
     },
     {
       "name": "HEA263",
-      "position_index": 396,
       "wage_chunk_index": 336
     },
     {
       "name": "APP383",
-      "position_index": 303,
       "wage_chunk_index": 44
     },
     {
       "name": "CRE266",
-      "position_index": 332,
       "wage_chunk_index": 445
     },
     {
       "name": "BIO223",
-      "position_index": 272,
       "wage_chunk_index": 172
     },
     {
       "name": "ART553",
-      "position_index": 205,
       "wage_chunk_index": 104
     },
     {
       "name": "CRI424",
-      "position_index": 343,
       "wage_chunk_index": 62
     },
     {
       "name": "BUS520",
-      "position_index": 203,
       "wage_chunk_index": 76
     },
     {
       "name": "MED564",
-      "position_index": 339,
       "wage_chunk_index": 365
     },
     {
       "name": "BIO222",
-      "position_index": 121,
       "wage_chunk_index": 474
     },
     {
       "name": "COM192",
-      "position_index": 21,
       "wage_chunk_index": 148
     },
     {
       "name": "MED340",
-      "position_index": 342,
       "wage_chunk_index": 184
     },
     {
       "name": "MED243",
-      "position_index": 70,
       "wage_chunk_index": 42
     },
     {
       "name": "COM220",
-      "position_index": 59,
       "wage_chunk_index": 256
     },
     {
       "name": "PSY223",
-      "position_index": 212,
       "wage_chunk_index": 314
     },
     {
       "name": "INF344",
-      "position_index": 266,
       "wage_chunk_index": 53
     },
     {
       "name": "ART310",
-      "position_index": 170,
       "wage_chunk_index": 448
     },
     {
       "name": "APP353",
-      "position_index": 20,
       "wage_chunk_index": 489
     },
     {
       "name": "DES347",
-      "position_index": 464,
       "wage_chunk_index": 471
     },
     {
       "name": "MED525",
-      "position_index": 484,
       "wage_chunk_index": 394
     },
     {
       "name": "APP332",
-      "position_index": 375,
       "wage_chunk_index": 35
     },
     {
       "name": "MED312",
-      "position_index": 361,
       "wage_chunk_index": 472
     },
     {
       "name": "ENG145",
-      "position_index": 340,
       "wage_chunk_index": 74
     },
     {
       "name": "ENG358",
-      "position_index": 384,
       "wage_chunk_index": 349
     },
     {
       "name": "FOR286",
-      "position_index": 319,
       "wage_chunk_index": 91
     },
     {
       "name": "FOR354",
-      "position_index": 46,
       "wage_chunk_index": 291
     }
   ]

@@ -169,14 +169,24 @@ ActiveRecord::Schema.define(version: 2019_08_27_223527) do
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
 
+  create_table "positions_reporting_tags", force: :cascade do |t|
+    t.bigint "reporting_tag_id"
+    t.bigint "position_id"
+    t.index ["position_id"], name: "index_positions_reporting_tags_on_position_id"
+    t.index ["reporting_tag_id"], name: "index_positions_reporting_tags_on_reporting_tag_id"
+  end
+
   create_table "reporting_tags", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "position_id"
+  end
+
+  create_table "reporting_tags_wage_chunks", force: :cascade do |t|
+    t.bigint "reporting_tag_id"
     t.bigint "wage_chunk_id"
-    t.index ["position_id"], name: "index_reporting_tags_on_position_id"
-    t.index ["wage_chunk_id"], name: "index_reporting_tags_on_wage_chunk_id"
+    t.index ["reporting_tag_id"], name: "index_reporting_tags_wage_chunks_on_reporting_tag_id"
+    t.index ["wage_chunk_id"], name: "index_reporting_tags_wage_chunks_on_wage_chunk_id"
   end
 
   create_table "sessions", force: :cascade do |t|

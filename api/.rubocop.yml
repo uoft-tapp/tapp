@@ -44,5 +44,5 @@ Style/ClassAndModuleChildren:
 Style/GuardClause:
   Enabled: false
 
-Style/OneLineConditiona:
+Style/OneLineConditional:
   Enabled: false

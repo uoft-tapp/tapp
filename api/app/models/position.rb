@@ -6,8 +6,8 @@
 # to a session.
 class Position < ApplicationRecord
     has_and_belongs_to_many :instructors
+    has_and_belongs_to_many :reporting_tags
     belongs_to :session
-    has_many :reporting_tags
     has_many :assignments
     has_many :position_preferences
     has_many :applications, through: :position_preferences

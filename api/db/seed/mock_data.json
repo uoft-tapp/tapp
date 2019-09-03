@@ -292,12 +292,10 @@
     "reporting_tags":[
         {
             "name": "MAT135H1F",
-            "position_index": 0,
             "wage_chunk_index": 0
         },
         {
             "name": "MAT135H1F",
-            "position_index": 0,
             "wage_chunk_index": 1
         }
     ]
