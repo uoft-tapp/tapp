@@ -7,7 +7,7 @@ import applicantReducer from "./modules/applicants_by_course/reducer";
 import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./modules/application/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
-import offerTableReducer from "./views/offertable/reducer";
+import offerTableReducer from "./views/offertable/reducers";
 import {
     statusReducer,
     sessionsReducer,

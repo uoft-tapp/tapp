@@ -82,7 +82,7 @@ export class CustomTable extends React.Component {
         }
         // update the state and send selected rows
         this.setState({ selectedRows, selectedIds });
-        this.props.sendSelectedRows(selectedIds);
+        this.props.setSelectedRows(selectedIds);
     };
 
     /**
@@ -107,7 +107,7 @@ export class CustomTable extends React.Component {
             });
         }
         this.setState({ selectAll, selectedRows, selectedIds });
-        this.props.sendSelectedRows(selectedIds);
+        this.props.setSelectedRows(selectedIds);
     };
 
     /**

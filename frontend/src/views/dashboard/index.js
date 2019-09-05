@@ -11,7 +11,7 @@ import {
     positionsSelector,
     assignmentsSelector
 } from "../../api/actions";
-import { sendSelectedRows } from "../offertable/actions";
+import { setSelectedRows } from "../offertable/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
@@ -66,9 +66,10 @@ const ConnectedEmailButton = connect(state => ({
 
 const ConnectedOfferTable = connect(
     null,
-    { sendSelectedRows }
+    { setSelectedRows }
 )(CustomTable);
 
+// XXX this header is temporary and should be updated when issue #226 is resolved
 const COLUMNS = [
     { Header: "First Name", accessor: "first_name", width: 100 },
     { Header: "Last Name", accessor: "last_name", width: 100 },
@@ -79,14 +80,12 @@ const COLUMNS = [
         accessor: "first_time_ta",
         Cell: props => <span>{props.value.toString().toUpperCase()}</span>,
         width: 100
-        // filterMethod: (filter, row) =>
-        //             row[filter.id].startsWith(filter.value) &&
-        //             row[filter.id].endsWith(filter.value)
     }, // boolean
     { Header: "Status", accessor: "status", width: 100 },
     { Header: "Nag Count", accessor: "nag_count", width: 100 }
 ];
 
+// XXX this is temporary data and should be removed when issue #226 is resolved
 const DATA = [
     {
         id: 1,

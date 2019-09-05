@@ -1,92 +1,97 @@
-import React from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Button, Dropdown, DropdownButton, Modal } from "react-bootstrap";
 import { readFile } from "../libs/fileManager";
 
-export class ImportButton extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: null,
-            dialogContents: "",
-            dialogOpen: false
-        };
-    }
+/**
+ * Renders an dropdown import button component that imports data from file.
+ *
+ * The data should be in json format.
+ *
+ * @export
+ * @param {function(list[object])} props.uploadFunc
+ */
+export function ImportButton(props) {
+    let { uploadFunc } = props;
+    const [data, setData] = useState(null);
+    const [dialogContents, setDialogContents] = useState("");
+    const [dialogOpen, setDialogOpen] = useState(false);
 
-    /* assume frontend data is up to date
-     *  upload the assignment object
-     *  if there's an part of inconsistency between the imported data and frontend data
-     *  then apiGET that part of data and re-verify it
+    /**
+     * closes the dialog by setting dialogOpen to false
      */
-
-    handleClose = () => {
-        this.setState({ dialogOpen: false });
+    const handleClose = () => {
+        setDialogOpen(false);
     };
 
-    uploadDataToBackend = () => {
-        // TODO
-    };
-
-    importFile = () => {
-        let loadDataFunc = data => {
+    /**
+     * Read the json file content and import the data in it to the backend.
+     *
+     * Implementation details discussed in TAPP meeting on Aug 29:
+     *   - assume frontend data is up to date
+     *   - upload the assignment object
+     *   - if there's an part of inconsistency between the imported data and frontend data
+     *   then apiGET that part of data and re-verify it
+     *
+     * @param {event} e
+     */
+    const importFile = e => {
+        let importClicked = data => {
             // passed in data is of json format
             console.log(data);
+            throw new Error("Not implemented!");
 
             /* TODO: 
             * const diffs = getDiffs(data, ...dataFromBackend);
             * if (diffs) {
-            *     this.setState({ data: data, dialogContents: diffs, dialogOpen: true})
+            *     setData(data)
+            *     setDialogContents(diffs);
+            *     setDialogOpen(true);
             * } else {
-            *     uploadDataToBackend(data)
+            *     uploadFunc(data)
             } */
         };
 
-        readFile(document.getElementById("file-input"), loadDataFunc);
+        readFile(e.target, importClicked);
     };
 
-    render() {
-        return (
-            <div>
-                <DropdownButton id="dropdown-basic-button" title="Import">
-                    <Dropdown.Item
-                        onClick={() =>
-                            document.getElementById("file-input").click()
-                        }
-                    >
-                        Import From File
-                    </Dropdown.Item>
-                    <input
-                        id="file-input"
-                        type="file"
-                        accept="application/json"
-                        style={{ display: "none" }}
-                        onChange={() => this.importFile()}
-                    />
-                </DropdownButton>
+    return (
+        <div>
+            <DropdownButton id="dropdown-basic-button" title="Import">
+                <input
+                    id="raised-button-file"
+                    type="file"
+                    accept="application/json"
+                    style={{ display: "none" }}
+                    onChange={importFile}
+                />
+                <label htmlFor="raised-button-file">
+                    <Dropdown.Item>Import From File</Dropdown.Item>
+                </label>
+            </DropdownButton>
 
-                <Modal show={this.state.dialogOpen} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>
-                            The following will be overwritten
-                        </Modal.Title>
-                    </Modal.Header>
+            <Modal show={dialogOpen} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>The following will be overwritten</Modal.Title>
+                </Modal.Header>
 
-                    <Modal.Body>
-                        <p>{this.state.dialogContents}</p>
-                    </Modal.Body>
+                <Modal.Body>
+                    <p>{dialogContents}</p>
+                </Modal.Body>
 
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleClose}>
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="primary"
-                            onClick={() => this.uploadDataToBackend()}
-                        >
-                            Proceed
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
-        );
-    }
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={() => uploadFunc(data)}>
+                        Proceed
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
+    );
 }
+
+ImportButton.propTypes = {
+    uploadFunc: PropTypes.func
+};

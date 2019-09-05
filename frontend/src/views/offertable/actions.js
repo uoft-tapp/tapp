@@ -1,6 +1,6 @@
-import { SEND_SELECTED_ROWS } from "./constants";
+import { SET_SELECTED_ROWS } from "./constants";
 
-export const sendSelectedRows = data => ({
-    type: SEND_SELECTED_ROWS,
+export const setSelectedRows = data => ({
+    type: SET_SELECTED_ROWS,
     payload: data
 });

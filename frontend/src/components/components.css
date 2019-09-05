@@ -2,19 +2,18 @@
     color: blue;
 }
 
-
 .search-box {
     padding: 10px 0px;
-  }
-  
+}
+
 .search-box input.search {
-width: 200px;
-margin-left: 10px;
-height: 30px;
-border: none;
-padding-left: 10px;
--moz-border-radius: 15px;
--webkit-border-radius: 15px;
-border-radius: 15px;
-border: 2px solid rgb(0, 95, 204);
+    width: 200px;
+    margin-left: 10px;
+    height: 30px;
+    border: none;
+    padding-left: 10px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    border: 2px solid rgb(0, 95, 204);
 }
