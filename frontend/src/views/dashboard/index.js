@@ -11,7 +11,7 @@ import {
     positionsSelector,
     assignmentsSelector
 } from "../../api/actions";
-import { setSelectedRows } from "../offertable/actions";
+import { offerTableSelector, setSelectedRows } from "../offertable/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
@@ -61,7 +61,7 @@ const ConnectedSearchBox = connect(state => ({
 }))(SearchBox);
 
 const ConnectedEmailButton = connect(state => ({
-    data: state.ui.offerTable.selectedIds
+    data: offerTableSelector(state)
 }))(EmailButton);
 
 const ConnectedOfferTable = connect(

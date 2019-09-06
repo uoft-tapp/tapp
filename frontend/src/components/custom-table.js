@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
+import "./components.css";
 
 const SelectTable = selectTableHOC(Table);
 
@@ -16,9 +17,18 @@ export class CustomTable extends React.Component {
         };
     }
 
+    /**
+     * Filter method used by custom table to filter out rows. Returns true if a row
+     * contains substring that matches filter.
+     *
+     * In case of multiple filters where each filter is seperated by empty space,
+     * we will join the filters by an OR relation.
+     *
+     * @param {string} filter
+     * @param {object} row
+     * @return {boolean}
+     */
     filterMethod = (filter, row) => {
-        // filter.id is the column name
-
         let value = row[filter.id].toString().toLowerCase();
         let filterValue = filter.value.toLowerCase();
         // split to array and check if matched filter strings
@@ -28,11 +38,13 @@ export class CustomTable extends React.Component {
     };
 
     /**
-     * Toggle a single checkbox for select table
+     * Toggle a single checkbox for select table.
+     *
+     * @param {string} key A str of the form "select-{id}" where id is the data id
+     * @param {boolean} shift A boolean indicating whether shift key is pressed or not
+     * @param {object} row A row object
      */
     toggleSelection = (key, shift, row) => {
-        // key is a str "select-{id}" where id is the data id
-
         const { keyField } = this.props;
         // access internal filteredData via: https://github.com/tannerlinsley/react-table/wiki/FAQ#how-do-i-get-at-the-internal-data-so-i-can-do-things-like-exporting-to-a-file
         const wrappedInstance = this.internalTable.getWrappedInstance();
@@ -112,24 +124,30 @@ export class CustomTable extends React.Component {
 
     /**
      * Whether or not a row is selected for select table
+     *
+     * @param {int} k keyField id
+     * @return {boolean}
      */
     isSelected = k => {
         return this.state.selectedRows.includes(`select-${k}`);
     };
 
+    /**
+     * Return a react-table's Tr element's prop to be updated
+     *
+     * @param {object} state
+     * @param {object} rowInfo
+     * @param {object} column
+     * @param {object} instance
+     * @return {object}
+     */
     rowFn = (state, rowInfo, column, instance) => {
         const { selectedRows } = this.state;
         const { keyField } = this.props;
 
         return {
+            // triggered when the row is clicked
             onClick: (e, handleOriginal) => {
-                console.log("A Tr Element was clicked!");
-                console.log("it produced this event:", e);
-                console.log("It was in this column:", state);
-                console.log("It was in this column:", column);
-                console.log("It was in this row:", rowInfo);
-                console.log("It was in this table instance:", instance);
-
                 this.toggleSelection(
                     `select-${rowInfo.original[keyField]}`,
                     null,
@@ -167,10 +185,7 @@ export class CustomTable extends React.Component {
                 toggleAll={this.toggleAll}
                 isSelected={this.isSelected}
                 getTrProps={this.rowFn}
-                defaultPageSize={20}
-                style={{
-                    height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
-                }}
+                defaultPageSize={500}
             />
         );
     }

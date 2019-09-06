@@ -6,11 +6,10 @@ const initialState = {
     selectedIds: []
 };
 
-const reducer = createReducer(initialState, {
+const offerTableReducer = createReducer(initialState, {
     [SET_SELECTED_ROWS]: (state, action) => {
         return { ...state, selectedIds: action.payload };
     }
 });
 
-// must import this reducer in the rootReducer file for the state tree to be created
-export default reducer;
+export default offerTableReducer;
