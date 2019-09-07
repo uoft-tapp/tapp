@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_052439) do
+ActiveRecord::Schema.define(version: 2019_08_27_223527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 2019_08_22_052439) do
     t.string "offer_override_pdf"
     t.bigint "position_id"
     t.bigint "applicant_id"
+    t.bigint "active_offer_id"
+    t.index ["active_offer_id"], name: "index_assignments_on_active_offer_id"
     t.index ["applicant_id"], name: "index_assignments_on_applicant_id"
     t.index ["position_id", "applicant_id"], name: "index_assignments_on_position_id_and_applicant_id", unique: true
     t.index ["position_id"], name: "index_assignments_on_position_id"
@@ -106,7 +108,9 @@ ActiveRecord::Schema.define(version: 2019_08_22_052439) do
     t.datetime "rejected_date"
     t.datetime "withdrawn_date"
     t.integer "nag_count", default: 0
+    t.string "url_token"
     t.index ["assignment_id"], name: "index_offers_on_assignment_id"
+    t.index ["url_token"], name: "index_offers_on_url_token", unique: true
   end
 
   create_table "position_data_for_ads", force: :cascade do |t|
@@ -214,5 +218,6 @@ ActiveRecord::Schema.define(version: 2019_08_22_052439) do
     t.index ["assignment_id"], name: "index_wage_chunks_on_assignment_id"
   end
 
+  add_foreign_key "assignments", "offers", column: "active_offer_id"
   add_foreign_key "positions", "sessions"
 end

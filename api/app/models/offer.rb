@@ -2,8 +2,26 @@
 
 # A class representing an offer. This class belongs to assignment, applicant and position.
 class Offer < ApplicationRecord
+    has_secure_token :url_token
     belongs_to :assignment
+    after_create :set_assignment_active_offer
+
+    private
+
+    def set_assignment_active_offer
+        # update_column skips callbacks
+        assignment.update_column(:active_offer_id, id)
+    end
 end
+# Below are the only fields that are updatable:
+#
+# accepted_date
+# emailed_date
+# nag_count
+# rejected_date
+# signature
+# withdrawn_date
+# updated_at
 
 # == Schema Information
 #
@@ -30,6 +48,7 @@ end
 #  signature               :string
 #  ta_coordinator_email    :string
 #  ta_coordinator_name     :string
+#  url_token               :string
 #  withdrawn_date          :datetime
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
@@ -38,4 +57,5 @@ end
 # Indexes
 #
 #  index_offers_on_assignment_id  (assignment_id)
+#  index_offers_on_url_token      (url_token) UNIQUE
 #
