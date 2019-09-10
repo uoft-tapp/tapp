@@ -28,14 +28,14 @@ export class CustomTable extends React.Component {
      * @param {object} row
      * @return {boolean}
      */
-    filterMethod = (filter, row) => {
+    filterMethod(filter, row) {
         let value = row[filter.id].toString().toLowerCase();
         let filterValue = filter.value.toLowerCase();
         // split to array and check if matched filter strings
         return filterValue
             .split(" ")
             .some(f => value && value.indexOf(f) !== -1);
-    };
+    }
 
     /**
      * Toggle a single checkbox for select table.
@@ -141,27 +141,20 @@ export class CustomTable extends React.Component {
      * @param {object} instance
      * @return {object}
      */
+    // eslint-disable-next-line
     rowFn = (state, rowInfo, column, instance) => {
         const { selectedRows } = this.state;
         const { keyField } = this.props;
 
         return {
             // triggered when the row is clicked
+            // eslint-disable-next-line
             onClick: (e, handleOriginal) => {
                 this.toggleSelection(
                     `select-${rowInfo.original[keyField]}`,
                     null,
                     rowInfo.original
                 );
-
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                    handleOriginal();
-                }
             },
             style: {
                 background:

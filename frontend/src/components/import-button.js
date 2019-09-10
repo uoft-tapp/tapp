@@ -13,16 +13,16 @@ import { readFile } from "../libs/fileManager";
  */
 export function ImportButton(props) {
     let { uploadFunc } = props;
-    const [data, setData] = useState(null);
-    const [dialogContents, setDialogContents] = useState("");
+    const [data, setData] = useState(null); // eslint-disable-line
+    const [dialogContents, setDialogContents] = useState(""); // eslint-disable-line
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
      * closes the dialog by setting dialogOpen to false
      */
-    const handleClose = () => {
+    function handleClose() {
         setDialogOpen(false);
-    };
+    }
 
     /**
      * Read the json file content and import the data in it to the backend.
@@ -35,7 +35,7 @@ export function ImportButton(props) {
      *
      * @param {event} e
      */
-    const importFile = e => {
+    function importFile(e) {
         let importClicked = data => {
             // passed in data is of json format
             console.log(data);
@@ -53,7 +53,7 @@ export function ImportButton(props) {
         };
 
         readFile(e.target, importClicked);
-    };
+    }
 
     return (
         <div>

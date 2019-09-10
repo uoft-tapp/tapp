@@ -16,24 +16,24 @@ export function EmailButton(props) {
     /**
      * Email to the applicants (using ids) by invoking email service provided by the backend
      */
-    const emailHandler = () => {
+    function emailHandler() {
         console.log("data read from redux: " + data);
         throw new Error("Email function not implemented!");
-    };
+    }
 
     /**
      * Email contract to the applicants (using ids) by invoking email service provided by the backend
      */
-    const emailContract = () => {
+    function emailContract() {
         throw new Error("Email contract not implemented!");
-    };
+    }
 
     /**
      * Nag offers to the applicants (using ids) by invoking email service provided by the backend
      */
-    const nagOffers = () => {
+    function nagOffers() {
         throw new Error("Nag offer function not implemented!");
-    };
+    }
 
     return (
         <DropdownButton id="dropdown-basic-button" title="Email">
