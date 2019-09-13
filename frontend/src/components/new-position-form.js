@@ -147,7 +147,5 @@ export const InstructorList = ({ curValue, instructors, setInstructor }) => {
 };
 
 export const initialState = {
-    ...newPositionFields.reduce((acc, cur) => ({ ...acc, [cur.value]: "" }), {}),
-    num_failures: 0,
-    num_successes: 0
+    ...newPositionFields.reduce((acc, cur) => ({ ...acc, [cur.value]: "" }), {})
 };

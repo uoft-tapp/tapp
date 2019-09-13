@@ -43,8 +43,8 @@ class NewPosition extends React.Component {
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
-        let num_failures_before_import = this.state.num_failures;
-        let num_successes_before_import = this.state.num_successes;
+        let num_failures_before_import = this.props.newPosition.num_failures;
+        let num_successes_before_import = this.props.newPosition.num_successes;
 
         for (var i = 1; i < data.length; i++) {
             const position = {
@@ -58,15 +58,14 @@ class NewPosition extends React.Component {
                 hours: data[i][7],
                 openings: data[i][8],
                 start_date: data[i][9],
-                end_date: data[i][10],
-                num_failures: this.state.num_failures,
-                num_successes: this.state.num_successes
+                end_date: data[i][10]
             };
             await this.props.importNewPosition(position);
         }
 
-        let num_failures_after_import = this.state.num_failures;
-        let num_successes_after_import = this.state.num_successes;
+        console.log(this.props.newPosition);
+        let num_failures_after_import = this.props.newPosition.num_failures;
+        let num_successes_after_import = this.props.newPosition.num_successes;
         let failed_imports = num_failures_after_import - num_failures_before_import;
         let success_imports = num_successes_after_import - num_successes_before_import;
         this.props.importResult(success_imports, failed_imports);
@@ -159,10 +158,12 @@ class NewPosition extends React.Component {
 export default connect(
     ({
         ui: {
-            instructors: { list }
+            instructors: { list },
+            newPosition: { num_failures, num_successes }
         }
     }) => ({
-        instructors: list
+        instructors: list,
+        newPosition: { num_failures, num_successes }
     }),
     { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition);

@@ -23,9 +23,9 @@ export const createNewPosition = payload => async dispatch => {
 export const importNewPosition = payload => async dispatch => {
     try {
         const data = await apiPOST("/positions/import", payload);
-        dispatch(importNewPositionSuccess(data));
+        dispatch(importNewPositionSuccess());
     } catch (e) {
-        dispatch(importNewPositionFailure(payload));
+        dispatch(importNewPositionFailure());
         dispatch(
             error({
                 ...errorProps,

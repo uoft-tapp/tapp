@@ -6,6 +6,7 @@ import positionReducer from "./modules/positions/reducer";
 import applicantReducer from "./modules/applicants_by_course/reducer";
 import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./views/application_form/reducer";
+import newPositionReducer from "./views/new_position_form/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
 import {
     statusReducer,
@@ -48,6 +49,7 @@ const reducer = combineReducers({
         applicants: applicantReducer,
         instructors: instructorReducer,
         application: applicationReducer,
+        newPosition: newPositionReducer,
         applicantsPositions: applicantsPositionReducer
     })
 });
