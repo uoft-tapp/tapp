@@ -43,8 +43,8 @@ class NewPosition extends React.Component {
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
-        let num_failures_before_import = this.getState().num_failures;
-        let num_successes_before_import = this.getState().num_successes;
+        let num_failures_before_import = this.state.num_failures;
+        let num_successes_before_import = this.state.num_successes;
 
         for (var i = 1; i < data.length; i++) {
             const position = {
@@ -58,13 +58,15 @@ class NewPosition extends React.Component {
                 hours: data[i][7],
                 openings: data[i][8],
                 start_date: data[i][9],
-                end_date: data[i][10]
+                end_date: data[i][10],
+                num_failures: this.state.num_failures,
+                num_successes: this.state.num_successes
             };
             await this.props.importNewPosition(position);
         }
 
-        let num_failures_after_import = this.getState().num_failures;
-        let num_successes_after_import = this.getState().num_successes;
+        let num_failures_after_import = this.state.num_failures;
+        let num_successes_after_import = this.state.num_successes;
         let failed_imports = num_failures_after_import - num_failures_before_import;
         let success_imports = num_successes_after_import - num_successes_before_import;
         this.props.importResult(success_imports, failed_imports);
@@ -160,9 +162,7 @@ export default connect(
             instructors: { list }
         }
     }) => ({
-        instructors: list,
-        num_failures: 0,
-        num_success: 0
+        instructors: list
     }),
     { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition);

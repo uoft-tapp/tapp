@@ -25,7 +25,7 @@ export const importNewPosition = payload => async dispatch => {
         const data = await apiPOST("/positions/import", payload);
         dispatch(importNewPositionSuccess(data));
     } catch (e) {
-        dispatch(importNewPositionFailure());
+        dispatch(importNewPositionFailure(payload));
         dispatch(
             error({
                 ...errorProps,

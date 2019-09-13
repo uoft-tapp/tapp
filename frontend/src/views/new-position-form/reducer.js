@@ -13,14 +13,16 @@ const reducer = createReducer(initialState, {
         ...state,
         list: [...state.list, action.payload],
     }),
-    [IMPORT_NEW_POSITION_FAILURE]: (state) => ({
-        ...state,
-        num_failures: state.num_failures + 1
-    }),
-    [IMPORT_NEW_POSITION_SUCCESS]: (state) => ({
-        ...state,
-        num_successes: state.num_successes + 1
-    })
+    [IMPORT_NEW_POSITION_FAILURE]: (state) => (
+        Object.assign({}, state, {
+            num_failures: state.num_failures + 1
+        })
+    ),
+    [IMPORT_NEW_POSITION_SUCCESS]: (state) => (
+        Object.assign({}, state, {
+            num_successes: state.num_successes + 1
+        })
+    )
 });
 
 export default reducer;
