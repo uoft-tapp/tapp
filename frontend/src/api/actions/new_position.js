@@ -23,7 +23,7 @@ export const createNewPosition = payload => async dispatch => {
 export const importNewPosition = payload => async dispatch => {
     try {
         const data = await apiPOST("/positions/import", payload);
-        dispatch(importNewPositionSuccess());
+        dispatch(importNewPositionSuccess(data));
     } catch (e) {
         dispatch(importNewPositionFailure());
         dispatch(

@@ -19,8 +19,9 @@ const reducer = createReducer(initialState, {
         ...state,
         num_failures: state.num_failures + 1
     }),
-    [IMPORT_NEW_POSITION_SUCCESS]: (state) => ({
+    [IMPORT_NEW_POSITION_SUCCESS]: (state, action) => ({
         ...state,
+        list: [...state.list, action.payload],
         num_successes: state.num_successes + 1
     }),
 });

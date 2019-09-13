@@ -63,7 +63,6 @@ class NewPosition extends React.Component {
             await this.props.importNewPosition(position);
         }
 
-        console.log(this.props.newPosition);
         let num_failures_after_import = this.props.newPosition.num_failures;
         let num_successes_after_import = this.props.newPosition.num_successes;
         let failed_imports = num_failures_after_import - num_failures_before_import;
