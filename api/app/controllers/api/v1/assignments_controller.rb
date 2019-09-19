@@ -11,7 +11,7 @@ module Api::V1
         # POST /assignments
         def create
             # if we passed in an id that exists, we want to update
-            update && return if update_condition(Assignment)
+            update && return if should_update(Assignment, params)
             params.require(:applicant_id)
             return if invalid_id(Position, :position_id)
             return if invalid_id(Applicant, :applicant_id)
@@ -29,12 +29,13 @@ module Api::V1
         end
 
         def update
-            update_entry(Assignment, assignment_update_params)
+            entry = Assignment.find(params[:id])
+            update_entry(entry, assignment_update_params)
         end
 
         # POST /assignments/delete
         def delete
-            delete_entry(Assignment)
+            delete_entry(Assignment, params)
         end
 
         private

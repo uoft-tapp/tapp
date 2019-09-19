@@ -10,7 +10,8 @@ module Api::V1
 
         # POST /add_position_template
         def create
-            update && return if update_condition(PositionTemplate)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(PositionTemplate, params)
             return if invalid_id_check(Session)
 
             params.require(%i[offer_template position_type])
@@ -30,12 +31,13 @@ module Api::V1
         end
 
         def update
-            update_entry(PositionTemplate, position_template_update_params)
+            entry = PositionTemplate.find(params[:id])
+            update_entry(entry, position_template_update_params)
         end
 
         # POST /position_templates/delete
         def delete
-            delete_entry(PositionTemplate)
+            delete_entry(PositionTemplate, params)
         end
 
         private

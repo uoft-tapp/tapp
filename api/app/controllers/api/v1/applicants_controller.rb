@@ -10,17 +10,19 @@ module Api::V1
 
         # POST /applicants
         def create
-            update && return if update_condition(Applicant)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(Applicant, params)
             create_entry(Applicant, applicant_params)
         end
 
         def update
-            update_entry(Applicant, applicant_params)
+            entry = Applicant.find(params[:id])
+            update_entry(entry, applicant_params)
         end
 
         # POST /applicants/delete
         def delete
-            delete_entry(Applicant)
+            delete_entry(Applicant, params)
         end
 
         private

@@ -11,9 +11,14 @@ module Response
     end
 
     def invalid_id(table, params_key, payload = {})
-        id = Integer(params[params_key])
-        table.find(id)
-        false
+        if params.include?(params_key)
+            id = Integer(params[params_key])
+            table.find(id)
+            false
+        else
+            render_error("There is no '#{params_key}' in the request body.", payload)
+            true
+        end
     rescue ArgumentError
         render_error("'#{params[params_key]}' is not a valid id.", payload)
         true

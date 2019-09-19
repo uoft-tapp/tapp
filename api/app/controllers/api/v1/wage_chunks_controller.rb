@@ -10,7 +10,8 @@ module Api::V1
 
         # POST /add_wage_chunk
         def create
-            update && return if update_condition(WageChunk)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(WageChunk, params)
             return if invalid_id_check(Assignment)
 
             output = proc { wage_chunks_by_assignment }
@@ -18,12 +19,13 @@ module Api::V1
         end
 
         def update
-            update_entry(WageChunk, wage_chunk_update_params)
+            entry = WageChunk.find(params[:id])
+            update_entry(entry, wage_chunk_update_params)
         end
 
         # POST /wage_chunks/delete
         def delete
-            delete_entry(WageChunk)
+            delete_entry(WageChunk, params)
         end
 
         private

@@ -10,7 +10,8 @@ module Api::V1
 
         # POST /add_reporting_tag
         def create
-            update && return if update_condition(WageChunk)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(WageChunk, params)
             return if invalid_id_check(WageChunk)
 
             params.require(:name)
@@ -24,12 +25,13 @@ module Api::V1
 
         def update
             update_fn = proc { |i| update_position_ids(i) }
-            update_entry(ReportingTag, reporting_tag_update_params, update_fn: update_fn)
+            entry = ReportingTag.find(params[:id])
+            update_entry(entry, reporting_tag_update_params, update_fn: update_fn)
         end
 
         # POST /reporting_tags/delete
         def delete
-            delete_entry(ReportingTag)
+            delete_entry(ReportingTag, params)
         end
 
         private

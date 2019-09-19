@@ -11,7 +11,7 @@ module Api::V1
         # POST /applications
         def create
             # if we passed in an id that exists, we want to update
-            update && return if update_condition(Application)
+            update && return if should_update(Application, params)
             params.require(:applicant_id)
             return if invalid_id(Session, :session_id)
             return if invalid_id(Applicant, :applicant_id)
@@ -37,7 +37,8 @@ module Api::V1
                 [matching_res, errors]
             end
             merge_fn = proc { |i| application_data(i) }
-            update_entry(Application, application_update_params,
+            entry = Application.find(params[:id])
+            update_entry(entry, application_update_params,
                          parts_fn: parts_fn, merge_fn: merge_fn)
         end
 
@@ -47,7 +48,7 @@ module Api::V1
                 matching = application.applicant_data_for_matching
                 matching.destroy!
             end
-            delete_entry(Application, delete_matching)
+            delete_entry(Application, params, delete_matching)
         end
 
         private

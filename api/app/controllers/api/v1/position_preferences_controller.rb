@@ -10,7 +10,8 @@ module Api::V1
 
         # POST /add_preference
         def create
-            update && return if update_condition(PositionPreference)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(PositionPreference, params)
             return if invalid_id_check(Application)
 
             params.require(:position_id)
@@ -21,12 +22,13 @@ module Api::V1
         end
 
         def update
-            update_entry(PositionPreference, preference_update_params)
+            entry = PositionPreference.find(params[:id])
+            update_entry(entry, preference_update_params)
         end
 
         # POST /position_preferences/delete
         def delete
-            delete_entry(PositionPreference)
+            delete_entry(PositionPreference, params)
         end
 
         private

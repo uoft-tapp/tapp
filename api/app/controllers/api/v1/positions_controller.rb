@@ -10,7 +10,8 @@ module Api::V1
 
         # POST /positions
         def create
-            update && return if update_condition(Position)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(Position, params)
             return if invalid_id_check(Session)
 
             params.require(%i[position_code position_title])
@@ -42,7 +43,8 @@ module Api::V1
                 [ad_res && matching_res, errors]
             end
             merge_fn = proc { |i| position_data(i) }
-            update_entry(Position, position_update_params,
+            entry = Position.find(params[:id])
+            update_entry(entry, position_update_params,
                          parts_fn: parts_fn, merge_fn: merge_fn)
         end
 
@@ -54,7 +56,7 @@ module Api::V1
                 matching.destroy!
                 ad.destroy!
             end
-            delete_entry(Position, delete_matching_and_ad)
+            delete_entry(Position, params, delete_matching_and_ad)
         end
 
         private

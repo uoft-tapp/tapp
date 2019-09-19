@@ -10,18 +10,20 @@ module Api::V1
 
         # POST /sessions
         def create
-            update && return if update_condition(Session)
+            # if we passed in an id that exists, we want to update
+            update && return if should_update(Session, params)
             params.require(:name)
             create_entry(Session, session_params)
         end
 
         def update
-            update_entry(Session, session_params)
+            entry = Session.find(params[:id])
+            update_entry(entry, session_params)
         end
 
         # POST /sessions/delete
         def delete
-            delete_entry(Session)
+            delete_entry(Session, params)
         end
 
         private
