@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import {
     createNewPosition,
-    importNewPosition } from "../../api/actions/new_position";
+    importNewPosition
+} from "../../api/actions/new_position";
 import { importResult } from "./actions";
 import {
     DefaultInput,
@@ -65,8 +66,10 @@ class NewPosition extends React.Component {
 
         let num_failures_after_import = this.props.newPosition.num_failures;
         let num_successes_after_import = this.props.newPosition.num_successes;
-        let failed_imports = num_failures_after_import - num_failures_before_import;
-        let success_imports = num_successes_after_import - num_successes_before_import;
+        let failed_imports =
+            num_failures_after_import - num_failures_before_import;
+        let success_imports =
+            num_successes_after_import - num_successes_before_import;
         this.props.importResult(success_imports, failed_imports);
     };
 

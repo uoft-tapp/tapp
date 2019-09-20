@@ -7,8 +7,6 @@ import {
 } from "../constants/new_position";
 import { apiPOST } from "../../libs/apiUtils";
 
-
-
 export const createNewPosition = payload => async dispatch => {
     try {
         const data = await apiPOST("/positions", payload);

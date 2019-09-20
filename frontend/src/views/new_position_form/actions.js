@@ -1,7 +1,5 @@
 import { show } from "react-notification-system-redux";
 
-
-
 export const importResult = (
     success_imports,
     failed_imports
