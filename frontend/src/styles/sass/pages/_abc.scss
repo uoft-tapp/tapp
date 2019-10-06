@@ -51,3 +51,21 @@
   text-align: center;
   color: #555;
 }
+
+.abc-table {
+  .rt-table .rt-tbody .rt-tr-group .rt-td {
+    overflow: visible;
+  }
+}
+
+.instructor-pref-dropdown {
+
+  button,
+  .dropdown-menu {
+    font-size: 80%;
+  }
+}
+
+.filter-reset-button {
+  margin-left: 16px
+}
