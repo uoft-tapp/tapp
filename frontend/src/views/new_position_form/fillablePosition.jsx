@@ -35,8 +35,7 @@ class NewPosition extends React.Component {
 
             if (err_msg) {
                 return `${cur.label}: ${err_msg}`;
-            }
-            else {
+            } else {
                 return acc;
             }
         }, []);
