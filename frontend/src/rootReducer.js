@@ -8,6 +8,7 @@ import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./views/application_form/reducer";
 import newPositionReducer from "./views/new_position_form/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
+import offerTableReducer from "./views/offertable/reducers";
 import {
     statusReducer,
     sessionsReducer,
@@ -49,8 +50,9 @@ const reducer = combineReducers({
         applicants: applicantReducer,
         instructors: instructorReducer,
         application: applicationReducer,
+        applicantsPositions: applicantsPositionReducer,
         newPosition: newPositionReducer,
-        applicantsPositions: applicantsPositionReducer
+        offerTable: offerTableReducer
     })
 });
 

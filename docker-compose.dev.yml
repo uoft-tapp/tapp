@@ -14,3 +14,8 @@ services:
   db:
     volumes:
       - './tmp/db:/var/lib/postgresql/data'
+  mailcatcher:
+    image: rordi/docker-mailcatcher
+    container_name: mailcatcher
+    ports:
+      - 1080:1080
