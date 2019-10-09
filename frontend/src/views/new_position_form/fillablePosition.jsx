@@ -31,16 +31,15 @@ class NewPosition extends React.Component {
     };
     getInvalid = () =>
         newPositionFields.reduce((acc, cur) => {
-            if (acc) {
+            const err_msg = cur.validator(this.state[cur.value], this.props);
+
+            if (err_msg) {
+                return `${cur.label}: ${err_msg}`;
+            }
+            else {
                 return acc;
             }
-            const errorMessage = cur.validate.reduce(
-                (running, validator) =>
-                    running || validator(this.state[cur.value], this.props),
-                false
-            );
-            return errorMessage ? `${cur.label}: ${errorMessage}` : acc;
-        }, false);
+        }, []);
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
