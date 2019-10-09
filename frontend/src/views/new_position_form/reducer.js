@@ -8,7 +8,7 @@ import {
 const initialState = {
     new_position_info: [],
     num_failures: 0,
-    num_successes: 0,
+    num_successes: 0
 };
 
 const reducer = createReducer(initialState, {
