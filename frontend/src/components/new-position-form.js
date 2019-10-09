@@ -4,14 +4,14 @@ import { moment } from "moment";
 const toNames = ({ first_name, last_name }) => `${first_name} ${last_name}`;
 
 const dummyValidator = () => "";
-const validNumber = val => (val && isNaN(val) ? "Not a valid number" : false);
+const validNumber = val => (val && isNaN(val) ? "Not a valid number" : "");
 const validDate = val =>
     (val && moment(val, "YYYY-MM-DD", true).isValid()) || val === ""
-        ? false
+        ? ""
         : "Not a valid date";
 const validInstructor = (val, props) => {
     const instructors = props.instructors.map(toNames);
-    return instructors.indexOf(val) !== -1 ? false : "Not a valid instructor";
+    return instructors.indexOf(val) !== -1 ? "" : "Not a valid instructor";
 };
 
 export const newPositionFields = [
