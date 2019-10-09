@@ -33,10 +33,10 @@ class NewPosition extends React.Component {
         newPositionFields.reduce((acc, cur) => {
             const err_msg = cur.validator(this.state[cur.value], this.props);
 
-            if (err_msg) {
-                return `${cur.label}: ${err_msg}`;
-            } else {
+            if (err_msg === "") {
                 return acc;
+            } else {
+                return `${cur.label}: ${err_msg}`;;
             }
         }, []);
     setInstructor = name => this.setState({ instructor: name });
