@@ -36,7 +36,7 @@ class NewPosition extends React.Component {
             if (err_msg === "") {
                 return acc;
             } else {
-                return `${cur.label}: ${err_msg}`;;
+                return `${cur.label}: ${err_msg}`;
             }
         }, []);
     setInstructor = name => this.setState({ instructor: name });
