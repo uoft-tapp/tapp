@@ -6,15 +6,15 @@ import {
 } from "../../api/constants/new_position";
 
 const initialState = {
-    list: [],
+    new_position_info: [],
     num_failures: 0,
-    num_successes: 0
+    num_successes: 0,
 };
 
 const reducer = createReducer(initialState, {
     [CREATE_NEW_POSITION_SUCCESS]: (state, action) => ({
         ...state,
-        list: [...state.list, action.payload]
+        new_position_info: [...state.new_position_info, action.payload]
     }),
     [IMPORT_NEW_POSITION_FAILURE]: state => ({
         ...state,
@@ -22,7 +22,7 @@ const reducer = createReducer(initialState, {
     }),
     [IMPORT_NEW_POSITION_SUCCESS]: (state, action) => ({
         ...state,
-        list: [...state.list, action.payload],
+        new_position_info: [...state.new_position_info, action.payload],
         num_successes: state.num_successes + 1
     })
 });
