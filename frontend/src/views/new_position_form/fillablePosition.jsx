@@ -28,6 +28,10 @@ class NewPosition extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.createNewPosition(this.state);
+
+        if (this.props.newPosition.new_position_created) {
+            window.location = "/tapp/positions";
+        }
     };
     getInvalid = () =>
         newPositionFields.reduce((acc, cur) => {
@@ -160,11 +164,11 @@ export default connect(
     ({
         ui: {
             instructors: { list },
-            newPosition: { num_failures, num_successes }
+            newPosition: { new_position_created, num_failures, num_successes }
         }
     }) => ({
         instructors: list,
-        newPosition: { num_failures, num_successes }
+        newPosition: { new_position_created, num_failures, num_successes }
     }),
     { createNewPosition, fetchInstructors, importNewPosition, importResult }
 )(NewPosition);
