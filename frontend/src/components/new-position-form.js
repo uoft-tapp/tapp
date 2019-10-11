@@ -12,7 +12,7 @@ const toNames = ({ first_name, last_name }) => `${first_name} ${last_name}`;
 // Validators
 const dummyValidator = () => true;
 const existingInstructor = (val, props) => {
-    for (const instructor in props.instructors) {
+    for (const instructor of props.instructors) {
         if (val === toNames(instructor)) {
             return true;
         }
