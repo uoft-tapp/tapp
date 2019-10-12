@@ -1,10 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-    createNewPosition,
-    importNewPosition
-} from "../../api/actions/new_position";
-import { importResult } from "./actions";
+import { upsertPosition } from "../../api/actions/positions";
 import {
     DefaultInput,
     InstructorInput,
@@ -13,6 +9,7 @@ import {
     initialState,
     newPositionFields
 } from "../../components/new-position-form";
+import { RedirectableComponent } from "../../components/redirectable-component";
 import { fetchInstructors } from "../../modules/instructors/actions";
 import { Col, Container, Button } from "react-bootstrap";
 import CSVReader from "react-csv-reader";
@@ -25,12 +22,12 @@ class NewPosition extends React.Component {
     handleChange = prop => event =>
         this.setState({ [prop]: event.target.value });
 
-    handleSubmit = e => {
+    handleSubmit = async e => {
         e.preventDefault();
-        this.props.createNewPosition(this.state);
+        const result = await this.props.upsertPosition(this.state);
 
-        if (this.props.newPosition.new_position_created) {
-            window.location = "/tapp/positions";
+        if (result.status === "success") {
+            this.props.enableRedirect();
         }
     };
     getInvalid = () =>
@@ -47,33 +44,27 @@ class NewPosition extends React.Component {
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
-        let num_failures_before_import = this.props.newPosition.num_failures;
-        let num_successes_before_import = this.props.newPosition.num_successes;
-
         for (var i = 1; i < data.length; i++) {
             const position = {
-                course_code: data[i][0],
-                course_name: data[i][1],
-                cap_enrolment: data[i][2],
-                duties: data[i][3],
-                qualifications: data[i][4],
-                instructor: data[i][5],
-                session_id: data[i][6],
-                hours: data[i][7],
-                openings: data[i][8],
-                start_date: data[i][9],
-                end_date: data[i][10]
+                id: data[i][0],
+                position_code: data[i][1],
+                position_title: data[i][2],
+                est_hours_per_assignment: data[i][3],
+                est_start_date: data[i][4],
+                est_end_date: data[i][5],
+                position_type: data[i][6],
+                duties: data[i][7],
+                qualifications: data[i][8],
+                ad_hours_per_assignment: data[i][9],
+                ad_num_assignments: data[i][10],
+                ad_open_date: data[i][11],
+                ad_close_date: data[i][12],
+                desired_num_assignments: data[i][13],
+                current_enrollment: data[i][14],
+                current_waitlisted: data[i][15]
             };
-            await this.props.importNewPosition(position);
+            await this.props.upsertPosition(position);
         }
-
-        let num_failures_after_import = this.props.newPosition.num_failures;
-        let num_successes_after_import = this.props.newPosition.num_successes;
-        let failed_imports =
-            num_failures_after_import - num_failures_before_import;
-        let success_imports =
-            num_successes_after_import - num_successes_before_import;
-        this.props.importResult(success_imports, failed_imports);
     };
 
     render() {
@@ -160,15 +151,23 @@ class NewPosition extends React.Component {
     }
 }
 
+function RedirectableNewPosition(props) {
+    return (
+        <RedirectableComponent
+            route="/tapp/positions"
+            component={NewPosition}
+            {...props}
+        />
+    );
+}
+
 export default connect(
     ({
         ui: {
-            instructors: { list },
-            newPosition: { new_position_created, num_failures, num_successes }
+            instructors: { list }
         }
     }) => ({
-        instructors: list,
-        newPosition: { new_position_created, num_failures, num_successes }
+        instructors: list
     }),
-    { createNewPosition, fetchInstructors, importNewPosition, importResult }
-)(NewPosition);
+    { fetchInstructors, upsertPosition }
+)(RedirectableNewPosition);

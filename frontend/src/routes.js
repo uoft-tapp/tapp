@@ -2,7 +2,7 @@ import Positions from "./modules/positions/components/index";
 import Applicants from "./modules/applicants_by_course/components/index";
 import RootRedirect from "./modules/auth/components/RootRedirect";
 import Screen from "./modules/cp/components/index";
-import NewPosition from "./views/new_position_form/fillablePosition";
+import RedirectableNewPosition from "./views/new_position_form/fillablePosition";
 import AllAssigned from "./modules/all_applicants/components/AllAssigned";
 import AllUnassigned from "./modules/all_applicants/components/AllUnassigned";
 import Summary from "./modules/tapp_summary/components/Summary";
@@ -21,7 +21,7 @@ export const openRoutes = [
     },
     {
         path: "/tapp/positions/new",
-        component: NewPosition
+        component: RedirectableNewPosition
     },
     {
         path: "/tapp/applicants",
