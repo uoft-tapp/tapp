@@ -11,7 +11,7 @@ import {
     positionsSelector,
     assignmentsSelector
 } from "../../api/actions";
-import { offerTableSelector, setSelectedRows } from "../offertable/actions";
+import { offerTableSelector } from "../offertable/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
@@ -21,7 +21,7 @@ import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
 import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
-import { CustomTable } from "../../components/custom-table";
+import { OfferTable } from "../../components/offer-table";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -64,27 +64,6 @@ const ConnectedEmailButton = connect(state => ({
     data: offerTableSelector(state)
 }))(EmailButton);
 
-const ConnectedOfferTable = connect(
-    null,
-    { setSelectedRows }
-)(CustomTable);
-
-// XXX this header is temporary and should be updated when issue #226 is resolved
-const COLUMNS = [
-    { Header: "First Name", accessor: "first_name", width: 100 },
-    { Header: "Last Name", accessor: "last_name", width: 100 },
-    { Header: "Email", accessor: "email", width: 250 },
-    { Header: "Position title", accessor: "position_title", width: 130 },
-    {
-        Header: "First Time?",
-        accessor: "first_time_ta",
-        Cell: props => <span>{props.value.toString().toUpperCase()}</span>,
-        width: 100
-    }, // boolean
-    { Header: "Status", accessor: "status", width: 100 },
-    { Header: "Nag Count", accessor: "nag_count", width: 100 }
-];
-
 // XXX this is temporary data and should be removed when issue #226 is resolved
 const DATA = [
     {
@@ -118,7 +97,7 @@ const DATA = [
         nag_count: 2
     },
     {
-        id: 4,
+        id: 9,
         first_name: "George",
         last_name: "Wu",
         email: "george.wu@mail.utoronto.ca",
@@ -179,6 +158,7 @@ function DashboardWidget(props) {
  *
  */
 function Dashboard() {
+    const [selectedOffers, setSelectedOffers] = React.useState([]);
     return (
         <div>
             <DashboardWidget title="SessionSelect">
@@ -209,10 +189,10 @@ function Dashboard() {
                 <ConnectedEmailButton />
             </DashboardWidget>
             <DashboardWidget title="OfferTable">
-                <ConnectedOfferTable
+                <OfferTable
                     data={DATA}
-                    columns={COLUMNS}
-                    keyField="id"
+                    selected={selectedOffers}
+                    setSelected={setSelectedOffers}
                 />
             </DashboardWidget>
         </div>
