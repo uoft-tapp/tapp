@@ -84,6 +84,57 @@ export class MockAPI {
             // if we found the session with matching id, delete it.
             data.sessions.splice(data.sessions.indexOf(matchingSessions[0]), 1);
             return {};
+        },
+        "/instructors": (data, params, body) => {
+            // body should be an instructor object. If it contains an id,
+            // update an existing session. Otherwise, create a new one.
+            const matchingInstructors = data.instructors.filter(
+                s => s.id === body.id
+            );
+            if (matchingInstructors.length > 0) {
+                return Object.assign(matchingInstructors[0], body);
+            }
+            // if we're here, we need to create a new instructor
+            // but check if the name is empty
+            if (
+                (body.first_name == null || body.first_name === "") &&
+                (body.last_name == null || body.last_name === "")
+            ) {
+                throw new Error("Instructor name cannot be empty!");
+            }
+            if (
+                data.instructors.some(
+                    s =>
+                        (body.utorid && body.utorid === s.utorid) ||
+                        (s.first_name === body.first_name &&
+                            s.last_name === body.last_name)
+                )
+            ) {
+                throw new Error(
+                    `Instructor of same first_name=${body.first_name} last_name=${body.last_name} already exists!`
+                );
+            }
+            // create new instructor
+            const newId = Math.floor(Math.random() * 1000);
+            const newInstructor = { ...body, id: newId };
+            data.instructors.push(newInstructor);
+            return newInstructor;
+        },
+        "/instructors/delete": (data, params, body) => {
+            const matchingInstructors = data.instructors.filter(
+                s => s.id === body.id
+            );
+            if (matchingInstructors.length === 0) {
+                throw new Error(
+                    `Could not find instructor with id=${body.id} to delete`
+                );
+            }
+            // if we found the item with matching id, delete it.
+            data.instructors.splice(
+                data.instructors.indexOf(matchingInstructors[0]),
+                1
+            );
+            return matchingInstructors[0];
         }
     };
 

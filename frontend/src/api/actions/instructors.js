@@ -26,9 +26,8 @@ export const fetchInstructors = validatedApiDispatcher({
     name: "fetchInstructors",
     description: "Fetch instructors",
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: () => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(`/sessions/${activeSessionId}/instructors`);
+    dispatcher: () => async dispatch => {
+        const data = await apiGET(`/instructors`);
         dispatch(fetchInstructorsSuccess(data));
     }
 });
@@ -38,11 +37,8 @@ export const fetchInstructor = validatedApiDispatcher({
     description: "Fetch instructor",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
-            `/sessions/${activeSessionId}/instructors/${payload.id}`
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiGET(`/instructors/${payload.id}`);
         dispatch(fetchOneInstructorSuccess(data));
     }
 });
@@ -52,12 +48,8 @@ export const upsertInstructor = validatedApiDispatcher({
     description: "Add/insert instructor",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/sessions/${activeSessionId}/instructors`,
-            payload
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiPOST(`/instructors`, payload);
         dispatch(upsertOneInstructorSuccess(data));
     }
 });
@@ -67,12 +59,8 @@ export const deleteInstructor = validatedApiDispatcher({
     description: "Delete instructor",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/sessions/${activeSessionId}/instructors/delete`,
-            payload
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiPOST(`/instructors/delete`, payload);
         dispatch(deleteOneInstructorSuccess(data));
     }
 });
