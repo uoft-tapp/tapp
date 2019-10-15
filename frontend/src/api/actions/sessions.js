@@ -28,9 +28,22 @@ export const fetchSessions = validatedApiDispatcher({
     name: "fetchSessions",
     description: "Fetch sessions",
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: () => async dispatch => {
+    dispatcher: () => async (dispatch, getState) => {
         const data = await apiGET("/sessions");
-        dispatch(fetchSessionsSuccess(data));
+        await dispatch(fetchSessionsSuccess(data));
+
+        // after sessions are fetched, we compare with the active session.
+        // The active session might need to be "updated" if the ID matches but
+        // the data doesn't
+        const activeSession = getState().model.sessions.activeSession;
+        const matchingSession = data.filter(s => s.id === activeSession.id)[0];
+        if (
+            matchingSession &&
+            JSON.stringify(matchingSession) !== JSON.stringify(activeSession)
+        ) {
+            // Force an override of the active session, even though the `id`s match.
+            dispatch(setActiveSession(matchingSession, true));
+        }
     }
 });
 
@@ -80,11 +93,17 @@ export const setActiveSession = validatedApiDispatcher({
     description: "Set the active session",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: true,
-    dispatcher: payload => async (dispatch, getState) => {
+    dispatcher: (payload, forceChange = false) => async (
+        dispatch,
+        getState
+    ) => {
         // Check to see if the active session is actually different. If it is, we will
         // trigger side-effects
         const state = getState();
-        if (state.model.sessions.activeSession.id === payload.id) {
+        if (
+            !forceChange &&
+            state.model.sessions.activeSession.id === payload.id
+        ) {
             return;
         }
         // If we made it here, the activeSession is changing.

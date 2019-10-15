@@ -251,7 +251,7 @@ export const mockData = {
             id: 2,
             start_date: "2020-01-01T00:00:00.000Z",
             end_date: "2020-04-30T00:00:00.000Z",
-            name: "2020 Spring",
+            name: "2021 Spring",
             rate1: 45.55,
             rate2: null
         }

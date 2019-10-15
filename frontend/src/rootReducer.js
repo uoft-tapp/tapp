@@ -8,6 +8,7 @@ import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./views/application_form/reducer";
 import applicantsPositionReducer from "./modules/applicants_positions/reducer";
 import offerTableReducer from "./views/offertable/reducers";
+import { globalReducer } from "./views/globals/reducers";
 import {
     statusReducer,
     sessionsReducer,
@@ -50,7 +51,8 @@ const reducer = combineReducers({
         instructors: instructorReducer,
         application: applicationReducer,
         applicantsPositions: applicantsPositionReducer,
-        offerTable: offerTableReducer
+        offerTable: offerTableReducer,
+        globals: globalReducer
     })
 });
 
