@@ -7,14 +7,18 @@ import selectTableHOC from "react-table/lib/hoc/selectTable";
 const SelectTable = selectTableHOC(ReactTable);
 
 const COLUMNS = [
-    { Header: "First Name", accessor: "first_name", width: 100 },
-    { Header: "Last Name", accessor: "last_name", width: 100 },
-    { Header: "Email", accessor: "email", width: 250 },
-    { Header: "Position title", accessor: "position_title", width: 130 },
+    { Header: "First Name", accessor: "applicant.first_name", width: 100 },
+    { Header: "Last Name", accessor: "applicant.last_name", width: 100 },
+    { Header: "Email", accessor: "applicant.email", width: 250 },
+    {
+        Header: "Position title",
+        accessor: "position.position_code",
+        width: 130
+    },
     {
         Header: "First Time?",
-        accessor: "first_time_ta",
-        Cell: props => <span>{props.value.toString().toUpperCase()}</span>,
+        accessor: "applicant.first_time_ta",
+        Cell: props => <span>{("" + props.value).toUpperCase()}</span>,
         width: 100
     }, // boolean
     { Header: "Status", accessor: "status", width: 100 },
@@ -28,7 +32,11 @@ const COLUMNS = [
  * @returns {string}
  */
 function rowToStr(row) {
-    return Object.values(row).join(" ");
+    // flatten to a string two levels deep
+    return Object.values(row)
+        .map(x => (typeof x === "string" ? x : Object.values(x).join(" ")))
+        .join(" ")
+        .toLowerCase();
 }
 
 /**
@@ -58,7 +66,7 @@ function OfferTable(props) {
     }
 
     const filteredData = filterString
-        ? data.filter(row => rowToStr(row).includes(filterString))
+        ? data.filter(row => rowToStr(row).includes(filterString.toLowerCase()))
         : data;
 
     // we need a reference to the internal table so that we can get the "visible data"

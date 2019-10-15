@@ -2,6 +2,27 @@ import uuid from "uuid-random";
 import PropTypes from "prop-types";
 import { apiError } from "./errors";
 import { apiInteractionStart, apiInteractionEnd } from "./status";
+
+/**
+ * Turn an array of items into a hash of items indexed
+ * by the value of `indexBy`
+ *
+ * @export
+ * @param {array} l
+ * @param {string} [indexBy="id"]
+ * @returns
+ */
+export function arrayToHash(l, indexBy = "id") {
+    if (!Array.isArray(l)) {
+        return l;
+    }
+    const ret = {};
+    for (const d of l) {
+        ret[d[indexBy]] = d;
+    }
+    return ret;
+}
+
 /**
  * Creates an action function that returns an object of the form
  * ```
