@@ -9,8 +9,8 @@ function AssignmentsList(props) {
             <ul>
                 {assignments.map(assignment => (
                     <li key={assignment.id}>
-                        {assignment.position.position_code} ({assignment.hours} hours):{" "}
-                        {assignment.applicant.first_name}{" "}
+                        {assignment.position.position_code} ({assignment.hours}{" "}
+                        hours): {assignment.applicant.first_name}{" "}
                         {assignment.applicant.last_name}
                     </li>
                 ))}

@@ -111,7 +111,9 @@ export class MockAPI {
                 )
             ) {
                 throw new Error(
-                    `Instructor of same first_name=${body.first_name} last_name=${body.last_name} already exists!`
+                    `Instructor of same first_name=${
+                        body.first_name
+                    } last_name=${body.last_name} already exists!`
                 );
             }
             // create new instructor
