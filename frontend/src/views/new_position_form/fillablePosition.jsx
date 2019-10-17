@@ -24,9 +24,9 @@ class NewPosition extends React.Component {
 
     handleSubmit = async e => {
         e.preventDefault();
-        const result = await this.props.upsertPosition(this.state);
+        await this.props.upsertPosition(this.state);
 
-        if (result.status === "success") {
+        if (this.props.newPosition.previousSubmitSuccess) {
             this.props.enableRedirect();
         }
     };
@@ -164,10 +164,13 @@ function RedirectableNewPosition(props) {
 export default connect(
     ({
         ui: {
-            instructors: { list }
+            instructors: { list },
+            newPosition: { newPositionData, previousSubmitSuccess }
         }
     }) => ({
-        instructors: list
+        instructors: list,
+        newPosition: newPositionData,
+        previousSubmitSuccess
     }),
     { fetchInstructors, upsertPosition }
 )(RedirectableNewPosition);

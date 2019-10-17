@@ -1,14 +1,16 @@
 import { createReducer } from "redux-create-reducer";
-import { UPSERT_ONE_SESSION_SUCCESS } from "../../api/constants/index";
+import { UPSERT_ONE_POSITION_SUCCESS } from "../../api/constants/index";
 
 const initialState = {
-    newPositionInfo: []
+    newPositionData: [],
+    previousSubmitSuccess: false
 };
 
 const reducer = createReducer(initialState, {
-    [UPSERT_ONE_SESSION_SUCCESS]: (state, action) => ({
+    [UPSERT_ONE_POSITION_SUCCESS]: (state, action) => ({
         ...state,
-        newPositionInfo: [...state.newPositionInfo, action.payload]
+        newPositionData: [...state.newPositionData, action.payload],
+        previousSubmitSuccess: true
     })
 });
 
