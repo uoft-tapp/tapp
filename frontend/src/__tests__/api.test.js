@@ -472,8 +472,8 @@ function instructorsTests({ apiGET, apiPOST }) {
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
-    it("get instructors for session", async () => {
-        const resp = await apiGET(`/sessions/${session.id}/instructors`);
+    it("get instructors for position", async () => {
+        const resp = await apiGET(`/sessions/${position.id}/instructors`);
         expect(resp).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
@@ -499,15 +499,15 @@ function instructorsTests({ apiGET, apiPOST }) {
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
-    it("delete instructor from session", async () => {
+    it("delete instructor from position", async () => {
         const resp1 = await apiPOST(
-            `/sessions/${session.id}/instructors/delete`,
+            `/sessions/${position.id}/instructors/delete`,
             instructor
         );
         expect(resp1).toMatchObject({ status: "success" });
 
-        // make sure instructor is not in the session
-        const resp2 = await apiGET(`/sessions/${session.id}/instructors`);
+        // make sure instructor is not in the position
+        const resp2 = await apiGET(`/sessions/${position.id}/instructors`);
         expect(resp2).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2.payload).not.toContainObject(instructor);
@@ -516,7 +516,10 @@ function instructorsTests({ apiGET, apiPOST }) {
     // delete an instructor
     it("delete instructor", async () => {
         const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toMatchObject({
+            status: "success",
+            payload: { id: instructor.id }
+        });
 
         // make sure the instructor is deleted
         const resp2 = await apiGET("/instructors");
@@ -619,5 +622,8 @@ describe("API tests", () => {
 describe("Mock API tests", () => {
     describe("`/sessions` tests", () => {
         sessionsTests(mockAPI);
+    });
+    describe("`/instructors` tests", () => {
+        //instructorsTests(mockAPI);
     });
 });

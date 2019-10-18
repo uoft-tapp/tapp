@@ -9,11 +9,14 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     runOnActiveSessionChange,
-    validatedApiDispatcher
+    validatedApiDispatcher,
+    arrayToHash
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { assignmentsReducer } from "../reducers/assignments";
 import { createSelector } from "reselect";
+import { applicantsSelector } from "./applicants";
+import { positionsSelector } from "./positions";
 
 // actions
 const fetchAssignmentsSuccess = actionFactory(FETCH_ASSIGNMENTS_SUCCESS);
@@ -79,14 +82,37 @@ export const deleteAssignment = validatedApiDispatcher({
 
 // selectors
 
-// Each reducer is given an isolated state; instead of needed to remember to
+// Each reducer is given an isolated state; instead of needing to remember to
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
 export const localStoreSelector = assignmentsReducer._localStoreSelector;
-export const assignmentsSelector = createSelector(
+/**
+ * Get just the assignment data as it appears in the store; i.e., it has references to
+ * id's of applicants and positions.
+ */
+const _assignmentsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
+);
+/**
+ * Get the current assignments. This selector is memoized and will only
+ * be recomputed when assignments, applicants, or positions change.
+ */
+export const assignmentsSelector = createSelector(
+    [_assignmentsSelector, applicantsSelector, positionsSelector],
+    (assignments, applicants, positions) => {
+        if (assignments.length === 0) {
+            return [];
+        }
+        applicants = arrayToHash(applicants);
+        positions = arrayToHash(positions);
+        return assignments.map(({ position_id, applicant_id, ...rest }) => ({
+            ...rest,
+            position: positions[position_id] || {},
+            applicant: applicants[applicant_id] || {}
+        }));
+    }
 );
 
 // Any time the active session changes, we want to refetch

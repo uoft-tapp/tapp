@@ -1,8 +1,30 @@
 import React from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
+import { connect } from "react-redux";
+import { setGlobals } from "../views/globals/actions";
 
 let mockAPI = { replaceGlobalFetch: () => {}, restoreGlobalFetch: () => {} };
 //import { mockAPI } from "../api/mockAPI";
+
+function setActive(state, props = {}) {
+    const { fetchSessions = () => {}, active, _setActive = () => {} } = props;
+    if (state === active) {
+        // avoid getting into an update loop
+        return;
+    }
+
+    // store the current activation state in a global (url-persistent) variable
+    props.setGlobals({ ...props.globals, mockAPI: state });
+    if (state === true) {
+        mockAPI.replaceGlobalFetch();
+    } else {
+        mockAPI.restoreGlobalFetch();
+    }
+    _setActive(mockAPI.active);
+    // after the mock API has been set, refetch the sessions,
+    // which will trigger a refetch of all the other data.
+    fetchSessions();
+}
 
 /**
  * A toggle switch for turning on and off the Mock API. An instance
@@ -15,23 +37,15 @@ let mockAPI = { replaceGlobalFetch: () => {}, restoreGlobalFetch: () => {} };
  * @returns {React.ElementType}
  */
 let ToggleMockApi = function ToggleMockApi(props) {
-    const { fetchSessions = () => {} } = props;
     const [active, _setActive] = React.useState(mockAPI.active);
-    function setActive(state) {
-        if (state === active) {
-            // avoid getting into an update loop
-            return;
+    const fullProps = { ...props, active, _setActive };
+    // Check the global state to see if we should activate right away
+    React.useEffect(() => {
+        if (props.globals.mockAPI === true) {
+            setActive(true, fullProps);
         }
-        if (state === true) {
-            mockAPI.replaceGlobalFetch();
-        } else {
-            mockAPI.restoreGlobalFetch();
-        }
-        _setActive(mockAPI.active);
-        // after the mock API has been set, refetch the sessions,
-        // which will trigger a refetch of all the other data.
-        fetchSessions();
-    }
+        // eslint-disable-next-line
+    }, [props.globals]);
 
     return (
         <span
@@ -43,13 +57,13 @@ let ToggleMockApi = function ToggleMockApi(props) {
             <ButtonGroup>
                 <Button
                     variant={active ? "primary" : "secondary"}
-                    onClick={() => setActive(true)}
+                    onClick={() => setActive(true, fullProps)}
                 >
                     On
                 </Button>
                 <Button
                     variant={active ? "secondary" : "primary"}
-                    onClick={() => setActive(false)}
+                    onClick={() => setActive(false, fullProps)}
                 >
                     Off
                 </Button>
@@ -70,5 +84,10 @@ if (process.env.NODE_ENV === "development") {
     };
 }
 /* eslint-enable */
+
+ToggleMockApi = connect(
+    state => ({ globals: state.ui.globals }),
+    { setGlobals }
+)(ToggleMockApi);
 
 export { ToggleMockApi };

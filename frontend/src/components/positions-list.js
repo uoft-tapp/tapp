@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export class PositionsList extends React.Component {
     static propTypes = {
-        data: PropTypes.arrayOf(
+        positions: PropTypes.arrayOf(
             PropTypes.shape({
                 position_code: PropTypes.string,
                 position_title: PropTypes.string
@@ -11,7 +11,7 @@ export class PositionsList extends React.Component {
         ).isRequired
     };
     render() {
-        const positions = this.props.data;
+        const positions = this.props.positions;
         let positionsList = <div>No Positions...</div>;
         if (positions.length > 0) {
             positionsList = (
