@@ -136,17 +136,35 @@ export const InstructorInput = ({ curValue, label, onChange, required }) => (
 );
 
 export const InstructorList = ({ curValue, instructors, setInstructor }) => {
-    const found_instructor = existingInstructor(curValue, { instructors });
-    const matchingInstructors = instructors
-        .map(({ first_name, last_name }) => `${first_name} ${last_name}`)
-        .filter(
-            name => name.toLowerCase().indexOf(curValue.toLowerCase()) !== -1
-        );
+    instructors = [
+        { first_name: "Karen", last_name: "Reid" },
+        { first_name: "David", last_name: "Liu" }
+    ];
+    const curValueLowerCase = curValue.toLowerCase();
+    let foundInstructor = false;
+    let autocompleteInstructors = [];
+
+    for (const instructor of instructors) {
+        const instructor_name = toNames(instructor);
+
+        if (curValue === instructor_name) {
+            foundInstructor = true;
+            break;
+        } else if (
+            instructor_name.toLowerCase().indexOf(curValueLowerCase) !== -1
+        ) {
+            autocompleteInstructors = [
+                ...autocompleteInstructors,
+                instructor_name
+            ];
+        }
+    }
+
     return (
         <div>
-            {!found_instructor && (
+            {!foundInstructor && (
                 <ul>
-                    {matchingInstructors.map(i => (
+                    {autocompleteInstructors.map(i => (
                         <li onClick={() => setInstructor(i)} key={i}>
                             {i}
                         </li>
