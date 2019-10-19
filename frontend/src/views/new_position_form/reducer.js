@@ -1,5 +1,8 @@
 import { createReducer } from "redux-create-reducer";
-import { UPSERT_ONE_POSITION_SUCCESS } from "../../api/constants/index";
+import {
+    UPSERT_POSITIONS_SUCCESS,
+    UPSERT_ONE_POSITION_SUCCESS
+} from "../../api/constants/index";
 
 const initialState = {
     newPositionData: [],
@@ -7,6 +10,10 @@ const initialState = {
 };
 
 const reducer = createReducer(initialState, {
+    [UPSERT_POSITIONS_SUCCESS]: (state, action) => ({
+        ...state,
+        newPositionData: [...state.newPositionData, ...action.payload]
+    }),
     [UPSERT_ONE_POSITION_SUCCESS]: (state, action) => ({
         ...state,
         newPositionData: [...state.newPositionData, action.payload],

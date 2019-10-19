@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { upsertPosition } from "../../api/actions/positions";
+import { upsertPosition, upsertPositions } from "../../api/actions/positions";
 import {
     DefaultInput,
     InstructorInput,
@@ -44,6 +44,8 @@ class NewPosition extends React.Component {
     setInstructor = name => this.setState({ instructor: name });
 
     handleForce = async data => {
+        let positions = [];
+
         for (var i = 1; i < data.length; i++) {
             const position = {
                 id: data[i][0],
@@ -63,8 +65,9 @@ class NewPosition extends React.Component {
                 current_enrollment: data[i][14],
                 current_waitlisted: data[i][15]
             };
-            await this.props.upsertPosition(position);
+            positions = [...positions, position];
         }
+        await this.props.upsertPositions(positions);
     };
 
     render() {
@@ -172,5 +175,5 @@ export default connect(
         newPosition: newPositionData,
         previousSubmitSuccess
     }),
-    { fetchInstructors, upsertPosition }
+    { fetchInstructors, upsertPosition, upsertPositions }
 )(RedirectableNewPosition);
