@@ -1,5 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
+import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line
 const { expect, test } = global;
 
@@ -205,77 +206,21 @@ export function checkPropTypes(propTypes, data) {
     expect(wasPropTypeErrors).toBe(false);
 }
 
-export const apiResponsePropTypes = PropTypes.shape({
-    status: PropTypes.oneOf(["success", "error"]).isRequired,
-    message: PropTypes.string,
-    payload: PropTypes.any
-});
+export const apiResponsePropTypes = apiPropTypes.apiResponse;
+export const successPropTypes = apiPropTypes.apiResponseSuccess;
+export const errorPropTypes = apiPropTypes.apiResponseError;
 
-export const successPropTypes = PropTypes.shape({
-    status: PropTypes.oneOf(["success"]).isRequired,
-    message: PropTypes.string,
-    payload: PropTypes.any
-});
+export const sessionPropTypes = apiPropTypes.session;
 
-export const errorPropTypes = PropTypes.shape({
-    status: PropTypes.oneOf(["error"]).isRequired,
-    message: PropTypes.string.isRequired,
-    payload: PropTypes.any
-});
+export const offerTemplateMinimalPropTypes = apiPropTypes.offerTemplateMinimal;
+export const offerTemplatePropTypes = apiPropTypes.offerTemplate;
 
-export const sessionPropTypes = PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
-    name: PropTypes.string.isRequired
-});
+export const positionPropTypes = apiPropTypes.position;
 
-export const offerTemplateMinimalPropTypes = PropTypes.shape({
-    offer_template: PropTypes.string
-});
+export const instructorPropTypes = apiPropTypes.instructor;
 
-export const offerTemplatePropTypes = PropTypes.shape({
-    offer_template: PropTypes.string,
-    position_type: PropTypes.string
-});
+export const assignmentPropTypes = apiPropTypes.assignment;
 
-export const positionPropTypes = PropTypes.shape({
-    position_code: PropTypes.string.isRequired,
-    position_title: PropTypes.string,
-    est_hours_per_assignment: PropTypes.number,
-    est_start_date: PropTypes.string,
-    est_end_date: PropTypes.string,
-    position_type: PropTypes.string,
-    duties: PropTypes.string,
-    qualifications: PropTypes.string
-    // XXX Add the rest of the properties here
-});
+export const wageChunkPropTypes = apiPropTypes.wageChunk;
 
-export const instructorPropTypes = PropTypes.shape({
-    first_name: PropTypes.string.isRequired,
-    last_name: PropTypes.string.isRequired,
-    email: PropTypes.string,
-    utorid: PropTypes.string.isRequired
-});
-
-export const assignmentPropTypes = PropTypes.shape({
-    contract_start: PropTypes.string,
-    contract_end: PropTypes.string,
-    note: PropTypes.string,
-    offer_override_pdf: PropTypes.string,
-    applicant_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-        .isRequired,
-    position_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
-        .isRequired
-});
-
-export const wageChunkPropTypes = PropTypes.shape({
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
-    hours: PropTypes.number,
-    rate: PropTypes.number
-});
-
-export const reportingTagsPropTypes = PropTypes.shape({
-    name: PropTypes.string
-});
+export const reportingTagsPropTypes = apiPropTypes.reportingTags;
