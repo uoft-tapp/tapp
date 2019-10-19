@@ -75,7 +75,10 @@ const PROPTYPES_TO_SWAGGER_TYPES = {
 function wrappedPropTypesToSwagger(pt) {
     const ret = {};
     if (!pt.callChain) {
-        console.warn("Attempting to compute swagger values for non-wrapped object", pt)
+        console.warn(
+            "Attempting to compute swagger values for non-wrapped object",
+            pt
+        );
     } else {
         // We are a proxied PropTypes object
         //
