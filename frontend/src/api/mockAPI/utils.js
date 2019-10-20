@@ -12,7 +12,7 @@
  */
 export function getUnusedId(data, prop = "id") {
     const ids = data.map(x => +x[prop]).filter(x => x != null);
-    const max = Math.max(...ids);
+    const max = Math.max(0, ...ids);
     if (isNaN(max)) {
         // Somehow there was some other type mixed in with the ids. In this case,
         // generate a random string
@@ -32,7 +32,24 @@ export function getUnusedId(data, prop = "id") {
  * @returns {undefined|object}
  */
 export function find(obj, data = [], prop = "id") {
-    return data.find(s => s[prop] === obj[prop]);
+    // We really do want to use `==` and not `===` here.
+    // Sometimes ids are given as ints and sometimes as strings;
+    // we should work interchangibly with both.
+    return data.find(s => s[prop] == obj[prop]);
+}
+
+/**
+ * Filter `data` to be a list which only includes items
+ * with ids listed in `ids`.
+ *
+ * @export
+ * @param {*} [ids=[]]
+ * @param {*} [data=[]]
+ * @param {string} [prop="id"]
+ * @returns {object[]}
+ */
+export function findAllById(ids = [], data = [], prop = "id") {
+    return data.filter(x => ids.includes(x[prop]));
 }
 
 /**

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
                 resources :instructors, only: [:index]
                 resources :assignments, only: [:index, :create]
                 post '/add_instructor', to: 'instructors#create'
+                post '/instructors/delete', to: 'instructors#delete_instructor_by_position'
             end
 
             # applicant routes
@@ -53,7 +54,6 @@ Rails.application.routes.draw do
                 resources :instructors, only: [:index]
                 post '/add_position_template', to: 'position_templates#create'
                 get '/instructors', to: 'instructors#instructor_by_session'
-                post '/instructors/delete', to: 'instructors#delete_instructor_by_session'
             end
 
             # position_template routes

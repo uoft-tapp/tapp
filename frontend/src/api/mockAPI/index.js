@@ -1,6 +1,9 @@
 import Route from "route-parser";
 import { mockData } from "./data";
 import { sessionsRoutes } from "./sessions";
+import { templatesRoutes } from "./position_templates";
+import { positionsRoutes } from "./positions";
+import { instructorsRoutes } from "./instructors";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -27,79 +30,30 @@ function pickFromArray(array, id, key = "id") {
 export class MockAPI {
     routePrefix = "/api/v1";
     // a list of selectors for each route
-    getRoutes = Object.assign({}, sessionsRoutes.get, {
-        "/all_data": data => data,
-        "/instructors": data => data.instructors,
-        "/available_position_templates": data => [
-            ...data.available_position_templates
-        ],
-        "/sessions/:session_id/positions": (data, params) => [
-            ...data.positions[params.session_id]
-        ],
-        "/sessions/:session_id/assignments": (data, params) => [
-            ...data.assignments[params.session_id]
-        ],
-        "/sessions/:session_id/position_templates": (data, params) => [
-            ...data.position_templates_by_session[params.session_id]
-        ],
-        "/sessions/:session_id/applicants": (data, params) =>
-            data.applicants_by_session[params.session_id].map(utorid =>
-                pickFromArray(data.applicants, utorid, "utorid")
-            )
-    });
-    postRoutes = Object.assign({}, sessionsRoutes.post, {
-        "/instructors": (data, params, body) => {
-            // body should be an instructor object. If it contains an id,
-            // update an existing session. Otherwise, create a new one.
-            const matchingInstructors = data.instructors.filter(
-                s => s.id === body.id
-            );
-            if (matchingInstructors.length > 0) {
-                return Object.assign(matchingInstructors[0], body);
-            }
-            // if we're here, we need to create a new instructor
-            // but check if the name is empty
-            if (
-                (body.first_name == null || body.first_name === "") &&
-                (body.last_name == null || body.last_name === "")
-            ) {
-                throw new Error("Instructor name cannot be empty!");
-            }
-            if (
-                data.instructors.some(
-                    s =>
-                        (body.utorid && body.utorid === s.utorid) ||
-                        (s.first_name === body.first_name &&
-                            s.last_name === body.last_name)
+    getRoutes = Object.assign(
+        {},
+        sessionsRoutes.get,
+        templatesRoutes.get,
+        positionsRoutes.get,
+        instructorsRoutes.get,
+        {
+            "/all_data": data => data,
+            "/sessions/:session_id/assignments": (data, params) => [
+                ...data.assignments[params.session_id]
+            ],
+            "/sessions/:session_id/applicants": (data, params) =>
+                data.applicants_by_session[params.session_id].map(utorid =>
+                    pickFromArray(data.applicants, utorid, "utorid")
                 )
-            ) {
-                throw new Error(
-                    `Instructor of same first_name=${body.first_name} last_name=${body.last_name} already exists!`
-                );
-            }
-            // create new instructor
-            const newId = Math.floor(Math.random() * 1000);
-            const newInstructor = { ...body, id: newId };
-            data.instructors.push(newInstructor);
-            return newInstructor;
-        },
-        "/instructors/delete": (data, params, body) => {
-            const matchingInstructors = data.instructors.filter(
-                s => s.id === body.id
-            );
-            if (matchingInstructors.length === 0) {
-                throw new Error(
-                    `Could not find instructor with id=${body.id} to delete`
-                );
-            }
-            // if we found the item with matching id, delete it.
-            data.instructors.splice(
-                data.instructors.indexOf(matchingInstructors[0]),
-                1
-            );
-            return matchingInstructors[0];
         }
-    });
+    );
+    postRoutes = Object.assign(
+        {},
+        sessionsRoutes.post,
+        templatesRoutes.post,
+        positionsRoutes.post,
+        instructorsRoutes.post
+    );
 
     constructor(seedData) {
         this.active = false;

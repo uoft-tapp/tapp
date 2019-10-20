@@ -57,7 +57,7 @@ module Api::V1
             end
         end
 
-        # POST /session/:id/instructors/delete
+        # POST /sessions/:id/instructors/delete
         def delete_instructor_by_session
             # delete an instructor from session is essentially remove
             # the instructor from the all positions of that session
@@ -72,6 +72,29 @@ module Api::V1
             end
             instructor.positions = instructor.positions.except(
                 instructor.positions.select { |x| x.session_id == params[:session_id] }
+            )
+            if instructor.save!
+                render_success(instructor)
+            else
+                render_error(instructor.errors)
+            end
+        end
+
+        # POST /positions/:id/instructors/delete
+        def delete_instructor_by_position
+            # delete an instructor from session is essentially remove
+            # the instructor from the all positions of that session
+            params.require(:id)
+            params.require(:position_id)
+            instructor = Instructor.find(params[:id])
+            instructor.positions.each do |position|
+                if position.id == params[:position_id]
+                    position.instructors = position.instructors.except(params[:id])
+                    position.save!
+                end
+            end
+            instructor.positions = instructor.positions.except(
+                instructor.positions.select { |x| x.id == params[:position_id] }
             )
             if instructor.save!
                 render_success(instructor)
