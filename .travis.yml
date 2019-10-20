@@ -51,3 +51,26 @@ matrix:
         - docker-compose logs
       after_script:
         - docker-compose down
+
+    # run the production build/deployment
+    - name: "Production Build"
+      language: ruby
+      services:
+        - docker
+      before_script:
+        - cp dev.env .env
+        - docker-compose up --build -d
+        - docker ps -a
+      script:
+        - docker-compose run frontend npm run dev-build
+      after_failure:
+        - docker-compose logs
+      after_script:
+        - docker-compose down
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_PAGES_TOKEN
+        local_dir: frontend/build
+        on:
+          branch: master
