@@ -35,6 +35,7 @@ export function find(obj, data = [], prop = "id") {
     // We really do want to use `==` and not `===` here.
     // Sometimes ids are given as ints and sometimes as strings;
     // we should work interchangibly with both.
+    // eslint-disable-next-line
     return data.find(s => s[prop] == obj[prop]);
 }
 

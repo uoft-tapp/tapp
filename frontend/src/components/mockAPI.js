@@ -31,7 +31,7 @@ function setActive(state, props = {}) {
  * of the Mock API is included in this component, and this component
  * takes no arguments.
  *
- * This component only renders when `process.env.NODE_ENV === "development"`.
+ * This component only renders when `process.env.REACT_APP_DEV_FEATURES` is truthy.
  *
  * @export
  * @returns {React.ElementType}
@@ -75,7 +75,7 @@ let ToggleMockApi = function ToggleMockApi(props) {
 // in production, ToggleMockApi is a no-op. In development, it actually
 // does something.
 /* eslint-disable */
-if (process.env.NODE_ENV === "development") {
+if (process.env.REACT_APP_DEV_FEATURES) {
     const mock = require("../api/mockAPI");
     mockAPI = mock.mockAPI;
 } else {
