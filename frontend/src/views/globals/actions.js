@@ -10,7 +10,8 @@ export function setGlobals(globals = {}, location = window.location) {
             location.host +
             location.pathname +
             "?" +
-            searchParams;
+            searchParams +
+            location.hash;
         if (newurl !== "" + location) {
             window.history.pushState({ path: newurl }, "", newurl);
         }
