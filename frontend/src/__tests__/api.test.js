@@ -371,6 +371,10 @@ function positionsTests(api = { apiGET, apiPOST }) {
         expect(resp2.payload).toContainObject(newData);
     });
 
+    it.todo("error when updating a position to have an empty position_code");
+
+    it.todo("error when creating a position for a session with an invalid id");
+
     it("error when creating two positions with the same position_code in the same session", async () => {
         // we already have a position
         const resp1 = await apiPOST(
@@ -379,6 +383,21 @@ function positionsTests(api = { apiGET, apiPOST }) {
         );
         expect(resp1).toMatchObject({ status: "error" });
         checkPropTypes(errorPropTypes, resp1);
+    });
+
+    it("error when creating a positions with blank position_code or position_title", async () => {
+        // we already have a position
+        const resp1 = await apiPOST(`/sessions/${session.id}/positions`, {
+            ...newPositionData,
+            position_code: ""
+        });
+        checkPropTypes(errorPropTypes, resp1);
+        const resp2 = await apiPOST(`/sessions/${session.id}/positions`, {
+            ...newPositionData,
+            position_code: "MY UNIQUE CODE XXX",
+            position_title: null
+        });
+        checkPropTypes(errorPropTypes, resp2);
     });
 
     it("succeed when creating two positions with the same code but for different sessions", async () => {
@@ -425,9 +444,7 @@ function positionsTests(api = { apiGET, apiPOST }) {
         expect(resp2.payload).not.toContainObject(position);
     });
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
+
 function instructorsTests({ apiGET, apiPOST }) {
     let session = null,
         position = null,
@@ -473,7 +490,7 @@ function instructorsTests({ apiGET, apiPOST }) {
     });
 
     it("get instructors for position", async () => {
-        const resp = await apiGET(`/sessions/${position.id}/instructors`);
+        const resp = await apiGET(`/positions/${position.id}/instructors`);
         expect(resp).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
@@ -501,13 +518,13 @@ function instructorsTests({ apiGET, apiPOST }) {
 
     it("delete instructor from position", async () => {
         const resp1 = await apiPOST(
-            `/sessions/${position.id}/instructors/delete`,
+            `/positions/${position.id}/instructors/delete`,
             instructor
         );
         expect(resp1).toMatchObject({ status: "success" });
 
         // make sure instructor is not in the position
-        const resp2 = await apiGET(`/sessions/${position.id}/instructors`);
+        const resp2 = await apiGET(`/positions/${position.id}/instructors`);
         expect(resp2).toMatchObject({ status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2.payload).not.toContainObject(instructor);
@@ -527,6 +544,8 @@ function instructorsTests({ apiGET, apiPOST }) {
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2).not.toContainObject(instructor);
     });
+
+    it.todo("fail to delete instructor from a position with invalid id");
 }
 // XXX we need to ignore eslint until we write some
 // actual tests that use `apiGET` and `apiPOST`
@@ -623,7 +642,13 @@ describe("Mock API tests", () => {
     describe("`/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
+    describe("template tests", () => {
+        templateTests(mockAPI);
+    });
+    describe("`/positions` tests", () => {
+        positionsTests(mockAPI);
+    });
     describe("`/instructors` tests", () => {
-        //instructorsTests(mockAPI);
+        instructorsTests(mockAPI);
     });
 });

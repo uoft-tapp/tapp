@@ -26,15 +26,21 @@ export const mockData = {
     ],
     position_templates_by_session: {
         1: [
-            { position_type: "standard", offer_template: "/math/default.html" },
-            { position_type: "oto", offer_template: "/math/oto.html" }
+            {
+                id: 1,
+                position_type: "standard",
+                offer_template: "/math/default.html"
+            },
+            { id: 2, position_type: "oto", offer_template: "/math/oto.html" }
         ],
         2: [
             {
+                id: 3,
                 position_type: "standard",
                 offer_template: "/math/default2018.html"
             },
             {
+                id: 4,
                 position_type: "invigilate",
                 offer_template: "/math/invigilate.html"
             }
@@ -70,62 +76,62 @@ export const mockData = {
             utorid: "beeral"
         }
     ],
-    positions: {
-        1: [
-            {
-                id: 10,
-                position_code: "MAT135H1F",
-                position_title: "Calculus I",
-                est_hours_per_assignment: 70,
-                est_start_date: "2019-09-08T00:00:00.000Z",
-                est_end_date: "2019-12-31T00:00:00.000Z",
-                position_type: "standard",
-                duties: "Tutorials",
-                qualifications: "Teaching skill",
-                ad_hours_per_assignment: 70,
-                ad_num_assignments: 15,
-                ad_open_date: "2019-08-01T00:00:00.000Z",
-                ad_close_date: "2019-08-15T00:00:00.000Z",
-                desired_num_assignments: 15,
-                current_enrollment: 1200,
-                current_waitlisted: 200,
-                instructors: ["smithh", "garciae"]
-            },
-            {
-                id: 11,
-                position_code: "MAT136H1F",
-                position_title: "Calculus II",
-                est_hours_per_assignment: 70,
-                est_start_date: "2019-09-08T00:00:00.000Z",
-                est_end_date: "2019-12-31T00:00:00.000Z",
-                position_type: "invigilation",
-                instructors: []
-            }
-        ],
-        2: [
-            {
-                id: 12,
-                position_code: "CSC135H1F",
-                position_title: "Computer Fun",
-                est_hours_per_assignment: 70,
-                est_start_date: "2019-09-08T00:00:00.000Z",
-                est_end_date: "2019-12-31T00:00:00.000Z",
-                position_type: "standard",
-                duties: "Tutorials",
-                instructors: ["smithh"]
-            },
-            {
-                id: 13,
-                position_code: "MAT235H1F",
-                position_title: "Calculus III",
-                est_hours_per_assignment: 70,
-                est_start_date: "2019-09-08T00:00:00.000Z",
-                est_end_date: "2019-12-31T00:00:00.000Z",
-                position_type: "invigilation",
-                instructors: ["millerm"]
-            }
-        ]
+    positions_by_session: {
+        1: [10, 11],
+        2: [12, 13]
     },
+    positions: [
+        {
+            id: 10,
+            position_code: "MAT135H1F",
+            position_title: "Calculus I",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019-09-08T00:00:00.000Z",
+            est_end_date: "2019-12-31T00:00:00.000Z",
+            position_type: "standard",
+            duties: "Tutorials",
+            qualifications: "Teaching skill",
+            ad_hours_per_assignment: 70,
+            ad_num_assignments: 15,
+            ad_open_date: "2019-08-01T00:00:00.000Z",
+            ad_close_date: "2019-08-15T00:00:00.000Z",
+            desired_num_assignments: 15,
+            current_enrollment: 1200,
+            current_waitlisted: 200,
+            instructors: ["smithh", "garciae"]
+        },
+        {
+            id: 11,
+            position_code: "MAT136H1F",
+            position_title: "Calculus II",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019-09-08T00:00:00.000Z",
+            est_end_date: "2019-12-31T00:00:00.000Z",
+            position_type: "invigilation",
+            instructors: []
+        },
+        {
+            id: 12,
+            position_code: "CSC135H1F",
+            position_title: "Computer Fun",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019-09-08T00:00:00.000Z",
+            est_end_date: "2019-12-31T00:00:00.000Z",
+            position_type: "standard",
+            duties: "Tutorials",
+            instructors: ["smithh"]
+        },
+        {
+            id: 13,
+            position_code: "MAT235H1F",
+            position_title: "Calculus III",
+            est_hours_per_assignment: 70,
+            est_start_date: "2019-09-08T00:00:00.000Z",
+            est_end_date: "2019-12-31T00:00:00.000Z",
+            position_type: "invigilation",
+            instructors: ["millerm"]
+        }
+    ],
     applicants_by_session: {
         1: ["weasleyr", "potterh", "smithb", "howeyb", "brownd"],
         2: ["smithb", "wilsonh", "molinat"]
