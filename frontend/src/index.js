@@ -16,7 +16,7 @@ let DevFrame = function(props) {
     return <React.Fragment>{props.children}</React.Fragment>;
 };
 /* eslint-disable */
-if (process.env.NODE_ENV === "development") {
+if (process.env.REACT_APP_DEV_FEATURES) {
     DevFrame = _DevFrame;
 }
 /* eslint-enable */

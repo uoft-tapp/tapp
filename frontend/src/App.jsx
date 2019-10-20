@@ -1,6 +1,5 @@
 import React from "react";
 import { Switch } from "react-router-dom";
-import moment from "moment";
 import CustomNotifications from "./modules/notifications/components/CustomNotifications";
 import { openRoutes, privateRoutes } from "./routes";
 import OpenRoute from "./modules/auth/components/OpenRoute";
