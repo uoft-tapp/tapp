@@ -9,11 +9,11 @@ $course-list-panel-width: calc(15em + 8px); /* includes margins */
 $closed-panel-height: 47px; /* includes top margin */
 $sessions-height: calc(55px + 1.5vh);
 
-html {
+html,
+body,
+#root {
     position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: $footer-height;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }

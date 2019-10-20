@@ -53,13 +53,6 @@ class App extends React.Component {
                         <PrivateRoute key={route.path} exact {...route} />
                     ))}
                 </Switch>
-                <footer>
-                    <div className="container-fluid">
-                        <p className="text-muted">
-                            University of Toronto, {moment().format("YYYY")}
-                        </p>
-                    </div>
-                </footer>
                 <CustomNotifications />
             </React.Fragment>
         );
