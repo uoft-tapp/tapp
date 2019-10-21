@@ -4,9 +4,20 @@ import {
     getAttributesCheckMessage,
     deleteInArray
 } from "./utils";
+import {
+    documentCallback,
+    wrappedPropTypes,
+    docApiPropTypes
+} from "../defs/doc-generation";
 
 export const sessionsRoutes = {
-    get: { "/sessions": data => [...data.sessions] },
+    get: {
+        "/sessions": documentCallback({
+            func: data => [...data.sessions],
+            summary: "Get all available sessions",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.session)
+        })
+    },
     post: {
         "/sessions": (data, params, body) => {
             // body should be a session object. If it contains an id,

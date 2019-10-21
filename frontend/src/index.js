@@ -23,15 +23,15 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 
 const render = Component => {
     return ReactDOM.render(
-        <Provider store={store}>
-            <DevFrame>
-                <PersistGate persistor={persistor}>
-                    <HashRouter>
+        <HashRouter>
+            <Provider store={store}>
+                <DevFrame>
+                    <PersistGate persistor={persistor}>
                         <Component />
-                    </HashRouter>
-                </PersistGate>
-            </DevFrame>
-        </Provider>,
+                    </PersistGate>
+                </DevFrame>
+            </Provider>
+        </HashRouter>,
         document.getElementById("root")
     );
 };

@@ -16,8 +16,6 @@ import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 
-window.PT = PropTypes;
-
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
 const fetchOnePositionSuccess = actionFactory(FETCH_ONE_POSITION_SUCCESS);
