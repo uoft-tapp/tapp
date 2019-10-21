@@ -11,6 +11,7 @@
     padding: 6px;
     padding-bottom: 7px;
     padding-top: 0px;
+    overflow: hidden;
 }
 #dev-frame-body-inner {
     background-color: white;

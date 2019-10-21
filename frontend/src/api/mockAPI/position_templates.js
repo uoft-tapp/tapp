@@ -1,13 +1,27 @@
 import { find, getAttributesCheckMessage, getUnusedId } from "./utils";
+import {
+    documentCallback,
+    wrappedPropTypes,
+    docApiPropTypes
+} from "../defs/doc-generation";
 
 export const templatesRoutes = {
     get: {
-        "/available_position_templates": data => [
-            ...data.available_position_templates
-        ],
-        "/sessions/:session_id/position_templates": (data, params) => [
-            ...(data.position_templates_by_session[params.session_id] || [])
-        ]
+        "/available_position_templates": documentCallback({
+            func: data => [...data.available_position_templates],
+            summary:
+                "Get all available position templates (these are literal files on the server).",
+            returns: wrappedPropTypes.arrayOf(
+                docApiPropTypes.offerTemplateMinimal
+            )
+        }),
+        "/sessions/:session_id/position_templates": documentCallback({
+            func: (data, params) => [
+                ...(data.position_templates_by_session[params.session_id] || [])
+            ],
+            summary: "Get position templates associated with this session.",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.offerTemplate)
+        })
     },
     post: {
         "/sessions/:session_id/add_position_template": (data, params, body) => {

@@ -4,6 +4,7 @@ import { sessionsRoutes } from "./sessions";
 import { templatesRoutes } from "./position_templates";
 import { positionsRoutes } from "./positions";
 import { instructorsRoutes } from "./instructors";
+import { documentCallback } from "../defs/doc-generation";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -37,7 +38,10 @@ export class MockAPI {
         positionsRoutes.get,
         instructorsRoutes.get,
         {
-            "/all_data": data => data,
+            "/all_data": documentCallback({
+                func: data => data,
+                exclude: true
+            }),
             "/sessions/:session_id/assignments": (data, params) => [
                 ...data.assignments[params.session_id]
             ],
