@@ -136,10 +136,6 @@ export const InstructorInput = ({ curValue, label, onChange, required }) => (
 );
 
 export const InstructorList = ({ curValue, instructors, setInstructor }) => {
-    instructors = [
-        { first_name: "Karen", last_name: "Reid" },
-        { first_name: "David", last_name: "Liu" }
-    ];
     const curValueLowerCase = curValue.toLowerCase();
     let foundInstructor = false;
     let autocompleteInstructors = [];
