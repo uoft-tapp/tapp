@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
+    UPSERT_POSITIONS_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
     DELETE_ONE_POSITION_SUCCESS,
     ADD_INSTRUCTOR_TO_POSITION_SUCCESS
@@ -19,6 +20,7 @@ import { createSelector } from "reselect";
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
 const fetchOnePositionSuccess = actionFactory(FETCH_ONE_POSITION_SUCCESS);
+const upsertPositionsSuccess = actionFactory(UPSERT_POSITIONS_SUCCESS);
 const upsertOnePositionSuccess = actionFactory(UPSERT_ONE_POSITION_SUCCESS);
 const deleteOnePositionSuccess = actionFactory(DELETE_ONE_POSITION_SUCCESS);
 const addInstructorToPositionSuccess = actionFactory(
@@ -63,6 +65,26 @@ export const upsertPosition = validatedApiDispatcher({
             payload
         );
         dispatch(upsertOnePositionSuccess(data));
+    }
+});
+
+export const upsertPositions = validatedApiDispatcher({
+    name: "upsertPositions",
+    description: "Add/insert positions",
+    propTypes: {},
+    onErrorDispatch: e => upsertError(e.toString()),
+    dispatcher: payload => async (dispatch, getState) => {
+        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        let positions = [];
+
+        for (const position of payload) {
+            const data = await apiPOST(
+                `/sessions/${activeSessionId}/positions`,
+                position
+            );
+            positions = [...positions, data];
+        }
+        dispatch(upsertPositionsSuccess(positions));
     }
 });
 
