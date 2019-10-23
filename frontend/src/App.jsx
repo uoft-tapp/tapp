@@ -1,15 +1,12 @@
 import React from "react";
-import { Switch } from "react-router-dom";
-import CustomNotifications from "./modules/notifications/components/CustomNotifications";
-import { openRoutes, privateRoutes } from "./routes";
-import OpenRoute from "./modules/auth/components/OpenRoute";
-import PrivateRoute from "./modules/auth/components/PrivateRoute";
-import Header from "./modules/navigation/components/Header";
 import { connect } from "react-redux";
 import { setGlobals } from "./views/globals/actions";
 import { parseURLSearchString } from "./libs/urlUtils";
 import { runOnActiveSessionChange } from "./api/actions/utils";
 import { setActiveSession } from "./api/actions";
+import { ConnectedNotifications } from "./views/notificatons";
+import { AdminRoutes } from "./views/routes";
+import { AdminHeader } from "./views/admin";
 
 class App extends React.Component {
     componentDidMount() {
@@ -43,16 +40,9 @@ class App extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
-                <Switch>
-                    {openRoutes.map(route => (
-                        <OpenRoute key={route.path} exact {...route} />
-                    ))}
-                    {privateRoutes.map(route => (
-                        <PrivateRoute key={route.path} exact {...route} />
-                    ))}
-                </Switch>
-                <CustomNotifications />
+                <AdminHeader />
+                <AdminRoutes />
+                <ConnectedNotifications />
             </React.Fragment>
         );
     }

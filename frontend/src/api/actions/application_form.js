@@ -1,5 +1,4 @@
 import { error, success } from "react-notification-system-redux";
-import { errorProps } from "../../modules/notifications/constants";
 import { apiPOST } from "../../libs/apiUtils";
 
 export const createNewApplication = payload => async dispatch => {
@@ -16,7 +15,6 @@ export const createNewApplication = payload => async dispatch => {
     } catch (e) {
         dispatch(
             error({
-                ...errorProps,
                 message: e.toString()
             })
         );
