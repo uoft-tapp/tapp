@@ -12,7 +12,7 @@ import { Route, NavLink } from "react-router-dom";
  */
 export function BootstrapNavLink(props) {
     return (
-        <Nav.Link as={NavLink} activeClassName="text-dark" to={props.to}>
+        <Nav.Link as={NavLink} activeClassName="text-dark" {...props}>
             {props.children}
         </Nav.Link>
     );
@@ -67,7 +67,10 @@ export function Header(props) {
                                 as="span"
                                 tabIndex="0"
                             >
-                                <BootstrapNavLink to={route.route}>
+                                <BootstrapNavLink
+                                    to={route.route}
+                                    title={route.description}
+                                >
                                     {route.name}
                                 </BootstrapNavLink>
                             </NavDropdown.Item>
@@ -83,6 +86,7 @@ export function Header(props) {
                                 <BootstrapNavLink
                                     to={fullroute}
                                     key={fullroute}
+                                    title={subroute.description}
                                 >
                                     {subroute.name}
                                 </BootstrapNavLink>
