@@ -10,14 +10,12 @@ import {
     newPositionFields
 } from "../../components/new-position-form";
 import { RedirectableComponent } from "../../components/redirectable-component";
-import { fetchInstructors } from "../../modules/instructors/actions";
 import { Col, Container, Button } from "react-bootstrap";
 import CSVReader from "react-csv-reader";
+import { instructorsSelector } from "../../api/actions";
 
 class NewPosition extends React.Component {
-    componentDidMount() {
-        this.props.fetchInstructors();
-    }
+    componentDidMount() {}
     state = { ...initialState };
     handleChange = prop => event =>
         this.setState({ [prop]: event.target.value });
@@ -81,11 +79,10 @@ class NewPosition extends React.Component {
                             switch (value) {
                                 case "instructor":
                                     return (
-                                        <div>
+                                        <div key={label}>
                                             <InstructorInput
                                                 curValue={this.state[value]}
                                                 required={required}
-                                                key={label}
                                                 label={label}
                                                 value={value}
                                                 onChange={this.handleChange(
@@ -98,7 +95,6 @@ class NewPosition extends React.Component {
                                                     setInstructor={
                                                         this.setInstructor
                                                     }
-                                                    key="instructorList"
                                                     instructors={
                                                         this.props.instructors
                                                     }
@@ -165,15 +161,10 @@ function RedirectableNewPosition(props) {
 }
 
 export default connect(
-    ({
-        ui: {
-            instructors: { list },
-            newPosition: { newPositionData, previousSubmitSuccess }
-        }
-    }) => ({
-        instructors: list,
-        newPosition: newPositionData,
-        previousSubmitSuccess
+    state => ({
+        instructors: instructorsSelector(state),
+        newPosition: state.ui.newPosition,
+        previousSubmitSuccess: state.ui.previousSubmitSuccess
     }),
-    { fetchInstructors, upsertPosition, upsertPositions }
+    { upsertPosition, upsertPositions }
 )(RedirectableNewPosition);

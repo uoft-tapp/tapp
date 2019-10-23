@@ -1,13 +1,8 @@
 import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
-import authReducer from "./modules/auth/reducer";
-import positionReducer from "./modules/positions/reducer";
-import applicantReducer from "./modules/applicants_by_course/reducer";
-import instructorReducer from "./modules/instructors/reducer";
 import applicationReducer from "./views/application_form/reducer";
 import newPositionReducer from "./views/new_position_form/reducer";
-import applicantsPositionReducer from "./modules/applicants_positions/reducer";
 import offerTableReducer from "./views/offertable/reducers";
 import { globalReducer } from "./views/globals/reducers";
 import {
@@ -46,12 +41,7 @@ const reducer = combineReducers({
     ui: combineReducers({
         notifications: notificationReducer,
         form: formReducer,
-        auth: authReducer,
-        positions: positionReducer,
-        applicants: applicantReducer,
-        instructors: instructorReducer,
         application: applicationReducer,
-        applicantsPositions: applicantsPositionReducer,
         newPosition: newPositionReducer,
         offerTable: offerTableReducer,
         globals: globalReducer

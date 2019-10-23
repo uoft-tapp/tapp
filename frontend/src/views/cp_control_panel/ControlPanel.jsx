@@ -6,14 +6,16 @@ import { positionsSelector } from "../../api/actions";
 import { ConnectedSessionSelect } from "../sessions/ConnectedSessionSelector";
 
 const ConnectedFilteredList = connect((state, ownProps) => ({
-    data: positionsSelector(state),
+    positions: positionsSelector(state),
     listRenderer: ownProps.listRenderer
 }))(FilteredList);
 
 function ControlPanel() {
     // dummy filter function
     const filter = (data, query) => {
-        console.log(query);
+        if (!query) {
+            return data;
+        }
         return data;
     };
 

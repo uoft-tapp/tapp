@@ -102,7 +102,7 @@ function DevFrame(props) {
             <div id="dev-frame-header">
                 <Navbar expand variant="dark">
                     <Navbar.Brand
-                        href="#"
+                        href="#/"
                         title="View TAPP in development mode in a framed window."
                     >
                         Dev Mode
