@@ -25,6 +25,9 @@ function generatePropTypes(PropTypes) {
             message: PropTypes.string.isRequired,
             payload: PropTypes.any
         }),
+        idOnly: PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        }),
         session: PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
             start_date: PropTypes.string,

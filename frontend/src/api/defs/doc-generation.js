@@ -82,6 +82,7 @@ const PROPTYPES_TO_SWAGGER_TYPES = {
 function wrappedPropTypesToSwagger(pt) {
     const ret = {};
     if (!pt.callChain) {
+        // eslint-disable-next-line
         console.warn(
             "Attempting to compute swagger values for non-wrapped object",
             pt
@@ -212,6 +213,7 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
             required: true
         }));
     }
+    // `docs.returns` holds information about what the route will return
     if (docs.returns) {
         ret.responses.default = {
             content: {
@@ -219,6 +221,17 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
                     schema: wrapInStandardApiResponseForSwagger(
                         wrappedPropTypesToSwagger(docs.returns)
                     )
+                }
+            }
+        };
+    }
+    // `docs.posts` holds information about what you can put in the
+    // requestBody
+    if (docs.posts) {
+        ret.requestBody = {
+            content: {
+                "application/json": {
+                    schema: wrappedPropTypesToSwagger(docs.posts)
                 }
             }
         };

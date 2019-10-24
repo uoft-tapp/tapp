@@ -164,8 +164,13 @@ export class MockAPI {
         this.active = true;
         this._origFetch = fetch;
         window.fetch = async (url, init = {}) => {
+            // Parse the URL first. We only want the pathname
+            const parsedURL = new URL(url, "http://dummy.com");
+            url = parsedURL.pathname;
             // Make sure the url doesn't start with "/api/v1"
-            url = url.replace(this.routePrefix, "");
+            url = url.startsWith(this.routePrefix)
+                ? url.replace(this.routePrefix, "")
+                : url;
             let mockResponse;
             if (init.method === "GET") {
                 mockResponse = this.apiGET(url);
@@ -184,15 +189,16 @@ export class MockAPI {
                 "Reponding with",
                 mockResponse
             );
+            // Create a `Response` object to return so that we fully immitate
+            // the `fetch` api.
+            const responseObj = new Response(
+                new Blob([JSON.stringify(mockResponse)], {
+                    type: "application/json"
+                }),
+                { status: 200, statusText: "OK" }
+            );
             return new Promise(resolve => {
-                window.setTimeout(
-                    () =>
-                        resolve({
-                            status: 200,
-                            json: () => Promise.resolve(mockResponse)
-                        }),
-                    delay
-                );
+                window.setTimeout(() => resolve(responseObj), delay);
             });
         };
     }
