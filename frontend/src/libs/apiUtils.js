@@ -114,4 +114,23 @@ async function apiPOST(path, body = {}) {
     return await _processFetchResponse(resp, path);
 }
 
-export { API_URL, ApiError, ApiFetchError, apiGET, apiPOST };
+/**
+ * Do a PUT requestion on the specified api route
+ *
+ * @param {string} path
+ * @param {object} [body={}]
+ * @returns {Promise<object>} Promise containing the processed JSON response
+ * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
+ */
+async function apiPUT(path, body = {}) {
+    // remove a leading "/" if there is one in `path`
+    path = _ensurePath(path);
+    const resp = await fetch(API_URL + path, {
+        ...FETCH_INIT,
+        method: "PUT",
+        body: JSON.stringify(body)
+    });
+    return await _processFetchResponse(resp, path);
+}
+
+export { API_URL, ApiError, ApiFetchError, apiGET, apiPOST, apiPUT };
