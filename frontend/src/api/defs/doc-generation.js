@@ -268,7 +268,34 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
         });
     }
 
-    return ret;
+    // The initial segment of each route is a "tag"; get a unique
+    // list of each of these tags and then for annotating the routes
+    const tags = Array.from(
+        new Set(
+            Object.keys(ret)
+                .map(x => x.split("/")[1])
+                .filter(x => x)
+        )
+    );
+    // If a route contains one of the "tags", then it should be annotated
+    // accordingly (with each relavent tag)
+    for (const [path, info] of Object.entries(ret)) {
+        const applicableTags = tags.filter(x => path.includes(x));
+        if (info.get && applicableTags.length > 0) {
+            info.get.tags = applicableTags;
+        }
+        if (info.post && applicableTags.length > 0) {
+            info.post.tags = applicableTags;
+        }
+    }
+
+    // Alphabetize the routes so they display in a sensible order.
+    const sortedRet = {};
+    for (const path of Object.keys(ret).sort()) {
+        sortedRet[path] = ret[path];
+    }
+
+    return sortedRet;
 }
 
 /**
