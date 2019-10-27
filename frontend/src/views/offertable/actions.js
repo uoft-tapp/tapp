@@ -7,4 +7,4 @@ export const setSelectedRows = data => ({
 });
 
 // selectors
-export const offerTableSelector = state => state.ui.offerTable.selectedIds;
+export const offerTableSelector = state => state.ui.offerTable;

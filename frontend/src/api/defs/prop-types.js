@@ -49,8 +49,14 @@ function generatePropTypes(PropTypes) {
             est_end_date: PropTypes.string,
             position_type: PropTypes.string,
             duties: PropTypes.string,
-            qualifications: PropTypes.string
-            // XXX Add the rest of the properties here
+            qualifications: PropTypes.string,
+            ad_hours_per_assignment: PropTypes.number,
+            ad_num_assignments: PropTypes.number,
+            ad_open_date: PropTypes.string,
+            ad_close_date: PropTypes.string,
+            desired_num_assignments: PropTypes.number,
+            current_enrollment: PropTypes.number,
+            current_waitlisted: PropTypes.number
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,
@@ -109,6 +115,16 @@ function generatePropTypes(PropTypes) {
             accepted_date: PropTypes.string,
             rejected_date: PropTypes.string,
             withdrawn_date: PropTypes.string
+        }),
+        application: PropTypes.shape({
+            session_id: PropTypes.number,
+            comments: PropTypes.string,
+            program: PropTypes.string,
+            department: PropTypes.string,
+            previous_uoft_experience: PropTypes.string,
+            yip: PropTypes.number,
+            annotation: PropTypes.string,
+            applicant_id: PropTypes.number
         })
     };
 }

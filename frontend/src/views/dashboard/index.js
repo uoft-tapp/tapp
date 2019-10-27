@@ -62,7 +62,7 @@ const ConnectedSearchBox = connect(state => ({
 }))(SearchBox);
 
 const ConnectedEmailButton = connect(state => ({
-    data: offerTableSelector(state)
+    data: offerTableSelector(state).selectedAssignmentIds
 }))(EmailButton);
 
 /**
@@ -95,7 +95,6 @@ function DashboardWidget(props) {
  *
  */
 function Dashboard() {
-    const [selectedOffers, setSelectedOffers] = React.useState([]);
     return (
         <div>
             <DashboardWidget title="EditableField">
@@ -135,10 +134,7 @@ function Dashboard() {
                 <ConnectedEmailButton />
             </DashboardWidget>
             <DashboardWidget title="OfferTable">
-                <ConnectedOfferTable
-                    selected={selectedOffers}
-                    setSelected={setSelectedOffers}
-                />
+                <ConnectedOfferTable />
             </DashboardWidget>
         </div>
     );
