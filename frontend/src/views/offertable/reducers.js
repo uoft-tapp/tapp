@@ -3,12 +3,12 @@ import { createReducer } from "redux-create-reducer";
 
 // initialize the state of offer table
 const initialState = {
-    selectedIds: []
+    selectedAssignmentIds: []
 };
 
 const offerTableReducer = createReducer(initialState, {
     [SET_SELECTED_ROWS]: (state, action) => {
-        return { ...state, selectedIds: action.payload };
+        return { ...state, selectedAssignmentIds: action.payload };
     }
 });
 

@@ -7,6 +7,7 @@ import {
 } from "../../api/actions";
 import { OfferTable } from "../../components/offer-table";
 import { EditableField } from "../../components/edit-field-widgets";
+import { offerTableSelector, setSelectedRows } from "./actions";
 
 /**
  * A cell that renders editable applicant information
@@ -113,7 +114,8 @@ function EditableOfferTable(props) {
  */
 export const ConnectedOfferTable = connect(
     state => ({
-        data: assignmentsSelector(state)
+        data: assignmentsSelector(state),
+        selected: offerTableSelector(state).selectedAssignmentIds
     }),
-    { upsertApplicant, upsertAssignment }
+    { upsertApplicant, upsertAssignment, setSelected: setSelectedRows }
 )(EditableOfferTable);
