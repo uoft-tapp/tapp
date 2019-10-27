@@ -21,7 +21,8 @@ import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
 import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
-import { OfferTable } from "../../components/offer-table";
+import { EditableField } from "../../components/edit-field-widgets";
+import { ConnectedOfferTable } from "../offertable";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -64,10 +65,6 @@ const ConnectedEmailButton = connect(state => ({
     data: offerTableSelector(state)
 }))(EmailButton);
 
-const ConnectedOfferTable = connect(state => ({
-    data: assignmentsSelector(state)
-}))(OfferTable);
-
 /**
  * Encapsulate a react component in a frame.
  *
@@ -101,6 +98,15 @@ function Dashboard() {
     const [selectedOffers, setSelectedOffers] = React.useState([]);
     return (
         <div>
+            <DashboardWidget title="EditableField">
+                <EditableField
+                    title="Edit this super awesome content"
+                    value={45}
+                    onChange={console.log}
+                >
+                    Edit me!
+                </EditableField>
+            </DashboardWidget>
             <DashboardWidget title="SessionSelect">
                 <ConnectedSessionSelect />
             </DashboardWidget>

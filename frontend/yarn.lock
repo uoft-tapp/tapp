@@ -8741,6 +8741,13 @@ react-error-overlay@^5.1.6:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
   integrity sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
 
+react-icons@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.8.0.tgz#229de5904809696c9f46932bd9b6126b2522866e"
+  integrity sha512-rA/8GRKjPulft8BSBSMsHkE1AGPqJ7LjNsyk0BE7XjG70Iz62zOled2SJk7LDo8x9z86a3xOstDlKlMZ4pAy7A==
+  dependencies:
+    camelcase "^5.0.0"
+
 react-immutable-proptypes@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-immutable-proptypes/-/react-immutable-proptypes-2.1.0.tgz#023d6f39bb15c97c071e9e60d00d136eac5fa0b4"

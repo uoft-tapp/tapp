@@ -88,6 +88,27 @@ function generatePropTypes(PropTypes) {
         }),
         reportingTags: PropTypes.shape({
             name: PropTypes.string
+        }),
+        offer: PropTypes.shape({
+            offer_template: PropTypes.string,
+            first_name: PropTypes.string,
+            last_name: PropTypes.string,
+            email: PropTypes.string,
+            position_code: PropTypes.string,
+            position_title: PropTypes.string,
+            position_start_date: PropTypes.string,
+            position_end_date: PropTypes.string,
+            first_time_ta: PropTypes.bool,
+            instructor_contact_desc: PropTypes.string,
+            pay_period_desc: PropTypes.string,
+            installments: PropTypes.number,
+            ta_coordinator_name: PropTypes.string,
+            ta_coordinator_email: PropTypes.string,
+            emailed_date: PropTypes.string,
+            string: PropTypes.string,
+            accepted_date: PropTypes.string,
+            rejected_date: PropTypes.string,
+            withdrawn_date: PropTypes.string
         })
     };
 }

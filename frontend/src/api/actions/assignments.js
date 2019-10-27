@@ -55,12 +55,8 @@ export const upsertAssignment = validatedApiDispatcher({
     description: "Add/insert assignment",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/sessions/${activeSessionId}/assignments`,
-            payload
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiPOST(`/assignments`, payload);
         dispatch(upsertOneAssignmentSuccess(data));
     }
 });
@@ -70,12 +66,8 @@ export const deleteAssignment = validatedApiDispatcher({
     description: "Delete assignment",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/sessions/${activeSessionId}/assignments/delete`,
-            payload
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiPOST(`/assignments/delete`, payload);
         dispatch(deleteOneAssignmentSuccess(data));
     }
 });

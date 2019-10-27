@@ -27,6 +27,7 @@ export const fetchApplicants = validatedApiDispatcher({
     description: "Fetch applicants",
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
+        // When we fetch applicants, we only want the applicants associated with the current session
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiGET(`/sessions/${activeSessionId}/applicants`);
         dispatch(fetchApplicantsSuccess(data));
@@ -38,11 +39,8 @@ export const fetchApplicant = validatedApiDispatcher({
     description: "Fetch applicant",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
-            `/sessions/${activeSessionId}/applicants/${payload.id}`
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiGET(`/applicants/${payload.id}`);
         dispatch(fetchOneApplicantSuccess(data));
     }
 });
@@ -52,12 +50,8 @@ export const upsertApplicant = validatedApiDispatcher({
     description: "Add/insert applicant",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/sessions/${activeSessionId}/applicants`,
-            payload
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiPOST(`/applicants`, payload);
         dispatch(upsertOneApplicantSuccess(data));
     }
 });

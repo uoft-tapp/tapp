@@ -195,21 +195,19 @@ export const mockData = {
             student_number: "29151485"
         }
     ],
-    assignments: {
-        1: [
-            {
-                id: 100,
-                position_id: 10,
-                applicant_id: 2001,
-                hours: 90
-            },
-            {
-                id: 101,
-                position_id: 10,
-                applicant_id: 2005,
-                hours: 95
-            }
-        ],
-        2: []
-    }
+    assignments_by_session: { 1: [100, 101], 2: [] },
+    assignments: [
+        {
+            id: 100,
+            position_id: 10,
+            applicant_id: 2001,
+            hours: 90
+        },
+        {
+            id: 101,
+            position_id: 10,
+            applicant_id: 2005,
+            hours: 95
+        }
+    ]
 };
