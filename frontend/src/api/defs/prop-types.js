@@ -72,6 +72,14 @@ function generatePropTypes(PropTypes) {
                 PropTypes.string
             ]).isRequired
         }),
+        applicant: PropTypes.shape({
+            utorid: PropTypes.string.isRequired,
+            student_number: PropTypes.string,
+            first_name: PropTypes.string.isRequired,
+            last_name: PropTypes.string.isRequired,
+            email: PropTypes.string,
+            phone: PropTypes.string
+        }),
         wageChunk: PropTypes.shape({
             start_date: PropTypes.string,
             end_date: PropTypes.string,

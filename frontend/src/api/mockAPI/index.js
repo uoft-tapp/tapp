@@ -5,28 +5,14 @@ import { templatesRoutes } from "./position_templates";
 import { positionsRoutes } from "./positions";
 import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";
+import { assignmentsRoutes } from "./assignments";
+import { applicantsRoutes } from "./applicants";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
  *
  * @module
  */
-
-/**
- * Pick an item from an array whose id === `id`.
- *
- * @param {Object[]} array Array to be picked from
- * @param {any} id Value to match on
- * @param {string} [key="id"] Which key to match on
- * @returns
- */
-function pickFromArray(array, id, key = "id") {
-    for (let elm of array) {
-        if (elm[key] === id) {
-            return elm;
-        }
-    }
-}
 
 export class MockAPI {
     routePrefix = "/api/v1";
@@ -37,18 +23,13 @@ export class MockAPI {
         templatesRoutes.get,
         positionsRoutes.get,
         instructorsRoutes.get,
+        assignmentsRoutes.get,
+        applicantsRoutes.get,
         {
             "/all_data": documentCallback({
                 func: data => data,
                 exclude: true
-            }),
-            "/sessions/:session_id/assignments": (data, params) => [
-                ...data.assignments[params.session_id]
-            ],
-            "/sessions/:session_id/applicants": (data, params) =>
-                data.applicants_by_session[params.session_id].map(utorid =>
-                    pickFromArray(data.applicants, utorid, "utorid")
-                )
+            })
         }
     );
     postRoutes = Object.assign(
@@ -56,7 +37,9 @@ export class MockAPI {
         sessionsRoutes.post,
         templatesRoutes.post,
         positionsRoutes.post,
-        instructorsRoutes.post
+        instructorsRoutes.post,
+        assignmentsRoutes.post,
+        applicantsRoutes.post
     );
 
     constructor(seedData) {

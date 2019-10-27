@@ -3,22 +3,42 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
+import "react-table/react-table.css";
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
 
 const COLUMNS = [
-    { Header: "First Name", accessor: "applicant.first_name", width: 100 },
-    { Header: "Last Name", accessor: "applicant.last_name", width: 100 },
+    { Header: "Last Name", accessor: "applicant.last_name" },
+    { Header: "First Name", accessor: "applicant.first_name" },
     { Header: "Email", accessor: "applicant.email", width: 250 },
     {
-        Header: "Position title",
+        Header: "Student Number",
+        accessor: "applicant.student_number",
+        width: 100
+    },
+    {
+        Header: "Position",
         accessor: "position.position_code",
         width: 130
     },
     {
+        Header: "Hours",
+        accessor: "hours",
+        width: 100
+    },
+    {
+        Header: "Contract",
+        accessor: "position.position_type",
+        width: 100
+    },
+    {
         Header: "First Time?",
         accessor: "applicant.first_time_ta",
-        Cell: props => <span>{("" + props.value).toUpperCase()}</span>,
+        Cell: props => (
+            <div style={{ backgroundColor: "red" }}>
+                {("" + props.value).toUpperCase()}
+            </div>
+        ),
         width: 100
     }, // boolean
     { Header: "Status", accessor: "status", width: 100 },
@@ -80,6 +100,7 @@ function OfferTable(props) {
      */
     function getDisplayedData() {
         if (!reactTableRef) {
+            // eslint-disable-next-line
             console.warn(
                 "Trying to get data displayed in a ReactTable, but no ref has been created"
             );
