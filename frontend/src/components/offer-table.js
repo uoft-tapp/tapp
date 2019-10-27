@@ -70,7 +70,7 @@ function rowToStr(row) {
  * @returns
  */
 function OfferTable(props) {
-    const { data, selected, setSelected } = props;
+    const { data, selected, setSelected, columns = COLUMNS } = props;
     // internally we use a more efficient datastructure than a list to keep track of `selected` things.
     const _selected = new Set(selected);
     const _setSelected = _selected => {
@@ -194,7 +194,7 @@ function OfferTable(props) {
         <SelectTable
             ref={r => (reactTableRef = r)}
             data={filteredData}
-            columns={COLUMNS}
+            columns={columns}
             toggleSelection={onToggleRow}
             selectAll={allSelected}
             toggleAll={onToggleAll}
@@ -205,7 +205,7 @@ function OfferTable(props) {
     );
     // if `selected` was not passed in, the table rows should not be selectable
     if (selected == null) {
-        tableComponent = <ReactTable columns={COLUMNS} data={filteredData} />;
+        tableComponent = <ReactTable columns={columns} data={filteredData} />;
     }
     return (
         <div>
@@ -221,7 +221,13 @@ function OfferTable(props) {
 OfferTable.propTypes = {
     selected: PropTypes.array,
     setSelected: PropTypes.func,
-    data: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    columns: PropTypes.arrayOf(
+        PropTypes.shape({
+            Header: PropTypes.string,
+            accessor: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+        })
+    )
 };
 
 export { OfferTable };
