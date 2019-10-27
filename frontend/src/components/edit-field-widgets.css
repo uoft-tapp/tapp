@@ -1,0 +1,36 @@
+.show-on-hover-wrapper {
+    min-height: 2.5ex;
+    position: relative;
+}
+
+.show-on-hover-wrapper:hover .show-on-hover {
+    opacity: 1;
+}
+
+.show-on-hover {
+    transition: all 0.3s;
+    opacity: 0;
+}
+
+.edit-glyph {
+    cursor: pointer;
+    position: absolute;
+    right: 2px;
+    bottom: 0;
+}
+
+.edit-glyph:hover {
+    color: blue;
+    transition: all 0.3s;
+}
+
+.field-dialog-formatted-name {
+    white-space: pre;
+    font-family: monospace;
+    color: blue;
+}
+.field-dialog-formatted-name::before,
+.field-dialog-formatted-name::after {
+    content: "'";
+    color: initial;
+}
