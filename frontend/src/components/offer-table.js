@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
+import 'react-table/react-table.css'
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
 

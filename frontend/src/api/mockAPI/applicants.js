@@ -1,4 +1,4 @@
-import { findAllById } from "./utils";
+import { find } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
@@ -10,7 +10,7 @@ export const applicantsRoutes = {
         "/sessions/:session_id/applicants": documentCallback({
             func: (data, params) =>
                 data.applicants_by_session[params.session_id].map(utorid =>
-                    findAllById(data.applicants, utorid, "utorid")
+                    find({ utorid }, data.applicants, "utorid")
                 ),
             summary: "Get all applicants associated with the given session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant)
