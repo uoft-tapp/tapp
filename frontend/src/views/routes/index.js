@@ -4,12 +4,16 @@ import RedirectableNewPosition from "../new_position_form/fillablePosition";
 import ApplicationForm from "../application_form/fillableApplication";
 import Dashboard from "../dashboard";
 import ControlPanel from "../cp_control_panel/ControlPanel";
+import { AdminIstructorsView } from "../instructors";
 
 export function AdminRoutes() {
     return (
         <Switch>
             <Route exact path="/">
                 <Redirect to="/tapp" />
+            </Route>
+            <Route path="/tapp/instructors">
+                <AdminIstructorsView />
             </Route>
             <Route exact path="/tapp/positions/new">
                 <RedirectableNewPosition />

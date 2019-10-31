@@ -16,7 +16,7 @@ Rails.application.routes.draw do
             resources :positions, only: [:index, :create] do
                 resources :instructors, only: [:index]
                 resources :assignments, only: [:index, :create]
-                post '/add_instructor', to: 'instructors#create'
+                post '/instructors', to: 'instructors#create'
                 post '/instructors/delete', to: 'instructors#delete_instructor_by_position'
             end
 

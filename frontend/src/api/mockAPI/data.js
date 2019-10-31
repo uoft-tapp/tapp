@@ -132,10 +132,6 @@ export const mockData = {
             instructors: ["millerm"]
         }
     ],
-    applicants_by_session: {
-        1: ["weasleyr", "potterh", "smithb", "howeyb", "brownd"],
-        2: ["smithb", "wilsonh", "molinat"]
-    },
     applicants: [
         {
             id: 2000,
@@ -208,6 +204,88 @@ export const mockData = {
             position_id: 10,
             applicant_id: 2005,
             hours: 95
+        }
+    ],
+    applications: [
+        {
+            comments: "",
+            program: "Phd",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "Last year I TAed a bunch",
+            yip: 2,
+            annotation: "",
+            session_id: 1,
+            applicant_id: 2000
+        },
+        {
+            comments: "",
+            program: "UG",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "",
+            yip: 2,
+            annotation: "",
+            session_id: 1,
+            applicant_id: 2001
+        },
+        {
+            comments: "",
+            program: "Phd",
+            department: "Math",
+            previous_uoft_ta_experience: "",
+            yip: 2,
+            annotation: "",
+            session_id: 1,
+            applicant_id: 2002
+        },
+        {
+            comments: "",
+            program: "Phd",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "",
+            yip: 2,
+            annotation: "",
+            session_id: 1,
+            applicant_id: 2005
+        },
+        {
+            comments: "",
+            program: "UG",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "",
+            yip: 2,
+            annotation: "",
+            session_id: 1,
+            applicant_id: 2006
+        },
+        {
+            comments: "",
+            program: "UG",
+            department: "Math",
+            previous_uoft_ta_experience: "",
+            yip: 3,
+            annotation: "",
+            session_id: 2,
+            applicant_id: 2002
+        },
+        {
+            comments: "",
+            program: "MSc",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "",
+            yip: 2,
+            annotation: "",
+            session_id: 2,
+            applicant_id: 2003
+        },
+        {
+            comments: "",
+            program: "UG",
+            department: "Computer Science",
+            previous_uoft_ta_experience: "",
+            yip: 4,
+            annotation: "",
+            session_id: 2,
+            applicant_id: 2004
         }
     ]
 };

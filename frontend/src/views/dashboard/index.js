@@ -15,7 +15,7 @@ import { offerTableSelector } from "../offertable/actions";
 import { SessionSelect } from "../../components/session-select";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
-import { InstructorsList } from "../../components/instructors-list";
+import { ConnectedInstructorsList } from "../instructors";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
 import { SearchBox } from "../../components/search-box";
@@ -23,6 +23,8 @@ import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
 import { EditableField } from "../../components/edit-field-widgets";
 import { ConnectedOfferTable } from "../offertable";
+import { PositionEditor } from "../../components/add-position";
+import { InstructorEditor } from "../../components/instructors";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -45,10 +47,6 @@ const ConnectedPositionTemplateList = connect(state => ({
     position_templates: positionTemplatesSelector(state)
 }))(PositionTemplatesList);
 
-const ConnectedInstructorsList = connect(state => ({
-    instructors: instructorsSelector(state)
-}))(InstructorsList);
-
 const ConnectedPositionsList = connect(state => ({
     positions: positionsSelector(state)
 }))(PositionsList);
@@ -64,6 +62,10 @@ const ConnectedSearchBox = connect(state => ({
 const ConnectedEmailButton = connect(state => ({
     data: offerTableSelector(state).selectedAssignmentIds
 }))(EmailButton);
+
+const ConnectedPositionEditor = connect(state => ({
+    instructors: instructorsSelector(state)
+}))(PositionEditor);
 
 /**
  * Encapsulate a react component in a frame.
@@ -95,8 +97,26 @@ function DashboardWidget(props) {
  *
  */
 function Dashboard() {
+    const [position, setPosition] = React.useState({ position_code: "" });
+    const [instructor, setInstructor] = React.useState({
+        last_name: "Baggins",
+        first_name: "Bilbo",
+        utorid: "bilbob"
+    });
     return (
         <div>
+            <DashboardWidget title="InstructorEditor">
+                <InstructorEditor
+                    instructor={instructor}
+                    setInstructor={setInstructor}
+                />
+            </DashboardWidget>
+            <DashboardWidget title="PositionEditor">
+                <ConnectedPositionEditor
+                    position={position}
+                    setPosition={setPosition}
+                />
+            </DashboardWidget>
             <DashboardWidget title="EditableField">
                 <EditableField
                     title="Edit this super awesome content"

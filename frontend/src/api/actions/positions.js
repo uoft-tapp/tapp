@@ -113,7 +113,7 @@ export const addInstructorToPosition = validatedApiDispatcher({
     onErrorDispatch: true,
     dispatcher: payload => async dispatch => {
         const data = await apiPOST(
-            `/positions/${payload.position.id}/add_instructor`,
+            `/positions/${payload.position.id}/instructors`,
             payload.instructor
         );
         await dispatch(

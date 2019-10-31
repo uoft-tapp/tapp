@@ -50,7 +50,9 @@ export function find(obj, data = [], prop = "id") {
  * @returns {object[]}
  */
 export function findAllById(ids = [], data = [], prop = "id") {
-    return data.filter(x => ids.includes(x[prop]));
+    // ids can be numbers or strings; make sure we get a match in either case.
+    ids = ids.map(x => "" + x);
+    return data.filter(x => ids.includes("" + x[prop]));
 }
 
 /**
