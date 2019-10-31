@@ -496,7 +496,7 @@ function instructorsTests({ apiGET, apiPOST }) {
     });
 
     it("add instrutor to position", async () => {
-        const resp = await apiPOST(`/positions/${position.id}/add_instructor`, {
+        const resp = await apiPOST(`/positions/${position.id}/instructors`, {
             id: instructor.id,
             position_id: position.id
         });

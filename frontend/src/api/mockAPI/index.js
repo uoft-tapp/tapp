@@ -7,6 +7,7 @@ import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";
 import { assignmentsRoutes } from "./assignments";
 import { applicantsRoutes } from "./applicants";
+import { applicationsRoutes } from "./applications";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -25,6 +26,7 @@ export class MockAPI {
         instructorsRoutes.get,
         assignmentsRoutes.get,
         applicantsRoutes.get,
+        applicationsRoutes.get,
         {
             "/all_data": documentCallback({
                 func: data => data,
@@ -39,7 +41,8 @@ export class MockAPI {
         positionsRoutes.post,
         instructorsRoutes.post,
         assignmentsRoutes.post,
-        applicantsRoutes.post
+        applicantsRoutes.post,
+        applicationsRoutes.post
     );
 
     constructor(seedData) {

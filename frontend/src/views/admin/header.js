@@ -17,6 +17,11 @@ function AdminHeader() {
                     description: "TAPP Main View",
                     subroutes: [
                         {
+                            route: "/instructors",
+                            name: "Instructors",
+                            description: "Manage Instructors"
+                        },
+                        {
                             route: "/positions",
                             name: "Positions",
                             description: "Manage Positions"

@@ -46,7 +46,7 @@ export const fetchInstructor = validatedApiDispatcher({
 export const upsertInstructor = validatedApiDispatcher({
     name: "upsertInstructor",
     description: "Add/insert instructor",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async dispatch => {
         const data = await apiPOST(`/instructors`, payload);

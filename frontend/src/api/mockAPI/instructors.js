@@ -76,7 +76,7 @@ export const instructorsRoutes = {
             posts: docApiPropTypes.idOnly,
             returns: docApiPropTypes.instructor
         }),
-        "/positions/:position_id/add_instructor": documentCallback({
+        "/positions/:position_id/instructors": documentCallback({
             func: (data, params, body) => {
                 const { position_id } = params;
                 const instructor = find(body, data.instructors);
@@ -89,11 +89,11 @@ export const instructorsRoutes = {
                 const instructors = (position.instructors =
                     position.instructors || []);
                 instructors.push(instructor.utorid);
-                return { ...instructor };
+                return instructor;
             },
             summary: "Associate an instructor with a position",
             posts: docApiPropTypes.idOnly,
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.instructor)
+            returns: docApiPropTypes.instructor
         }),
         "/positions/:position_id/instructors/delete": documentCallback({
             func: (data, params, body) => {
