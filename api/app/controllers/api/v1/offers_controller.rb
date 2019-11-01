@@ -60,7 +60,6 @@ class Api::V1::OffersController < ApplicationController
     end
 
     def accept_offer
-        params.require(:signature)
         if @offer.update_attributes(signature: params[:signature], accepted_date: Time.zone.now)
             render_success(@offer)
         else
@@ -81,20 +80,19 @@ class Api::V1::OffersController < ApplicationController
 
     def set_assignment
         assignment_id = params[:assignment_id]
-        if Assignment.exists?(assignment_id)
-            @assignment = Assignment.find(assignment_id)
-        else
+        @assignment = Assignment.find_by(id: assignment_id)
+        if @assignment.blank?
             render_error "Assignment #{assignment_id} does not exist."
+            return
         end
     end
 
     def set_offer
-        params.require(:url_token)
         offer_token = params[:url_token]
-        if Offer.find_by(url_token: offer_token).present?
-            @offer = Offer.find_by(url_token: offer_token)
-        else
+        @offer = Offer.find_by(url_token: offer_token)
+        if @offer.blank?
             render_error "Offer #{offer_token} does not exist."
+            return
         end
     end
 end
