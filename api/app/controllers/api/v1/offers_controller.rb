@@ -3,26 +3,23 @@
 module Api::V1
     # Controller for Offers
     class OffersController < ApplicationController
-        before_action :set_assignment, only: %i[create active_offer email_offer withdraw_offer nag]
-        before_action :set_offer, only: %i[reject_offer accept_offer]
+        before_action :find_assignment, only: %i[create active_offer email_offer withdraw_offer nag]
+        before_action :find_offer, only: %i[show accept reject]
+        before_action :find_contract_template, only: %i[show]
+
         # POST /offers
         def create
             offer = Offer.new(@assignment.offer_params)
-            if offer.save
-                render_success(offer)
-            else
-                render_error(offer.errors)
-            end
+            offer.save ? render_success(offer) : render_error(offer.errors)
         end
 
         # GET /offers/:url_token
         def show
-            params.require(:id)
-            offer = Offer.find_by(url_token: params[:id])
-            if offer
-                render_success(offer.to_html)
-            else
-                render_error('offer does not exist')
+            respond_to do |format|
+                format.html
+                format.pdf do
+                    render pdf: 'offer', inline: @rendered_contract
+                end
             end
         end
 
@@ -53,17 +50,18 @@ module Api::V1
             end
         end
 
-        def reject_offer
-            if @offer.update_attribute(:rejected_date, Time.zone.now)
+        def accept
+            if @offer.update(signature: params[:signature],
+                             accepted_date: Time.zone.now,
+                             status: :accepted)
                 render_success(@offer)
             else
                 render_error(@offer.errors)
             end
         end
 
-        def accept_offer
-            params.require(:signature)
-            if @offer.update_attributes(signature: params[:signature], accepted_date: Time.zone.now)
+        def reject
+            if @offer.update(rejected_date: Time.zone.now, status: :rejected)
                 render_success(@offer)
             else
                 render_error(@offer.errors)
@@ -81,24 +79,29 @@ module Api::V1
 
         private
 
-        def set_assignment
-            params.require(:assignment_id)
-            assignment_id = params[:assignment_id]
-            if Assignment.exists?(assignment_id)
-                @assignment = Assignment.find(assignment_id)
-            else
+        def find_assignment
+            @assignment = Assignment.find_by(assignment_id: params[:assignment_id])
+            if @assignment.blank?
                 render_error("assignment #{assignment_id} does not exist.")
+                return
             end
         end
 
-        def set_offer
-            params.require(:url_token)
-            offer_token = params[:url_token]
-            if Offer.find_by(url_token: offer_token).present?
-                @offer = Offer.find_by(url_token: offer_token)
-            else
-                render_error("offer #{offer_token} does not exist.")
+        def find_offer
+            @offer = Offer.find_by(url_token: params[:url_token])
+            if @offer.blank?
+                render_error("offer #{params[:url_token]} does not exist.")
+                return
             end
+        end
+
+        def find_contract_template
+            offer_template = File.read("#{CONTRACT_DIR}/offer-template.html")
+            template = Liquid::Template.parse(offer_template)
+            styles = { 'style_font' => File.read("#{CONTRACT_DIR}/font.css"),
+                       'style_header' => File.read("#{CONTRACT_DIR}/header.css") }
+            subs = @offer.format.merge(styles)
+            @rendered_contract = template.render(subs)
         end
     end
 end
