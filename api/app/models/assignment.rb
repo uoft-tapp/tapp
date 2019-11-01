@@ -12,6 +12,8 @@ class Assignment < ApplicationRecord
 
     after_update :reset_active_offer
 
+    scope :by_position, ->(position_id) { where(position_id: position_id).order(:id) }
+
     def active_offer
         active_offer_id ? Offer.find(active_offer_id) : nil
     end
@@ -19,18 +21,15 @@ class Assignment < ApplicationRecord
     def offer_params
         return if active_offer.present?
 
-        applicant = self.applicant
-        position = self.position
         session = position.session
+        # FIXME: Refactor this out?
         applicant_data = applicant.applicant_data_for_matchings
                                   .joins(:application)
-                                  .where(applications: { session: session })
-                                  .first
+                                  .find_by(applications: { session: session })
         start_date = position.est_start_date
         end_date = position.est_end_date
         installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
-        offer_template = session.position_templates.where(position_type: position.position_type).first.offer_template
-
+        offer_template = session.position_templates.find_by(position_type: position.position_type)&.offer_template
         {
             email: applicant.email,
             first_name: applicant.first_name,
@@ -57,6 +56,7 @@ class Assignment < ApplicationRecord
         update_column(:active_offer_id, nil)
     end
 
+    # FIXME: This should be a decorator...
     def instructor_contact_desc
         contact_info = position.instructors.map do |instructor|
             "#{instructor.first_name.capitalize} #{instructor.last_name.capitalize}: #{instructor.email}"
@@ -64,6 +64,7 @@ class Assignment < ApplicationRecord
         contact_info.join(', ')
     end
 
+    # FIXME: This should be a decorator...
     def pay_period_desc
         pay_period_info = wage_chunks.map do |wage_chunk|
             "#{wage_chunk.hours} hours at #{wage_chunk.rate} per hour"
