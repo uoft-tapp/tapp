@@ -1,69 +1,72 @@
 # frozen_string_literal: true
 
-module Api::V1
-    # Controller for Applicants
-    class ApplicantsController < ApplicationController
-        # GET /applicants
-        def index
-            unless params.include?(:session_id)
-                render_success(Applicant.order(:id))
-                return
-            end
-            return if invalid_id(Session, :session_id)
+# Controller for Applicants
+class Api::V1::ApplicantsController < ApplicationController
+    before_action :find_applicant, only: %i[create destroy]
 
-            render_success(applicants_by_session)
+    # GET /applicants
+    def index
+        if params[:session_id].blank?
+            render_success(Applicant.order(:id))
+            return
         end
+        return if invalid_id?(Session, :session_id)
 
-        # POST /applicants
-        def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && Applicant.exists?(params[:id])
-            applicant = Applicant.new(applicant_params)
-            if applicant.save # passes Applicant model validation
-                render_success(applicant)
-            else
-                applicant.destroy!
-                render_error(applicant.errors)
-            end
+        render_success Applicant.by_session(params[:session_id])
+    end
+
+    # POST /applicants
+    def create
+        if params[:id].present? && @applicant.present?
+            update
+            return
         end
-
-        def update
-            applicant = Applicant.find(params[:id])
-            if applicant.update_attributes!(applicant_params)
-                render_success(applicant)
-            else
-                render_error(applicant.errors)
-            end
-        end
-
-        # POST /applicants/delete
-        def delete
-            params.require(:id)
-            applicant = Applicant.find(params[:id])
-            if applicant.destroy!
-                render_success(applicant)
-            else
-                render_error(applicant.errors.full_messages.join('; '))
-            end
-        end
-
-        private
-
-        def applicant_params
-            params.permit(
-                :email,
-                :first_name,
-                :last_name,
-                :phone,
-                :student_number,
-                :utorid
-            )
-        end
-
-        def applicants_by_session
-            Applicant.order(:id).select do |entry|
-                entry[:session_id] == params[:session_id].to_i
-            end
+        applicant = Applicant.new(applicant_params)
+        if applicant.save
+            render_success applicant
+        else
+            render_error applicant.errors
         end
     end
+
+    # POST /applicants/delete
+    def delete
+        if @applicant.destroy
+            render_success @applicant
+        else
+            render_error @applicant.errors.full_messages.join('; ')
+        end
+    end
+
+    private
+
+    def applicant_params
+        params.permit(
+            :email,
+            :first_name,
+            :last_name,
+            :phone,
+            :student_number,
+            :utorid
+        )
+    end
+
+    def find_applicant
+        @applicant = Applicant.find_by(id: params[:id])
+    end
+
+    def update
+        if @applicant.update_attributes! applicant_params
+            render_success @applicant
+        else
+            render_error @applicant.errors
+        end
+    end
+
+    # FIXME: Session_id doesn't exist as an attribute as part of an applicant....
+    # def applicants_by_session
+    #     Applicant.order(:id).select do |entry|
+    #         entry[:session_id] == params[:session_id].to_i
+    #     end
+    # end
 end

@@ -8,6 +8,9 @@ class Applicant < ApplicationRecord
 
     validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
     validates_uniqueness_of :student_number, :utorid
+
+    # FIXME: Session doesn't exist as an attribute anymore
+    # scope :by_session, ->(session_id) { where(session_id: session_id).order(:id) }
 end
 
 # == Schema Information
