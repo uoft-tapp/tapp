@@ -6,6 +6,8 @@ class WageChunk < ApplicationRecord
     belongs_to :assignment
     validates :hours, numericality: { only_float: true }, allow_nil: true
     validates :rate, numericality: { only_float: true }, allow_nil: true
+
+    scope :by_assignment, ->(assignment_id) { where(assignment_id: assignment_id).order(:id) }
 end
 
 # == Schema Information
