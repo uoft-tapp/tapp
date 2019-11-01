@@ -15,6 +15,18 @@ class Position < ApplicationRecord
     has_one :position_data_for_matching
     validates :est_hours_per_assignment, numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
+
+    JSON_EXCEPTIONS = %i[id created_at updated_at position_id].freeze
+
+    scope :all_positions, -> { all.order(:id) }
+    scope :by_sessions, ->(session_id) { all_positions.where(session_id: session_id) }
+
+    def as_json(_options = {})
+        super(except: JSON_EXCEPTIONS,
+              include: { position_data_for_matching: { except: JSON_EXCEPTIONS },
+                         position_data_for_ad: { except: JSON_EXCEPTIONS } },
+              methods: :instructor_ids)
+    end
 end
 
 # == Schema Information
