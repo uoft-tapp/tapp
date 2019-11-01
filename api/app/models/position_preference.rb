@@ -8,6 +8,8 @@ class PositionPreference < ApplicationRecord
 
     validates :preference_level, numericality: true, allow_nil: true
     validates_uniqueness_of :application_id, scope: [:position_id]
+
+    scope :by_application, ->(application_id) { where(application_id: application_id).order(:id) }
 end
 
 # == Schema Information

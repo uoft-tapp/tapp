@@ -1,70 +1,68 @@
 # frozen_string_literal: true
 
-module Api::V1
-    # Controller for PositionPreferences
-    class PositionPreferencesController < ApplicationController
-        # GET /position_preferences
-        def index
-            render_success(PositionPreference.order(:id))
+# Controller for PositionPreferences
+class PositionPreferencesController < ApplicationController
+    before_action :find_position_preference, except: :index
+
+    # GET /position_preferences
+    # FIXME: This should be scoped?
+    def index
+        render_success PositionPreference.order(:id)
+    end
+
+    # POST /add_preference
+    def create
+        # if we passed in an id that exists, we want to update
+        if params.key?(:id) && @position_preference.present?
+            update
+            return
         end
 
-        # POST /add_preference
-        def create
-            # if we passed in an id that exists, we want to update
-            update && return if params.key?(:id) && PositionPreference.exists?(params[:id])
-            params.require(:position_id)
-            return if invalid_id(Application, :application_id, [])
-            return if invalid_id(Position, :position_id, preferences_by_application)
+        return if invalid_id?(Application, :application_id, []) ||
+                  invalid_id?(Position, :position_id, preferences_by_application)
 
-            preference = PositionPreference.new(preference_params)
-            if preference.save # passes PositionPreference model validation
-                render_success(preferences_by_application)
-            else
-                preference.destroy!
-                render_error(preference.errors, preferences_by_application)
-            end
+        preference = PositionPreference.new(preference_params)
+        if preference.save!
+            render_success preferences_by_application
+        else
+            render_error(preference.errors, preferences_by_application)
         end
+    end
 
-        def update
-            position_preference = PositionPreference.find(params[:id])
-            if position_preference.update_attributes!(preference_update_params)
-                render_success(position_preference)
-            else
-                render_error(position_preference.errors)
-            end
+    # POST /position_preferences/delete
+    def delete
+        if @position_preference.destroy!
+            render_success @position_preference
+        else
+            render_error @position_preference.errors.full_messages.join('; ')
         end
+    end
 
-        # POST /position_preferences/delete
-        def delete
-            params.require(:id)
-            position_preference = PositionPreference.find(params[:id])
-            if position_preference.destroy!
-                render_success(position_preference)
-            else
-                render_error(position_preference.errors.full_messages.join('; '))
-            end
-        end
+    private
 
-        private
+    def preference_params
+        params.permit(
+            :application_id,
+            :position_id,
+            :preference_level
+        )
+    end
 
-        def preference_params
-            params.permit(
-                :application_id,
-                :position_id,
-                :preference_level
-            )
-        end
+    def preference_update_params
+        params.permit(
+            :preference_level
+        )
+    end
 
-        def preference_update_params
-            params.permit(
-                :preference_level
-            )
-        end
+    def position_preference
+        @position_preference = PositionPreference.by_application(params[:application_id])
+    end
 
-        def preferences_by_application
-            PositionPreference.order(:id).select do |entry|
-                entry[:application_id] == params[:application_id].to_i
-            end
+    def update
+        if @position_preference.update_attributes!(preference_update_params)
+            render_success(@position_preference)
+        else
+            render_error(@position_preference.errors)
         end
     end
 end
