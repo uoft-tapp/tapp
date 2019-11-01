@@ -6,6 +6,9 @@ class Instructor < ApplicationRecord
 
     validates_presence_of :last_name, :first_name, :utorid, :email
     validates_uniqueness_of :utorid
+
+    scope :by_position, ->(position_id) { joins(:positions).where(positions: { id: position_id }) }
+    scope :by_session_id, ->(session_id) { joins(:positions).where(positions: { session_id: session_id }) }
 end
 
 # == Schema Information
