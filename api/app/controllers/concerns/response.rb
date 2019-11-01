@@ -10,9 +10,8 @@ module Response
         render json: { status: 'error', message: message, payload: payload }
     end
 
-    def invalid_id(table, params_key, payload = {})
-        id = Integer(params[params_key])
-        table.find(id)
+    def invalid_id?(table, params_key, payload = {})
+        table.find(params[param_key])
         false
     rescue ArgumentError
         render_error("'#{params[params_key]}' is not a valid id.", payload)
