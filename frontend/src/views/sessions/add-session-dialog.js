@@ -5,7 +5,7 @@ import { SessionEditor } from "../../components/sessions";
 import { upsertSession, sessionsSelector } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 
-function getConficts(session, sessions=[]) {
+function getConficts(session, sessions = []) {
     const ret = { delayShow: "", immediateShow: "" };
     if (
         !strip(session.name) ||
