@@ -5,12 +5,16 @@ import ApplicationForm from "../application_form/fillableApplication";
 import Dashboard from "../dashboard";
 import ControlPanel from "../cp_control_panel/ControlPanel";
 import { AdminIstructorsView } from "../instructors";
+import { AdminSessionsView } from "../sessions";
 
 export function AdminRoutes() {
     return (
         <Switch>
             <Route exact path="/">
                 <Redirect to="/tapp" />
+            </Route>
+            <Route path="/tapp/sessions">
+                <AdminSessionsView />
             </Route>
             <Route path="/tapp/instructors">
                 <AdminIstructorsView />
