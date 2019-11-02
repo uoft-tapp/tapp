@@ -39,6 +39,9 @@ export const sessionsRoutes = {
                 const newId = getUnusedId(data.sessions);
                 const newSession = { ...body, id: newId };
                 data.sessions.push(newSession);
+                // If we insert a new session, we need to make sure we create
+                // a corresponding assignments_by_session array
+                data.assignments_by_session[newSession.id] = [];
                 return newSession;
             },
             summary: "Upsert a session",

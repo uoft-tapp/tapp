@@ -12,7 +12,7 @@ import {
     assignmentsSelector
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
-import { SessionSelect } from "../../components/session-select";
+import { SessionSelect, SessionEditor } from "../../components/sessions";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
 import { ConnectedInstructorsList } from "../instructors";
@@ -103,8 +103,12 @@ function Dashboard() {
         first_name: "Bilbo",
         utorid: "bilbob"
     });
+    const [session, setSession] = React.useState({ name: "" });
     return (
         <div>
+            <DashboardWidget title="SessionEditor">
+                <SessionEditor session={session} setSession={setSession} />
+            </DashboardWidget>
             <DashboardWidget title="InstructorEditor">
                 <InstructorEditor
                     instructor={instructor}

@@ -61,7 +61,7 @@ export const fetchSession = validatedApiDispatcher({
 export const upsertSession = validatedApiDispatcher({
     name: "upsertSession",
     description: "Add/insert session",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async dispatch => {
         const data = await apiPOST(`/sessions`, payload);
