@@ -70,13 +70,16 @@ Rails.application.routes.draw do
             resources :position_preferences, only: [:index, :create]
 
             # offer routes
-            resources :offers, only: [:create, :show]
+            resources :offers, only: %i[create show], param: :url_token do
+                member do
+                    get 'pdf', to: 'offers#pdf'
+                    post 'accept', to: 'offers#accept'
+                    post 'reject', to: 'offers#reject'
+                end
+            end
             post '/email_offer', to: 'offers#email_offer'
             post '/withdraw_offer', to: 'offers#withdraw_offer'
-            post '/reject_offer', to: 'offers#reject_offer'
-            post '/accept_offer', to: 'offers#accept_offer'
             post '/nag', to: 'offers#nag'
-
         end
 
         # This route makes sure that any requests with URLs of the form '/api/*' 

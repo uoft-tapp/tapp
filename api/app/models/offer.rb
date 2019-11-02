@@ -3,8 +3,31 @@
 # A class representing an offer. This class belongs to assignment, applicant and position.
 class Offer < ApplicationRecord
     has_secure_token :url_token
+    enum status: %i[pending accepted rejected]
+
     belongs_to :assignment
     after_create :set_assignment_active_offer
+
+    validates_presence_of :status
+
+    def format
+        offer = as_json
+        position = assignment.position
+        applicant = assignment.applicant
+        data = {
+            position: position.position_code,
+            hours: position.est_hours_per_assignment,
+            start_date: assignment.contract_start,
+            end_date: assignment.contract_end,
+            applicant: applicant.as_json,
+            # FIXME: What to do with this since chunks are variable
+            session_info: {
+                pay: '$' + assignment.wage_chunks.last&.rate&.to_s || ''
+            }
+        }
+        # the Liquid templating engine assumes strings instead of symbols
+        offer.merge!(data).with_indifferent_access
+    end
 
     private
 
