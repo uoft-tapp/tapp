@@ -53,7 +53,7 @@ export const fetchAssignment = validatedApiDispatcher({
 export const upsertAssignment = validatedApiDispatcher({
     name: "upsertAssignment",
     description: "Add/insert assignment",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async dispatch => {
         const data = await apiPOST(`/assignments`, payload);

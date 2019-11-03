@@ -64,7 +64,7 @@ export const fetchPositionTemplate = validatedApiDispatcher({
 export const upsertPositionTemplate = validatedApiDispatcher({
     name: "upsertPositionTemplate",
     description: "Add/insert position_template",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;

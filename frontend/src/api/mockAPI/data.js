@@ -98,7 +98,7 @@ export const mockData = {
             desired_num_assignments: 15,
             current_enrollment: 1200,
             current_waitlisted: 200,
-            instructors: ["smithh", "garciae"]
+            instructors: [{ id: 1000 }, { id: 1001 }]
         },
         {
             id: 11,
@@ -119,7 +119,7 @@ export const mockData = {
             est_end_date: "2019-12-31T00:00:00.000Z",
             position_type: "standard",
             duties: "Tutorials",
-            instructors: ["smithh"]
+            instructors: [{ id: 1000 }]
         },
         {
             id: 13,
@@ -129,7 +129,7 @@ export const mockData = {
             est_start_date: "2019-09-08T00:00:00.000Z",
             est_end_date: "2019-12-31T00:00:00.000Z",
             position_type: "invigilation",
-            instructors: ["millerm"]
+            instructors: [{ id: 1002 }]
         }
     ],
     applicants: [

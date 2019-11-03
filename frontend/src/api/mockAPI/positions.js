@@ -45,8 +45,7 @@ export const positionsRoutes = {
                     body,
                     findAllById(positions_by_session, positions),
                     {
-                        position_code: { required: true, unique: true },
-                        position_title: { required: true }
+                        position_code: { required: true, unique: true }
                     }
                 );
                 if (message) {

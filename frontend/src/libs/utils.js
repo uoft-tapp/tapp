@@ -6,5 +6,8 @@
  * @returns
  */
 export function strip(x) {
+    if (x == null) {
+        return "";
+    }
     return ("" + x).trim();
 }
