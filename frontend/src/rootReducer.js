@@ -1,7 +1,6 @@
 import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
-import applicationReducer from "./views/application_form/reducer";
 import offerTableReducer from "./views/offertable/reducers";
 import { globalReducer } from "./views/globals/reducers";
 import {
@@ -40,7 +39,6 @@ const reducer = combineReducers({
     ui: combineReducers({
         notifications: notificationReducer,
         form: formReducer,
-        application: applicationReducer,
         offerTable: offerTableReducer,
         globals: globalReducer
     })
