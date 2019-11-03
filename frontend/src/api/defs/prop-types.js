@@ -56,7 +56,15 @@ function generatePropTypes(PropTypes) {
             ad_close_date: PropTypes.string,
             desired_num_assignments: PropTypes.number,
             current_enrollment: PropTypes.number,
-            current_waitlisted: PropTypes.number
+            current_waitlisted: PropTypes.number,
+            instructors: PropTypes.arrayOf(
+                PropTypes.shape({
+                    id: PropTypes.oneOfType([
+                        PropTypes.number,
+                        PropTypes.string
+                    ]).isRequired
+                })
+            )
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,

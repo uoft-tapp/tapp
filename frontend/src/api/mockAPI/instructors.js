@@ -88,7 +88,7 @@ export const instructorsRoutes = {
                 const position = find({ id: position_id }, data.positions);
                 const instructors = (position.instructors =
                     position.instructors || []);
-                instructors.push(instructor.utorid);
+                instructors.push({ id: instructor.id });
                 return instructor;
             },
             summary: "Associate an instructor with a position",

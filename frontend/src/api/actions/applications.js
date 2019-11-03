@@ -54,7 +54,7 @@ export const fetchApplication = validatedApiDispatcher({
 export const upsertApplication = validatedApiDispatcher({
     name: "upsertApplication",
     description: "Add/insert application",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;

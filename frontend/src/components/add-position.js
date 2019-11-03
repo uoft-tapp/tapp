@@ -44,10 +44,10 @@ export function PositionEditor(props) {
      * @param {string} attr
      * @returns
      */
-    function setAttrFactory(attr) {
+    function setAttrFactory(attr, coerceFunc = x => x) {
         return e => {
             const newVal = e.target.value || "";
-            const newPosition = { ...position, [attr]: newVal };
+            const newPosition = { ...position, [attr]: coerceFunc(newVal) };
             setPosition(newPosition);
         };
     }
@@ -61,13 +61,19 @@ export function PositionEditor(props) {
      * @returns {node}
      */
     function createFieldEditor(title, attr, type = "text") {
+        let coerceFunc = x => x;
+        // for type="number" inputs, we want to turn the input from a
+        // string into a number before we save it
+        if (type === "number") {
+            coerceFunc = Number;
+        }
         return (
             <React.Fragment>
                 <Form.Label>{title}</Form.Label>
                 <Form.Control
                     type={type}
                     value={position[attr] || ""}
-                    onChange={setAttrFactory(attr)}
+                    onChange={setAttrFactory(attr, coerceFunc)}
                 />
             </React.Fragment>
         );
@@ -78,7 +84,7 @@ export function PositionEditor(props) {
             <Form.Row>
                 <Form.Group as={Col}>
                     {createFieldEditor(
-                        "Course (e.g. MAT135H1F)",
+                        "Course Code (e.g. MAT135H1F)",
                         "position_code"
                     )}
                 </Form.Group>
@@ -86,7 +92,7 @@ export function PositionEditor(props) {
                     {createFieldEditor("Course Title", "position_title")}
                 </Form.Group>
             </Form.Row>
-            <Form.Row>
+            <Form.Row style={{ alignItems: "baseline" }}>
                 <Form.Group as={Col}>
                     {createFieldEditor("Start Date", "est_start_date", "date")}
                 </Form.Group>
@@ -124,7 +130,7 @@ export function PositionEditor(props) {
             </Form.Group>
 
             <h3>Admin Info</h3>
-            <Form.Row>
+            <Form.Row style={{ alignItems: "baseline" }}>
                 <Form.Group as={Col}>
                     {createFieldEditor(
                         "Current Enrollment",
@@ -151,6 +157,7 @@ export function PositionEditor(props) {
     );
 }
 PositionEditor.propTypes = {
-    position: docApiPropTypes.position,
+    position: docApiPropTypes.position.isRequired,
+    setPosition: PropTypes.func.isRequired,
     instructors: PropTypes.arrayOf(docApiPropTypes.instructor)
 };

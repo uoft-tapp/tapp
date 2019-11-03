@@ -16,6 +16,7 @@ import {
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
+import { instructorsSelector } from "./instructors";
 
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
@@ -56,7 +57,7 @@ export const fetchPosition = validatedApiDispatcher({
 export const upsertPosition = validatedApiDispatcher({
     name: "upsertPosition",
     description: "Add/insert position",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
@@ -132,9 +133,30 @@ export const addInstructorToPosition = validatedApiDispatcher({
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
 export const localStoreSelector = positionsReducer._localStoreSelector;
-export const positionsSelector = createSelector(
+const _positionsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
+);
+/**
+ * Get the positions, but populate the `instructors` array with the full instructor
+ * information.
+ */
+export const positionsSelector = createSelector(
+    [_positionsSelector, instructorsSelector],
+    (positions, instructors) => {
+        // Hash the instructors by `id` for fast lookup
+        const instructorsById = {};
+        for (const instructor of instructors) {
+            instructorsById[instructor.id] = instructor;
+        }
+        // Leave all the data alone, except replace the instructors list
+        // with the full instructor data. Currently, the instructors list
+        // looks like, [{id: xxx}]. I.e., it is only has the `id` field.
+        return positions.map(({ instructors, ...rest }) => ({
+            ...rest,
+            instructors: instructors.map(x => instructorsById[x.id])
+        }));
+    }
 );
 
 // Any time the active session changes, we want to refetch

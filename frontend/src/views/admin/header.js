@@ -32,11 +32,6 @@ function AdminHeader() {
                             description: "Manage Positions"
                         },
                         {
-                            route: "/positions/new",
-                            name: "New Positions",
-                            description: "Create New Positions"
-                        },
-                        {
                             route: "/summary",
                             name: "Summary",
                             description: "Overivew of all data"

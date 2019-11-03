@@ -385,19 +385,13 @@ function positionsTests(api = { apiGET, apiPOST }) {
         checkPropTypes(errorPropTypes, resp1);
     });
 
-    it("error when creating a positions with blank position_code or position_title", async () => {
+    it("error when creating a positions with blank position_code", async () => {
         // we already have a position
         const resp1 = await apiPOST(`/sessions/${session.id}/positions`, {
             ...newPositionData,
             position_code: ""
         });
         checkPropTypes(errorPropTypes, resp1);
-        const resp2 = await apiPOST(`/sessions/${session.id}/positions`, {
-            ...newPositionData,
-            position_code: "MY UNIQUE CODE XXX",
-            position_title: null
-        });
-        checkPropTypes(errorPropTypes, resp2);
     });
 
     it("succeed when creating two positions with the same code but for different sessions", async () => {
@@ -443,6 +437,10 @@ function positionsTests(api = { apiGET, apiPOST }) {
         const resp2 = await apiGET(`/sessions/${session.id}/positions`);
         expect(resp2.payload).not.toContainObject(position);
     });
+
+    it.todo(
+        "create a position with instructors list specified and have instructors automatically added to the position"
+    );
 }
 
 function instructorsTests({ apiGET, apiPOST }) {
