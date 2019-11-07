@@ -201,6 +201,8 @@ function OfferTable(props) {
             isSelected={isSelected}
             selectType="checkbox"
             keyField="id"
+            minRows={1}
+            showPagination={false}
         />
     );
     // if `selected` was not passed in, the table rows should not be selectable

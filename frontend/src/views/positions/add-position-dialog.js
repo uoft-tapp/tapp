@@ -7,7 +7,7 @@ import {
     instructorsSelector
 } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
-import { PositionEditor } from "../../components/add-position";
+import { PositionEditor } from "../../components/forms/position-editor";
 
 function getConficts(position, positions = []) {
     const ret = { delayShow: "", immediateShow: "" };

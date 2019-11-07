@@ -99,6 +99,10 @@ function EditableOfferTable(props) {
             Cell: generateApplicantCell("email")
         },
         {
+            Header: "Position",
+            accessor: "position.position_code"
+        },
+        {
             Header: "Hours",
             accessor: "hours",
             Cell: generateAssignmentCell("hours")

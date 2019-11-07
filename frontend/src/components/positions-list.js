@@ -56,34 +56,3 @@ PositionsList.propTypes = {
         PropTypes.shape({ Header: PropTypes.any.isRequired })
     )
 };
-export class PositionsListx extends React.Component {
-    static propTypes = {
-        positions: PropTypes.arrayOf(
-            PropTypes.shape({
-                position_code: PropTypes.string,
-                position_title: PropTypes.string
-            })
-        ).isRequired
-    };
-    render() {
-        const positions = this.props.positions;
-        let positionsList = <div>No Positions...</div>;
-        if (positions.length > 0) {
-            positionsList = (
-                <ul>
-                    {positions.map(position => (
-                        <li key={position.id}>
-                            {position.position_code} {position.position_title}
-                        </li>
-                    ))}
-                </ul>
-            );
-        }
-        return (
-            <div>
-                <h3>Available Positions</h3>
-                {positionsList}
-            </div>
-        );
-    }
-}
