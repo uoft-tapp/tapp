@@ -12,7 +12,8 @@ import {
     assignmentsSelector
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
-import { SessionSelect, SessionEditor } from "../../components/sessions";
+import { SessionSelect } from "../../components/sessions";
+import { SessionEditor } from "../../components/forms/session-editor";
 import { ApplicantsList } from "../../components/applicants-list";
 import { PositionTemplatesList } from "../../components/postition-templates-list";
 import { ConnectedInstructorsList } from "../instructors";
@@ -23,8 +24,9 @@ import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
 import { EditableField } from "../../components/edit-field-widgets";
 import { ConnectedOfferTable } from "../offertable";
-import { PositionEditor } from "../../components/add-position";
+import { PositionEditor } from "../../components/forms/position-editor";
 import { InstructorEditor } from "../../components/instructors";
+import { AssignmentEditor } from "../../components/forms/assignment-editor";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -67,6 +69,11 @@ const ConnectedPositionEditor = connect(state => ({
     instructors: instructorsSelector(state)
 }))(PositionEditor);
 
+const ConnectedAssignmentEditor = connect(state => ({
+    positions: positionsSelector(state),
+    applicants: applicantsSelector(state)
+}))(AssignmentEditor);
+
 /**
  * Encapsulate a react component in a frame.
  *
@@ -97,6 +104,10 @@ function DashboardWidget(props) {
  *
  */
 function Dashboard() {
+    const [assignment, setAssignment] = React.useState({
+        position_id: 0,
+        applicant_id: 0
+    });
     const [position, setPosition] = React.useState({ position_code: "" });
     const [instructor, setInstructor] = React.useState({
         last_name: "Baggins",
@@ -106,6 +117,12 @@ function Dashboard() {
     const [session, setSession] = React.useState({ name: "" });
     return (
         <div>
+            <DashboardWidget title="AssignmentsEditor">
+                <ConnectedAssignmentEditor
+                    assignment={assignment}
+                    setAssignment={setAssignment}
+                />
+            </DashboardWidget>
             <DashboardWidget title="SessionEditor">
                 <SessionEditor session={session} setSession={setSession} />
             </DashboardWidget>

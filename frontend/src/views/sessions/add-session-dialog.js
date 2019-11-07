@@ -1,7 +1,7 @@
 import React from "react";
 import { strip } from "../../libs/utils";
 import { connect } from "react-redux";
-import { SessionEditor } from "../../components/sessions";
+import { SessionEditor } from "../../components/forms/session-editor";
 import { upsertSession, sessionsSelector } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 

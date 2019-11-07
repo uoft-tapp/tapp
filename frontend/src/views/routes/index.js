@@ -5,6 +5,7 @@ import ControlPanel from "../cp_control_panel/ControlPanel";
 import { AdminIstructorsView } from "../instructors";
 import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView } from "../positions";
+import { AdminAssignmentsView } from "../assignments";
 
 export function AdminRoutes() {
     return (
@@ -20,6 +21,9 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/tapp/positions">
                 <AdminPositionsView />
+            </Route>
+            <Route exact path="/tapp/assignments">
+                <AdminAssignmentsView />
             </Route>
             <Route exact path="/dashboard">
                 <Dashboard />
