@@ -45,7 +45,14 @@ const BLANK_ASSIGNMENT = {
 };
 
 export function AddAssignmentDialog(props) {
-    const { show, onHide, positions, applicants, assignments, upsertAssignment } = props;
+    const {
+        show,
+        onHide,
+        positions,
+        applicants,
+        assignments,
+        upsertAssignment
+    } = props;
     const [newAssignment, setNewAssignment] = React.useState(BLANK_ASSIGNMENT);
 
     React.useEffect(() => {
@@ -56,7 +63,7 @@ export function AddAssignmentDialog(props) {
     }, [show]);
 
     function createAssignment() {
-        upsertAssignment(newAssignment)
+        upsertAssignment(newAssignment);
         onHide();
     }
 
@@ -96,8 +103,11 @@ export function AddAssignmentDialog(props) {
     );
 }
 
-export const ConnectedAddAssignmentDialog = connect(state => ({
-    positions: positionsSelector(state),
-    applicants: applicantsSelector(state),
-    assignments: assignmentsSelector(state)
-}), {upsertAssignment})(AddAssignmentDialog);
+export const ConnectedAddAssignmentDialog = connect(
+    state => ({
+        positions: positionsSelector(state),
+        applicants: applicantsSelector(state),
+        assignments: assignmentsSelector(state)
+    }),
+    { upsertAssignment }
+)(AddAssignmentDialog);

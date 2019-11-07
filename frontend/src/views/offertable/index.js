@@ -100,7 +100,7 @@ function EditableOfferTable(props) {
         },
         {
             Header: "Position",
-            accessor: "position.position_code",
+            accessor: "position.position_code"
         },
         {
             Header: "Hours",
