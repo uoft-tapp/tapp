@@ -25,6 +25,28 @@ function generatePropTypes(PropTypes) {
             message: PropTypes.string.isRequired,
             payload: PropTypes.any
         }),
+        application: PropTypes.shape({
+            comments: PropTypes.string,
+            program: PropTypes.string.isRequired,
+            department: PropTypes.string.isRequired,
+            previous_uoft_ta_experience: PropTypes.string,
+            annotation: PropTypes.string,
+            applicant_id: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ]).isRequired,
+            position_id: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ]).isRequired,
+        }),
+        applicant: PropTypes.shape({
+            first_name: PropTypes.string.isRequired,
+            last_name: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            utorid: PropTypes.string.isRequired,
+            student_number: PropTypes.number.isRequired
+        }),
         idOnly: PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
         }),

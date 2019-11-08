@@ -137,6 +137,14 @@ export const positionsSelector = createSelector(
     state => state._modelData
 );
 
+export const findPositionByIdSelector = createSelector(
+    localStoreSelector,
+    (state, positionId) => {
+        const positions = positionsSelector(state)
+
+        return positions.find(({ id }) => id === positionId)
+})
+
 // Any time the active session changes, we want to refetch
 // all data. Calling `runOnActiveSessionChange` ensures that
 // when the active session changes all data is re-fetched

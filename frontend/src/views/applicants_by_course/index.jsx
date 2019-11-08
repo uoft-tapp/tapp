@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Col, Container, Row } from "react-bootstrap";
 import SelectCourse from "./components/SelectCourse";
 import ManageCourse from "./components/ManageCourse";
+// import { applicantsByCourseSelector } from "../../api/actions";
 
 class Applicants extends React.Component {
     render() {
@@ -12,9 +13,9 @@ class Applicants extends React.Component {
                     <Col xs={2}>
                         <SelectCourse />
                     </Col>
-                    {this.props.openPositions.map(positionId => (
+                    {this.props.selectedPositionIds.map(positionId => (
                         <Col
-                            xs={10 / this.props.openPositions.length}
+                            xs={10 / this.props.selectedPositionIds.length}
                             key={positionId}
                         >
                             <ManageCourse positionId={positionId} />
@@ -26,10 +27,7 @@ class Applicants extends React.Component {
     }
 }
 
-const mapStateToProps = ({
-    ui: {
-        applicants: { openPositions }
-    }
-}) => ({ openPositions });
-
-export default connect(mapStateToProps)(Applicants);
+export default connect((state) => {
+    const selectedPositionIds = state.model.applicantsByCourse.selectedPositionIds 
+    return { selectedPositionIds };
+})(Applicants);

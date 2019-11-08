@@ -1,38 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchPositions } from "../../../api/actions/positions.js";
-import { viewPosition, switchPositions } from "../../../api/actions/applicants_by_course";
+import {
+    positionsSelector,
+    viewPosition,
+    switchPositions
+} from "../../../api/actions";
 import { Card, ListGroup, ListGroupItem } from "react-bootstrap";
 
 class SelectCourse extends React.Component {
     componentDidMount() {
         this.props.fetchPositions();
     }
-    getActive = item => this.props.openPositions.indexOf(item.id) !== -1;
+    getActive = item => this.props.selectedPositionIds.indexOf(item.id) !== -1;
     render() {
-        const dummyPositions = [
-            {
-                id: 1,
-                course_code: "temp1"
-            },
-            {
-                id: 2,
-                course_code: "temp2"
-            },
-            {
-                id: 3,
-                course_code: "temp3"
-            },
-            {
-                id: 4,
-                course_code: "temp4"
-            }
-        ];
         return (
             <Card>
                 <Card.Header>
                     Courses{" "}
-                    {this.props.openPositions.length === 2 && (
+                    {this.props.selectedPositionIds.length === 2 && (
                         <span
                             style={{ cursor: "pointer" }}
                             className="fa fa-arrows-h"
@@ -41,13 +27,13 @@ class SelectCourse extends React.Component {
                     )}
                 </Card.Header>
                 <ListGroup>
-                    {dummyPositions.map(item => (
+                    {this.props.positions.map(item => (
                         <ListGroupItem
                             key={item.id}
                             onClick={() => this.props.viewPosition(item.id)}
                             active={this.getActive(item)}
                         >
-                            {item.course_code}
+                            {item.position_code}
                         </ListGroupItem>
                     ))}
                 </ListGroup>
@@ -56,15 +42,10 @@ class SelectCourse extends React.Component {
     }
 }
 
-export default connect(
-    ({
-        ui: {
-            applicants: { openPositions },
-            positions: { list }
-        }
-    }) => ({
-        positions: list,
-        openPositions
-    }),
-    { fetchPositions, viewPosition, switchPositions }
+
+export default connect((state) => ({
+    positions: positionsSelector(state),
+    selectedPositionIds: state.model.applicantsByCourse.selectedPositionIds
+}),
+{ fetchPositions, viewPosition, switchPositions }
 )(SelectCourse);

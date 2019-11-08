@@ -80,28 +80,11 @@ const data2 = [
 ];
 
 const initialState = {
-    openPositions: [],
-    positionData: {
-        1: {
-            selected: data1,
-            available: data2
-        },
-        2: {
-            selected: data1,
-            available: data2
-        },
-        3: {
-            selected: data1,
-            available: data2
-        },
-        4: {
-            selected: data1,
-            available: data2
-        }
-    }
+    selectedPositionIds: [],
+    positionData: []
 };
 
-export const applicantsByCouseReducer = createReducer(initialState, {
+export const applicantsByCourseReducer = createReducer(initialState, {
     [SELECT_APPLICANT_SUCCESS]: (
         state,
         { payload: { positionId, applicantId } }
@@ -177,32 +160,32 @@ export const applicantsByCouseReducer = createReducer(initialState, {
         };
     },
     [VIEW_POSITION]: (state, action) => {
-        if (state.openPositions.indexOf(action.payload) !== -1) {
+        if (state.selectedPositionIds.indexOf(action.payload) !== -1) {
             return {
                 ...state,
-                openPositions: state.openPositions.filter(
+                selectedPositionIds: state.selectedPositionIds.filter(
                     item => item !== action.payload
                 )
             };
         }
-        switch (state.openPositions.length) {
+        switch (state.selectedPositionIds.length) {
             case 0:
-                return { ...state, openPositions: [action.payload] };
+                return { ...state, selectedPositionIds: [action.payload] };
             case 1:
             case 2:
                 return {
                     ...state,
-                    openPositions: [action.payload, state.openPositions[0]]
+                    selectedPositionIds: [action.payload, state.selectedPositionIds[0]]
                 };
             default:
                 return state;
         }
     },
     [SWITCH_POSITIONS]: state => {
-        if (state.openPositions.length === 2) {
+        if (state.selectedPositionIds.length === 2) {
             return {
                 ...state,
-                openPositions: [state.openPositions[1], state.openPositions[0]]
+                selectedPositionIds: [state.selectedPositionIds[1], state.selectedPositionIds[0]]
             };
         }
         return state;

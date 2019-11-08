@@ -132,8 +132,74 @@ export const mockData = {
             instructors: ["millerm"]
         }
     ],
+    applications_by_session: {
+        1: [1, 2, 3, 4, 5],
+        2: [1, 2, 3, 4, 5, 6]
+    },
+    applications: [
+        {
+            id: 1,
+            status: "selected",
+            comments: "This is a comment",
+            program: "Computer Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "CSC148",
+            applicant_id: 2000,
+            position_id: 10
+        },
+        {
+            id: 2,
+            status: "available",
+            comments: "This is a comment",
+            program: "Life Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "BIO120",
+            applicant_id: 2001,
+            position_id: 10
+        },
+        {
+            id: 3,
+            status: "available",
+            comments: "This is a comment",
+            program: "Computer Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "CSC165",
+            applicant_id: 2002,
+            position_id: 10
+        },
+        {
+            id: 4,
+            status: "selected",
+            comments: "This is a comment",
+            program: "Computer Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "CSC165",
+            applicant_id: 2003,
+            position_id: 10
+        },
+        {
+            id: 5,
+            status: "selected",
+            comments: "This is a comment",
+            program: "Computer Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "CSC165",
+            applicant_id: 2004,
+            position_id: 10
+        },
+        {
+            id: 6,
+            status: "selected",
+            comments: "This is a comment",
+            program: "Computer Science",
+            department: "Arts and Science",
+            previous_uoft_ta_experience: "CSC165",
+            applicant_id: 2006,
+            position_id: 10
+        },
+    ],
     applicants_by_session: {
-        1: ["weasleyr", "potterh", "smithb", "howeyb", "brownd"],
+        1: ["weasleyr", "potterh", "smithb", "molinat", "howeyb", "brownd"],
         2: ["smithb", "wilsonh", "molinat"]
     },
     applicants: [

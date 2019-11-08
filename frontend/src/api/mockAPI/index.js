@@ -1,5 +1,6 @@
 import Route from "route-parser";
 import { mockData } from "./data";
+import { applicationsRoutes } from "./applications";
 import { sessionsRoutes } from "./sessions";
 import { templatesRoutes } from "./position_templates";
 import { positionsRoutes } from "./positions";
@@ -33,6 +34,7 @@ export class MockAPI {
     // a list of selectors for each route
     getRoutes = Object.assign(
         {},
+        applicationsRoutes.get,
         sessionsRoutes.get,
         templatesRoutes.get,
         positionsRoutes.get,
