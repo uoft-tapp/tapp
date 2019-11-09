@@ -40,8 +40,8 @@ export function AssignmentEditor(props) {
             position,
             position_id: position.id,
             hours: position.hours_per_assignment,
-            contract_start: position.start_date,
-            contract_end: position.end_date
+            contract_start_date: position.start_date,
+            contract_end_date: position.end_date
         });
     }
 
@@ -105,8 +105,8 @@ export function AssignmentEditor(props) {
 
             <h4>Optional Settings</h4>
             <DialogRow>
-                {createFieldEditor("Start Date", "contract_start", "date")}
-                {createFieldEditor("End Date", "contract_end", "date")}
+                {createFieldEditor("Start Date", "contract_start_date", "date")}
+                {createFieldEditor("End Date", "contract_end_date", "date")}
             </DialogRow>
         </Form>
     );
