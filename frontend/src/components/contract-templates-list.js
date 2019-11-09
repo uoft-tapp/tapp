@@ -1,28 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./components.css";
+import { docApiPropTypes } from "../api/defs/doc-generation";
 
-export class PositionTemplatesList extends React.Component {
+export class ContractTemplatesList extends React.Component {
     static propTypes = {
-        position_templates: PropTypes.arrayOf(
-            PropTypes.shape({
-                position_type: PropTypes.string,
-                offer_template: PropTypes.string
-            })
-        ).isRequired
+        contract_templates: PropTypes.arrayOf(docApiPropTypes.contractTemplate)
+            .isRequired
     };
     render() {
-        const { position_templates } = this.props;
+        const { contract_templates } = this.props;
         let templateList = <div>No Templates...</div>;
-        if (position_templates.length > 0) {
+        if (contract_templates.length > 0) {
             templateList = (
                 <ul>
-                    {position_templates.map(template => (
-                        <li key={template.offer_template}>
+                    {contract_templates.map(template => (
+                        <li key={template.template_name}>
                             <span className="position-type">
-                                {template.position_type}
+                                {template.template_name}
                             </span>
-                            , {template.offer_template}
+                            , {template.template_file}
                         </li>
                     ))}
                 </ul>

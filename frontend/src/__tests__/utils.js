@@ -25,7 +25,15 @@ function _ensurePath(path) {
  */
 export async function apiGET(url) {
     url = API_URL + _ensurePath(url);
-    const resp = await axios.get(url);
+    let resp = null;
+    try {
+        resp = await axios.get(url);
+    } catch (e) {
+        // Modify the error to display some useful information
+        throw new Error(
+            `Posting to \`${url}\`\nfailed with error: ${e.message}`
+        );
+    }
     checkPropTypes(apiResponsePropTypes, resp.data);
 
     // by this point, we have a valid response, so
@@ -44,7 +52,17 @@ export async function apiGET(url) {
  */
 export async function apiPOST(url, body = {}) {
     url = API_URL + _ensurePath(url);
-    const resp = await axios.post(url, body);
+    let resp = null;
+    try {
+        resp = await axios.post(url, body);
+    } catch (e) {
+        // Modify the error to display some useful information
+        throw new Error(
+            `Posting to \`${url}\` with content\n\t${JSON.stringify(
+                body
+            )}\nfailed with error: ${e.message}`
+        );
+    }
     checkPropTypes(apiResponsePropTypes, resp.data);
 
     // by this point, we have a valid response, so
@@ -89,19 +107,19 @@ export function isApiErrorResponse(response) {
  * @param {number} [num=1] Number of templates to add
  * @returns
  */
-export async function addPositionTemplateToSession(api, session, num = 1) {
+export async function addContractTemplateToSession(api, session, num = 1) {
     // generates position template data
     function generateTemplateData(i = 0) {
         return {
-            offer_template: `this_is_a_test_template_${i}.html`,
-            position_type:
+            template_file: `this_is_a_test_template_${i}.html`,
+            template_name:
                 ["Standard", "OTO", "Invigilate"][i] || `Standard v ${i}`
         };
     }
     let resp = {};
     for (let i = 0; i < num; i++) {
         resp = await api.apiPOST(
-            `/sessions/${session.id}/add_position_template`,
+            `/sessions/${session.id}/contract_templates`,
             generateTemplateData(i)
         );
     }
@@ -113,10 +131,10 @@ export async function addPositionTemplateToSession(api, session, num = 1) {
  *
  * @export
  * @param {{apiGET: Function, apiPOST: Function}} api api object containing `apiGET` and `apiPOST`
- * @param {object} [include={ position_templates: true }] additional objects to create and attach to the session
+ * @param {object} [include={ contract_templates: true }] additional objects to create and attach to the session
  * @returns
  */
-export async function addSession(api, include = { position_templates: true }) {
+export async function addSession(api, include = { contract_templates: true }) {
     const newSessionData = {
         start_date: "2019/09/09",
         end_date: "2019/12/31",
@@ -128,8 +146,8 @@ export async function addSession(api, include = { position_templates: true }) {
     let resp = {};
     resp = await api.apiPOST(`/sessions`, newSessionData);
     const session = resp.payload;
-    if (include.position_templates) {
-        addPositionTemplateToSession(api, session);
+    if (include.contract_templates) {
+        addContractTemplateToSession(api, session);
     }
     return session;
 }
@@ -159,10 +177,9 @@ export async function addPosition(api, session) {
     const newPositionData = {
         position_code: "MAT135F",
         position_title: "Calculus I",
-        est_hours_per_assignment: 70,
-        est_start_date: "2018/05/09",
-        est_end_date: "2018/09/09",
-        position_type: "Standard"
+        hours_per_assignment: 70,
+        start_date: "2018/05/09",
+        end_date: "2018/09/09"
     };
     const resp = await api.apiPOST(
         `/sessions/${session.id}/positions`,
@@ -212,8 +229,9 @@ export const errorPropTypes = apiPropTypes.apiResponseError;
 
 export const sessionPropTypes = apiPropTypes.session;
 
-export const offerTemplateMinimalPropTypes = apiPropTypes.offerTemplateMinimal;
-export const offerTemplatePropTypes = apiPropTypes.offerTemplate;
+export const offerTemplateMinimalPropTypes =
+    apiPropTypes.contractTemplateMinimal;
+export const offerTemplatePropTypes = apiPropTypes.contractTemplate;
 
 export const positionPropTypes = apiPropTypes.position;
 

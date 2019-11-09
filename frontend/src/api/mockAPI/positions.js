@@ -53,7 +53,7 @@ export const positionsRoutes = {
                 }
                 // create new session
                 const newId = getUnusedId(positions);
-                const newPosition = { ...body, id: newId };
+                const newPosition = { instructor_ids: [], ...body, id: newId };
                 positions.push(newPosition);
                 positions_by_session.push(newId);
                 return newPosition;

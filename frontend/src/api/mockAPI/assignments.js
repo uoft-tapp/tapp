@@ -44,11 +44,12 @@ export const assignmentsRoutes = {
                 // Add the assignment to the list of all applicants
                 assignments.push(newAssignment);
                 // Figure out what session it is assigned to and add it there too
-                const session_id = Object.keys(data.positions_by_session).find(
-                    x =>
-                        data.positions_by_session[x].includes(
-                            newAssignment.position_id
-                        )
+                const session_id = Object.keys(
+                    data.positions_by_session
+                ).find(x =>
+                    data.positions_by_session[x].includes(
+                        newAssignment.position_id
+                    )
                 );
                 if (session_id) {
                     data.assignments_by_session[session_id].push(

@@ -17,34 +17,34 @@ export const mockData = {
             rate2: null
         }
     ],
-    available_position_templates: [
+    available_contract_templates: [
         { offer_template: "/math/default.html" },
         { offer_template: "/math/default2018.html" },
         { offer_template: "/math/invigilate.html" },
         { offer_template: "/math/invigilate2014.html" },
         { offer_template: "/math/oto.html" }
     ],
-    position_templates_by_session: {
-        1: [
-            {
-                id: 1,
-                position_type: "standard",
-                offer_template: "/math/default.html"
-            },
-            { id: 2, position_type: "oto", offer_template: "/math/oto.html" }
-        ],
-        2: [
-            {
-                id: 3,
-                position_type: "standard",
-                offer_template: "/math/default2018.html"
-            },
-            {
-                id: 4,
-                position_type: "invigilate",
-                offer_template: "/math/invigilate.html"
-            }
-        ]
+    contract_templates: [
+        {
+            id: 1,
+            template_name: "standard",
+            template_file: "/math/default.html"
+        },
+        { id: 2, template_name: "oto", template_file: "/math/oto.html" },
+        {
+            id: 3,
+            template_name: "standard",
+            template_file: "/math/default2018.html"
+        },
+        {
+            id: 4,
+            template_name: "invigilate",
+            template_file: "/math/invigilate.html"
+        }
+    ],
+    contract_templates_by_session: {
+        1: [1, 2],
+        2: [3, 4]
     },
     instructors: [
         {
@@ -85,10 +85,10 @@ export const mockData = {
             id: 10,
             position_code: "MAT135H1F",
             position_title: "Calculus I",
-            est_hours_per_assignment: 70,
-            est_start_date: "2019-09-08T00:00:00.000Z",
-            est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "standard",
+            hours_per_assignment: 70,
+            start_date: "2019-09-08T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            contract_template_id: 1,
             duties: "Tutorials",
             qualifications: "Teaching skill",
             ad_hours_per_assignment: 70,
@@ -98,38 +98,38 @@ export const mockData = {
             desired_num_assignments: 15,
             current_enrollment: 1200,
             current_waitlisted: 200,
-            instructors: [{ id: 1000 }, { id: 1001 }]
+            instructor_ids: [1000, 1001]
         },
         {
             id: 11,
             position_code: "MAT136H1F",
             position_title: "Calculus II",
-            est_hours_per_assignment: 70,
-            est_start_date: "2019-09-08T00:00:00.000Z",
-            est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "invigilation",
-            instructors: []
+            hours_per_assignment: 70,
+            start_date: "2019-09-08T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            contract_template_id: 2,
+            instructor_ids: []
         },
         {
             id: 12,
             position_code: "CSC135H1F",
             position_title: "Computer Fun",
-            est_hours_per_assignment: 70,
-            est_start_date: "2019-09-08T00:00:00.000Z",
-            est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "standard",
+            hours_per_assignment: 70,
+            start_date: "2019-09-08T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
             duties: "Tutorials",
-            instructors: [{ id: 1000 }]
+            contract_template_id: 3,
+            instructor_ids: [1000]
         },
         {
             id: 13,
             position_code: "MAT235H1F",
             position_title: "Calculus III",
-            est_hours_per_assignment: 70,
-            est_start_date: "2019-09-08T00:00:00.000Z",
-            est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "invigilation",
-            instructors: [{ id: 1002 }]
+            hours_per_assignment: 70,
+            start_date: "2019-09-08T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            contract_template_id: 3,
+            instructor_ids: [1002]
         }
     ],
     applicants: [

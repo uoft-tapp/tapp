@@ -9,6 +9,8 @@ import PropTypes from "prop-types";
  * @returns an object of PropTypes
  */
 function generatePropTypes(PropTypes) {
+    const id = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
+
     return {
         apiResponse: PropTypes.shape({
             status: PropTypes.oneOf(["success", "error"]).isRequired,
@@ -26,28 +28,28 @@ function generatePropTypes(PropTypes) {
             payload: PropTypes.any
         }),
         idOnly: PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            id
         }),
         session: PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+            id,
             start_date: PropTypes.string,
             end_date: PropTypes.string,
             name: PropTypes.string.isRequired
         }),
-        offerTemplateMinimal: PropTypes.shape({
-            offer_template: PropTypes.string
+        contractTemplateMinimal: PropTypes.shape({
+            template_file: PropTypes.string
         }),
-        offerTemplate: PropTypes.shape({
-            offer_template: PropTypes.string,
-            position_type: PropTypes.string
+        contractTemplate: PropTypes.shape({
+            template_file: PropTypes.string,
+            template_name: PropTypes.string
         }),
         position: PropTypes.shape({
             position_code: PropTypes.string.isRequired,
             position_title: PropTypes.string,
-            est_hours_per_assignment: PropTypes.number,
-            est_start_date: PropTypes.string,
-            est_end_date: PropTypes.string,
-            position_type: PropTypes.string,
+            hours_per_assignment: PropTypes.number,
+            start_date: PropTypes.string,
+            end_date: PropTypes.string,
+            contract_template_id: id,
             duties: PropTypes.string,
             qualifications: PropTypes.string,
             ad_hours_per_assignment: PropTypes.number,
@@ -57,14 +59,7 @@ function generatePropTypes(PropTypes) {
             desired_num_assignments: PropTypes.number,
             current_enrollment: PropTypes.number,
             current_waitlisted: PropTypes.number,
-            instructors: PropTypes.arrayOf(
-                PropTypes.shape({
-                    id: PropTypes.oneOfType([
-                        PropTypes.number,
-                        PropTypes.string
-                    ]).isRequired
-                })
-            )
+            instructor_ids: PropTypes.arrayOf(id)
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,
@@ -73,18 +68,12 @@ function generatePropTypes(PropTypes) {
             utorid: PropTypes.string.isRequired
         }),
         assignment: PropTypes.shape({
-            contract_start: PropTypes.string,
-            contract_end: PropTypes.string,
+            contract_start_date: PropTypes.string,
+            contract_end_date: PropTypes.string,
             note: PropTypes.string,
             offer_override_pdf: PropTypes.string,
-            applicant_id: PropTypes.oneOfType([
-                PropTypes.number,
-                PropTypes.string
-            ]).isRequired,
-            position_id: PropTypes.oneOfType([
-                PropTypes.number,
-                PropTypes.string
-            ]).isRequired
+            applicant_id: id.isRequired,
+            position_id: id.isRequired
         }),
         applicant: PropTypes.shape({
             utorid: PropTypes.string.isRequired,
@@ -104,7 +93,7 @@ function generatePropTypes(PropTypes) {
             name: PropTypes.string
         }),
         offer: PropTypes.shape({
-            offer_template: PropTypes.string,
+            template_file: PropTypes.string,
             first_name: PropTypes.string,
             last_name: PropTypes.string,
             email: PropTypes.string,
@@ -125,14 +114,14 @@ function generatePropTypes(PropTypes) {
             withdrawn_date: PropTypes.string
         }),
         application: PropTypes.shape({
-            session_id: PropTypes.number,
+            session_id: id,
             comments: PropTypes.string,
             program: PropTypes.string,
             department: PropTypes.string,
             previous_uoft_experience: PropTypes.string,
             yip: PropTypes.number,
             annotation: PropTypes.string,
-            applicant_id: PropTypes.number
+            applicant_id: id
         })
     };
 }

@@ -2,31 +2,28 @@ import PropTypes from "prop-types";
 import {
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
-    UPSERT_POSITIONS_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
-    DELETE_ONE_POSITION_SUCCESS,
-    ADD_INSTRUCTOR_TO_POSITION_SUCCESS
+    DELETE_ONE_POSITION_SUCCESS
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     runOnActiveSessionChange,
-    validatedApiDispatcher
+    validatedApiDispatcher,
+    arrayToHash,
+    flattenIdFactory
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";
+import { contractTemplatesSelector } from "./contract_templates";
 
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
 const fetchOnePositionSuccess = actionFactory(FETCH_ONE_POSITION_SUCCESS);
-const upsertPositionsSuccess = actionFactory(UPSERT_POSITIONS_SUCCESS);
 const upsertOnePositionSuccess = actionFactory(UPSERT_ONE_POSITION_SUCCESS);
 const deleteOnePositionSuccess = actionFactory(DELETE_ONE_POSITION_SUCCESS);
-const addInstructorToPositionSuccess = actionFactory(
-    ADD_INSTRUCTOR_TO_POSITION_SUCCESS
-);
 
 // dispatchers
 export const fetchPositions = validatedApiDispatcher({
@@ -54,6 +51,17 @@ export const fetchPosition = validatedApiDispatcher({
     }
 });
 
+// Some helper functions to convert the data that the UI uses
+// into data that the API can use
+const instructorsToInstructorIds = flattenIdFactory(
+    "instructors",
+    "instructor_ids",
+    true
+);
+function prepForApi(data) {
+    return instructorsToInstructorIds(data);
+}
+
 export const upsertPosition = validatedApiDispatcher({
     name: "upsertPosition",
     description: "Add/insert position",
@@ -63,29 +71,9 @@ export const upsertPosition = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/sessions/${activeSessionId}/positions`,
-            payload
+            prepForApi(payload)
         );
         dispatch(upsertOnePositionSuccess(data));
-    }
-});
-
-export const upsertPositions = validatedApiDispatcher({
-    name: "upsertPositions",
-    description: "Add/insert positions",
-    propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        let positions = [];
-
-        for (const position of payload) {
-            const data = await apiPOST(
-                `/sessions/${activeSessionId}/positions`,
-                position
-            );
-            positions = [...positions, data];
-        }
-        dispatch(upsertPositionsSuccess(positions));
     }
 });
 
@@ -101,28 +89,6 @@ export const deletePosition = validatedApiDispatcher({
             payload
         );
         dispatch(deleteOnePositionSuccess(data));
-    }
-});
-
-export const addInstructorToPosition = validatedApiDispatcher({
-    name: "addInstructorToPosition",
-    description: "Add instructor to position",
-    propTypes: {
-        instructor: PropTypes.shape({ id: PropTypes.any.isRequired }),
-        position: PropTypes.shape({ id: PropTypes.any.isRequired })
-    },
-    onErrorDispatch: true,
-    dispatcher: payload => async dispatch => {
-        const data = await apiPOST(
-            `/positions/${payload.position.id}/instructors`,
-            payload.instructor
-        );
-        await dispatch(
-            addInstructorToPositionSuccess({
-                position: payload.position,
-                instructors: data
-            })
-        );
     }
 });
 
@@ -142,20 +108,21 @@ const _positionsSelector = createSelector(
  * information.
  */
 export const positionsSelector = createSelector(
-    [_positionsSelector, instructorsSelector],
-    (positions, instructors) => {
+    [_positionsSelector, instructorsSelector, contractTemplatesSelector],
+    (positions, instructors, contractTemplates) => {
         // Hash the instructors by `id` for fast lookup
-        const instructorsById = {};
-        for (const instructor of instructors) {
-            instructorsById[instructor.id] = instructor;
-        }
-        // Leave all the data alone, except replace the instructors list
-        // with the full instructor data. Currently, the instructors list
-        // looks like, [{id: xxx}]. I.e., it is only has the `id` field.
-        return positions.map(({ instructors, ...rest }) => ({
-            ...rest,
-            instructors: instructors.map(x => instructorsById[x.id])
-        }));
+        const instructorsById = arrayToHash(instructors);
+        const contractTemplatesById = arrayToHash(contractTemplates);
+
+        // Leave all the data alone, except replace the `instructor_ids` list
+        // with the full instructor data.
+        return positions.map(
+            ({ instructor_ids, contract_template_id, ...rest }) => ({
+                ...rest,
+                instructors: instructor_ids.map(x => instructorsById[x]),
+                contract_template: contractTemplatesById[contract_template_id]
+            })
+        );
     }
 );
 

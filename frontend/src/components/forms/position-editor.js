@@ -11,8 +11,8 @@ import { fieldEditorFactory, DialogRow } from "./common-controls";
 const DEFAULT_POSITION = {
     position_code: "",
     position_title: "",
-    est_hours_per_assignment: 0,
-    position_type: "standard",
+    hours_per_assignment: 0,
+    contract_template: {},
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: []
@@ -26,7 +26,12 @@ const DEFAULT_POSITION = {
  * @returns
  */
 export function PositionEditor(props) {
-    const { position: positionProp, setPosition, instructors = [] } = props;
+    const {
+        position: positionProp,
+        setPosition,
+        instructors = [],
+        contractTemplates = []
+    } = props;
     const position = { ...DEFAULT_POSITION, ...positionProp };
 
     /**
@@ -36,6 +41,17 @@ export function PositionEditor(props) {
      */
     function setInstructors(instructors) {
         setPosition({ ...position, instructors });
+    }
+
+    /**
+     * Set `position.contract_template` to the most recently selected item
+     *
+     * @param {*} selectedContractTypes
+     */
+    function setContractType(selectedContractTypes) {
+        const contract_template =
+            selectedContractTypes[selectedContractTypes.length - 1];
+        setPosition({ ...position, contract_template });
     }
 
     const createFieldEditor = fieldEditorFactory(position, setPosition);
@@ -50,11 +66,11 @@ export function PositionEditor(props) {
                 {createFieldEditor("Course Title", "position_title")}
             </DialogRow>
             <DialogRow>
-                {createFieldEditor("Start Date", "est_start_date", "date")}
-                {createFieldEditor("End Date", "est_end_date", "date")}
+                {createFieldEditor("Start Date", "start_date", "date")}
+                {createFieldEditor("End Date", "end_date", "date")}
                 {createFieldEditor(
                     "Hours per Assignment",
-                    "est_hours_per_assignment",
+                    "hours_per_assignment",
                     "number"
                 )}
             </DialogRow>
@@ -73,13 +89,26 @@ export function PositionEditor(props) {
                     onChange={setInstructors}
                 />
             </Form.Group>
-
+            <Form.Group>
+                <Form.Label>
+                    Position Type (which offer template will be used)
+                </Form.Label>
+                <Typeahead
+                    id="instructors-input"
+                    ignoreDiacritics={true}
+                    multiple
+                    placeholder="Position Type..."
+                    labelKey={option => `${option.template_name}`}
+                    selected={[position.contract_template]}
+                    options={contractTemplates}
+                    onChange={setContractType}
+                />
+            </Form.Group>
             <h3>Ad-related Info</h3>
             <DialogRow>{createFieldEditor("Duties", "duties")}</DialogRow>
             <DialogRow>
                 {createFieldEditor("Qualifications", "qualifications")}
             </DialogRow>
-
             <h3>Admin Info</h3>
             <DialogRow>
                 {createFieldEditor(
