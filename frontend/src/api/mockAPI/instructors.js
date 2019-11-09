@@ -51,6 +51,7 @@ export const instructorsRoutes = {
         "/instructors/delete": documentCallback({
             func: (data, params, body) => {
                 const instructors = data.instructors;
+                const positions = data.positions;
                 const matchingInstructor = find(body, instructors);
                 if (!matchingInstructor) {
                     throw new Error(
@@ -58,7 +59,17 @@ export const instructorsRoutes = {
                     );
                 }
                 deleteInArray(matchingInstructor, instructors);
-                // if we found the session with matching id, delete it.
+                // remove this instructor from any positions
+                for (const position of positions) {
+                    if (
+                        position.instructor_ids.includes(matchingInstructor.id)
+                    ) {
+                        deleteInArray(
+                            matchingInstructor.id,
+                            position.instructor_ids
+                        );
+                    }
+                }
                 return body;
             },
             summary: "Delete an instructor (removes from all positions)",

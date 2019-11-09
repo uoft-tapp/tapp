@@ -488,21 +488,6 @@ function instructorsTests({ apiGET, apiPOST }) {
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
-    it("get instructors for position", async () => {
-        const resp = await apiGET(`/positions/${position.id}/instructors`);
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
-    });
-
-    it("add instrutor to position", async () => {
-        const resp = await apiPOST(`/positions/${position.id}/instructors`, {
-            id: instructor.id,
-            position_id: position.id
-        });
-        expect(resp).toMatchObject({ status: "success" });
-        expect(resp.payload).toMatchObject(instructor);
-    });
-
     it("update an instructor", async () => {
         const updateInstructorData = {
             id: instructor.id,
@@ -513,20 +498,6 @@ function instructorsTests({ apiGET, apiPOST }) {
         const resp = await apiPOST(`/instructors`, updateInstructorData);
         expect(resp).toMatchObject({ status: "success" });
         expect(resp.payload).toMatchObject(updateInstructorData);
-    });
-
-    it("delete instructor from position", async () => {
-        const resp1 = await apiPOST(
-            `/positions/${position.id}/instructors/delete`,
-            instructor
-        );
-        expect(resp1).toMatchObject({ status: "success" });
-
-        // make sure instructor is not in the position
-        const resp2 = await apiGET(`/positions/${position.id}/instructors`);
-        expect(resp2).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
-        expect(resp2.payload).not.toContainObject(instructor);
     });
 
     // delete an instructor
