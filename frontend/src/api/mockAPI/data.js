@@ -17,34 +17,34 @@ export const mockData = {
             rate2: null
         }
     ],
-    available_position_templates: [
+    available_contract_templates: [
         { offer_template: "/math/default.html" },
         { offer_template: "/math/default2018.html" },
         { offer_template: "/math/invigilate.html" },
         { offer_template: "/math/invigilate2014.html" },
         { offer_template: "/math/oto.html" }
     ],
-    position_templates_by_session: {
-        1: [
-            {
-                id: 1,
-                position_type: "standard",
-                offer_template: "/math/default.html"
-            },
-            { id: 2, position_type: "oto", offer_template: "/math/oto.html" }
-        ],
-        2: [
-            {
-                id: 3,
-                position_type: "standard",
-                offer_template: "/math/default2018.html"
-            },
-            {
-                id: 4,
-                position_type: "invigilate",
-                offer_template: "/math/invigilate.html"
-            }
-        ]
+    contract_templates: [
+        {
+            id: 1,
+            template_name: "standard",
+            template_file: "/math/default.html"
+        },
+        { id: 2, template_name: "oto", template_file: "/math/oto.html" },
+        {
+            id: 3,
+            template_name: "standard",
+            template_file: "/math/default2018.html"
+        },
+        {
+            id: 4,
+            template_name: "invigilate",
+            template_file: "/math/invigilate.html"
+        }
+    ],
+    contract_templates_by_session: {
+        1: [1, 2],
+        2: [3, 4]
     },
     instructors: [
         {
@@ -88,7 +88,7 @@ export const mockData = {
             est_hours_per_assignment: 70,
             est_start_date: "2019-09-08T00:00:00.000Z",
             est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "standard",
+            contract_template_id: 1,
             duties: "Tutorials",
             qualifications: "Teaching skill",
             ad_hours_per_assignment: 70,
@@ -107,7 +107,7 @@ export const mockData = {
             est_hours_per_assignment: 70,
             est_start_date: "2019-09-08T00:00:00.000Z",
             est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "invigilation",
+            contract_template_id: 2,
             instructors: []
         },
         {
@@ -117,8 +117,8 @@ export const mockData = {
             est_hours_per_assignment: 70,
             est_start_date: "2019-09-08T00:00:00.000Z",
             est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "standard",
             duties: "Tutorials",
+            contract_template_id: 3,
             instructors: [{ id: 1000 }]
         },
         {
@@ -128,7 +128,7 @@ export const mockData = {
             est_hours_per_assignment: 70,
             est_start_date: "2019-09-08T00:00:00.000Z",
             est_end_date: "2019-12-31T00:00:00.000Z",
-            position_type: "invigilation",
+            contract_template_id: 3,
             instructors: [{ id: 1002 }]
         }
     ],

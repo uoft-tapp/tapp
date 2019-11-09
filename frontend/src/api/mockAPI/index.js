@@ -1,7 +1,7 @@
 import Route from "route-parser";
 import { mockData } from "./data";
 import { sessionsRoutes } from "./sessions";
-import { templatesRoutes } from "./position_templates";
+import { templatesRoutes } from "./contract_templates";
 import { positionsRoutes } from "./positions";
 import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";

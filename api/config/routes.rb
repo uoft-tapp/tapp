@@ -53,6 +53,8 @@ Rails.application.routes.draw do
                 resources :applicants, only: [:index]
                 resources :instructors, only: [:index]
                 post '/add_position_template', to: 'position_templates#create'
+                post '/contract_templates', to: 'position_templates#create'
+                get '/contract_templates', to: 'position_templates#index'
                 get '/instructors', to: 'instructors#instructor_by_session'
             end
 

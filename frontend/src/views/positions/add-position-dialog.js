@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import {
     upsertPosition,
     positionsSelector,
-    instructorsSelector
+    instructorsSelector,
+    contractTemplatesSelector
 } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { PositionEditor } from "../../components/forms/position-editor";
@@ -33,7 +34,7 @@ const BLANK_POSITION = {
     position_code: "",
     position_title: "",
     est_hours_per_assignment: 0,
-    position_type: "standard",
+    contract_template_id: null,
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: []
@@ -45,7 +46,8 @@ export function AddPositionDialog(props) {
         onHide = () => {},
         positions,
         upsertPosition,
-        instructors
+        instructors,
+        contractTemplates
     } = props;
     const [newPosition, setNewPosition] = React.useState(BLANK_POSITION);
 
@@ -73,6 +75,7 @@ export function AddPositionDialog(props) {
                     position={newPosition}
                     setPosition={setNewPosition}
                     instructors={instructors}
+                    contractTemplates={contractTemplates}
                 />
                 {conflicts.immediateShow ? (
                     <Alert variant="danger">{conflicts.immediateShow}</Alert>
@@ -99,7 +102,8 @@ export function AddPositionDialog(props) {
 export const ConnectedAddPositionDialog = connect(
     state => ({
         positions: positionsSelector(state),
-        instructors: instructorsSelector(state)
+        instructors: instructorsSelector(state),
+        contractTemplates: contractTemplatesSelector(state)
     }),
     { upsertPosition }
 )(AddPositionDialog);

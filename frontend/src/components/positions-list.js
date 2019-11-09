@@ -25,7 +25,8 @@ const DEFAULT_COLUMNS = [
                 })}
             </React.Fragment>
         )
-    }
+    },
+    { Header: "Position Type", accessor: "template_name" }
 ];
 
 /**

@@ -11,12 +11,14 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     runOnActiveSessionChange,
-    validatedApiDispatcher
+    validatedApiDispatcher,
+    arrayToHash
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";
+import { contractTemplatesSelector } from "./contract_templates";
 
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
@@ -142,20 +144,22 @@ const _positionsSelector = createSelector(
  * information.
  */
 export const positionsSelector = createSelector(
-    [_positionsSelector, instructorsSelector],
-    (positions, instructors) => {
+    [_positionsSelector, instructorsSelector, contractTemplatesSelector],
+    (positions, instructors, contractTemplates) => {
         // Hash the instructors by `id` for fast lookup
-        const instructorsById = {};
-        for (const instructor of instructors) {
-            instructorsById[instructor.id] = instructor;
-        }
+        const instructorsById = arrayToHash(instructors);
+        const contractTemplatesById = arrayToHash(contractTemplates);
+
         // Leave all the data alone, except replace the instructors list
         // with the full instructor data. Currently, the instructors list
         // looks like, [{id: xxx}]. I.e., it is only has the `id` field.
-        return positions.map(({ instructors, ...rest }) => ({
-            ...rest,
-            instructors: instructors.map(x => instructorsById[x.id])
-        }));
+        return positions.map(
+            ({ instructors, contract_template_id, ...rest }) => ({
+                ...rest,
+                instructors: instructors.map(x => instructorsById[x.id]),
+                contract_template: contractTemplatesById[contract_template_id]
+            })
+        );
     }
 );
 

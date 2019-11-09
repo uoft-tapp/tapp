@@ -28,7 +28,7 @@ const COLUMNS = [
     },
     {
         Header: "Contract",
-        accessor: "position.position_type",
+        accessor: "position.contract_template.template_name",
         width: 100
     },
     {

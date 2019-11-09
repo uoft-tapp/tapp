@@ -6,7 +6,7 @@ import {
     sessionsSelector,
     activeSessionSelector,
     applicantsSelector,
-    positionTemplatesSelector,
+    contractTemplatesSelector,
     instructorsSelector,
     positionsSelector,
     assignmentsSelector
@@ -15,7 +15,7 @@ import { offerTableSelector } from "../offertable/actions";
 import { SessionSelect } from "../../components/sessions";
 import { SessionEditor } from "../../components/forms/session-editor";
 import { ApplicantsList } from "../../components/applicants-list";
-import { PositionTemplatesList } from "../../components/postition-templates-list";
+import { ContractTemplatesList } from "../../components/contract-templates-list";
 import { ConnectedInstructorsList } from "../instructors";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
@@ -45,9 +45,9 @@ const ConnectedApplicantList = connect(state => ({
     applicants: applicantsSelector(state)
 }))(ApplicantsList);
 
-const ConnectedPositionTemplateList = connect(state => ({
-    position_templates: positionTemplatesSelector(state)
-}))(PositionTemplatesList);
+const ConnectedContractTemplatesList = connect(state => ({
+    contract_templates: contractTemplatesSelector(state)
+}))(ContractTemplatesList);
 
 const ConnectedPositionsList = connect(state => ({
     positions: positionsSelector(state)
@@ -154,7 +154,7 @@ function Dashboard() {
                 <ConnectedApplicantList />
             </DashboardWidget>
             <DashboardWidget title="PostitionTemplatesList">
-                <ConnectedPositionTemplateList />
+                <ConnectedContractTemplatesList />
             </DashboardWidget>
             <DashboardWidget title="InstuctorsList">
                 <ConnectedInstructorsList />
