@@ -46,9 +46,9 @@ function generatePropTypes(PropTypes) {
         position: PropTypes.shape({
             position_code: PropTypes.string.isRequired,
             position_title: PropTypes.string,
-            est_hours_per_assignment: PropTypes.number,
-            est_start_date: PropTypes.string,
-            est_end_date: PropTypes.string,
+            hours_per_assignment: PropTypes.number,
+            start_date: PropTypes.string,
+            end_date: PropTypes.string,
             contract_template_id: id,
             duties: PropTypes.string,
             qualifications: PropTypes.string,

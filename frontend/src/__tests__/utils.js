@@ -177,9 +177,9 @@ export async function addPosition(api, session) {
     const newPositionData = {
         position_code: "MAT135F",
         position_title: "Calculus I",
-        est_hours_per_assignment: 70,
-        est_start_date: "2018/05/09",
-        est_end_date: "2018/09/09"
+        hours_per_assignment: 70,
+        start_date: "2018/05/09",
+        end_date: "2018/09/09"
     };
     const resp = await api.apiPOST(
         `/sessions/${session.id}/positions`,

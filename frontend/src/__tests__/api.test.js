@@ -321,9 +321,9 @@ function positionsTests(api = { apiGET, apiPOST }) {
     const newPositionData = {
         position_code: "MAT135F",
         position_title: "Calculus I",
-        est_hours_per_assignment: 70,
-        est_start_date: "2018/05/09",
-        est_end_date: "2018/09/09"
+        hours_per_assignment: 70,
+        start_date: "2018/05/09",
+        end_date: "2018/09/09"
     };
     // set up a session to be available before tests run
     beforeAll(async () => {
@@ -362,7 +362,7 @@ function positionsTests(api = { apiGET, apiPOST }) {
 
     it("update a position", async () => {
         const id = position.id;
-        const newData = { id, est_hours_per_assignment: 75 };
+        const newData = { id, hours_per_assignment: 75 };
         const resp1 = await apiPOST(`/positions`, newData);
         expect(resp1).toMatchObject({ status: "success" });
         expect(resp1.payload).toMatchObject(newData);
@@ -407,9 +407,9 @@ function positionsTests(api = { apiGET, apiPOST }) {
         const newPositionData2 = {
             position_code: "MAT135F",
             position_title: "Calculus I",
-            est_hours_per_assignment: 70,
-            est_start_date: "2019/09/09",
-            est_end_date: "2019/12/31",
+            hours_per_assignment: 70,
+            start_date: "2019/09/09",
+            end_date: "2019/12/31",
             contract_template_id: contractTemplate.id
         };
         // create a new session to add a template to

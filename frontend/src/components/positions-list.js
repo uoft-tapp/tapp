@@ -7,9 +7,9 @@ import { Badge } from "react-bootstrap";
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
     { Header: "Position Title", accessor: "position_title" },
-    { Header: "Hours", accessor: "est_hours_per_assignment" },
-    { Header: "Start", accessor: "est_start_date" },
-    { Header: "End", accessor: "est_end_date" },
+    { Header: "Hours", accessor: "hours_per_assignment" },
+    { Header: "Start", accessor: "start_date" },
+    { Header: "End", accessor: "end_date" },
     {
         Header: "Instructors",
         accessor: "instructors",

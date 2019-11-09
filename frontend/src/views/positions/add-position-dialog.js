@@ -14,8 +14,8 @@ function getConficts(position, positions = []) {
     const ret = { delayShow: "", immediateShow: "" };
     if (
         !strip(position.position_code) ||
-        !strip(position.est_start_date) ||
-        !strip(position.est_end_date)
+        !strip(position.start_date) ||
+        !strip(position.end_date)
     ) {
         ret.delayShow = "A position code, start date, and end date is required";
     }
@@ -33,7 +33,7 @@ function getConficts(position, positions = []) {
 const BLANK_POSITION = {
     position_code: "",
     position_title: "",
-    est_hours_per_assignment: 0,
+    hours_per_assignment: 0,
     contract_template_id: null,
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",

@@ -39,9 +39,9 @@ export function AssignmentEditor(props) {
             ...assignment,
             position,
             position_id: position.id,
-            hours: position.est_hours_per_assignment,
-            contract_start: position.est_start_date,
-            contract_end: position.est_end_date
+            hours: position.hours_per_assignment,
+            contract_start: position.start_date,
+            contract_end: position.end_date
         });
     }
 

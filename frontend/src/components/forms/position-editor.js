@@ -11,7 +11,7 @@ import { fieldEditorFactory, DialogRow } from "./common-controls";
 const DEFAULT_POSITION = {
     position_code: "",
     position_title: "",
-    est_hours_per_assignment: 0,
+    hours_per_assignment: 0,
     contract_template: {},
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
@@ -66,11 +66,11 @@ export function PositionEditor(props) {
                 {createFieldEditor("Course Title", "position_title")}
             </DialogRow>
             <DialogRow>
-                {createFieldEditor("Start Date", "est_start_date", "date")}
-                {createFieldEditor("End Date", "est_end_date", "date")}
+                {createFieldEditor("Start Date", "start_date", "date")}
+                {createFieldEditor("End Date", "end_date", "date")}
                 {createFieldEditor(
                     "Hours per Assignment",
-                    "est_hours_per_assignment",
+                    "hours_per_assignment",
                     "number"
                 )}
             </DialogRow>
