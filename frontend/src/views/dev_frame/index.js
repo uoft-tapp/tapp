@@ -90,10 +90,7 @@ const swaggerData = {
 // When toggled, `ToggleMockApi` will try
 // to refetch all the sessions, so pass it an
 // appropriate dispatcher.
-const ConnectedToggleMockApi = connect(
-    null,
-    { fetchSessions }
-)(ToggleMockApi);
+const ConnectedToggleMockApi = connect(null, { fetchSessions })(ToggleMockApi);
 
 function DevFrame(props) {
     return (

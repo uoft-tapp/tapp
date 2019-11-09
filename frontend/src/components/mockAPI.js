@@ -85,9 +85,8 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 }
 /* eslint-enable */
 
-ToggleMockApi = connect(
-    state => ({ globals: state.ui.globals }),
-    { setGlobals }
-)(ToggleMockApi);
+ToggleMockApi = connect(state => ({ globals: state.ui.globals }), {
+    setGlobals
+})(ToggleMockApi);
 
 export { ToggleMockApi };

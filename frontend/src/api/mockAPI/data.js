@@ -98,7 +98,7 @@ export const mockData = {
             desired_num_assignments: 15,
             current_enrollment: 1200,
             current_waitlisted: 200,
-            instructors: [{ id: 1000 }, { id: 1001 }]
+            instructor_ids: [1000, 1001]
         },
         {
             id: 11,
@@ -108,7 +108,7 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 2,
-            instructors: []
+            instructor_ids: []
         },
         {
             id: 12,
@@ -119,7 +119,7 @@ export const mockData = {
             end_date: "2019-12-31T00:00:00.000Z",
             duties: "Tutorials",
             contract_template_id: 3,
-            instructors: [{ id: 1000 }]
+            instructor_ids: [1000]
         },
         {
             id: 13,
@@ -129,7 +129,7 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 3,
-            instructors: [{ id: 1002 }]
+            instructor_ids: [1002]
         }
     ],
     applicants: [
