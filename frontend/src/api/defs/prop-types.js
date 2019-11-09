@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
  * @returns an object of PropTypes
  */
 function generatePropTypes(PropTypes) {
-    const id = PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    const id = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
 
     return {
         apiResponse: PropTypes.shape({
@@ -31,7 +31,7 @@ function generatePropTypes(PropTypes) {
             id
         }),
         session: PropTypes.shape({
-            id ,
+            id,
             start_date: PropTypes.string,
             end_date: PropTypes.string,
             name: PropTypes.string.isRequired

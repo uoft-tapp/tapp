@@ -5,9 +5,8 @@ import { docApiPropTypes } from "../api/defs/doc-generation";
 
 export class ContractTemplatesList extends React.Component {
     static propTypes = {
-        contract_templates: PropTypes.arrayOf(
-            docApiPropTypes.contractTemplate
-        ).isRequired
+        contract_templates: PropTypes.arrayOf(docApiPropTypes.contractTemplate)
+            .isRequired
     };
     render() {
         const { contract_templates } = this.props;
