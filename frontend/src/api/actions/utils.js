@@ -52,7 +52,7 @@ export function actionFactory(type) {
  * @param {*} [props=[]] - list of properties to split out
  * @returns {[object, object]} list of two objects. The first contains all properties not listed in `props`. The second contains all properties listed in `props`
  */
-function splitObjByProps(obj, props = []) {
+export function splitObjByProps(obj, props = []) {
     const ret = {},
         filtered = {};
     for (const prop of props) {

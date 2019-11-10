@@ -5,7 +5,7 @@ import {
     setActiveSession,
     sessionsSelector,
     activeSessionSelector,
-    applicantsSelector,
+    wageChunksByAssignmentSelector,
     contractTemplatesSelector,
     instructorsSelector,
     positionsSelector,
@@ -43,7 +43,7 @@ const ConnectedSessionSelect = connect(
 )(SessionSelect);
 
 const ConnectedApplicantList = connect(state => ({
-    applicants: applicantsSelector(state)
+    applicants: wageChunksByAssignmentSelector(state)
 }))(ApplicantsList);
 
 const ConnectedContractTemplatesList = connect(state => ({
@@ -59,7 +59,7 @@ const ConnectedAssignmentsList = connect(state => ({
 }))(AssignmentsList);
 
 const ConnectedSearchBox = connect(state => ({
-    data: applicantsSelector(state)
+    data: wageChunksByAssignmentSelector(state)
 }))(SearchBox);
 
 const ConnectedEmailButton = connect(state => ({
@@ -72,7 +72,7 @@ const ConnectedPositionEditor = connect(state => ({
 
 const ConnectedAssignmentEditor = connect(state => ({
     positions: positionsSelector(state),
-    applicants: applicantsSelector(state)
+    applicants: wageChunksByAssignmentSelector(state)
 }))(AssignmentEditor);
 
 /**

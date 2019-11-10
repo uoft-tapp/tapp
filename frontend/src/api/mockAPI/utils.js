@@ -3,6 +3,57 @@
  */
 
 /**
+ * Adds the arguments passed in.
+ *
+ * @export
+ * @param {} numbers
+ * @returns {number}
+ */
+export function sum(...numbers) {
+    let ret = 0;
+    for (const num of numbers) {
+        ret += +num;
+    }
+    return ret;
+}
+
+/**
+ * Given a date range, returns an array of one or two ranges depending
+ * on whether the date range includes a new-years.
+ *
+ * @export
+ * @param {(string|Date)} start_date
+ * @param {(string|Date)} end_date
+ * @returns {{start_date: string, end_date:string}[]}
+ */
+export function splitDateRangeAtNewYear(start_date, end_date) {
+    start_date = new Date(start_date);
+    end_date = new Date(end_date);
+    // For `Date`, 11 is december
+    const december = new Date(start_date.getFullYear(), 11, 31);
+    // For `Date`, 12 will be the first month of the subsequent year
+    const january = new Date(start_date.getFullYear(), 12, 1);
+    if (start_date <= december) {
+        return [
+            {
+                start_date: start_date.toISOString(),
+                end_date: december.toISOString()
+            },
+            {
+                start_date: january.toISOString(),
+                end_date: end_date.toISOString()
+            }
+        ];
+    }
+    return [
+        {
+            start_date: start_date.toISOString(),
+            end_date: end_date.toISOString()
+        }
+    ];
+}
+
+/**
  * Generates an unused Id based on the `prop` attribute.
  *
  * @export
@@ -44,8 +95,8 @@ export function find(obj, data = [], prop = "id") {
  * with ids listed in `ids`.
  *
  * @export
- * @param {*} [ids=[]]
- * @param {*} [data=[]]
+ * @param {string[]} [ids=[]]
+ * @param {object[]} [data=[]]
  * @param {string} [prop="id"]
  * @returns {object[]}
  */
