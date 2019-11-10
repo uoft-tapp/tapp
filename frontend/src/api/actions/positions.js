@@ -90,7 +90,7 @@ export const deletePosition = validatedApiDispatcher({
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
             `/sessions/${activeSessionId}/positions/delete`,
-            payload
+            prepForApi(payload)
         );
         dispatch(deleteOnePositionSuccess(data));
     }

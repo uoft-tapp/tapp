@@ -89,7 +89,7 @@ function generatePropTypes(PropTypes) {
             hours: PropTypes.number,
             rate: PropTypes.number
         }),
-        reportingTags: PropTypes.shape({
+        reportingTag: PropTypes.shape({
             name: PropTypes.string
         }),
         offer: PropTypes.shape({

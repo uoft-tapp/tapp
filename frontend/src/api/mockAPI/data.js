@@ -206,6 +206,32 @@ export const mockData = {
             hours: 95
         }
     ],
+    wage_chunks: [
+        {
+            id: 3000,
+            assignment_id: 100,
+            hours: 20,
+            start_date: "2019-09-08T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            rate: 10.01
+        },
+        {
+            id: 3001,
+            assignment_id: 100,
+            hours: 35,
+            start_date: "2020-01-01T00:00:00.000Z",
+            end_date: "2020-04-20T00:00:00.000Z",
+            rate: 12.02
+        },
+        {
+            id: 3002,
+            assignment_id: 101,
+            hours: 95,
+            start_date: "2019-09-01T00:00:00.000Z",
+            end_date: "2020-04-20T00:00:00.000Z",
+            rate: null
+        }
+    ],
     applications: [
         {
             comments: "",

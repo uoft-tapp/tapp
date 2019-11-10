@@ -91,7 +91,7 @@ function EditFieldIcon(props) {
  * `onChange` is called if "save" is pressed in the edit dialog.
  *
  * @export
- * @param {*} props
+ * @param {{children, title, value, onChange: function, editable: boolean}} props
  * @returns
  */
 export function EditableField(props) {

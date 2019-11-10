@@ -10,7 +10,8 @@ import {
     actionFactory,
     runOnActiveSessionChange,
     validatedApiDispatcher,
-    arrayToHash
+    arrayToHash,
+    flattenIdFactory
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { assignmentsReducer } from "../reducers/assignments";
@@ -41,14 +42,19 @@ export const fetchAssignment = validatedApiDispatcher({
     description: "Fetch assignment",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
-            `/sessions/${activeSessionId}/assignments/${payload.id}`
-        );
+    dispatcher: payload => async dispatch => {
+        const data = await apiGET(`/assignments/${payload.id}`);
         dispatch(fetchOneAssignmentSuccess(data));
     }
 });
+
+// Some helper functions to convert the data that the UI uses
+// into data that the API can use
+const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
+const positionToPositionId = flattenIdFactory("position", "position_id");
+function prepForApi(data) {
+    return positionToPositionId(applicantToApplicantId(data));
+}
 
 export const upsertAssignment = validatedApiDispatcher({
     name: "upsertAssignment",
@@ -56,7 +62,7 @@ export const upsertAssignment = validatedApiDispatcher({
     propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async dispatch => {
-        const data = await apiPOST(`/assignments`, payload);
+        const data = await apiPOST(`/assignments`, prepForApi(payload));
         dispatch(upsertOneAssignmentSuccess(data));
     }
 });
@@ -67,7 +73,7 @@ export const deleteAssignment = validatedApiDispatcher({
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
     dispatcher: payload => async dispatch => {
-        const data = await apiPOST(`/assignments/delete`, payload);
+        const data = await apiPOST(`/assignments/delete`, prepForApi(payload));
         dispatch(deleteOneAssignmentSuccess(data));
     }
 });
