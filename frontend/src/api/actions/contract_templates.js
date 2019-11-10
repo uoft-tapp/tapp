@@ -94,6 +94,10 @@ export const contractTemplatesSelector = createSelector(
     localStoreSelector,
     state => state._modelData
 );
+export const allContractTemplatesSelector = createSelector(
+    localStoreSelector,
+    state => state.all
+);
 
 // Any time the active session changes, we want to refetch
 // all data. Calling `runOnActiveSessionChange` ensures that

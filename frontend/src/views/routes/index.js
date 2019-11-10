@@ -6,6 +6,7 @@ import { AdminIstructorsView } from "../instructors";
 import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView } from "../positions";
 import { AdminAssignmentsView } from "../assignments";
+import { AdminContractTemplatesView } from "../contract_template";
 
 export function AdminRoutes() {
     return (
@@ -13,10 +14,13 @@ export function AdminRoutes() {
             <Route exact path="/">
                 <Redirect to="/tapp" />
             </Route>
-            <Route path="/tapp/sessions">
+            <Route exact path="/tapp/sessions">
                 <AdminSessionsView />
             </Route>
-            <Route path="/tapp/instructors">
+            <Route exact path="/tapp/contract_templates">
+                <AdminContractTemplatesView />
+            </Route>
+            <Route exact path="/tapp/instructors">
                 <AdminIstructorsView />
             </Route>
             <Route exact path="/tapp/positions">

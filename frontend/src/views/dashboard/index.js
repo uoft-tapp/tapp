@@ -27,6 +27,7 @@ import { ConnectedOfferTable } from "../offertable";
 import { PositionEditor } from "../../components/forms/position-editor";
 import { InstructorEditor } from "../../components/instructors";
 import { AssignmentEditor } from "../../components/forms/assignment-editor";
+import { ContractTemplateEditor } from "../../components/forms/contract-template-editor";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -46,7 +47,7 @@ const ConnectedApplicantList = connect(state => ({
 }))(ApplicantsList);
 
 const ConnectedContractTemplatesList = connect(state => ({
-    contract_templates: contractTemplatesSelector(state)
+    contractTemplates: contractTemplatesSelector(state)
 }))(ContractTemplatesList);
 
 const ConnectedPositionsList = connect(state => ({
@@ -115,8 +116,19 @@ function Dashboard() {
         utorid: "bilbob"
     });
     const [session, setSession] = React.useState({ name: "" });
+    const [contractTemplate, setContractTemplate] = React.useState({});
     return (
         <div>
+            <DashboardWidget title="ContractTemplateEditor">
+                <ContractTemplateEditor
+                    contractTemplate={contractTemplate}
+                    setContractTemplate={setContractTemplate}
+                    availableTemplates={[
+                        { template_file: "/math/OTO.html" },
+                        { template_file: "/cs/invigilate.html" }
+                    ]}
+                />
+            </DashboardWidget>
             <DashboardWidget title="AssignmentsEditor">
                 <ConnectedAssignmentEditor
                     assignment={assignment}
