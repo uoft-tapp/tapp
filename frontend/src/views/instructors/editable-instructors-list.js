@@ -54,6 +54,11 @@ function EditableInstructorsList(props) {
             Cell: generateCell("first_name")
         },
         {
+            Header: "Email",
+            accessor: "email",
+            Cell: generateCell("email")
+        },
+        {
             Header: "UTORid",
             accessor: "utorid",
             Cell: generateCell("utorid")

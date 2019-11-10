@@ -18,11 +18,11 @@ export const mockData = {
         }
     ],
     available_contract_templates: [
-        { offer_template: "/math/default.html" },
-        { offer_template: "/math/default2018.html" },
-        { offer_template: "/math/invigilate.html" },
-        { offer_template: "/math/invigilate2014.html" },
-        { offer_template: "/math/oto.html" }
+        { template_file: "/math/default.html" },
+        { template_file: "/math/default2018.html" },
+        { template_file: "/math/invigilate.html" },
+        { template_file: "/math/invigilate2014.html" },
+        { template_file: "/math/oto.html" }
     ],
     contract_templates: [
         {

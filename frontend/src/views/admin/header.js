@@ -22,6 +22,11 @@ function AdminHeader() {
                             description: "Manage Sessions"
                         },
                         {
+                            route: "/contract_templates",
+                            name: "Contract Templates",
+                            description: "Manage Contract Templates"
+                        },
+                        {
                             route: "/instructors",
                             name: "Instructors",
                             description: "Manage Instructors"

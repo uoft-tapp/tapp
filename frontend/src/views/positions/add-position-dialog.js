@@ -58,7 +58,32 @@ export function AddPositionDialog(props) {
         }
     }, [show]);
 
-    function createInstructor() {
+    // select a suitable default for the contract template
+    React.useEffect(() => {
+        // Look for a contract template whose name is "standard" or "default";
+        // If that fails, find one whose name contains "standard" or "default";
+        // If all else fails, pick the first template in the list
+        const defaultTemplate =
+            contractTemplates.find(
+                x => x.template_name.toLowerCase() === "standard"
+            ) ||
+            contractTemplates.find(
+                x => x.template_name.toLowerCase() === "default"
+            ) ||
+            contractTemplates.find(x =>
+                x.template_name.toLowerCase().includes("standard")
+            ) ||
+            contractTemplates.find(x =>
+                x.template_name.toLowerCase().includes("default")
+            ) ||
+            contractTemplates[0];
+        if (defaultTemplate) {
+            BLANK_POSITION.contract_template = defaultTemplate;
+            BLANK_POSITION.contract_template_id = defaultTemplate.id;
+        }
+    }, [contractTemplates]);
+
+    function createPosition() {
         upsertPosition(newPosition);
         onHide();
     }
@@ -76,6 +101,7 @@ export function AddPositionDialog(props) {
                     setPosition={setNewPosition}
                     instructors={instructors}
                     contractTemplates={contractTemplates}
+                    defaultContractTemplate={BLANK_POSITION.contract_template}
                 />
                 {conflicts.immediateShow ? (
                     <Alert variant="danger">{conflicts.immediateShow}</Alert>
@@ -86,7 +112,7 @@ export function AddPositionDialog(props) {
                     Cancel
                 </Button>
                 <Button
-                    onClick={createInstructor}
+                    onClick={createPosition}
                     title={conflicts.delayShow || "Create Position"}
                     disabled={
                         !!conflicts.delayShow || !!conflicts.immediateShow

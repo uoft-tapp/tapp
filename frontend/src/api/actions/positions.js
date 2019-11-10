@@ -58,8 +58,12 @@ const instructorsToInstructorIds = flattenIdFactory(
     "instructor_ids",
     true
 );
+const contractTemplateToInstructorIds = flattenIdFactory(
+    "contract_template",
+    "contract_template_id"
+);
 function prepForApi(data) {
-    return instructorsToInstructorIds(data);
+    return contractTemplateToInstructorIds(instructorsToInstructorIds(data));
 }
 
 export const upsertPosition = validatedApiDispatcher({
