@@ -30,7 +30,8 @@ export function PositionEditor(props) {
         position: positionProp,
         setPosition,
         instructors = [],
-        contractTemplates = []
+        contractTemplates = [],
+        defaultContractTemplate = {}
     } = props;
     const position = { ...DEFAULT_POSITION, ...positionProp };
 
@@ -50,7 +51,8 @@ export function PositionEditor(props) {
      */
     function setContractType(selectedContractTypes) {
         const contract_template =
-            selectedContractTypes[selectedContractTypes.length - 1];
+            selectedContractTypes[selectedContractTypes.length - 1] ||
+            defaultContractTemplate;
         setPosition({ ...position, contract_template });
     }
 
@@ -91,13 +93,13 @@ export function PositionEditor(props) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>
-                    Position Type (which offer template will be used)
+                    Contract Template (which offer template will be used)
                 </Form.Label>
                 <Typeahead
                     id="instructors-input"
                     ignoreDiacritics={true}
                     multiple
-                    placeholder="Position Type..."
+                    placeholder="Contract template..."
                     labelKey={option => `${option.template_name}`}
                     selected={[position.contract_template]}
                     options={contractTemplates}
@@ -133,5 +135,7 @@ export function PositionEditor(props) {
 PositionEditor.propTypes = {
     position: docApiPropTypes.position.isRequired,
     setPosition: PropTypes.func.isRequired,
-    instructors: PropTypes.arrayOf(docApiPropTypes.instructor)
+    instructors: PropTypes.arrayOf(docApiPropTypes.instructor),
+    defaultContractTemplate: docApiPropTypes.contractTemplate,
+    contractTemplates: PropTypes.arrayOf(docApiPropTypes.contractTemplate)
 };

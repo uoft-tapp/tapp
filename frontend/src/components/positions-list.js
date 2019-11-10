@@ -26,7 +26,7 @@ const DEFAULT_COLUMNS = [
             </React.Fragment>
         )
     },
-    { Header: "Position Type", accessor: "template_name" }
+    { Header: "Contract Template", accessor: "contract_template.template_name" }
 ];
 
 /**
