@@ -68,8 +68,8 @@ function generatePropTypes(PropTypes) {
             utorid: PropTypes.string.isRequired
         }),
         assignment: PropTypes.shape({
-            contract_start_date: PropTypes.string,
-            contract_end_date: PropTypes.string,
+            start_date: PropTypes.string,
+            end_date: PropTypes.string,
             note: PropTypes.string,
             offer_override_pdf: PropTypes.string,
             applicant_id: id.isRequired,

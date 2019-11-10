@@ -90,9 +90,6 @@ export const wageChunksByAssignmentSelector = createSelector(
         function(assignment) {
             const assignment_id = assignment.id;
             if (!state._wageChunksByAssignmentId[assignment_id]) {
-                console.warn(
-                    "Trying to access wage chunks for an assignment for which wage chunks have not yet been fetched"
-                );
                 return [];
             }
             return state._wageChunksByAssignmentId[assignment_id];
