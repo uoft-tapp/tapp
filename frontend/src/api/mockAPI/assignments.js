@@ -153,8 +153,8 @@ export const assignmentsRoutes = {
                 // create the associated wage_chunk(s)
                 if (computedProps.hours != null) {
                     const dateRanges = splitDateRangeAtNewYear(
-                        newAssignment.contract_start_date,
-                        newAssignment.contract_end_date
+                        newAssignment.start_date,
+                        newAssignment.end_date
                     );
                     const hoursPerChunk =
                         +computedProps.hours / dateRanges.length;
