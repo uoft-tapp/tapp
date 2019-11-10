@@ -33,7 +33,7 @@ export function splitDateRangeAtNewYear(start_date, end_date) {
     const december = new Date(start_date.getFullYear(), 11, 31);
     // For `Date`, 12 will be the first month of the subsequent year
     const january = new Date(start_date.getFullYear(), 12, 1);
-    if (start_date <= december) {
+    if (start_date <= december && end_date > december) {
         return [
             {
                 start_date: start_date.toISOString(),
