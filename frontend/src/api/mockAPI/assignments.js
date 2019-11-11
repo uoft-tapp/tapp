@@ -32,6 +32,32 @@ function getWageChunkInfo(assignment_id, data) {
 }
 
 /**
+ * Grab the active offer for an assignment
+ *
+ * @param {number} assignment_id
+ * @param {object} data
+ * @returns {({}|null)} - an offer object or `undefined`
+ */
+function getActiveOffer(assignment_id, data) {
+    // offers are never deleted, only added to the table, so
+    // picking the last one is the same as picking the "newest"
+    const offers = findAllById([assignment_id], data.offers, "assignment_id");
+    const activeOffer = offers[offers.length - 1];
+    if (!activeOffer) {
+        return null;
+    }
+    // an offer is only active if it has been accepted, rejected, or is pending
+    if (
+        activeOffer.status === "accepted" ||
+        activeOffer.status === "rejected" ||
+        activeOffer.status === "pending"
+    ) {
+        return activeOffer;
+    }
+    return null;
+}
+
+/**
  * Pieces together all the details of an assignment from the mockAPI data
  *
  * @param {object} assignment - an assignment
@@ -42,8 +68,17 @@ function assembleAssignment(assignment, data) {
     if (!assignment) {
         return assignment;
     }
+    const ret = { ...assignment };
+    // compute the hours from wage chunks
     const { hours } = getWageChunkInfo(assignment.id, data);
-    return { ...assignment, hours: hours };
+    Object.assign(ret, { hours });
+    // compute offer_status
+    const activeOffer = getActiveOffer(assignment.id, data);
+    if (activeOffer) {
+        Object.assign(ret, { active_offer_status: activeOffer.status });
+    }
+
+    return ret;
 }
 
 export const assignmentsRoutes = {
@@ -70,8 +105,9 @@ export const assignmentsRoutes = {
             returns: docApiPropTypes.assignment
         }),
         "/assignments/:assignment_id/active_offer": documentCallback({
-            // XXX impliment
-            func: () => ({}),
+            func: (data, params) => {
+                return getActiveOffer(params.assignment_id, data) || {};
+            },
             summary: "Get the active offer associated with an assignment",
             returns: docApiPropTypes.offer
         }),
@@ -229,6 +265,114 @@ export const assignmentsRoutes = {
                 "Sets the wage chunks of an assignment to the specified list. The contents of the list are upserted.",
             posts: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk)
+        }),
+        "/assignments/:assignment_id/active_offer/withdraw": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (!activeOffer) {
+                    throw new Error(
+                        `No active offer for assignment with id=${params.assignment_id}`
+                    );
+                }
+                return Object.assign(activeOffer, {
+                    status: "withdrawn",
+                    withdrawn_date: new Date().toISOString()
+                });
+            },
+            summary: "Withdraws the active offer for the specified assignment",
+            returns: docApiPropTypes.offer
+        }),
+        "/assignments/:assignment_id/active_offer/reject": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (!activeOffer) {
+                    throw new Error(
+                        `No active offer for assignment with id=${params.assignment_id}`
+                    );
+                }
+                return Object.assign(activeOffer, {
+                    status: "rejected",
+                    rejected_date: new Date().toISOString()
+                });
+            },
+            summary: "Rejects the active offer for the specified assignment",
+            returns: docApiPropTypes.offer
+        }),
+        "/assignments/:assignment_id/active_offer/accept": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (!activeOffer) {
+                    throw new Error(
+                        `No active offer for assignment with id=${params.assignment_id}`
+                    );
+                }
+                return Object.assign(activeOffer, {
+                    status: "accepted",
+                    accepted_date: new Date().toISOString()
+                });
+            },
+            summary: "Accepts the active offer for the specified assignment",
+            returns: docApiPropTypes.offer
+        }),
+        "/assignments/:assignment_id/active_offer/create": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (activeOffer) {
+                    throw new Error(
+                        `Already an active offer for assignment with id=${params.assignment_id}`
+                    );
+                }
+                const newId = getUnusedId(data.offers);
+                const newOffer = {
+                    id: newId,
+                    assignment_id: params.assignment_id,
+                    status: "pending"
+                };
+                data.offers.push(newOffer);
+                return newOffer;
+            },
+            summary:
+                "Creates an offer for the specified assignment, provided there are no active offers for this assignment.",
+            returns: docApiPropTypes.offer
+        }),
+        "/assignments/:assignment_id/active_offer/email": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (!activeOffer) {
+                    throw new Error(
+                        `No ative offer for assignment with id=${params.assignment_id} to email`
+                    );
+                }
+                Object.assign(activeOffer, {
+                    emailed_date: new Date().toISOString()
+                });
+                return activeOffer;
+            },
+            summary: "Emails the active offer for the specified assignment",
+            returns: docApiPropTypes.offer
+        }),
+        "/assignments/:assignment_id/active_offer/nag": documentCallback({
+            func: (data, params) => {
+                const activeOffer = getActiveOffer(params.assignment_id, data);
+                if (!activeOffer) {
+                    throw new Error(
+                        `No ative offer for assignment with id=${params.assignment_id} to email`
+                    );
+                }
+                if (!activeOffer.emailed_date) {
+                    throw new Error(
+                        `The ative offer for assignment with id=${params.assignment_id} has not been emailed yet, so a nag email cannot be sent`
+                    );
+                }
+                Object.assign(activeOffer, {
+                    emailed_date: new Date().toISOString(),
+                    nag_count: (activeOffer.nag_count || 0) + 1
+                });
+                return activeOffer;
+            },
+            summary:
+                "Sends a nag email for the active offer for the specified assignment which has already been emailed once",
+            returns: docApiPropTypes.offer
         })
     }
 };

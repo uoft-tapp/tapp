@@ -20,6 +20,8 @@ function AssignmentDetails(props) {
     React.useEffect(() => {
         // When the widget loads or the assignment changes, fetch data once.
         fetchWageChunksForAssignment(assignment);
+        // We are purposely not including fetchWageChunksForAssignment in the dependency list to avoid an infite loop
+        // eslint-disable-next-line
     }, [assignment]);
     React.useEffect(() => {
         // Whenever wage chunk data has changed, we need to rerender
