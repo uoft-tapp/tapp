@@ -3,6 +3,7 @@ import { ConnectedOfferTable } from "../offertable";
 import { Button } from "react-bootstrap";
 import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
 import { ConnectedViewAssignmentDetailsButton } from "./assignment-details";
+import { ConnectedOfferActionButtons } from "./offer-actions";
 
 export function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -20,7 +21,12 @@ export function AdminAssignmentsView() {
                 show={addDialogVisible}
                 onHide={setAddDialogVisible}
             />
-            <ConnectedViewAssignmentDetailsButton />
+            <div>
+                <ConnectedViewAssignmentDetailsButton />
+            </div>
+            <div>
+                <ConnectedOfferActionButtons />
+            </div>
         </div>
     );
 }

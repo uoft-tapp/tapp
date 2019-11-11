@@ -9,6 +9,10 @@ import { OfferTable } from "../../components/offer-table";
 import { EditableField } from "../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
 
+function capitalize(word = "") {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 /**
  * A cell that renders editable applicant information
  *
@@ -42,6 +46,7 @@ function ApplicantCell(props) {
 function AssignmentCell(props) {
     const title = `Edit ${props.column.Header}`;
     const { upsertAssignment, field } = props;
+    const active_offer_status = props.original.active_offer_status;
     function onChange(newVal) {
         const applicationId = props.original.id;
         upsertAssignment({ id: applicationId, [field]: newVal });
@@ -51,6 +56,7 @@ function AssignmentCell(props) {
             title={title}
             value={props.value || ""}
             onChange={onChange}
+            editable={!active_offer_status}
         >
             {props.value}
         </EditableField>
@@ -106,6 +112,11 @@ function EditableOfferTable(props) {
             Header: "Hours",
             accessor: "hours",
             Cell: generateAssignmentCell("hours")
+        },
+        {
+            Header: "Status",
+            id: "status",
+            accessor: data => capitalize(data.active_offer_status || "")
         }
     ];
 

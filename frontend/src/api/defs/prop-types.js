@@ -73,7 +73,13 @@ function generatePropTypes(PropTypes) {
             note: PropTypes.string,
             offer_override_pdf: PropTypes.string,
             applicant_id: id.isRequired,
-            position_id: id.isRequired
+            position_id: id.isRequired,
+            active_offer_status: PropTypes.oneOf([
+                "accepted",
+                "rejected",
+                "pending",
+                null
+            ])
         }),
         applicant: PropTypes.shape({
             utorid: PropTypes.string.isRequired,

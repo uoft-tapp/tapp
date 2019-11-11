@@ -18,11 +18,21 @@ export const mockData = {
         }
     ],
     available_contract_templates: [
-        { template_file: "/math/default.html" },
-        { template_file: "/math/default2018.html" },
-        { template_file: "/math/invigilate.html" },
-        { template_file: "/math/invigilate2014.html" },
-        { template_file: "/math/oto.html" }
+        {
+            template_file: "/math/default.html"
+        },
+        {
+            template_file: "/math/default2018.html"
+        },
+        {
+            template_file: "/math/invigilate.html"
+        },
+        {
+            template_file: "/math/invigilate2014.html"
+        },
+        {
+            template_file: "/math/oto.html"
+        }
     ],
     contract_templates: [
         {
@@ -30,7 +40,11 @@ export const mockData = {
             template_name: "standard",
             template_file: "/math/default.html"
         },
-        { id: 2, template_name: "oto", template_file: "/math/oto.html" },
+        {
+            id: 2,
+            template_name: "oto",
+            template_file: "/math/oto.html"
+        },
         {
             id: 3,
             template_name: "standard",
@@ -43,8 +57,8 @@ export const mockData = {
         }
     ],
     contract_templates_by_session: {
-        1: [1, 2],
-        2: [3, 4]
+        "1": [1, 2],
+        "2": [3, 4]
     },
     instructors: [
         {
@@ -77,8 +91,8 @@ export const mockData = {
         }
     ],
     positions_by_session: {
-        1: [10, 11],
-        2: [12, 13]
+        "1": [10, 11, 14, 15, 16],
+        "2": [12, 13]
     },
     positions: [
         {
@@ -130,6 +144,46 @@ export const mockData = {
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 3,
             instructor_ids: [1002]
+        },
+        {
+            instructor_ids: [1002],
+            position_code: "CSC100H1S",
+            position_title: "Computers for Humans",
+            hours_per_assignment: 100,
+            duties:
+                "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+            contract_template_id: 1,
+            start_date: "2021-01-01T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 14
+        },
+        {
+            instructor_ids: [1000],
+            position_code: "MAT137Y1Y",
+            position_title: "Calculus!",
+            hours_per_assignment: 250,
+            duties:
+                "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+            contract_template_id: 1,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            qualifications: "Skilled Proofs Reader",
+            current_enrollment: 1500,
+            current_waitlisted: 78,
+            desired_num_assignments: 22,
+            id: 15
+        },
+        {
+            instructor_ids: [1001],
+            position_code: "MAT135H1F Head TA",
+            position_title: "Calculus I",
+            hours_per_assignment: 225,
+            duties: "Top-notch Head TA Stuff",
+            contract_template_id: 1,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            desired_num_assignments: 3,
+            id: 16
         }
     ],
     applicants: [
@@ -191,7 +245,10 @@ export const mockData = {
             student_number: "29151485"
         }
     ],
-    assignments_by_session: { 1: [100, 101], 2: [] },
+    assignments_by_session: {
+        "1": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
+        "2": []
+    },
     assignments: [
         {
             id: 100,
@@ -204,6 +261,70 @@ export const mockData = {
             position_id: 10,
             applicant_id: 2005,
             hours: 95
+        },
+        {
+            note: "",
+            position_id: 16,
+            applicant_id: 2000,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            id: 102
+        },
+        {
+            note: "",
+            position_id: 16,
+            applicant_id: 2002,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+            id: 103
+        },
+        {
+            note: "",
+            position_id: 15,
+            applicant_id: 2001,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 104
+        },
+        {
+            note: "",
+            position_id: 15,
+            applicant_id: 2002,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 105
+        },
+        {
+            note: "",
+            position_id: 15,
+            applicant_id: 2005,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 106
+        },
+        {
+            note: "",
+            position_id: 15,
+            applicant_id: 2000,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 107
+        },
+        {
+            note: "",
+            position_id: 15,
+            applicant_id: 2006,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 108
+        },
+        {
+            note: "",
+            position_id: 14,
+            applicant_id: 2002,
+            start_date: "2021-01-01T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z",
+            id: 109
         }
     ],
     wage_chunks: [
@@ -230,6 +351,119 @@ export const mockData = {
             start_date: "2019-09-01T00:00:00.000Z",
             end_date: "2020-04-20T00:00:00.000Z",
             rate: null
+        },
+        {
+            id: 3003,
+            assignment_id: 102,
+            hours: 225,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z"
+        },
+        {
+            id: 3004,
+            assignment_id: 103,
+            hours: 225,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z"
+        },
+        {
+            id: 3005,
+            assignment_id: 104,
+            hours: 125,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T05:00:00.000Z"
+        },
+        {
+            id: 3006,
+            assignment_id: 104,
+            hours: 125,
+            start_date: "2020-01-01T05:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        },
+        {
+            id: 3007,
+            assignment_id: 105,
+            hours: 125,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T05:00:00.000Z"
+        },
+        {
+            id: 3008,
+            assignment_id: 105,
+            hours: 125,
+            start_date: "2020-01-01T05:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        },
+        {
+            id: 3009,
+            assignment_id: 106,
+            hours: 125,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T05:00:00.000Z"
+        },
+        {
+            id: 3010,
+            assignment_id: 106,
+            hours: 125,
+            start_date: "2020-01-01T05:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        },
+        {
+            id: 3011,
+            assignment_id: 107,
+            hours: 100,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T05:00:00.000Z"
+        },
+        {
+            id: 3012,
+            assignment_id: 107,
+            hours: 100,
+            start_date: "2020-01-01T05:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        },
+        {
+            id: 3013,
+            assignment_id: 108,
+            hours: 100,
+            start_date: "2019-09-02T00:00:00.000Z",
+            end_date: "2019-12-31T05:00:00.000Z"
+        },
+        {
+            id: 3014,
+            assignment_id: 108,
+            hours: 100,
+            start_date: "2020-01-01T05:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        },
+        {
+            id: 3015,
+            assignment_id: 109,
+            hours: 100,
+            start_date: "2021-01-01T00:00:00.000Z",
+            end_date: "2020-04-03T00:00:00.000Z"
+        }
+    ],
+    offers: [
+        {
+            id: 10000,
+            assignment_id: 100,
+            status: "withdrawn"
+        },
+        {
+            id: 10001,
+            assignment_id: 100,
+            status: "pending"
+        },
+        {
+            id: 10002,
+            assignment_id: 101,
+            status: "accepted"
+        },
+        {
+            id: 10003,
+            assignment_id: 102,
+            status: "withdrawn"
         }
     ],
     applications: [
