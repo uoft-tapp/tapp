@@ -1,8 +1,7 @@
 import {
-    getUnusedId,
-    find,
     getAttributesCheckMessage,
-    deleteInArray
+    deleteInArray,
+    MockAPIController
 } from "./utils";
 import {
     documentCallback,
@@ -10,10 +9,46 @@ import {
     docApiPropTypes
 } from "../defs/doc-generation";
 
+export class Instructor extends MockAPIController {
+    constructor(data) {
+        super(data, data.instructors);
+    }
+    validateNew(instructor) {
+        const message = getAttributesCheckMessage(instructor, this.ownData, {
+            utorid: { required: true, unique: true },
+            first_name: { required: true },
+            last_name: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
+    delete(instructor) {
+        const matchingInstructor = this.find(instructor);
+        if (!matchingInstructor) {
+            throw new Error(
+                `Cannot find instructor matching ${JSON.stringify(instructor)}`
+            );
+        }
+        super.delete(matchingInstructor);
+        // After an instructor is deleted, they should be removed from all courses
+
+        // remove this instructor from any positions
+        for (const position of this.data.positions) {
+            if (
+                (position.instructor_ids || []).includes(matchingInstructor.id)
+            ) {
+                deleteInArray(matchingInstructor.id, position.instructor_ids);
+            }
+        }
+        return matchingInstructor;
+    }
+}
+
 export const instructorsRoutes = {
     get: {
         "/instructors": documentCallback({
-            func: data => data.instructors,
+            func: data => new Instructor(data).findAll(),
             summary: "Get a list of all instructors",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.instructor)
         })
@@ -21,28 +56,7 @@ export const instructorsRoutes = {
     post: {
         "/instructors": documentCallback({
             func: (data, params, body) => {
-                const instructors = data.instructors;
-                // body should be an instructor object. If it contains an id,
-                // update an existing instructor. Otherwise, create a new one.
-                const matchingInstructor = find(body, instructors);
-                if (matchingInstructor) {
-                    return Object.assign(matchingInstructor, body);
-                }
-
-                // if we're here, we need to create a new session
-                // but check if the session name is empty or duplicate
-                const message = getAttributesCheckMessage(body, instructors, {
-                    utorid: { required: true, unique: true },
-                    first_name: { required: true },
-                    last_name: { required: true }
-                });
-                if (message) {
-                    throw new Error(message);
-                }
-                const newId = getUnusedId(instructors);
-                const newInstructor = { ...body, id: newId };
-                instructors.push(newInstructor);
-                return newInstructor;
+                return new Instructor(data).upsert(body);
             },
             summary: "Upsert an instructor",
             posts: docApiPropTypes.instructor,
@@ -50,27 +64,7 @@ export const instructorsRoutes = {
         }),
         "/instructors/delete": documentCallback({
             func: (data, params, body) => {
-                const instructors = data.instructors;
-                const positions = data.positions;
-                const matchingInstructor = find(body, instructors);
-                if (!matchingInstructor) {
-                    throw new Error(
-                        `Could not find instructor with id=${body.id} to delete`
-                    );
-                }
-                deleteInArray(matchingInstructor, instructors);
-                // remove this instructor from any positions
-                for (const position of positions) {
-                    if (
-                        position.instructor_ids.includes(matchingInstructor.id)
-                    ) {
-                        deleteInArray(
-                            matchingInstructor.id,
-                            position.instructor_ids
-                        );
-                    }
-                }
-                return body;
+                return new Instructor(data).delete(body);
             },
             summary: "Delete an instructor (removes from all positions)",
             posts: docApiPropTypes.idOnly,
