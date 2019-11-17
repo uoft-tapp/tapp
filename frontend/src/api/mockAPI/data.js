@@ -547,5 +547,28 @@ export const mockData = {
             session_id: 2,
             applicant_id: 2004
         }
-    ]
+    ],
+    users: [
+        {
+            email: "hery.smith@utoronto.ca",
+            utorid: "smithh",
+            roles: ["admin", "instructor"]
+        },
+        {
+            email: "emily.garcia@utoronto.ca",
+            utorid: "garciae",
+            roles: ["instructor"]
+        },
+        {
+            email: "megan.miller@utoronto.ca",
+            utorid: "millerm",
+            roles: ["instructor"]
+        },
+        {
+            email: "lizzy.beera@utoronto.ca",
+            utorid: "beeral",
+            roles: ["instructor"]
+        }
+    ],
+    active_user: "smithh"
 };

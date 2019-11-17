@@ -1,66 +1,71 @@
 import {
-    find,
-    getUnusedId,
     getAttributesCheckMessage,
-    findAllById
+    findAllById,
+    MockAPIController
 } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
     docApiPropTypes
 } from "../defs/doc-generation";
+import { Session } from "./sessions";
+
+export class Applicant extends MockAPIController {
+    constructor(data) {
+        super(data, data.applicants);
+    }
+    validateNew(applicant) {
+        const message = getAttributesCheckMessage(applicant, this.ownData, {
+            utorid: { required: true, unique: true },
+            first_name: { required: true },
+            last_name: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
+    findAllBySession(session) {
+        const matchingSession = new Session(this.data).find(session);
+        if (!matchingSession) {
+            throw new Error(
+                `Cannot find applicant by session because session ${JSON.stringify(
+                    session
+                )} cannot be found`
+            );
+        }
+        // The applicants for this session are those who have submitted an application for this session
+        const applicantIds = findAllById(
+            [matchingSession.id],
+            this.data.applications,
+            "session_id"
+        ).map(x => x.applicant_id);
+        return findAllById(applicantIds, this.ownData);
+    }
+}
 
 export const applicantsRoutes = {
     get: {
         "/sessions/:session_id/applicants": documentCallback({
-            func: (data, params) => {
-                const applicantIds = findAllById(
-                    [params.session_id],
-                    data.applications,
-                    "session_id"
-                ).map(x => x.applicant_id);
-                return findAllById(applicantIds, data.applicants);
-            },
+            func: (data, params) =>
+                new Applicant(data).findAllBySession(params.session_id),
             summary: "Get all applicants associated with the given session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant)
         }),
         "/applicants": documentCallback({
-            func: data => data.applicants,
+            func: data => new Applicant(data).findAll(),
             summary: "Get all applicants",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant)
         }),
         "/applicants/:applicant_id": documentCallback({
             func: (data, params) =>
-                find({ id: params.applicant_id }, data.applicants),
+                new Applicant(data).find(params.applicant_id),
             summary: "Get an applicant",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant)
         })
     },
     post: {
         "/applicants": documentCallback({
-            func: (data, params, body) => {
-                const applicants = data.applicants;
-                const applicant = find(body, applicants);
-                if (applicant) {
-                    // if we're here, we are updating an existing applicant
-                    return Object.assign(applicant, body);
-                }
-                // If there is no matching applicant, we need to create one
-                // and add it to the current session
-                const message = getAttributesCheckMessage(body, applicants, {
-                    utorid: { required: true, unique: true },
-                    first_name: { required: true },
-                    last_name: { required: true }
-                });
-                if (message) {
-                    throw new Error(message);
-                }
-                const newId = getUnusedId(applicants);
-                const newApplicant = { ...body, id: newId };
-                // Add the applicant to the list of all applicants
-                applicants.push(newApplicant);
-                return newApplicant;
-            },
+            func: (data, params, body) => new Applicant(data).upsert(body),
             summary: "Upsert an applicant",
             posts: docApiPropTypes.applicant,
             returns: docApiPropTypes.applicant

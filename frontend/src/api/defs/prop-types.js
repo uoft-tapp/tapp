@@ -127,6 +127,11 @@ function generatePropTypes(PropTypes) {
             yip: PropTypes.number,
             annotation: PropTypes.string,
             applicant_id: id
+        }),
+        user: PropTypes.shape({
+            utorid: PropTypes.string,
+            roles: PropTypes.arrayOf(PropTypes.string),
+            email: PropTypes.string
         })
     };
 }

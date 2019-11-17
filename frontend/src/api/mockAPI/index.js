@@ -9,6 +9,7 @@ import { assignmentsRoutes } from "./assignments";
 import { applicantsRoutes } from "./applicants";
 import { applicationsRoutes } from "./applications";
 import { wageChunkRoutes } from "./wage_chunks";
+import { debugRoutes } from "./debug";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -29,6 +30,7 @@ export class MockAPI {
         applicantsRoutes.get,
         applicationsRoutes.get,
         wageChunkRoutes.get,
+        debugRoutes.get,
         {
             "/all_data": documentCallback({
                 func: data => data,
@@ -45,7 +47,8 @@ export class MockAPI {
         assignmentsRoutes.post,
         applicantsRoutes.post,
         applicationsRoutes.post,
-        wageChunkRoutes.post
+        wageChunkRoutes.post,
+        debugRoutes.post
     );
 
     constructor(seedData) {
