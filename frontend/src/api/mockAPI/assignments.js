@@ -4,372 +4,333 @@ import {
     docApiPropTypes
 } from "../defs/doc-generation";
 import {
-    find,
-    getUnusedId,
     getAttributesCheckMessage,
     findAllById,
     sum,
     splitDateRangeAtNewYear,
-    deleteInArray
+    MockAPIController
 } from "./utils";
-import { splitObjByProps } from "../actions/utils";
+import { Session } from "./sessions";
+import { Position } from "./positions";
+import { WageChunk } from "./wage_chunks";
 
-/**
- * Grabs a bunch of data from the wage chunks related to an assignment
- *
- * @param {string} assignment_id
- * @param {object} data - the full mockAPI data object
- * @returnType {{hours: number, wage_chunks: object[]}}
- */
-function getWageChunkInfo(assignment_id, data) {
-    const wageChunks = findAllById(
-        [assignment_id],
-        data.wage_chunks,
-        "assignment_id"
-    );
-    const hours = sum(...wageChunks.map(x => x.hours));
-    return { hours, wageChunks };
+export class Assignment extends MockAPIController {
+    constructor(data) {
+        super(data, data.assignments);
+    }
+    validateNew(assignment) {
+        // No uniqueness required, so pass in an empty array ([]) to the verifier
+        const message = getAttributesCheckMessage(assignment, [], {
+            position_id: { required: true },
+            applicant_id: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
+    findAllBySession(session) {
+        const matchingSession = new Session(this.data).rawFind(session);
+        return findAllById(
+            this.data.assignments_by_session[matchingSession.id] || [],
+            this.ownData
+            // Call "find" again to make sure every item gets packaged appropriately
+        ).map(x => new Assignment(this.data).find(x));
+    }
+    /**
+     * Grabs a bunch of data from the wage chunks related to an assignment
+     *
+     * @param {string} assignment
+     * @returnType {{hours: number, wage_chunks: object[]}}
+     */
+    getWageChunkInfo(assignment) {
+        const wageChunks = new WageChunk(this.data).findAllByAssignment(
+            assignment
+        );
+        const hours = sum(...wageChunks.map(x => x.hours));
+        return { hours, wageChunks };
+    }
+    /**
+     * Grab the active offer for an assignment
+     *
+     * @param {number} matchingAssignment.id
+     * @param {object} this.data
+     * @returns {({}|null)} - an offer object or `undefined`
+     */
+    getActiveOffer(assignment) {
+        return new ActiveOffer(this.data).findByAssignment(assignment);
+    }
+    /**
+     * Pieces together all the details of an assignment from the mockAPI data
+     *
+     * @param {object} matchingAssignment - an assignment
+     * @returns
+     */
+    find(assignment) {
+        const matchingAssignment = this.rawFind(assignment);
+        if (!matchingAssignment) {
+            return matchingAssignment;
+        }
+        const ret = { ...matchingAssignment };
+        // compute the hours from wage chunks
+        const { hours } = this.getWageChunkInfo(matchingAssignment);
+        Object.assign(ret, { hours });
+        // compute offer_status
+        const activeOffer = this.getActiveOffer(matchingAssignment);
+        if (activeOffer) {
+            Object.assign(ret, { active_offer_status: activeOffer.status });
+        }
+        return ret;
+    }
+    upsert(assignment) {
+        // Call `find` to make sure the `hours` field is computed
+        const upsertedAssignment = this.find(super.upsert(assignment));
+
+        // If `hours` is passed into the assignment, we need to modify the wage chunks
+        // associated with the assignment (but only if the hours differ).
+        if (
+            assignment.hours == null ||
+            +upsertedAssignment.hours === +assignment.hours
+        ) {
+            return upsertedAssignment;
+        }
+
+        // Make sure the assignment is in the assignments_by_session list
+        const session_id = new Position(this.data).findAssociatedSession(
+            upsertedAssignment.position_id
+        );
+        if (session_id) {
+            this.data.assignments_by_session[session_id].push(
+                upsertedAssignment.id
+            );
+        }
+
+        let wageChunks = new WageChunk(this.data).findAllByAssignment(
+            upsertedAssignment
+        );
+        // If there are no wage chunks, we need to create some
+        if (wageChunks.length === 0) {
+            const dateRanges = splitDateRangeAtNewYear(
+                upsertedAssignment.start_date,
+                upsertedAssignment.end_date
+            );
+            // create the wage chunks with zero hours, because it will be updated soon
+            for (const range of dateRanges) {
+                new WageChunk(this.data).upsertByAssignment(
+                    {
+                        hours: 0,
+                        start_date: range.start_date,
+                        end_date: range.end_date
+                    },
+                    upsertedAssignment
+                );
+            }
+        }
+
+        // Now we are gauranteed to have wage chunks, so set them to the correct number
+        // of hours
+        wageChunks = new WageChunk(this.data).findAllByAssignment(
+            upsertedAssignment
+        );
+        const delta =
+            +assignment.hours - +(this.find(upsertedAssignment).hours || 0);
+        const perChunkDelta = delta / wageChunks.length;
+        for (const chunk of wageChunks) {
+            new WageChunk(this.data).upsert({
+                ...chunk,
+                hours: (chunk.hours || 0) + perChunkDelta
+            });
+        }
+
+        // Find the assignment again, to make sure all computed fields are properly computed
+        return this.find(upsertedAssignment);
+    }
 }
 
-/**
- * Grab the active offer for an assignment
- *
- * @param {number} assignment_id
- * @param {object} data
- * @returns {({}|null)} - an offer object or `undefined`
- */
-function getActiveOffer(assignment_id, data) {
-    // offers are never deleted, only added to the table, so
-    // picking the last one is the same as picking the "newest"
-    const offers = findAllById([assignment_id], data.offers, "assignment_id");
-    const activeOffer = offers[offers.length - 1];
-    if (!activeOffer) {
+class ActiveOffer extends MockAPIController {
+    constructor(data) {
+        super(data, data.offers);
+    }
+    findByAssignment(assignment) {
+        const matchingAssignment = this._ensureAssignment(assignment);
+
+        // offers are never deleted, only added to the table, so
+        // picking the last one is the same as picking the "newest"
+        const offers = findAllById(
+            [matchingAssignment.id],
+            this.data.offers,
+            "assignment_id"
+        );
+        const activeOffer = offers[offers.length - 1];
+        if (!activeOffer) {
+            return null;
+        }
+        // an offer is only active if it has been accepted, rejected, or is pending
+        if (
+            activeOffer.status === "accepted" ||
+            activeOffer.status === "rejected" ||
+            activeOffer.status === "pending"
+        ) {
+            return activeOffer;
+        }
         return null;
     }
-    // an offer is only active if it has been accepted, rejected, or is pending
-    if (
-        activeOffer.status === "accepted" ||
-        activeOffer.status === "rejected" ||
-        activeOffer.status === "pending"
-    ) {
-        return activeOffer;
+    _ensureAssignment(assignment) {
+        const matchingAssignment = new Assignment(this.data).rawFind(
+            assignment
+        );
+        if (!matchingAssignment) {
+            throw new Error(
+                `Could not find assignment matching ${JSON.stringify(
+                    assignment
+                )}`
+            );
+        }
+        return matchingAssignment;
     }
-    return null;
-}
-
-/**
- * Pieces together all the details of an assignment from the mockAPI data
- *
- * @param {object} assignment - an assignment
- * @param {object} data - mockAPI data
- * @returns
- */
-function assembleAssignment(assignment, data) {
-    if (!assignment) {
-        return assignment;
+    withdrawByAssignment(assignment) {
+        const offer = this.findByAssignment(this._ensureAssignment(assignment));
+        return this.upsert({
+            ...offer,
+            status: "withdrawn",
+            withdrawn_date: new Date().toISOString()
+        });
     }
-    const ret = { ...assignment };
-    // compute the hours from wage chunks
-    const { hours } = getWageChunkInfo(assignment.id, data);
-    Object.assign(ret, { hours });
-    // compute offer_status
-    const activeOffer = getActiveOffer(assignment.id, data);
-    if (activeOffer) {
-        Object.assign(ret, { active_offer_status: activeOffer.status });
+    rejectByAssignment(assignment) {
+        const offer = this.findByAssignment(this._ensureAssignment(assignment));
+        return this.upsert({
+            ...offer,
+            status: "rejected",
+            rejected_date: new Date().toISOString()
+        });
     }
-
-    return ret;
+    acceptByAssignment(assignment) {
+        const offer = this.findByAssignment(this._ensureAssignment(assignment));
+        return this.upsert({
+            ...offer,
+            status: "accepted",
+            accepted_date: new Date().toISOString()
+        });
+    }
+    emailByAssignment(assignment) {
+        const offer = this.findByAssignment(this._ensureAssignment(assignment));
+        return this.upsert({
+            ...offer,
+            status: "pending",
+            emailed_date: new Date().toISOString()
+        });
+    }
+    nagByAssignment(assignment) {
+        const offer = this.findByAssignment(this._ensureAssignment(assignment));
+        if (!offer.emailed_date) {
+            throw new Error(
+                `The ative offer for assignment with id=${assignment.id} has not been emailed yet, so a nag email cannot be sent`
+            );
+        }
+        return this.upsert({
+            ...offer,
+            nag_count: (offer.nag_count || 0) + 1
+        });
+    }
+    createByAssignment(assignment) {
+        const matchingAssignment = this._ensureAssignment(assignment);
+        const offer = this.findByAssignment(matchingAssignment);
+        if (offer) {
+            throw new Error(
+                `An offer already exists for assignment=${JSON.stringify(
+                    assignment
+                )}`
+            );
+        }
+        return this.create({
+            assignment_id: matchingAssignment.assignment_id,
+            status: "pending"
+        });
+    }
 }
 
 export const assignmentsRoutes = {
     get: {
         "/sessions/:session_id/assignments": documentCallback({
-            func: (data, params) => {
-                const assignments = data.assignments_by_session[
-                    params.session_id
-                ].map(id => find({ id }, data.assignments));
-                return assignments.map(assignment =>
-                    assembleAssignment(assignment, data)
-                );
-            },
+            func: (data, params) =>
+                new Assignment(data).findAllBySession(params.session_id),
             summary: "Get assignments associated with a session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.assignment)
         }),
         "/assignments/:assignment_id": documentCallback({
             func: (data, params) =>
-                assembleAssignment(
-                    find({ id: params.assignment_id }, data.assignments),
-                    data
-                ),
+                new Assignment(data).find(params.assignment_id),
             summary: "Get an assignment",
             returns: docApiPropTypes.assignment
         }),
         "/assignments/:assignment_id/active_offer": documentCallback({
-            func: (data, params) => {
-                return getActiveOffer(params.assignment_id, data) || {};
-            },
+            func: (data, params) =>
+                new Assignment(data).getActiveOffer(params.assignment_id),
             summary: "Get the active offer associated with an assignment",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params) =>
-                getWageChunkInfo(params.assignment_id, data).wageChunks,
+                new Assignment(data).getWageChunkInfo(params.assignment_id)
+                    .wageChunks,
             summary: "Get the wage_chunks associated with an assignment",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk)
         })
     },
     post: {
         "/assignments": documentCallback({
-            func: (data, params, body) => {
-                const assignments = data.assignments;
-                const assignment = find(body, assignments);
-                // The computed assignment will have fields in it that are computed
-                // e.g., from wage_chunks
-                const computedAssignment = assembleAssignment(assignment, data);
-                if (assignment) {
-                    // If the hours have changed, we need to update the corresponding
-                    // wage chunks
-                    if (
-                        body.hours != null &&
-                        +body.hours !== computedAssignment.hours
-                    ) {
-                        // the chagne in hours
-                        const delta = +body.hours - computedAssignment.hours;
-                        const { wageChunks } = getWageChunkInfo(
-                            assignment.id,
-                            data
-                        );
-                        // we adjust each wage chunk an equal amount
-                        const perChunkDelta = delta / wageChunks.length;
-                        for (const chunk of wageChunks) {
-                            chunk.hours += perChunkDelta;
-                        }
-                    }
-
-                    // update an existing assignment, then return a recomputed
-                    // version
-                    return assembleAssignment(
-                        Object.assign(assignment, body),
-                        data
-                    );
-                }
-                // create a new assignment
-                const message = getAttributesCheckMessage(body, assignments, {
-                    position_id: { required: true },
-                    applicant_id: { required: true }
-                });
-                if (message) {
-                    throw new Error(message);
-                }
-                const newId = getUnusedId(assignments);
-                // Some properties of an assignment are stored directly, others are computed.
-                // split off the computed properties so we can handle them separately.
-                const [baseProps, computedProps] = splitObjByProps(body, [
-                    "hours"
-                ]);
-                const newAssignment = { ...baseProps, id: newId };
-
-                // Add the assignment to the list of all applicants
-                assignments.push(newAssignment);
-
-                // Figure out what session it is assigned to and add it there too
-                const session_id = Object.keys(
-                    data.positions_by_session
-                ).find(x =>
-                    data.positions_by_session[x].includes(
-                        newAssignment.position_id
-                    )
-                );
-                if (session_id) {
-                    data.assignments_by_session[session_id].push(
-                        newAssignment.id
-                    );
-                }
-
-                // create the associated wage_chunk(s)
-                if (computedProps.hours != null) {
-                    const dateRanges = splitDateRangeAtNewYear(
-                        newAssignment.start_date,
-                        newAssignment.end_date
-                    );
-                    const hoursPerChunk =
-                        +computedProps.hours / dateRanges.length;
-                    // add a wage chunk for each date range
-                    for (const range of dateRanges) {
-                        const newWageChunkId = getUnusedId(data.wage_chunks);
-                        data.wage_chunks.push({
-                            id: newWageChunkId,
-                            assignment_id: newAssignment.id,
-                            hours: hoursPerChunk,
-                            start_date: range.start_date,
-                            end_date: range.end_date
-                        });
-                    }
-                }
-
-                return assembleAssignment(newAssignment, data);
-            },
+            func: (data, params, body) => new Assignment(data).upsert(body),
             posts: docApiPropTypes.assignment,
             summary: "Upsert an assignment",
             returns: docApiPropTypes.assignment
         }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params, body) => {
-                const existingWageChunks = getWageChunkInfo(
-                    params.assignment_id,
-                    data
-                ).wageChunks;
-                // Find which wage chunks need to be updated and which need to be inserted
-                const updateList = [],
-                    insertList = [];
-                for (const chunk of body) {
-                    const match = find(chunk, existingWageChunks);
-                    if (match) {
-                        updateList.push({
-                            existingWageChunk: match,
-                            newWageChunk: chunk
-                        });
-                    } else {
-                        insertList.push(chunk);
-                    }
-                }
-
-                // Update everything that needs updating first
-                for (const { existingWageChunk, newWageChunk } of updateList) {
-                    Object.assign(existingWageChunk, newWageChunk);
-                }
-
-                // Insert everything that needs inserting
-                for (const newWageChunk of insertList) {
-                    const newWageChunkId = getUnusedId(data.wage_chunks);
-                    data.wage_chunks.push({
-                        ...newWageChunk,
-                        id: newWageChunkId
-                    });
-                }
-
-                // Delete everythign that wasn't in the `body` list.
-                // That is, everything that is in the `existingWageChunks`
-                // list but not on the `updateList` needs to be deleted
-                const updated = updateList.map(x => x.existingWageChunk);
-                const deleteList = existingWageChunks.filter(
-                    chunk => !find(chunk, updated)
+                return new WageChunk(data).setAllByAssignment(
+                    body,
+                    params.assignment_id
                 );
-                for (const chunk of deleteList) {
-                    deleteInArray(chunk, data.wage_chunks);
-                }
-
-                return getWageChunkInfo(params.assignment_id, data).wageChunks;
             },
             summary:
-                "Sets the wage chunks of an assignment to the specified list. The contents of the list are upserted.",
+                "Sets the wage chunks of an assignment to the specified list. The contents of the list are upserted. Omitted wage chunks are deleted.",
             posts: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk)
         }),
         "/assignments/:assignment_id/active_offer/withdraw": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (!activeOffer) {
-                    throw new Error(
-                        `No active offer for assignment with id=${params.assignment_id}`
-                    );
-                }
-                return Object.assign(activeOffer, {
-                    status: "withdrawn",
-                    withdrawn_date: new Date().toISOString()
-                });
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).withdrawByAssignment(
+                    params.assignment_id
+                ),
             summary: "Withdraws the active offer for the specified assignment",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/active_offer/reject": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (!activeOffer) {
-                    throw new Error(
-                        `No active offer for assignment with id=${params.assignment_id}`
-                    );
-                }
-                return Object.assign(activeOffer, {
-                    status: "rejected",
-                    rejected_date: new Date().toISOString()
-                });
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).rejectByAssignment(params.assignment_id),
             summary: "Rejects the active offer for the specified assignment",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/active_offer/accept": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (!activeOffer) {
-                    throw new Error(
-                        `No active offer for assignment with id=${params.assignment_id}`
-                    );
-                }
-                return Object.assign(activeOffer, {
-                    status: "accepted",
-                    accepted_date: new Date().toISOString()
-                });
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).acceptByAssignment(params.assignment_id),
             summary: "Accepts the active offer for the specified assignment",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/active_offer/create": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (activeOffer) {
-                    throw new Error(
-                        `Already an active offer for assignment with id=${params.assignment_id}`
-                    );
-                }
-                const newId = getUnusedId(data.offers);
-                const newOffer = {
-                    id: newId,
-                    assignment_id: params.assignment_id,
-                    status: "pending"
-                };
-                data.offers.push(newOffer);
-                return newOffer;
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).createByAssignment(params.assignment_id),
             summary:
                 "Creates an offer for the specified assignment, provided there are no active offers for this assignment.",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/active_offer/email": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (!activeOffer) {
-                    throw new Error(
-                        `No ative offer for assignment with id=${params.assignment_id} to email`
-                    );
-                }
-                Object.assign(activeOffer, {
-                    emailed_date: new Date().toISOString()
-                });
-                return activeOffer;
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).emailByAssignment(params.assignment_id),
             summary: "Emails the active offer for the specified assignment",
             returns: docApiPropTypes.offer
         }),
         "/assignments/:assignment_id/active_offer/nag": documentCallback({
-            func: (data, params) => {
-                const activeOffer = getActiveOffer(params.assignment_id, data);
-                if (!activeOffer) {
-                    throw new Error(
-                        `No ative offer for assignment with id=${params.assignment_id} to email`
-                    );
-                }
-                if (!activeOffer.emailed_date) {
-                    throw new Error(
-                        `The ative offer for assignment with id=${params.assignment_id} has not been emailed yet, so a nag email cannot be sent`
-                    );
-                }
-                Object.assign(activeOffer, {
-                    emailed_date: new Date().toISOString(),
-                    nag_count: (activeOffer.nag_count || 0) + 1
-                });
-                return activeOffer;
-            },
+            func: (data, params) =>
+                new ActiveOffer(data).nagByAssignment(params.assignment_id),
             summary:
                 "Sends a nag email for the active offer for the specified assignment which has already been emailed once",
             returns: docApiPropTypes.offer
