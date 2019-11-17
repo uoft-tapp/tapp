@@ -33,7 +33,16 @@ class App extends React.Component {
         // If there is an `activeSession` stored in globals, use it to set the active
         // session now. (This is a one-time action)
         if (newGlobals.activeSession != null) {
-            this.props.setActiveSession({ id: newGlobals.activeSession });
+            // If the mockAPI is enabled, we need to let it get set up
+            // before we attempt to fetch a bunch of data. Therefore, 
+            // we do a `setTimeout`
+            window.setTimeout(
+                () =>
+                    this.props.setActiveSession({
+                        id: newGlobals.activeSession
+                    }),
+                0
+            );
         }
     }
 
