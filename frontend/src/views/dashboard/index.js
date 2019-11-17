@@ -5,11 +5,11 @@ import {
     setActiveSession,
     sessionsSelector,
     activeSessionSelector,
-    wageChunksByAssignmentSelector,
     contractTemplatesSelector,
     instructorsSelector,
     positionsSelector,
-    assignmentsSelector
+    assignmentsSelector,
+    applicantsSelector
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
 import { SessionSelect } from "../../components/sessions";
@@ -43,7 +43,7 @@ const ConnectedSessionSelect = connect(
 )(SessionSelect);
 
 const ConnectedApplicantList = connect(state => ({
-    applicants: wageChunksByAssignmentSelector(state)
+    applicants: applicantsSelector(state)
 }))(ApplicantsList);
 
 const ConnectedContractTemplatesList = connect(state => ({
@@ -59,7 +59,7 @@ const ConnectedAssignmentsList = connect(state => ({
 }))(AssignmentsList);
 
 const ConnectedSearchBox = connect(state => ({
-    data: wageChunksByAssignmentSelector(state)
+    data: applicantsSelector(state)
 }))(SearchBox);
 
 const ConnectedEmailButton = connect(state => ({
@@ -72,7 +72,7 @@ const ConnectedPositionEditor = connect(state => ({
 
 const ConnectedAssignmentEditor = connect(state => ({
     positions: positionsSelector(state),
-    applicants: wageChunksByAssignmentSelector(state)
+    applicants: applicantsSelector(state)
 }))(AssignmentEditor);
 
 /**
@@ -129,7 +129,7 @@ function Dashboard() {
                     ]}
                 />
             </DashboardWidget>
-            <DashboardWidget title="AssignmentsEditor">
+            <DashboardWidget title="AssignmentEditor">
                 <ConnectedAssignmentEditor
                     assignment={assignment}
                     setAssignment={setAssignment}

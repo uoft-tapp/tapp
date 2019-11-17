@@ -99,7 +99,6 @@ function generatePropTypes(PropTypes) {
             name: PropTypes.string
         }),
         offer: PropTypes.shape({
-            template_file: PropTypes.string,
             first_name: PropTypes.string,
             last_name: PropTypes.string,
             email: PropTypes.string,
@@ -114,7 +113,7 @@ function generatePropTypes(PropTypes) {
             ta_coordinator_name: PropTypes.string,
             ta_coordinator_email: PropTypes.string,
             emailed_date: PropTypes.string,
-            string: PropTypes.string,
+            status: PropTypes.string,
             accepted_date: PropTypes.string,
             rejected_date: PropTypes.string,
             withdrawn_date: PropTypes.string
