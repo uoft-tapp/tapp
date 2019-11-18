@@ -34,7 +34,7 @@ class App extends React.Component {
         // session now. (This is a one-time action)
         if (newGlobals.activeSession != null) {
             // If the mockAPI is enabled, we need to let it get set up
-            // before we attempt to fetch a bunch of data. Therefore, 
+            // before we attempt to fetch a bunch of data. Therefore,
             // we do a `setTimeout`
             window.setTimeout(
                 () =>
