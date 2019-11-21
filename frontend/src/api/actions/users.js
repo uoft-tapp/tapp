@@ -20,8 +20,9 @@ export const fetchActiveUser = validatedApiDispatcher({
     name: "fetchActiveUser",
     description: "Fetch the active user",
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: () => async dispatch => {
-        const data = await apiGET(`/active_user`);
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/active_user`);
         dispatch(fetchActiveUserSuccess(data));
     }
 });
@@ -44,8 +45,9 @@ export const fetchUsers = validatedApiDispatcher({
     description: "Fetch all users",
     propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: () => async dispatch => {
-        const data = await apiGET(`/users`);
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/users`);
         dispatch(fetchUsersSuccess(data));
     }
 });

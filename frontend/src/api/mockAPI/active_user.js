@@ -44,7 +44,7 @@ export const activeUserRoutes = {
             func: data => new User(data).getActiveUser(),
             summary: "Gets the currently active user.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
-            roles: ["instructors", "ta"]
+            roles: ["instructor", "ta"]
         })
     },
     post: {

@@ -203,7 +203,12 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
     if (!docs) {
         return ret;
     }
-    ret.summary = docs.summary;
+    // Routes are all prefixed. `admin` can access all routes.
+    // other routes are restricted depending on the list specified in `roles`.
+    const prefixRoles = ["admin", ...(docs.roles || [])];
+    ret.summary =
+        `(prefixes: ${prefixRoles.map(x => "/" + x).join(", ")}) ` +
+        docs.summary;
     // If there are templateVars, they should become `paramters`
     if (templateVars.length > 0) {
         ret.parameters = templateVars.map(x => ({
