@@ -13,6 +13,7 @@ import {
     instructorsReducer,
     contractTemplatesReducer
 } from "./api/reducers";
+import { usersReducer } from "./api/reducers/users";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -34,7 +35,8 @@ const reducer = combineReducers({
         applications: applicationsReducer,
         assignments: assignmentsReducer,
         instructors: instructorsReducer,
-        contractTemplates: contractTemplatesReducer
+        contractTemplates: contractTemplatesReducer,
+        users: usersReducer
     }),
     ui: combineReducers({
         notifications: notificationReducer,

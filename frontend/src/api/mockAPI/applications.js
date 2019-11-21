@@ -1,46 +1,54 @@
-import { find, getUnusedId, getAttributesCheckMessage } from "./utils";
+import {
+    getAttributesCheckMessage,
+    MockAPIController,
+    findAllById
+} from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
     docApiPropTypes
 } from "../defs/doc-generation";
+import { Session } from "./sessions";
+
+export class Application extends MockAPIController {
+    constructor(data) {
+        super(data, data.applications);
+    }
+    validateNew(applicant) {
+        const message = getAttributesCheckMessage(applicant, this.ownData, {
+            session_id: { required: true },
+            applicant_id: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
+    findAllBySession(session) {
+        const matchingSession = new Session(this.data).find(session);
+        if (!matchingSession) {
+            throw new Error(
+                `Cannot find applicant by session because session ${JSON.stringify(
+                    session
+                )} cannot be found`
+            );
+        }
+        // The applicants for this session are those who have submitted an application for this session
+        return findAllById([matchingSession.id], this.ownData, "session_id");
+    }
+}
 
 export const applicationsRoutes = {
     get: {
         "/sessions/:session_id/applications": documentCallback({
             func: (data, params) =>
-                data.applications.filter(
-                    application =>
-                        "" + application.session_id === "" + params.session_id
-                ),
+                new Application(data).findAllBySession(params.session_id),
             summary: "Get all applications associated with the given session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.application)
         })
     },
     post: {
         "/applications": documentCallback({
-            func: (data, params, body) => {
-                const applications = data.applications;
-                const application = find(body, applications);
-                if (application) {
-                    // if we're here, we are updating an existing applicant
-                    return Object.assign(application, body);
-                }
-                // If there is no matching applicant, we need to create one
-                // and add it to the current session
-                const message = getAttributesCheckMessage(body, applications, {
-                    session_id: { required: true },
-                    applicant_id: { required: true }
-                });
-                if (message) {
-                    throw new Error(message);
-                }
-                const newId = getUnusedId(applications);
-                const newApplication = { ...body, id: newId };
-                // Add the applicant to the list of all applicants
-                applications.push(newApplication);
-                return newApplication;
-            },
+            func: (data, params, body) => new Application(data).upsert(body),
             summary: "Upsert an application",
             posts: docApiPropTypes.application,
             returns: docApiPropTypes.application

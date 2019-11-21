@@ -15,6 +15,7 @@ import {
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { sessionsReducer } from "../reducers/sessions";
+import { activeRoleSelector } from "./users";
 
 // actions
 const fetchSessionsSuccess = actionFactory(FETCH_SESSIONS_SUCCESS);
@@ -29,7 +30,8 @@ export const fetchSessions = validatedApiDispatcher({
     description: "Fetch sessions",
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const data = await apiGET("/sessions");
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/sessions`);
         await dispatch(fetchSessionsSuccess(data));
 
         // after sessions are fetched, we compare with the active session.
@@ -52,8 +54,9 @@ export const fetchSession = validatedApiDispatcher({
     description: "Fetch session",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        const data = await apiGET(`/sessions/${payload.id}`);
+    dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/sessions/${payload.id}`);
         dispatch(fetchOneSessionSuccess(data));
     }
 });
@@ -63,8 +66,9 @@ export const upsertSession = validatedApiDispatcher({
     description: "Add/insert session",
     propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        const data = await apiPOST(`/sessions`, payload);
+    dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiPOST(`/${role}/sessions`, payload);
         dispatch(upsertOneSessionSuccess(data));
     }
 });
@@ -75,8 +79,9 @@ export const deleteSession = payload =>
         description: "Delete session",
         propTypes: { id: PropTypes.any.isRequired },
         onErrorDispatch: e => deleteError(e.toString()),
-        dispatcher: async dispatch => {
-            const data = await apiPOST(`/sessions/delete`, payload);
+        dispatcher: async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const data = await apiPOST(`/${role}/sessions/delete`, payload);
             dispatch(deleteOneSessionSuccess(data));
         }
     });

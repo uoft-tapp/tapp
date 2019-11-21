@@ -4,15 +4,10 @@ export function setGlobals(globals = {}, location = window.location) {
         searchParams.append(key, JSON.stringify(val));
     }
     if (window.history.pushState && ("" + searchParams).length > 0) {
-        const newurl =
-            location.protocol +
-            "//" +
-            location.host +
-            location.pathname +
-            "?" +
-            searchParams +
-            location.hash;
-        if (newurl !== "" + location) {
+        let newurl = new URL(location);
+        newurl.search = "?" + searchParams;
+        newurl = "" + newurl;
+        if ("" + newurl !== "" + location) {
             window.history.pushState({ path: newurl }, "", newurl);
         }
     }

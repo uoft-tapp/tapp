@@ -42,7 +42,12 @@ const swaggerData = {
             "TAPP is a program for TA management--for making TA assignments and distributing TA contracts.",
         title: "TAPP"
     },
-    servers: [{ url: "/api/v1" }],
+    servers: [
+        { url: "/api/v1/admin" },
+        { url: "/api/v1/instructor" },
+        { url: "/api/v1/ta" },
+        { url: "/api/v1" }
+    ],
     paths: {
         /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documenation
         "/bob": {

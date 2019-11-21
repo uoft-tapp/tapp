@@ -18,6 +18,7 @@ import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";
 import { contractTemplatesSelector } from "./contract_templates";
+import { activeRoleSelector } from "./users";
 
 // actions
 const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
@@ -32,7 +33,10 @@ export const fetchPositions = validatedApiDispatcher({
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(`/sessions/${activeSessionId}/positions`);
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(
+            `/${role}/sessions/${activeSessionId}/positions`
+        );
         dispatch(fetchPositionsSuccess(data));
     }
 });
@@ -44,8 +48,9 @@ export const fetchPosition = validatedApiDispatcher({
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const role = activeRoleSelector(getState());
         const data = await apiGET(
-            `/sessions/${activeSessionId}/positions/${payload.id}`
+            `/${role}/sessions/${activeSessionId}/positions/${payload.id}`
         );
         dispatch(fetchOnePositionSuccess(data));
     }
@@ -73,8 +78,9 @@ export const upsertPosition = validatedApiDispatcher({
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const role = activeRoleSelector(getState());
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/positions`,
+            `/${role}/sessions/${activeSessionId}/positions`,
             prepForApi(payload)
         );
         dispatch(upsertOnePositionSuccess(data));
@@ -88,8 +94,9 @@ export const deletePosition = validatedApiDispatcher({
     onErrorDispatch: e => deleteError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const role = activeRoleSelector(getState());
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/positions/delete`,
+            `/${role}/sessions/${activeSessionId}/positions/delete`,
             prepForApi(payload)
         );
         dispatch(deleteOnePositionSuccess(data));

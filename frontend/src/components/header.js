@@ -43,7 +43,7 @@ BootstrapNavLink.propTypes = {
  * @returns
  */
 export function Header(props) {
-    const { routes = [] } = props;
+    const { routes = [], infoComponent = null } = props;
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
@@ -77,7 +77,7 @@ export function Header(props) {
                         ))}
                 </NavDropdown>
             </Navbar.Brand>
-            <Nav>
+            <Nav className="mr-auto">
                 {routes.map(route => (
                     <Route path={route.route} key={route.route}>
                         {(route.subroutes || []).map(subroute => {
@@ -95,6 +95,7 @@ export function Header(props) {
                     </Route>
                 ))}
             </Nav>
+            {infoComponent}
         </Navbar>
     );
 }
@@ -112,5 +113,6 @@ Header.propTypes = {
                 })
             )
         })
-    )
+    ),
+    infoComponent: PropTypes.node
 };
