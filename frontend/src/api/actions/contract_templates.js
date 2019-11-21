@@ -14,6 +14,7 @@ import {
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { contractTemplatesReducer } from "../reducers/contract_templates";
 import { createSelector } from "reselect";
+import { activeRoleSelector } from "./users";
 
 // actions
 const fetchContractTemplatesSuccess = actionFactory(
@@ -35,9 +36,10 @@ export const fetchContractTemplates = validatedApiDispatcher({
     description: "Fetch contract_templates",
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiGET(
-            `/sessions/${activeSessionId}/contract_templates`
+            `/${role}/sessions/${activeSessionId}/contract_templates`
         );
         dispatch(fetchContractTemplatesSuccess(data));
     }
@@ -49,9 +51,10 @@ export const upsertContractTemplate = validatedApiDispatcher({
     propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/contract_templates`,
+            `/${role}/sessions/${activeSessionId}/contract_templates`,
             payload
         );
         dispatch(upsertOneContractTemplateSuccess(data));
@@ -64,9 +67,10 @@ export const deleteContractTemplate = validatedApiDispatcher({
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/contract_templates/delete`,
+            `/${role}/sessions/${activeSessionId}/contract_templates/delete`,
             payload
         );
         dispatch(deleteOneContractTemplateSuccess(data));
@@ -77,8 +81,9 @@ export const fetchAllContractTemplates = validatedApiDispatcher({
     name: "fetchAllContractTemplates",
     description: "Fetch all available contract_templates",
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: () => async dispatch => {
-        const data = await apiGET(`/available_contract_templates`);
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/available_contract_templates`);
         dispatch(fetchAllContractTemplatesSuccess(data));
     }
 });

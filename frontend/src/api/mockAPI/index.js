@@ -10,6 +10,7 @@ import { applicantsRoutes } from "./applicants";
 import { applicationsRoutes } from "./applications";
 import { wageChunkRoutes } from "./wage_chunks";
 import { debugRoutes } from "./debug";
+import { activeUserRoutes } from "./active_user";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -31,6 +32,7 @@ export class MockAPI {
         applicationsRoutes.get,
         wageChunkRoutes.get,
         debugRoutes.get,
+        activeUserRoutes.get,
         {
             "/all_data": documentCallback({
                 func: data => data,
@@ -48,18 +50,31 @@ export class MockAPI {
         applicantsRoutes.post,
         applicationsRoutes.post,
         wageChunkRoutes.post,
-        debugRoutes.post
+        debugRoutes.post,
+        activeUserRoutes.post
     );
 
     constructor(seedData) {
         this.active = false;
         this.data = seedData;
-        this._getRoutesParsers = Object.keys(this.getRoutes).map(
-            routeStr => new Route(routeStr)
-        );
-        this._postRoutesParsers = Object.keys(this.postRoutes).map(
-            routeStr => new Route(routeStr)
-        );
+        this._getRoutesParsers = Object.keys(this.getRoutes).map(routeStr => {
+            // We want to peel of the role from the start of the route, but we don't want
+            // to consider it part of the route for documentation purposes. Since `routeStr`
+            // is used to find the callback of the route, we hack `Route` so that `spec`
+            // is the same as `routeStr`.
+            const r = new Route("(/:role)" + routeStr);
+            r.spec = routeStr;
+            return r;
+        });
+        this._postRoutesParsers = Object.keys(this.postRoutes).map(routeStr => {
+            // We want to peel of the role from the start of the route, but we don't want
+            // to consider it part of the route for documentation purposes. Since `routeStr`
+            // is used to find the callback of the route, we hack `Route` so that `spec`
+            // is the same as `routeStr`.
+            const r = new Route("(/:role)" + routeStr);
+            r.spec = routeStr;
+            return r;
+        });
     }
 
     /**

@@ -1,5 +1,8 @@
 import React from "react";
 import { Header } from "../../components/header";
+import { connect } from "react-redux";
+import { usersSelector } from "../../api/actions";
+import { ActiveUserDisplay } from "../../components/active-user";
 
 /**
  * Header showing the routes that a user with `role=admin`
@@ -68,8 +71,14 @@ function AdminHeader() {
                     hidden: true
                 }
             ]}
+            infoComponent={<ConnectedActiveUserDisplay />}
         />
     );
 }
+
+const ConnectedActiveUserDisplay = connect(state => ({
+    user: usersSelector(state).active_user,
+    role: usersSelector(state).active_role
+}))(ActiveUserDisplay);
 
 export { AdminHeader };

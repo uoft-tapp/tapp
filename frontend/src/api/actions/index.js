@@ -8,3 +8,4 @@ export * from "./contract_templates";
 export * from "./wage_chunks";
 export * from "./status";
 export * from "./offers";
+export * from "./users";

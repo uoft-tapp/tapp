@@ -14,6 +14,7 @@ import {
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { instructorsReducer } from "../reducers/instructors";
 import { createSelector } from "reselect";
+import { activeRoleSelector } from "./users";
 
 // actions
 const fetchInstructorsSuccess = actionFactory(FETCH_INSTRUCTORS_SUCCESS);
@@ -26,8 +27,9 @@ export const fetchInstructors = validatedApiDispatcher({
     name: "fetchInstructors",
     description: "Fetch instructors",
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: () => async dispatch => {
-        const data = await apiGET(`/instructors`);
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/instructors`);
         dispatch(fetchInstructorsSuccess(data));
     }
 });
@@ -37,8 +39,9 @@ export const fetchInstructor = validatedApiDispatcher({
     description: "Fetch instructor",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        const data = await apiGET(`/instructors/${payload.id}`);
+    dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(`/${role}/instructors/${payload.id}`);
         dispatch(fetchOneInstructorSuccess(data));
     }
 });
@@ -48,8 +51,9 @@ export const upsertInstructor = validatedApiDispatcher({
     description: "Add/insert instructor",
     propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        const data = await apiPOST(`/instructors`, payload);
+    dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiPOST(`/${role}/instructors`, payload);
         dispatch(upsertOneInstructorSuccess(data));
     }
 });
@@ -59,8 +63,9 @@ export const deleteInstructor = validatedApiDispatcher({
     description: "Delete instructor",
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        const data = await apiPOST(`/instructors/delete`, payload);
+    dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiPOST(`/${role}/instructors/delete`, payload);
         dispatch(deleteOneInstructorSuccess(data));
     }
 });

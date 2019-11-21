@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { setGlobals } from "./views/globals/actions";
 import { parseURLSearchString } from "./libs/urlUtils";
 import { runOnActiveSessionChange } from "./api/actions/utils";
-import { setActiveSession } from "./api/actions";
+import { setActiveSession, fetchActiveUser } from "./api/actions";
 import { ConnectedNotifications } from "./views/notificatons";
 import { AdminRoutes } from "./views/routes";
 import { AdminHeader } from "./views/admin";
@@ -30,19 +30,23 @@ class App extends React.Component {
                 activeSession: activeSession.id
             });
         });
+        // We need to make sure we have an active user before continuing
+        window.setTimeout(() => {
+            this.props.fetchActiveUser();
+        }, 0);
+
         // If there is an `activeSession` stored in globals, use it to set the active
         // session now. (This is a one-time action)
         if (newGlobals.activeSession != null) {
             // If the mockAPI is enabled, we need to let it get set up
             // before we attempt to fetch a bunch of data. Therefore,
             // we do a `setTimeout`
-            window.setTimeout(
-                () =>
-                    this.props.setActiveSession({
-                        id: newGlobals.activeSession
-                    }),
-                0
-            );
+            window.setTimeout(() => {
+                this.props.fetchActiveUser();
+                this.props.setActiveSession({
+                    id: newGlobals.activeSession
+                });
+            }, 0);
         }
     }
 
@@ -61,7 +65,7 @@ const ConnectedApp = connect(
     state => ({
         globals: state.ui.globals
     }),
-    { setGlobals, setActiveSession }
+    { setGlobals, setActiveSession, fetchActiveUser }
 )(App);
 
 export default ConnectedApp;
