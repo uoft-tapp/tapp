@@ -1,48 +1,51 @@
 AllCops:
-  Exclude:
-    - 'config/**/*'
-    - 'db/**/*'
-    - 'bin/**/*'
-    - 'lib/{assets,tasks}/*'
-    - 'test/**/*'
-    - 'frontend/**/**'
-    - 'script/**/**'
-    - 'resources/**/*'
+    Exclude:
+        - "config/**/*"
+        - "db/**/*"
+        - "bin/**/*"
+        - "lib/{assets,tasks}/*"
+        - "test/**/*"
+        - "frontend/**/**"
+        - "script/**/**"
+        - "resources/**/*"
 
 Metrics/LineLength:
-  Max: 120
+    Max: 120
 
 Metrics/MethodLength:
-  Max: 100
+    Max: 100
 
 Metrics/BlockLength:
-  Max: 100
-  Exclude:
-    - 'spec/**/*'
+    Max: 100
+    Exclude:
+        - "spec/**/*"
 
 Metrics/ModuleLength:
-  Max: 500
+    Max: 500
 
 Metrics/ClassLength:
-  Enabled: false
+    Enabled: false
 
 Metrics/AbcSize:
-  Enabled: false
+    Enabled: false
 
 Layout/IndentationWidth:
-  Width: 4
+    Width: 4
 
 Metrics/CyclomaticComplexity:
-  Enabled: false
+    Enabled: false
 
 Metrics/PerceivedComplexity:
-  Enabled: false
+    Enabled: false
 
 Style/ClassAndModuleChildren:
-  Enabled: false
+    Enabled: false
 
 Style/GuardClause:
-  Enabled: false
+    Enabled: false
 
 Style/OneLineConditional:
-  Enabled: false
+    Enabled: false
+
+Bundler/OrderedGems:
+    Enabled: false

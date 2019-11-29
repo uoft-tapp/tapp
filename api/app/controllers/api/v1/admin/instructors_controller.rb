@@ -9,7 +9,7 @@ class Api::V1::Admin::InstructorsController < ApplicationController
     # POST /instructors
     def create
         @instructor = instructor.find_by(id: params[:instructor_id])
-        update and return if @instructor
+        update && return if @instructor
         @instructor = instructor.new(instructor_params)
         render_on_condition(object: @instructor,
                             condition: proc { @instructor.save! })

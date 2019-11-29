@@ -9,7 +9,7 @@ class Api::V1::Admin::UsersController < ApplicationController
     # POST /users
     def create
         @user = User.find_by(id: params[:id])
-        update and return if @user
+        update && return if @user
         @user = User.new(user_params)
         render_on_condition(object: @user,
                             condition: proc { @user.save! })

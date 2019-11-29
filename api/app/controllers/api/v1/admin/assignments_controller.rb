@@ -10,7 +10,7 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
     # POST /assignments
     def create
         @assignment = Assignment.find_by(id: params[:assignment_id])
-        update and return if @assignment
+        update && return if @assignment
         @assignment = Assignment.new(assignment_params)
         render_on_condition(object: @assignment,
                             condition: proc { @assignment.save! })

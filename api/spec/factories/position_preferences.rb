@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-  factory :position_preference do
-    postion { nil }
-    application { nil }
-    preference_level { "" }
-  end
+    factory :position_preference do
+        postion { nil }
+        application { nil }
+        preference_level { '' }
+    end
 end
 
 # == Schema Information

@@ -9,7 +9,7 @@ class Api::V1::Admin::SessionsController < ApplicationController
     # POST /sessions
     def create
         @session = Session.find_by(id: params[:id])
-        update and return if @session
+        update && return if @session
         @session = Session.new(session_params)
         render_on_condition(object: @session, condition: proc { @session.save! })
     end

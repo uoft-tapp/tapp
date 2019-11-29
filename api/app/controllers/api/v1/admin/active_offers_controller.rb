@@ -47,14 +47,12 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
 
     # POST /active_offers/email
     # Emails the active offer for the specified Assignment
-    def email
-    end
+    def email; end
 
     # POST /active_offers/nag
     # Sends a nag email for the active_offer for the specified Assignment
     # which has already been emailed once
-    def nag
-    end
+    def nag; end
 
     private
 

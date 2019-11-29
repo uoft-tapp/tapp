@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
     factory :applicant do
         utorid { Faker::Internet.slug("#{last_name} #{first_name} #{Faker::Number.number(2)}", '') }

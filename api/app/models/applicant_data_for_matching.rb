@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicantDataForMatching < ApplicationRecord
     belongs_to :applicant
     belongs_to :application

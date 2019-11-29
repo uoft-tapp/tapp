@@ -2,8 +2,7 @@
 
 class Api::V1::Admin::DebugController < ApplicationController
     # POST /active_user
-    def active_user
-    end
+    def active_user; end
 
     # POST /clear_data
     def clear_data
@@ -16,6 +15,5 @@ class Api::V1::Admin::DebugController < ApplicationController
     end
 
     # POST /snapshot
-    def snapshot
-    end
+    def snapshot; end
 end

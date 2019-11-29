@@ -6,7 +6,7 @@ module TransactionHandler
     def start_transaction_and_rollback_on_exception
         ActiveRecord::Base.transaction do
             yield
-        rescue => e
+        rescue StandardError => e
             render_error(message: e.message)
         end
     end

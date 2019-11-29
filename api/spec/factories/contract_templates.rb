@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-  factory :contract_template do
-    session { nil }
-    position_type { "MyString" }
-    offer_template { "MyString" }
-  end
+    factory :contract_template do
+        session { nil }
+        position_type { 'MyString' }
+        offer_template { 'MyString' }
+    end
 end
 
 # == Schema Information

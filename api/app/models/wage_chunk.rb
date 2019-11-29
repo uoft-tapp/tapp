@@ -23,11 +23,11 @@ class WageChunk < ApplicationRecord
         # Apply Session rate1 or rate2 depending on the time of year
         # TODO: Check for different rates
         if session.rate1 && session.rate2
-            if Time.zone.now.end_of_year >= end_date
-                self.rate = session.rate1
-            else
-                self.rate = session.rate2
-            end
+            self.rate = if Time.zone.now.end_of_year >= end_date
+                            session.rate1
+                        else
+                            session.rate2
+                        end
         end
     end
 end

@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Api::V1::SessionsController do
-    let(:valid_attributes) {
+    let(:valid_attributes) do
         {
             "start_date": Time.zone.now,
             "end_date": Time.zone.now + 3.days,
             "name": 'Fall 2019 Session',
             "rate1": 20.00
         }
-    }
+    end
 
     describe 'GET /sessions' do
         it 'returns all Sessions' do
@@ -17,7 +19,7 @@ describe Api::V1::SessionsController do
             expect(response.status).to eq(200)
             payload = JSON.parse(response.body)['payload']
             expect(payload).to be_an_instance_of(Array)
-            expect(payload.first).to eq(session.as_json(only: [:end_date, :id, :start_date, :name]))
+            expect(payload.first).to eq(session.as_json(only: %i[end_date id start_date name]))
         end
     end
 

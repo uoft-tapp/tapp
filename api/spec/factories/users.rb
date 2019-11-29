@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
     factory :user do
         utorid { "utorid#{Faker::Number.number(digits: 2)}" }
