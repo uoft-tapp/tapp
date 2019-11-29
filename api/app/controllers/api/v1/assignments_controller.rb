@@ -50,17 +50,6 @@ class Api::V1::AssignmentsController < ApplicationController
 
     private
 
-    def assignment_params
-        params.permit(
-            :contract_start,
-            :contract_end,
-            :note,
-            :offer_override_pdf,
-            :applicant_id,
-            :position_id
-        )
-    end
-
     def assignment_update_params
         params.permit(
             :contract_start,

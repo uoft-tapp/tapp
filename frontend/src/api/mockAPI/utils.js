@@ -3,6 +3,57 @@
  */
 
 /**
+ * Adds the arguments passed in.
+ *
+ * @export
+ * @param {} numbers
+ * @returns {number}
+ */
+export function sum(...numbers) {
+    let ret = 0;
+    for (const num of numbers) {
+        ret += +num;
+    }
+    return ret;
+}
+
+/**
+ * Given a date range, returns an array of one or two ranges depending
+ * on whether the date range includes a new-years.
+ *
+ * @export
+ * @param {(string|Date)} start_date
+ * @param {(string|Date)} end_date
+ * @returns {{start_date: string, end_date:string}[]}
+ */
+export function splitDateRangeAtNewYear(start_date, end_date) {
+    start_date = new Date(start_date);
+    end_date = new Date(end_date);
+    // For `Date`, 11 is december
+    const december = new Date(start_date.getFullYear(), 11, 31);
+    // For `Date`, 12 will be the first month of the subsequent year
+    const january = new Date(start_date.getFullYear(), 12, 1);
+    if (start_date <= december && end_date > december) {
+        return [
+            {
+                start_date: start_date.toISOString(),
+                end_date: december.toISOString()
+            },
+            {
+                start_date: january.toISOString(),
+                end_date: end_date.toISOString()
+            }
+        ];
+    }
+    return [
+        {
+            start_date: start_date.toISOString(),
+            end_date: end_date.toISOString()
+        }
+    ];
+}
+
+/**
  * Generates an unused Id based on the `prop` attribute.
  *
  * @export
@@ -44,8 +95,8 @@ export function find(obj, data = [], prop = "id") {
  * with ids listed in `ids`.
  *
  * @export
- * @param {*} [ids=[]]
- * @param {*} [data=[]]
+ * @param {string[]} [ids=[]]
+ * @param {object[]} [data=[]]
  * @param {string} [prop="id"]
  * @returns {object[]}
  */
@@ -93,4 +144,141 @@ export function getAttributesCheckMessage(
         }
     }
     return false;
+}
+
+/**
+ * Base class for mockAPI controllers. These handle
+ * the mockAPI data and queries thereof.
+ *
+ * @export
+ * @class MockAPIController
+ */
+export class MockAPIController {
+    constructor(data, ownData) {
+        this.data = data;
+        this.ownData = ownData;
+    }
+    /**
+     * Finds all instances of the given item; returns an array copy.
+     *
+     * @returns {object[]}
+     * @memberof MockAPIController
+     */
+    findAll() {
+        return [...this.ownData];
+    }
+    /**
+     * Finds a single instance of an item
+     *
+     * @param {({id: number}|number)} query
+     * @returns {object}
+     * @memberof MockAPIController
+     */
+    find(query) {
+        return this.rawFind(query);
+    }
+    /**
+     * Not to be overridden. The return value of this object
+     * must be an unmangled version of the actual data stored (so that it can be
+     * mutated, for example.)
+     *
+     * @param {*} query
+     * @returns
+     * @memberof MockAPIController
+     */
+    rawFind(query) {
+        if (query == null) {
+            return null;
+        }
+        if (query.id != null) {
+            return find(query, this.ownData);
+        }
+        return find({ id: query }, this.ownData);
+    }
+    /**
+     * Delete the given object (by id).
+     *
+     * @param {{id: number}} obj
+     * @memberof MockAPIController
+     */
+    delete(obj) {
+        obj = this.rawFind(obj);
+        if (!obj) {
+            throw new Error(`Cannot delete object ${JSON.stringify(obj)}`);
+        }
+        deleteInArray(obj, this.ownData);
+        return obj;
+    }
+    /**
+     * Get an unused ID
+     *
+     * @returns {number}
+     * @memberof MockAPIController
+     */
+    unusedId() {
+        if (!this.ownData) {
+            throw new Error(
+                "Cannot get unused ID when `ownData` hasn't been set"
+            );
+        }
+        return getUnusedId(this.ownData);
+    }
+    /**
+     * Creates a new item instance; no validation is performed.
+     *
+     * @param {object} obj - the new instance data
+     * @memberof MockAPIController
+     */
+    create(obj) {
+        const newId = getUnusedId(this.ownData);
+        const newItem = { ...obj, id: newId };
+        this.ownData.push(newItem);
+        return newItem;
+    }
+    /**
+     * Validates the properties of a new item instance. Throws an error
+     * if the properties are invalid/incompatable.
+     *
+     * @param {object} obj
+     * @memberof MockAPIController
+     */
+    validateNew() {
+        throw new Error("Subclasses must impliment `validateNew()`");
+    }
+    /**
+     * Update an item if it can be found. Otherwise, return null.
+     *
+     * @param {*} obj
+     * @returns {(object|null)}
+     * @memberof MockAPIController
+     */
+    updateIfFound(obj) {
+        const item = this.rawFind(obj);
+        if (!item) {
+            return null;
+        }
+        // We've found a matching item. Update all non-null
+        // properties
+        for (const prop in obj) {
+            if (prop != null) {
+                item[prop] = obj[prop];
+            }
+        }
+        return item;
+    }
+    /**
+     * Upsert an item. `validateNew` will be run on the item before it is created.
+     * Null/undefined parameters will not be updated.
+     *
+     * @param {object} obj
+     * @returns {object}
+     * @memberof MockAPIController
+     */
+    upsert(obj) {
+        if (this.rawFind(obj)) {
+            return this.updateIfFound(obj);
+        }
+        this.validateNew(obj);
+        return this.create(obj);
+    }
 }

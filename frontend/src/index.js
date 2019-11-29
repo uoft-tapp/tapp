@@ -25,11 +25,11 @@ const render = Component => {
     return ReactDOM.render(
         <HashRouter>
             <Provider store={store}>
-                <DevFrame>
-                    <PersistGate persistor={persistor}>
+                <PersistGate persistor={persistor}>
+                    <DevFrame>
                         <Component />
-                    </PersistGate>
-                </DevFrame>
+                    </DevFrame>
+                </PersistGate>
             </Provider>
         </HashRouter>,
         document.getElementById("root")

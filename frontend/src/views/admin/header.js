@@ -1,5 +1,8 @@
 import React from "react";
 import { Header } from "../../components/header";
+import { connect } from "react-redux";
+import { usersSelector } from "../../api/actions";
+import { ActiveUserDisplay } from "../../components/active-user";
 
 /**
  * Header showing the routes that a user with `role=admin`
@@ -17,6 +20,16 @@ function AdminHeader() {
                     description: "TAPP Main View",
                     subroutes: [
                         {
+                            route: "/sessions",
+                            name: "Sessions",
+                            description: "Manage Sessions"
+                        },
+                        {
+                            route: "/contract_templates",
+                            name: "Contract Templates",
+                            description: "Manage Contract Templates"
+                        },
+                        {
                             route: "/instructors",
                             name: "Instructors",
                             description: "Manage Instructors"
@@ -27,9 +40,9 @@ function AdminHeader() {
                             description: "Manage Positions"
                         },
                         {
-                            route: "/positions/new",
-                            name: "New Positions",
-                            description: "Create New Positions"
+                            route: "/assignments",
+                            name: "Assignments",
+                            description: "Manage Assignments"
                         },
                         {
                             route: "/summary",
@@ -58,8 +71,14 @@ function AdminHeader() {
                     hidden: true
                 }
             ]}
+            infoComponent={<ConnectedActiveUserDisplay />}
         />
     );
 }
+
+const ConnectedActiveUserDisplay = connect(state => ({
+    user: usersSelector(state).active_user,
+    role: usersSelector(state).active_role
+}))(ActiveUserDisplay);
 
 export { AdminHeader };

@@ -3,23 +3,13 @@ import { connect } from "react-redux";
 import { InstructorEditor } from "../../components/instructors";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { upsertInstructor, instructorsSelector } from "../../api/actions";
+import { strip } from "../../libs/utils";
 
 const BLANK_INSTRUCTOR = {
     first_name: "",
     last_name: "",
     utorid: ""
 };
-
-/**
- * Trims the input string. If the `x` is not a string, it is
- * coerced
- *
- * @param {string} x
- * @returns
- */
-function strip(x) {
-    return ("" + x).trim();
-}
 
 /**
  * Find if there is a conflicting instructor in the passed in list

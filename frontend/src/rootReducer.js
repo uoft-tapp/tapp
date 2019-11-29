@@ -1,8 +1,6 @@
 import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
-import applicationReducer from "./views/application_form/reducer";
-import newPositionReducer from "./views/new_position_form/reducer";
 import offerTableReducer from "./views/offertable/reducers";
 import { globalReducer } from "./views/globals/reducers";
 import {
@@ -13,8 +11,9 @@ import {
     applicationsReducer,
     assignmentsReducer,
     instructorsReducer,
-    positionTemplatesReducer
+    contractTemplatesReducer
 } from "./api/reducers";
+import { usersReducer } from "./api/reducers/users";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -36,13 +35,12 @@ const reducer = combineReducers({
         applications: applicationsReducer,
         assignments: assignmentsReducer,
         instructors: instructorsReducer,
-        positionTemplates: positionTemplatesReducer
+        contractTemplates: contractTemplatesReducer,
+        users: usersReducer
     }),
     ui: combineReducers({
         notifications: notificationReducer,
         form: formReducer,
-        application: applicationReducer,
-        newPosition: newPositionReducer,
         offerTable: offerTableReducer,
         globals: globalReducer
     })

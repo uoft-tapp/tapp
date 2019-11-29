@@ -14,6 +14,7 @@ import {
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
 import { createSelector } from "reselect";
+import { activeRoleSelector } from "./users";
 
 // actions
 const fetchApplicationsSuccess = actionFactory(FETCH_APPLICATIONS_SUCCESS);
@@ -31,8 +32,11 @@ export const fetchApplications = validatedApiDispatcher({
     description: "Fetch applications",
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(`/sessions/${activeSessionId}/applications`);
+        const data = await apiGET(
+            `/${role}/sessions/${activeSessionId}/applications`
+        );
         dispatch(fetchApplicationsSuccess(data));
     }
 });
@@ -43,9 +47,10 @@ export const fetchApplication = validatedApiDispatcher({
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => fetchError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiGET(
-            `/sessions/${activeSessionId}/applications/${payload.id}`
+            `/${role}/sessions/${activeSessionId}/applications/${payload.id}`
         );
         dispatch(fetchOneApplicationSuccess(data));
     }
@@ -54,12 +59,13 @@ export const fetchApplication = validatedApiDispatcher({
 export const upsertApplication = validatedApiDispatcher({
     name: "upsertApplication",
     description: "Add/insert application",
-    propTypes: { id: PropTypes.any.isRequired },
+    propTypes: {},
     onErrorDispatch: e => upsertError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/applications`,
+            `/${role}/sessions/${activeSessionId}/applications`,
             payload
         );
         dispatch(upsertOneApplicationSuccess(data));
@@ -72,9 +78,10 @@ export const deleteApplication = validatedApiDispatcher({
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: e => deleteError(e.toString()),
     dispatcher: payload => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
-            `/sessions/${activeSessionId}/applications/delete`,
+            `/${role}/sessions/${activeSessionId}/applications/delete`,
             payload
         );
         dispatch(deleteOneApplicationSuccess(data));

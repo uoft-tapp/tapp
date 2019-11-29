@@ -8,11 +8,9 @@ class Assignment < ApplicationRecord
     belongs_to :position
     has_many :wage_chunks
 
-    validates_uniqueness_of :applicant_id, scope: [:position_id]
+
 
     after_update :reset_active_offer
-
-    scope :by_position, ->(position_id) { where(position_id: position_id).order(:id) }
 
     def active_offer
         active_offer_id ? Offer.find(active_offer_id) : nil

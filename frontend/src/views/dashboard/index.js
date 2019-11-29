@@ -5,16 +5,17 @@ import {
     setActiveSession,
     sessionsSelector,
     activeSessionSelector,
-    applicantsSelector,
-    positionTemplatesSelector,
+    contractTemplatesSelector,
     instructorsSelector,
     positionsSelector,
-    assignmentsSelector
+    assignmentsSelector,
+    applicantsSelector
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
-import { SessionSelect } from "../../components/session-select";
+import { SessionSelect } from "../../components/sessions";
+import { SessionEditor } from "../../components/forms/session-editor";
 import { ApplicantsList } from "../../components/applicants-list";
-import { PositionTemplatesList } from "../../components/postition-templates-list";
+import { ContractTemplatesList } from "../../components/contract-templates-list";
 import { ConnectedInstructorsList } from "../instructors";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
@@ -23,8 +24,10 @@ import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
 import { EditableField } from "../../components/edit-field-widgets";
 import { ConnectedOfferTable } from "../offertable";
-import { PositionEditor } from "../../components/add-position";
+import { PositionEditor } from "../../components/forms/position-editor";
 import { InstructorEditor } from "../../components/instructors";
+import { AssignmentEditor } from "../../components/forms/assignment-editor";
+import { ContractTemplateEditor } from "../../components/forms/contract-template-editor";
 
 // Connect the SessionSelect component
 let mapStateToProps = state => {
@@ -43,9 +46,9 @@ const ConnectedApplicantList = connect(state => ({
     applicants: applicantsSelector(state)
 }))(ApplicantsList);
 
-const ConnectedPositionTemplateList = connect(state => ({
-    position_templates: positionTemplatesSelector(state)
-}))(PositionTemplatesList);
+const ConnectedContractTemplatesList = connect(state => ({
+    contractTemplates: contractTemplatesSelector(state)
+}))(ContractTemplatesList);
 
 const ConnectedPositionsList = connect(state => ({
     positions: positionsSelector(state)
@@ -66,6 +69,11 @@ const ConnectedEmailButton = connect(state => ({
 const ConnectedPositionEditor = connect(state => ({
     instructors: instructorsSelector(state)
 }))(PositionEditor);
+
+const ConnectedAssignmentEditor = connect(state => ({
+    positions: positionsSelector(state),
+    applicants: applicantsSelector(state)
+}))(AssignmentEditor);
 
 /**
  * Encapsulate a react component in a frame.
@@ -97,14 +105,39 @@ function DashboardWidget(props) {
  *
  */
 function Dashboard() {
+    const [assignment, setAssignment] = React.useState({
+        position_id: 0,
+        applicant_id: 0
+    });
     const [position, setPosition] = React.useState({ position_code: "" });
     const [instructor, setInstructor] = React.useState({
         last_name: "Baggins",
         first_name: "Bilbo",
         utorid: "bilbob"
     });
+    const [session, setSession] = React.useState({ name: "" });
+    const [contractTemplate, setContractTemplate] = React.useState({});
     return (
         <div>
+            <DashboardWidget title="ContractTemplateEditor">
+                <ContractTemplateEditor
+                    contractTemplate={contractTemplate}
+                    setContractTemplate={setContractTemplate}
+                    availableTemplates={[
+                        { template_file: "/math/OTO.html" },
+                        { template_file: "/cs/invigilate.html" }
+                    ]}
+                />
+            </DashboardWidget>
+            <DashboardWidget title="AssignmentEditor">
+                <ConnectedAssignmentEditor
+                    assignment={assignment}
+                    setAssignment={setAssignment}
+                />
+            </DashboardWidget>
+            <DashboardWidget title="SessionEditor">
+                <SessionEditor session={session} setSession={setSession} />
+            </DashboardWidget>
             <DashboardWidget title="InstructorEditor">
                 <InstructorEditor
                     instructor={instructor}
@@ -133,7 +166,7 @@ function Dashboard() {
                 <ConnectedApplicantList />
             </DashboardWidget>
             <DashboardWidget title="PostitionTemplatesList">
-                <ConnectedPositionTemplateList />
+                <ConnectedContractTemplatesList />
             </DashboardWidget>
             <DashboardWidget title="InstuctorsList">
                 <ConnectedInstructorsList />

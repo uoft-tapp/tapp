@@ -10,7 +10,7 @@ import { apiInteractionStart, apiInteractionEnd } from "./status";
  * @export
  * @param {array} l
  * @param {string} [indexBy="id"]
- * @returns
+ * @returns {object[]}
  */
 export function arrayToHash(l, indexBy = "id") {
     if (!Array.isArray(l)) {
@@ -42,6 +42,62 @@ export function actionFactory(type) {
         type,
         payload
     });
+}
+
+/**
+ * Split an object into two objects. One with only properties listed in
+ * `props` and the other with all remaining properties.
+ *
+ * @param {*} obj - object to be split
+ * @param {*} [props=[]] - list of properties to split out
+ * @returns {[object, object]} list of two objects. The first contains all properties not listed in `props`. The second contains all properties listed in `props`
+ */
+export function splitObjByProps(obj, props = []) {
+    const ret = {},
+        filtered = {};
+    for (const prop of props) {
+        if (Object.hasOwnProperty.call(obj, prop)) {
+            filtered[prop] = obj[prop];
+        }
+    }
+    for (const prop in obj) {
+        if (!Object.hasOwnProperty.call(filtered, prop)) {
+            ret[prop] = obj[prop];
+        }
+    }
+    return [ret, filtered];
+}
+
+/**
+ * Create a function that takes an `obj` object. It effectively does
+ * `obj[outPropName] = obj[inPropName].id; delete obj[inPropName]` but
+ * is non-destructive.
+ *
+ * @export
+ * @param {string} inPropName
+ * @param {string} outPropName
+ * @param {boolean} [isArrayOfIds=false]
+ * @returns
+ */
+export function flattenIdFactory(
+    inPropName,
+    outPropName,
+    isArrayOfIds = false
+) {
+    return function(obj) {
+        // if the `inPropName` field doesn't exist, don't change anything
+        // and don't error!
+        if (obj[inPropName] == null) {
+            return obj;
+        }
+        const [ret, filtered] = splitObjByProps(obj, [inPropName]);
+        if (isArrayOfIds) {
+            ret[outPropName] = filtered[inPropName].map(x => x.id);
+        } else {
+            ret[outPropName] = filtered[inPropName].id;
+        }
+        return ret;
+    };
 }
 
 export const onActiveSessionChangeActions = [];

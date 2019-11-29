@@ -28,7 +28,7 @@ const COLUMNS = [
     },
     {
         Header: "Contract",
-        accessor: "position.position_type",
+        accessor: "position.contract_template.template_name",
         width: 100
     },
     {
@@ -201,6 +201,8 @@ function OfferTable(props) {
             isSelected={isSelected}
             selectType="checkbox"
             keyField="id"
+            minRows={1}
+            showPagination={false}
         />
     );
     // if `selected` was not passed in, the table rows should not be selectable

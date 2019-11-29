@@ -1,13 +1,16 @@
 import Route from "route-parser";
 import { mockData } from "./data";
 import { sessionsRoutes } from "./sessions";
-import { templatesRoutes } from "./position_templates";
+import { templatesRoutes } from "./contract_templates";
 import { positionsRoutes } from "./positions";
 import { instructorsRoutes } from "./instructors";
 import { documentCallback } from "../defs/doc-generation";
 import { assignmentsRoutes } from "./assignments";
 import { applicantsRoutes } from "./applicants";
 import { applicationsRoutes } from "./applications";
+import { wageChunkRoutes } from "./wage_chunks";
+import { debugRoutes } from "./debug";
+import { activeUserRoutes } from "./active_user";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -27,6 +30,9 @@ export class MockAPI {
         assignmentsRoutes.get,
         applicantsRoutes.get,
         applicationsRoutes.get,
+        wageChunkRoutes.get,
+        debugRoutes.get,
+        activeUserRoutes.get,
         {
             "/all_data": documentCallback({
                 func: data => data,
@@ -42,18 +48,33 @@ export class MockAPI {
         instructorsRoutes.post,
         assignmentsRoutes.post,
         applicantsRoutes.post,
-        applicationsRoutes.post
+        applicationsRoutes.post,
+        wageChunkRoutes.post,
+        debugRoutes.post,
+        activeUserRoutes.post
     );
 
     constructor(seedData) {
         this.active = false;
         this.data = seedData;
-        this._getRoutesParsers = Object.keys(this.getRoutes).map(
-            routeStr => new Route(routeStr)
-        );
-        this._postRoutesParsers = Object.keys(this.postRoutes).map(
-            routeStr => new Route(routeStr)
-        );
+        this._getRoutesParsers = Object.keys(this.getRoutes).map(routeStr => {
+            // We want to peel of the role from the start of the route, but we don't want
+            // to consider it part of the route for documentation purposes. Since `routeStr`
+            // is used to find the callback of the route, we hack `Route` so that `spec`
+            // is the same as `routeStr`.
+            const r = new Route("(/:role)" + routeStr);
+            r.spec = routeStr;
+            return r;
+        });
+        this._postRoutesParsers = Object.keys(this.postRoutes).map(routeStr => {
+            // We want to peel of the role from the start of the route, but we don't want
+            // to consider it part of the route for documentation purposes. Since `routeStr`
+            // is used to find the callback of the route, we hack `Route` so that `spec`
+            // is the same as `routeStr`.
+            const r = new Route("(/:role)" + routeStr);
+            r.spec = routeStr;
+            return r;
+        });
     }
 
     /**
