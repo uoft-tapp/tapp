@@ -18,7 +18,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
     def create
         @applicant = Applicant.find_by(id: params[:id])
         update && return if @application
-        @session = Applicant.new(applicant_params)
+        @applicant = Applicant.new(applicant_params)
         render_on_condition(object: @applicant,
                             condition: proc { @applicant.save! })
     end
