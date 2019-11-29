@@ -4,25 +4,30 @@
 # has many preferences (a student can apply to many positions).
 class Applicant < ApplicationRecord
     has_many :assignments
-    has_many :applicant_data_for_matchings
+    has_many :applications
+    has_one :applicant_data_for_matching
 
     validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
     validates_uniqueness_of :student_number, :utorid
 
-    # FIXME: Session doesn't exist as an attribute anymore
+    def self.by_session(session_id)
+        joins(:applications)
+            .where('applications.session_id = ?', session_id)
+            .distinct
+    end
 end
 
 # == Schema Information
 #
 # Table name: applicants
 #
-#  id             :bigint(8)        not null, primary key
-#  email          :string           not null
+#  id             :integer          not null, primary key
+#  utorid         :string           not null
+#  student_number :string           not null
 #  first_name     :string           not null
 #  last_name      :string           not null
+#  email          :string           not null
 #  phone          :string
-#  student_number :string           not null
-#  utorid         :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #

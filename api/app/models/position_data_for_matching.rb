@@ -12,13 +12,13 @@ end
 #
 # Table name: position_data_for_matchings
 #
-#  id                      :bigint(8)        not null, primary key
+#  id                      :integer          not null, primary key
+#  position_id             :integer          not null
+#  desired_num_assignments :integer
 #  current_enrollment      :integer
 #  current_waitlisted      :integer
-#  desired_num_assignments :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  position_id             :bigint(8)
 #
 # Indexes
 #

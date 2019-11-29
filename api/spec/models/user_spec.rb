@@ -1,44 +1,10 @@
-# frozen_string_literal: true
+require 'rails_helper'
 
-describe User do
-    it 'should create a valid user object' do
-        k = FactoryBot.create(:user)
-        expect(k).to eq(User.last)
-    end
-
-    context 'role is instructor' do
-        it 'should create a valid user object' do
-            k = FactoryBot.create(:user, :instructor)
-            expect(k).to eq(User.last)
-        end
-    end
-
-    context 'role is admin' do
-        it 'should create a valid user object' do
-            k = FactoryBot.create(:user, :admin)
-            expect(k).to eq(User.last)
-        end
-    end
-
-    context 'role is invalid' do
-        it 'should not be valid' do
-            expect { FactoryBot.create(:user, role: 3) }.to raise_error(ArgumentError)
-        end
-    end
-
-    it 'should not be valid without a utorid' do
-        k = FactoryBot.build(:user, utorid: nil)
-        expect(k).to_not be_valid
-
-        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it 'should not be valid if the utorid is already taken' do
-        user1 = FactoryBot.create(:user)
-        user2 = FactoryBot.build(:user, utorid: user1.utorid)
-
-        expect(user2).to_not be_valid
-        expect { user2.save! }.to raise_error(ActiveRecord::RecordInvalid)
+RSpec.describe User, type: :model do
+    describe 'validations' do
+        it { should define_enum_for(:role).with_values(%i[admin instructor]) }
+        it { should validate_presence_of(:utorid) }
+        it { should validate_uniqueness_of(:utorid) }
     end
 end
 
@@ -46,9 +12,9 @@ end
 #
 # Table name: users
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :integer          not null, primary key
+#  utorid     :string
 #  role       :integer
-#  utorid     :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
