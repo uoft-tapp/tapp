@@ -103,5 +103,14 @@ class Api::V1::OffersController < ApplicationController
             subs = @offer.format.merge(styles)
             @rendered_contract = template.render(subs)
         end
+
+        def find_contract_template
+            offer_template = File.read("#{CONTRACT_DIR}/offer-template.html")
+            template = Liquid::Template.parse(offer_template)
+            styles = { 'style_font' => File.read("#{CONTRACT_DIR}/font.css"),
+                       'style_header' => File.read("#{CONTRACT_DIR}/header.css") }
+            subs = @offer.format.merge(styles)
+            @rendered_contract = template.render(subs)
+        end
     end
 end
