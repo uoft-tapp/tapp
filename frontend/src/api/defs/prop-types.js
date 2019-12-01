@@ -59,7 +59,14 @@ function generatePropTypes(PropTypes) {
             desired_num_assignments: PropTypes.number,
             current_enrollment: PropTypes.number,
             current_waitlisted: PropTypes.number,
-            instructor_ids: PropTypes.arrayOf(id)
+            instructor_ids: PropTypes.arrayOf(id),
+            instructor_preference: PropTypes.arrayOf(
+                PropTypes.shape({
+                    preference_level: PropTypes.number,
+                    applicant_id: id,
+                    instructor_id: id
+                })
+            )
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,
@@ -126,7 +133,13 @@ function generatePropTypes(PropTypes) {
             previous_uoft_experience: PropTypes.string,
             yip: PropTypes.number,
             annotation: PropTypes.string,
-            applicant_id: id
+            applicant_id: id,
+            position_preference: PropTypes.arrayOf(
+                PropTypes.shape({
+                    preference_level: PropTypes.number,
+                    position_id: id
+                })
+            )
         }),
         user: PropTypes.shape({
             utorid: PropTypes.string,

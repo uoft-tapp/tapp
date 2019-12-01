@@ -112,7 +112,34 @@ export const mockData = {
             desired_num_assignments: 15,
             current_enrollment: 1200,
             current_waitlisted: 200,
-            instructor_ids: [1000, 1001]
+            instructor_ids: [1000, 1001],
+            instructor_preferences: [
+                {
+                    preference_level: 2,
+                    applicant_id: 2000,
+                    instructor_id: 1000
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2002,
+                    instructor_id: 1000
+                },
+                {
+                    preference_level: -1,
+                    applicant_id: 2005,
+                    instructor_id: 1001
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2002,
+                    instructor_id: 1001
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2006,
+                    instructor_id: 1001
+                }
+            ]
         },
         {
             id: 11,
@@ -133,7 +160,24 @@ export const mockData = {
             end_date: "2019-12-31T00:00:00.000Z",
             duties: "Tutorials",
             contract_template_id: 3,
-            instructor_ids: [1000]
+            instructor_ids: [1000],
+            instructor_preferences: [
+                {
+                    preference_level: -1,
+                    applicant_id: 2005,
+                    instructor_id: 1000
+                },
+                {
+                    preference_level: 2,
+                    applicant_id: 2001,
+                    instructor_id: 1000
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2006,
+                    instructor_id: 1000
+                }
+            ]
         },
         {
             id: 13,
@@ -143,7 +187,19 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 3,
-            instructor_ids: [1002]
+            instructor_ids: [1002],
+            instructor_preferences: [
+                {
+                    preference_level: 2,
+                    applicant_id: 2000,
+                    instructor_id: 1002
+                },
+                {
+                    preference_level: 1,
+                    applicant_id: 2002,
+                    instructor_id: 1002
+                }
+            ]
         },
         {
             instructor_ids: [1002],
@@ -475,7 +531,17 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 1,
-            applicant_id: 2000
+            applicant_id: 2000,
+            position_preferences: [
+                {
+                    preference_level: 2,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 15
+                }
+            ]
         },
         {
             comments: "",
@@ -485,7 +551,17 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 1,
-            applicant_id: 2001
+            applicant_id: 2001,
+            position_preferences: [
+                {
+                    preference_level: 0,
+                    position_id: 12
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                }
+            ]
         },
         {
             comments: "",
@@ -495,7 +571,25 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 1,
-            applicant_id: 2002
+            applicant_id: 2002,
+            position_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -505,7 +599,25 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 1,
-            applicant_id: 2005
+            applicant_id: 2005,
+            position_preferences: [
+                {
+                    preference_level: 2,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 0,
+                    position_id: 12
+                },
+                {
+                    preference_level: 1,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -515,7 +627,21 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 1,
-            applicant_id: 2006
+            applicant_id: 2006,
+            position_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 0,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                }
+            ]
         },
         {
             comments: "",
@@ -525,7 +651,25 @@ export const mockData = {
             yip: 3,
             annotation: "",
             session_id: 2,
-            applicant_id: 2002
+            applicant_id: 2002,
+            position_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -535,7 +679,25 @@ export const mockData = {
             yip: 2,
             annotation: "",
             session_id: 2,
-            applicant_id: 2003
+            applicant_id: 2003,
+            position_preferences: [
+                {
+                    preference_level: 3,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                },
+                {
+                    preference_level: 2,
+                    position_id: 12
+                },
+                {
+                    preference_level: 0,
+                    position_id: 11
+                }
+            ]
         },
         {
             comments: "",
@@ -545,7 +707,17 @@ export const mockData = {
             yip: 4,
             annotation: "",
             session_id: 2,
-            applicant_id: 2004
+            applicant_id: 2004,
+            position_preferences: [
+                {
+                    preference_level: 1,
+                    position_id: 10
+                },
+                {
+                    preference_level: 3,
+                    position_id: 13
+                }
+            ]
         }
     ],
     users: [
