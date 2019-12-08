@@ -47,7 +47,7 @@ if [[ ! "$STAGED_RUBY_FILES" = "" ]]; then
 
     RUBOCOP="$(git rev-parse --show-toplevel)/api/resources/rubocop.rb"
 
-    ruby $RUBOCOP --index -Ra --fail-level convention
+    ruby $RUBOCOP --staged -a --fail-level convention
     RUBOCOP_EXIT=$?
 
     if [[ "$RUBOCOP_EXIT" == 1 ]]; then
