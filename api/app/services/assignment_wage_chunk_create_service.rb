@@ -25,15 +25,12 @@ class AssignmentWageChunkCreateService
     private
 
     def delete_existing_wage_chunks
-        # TODO: Array of ID's passed in -- delete the ones not referenced in the list
-        # ids = @wage_chunks.fetch(:id)
         @assignment.wage_chunks.where(id: ids).not.delete_all
     end
 
     def add_missing_wage_chunk_attrs
         raise AssignmentWageChunkCreateService::WageChunkMissing if @wage_chunks.blank?
 
-        # TODO: Reference GitHub work around issue here
         @wage_chunks = @wage_chunks.map do |x|
             time = Time.zone.now
             x.to_h.merge!(assignment_id: @assignment.id,

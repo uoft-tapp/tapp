@@ -59,9 +59,4 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
     def find_assignment
         @assignment = Assignment.find(params[:assignment_id])
     end
-
-    def offer_create_params
-        params.permit(:position_id, :applicant_id, :contract_start_date,
-                      :contract_end_date, :note, :offer_override_pdf)
-    end
 end
