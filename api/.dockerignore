@@ -2,3 +2,4 @@
 .dockerignore
 log/*
 tmp/*
+db/snapshots/*
