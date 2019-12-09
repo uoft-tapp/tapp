@@ -1,21 +1,21 @@
-version: '3'
+version: "3"
 
 services:
-  frontend:
-    command: yarn start
-    build: ./frontend
-    ports:
-      - '8000:8000'
-    volumes:
-      - './frontend:/app'
-  api:
-    volumes:
-      - './api:/app'
-  db:
-    volumes:
-      - './tmp/db:/var/lib/postgresql/data'
-  mailcatcher:
-    image: rordi/docker-mailcatcher
-    container_name: mailcatcher
-    ports:
-      - 1080:1080
+    frontend:
+        command: yarn start
+        build: ./frontend
+        ports:
+            - "8000:8000"
+        volumes:
+            - "./frontend:/app"
+    api:
+        volumes:
+            - "./api:/app"
+    db:
+        volumes:
+            - "./pg_data/db:/var/lib/postgresql/data"
+    mailcatcher:
+        image: rordi/docker-mailcatcher
+        container_name: mailcatcher
+        ports:
+            - 1080:1080

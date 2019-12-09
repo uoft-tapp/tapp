@@ -5,7 +5,7 @@ Rails.application.routes.draw do
         namespace :v1 do
             namespace :admin do
                 # Active User
-                resource :active_user, only: [:index]
+                # resource :active_user, only: [:index]
 
                 # Applicants
                 resources :applicants, only: %i[index show create]
@@ -32,11 +32,16 @@ Rails.application.routes.draw do
                 get :available_contract_templates, to: 'contract_templates#available'
 
                 # Debug
-                if Rails.env.development?
-                    post '/debug/active_user', to: 'debug#active_user'
-                    post '/debug/clear_data', to: 'debug#clear_data'
-                    post '/debug/restore_snapshot', to: 'debug#restore_snapshot'
-                    post '/debug/snapshot', to: 'debug#snapshot'
+                unless Rails.env.production?
+                    resources :debug, only: [] do
+                        collection do
+                            get :active_user, to: 'debug#active_user'
+                            post :active_user, to: 'debug#create_active_user'
+                            post :clear_data, to: 'debug#clear_data'
+                            post :restore_snapshot, to: 'debug#restore_snapshot'
+                            post :snapshot, to: 'debug#snapshot'
+                        end
+                    end
                 end
 
                 # Instructors
