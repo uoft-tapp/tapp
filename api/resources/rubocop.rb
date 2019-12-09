@@ -1,7 +1,5 @@
-# !/usr/bin/env ruby
+#!/usr/bin/env ruby
 # frozen_string_literal: true
-
-# https://gist.github.com/MaxLap/ea4b6d1df81de3024562798b5501b9c8
 
 # A sneaky wrapper around Rubocop that allows you to run it only against
 # the recent changes, as opposed to the whole project. It lets you
@@ -46,160 +44,162 @@ require 'rubocop'
 require 'pathname'
 
 module DirtyCop
-  module_function # In your face, style guide!
+    extend self # In your face, style guide!
 
-  def bury_evidence?(file, line)
-    !report_offense_at?(file, line)
-  end
-
-  def bury_evidences(file, offenses)
-    offenses.reject { |o| bury_evidence?(file, o.line) }
-  end
-
-  def staged_changes_only?
-    !!@staged_changes_only
-  end
-
-  def uncovered_targets
-    @files
-  end
-
-  def cover_up_unmodified(ref, only_changed_lines = true)
-    @files = files_modified_since(ref)
-    @line_filter = build_line_filter(@files, ref) if only_changed_lines
-  end
-
-  def process_bribe
-    eat_a_donut if ARGV.empty?
-
-    ref = nil
-    only_changed_lines = true
-
-    loop do
-      arg = ARGV.shift
-      case arg
-      when '--local'
-        ref = `git rev-parse --abbrev-ref --symbolic-full-name @{u}`.chomp
-        exit(1) unless $CHILD_STATUS.success?
-      when '--staged'
-        ref = '--cached'
-        @staged_changes_only = true
-        ARGV << '--cache=false'
-      when '--against'
-        ref = ARGV.shift
-      when '--uncommitted', '--index'
-        ref = 'HEAD'
-      when '--branch'
-        ref = `git merge-base HEAD master`.chomp
-      when '--courage'
-        only_changed_lines = false
-      else
-        ARGV.unshift(arg)
-        break
-      end
+    def bury_evidence?(file, line)
+        !report_offense_at?(file, line)
     end
 
-    return unless ref
-
-    cover_up_unmodified(ref, only_changed_lines)
-  end
-
-  def report_offense_at?(file, line)
-    !@line_filter || @line_filter.fetch(file)[line]
-  end
-
-  def files_modified_since(ref)
-    `git diff --diff-filter=AM --name-only #{ref}`
-      .lines
-      .map(&:chomp)
-      .map { |file| File.absolute_path(file) }
-  end
-
-  def build_line_filter(_files, ref)
-    result = {}
-
-    suspects = files_modified_since(ref)
-    suspects.each do |file|
-      result[file] = lines_modified_since(file, ref)
+    def bury_evidences(file, offenses)
+        offenses.reject { |o| bury_evidence?(file, o.line) }
     end
 
-    result
-  end
-
-  def lines_modified_since(file, ref)
-    ranges =
-      `git diff -p -U0 #{ref} #{file}`
-      .lines
-      .grep(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/) { Regexp.last_match(1).to_i...(Regexp.last_match(1).to_i + (Regexp.last_match(2) || 1).to_i) }
-      .reverse
-
-    return [] if ranges.empty?
-
-    mask = Array.new(ranges.first.end)
-
-    ranges.each do |range|
-      range.each do |line|
-        mask[line] = true
-      end
+    def staged_changes_only?
+        @staged_changes_only
     end
 
-    mask
-  end
+    def uncovered_targets
+        @files
+    end
 
-  def eat_a_donut
-    puts "#{$PROGRAM_NAME}: The dirty cop Alex Murphy could have been"
-    puts
-    puts File.read(__FILE__)[/(?:^#(?:[^!].*)?\n)+/s].gsub(/^#/, '   ')
-    exit
-  end
+    def cover_up_unmodified(ref, only_changed_lines = true)
+        @files = files_modified_since(ref)
+        @line_filter = build_line_filter(@files, ref) if only_changed_lines
+    end
+
+    def process_bribe
+        eat_a_donut if ARGV.empty?
+
+        ref = nil
+        only_changed_lines = true
+
+        loop do
+            arg = ARGV.shift
+            case arg
+            when '--local'
+                ref = `git rev-parse --abbrev-ref --symbolic-full-name @{u}`.chomp
+                exit 1 unless $CHILD_STATUS.success?
+            when '--staged'
+                ref = '--cached'
+                @staged_changes_only = true
+                ARGV << '--cache=false'
+            when '--against'
+                ref = ARGV.shift
+            when '--uncommitted', '--index'
+                ref = 'HEAD'
+            when '--branch'
+                ref = `git merge-base HEAD master`.chomp
+            when '--courage'
+                only_changed_lines = false
+            else
+                ARGV.unshift arg
+                break
+            end
+        end
+
+        return unless ref
+
+        cover_up_unmodified ref, only_changed_lines
+    end
+
+    private
+
+    def report_offense_at?(file, line)
+        !@line_filter || @line_filter.fetch(file)[line]
+    end
+
+    def files_modified_since(ref)
+        `git diff --diff-filter=AM --name-only #{ref}`
+            .lines
+            .map(&:chomp)
+            .map { |file| File.absolute_path(file) }
+    end
+
+    def build_line_filter(_files, ref)
+        result = {}
+
+        suspects = files_modified_since(ref)
+        suspects.each do |file|
+            result[file] = lines_modified_since(file, ref)
+        end
+
+        result
+    end
+
+    def lines_modified_since(file, ref)
+        ranges =
+            `git diff -p -U0 #{ref} #{file}`
+            .lines
+            .grep(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/) do
+                Regexp.last_match(1).to_i...(Regexp.last_match(1).to_i +
+                (Regexp.last_match(2) || 1).to_i)
+            end
+            .reverse
+
+        return [] if ranges.empty?
+
+        mask = Array.new(ranges.first.end)
+
+        ranges.each do |range|
+            range.each do |line|
+                mask[line] = true
+            end
+        end
+
+        mask
+    end
+
+    def eat_a_donut
+        puts "#{$PROGRAM_NAME}: The dirty cop Alex Murphy could have been"
+        puts
+        puts File.read(__FILE__)[/(?:^#(?:[^!].*)?\n)+/s].gsub(/^#/, '   ')
+        exit
+    end
 end
 
 module RuboCop
-  class TargetFinder
-    alias find_unpatched find
+    class TargetFinder
+        alias find_unpatched find
 
-    def find(args)
-      every_files = find_unpatched(args)
-      modified_files = DirtyCop.uncovered_targets
-      every_files & modified_files if modified_files
-    end
-  end
-
-  class Runner
-    alias inspect_file_unpatched inspect_file
-
-    def inspect_file(processed_source)
-      offenses, updated = inspect_file_unpatched(processed_source)
-      offenses = DirtyCop.bury_evidences(processed_source.path, offenses)
-      [offenses, updated]
+        def find(args)
+            every_files = find_unpatched(args)
+            modified_files = DirtyCop.uncovered_targets
+            every_files & modified_files if modified_files
+        end
     end
 
-    alias add_unneeded_disables_unpatched add_unneeded_disables
-    def add_unneeded_disables(file, offenses, source)
-      offenses = add_unneeded_disables_unpatched(file, offenses, source)
-      DirtyCop.bury_evidences(file, offenses)
-    end
-  end
+    class Runner
+        def self.inspect_file(processed_source)
+            offenses, updated = inspect_file_unpatched(processed_source)
+            offenses = DirtyCop.bury_evidences(processed_source.path, offenses)
+            [offenses, updated]
+        end
 
-  class ProcessedSource
-    class << self
-      alias from_file_unpatched from_file
+        def self.add_unneeded_disables(file, offenses, source)
+            offenses = add_unneeded_disables_unpatched(file, offenses, source)
+            DirtyCop.bury_evidences(file, offenses)
+        end
     end
 
-    def self.from_file(path, ruby_version)
-      if DirtyCop.staged_changes_only?
-        pathname = Pathname.new(path)
-        git_root = Pathname.new(`git rev-parse --show-toplevel`.strip)
-        git_relative_path = pathname.relative_path_from(git_root).to_s
-        source = `git show :#{git_relative_path}`
-        new(source, ruby_version, path)
-      else
-        from_file_unpatched(path, ruby_version)
-      end
+    class ProcessedSource
+        class << self
+            alias from_file_unpatched from_file
+        end
+
+        def self.from_file(path, ruby_version)
+            if DirtyCop.staged_changes_only?
+                pathname = Pathname.new(path)
+                git_root = Pathname.new(`git rev-parse --show-toplevel`.strip)
+                git_relative_path = pathname.relative_path_from(git_root).to_s
+                source = `git show :#{git_relative_path}`
+                new(source, ruby_version, path)
+            else
+                from_file_unpatched(path, ruby_version)
+            end
+        end
     end
-  end
 end
 
 DirtyCop.process_bribe
 
-exit(RuboCop::CLI.new.run)
+exit RuboCop::CLI.new.run
