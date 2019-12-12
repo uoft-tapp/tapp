@@ -2,4 +2,4 @@
 
 require 'rake'
 
-Tapp::Application.load_tasks if Rake::Task.tasks.empty?
+Tapp::Application.load_tasks if Rake::Task.tasks.empty? && !Rails.env.production?
