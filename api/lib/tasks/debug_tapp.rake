@@ -10,7 +10,7 @@ namespace :debug do
             timestamp = Time.now.strftime('%Y%m%d%H%M%S')
             file_name = "#{Rails.root}/db/snapshots/#{timestamp}_#{db}.psql"
             con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-            cmd = "pg_dump -v -F c -f #{file_name} #{con_string}"
+            cmd = "pg_dump -v -f #{file_name} #{con_string}"
             puts cmd
         end
         `#{cmd}`
@@ -27,7 +27,7 @@ namespace :debug do
             else
                 file_name = "#{Rails.root}/db/snapshots/#{last_snapshot_file}"
                 con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-                cmd = "pg_restore -F c -v -c -C #{file_name} #{con_string}"
+                cmd = "pg_restore -d #{con_string} -v -c -C #{file_name}"
             end
         end
         ActiveRecord::Tasks::DatabaseTasks.drop_all
