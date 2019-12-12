@@ -12,7 +12,6 @@ end
 #
 #  id                       :integer          not null, primary key
 #  applicant_id             :integer          not null
-#  application_id           :integer          not null
 #  program                  :string
 #  department               :string
 #  previous_uoft_experience :text
@@ -23,6 +22,5 @@ end
 #
 # Indexes
 #
-#  index_applicant_data_for_matchings_on_applicant_id    (applicant_id)
-#  index_applicant_data_for_matchings_on_application_id  (application_id)
+#  index_applicant_data_for_matchings_on_applicant_id  (applicant_id)
 #
