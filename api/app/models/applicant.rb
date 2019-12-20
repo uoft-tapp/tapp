@@ -8,7 +8,8 @@ class Applicant < ApplicationRecord
     has_one :applicant_data_for_matching
 
     validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
-    validates_uniqueness_of :student_number, :utorid
+    validates_uniqueness_of :student_number, case_sensitive: false
+    validates_uniqueness_of :utorid
 
     def self.by_session(session_id)
         joins(:applications)
