@@ -45,7 +45,7 @@ class Assignment < ApplicationRecord
                                    hours: assignment_hours_split }])
         else
             wage_chunks.create!(start_date: start_date, end_date: end_date,
-                                hours: assigment_hours)
+                                hours: assignment_hours)
         end
     end
 end
