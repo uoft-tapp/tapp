@@ -12,7 +12,9 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
         render_success Applicant.by_session(params[:session_id])
     end
 
-    def show; end
+    def show
+        render_success @applicant
+    end
 
     # POST /applicants
     def create
