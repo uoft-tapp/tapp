@@ -2,7 +2,10 @@
 
 FactoryBot.define do
     factory :applicant do
-        utorid { Faker::Internet.slug(words: "#{last_name} #{first_name} #{Faker::Number.number(digits: 2)}", glue: '') }
+        utorid do
+            Faker::Internet.slug(words: "#{last_name} #{first_name} \
+            #{Faker::Number.number(digits: 2)}", glue: '')
+        end
         first_name { Faker::Name.first_name }
         last_name { Faker::Name.last_name }
         email { Faker::Internet.email(name: "#{first_name} #{last_name}", separators: '') }
@@ -11,7 +14,10 @@ FactoryBot.define do
             student_number { Faker::Number.number(digits: 10) }
         end
         trait :with_utorid do
-            utorid { Faker::Internet.slug(words: "#{last_name} #{first_name} #{Faker::Number.number(digits: 2)}", glue: '') }
+            utorid do
+                Faker::Internet.slug(words: "#{last_name} #{first_name} \
+                    #{Faker::Number.number(digits: 2)}", glue: '')
+            end
         end
     end
 end

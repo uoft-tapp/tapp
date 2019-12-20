@@ -6,9 +6,9 @@ RSpec.describe WageChunk, type: :model do
     describe 'associations' do
         it { should have_and_belong_to_many(:reporting_tags) }
         it { should belong_to(:assignment) }
-    end 
+    end
 
-    describe 'validations' do 
+    describe 'validations' do
         it { should validate_numericality_of(:hours) }
         it { should validate_numericality_of(:rate) }
     end

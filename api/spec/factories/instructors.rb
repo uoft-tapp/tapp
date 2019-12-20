@@ -5,9 +5,12 @@ FactoryBot.define do
         first_name { Faker::Name.unique.first_name }
         last_name { Faker::Name.unique.last_name }
         email { Faker::Internet.email(name: "#{first_name} #{last_name}", separators: '') }
-        utorid { Faker::Internet.slug(words: "#{last_name} #{first_name} #{Faker::Number.number(digits: 2)}", glue: '') }
+        utorid do
+            Faker::Internet.slug(words: "#{last_name} #{first_name} \
+            #{Faker::Number.number(digits: 2)}", glue: '')
+        end
         trait :without_utorid do
-            utorid { }
+            utorid {}
         end
     end
 end
