@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::PositionsController, type: :controller do
+RSpec.describe Api::V1::Admin::PositionsController, type: :controller do
 end

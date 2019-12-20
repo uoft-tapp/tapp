@@ -6,7 +6,6 @@ RSpec.describe Application, type: :model do
     describe 'associations' do
         it { should have_many(:position_preferences) }
         it { should have_many(:positions).through(:position_preferences) }
-        it { should have_one(:applicant_data_for_matching) }
         it { should belong_to(:applicant) }
         it { should belong_to(:session) }
     end

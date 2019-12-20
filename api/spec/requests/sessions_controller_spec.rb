@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Api::V1::SessionsController do
+describe Api::V1::Admin::SessionsController do
     let(:valid_attributes) do
         {
             "start_date": Time.zone.now,
@@ -15,7 +15,7 @@ describe Api::V1::SessionsController do
     describe 'GET /sessions' do
         it 'returns all Sessions' do
             session = create(:session, :fall)
-            get '/api/v1/sessions'
+            get '/api/v1/admin/sessions'
             expect(response.status).to eq(200)
             payload = JSON.parse(response.body)['payload']
             expect(payload).to be_an_instance_of(Array)
@@ -28,7 +28,7 @@ describe Api::V1::SessionsController do
             context 'with valid attributes' do
                 before(:each) do
                     expect(Session.count).to eq(0)
-                    post '/api/v1/sessions', params: valid_attributes
+                    post '/api/v1/admin/sessions', params: valid_attributes
                 end
 
                 it 'creates a new session' do
@@ -47,7 +47,7 @@ describe Api::V1::SessionsController do
                 expect(Session.count).to eq(1)
                 session = Session.first
                 session.start_date = session.start_date - 1.day
-                post '/api/v1/sessions', params: session.as_json
+                post '/api/v1/admin/sessions', params: session.as_json
                 expect(Session.count).to eq(1)
                 expect(Session.first.start_date).to eq(session.start_date)
             end
@@ -63,7 +63,7 @@ describe Api::V1::SessionsController do
 
         context 'with a valid Session' do
             before(:each) do
-                post '/api/v1/sessions/delete', params: { id: session.id }
+                post '/api/v1/admin/sessions/delete', params: { id: session.id }
             end
 
             it 'creates a deletes the Session' do
@@ -77,7 +77,7 @@ describe Api::V1::SessionsController do
 
         context 'with an invalid Session' do
             before(:each) do
-                post '/api/v1/sessions/delete', params: { id: -1 }
+                post '/api/v1/admin/sessions/delete', params: { id: -1 }
             end
 
             it 'does not delete any Session' do

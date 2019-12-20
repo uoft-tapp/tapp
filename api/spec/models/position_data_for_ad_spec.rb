@@ -3,7 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe PositionDataForAd, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    describe 'associations' do
+        it { should belong_to(:position) }
+    end
+
+    describe 'validations' do
+        it { should validate_numericality_of(:ad_num_assignments) }
+        it { should validate_numericality_of(:ad_hours_per_assignment) }
+    end
 end
 
 # == Schema Information

@@ -3,7 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe WageChunk, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    describe 'associations' do
+        it { should have_and_belong_to_many(:reporting_tags) }
+        it { should belong_to(:assignment) }
+    end 
+
+    describe 'validations' do 
+        it { should validate_numericality_of(:hours) }
+        it { should validate_numericality_of(:rate) }
+    end
 end
 
 # == Schema Information

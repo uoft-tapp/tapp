@@ -6,9 +6,13 @@ RSpec.describe Assignment, type: :model do
     describe 'associations' do
         it { should have_many(:offers) }
         it { should have_many(:wage_chunks) }
-        # it { should belong_to(:active_offer) }
         it { should belong_to(:applicant) }
         it { should belong_to(:position) }
+    end
+
+    describe 'validations' do
+        subject { build(:assignment) }
+        it { should validate_uniqueness_of(:applicant_id).scoped_to(:position_id) }
     end
 end
 

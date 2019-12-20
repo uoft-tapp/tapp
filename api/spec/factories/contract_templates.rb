@@ -2,9 +2,9 @@
 
 FactoryBot.define do
     factory :contract_template do
-        session { nil }
-        position_type { 'MyString' }
-        offer_template { 'MyString' }
+        association :session
+        template_name { 'MyString' }
+        template_file { 'MyString' }
     end
 end
 

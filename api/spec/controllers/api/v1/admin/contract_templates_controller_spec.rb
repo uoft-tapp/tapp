@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V1::ContractTemplatesController, type: :controller do
+RSpec.describe Api::V1::Admin::ContractTemplatesController, type: :controller do
 end

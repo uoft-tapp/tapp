@@ -3,7 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe Position, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    describe 'associations' do
+        it { should have_and_belong_to_many(:instructors) }
+        it { should have_and_belong_to_many(:reporting_tags) }
+        it { should have_many(:assignments) }
+        it { should have_many(:position_preferences) }
+        it { should have_many(:applications).through(:position_preferences) }
+        it { should have_one(:position_data_for_ad) }
+        it { should have_one(:position_data_for_matching) }
+        it { should belong_to(:session) }
+        it { should belong_to(:contract_template) }
+    end
+
+    describe 'validation' do
+        it { should validate_presence_of(:start_date) }
+        it { should validate_presence_of(:end_date) }
+        it { should validate_presence_of(:position_code) }
+        it { should validate_numericality_of(:hours_per_assignment) }
+    end
 end
 
 # == Schema Information

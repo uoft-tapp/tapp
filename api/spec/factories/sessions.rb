@@ -6,6 +6,7 @@ FactoryBot.define do
     year = Time.now.year
     factory :session do
         rate1 { 20.00 }
+        name { Faker::String.random(length: 3..12) }
         trait :fall do
             start_date { Time.new(year, 9, 1) }
             end_date { Time.new(year, 12, 31) }

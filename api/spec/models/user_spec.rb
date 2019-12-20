@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
     describe 'validations' do
-        it { should define_enum_for(:role).with_values(%i[admin instructor]) }
         it { should validate_presence_of(:utorid) }
         it { should validate_uniqueness_of(:utorid) }
     end
