@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { ConnectedSessionSelect } from "./session-select";
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
 import { Button } from "react-bootstrap";
 import { sessionsSelector } from "../../api/actions";
@@ -27,10 +26,9 @@ export function AdminSessionsView() {
                     setAddDialogVisible(false);
                 }}
             />
-            <ConnectedSessionSelect />
             <ConnectedSessionList />
         </div>
     );
 }
 
-export { ConnectedAddSessionDialog, ConnectedSessionSelect };
+export { ConnectedAddSessionDialog };

@@ -9,7 +9,7 @@ import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: [],
-    activeSession: { id: null }
+    activeSession: null
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,

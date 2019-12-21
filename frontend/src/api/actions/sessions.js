@@ -37,14 +37,20 @@ export const fetchSessions = validatedApiDispatcher({
         // after sessions are fetched, we compare with the active session.
         // The active session might need to be "updated" if the ID matches but
         // the data doesn't
-        const activeSession = getState().model.sessions.activeSession;
-        const matchingSession = data.filter(s => s.id === activeSession.id)[0];
-        if (
-            matchingSession &&
-            JSON.stringify(matchingSession) !== JSON.stringify(activeSession)
-        ) {
-            // Force an override of the active session, even though the `id`s match.
-            dispatch(setActiveSession(matchingSession, true));
+        const activeSession = activeSessionSelector(getState());
+
+        if (activeSession) {
+            const matchingSession = data.filter(
+                s => s.id === activeSession.id
+            )[0];
+            if (
+                matchingSession &&
+                JSON.stringify(matchingSession) !==
+                    JSON.stringify(activeSession)
+            ) {
+                // Force an override of the active session, even though the `id`s match.
+                dispatch(setActiveSession(matchingSession, true));
+            }
         }
     }
 });
@@ -107,7 +113,7 @@ export const setActiveSession = validatedApiDispatcher({
         const state = getState();
         if (
             !forceChange &&
-            state.model.sessions.activeSession.id === payload.id
+            (activeSessionSelector(state) || { id: null }).id === payload.id
         ) {
             return;
         }

@@ -1,10 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import {
-    fetchSessions,
-    setActiveSession,
-    sessionsSelector,
-    activeSessionSelector,
     contractTemplatesSelector,
     instructorsSelector,
     positionsSelector,
@@ -12,7 +8,6 @@ import {
     applicantsSelector
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
-import { SessionSelect } from "../../components/sessions";
 import { SessionEditor } from "../../components/forms/session-editor";
 import { ApplicantsList } from "../../components/applicants-list";
 import { ContractTemplatesList } from "../../components/contract-templates-list";
@@ -28,19 +23,6 @@ import { PositionEditor } from "../../components/forms/position-editor";
 import { InstructorEditor } from "../../components/instructors";
 import { AssignmentEditor } from "../../components/forms/assignment-editor";
 import { ContractTemplateEditor } from "../../components/forms/contract-template-editor";
-
-// Connect the SessionSelect component
-let mapStateToProps = state => {
-    return {
-        sessions: sessionsSelector(state),
-        activeSession: activeSessionSelector(state)
-    };
-};
-let mapDispatchToProps = { fetchSessions, setActiveSession };
-const ConnectedSessionSelect = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SessionSelect);
 
 const ConnectedApplicantList = connect(state => ({
     applicants: applicantsSelector(state)
@@ -158,9 +140,6 @@ function Dashboard() {
                 >
                     Edit me!
                 </EditableField>
-            </DashboardWidget>
-            <DashboardWidget title="SessionSelect">
-                <ConnectedSessionSelect />
             </DashboardWidget>
             <DashboardWidget title="ApplicantsList">
                 <ConnectedApplicantList />
