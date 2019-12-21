@@ -3,7 +3,6 @@ import { PositionsList } from "../../components/positions-list";
 import { FilteredList } from "../../components/filtered-list";
 import { connect } from "react-redux";
 import { positionsSelector } from "../../api/actions";
-import { ConnectedSessionSelect } from "../sessions";
 
 const ConnectedFilteredList = connect((state, ownProps) => ({
     positions: positionsSelector(state),
@@ -21,7 +20,6 @@ function ControlPanel() {
 
     return (
         <div>
-            <ConnectedSessionSelect />
             <ConnectedFilteredList
                 listRenderer={PositionsList}
                 filterFunc={filter}

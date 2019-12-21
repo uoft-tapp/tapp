@@ -43,7 +43,7 @@ BootstrapNavLink.propTypes = {
  * @returns
  */
 export function Header(props) {
-    const { routes = [], infoComponent = null } = props;
+    const { routes = [], infoComponents = null } = props;
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
@@ -95,7 +95,9 @@ export function Header(props) {
                     </Route>
                 ))}
             </Nav>
-            {infoComponent}
+            {infoComponents.map((component, index) => (
+                <div key={index}>{component}</div>
+            ))}
         </Navbar>
     );
 }
@@ -114,5 +116,5 @@ Header.propTypes = {
             )
         })
     ),
-    infoComponent: PropTypes.node
+    infoComponents: PropTypes.array
 };

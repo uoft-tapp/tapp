@@ -1,8 +1,15 @@
 import React from "react";
 import { Header } from "../../components/header";
 import { connect } from "react-redux";
-import { usersSelector } from "../../api/actions";
+import {
+    setActiveUserRole,
+    setActiveSession,
+    usersSelector,
+    sessionsSelector,
+    activeSessionSelector
+} from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
+import { ActiveSessionDisplay } from "../../components/active-session";
 
 /**
  * Header showing the routes that a user with `role=admin`
@@ -71,14 +78,36 @@ function AdminHeader() {
                     hidden: true
                 }
             ]}
-            infoComponent={<ConnectedActiveUserDisplay />}
+            infoComponents={[
+                <ConnectedActiveSessionDisplay />,
+                <ConnectedActiveUserDisplay />
+            ]}
         />
     );
 }
 
-const ConnectedActiveUserDisplay = connect(state => ({
-    user: usersSelector(state).active_user,
-    role: usersSelector(state).active_role
-}))(ActiveUserDisplay);
+const mapSessionsStateToProps = state => ({
+    sessions: sessionsSelector(state),
+    activeSession: activeSessionSelector(state)
+});
+
+const mapSessionsDispatchToProps = { setActiveSession };
+
+const ConnectedActiveSessionDisplay = connect(
+    mapSessionsStateToProps,
+    mapSessionsDispatchToProps
+)(ActiveSessionDisplay);
+
+const mapActiveUserStateToProps = state => ({
+    activeUser: usersSelector(state).active_user,
+    activeRole: usersSelector(state).active_role
+});
+
+const mapActiveUserDispatchToProps = { setActiveUserRole };
+
+const ConnectedActiveUserDisplay = connect(
+    mapActiveUserStateToProps,
+    mapActiveUserDispatchToProps
+)(ActiveUserDisplay);
 
 export { AdminHeader };
