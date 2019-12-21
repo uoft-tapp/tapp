@@ -1,16 +1,11 @@
 # frozen_string_literal: true
 
-# Base class from which most controllers will inherit from
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::API
     include Response
     include ExceptionHandler
-    include ApplicationHelper
+    include TransactionHandler
 
-    def index
-        render file: 'public/index.html'
-    end
-
-    def not_found
-        render_error('unknown route')
-    end
+    # Don't wrap parameters
+    # https://guides.rubyonrails.org/action_controller_overview.html#json-xml-parameters
+    wrap_parameters false
 end

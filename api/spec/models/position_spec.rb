@@ -1,45 +1,25 @@
 # frozen_string_literal: true
 
-describe Position do
-    it 'should have a valid factory' do
-        FactoryBot.create(:position)
+require 'rails_helper'
+
+RSpec.describe Position, type: :model do
+    describe 'associations' do
+        it { should have_and_belong_to_many(:instructors) }
+        it { should have_and_belong_to_many(:reporting_tags) }
+        it { should have_many(:assignments) }
+        it { should have_many(:position_preferences) }
+        it { should have_many(:applications).through(:position_preferences) }
+        it { should have_one(:position_data_for_ad) }
+        it { should have_one(:position_data_for_matching) }
+        it { should belong_to(:session) }
+        it { should belong_to(:contract_template) }
     end
 
-    it 'should not save without course code' do
-        k = FactoryBot.build(:position, course_code: nil)
-        expect(k).to_not be_valid
-
-        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it 'should not save without openings' do
-        k = FactoryBot.build(:position, openings: nil)
-        expect(k).to_not be_valid
-
-        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it 'should not save without a session' do
-        k = FactoryBot.build(:position, session: nil)
-        expect(k).to_not be_valid
-
-        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it 'should not save with invalid openings' do
-        k = FactoryBot.build(:position, openings: -30.15)
-        expect(k).to_not be_valid
-
-        expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it 'should not save with a duplicated opening date' do
-        original = FactoryBot.create(:position)
-        new = FactoryBot.build(:position)
-        new.session = original.session
-
-        expect(new).to_not be_valid
-        expect { new.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    describe 'validation' do
+        it { should validate_presence_of(:start_date) }
+        it { should validate_presence_of(:end_date) }
+        it { should validate_presence_of(:position_code) }
+        it { should validate_numericality_of(:hours_per_assignment) }
     end
 end
 
@@ -47,22 +27,19 @@ end
 #
 # Table name: positions
 #
-#  id                       :bigint(8)        not null, primary key
-#  est_end_date             :datetime
-#  est_hours_per_assignment :float
-#  est_start_date           :datetime
-#  position_code            :string
-#  position_title           :string
-#  position_type            :string
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  session_id               :bigint(8)
+#  id                   :integer          not null, primary key
+#  session_id           :integer          not null
+#  position_code        :string
+#  position_title       :string
+#  hours_per_assignment :float
+#  start_date           :datetime         not null
+#  end_date             :datetime         not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  contract_template_id :integer          not null
 #
 # Indexes
 #
-#  index_positions_on_session_id  (session_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (session_id => sessions.id)
+#  index_positions_on_contract_template_id  (contract_template_id)
+#  index_positions_on_session_id            (session_id)
 #

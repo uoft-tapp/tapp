@@ -3,72 +3,50 @@
 # A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
+    ACTIVE_OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
+    enum active_offer_status: ACTIVE_OFFER_STATUS
+
     has_many :offers
+    has_many :wage_chunks, dependent: :delete_all
+    belongs_to :active_offer, class_name: 'Offer', optional: true
     belongs_to :applicant
     belongs_to :position
-    has_many :wage_chunks
 
     validates_uniqueness_of :applicant_id, scope: [:position_id]
 
-    after_update :reset_active_offer
+    scope :by_position, ->(position_id) { where(position_id: position_id).order(:id) }
 
-    def active_offer
-        active_offer_id ? Offer.find(active_offer_id) : nil
-    end
-
-    def offer_params
-        return if active_offer.present?
-
-        applicant = self.applicant
-        position = self.position
-        session = position.session
-        applicant_data = applicant.applicant_data_for_matchings
-                                  .joins(:application)
-                                  .where(applications: { session: session })
-                                  .first
-        start_date = position.est_start_date
-        end_date = position.est_end_date
-        installments = (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
-        offer_template = session.position_templates.where(position_type: position.position_type).first.offer_template
-
-        {
-            email: applicant.email,
-            first_name: applicant.first_name,
-            last_name: applicant.last_name,
-            first_time_ta: applicant_data.previous_uoft_ta_experience,
-            installments: installments,
-            instructor_contact_desc: instructor_contact_desc,
-            nag_count: 0,
-            offer_override_pdf: offer_override_pdf,
-            offer_template: offer_template,
-            pay_period_desc: pay_period_desc,
-            position_code: position.position_code,
-            position_end_date: end_date,
-            position_start_date: start_date,
-            position_title: position.position_title,
-            assignment: self
-        }
-    end
+    after_create :split_and_create_wage_chunks
 
     private
 
-    def reset_active_offer
-        # update_column skips callbacks
-        update_column(:active_offer_id, nil)
-    end
-
-    def instructor_contact_desc
-        contact_info = position.instructors.map do |instructor|
-            "#{instructor.first_name.capitalize} #{instructor.last_name.capitalize}: #{instructor.email}"
+    def split_and_create_wage_chunks
+        start_date = self.start_date
+        end_date = self.end_date
+        if start_date.blank? && end_date.blank?
+            start_date = position.start_date
+            end_date = position.end_date
         end
-        contact_info.join(', ')
-    end
 
-    def pay_period_desc
-        pay_period_info = wage_chunks.map do |wage_chunk|
-            "#{wage_chunk.hours} hours at #{wage_chunk.rate} per hour"
+        return unless start_date && end_date
+
+        assignment_hours = position.hours_per_assignment
+        return unless assignment_hours
+
+        if end_date.year > start_date.year
+            boundary_date = start_date.end_of_year
+            assignment_hours_split = assignment_hours / 2.to_f
+            wage_chunks.create!([{ start_date: start_date,
+                                   end_date: boundary_date,
+                                   hours: assignment_hours_split },
+                                 { start_date: (boundary_date + 1.day)
+                                               .beginning_of_year,
+                                   end_date: end_date,
+                                   hours: assignment_hours_split }])
+        else
+            wage_chunks.create!(start_date: start_date, end_date: end_date,
+                                hours: assignment_hours)
         end
-        pay_period_info.join(', ')
     end
 end
 
@@ -76,16 +54,17 @@ end
 #
 # Table name: assignments
 #
-#  id                 :bigint(8)        not null, primary key
-#  contract_end       :datetime
-#  contract_start     :datetime
-#  note               :text
-#  offer_override_pdf :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  active_offer_id    :bigint(8)
-#  applicant_id       :bigint(8)
-#  position_id        :bigint(8)
+#  id                  :integer          not null, primary key
+#  position_id         :integer          not null
+#  applicant_id        :integer          not null
+#  start_date          :datetime
+#  end_date            :datetime
+#  note                :text
+#  offer_override_pdf  :string
+#  active_offer_status :integer          default("0"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  active_offer_id     :integer
 #
 # Indexes
 #
@@ -93,8 +72,4 @@ end
 #  index_assignments_on_applicant_id                  (applicant_id)
 #  index_assignments_on_position_id                   (position_id)
 #  index_assignments_on_position_id_and_applicant_id  (position_id,applicant_id) UNIQUE
-#
-# Foreign Keys
-#
-#  fk_rails_...  (active_offer_id => offers.id)
 #

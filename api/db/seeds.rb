@@ -1,82 +1,95 @@
-# frozen_string_literal: true
-
-# Seed data is contained in the json files under seed folder. This file serves as the script of 
-# pasing json file and create tables from the parsed data. The data can then be loaded with the rails db:seed command (or created alongside the
-# database with db:setup). For testing purpose, use db:reset to reload all the table.
-include SeedsHandler
-
-seed_data_sequence = [
-    {
-        get: '/sessions',
-        create: '/sessions',
-    },
-    {
-        get: '/position_templates',
-        create: '/sessions/:session_id/add_position_template',
-    },
-    {
-        get: '/instructors',
-        create: '/instructors',
-    },
-    {
-        get: '/positions',
-        create: '/sessions/:session_id/positions',
-    },
-    {
-        get: '/applicants',
-        create: '/applicants',
-    },
-    {
-        get: '/applications',
-        create: '/sessions/:session_id/applications',
-    },
-    {
-        get: '/position_preferences',
-        create: '/applications/:application_id/add_preference',
-    },
-    {
-        get: '/assignments',
-        create: '/positions/:position_id/assignments',
-    },
-    {
-        get: '/wage_chunks',
-        create: '/assignments/:assignment_id/add_wage_chunk',
-    },
-    {
-        get: '/reporting_tags',
-        create: '/wage_chunks/:wage_chunk_id/add_reporting_tag',
-    }
-]
-
-# entries is used for generating seed data into a JSON file. The 
-# command for generating a new seed data file is:
-#    generate_mock_data(entries, file)
+# This file should contain all the record creation needed to seed the database with its default values.
+# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
-# file: string for the output JSON file. It can be something like 
-#    "new_mock_data.json". This file will be generated in the 
-#    /api/db/seed/ folder.
-# entries: a hash like the "entries" below. Each of the key in this
-#    hash are tables included in the seed data. Removing any of them
-#    will likely cause the generation to crash due to tables being dependent
-#    on one another. Also, don't change the order of the keys.
-#    The actual values indicate the number of entries for that table 
-#    you want to create. Please make sure the number make sense. 
-#    e.g. don't have:
-#        applicants: 1
-#        positions: 1
-#        assignments: 40
-entries = {
-    sessions: 3,
-    position_templates: 3,
-    instructors: 20,
-    positions: 50,
-    applicants: 100,
-    applications: 150,
-    position_preferences: 300,
-    assignments: 100,
-    wage_chunks: 50,
-    reporting_tags: 50,
-}
+# Examples:
+#
+#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
+#   Character.create(name: 'Luke', movie: movies.first)
 
-insert_data(seed_data_sequence, 'mock_data.json')
- 
+session = Session.new({
+  start_date: Time.zone.now,
+  end_date: Time.zone.now.end_of_year,
+  name: "Fall 2019 Session",
+  rate1: 40
+})
+
+session.save!
+session.contract_templates.create!
+session.positions.new({
+  contract_template: session.contract_templates.first,
+  position_code: "Position 1"
+})
+
+
+session2 = Session.new({
+  start_date: Time.zone.now.end_of_year + 1.day,
+  end_date: Time.zone.now.end_of_year + 1.day + 4.months,
+  name: "Winter 2020 Session",
+  rate1: 40
+})
+session2.save!
+
+applicant1 = Applicant.new({
+  "utorid": "A",
+  "email": "A",
+  "first_name": "A",
+  "last_name": "A",
+  "student_number": "A"
+})
+
+applicant2 = Applicant.new({
+  "utorid": "B",
+  "email": "B",
+  "first_name": "B",
+  "last_name": "B",
+  "student_number": "B"
+})
+
+applicant3 = Applicant.new({
+  "utorid": "C",
+  "email": "C",
+  "first_name": "C",
+  "last_name": "C",
+  "student_number": "C"
+})
+
+applicant1.save!
+applicant2.save!
+applicant3.save!
+
+application = Application.new({
+  session: session,
+  applicant: applicant1
+})
+
+application.save!
+
+application2 = Application.new({
+  session: session2,
+  applicant: applicant1,
+})
+
+application3 = Application.new({
+  session: session,
+  applicant: applicant1,
+})
+
+application3.save!
+
+ApplicantDataForMatching.create!({
+  applicant: applicant1,
+  application: application,
+})
+
+contract_template = ContractTemplate.new({
+  session: session
+})
+contract_template.save!
+
+position = Position.new({
+  contract_template: contract_template,
+  position_code: "Position for ABC",
+  session: session
+})
+
+position.save!

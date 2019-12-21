@@ -6,7 +6,8 @@ RUN apk update && apk add build-base \
   nodejs \
   postgresql-dev \
   tzdata \
-  graphviz
+  graphviz \
+  postgresql-client
 
 RUN apk add --update --no-cache \
   libgcc libstdc++ libx11 glib libxrender libxext libintl \

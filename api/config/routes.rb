@@ -1,102 +1,91 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-    # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-    root :to => 'application#index'
-
     namespace :api do
         namespace :v1 do
-            # instructor routes
-            post '/instructors/delete' => 'instructors#delete'
-            resources :instructors, only: [:index, :create]
+            namespace :admin do
+                # Active User
+                # resource :active_user, only: [:index]
 
-            # position routes
-            post '/positions/delete' => 'positions#delete'
-            resources :positions, only: [:index, :create] do
-                resources :instructors, only: [:index]
-                resources :assignments, only: [:index, :create]
-                post '/instructors', to: 'instructors#create'
-                post '/instructors/delete', to: 'instructors#delete_instructor_by_position'
-            end
+                # Applicants
+                resources :applicants, only: %i[index show create]
 
-            # applicant routes
-            post '/applicants/delete' => 'applicants#delete'
-            resources :applicants, only: [:index, :create]
+                # Application
+                resources :applications, only: :create
 
-            # assignment routes
-            post '/assignments/delete' => 'assignments#delete'
-            resources :assignments, only: [:index, :create] do
-                resources :wage_chunks, only: [:index]
-                post '/add_wage_chunk', to: 'wage_chunks#create'
-                get '/active_offer', to: 'offers#active_offer'
-            end
+                # Assignments
+                resources :assignments, only: %i[show create] do
+                    resources :wage_chunks, controller: :assignment_wage_chunks, only: %i[index create]
+                    resources :offers, path: :active_offer, controller: :active_offers, only: :index do
+                        collection do
+                            post 'create'
+                            post :accept
+                            post :reject
+                            post :withdraw
+                            post :email
+                            post :nag
+                        end
+                    end
+                end
 
-            # wage_chunk routes
-            post '/wage_chunks/delete' => 'wage_chunks#delete'
-            resources :wage_chunks, only: [:index, :create] do 
-                post '/add_reporting_tag', to: 'reporting_tags#create'
-            end
+                # Contract Templates
+                get :available_contract_templates, to: 'contract_templates#available'
 
-            # application routes
-            post '/applications/delete' => 'applications#delete'
-            resources :applications, only: [:index, :create] do
-                post '/add_preference', to: 'position_preferences#create'
-            end
+                # Debug
+                unless Rails.env.production?
+                    resources :debug, only: [] do
+                        collection do
+                            get :active_user, to: 'debug#active_user'
+                            post :active_user, to: 'debug#create_active_user'
+                            post :clear_data, to: 'debug#clear_data'
+                            post :restore_snapshot, to: 'debug#restore_snapshot'
+                            post :snapshot, to: 'debug#snapshot'
+                        end
+                    end
+                end
 
-            # session routes
-            post '/sessions/delete' => 'sessions#delete'
-            resources :sessions, only: [:index, :create] do
-                resources :positions, only: [:index, :create]
-                resources :position_templates, only: [:index]
-                resources :applications, only: [:index, :create]
-                resources :applicants, only: [:index]
-                resources :instructors, only: [:index]
-                post '/add_position_template', to: 'position_templates#create'
-                post '/contract_templates', to: 'position_templates#create'
-                get '/contract_templates', to: 'position_templates#index'
-                get '/instructors', to: 'instructors#instructor_by_session'
-            end
+                # Instructors
+                resources :instructors, only: %i[index create] do
+                    collection do
+                        post :delete
+                    end
+                end
 
-            # position_template routes
-            post '/position_templates/delete' => 'position_templates#delete'
-            resources :position_templates, only: [:index, :create]
-            get '/available_position_templates', to: 'position_templates#available'
+                # Positions
+                resources :positions, only: %i[index create] do
+                    collection do
+                        post :delete
+                    end
+                end
 
-            # reporting_tag routes
-            post '/reporting_tags/delete' => 'reporting_tags#delete'
-            resources :reporting_tags, only: [:index, :create]
+                # Sessions
+                resources :sessions, only: %i[index create] do
+                    collection do
+                        post :delete, to: 'sessions#delete'
+                    end
+                    resources :applicants, only: %i[index]
+                    resources :applications, only: %i[index]
+                    resources :assignments, only: %i[index]
+                    resources :contract_templates, only: %i[index create]
+                    resources :positions, controller: :session_positions, only: %i[index create]
+                end
 
-            # position_preference routes
-            post '/position_preferences/delete' => 'position_preferences#delete'
-            resources :position_preferences, only: [:index, :create]
+                # Users
+                resources :users, only: %i[index create]
 
-            # offer routes
-            resources :offers, only: %i[create show], param: :url_token do
-                member do
-                    get 'pdf', to: 'offers#pdf'
-                    post 'accept', to: 'offers#accept'
-                    post 'reject', to: 'offers#reject'
+                # Wage Chunks
+                resources :wage_chunks, only: %i[create] do
+                    collection do
+                        post :delete
+                    end
                 end
             end
-            post '/email_offer', to: 'offers#email_offer'
-            post '/withdraw_offer', to: 'offers#withdraw_offer'
-            post '/nag', to: 'offers#nag'
+
+            namespace :instructor do
+            end
+
+            namespace :ta do
+            end
         end
-
-        # This route makes sure that any requests with URLs of the form '/api/*' 
-        # with no corresponding route gets a 404 instead of the frontend index file.
-        # Redirecting to a specialized 404 route because this route is namespaced and
-        # cannot call actions from the application controller.
-        get '*path', to: redirect('/404')
-    end
-
-    # This route returns a 404 error status by throwing a rails routing error.  
-    get '/404', to: 'application#not_found'
-
-    # This matches all routes that do not begin with '/api' and returns the frontend
-    # index file.  The request URL is then given to react router.  
-    get '*path', to: "application#index", constraints: ->(request) do
-        !request.xhr? && request.format.html?
     end
 end
