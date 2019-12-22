@@ -17,21 +17,25 @@ class Api::V1::Admin::DebugController < ApplicationController
     # POST /snapshot
     def snapshot
         Rake::Task['debug:snapshot'].execute
+        render_success
     end
 
     # POST /clear_data
     def clear_data
         Rake::Task['db:schema:load'].execute
+        render_success
     end
 
     # POST /restore_snapshot
     def restore_snapshot
         Rake::Task['debug:restore'].execute
+        render_success
     end
 
     private
 
     def active_user_create_params
         params.permit(credentials: {})
+        render_success
     end
 end
