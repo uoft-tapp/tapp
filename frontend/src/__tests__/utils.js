@@ -55,6 +55,7 @@ export async function apiPOST(url, body = {}) {
     let resp = null;
     try {
         resp = await axios.post(url, body);
+        checkPropTypes(apiResponsePropTypes, resp.data);
     } catch (e) {
         // Modify the error to display some useful information
         throw new Error(
@@ -63,7 +64,6 @@ export async function apiPOST(url, body = {}) {
             )}\nfailed with error: ${e.message}`
         );
     }
-    checkPropTypes(apiResponsePropTypes, resp.data);
 
     // by this point, we have a valid response, so
     // just return the payload
@@ -119,7 +119,7 @@ export async function addContractTemplateToSession(api, session, num = 1) {
     let resp = {};
     for (let i = 0; i < num; i++) {
         resp = await api.apiPOST(
-            `/sessions/${session.id}/contract_templates`,
+            `/admin/sessions/${session.id}/contract_templates`,
             generateTemplateData(i)
         );
     }
@@ -144,7 +144,7 @@ export async function addSession(api, include = { contract_templates: true }) {
         rate1: 56.54
     };
     let resp = {};
-    resp = await api.apiPOST(`/sessions`, newSessionData);
+    resp = await api.apiPOST(`/admin/sessions`, newSessionData);
     const session = resp.payload;
     if (include.contract_templates) {
         addContractTemplateToSession(api, session);
@@ -161,7 +161,7 @@ export async function addSession(api, include = { contract_templates: true }) {
  * @returns
  */
 export async function deleteSession(api, session) {
-    const resp = await api.apiPOST(`/sessions/delete`, session);
+    const resp = await api.apiPOST(`/admin/sessions/delete`, session);
     return resp.payload;
 }
 
@@ -182,7 +182,7 @@ export async function addPosition(api, session) {
         end_date: "2018/09/09"
     };
     const resp = await api.apiPOST(
-        `/sessions/${session.id}/positions`,
+        `/admin/sessions/${session.id}/positions`,
         newPositionData
     );
     return resp.payload;
@@ -197,7 +197,7 @@ export async function addPosition(api, session) {
  * @returns
  */
 export async function deletePosition(api, position) {
-    const resp = await api.apiPOST(`/positions/delete`, position);
+    const resp = await api.apiPOST(`/admin/positions/delete`, position);
     return resp.payload;
 }
 
@@ -220,7 +220,16 @@ export function checkPropTypes(propTypes, data) {
             wasPropTypeErrors = true;
         }
     );
-    expect(wasPropTypeErrors).toBe(false);
+    if (wasPropTypeErrors) {
+        try {
+            throw new Error();
+        } catch (e) {
+            console.warn("Proptypes error call stack:", e.stack);
+        }
+        throw new Error(
+            `Object ${JSON.stringify(data)} failed proptypes check`
+        );
+    }
 }
 
 export const apiResponsePropTypes = apiPropTypes.apiResponse;

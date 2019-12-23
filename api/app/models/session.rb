@@ -8,6 +8,7 @@ class Session < ApplicationRecord
 
     validates :rate1, numericality: { only_float: true }, allow_nil: true
     validates :rate2, numericality: { only_float: true }, allow_nil: true
+    validates :name, presence: true
     validates_uniqueness_of :name
 end
 
