@@ -3,7 +3,6 @@
     "description": "This environment includes dependencies to run code-formatting checks",
     "license": "MIT",
     "dependencies": {
-        "//": "ESLint version is restricted to version 6.1.0 as per issue 209",
         "eslint": "~6.1.0",
         "eslint-plugin-react": "^7.13.0",
         "prettier": "^1.18.2",
