@@ -5,6 +5,7 @@ import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { DevFrame as _DevFrame } from "./views/dev_frame";
 import App from "./App";
+import "bootstrap/dist/css/bootstrap.css";
 import configureStore from "./store";
 
 const { store, persistor } = configureStore();
