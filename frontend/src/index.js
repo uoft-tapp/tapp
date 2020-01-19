@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { DevFrame as _DevFrame } from "./views/dev_frame";
-import "./styles/sass/main.scss";
 import App from "./App";
 import configureStore from "./store";
 
