@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-# Base class from which most controllers will inherit from
-class ApplicationController < ActionController::Base
-  include Response
-  include ExceptionHandler
+class ApplicationController < ActionController::API
+    include Response
+    include ExceptionHandler
+    include TransactionHandler
+
+    # Don't wrap parameters
+    # https://guides.rubyonrails.org/action_controller_overview.html#json-xml-parameters
+    wrap_parameters false
 end

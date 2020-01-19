@@ -1,0 +1,22 @@
+#dev-frame {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+}
+#dev-frame-body {
+    flex-grow: 1;
+    position: relative;
+    padding: 6px;
+    padding-bottom: 7px;
+    padding-top: 0px;
+    overflow: hidden;
+}
+#dev-frame-body-inner {
+    background-color: white;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}

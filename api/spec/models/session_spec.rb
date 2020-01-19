@@ -1,71 +1,31 @@
 # frozen_string_literal: true
 
-describe Session do
-  it 'should have a valid factory' do
-    FactoryBot.create(:session, :fall)
-    FactoryBot.create(:session, :winter)
-    FactoryBot.create(:session, :summer)
-  end
+require 'rails_helper'
 
-  it 'should not be valid without a semester' do
-    k = FactoryBot.build(:session, :fall, semester: nil)
-    expect(k).to_not be_valid
+RSpec.describe Session, type: :model do
+    describe 'associations' do
+        it { should have_many(:applications) }
+        it { should have_many(:contract_templates) }
+        it { should have_many(:positions) }
+    end
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid without a year' do
-    k = FactoryBot.build(:session, :fall)
-    k.year = nil
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we have the two session with the same year and semester' do
-    original = FactoryBot.create(:session, :fall)
-    k = FactoryBot.build(:session, :fall, year: original.year)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we have a semester not in the given values' do
-    k = FactoryBot.build(:session, :fall, semester: 40)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we have a year less than 0' do
-    k = FactoryBot.build(:session, :fall, year: -23)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if we do not have an integer for year' do
-    k = FactoryBot.build(:session, :fall, year: 2018.1234)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+    describe 'validations' do
+        it { should validate_numericality_of(:rate1) }
+        it { should validate_numericality_of(:rate2) }
+        it { should validate_uniqueness_of(:name) }
+    end
 end
 
 # == Schema Information
 #
 # Table name: sessions
 #
-#  id         :bigint(8)        not null, primary key
-#  end_date   :datetime
-#  pay        :float
-#  semester   :integer          default(0)
+#  id         :integer          not null, primary key
 #  start_date :datetime
-#  year       :integer
+#  end_date   :datetime
+#  name       :string
+#  rate1      :float
+#  rate2      :float
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_sessions_on_year_and_semester  (year,semester) UNIQUE
 #

@@ -1,0 +1,17 @@
+{
+    "name": "tapp-dev-environment",
+    "description": "This environment includes dependencies to run code-formatting checks",
+    "license": "MIT",
+    "dependencies": {
+        "eslint": "~6.1.0",
+        "eslint-plugin-react": "^7.13.0",
+        "prettier": "^1.18.2",
+        "prettier-check": "^2.0.0",
+        "prettier-diff": "^0.0.16"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": true,
+        "endOfLine": "lf"
+    }
+}

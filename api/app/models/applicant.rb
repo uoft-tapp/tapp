@@ -3,34 +3,34 @@
 # A class representing an applicant. This holds information regarding a student. This class
 # has many preferences (a student can apply to many positions).
 class Applicant < ApplicationRecord
-  has_many :preferences
-  has_many :positions, through: :preferences
+    has_many :assignments
+    has_many :applications
+    has_one :applicant_data_for_matching
 
-  validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
-  validates_uniqueness_of :student_number, :utorid
+    validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
+    validates_uniqueness_of :student_number, case_sensitive: false
+    validates_uniqueness_of :utorid
+
+    def self.by_session(session_id)
+        joins(:applications)
+            .where('applications.session_id = ?', session_id)
+            .distinct
+    end
 end
 
 # == Schema Information
 #
 # Table name: applicants
 #
-#  id              :bigint(8)        not null, primary key
-#  address         :text
-#  commentary      :text
-#  dept            :string
-#  dept_fields     :string
-#  email           :string
-#  first_name      :string
-#  is_full_time    :boolean
-#  is_grad_student :boolean
-#  last_name       :string
-#  phone           :string
-#  program         :string
-#  student_number  :string
-#  utorid          :string
-#  year_in_program :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id             :integer          not null, primary key
+#  utorid         :string           not null
+#  student_number :string           not null
+#  first_name     :string           not null
+#  last_name      :string           not null
+#  email          :string           not null
+#  phone          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #

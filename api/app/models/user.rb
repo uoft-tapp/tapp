@@ -3,18 +3,17 @@
 # A class representing a user. This holds information regarding known users and their roles
 # to determine what they should be allowed access to.
 class User < ApplicationRecord
-  enum role: %i[admin instructor]
-  validates_presence_of :utorid
-  validates_uniqueness_of :utorid
+    validates_presence_of :utorid
+    validates_uniqueness_of :utorid
 end
 
 # == Schema Information
 #
 # Table name: users
 #
-#  id         :bigint(8)        not null, primary key
-#  role       :integer
+#  id         :integer          not null, primary key
 #  utorid     :string
+#  role       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

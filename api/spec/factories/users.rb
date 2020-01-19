@@ -1,26 +1,24 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user do
-    utorid { "utorid#{Faker::Number.number(2)}" }
-
-    trait :admin do
-      role { 'admin' }
+    factory :user do
+        utorid { "utorid#{Faker::Number.number(digits: 2)}" }
+        trait :admin do
+            role { :admin }
+        end
+        trait :instructor do
+            role { :instructor }
+        end
     end
-
-    trait :instructor do
-      role { 'instructor' }
-    end
-  end
 end
 
 # == Schema Information
 #
 # Table name: users
 #
-#  id         :bigint(8)        not null, primary key
-#  role       :integer
+#  id         :integer          not null, primary key
 #  utorid     :string
+#  role       :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

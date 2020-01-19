@@ -2,8 +2,17 @@
 TA application, assignment, and matching.
 
 ## Contributing
+<details>
+<summary>If you would like to contribute to the project, we ask that you follow the following conventions.</summary>
+<p>
 
-If you would like to contribute to the project, we ask that you follow the following conventions. 
+## Travis CI
+We use Travis CI for our continuous integration pipeline. As of right now, we have 3 tests that should pass:
+```
+1. Yarn linting tests for our front end
+2. Rubocop linting tests for our back end
+3. Frontend unit tests
+```
 
 ### Issues
 
@@ -89,6 +98,8 @@ adding a new position would always fail.
 - If the PR commits must be rebased, the reviewee is responsible for doing this and should do so in a seperate commit
 - Github's automatic merge commits are acceptable
 - The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
+</p>
+</details>
 
 ## Getting Started
 These instructions will get a copy of the project up and running on your
@@ -98,20 +109,21 @@ local machine for development and testing purposes. Currently, the entire app
 ### Prerequisties
 
 1. [Docker](https://docs.docker.com/install/#supported-platforms)
-2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)*
+2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)
 3. Ruby, only if you would like to use the precommit hook
 
-* If you are running OSx or Windows, your Docker installation will have come with docker-compose.
+*If you are running OSx or Windows, your Docker installation will have come with docker-compose.*
 
-### Rubocop precommit hook
+### Rubocop and eslint precommit hook
 
-If you want to work on the Rails API, we maintaing a script that installs a linter (rubocop) and sets up a 
+
+If you want to work on the Rails API, we maintain a script that installs a linter (rubocop) and sets up a 
 precommit hook making the linter run automatically whenever you commit.
 
-If you would like to install it, first nagivate into the `api` directory and invoke:
+If you would like to install it, invoke:
 
 ```
-bash script/init-script.sh
+bash ./init.sh
 ```
 
 ### Project Structure
@@ -124,40 +136,83 @@ The app is organized into three entities:
 
 ### Running the app with Docker
 
-To begin, make sure that Docker is running on your system. Once it is, begin by building all the relevant docker images by invoking
+#### Overview
+We have four docker compose files that are important to know:
+1. `docker-compose.yml` is our base docker-compose file. This by itself will
+   build the db and the API
+2. `docker-compose.dev.yml` is our development docker-compose file (`docker-compose.override.yml` is
+    a symbolic link to this file). This will
+   dynamically serve the frontend via a local webpack dev server.
+3. `docker-compose.prod.yml` is our production docker-compose file. This will
+   also build the db and API, but not the front end
+3. `docker-compose.frontend.yml` This will use webpack to build
+   the frontend for serving as a static asset.
+
+#### Development Environment First Install
+
+The first time you run docker, you must build the docker images. First, ensure no
+docker images are running with
+
+```
+docker-compose down
+```
+
+Set up the local environment with
+
+```
+cp dev.env .env
+```
+
+In development mode, the frontend is served via nodejs on port `8000` while the backend/api
+is served on a different port. To prevent confusion if you try to access TAPP through the wrong
+port, set up a static asset to be served by rails.
+
+```
+mkdir api/public && echo "Please go to localhost:8000 for frontend" > api/public/index.html
+```
+
+Finally, we can build the docker images and migrate the database
 
 ```
 docker-compose build
+docker-compose run api rake db:setup
+docker-compose run api rake db:migrate
 ```
 
-then invoke
+Now you can run the project with
 
 ```
 docker-compose up
 ```
 
-This will spin up three services: one for the database, one for api and one for the frontend.
+Access the frontend by navigating to [http://localhost:8000](http://localhost:8000)
 
-You can access the rails app from your browser by navigating to `http://localhost:3000`.
+#### Development Environment
 
-You will be able to access the frontend at `http://localhost:8000`. Note that
-unlike most traditional rails app, under our project, rails does not serve views.
-It only provides the API which the frontend, served seperately by yarn, pulls from.
-
-In the future, you can collapse these two commands into one with:
+The development environment can be started with
 
 ```
-docker-compose up --build
+docker-compose up
 ```
+
+This is equivalent to the command `docker-compose -f docker-compose.yml -f docker-compose.override.yml up`
+or `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
+since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`.
+
+
+#### Debugging
 
 To view the STDOUT from a docker container of a running server, you can invoke
 
 ```docker-compose logs -tf <image>```
 
+To stop everything, use `docker-compose down`.
+
 ### Navigating into the containers from the command line
 
-Currently, we define three services under docker-compose: frontend, api and db. If you would
-like to interact with any of the containers from the command line, you can do so by invoking:
+Currently, we define three services under docker-compose: frontend, api, and
+db. If you would like to interact with any of the containers from the command
+line, you can do so by invoking:
 
 ```
 docker-compose exec [service] sh
@@ -181,7 +236,8 @@ docker-compose run api rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB 
-with seed data. 
+with seed data. Note that seed data is loaded from `api/db/seed/` folder where
+each json file represents a table.
 
 Once your DB is setup, you can gain SQL access to it by first navigating into 
 the DB container, then invoking:
@@ -224,7 +280,18 @@ rspec spec/models/position_spec.rb
 # For example,
 rspec spec/models/position_spec.rb:17
 ```
+## API Documentation
+We currently have a Swagger UI locally hosted under the `dist` folder. Within
+it is an "index.html" that you can drag to a local browser that will open up
+our documentation for our API routes. To make changes, go to the public `gist`
+that is pointed to under the `URL` property, and update the existing YAML
+there.
 
+OpenAPI 3.0.2 specifications are located
+[here](https://github.com/OAI/OpenApi-Specification/blob/master/versions/3.0.2.md).
+
+This online [editor](editor.swagger.io) helps with a live loading of the documentation to write
+documentation. Just copy paste the current YAML into the editor to start editing.
 ## Playbook
 
 ### Gemfile.lock synchronization
@@ -259,3 +326,24 @@ scratch and `rake db:migrate`.
 After `running docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail. 
 
 To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
+
+2. Docker cannot start up a front-end service, complaining that it can't find an image.
+
+You can resolve this by using `docker containers ls -a`, finding all
+deactivated containers, and then removing them with `docker container rm
+[container ID]`. Then, you should be able to run `./start_local.sh`
+
+3. Travis CI fails to execute a script.
+
+This issue usually comes up when adding a new executable script on travis. Your
+build fails because the script is `permission denied`. To resolve this, you
+must check in the file with executable permissions.
+
+For example, say `build.sh` is unable to execute. To fix this, you must do:
+```
+git update-index --add --chmod=+x build.sh
+git commit -m "Make build.sh executable"
+git push
+```
+
+This should resolve the issue

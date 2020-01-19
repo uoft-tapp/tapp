@@ -1,31 +1,26 @@
-version: '3'
+version: "3"
 
 services:
-  db:
-    image: 'postgres:10.5-alpine'
-    volumes:
-      - 'tapp-db-data:/var/lib/postgresql/data'
-    env_file:
-      - './api/.env'
-  api:
-    depends_on:
-      - 'db'
-    command: bundle exec rails s -p 3000 -b "0.0.0.0"
-    build: ./api
-    ports:
-      - '3023:3000'
-    volumes:
-      - './api:/app'
-    env_file:
-      - './api/.env'
-  frontend:
-    command: yarn start
-    build: ./frontend
-    ports:
-      - '8000:8000'
-    volumes:
-      - './frontend:/app'
-
-volumes:
-  tapp-db-data:
-    driver: local
+    db:
+        image: "postgres:10.5-alpine"
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    api:
+        depends_on:
+            - "db"
+        command: sh -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+        build: ./api
+        ports:
+            - "3000:3000"
+        environment:
+            RAILS_ENV: ${RAILS_ENV}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+            RAILS_SERVE_STATIC_FILES: ${RAILS_SERVE_STATIC_FILES}
+            RAILS_LOG_TO_STDOUT: ${RAILS_LOG_TO_STDOUT}
+            DEPARTMENT: ${DEPARTMENT}
+            BASE_URL: ${BASE_URL}

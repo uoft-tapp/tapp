@@ -1,0 +1,4 @@
+master.key
+coverage/*
+.bundle/*
+log/*

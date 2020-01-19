@@ -1,83 +1,46 @@
 # frozen_string_literal: true
 
-describe Applicant do
-  it 'should have a valid factory' do
-    FactoryBot.create(:applicant)
-  end
+require 'rails_helper'
 
-  it 'should not be valid without a first name' do
-    k = FactoryBot.build(:applicant, first_name: nil)
-    expect(k).to_not be_valid
+RSpec.describe Applicant, type: :model do
+    describe 'associations' do
+        it { should have_many(:assignments) }
+        it { should have_many(:applications) }
+        it { should have_one(:applicant_data_for_matching) }
+    end
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+    describe 'validations' do
+        it { should validate_presence_of(:first_name) }
+        it { should validate_presence_of(:last_name) }
+        it { should validate_presence_of(:email) }
+        it { should validate_presence_of(:student_number) }
+        it { should validate_presence_of(:utorid) }
+    end
 
-  it 'should not be valid without last name' do
-    k = FactoryBot.build(:applicant, last_name: nil)
-    expect(k).to_not be_valid
+    describe 'student number uniqueness validation' do
+        subject { build(:applicant, :with_student_number, :with_utorid) }
+        it { should validate_uniqueness_of(:student_number).case_insensitive }
+    end
 
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid without email' do
-    k = FactoryBot.build(:applicant, email: nil)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid without student number' do
-    k = FactoryBot.build(:applicant, student_number: nil)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid without utorid' do
-    k = FactoryBot.build(:applicant, utorid: nil)
-    expect(k).to_not be_valid
-
-    expect { k.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if the student number is already taken' do
-    applicant1 = FactoryBot.create(:applicant)
-    applicant2 = FactoryBot.build(:applicant, student_number: applicant1.student_number)
-
-    expect(applicant2).to_not be_valid
-    expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
-
-  it 'should not be valid if the utorid is already taken' do
-    applicant1 = FactoryBot.create(:applicant)
-    applicant2 = FactoryBot.build(:applicant, utorid: applicant1.utorid)
-
-    expect(applicant2).to_not be_valid
-    expect { applicant2.save! }.to raise_error(ActiveRecord::RecordInvalid)
-  end
+    describe 'utorid uniqueness validation' do
+        subject { build(:applicant, :with_student_number) }
+        it { should validate_uniqueness_of(:utorid) }
+    end
 end
 
 # == Schema Information
 #
 # Table name: applicants
 #
-#  id              :bigint(8)        not null, primary key
-#  address         :text
-#  commentary      :text
-#  dept            :string
-#  dept_fields     :string
-#  email           :string
-#  first_name      :string
-#  is_full_time    :boolean
-#  is_grad_student :boolean
-#  last_name       :string
-#  phone           :string
-#  program         :string
-#  student_number  :string
-#  utorid          :string
-#  year_in_program :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id             :integer          not null, primary key
+#  utorid         :string           not null
+#  student_number :string           not null
+#  first_name     :string           not null
+#  last_name      :string           not null
+#  email          :string           not null
+#  phone          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #
