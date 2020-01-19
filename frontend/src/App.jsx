@@ -8,6 +8,7 @@ import { ConnectedNotifications } from "./views/notificatons";
 import { AdminRoutes } from "./views/routes";
 import { AdminHeader } from "./views/admin";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 class App extends React.Component {
     componentDidMount() {
         // Some special values can be persisted in the url search string.

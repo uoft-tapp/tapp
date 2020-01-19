@@ -214,7 +214,6 @@ ActiveRecord::Schema.define(version: 2019_11_29_181519) do
 
   create_table "users", force: :cascade do |t|
     t.string "utorid"
-    t.integer "role"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["utorid"], name: "index_users_on_utorid", unique: true

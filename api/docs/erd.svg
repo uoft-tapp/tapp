@@ -393,7 +393,7 @@
 <text text-anchor="start" x="26" y="-328.5" font-family="Arial" font-size="10.00" fill="#000000">end_date </text>
 <text text-anchor="start" x="69" y="-328.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 <text text-anchor="start" x="26" y="-315.5" font-family="Arial" font-size="10.00" fill="#000000">name </text>
-<text text-anchor="start" x="54" y="-315.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string U</text>
+<text text-anchor="start" x="54" y="-315.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 <text text-anchor="start" x="26" y="-302.5" font-family="Arial" font-size="10.00" fill="#000000">rate1 </text>
 <text text-anchor="start" x="51" y="-302.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
 <text text-anchor="start" x="26" y="-289.5" font-family="Arial" font-size="10.00" fill="#000000">rate2 </text>
@@ -421,19 +421,17 @@
 <!-- m_User -->
 <g id="node17" class="node">
 <title>m_User</title>
-<path fill="none" stroke="#000000" d="M31,-405.5C31,-405.5 151,-405.5 151,-405.5 157,-405.5 163,-411.5 163,-417.5 163,-417.5 163,-449.5 163,-449.5 163,-455.5 157,-461.5 151,-461.5 151,-461.5 31,-461.5 31,-461.5 25,-461.5 19,-455.5 19,-449.5 19,-449.5 19,-417.5 19,-417.5 19,-411.5 25,-405.5 31,-405.5"/>
-<text text-anchor="start" x="76.5" y="-448.7" font-family="Arial Bold" font-size="11.00" fill="#000000">User</text>
-<polyline fill="none" stroke="#000000" points="19,-441.5 163,-441.5 "/>
-<text text-anchor="start" x="26" y="-428.5" font-family="Arial" font-size="10.00" fill="#000000">utorid </text>
-<text text-anchor="start" x="54" y="-428.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
-<text text-anchor="start" x="26" y="-415.5" font-family="Arial" font-size="10.00" fill="#000000">role </text>
-<text text-anchor="start" x="45" y="-415.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<path fill="none" stroke="#000000" d="M31,-405C31,-405 151,-405 151,-405 157,-405 163,-411 163,-417 163,-417 163,-436 163,-436 163,-442 157,-448 151,-448 151,-448 31,-448 31,-448 25,-448 19,-442 19,-436 19,-436 19,-417 19,-417 19,-411 25,-405 31,-405"/>
+<text text-anchor="start" x="76.5" y="-435.2" font-family="Arial Bold" font-size="11.00" fill="#000000">User</text>
+<polyline fill="none" stroke="#000000" points="19,-428 163,-428 "/>
+<text text-anchor="start" x="26" y="-414.5" font-family="Arial" font-size="10.00" fill="#000000">utorid </text>
+<text text-anchor="start" x="54" y="-414.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>
 <!-- m_primary::SchemaMigration -->
 <g id="node19" class="node">
 <title>m_primary::SchemaMigration</title>
-<path fill="none" stroke="#000000" d="M27.5,-491.5C27.5,-491.5 154.5,-491.5 154.5,-491.5 160.5,-491.5 166.5,-497.5 166.5,-503.5 166.5,-503.5 166.5,-515.5 166.5,-515.5 166.5,-521.5 160.5,-527.5 154.5,-527.5 154.5,-527.5 27.5,-527.5 27.5,-527.5 21.5,-527.5 15.5,-521.5 15.5,-515.5 15.5,-515.5 15.5,-503.5 15.5,-503.5 15.5,-497.5 21.5,-491.5 27.5,-491.5"/>
-<text text-anchor="start" x="21" y="-506.7" font-family="Arial Bold" font-size="11.00" fill="#000000">primary::SchemaMigration</text>
+<path fill="none" stroke="#000000" d="M27.5,-478.5C27.5,-478.5 154.5,-478.5 154.5,-478.5 160.5,-478.5 166.5,-484.5 166.5,-490.5 166.5,-490.5 166.5,-502.5 166.5,-502.5 166.5,-508.5 160.5,-514.5 154.5,-514.5 154.5,-514.5 27.5,-514.5 27.5,-514.5 21.5,-514.5 15.5,-508.5 15.5,-502.5 15.5,-502.5 15.5,-490.5 15.5,-490.5 15.5,-484.5 21.5,-478.5 27.5,-478.5"/>
+<text text-anchor="start" x="21" y="-493.7" font-family="Arial Bold" font-size="11.00" fill="#000000">primary::SchemaMigration</text>
 </g>
 </g>
 </svg>

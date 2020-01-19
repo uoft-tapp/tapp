@@ -1,5 +1,7 @@
+/**
+ * @jest-environment node
+ */
 /* eslint-disable */
-
 import PropTypes from "prop-types";
 import {
     apiGET,
