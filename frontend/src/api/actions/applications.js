@@ -9,7 +9,6 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     arrayToHash,
-    runOnActiveSessionChange,
     validatedApiDispatcher,
     flattenIdFactory,
     splitObjByProps
@@ -148,8 +147,3 @@ export const applicationsSelector = createSelector(
         );
     }
 );
-
-// Any time the active session changes, we want to refetch
-// all data. Calling `runOnActiveSessionChange` ensures that
-// when the active session changes all data is re-fetched
-runOnActiveSessionChange(fetchApplications);

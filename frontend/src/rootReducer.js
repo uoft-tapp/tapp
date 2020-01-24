@@ -1,8 +1,8 @@
 import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
+import { globalReducer } from "./api/reducers/globals";
 import offerTableReducer from "./views/offertable/reducers";
-import { globalReducer } from "./views/globals/reducers";
 import {
     statusReducer,
     sessionsReducer,

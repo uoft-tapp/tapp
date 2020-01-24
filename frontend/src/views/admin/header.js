@@ -2,8 +2,7 @@ import React from "react";
 import { Header } from "../../components/header";
 import { connect } from "react-redux";
 import {
-    setActiveUserRole,
-    setActiveSession,
+    initFromStage,
     usersSelector,
     sessionsSelector,
     activeSessionSelector
@@ -91,7 +90,7 @@ const mapSessionsStateToProps = state => ({
     activeSession: activeSessionSelector(state)
 });
 
-const mapSessionsDispatchToProps = { setActiveSession };
+const mapSessionsDispatchToProps = { initFromStage };
 
 const ConnectedActiveSessionDisplay = connect(
     mapSessionsStateToProps,
@@ -103,7 +102,7 @@ const mapActiveUserStateToProps = state => ({
     activeRole: usersSelector(state).active_role
 });
 
-const mapActiveUserDispatchToProps = { setActiveUserRole };
+const mapActiveUserDispatchToProps = { initFromStage };
 
 const ConnectedActiveUserDisplay = connect(
     mapActiveUserStateToProps,

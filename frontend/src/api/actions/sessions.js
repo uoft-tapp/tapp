@@ -8,11 +8,7 @@ import {
     SET_ACTIVE_SESSION
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import {
-    actionFactory,
-    onActiveSessionChangeActions,
-    validatedApiDispatcher
-} from "./utils";
+import { actionFactory, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { sessionsReducer } from "../reducers/sessions";
 import { activeRoleSelector } from "./users";
@@ -33,25 +29,6 @@ export const fetchSessions = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/sessions`);
         await dispatch(fetchSessionsSuccess(data));
-
-        // after sessions are fetched, we compare with the active session.
-        // The active session might need to be "updated" if the ID matches but
-        // the data doesn't
-        const activeSession = activeSessionSelector(getState());
-
-        if (activeSession) {
-            const matchingSession = data.filter(
-                s => s.id === activeSession.id
-            )[0];
-            if (
-                matchingSession &&
-                JSON.stringify(matchingSession) !==
-                    JSON.stringify(activeSession)
-            ) {
-                // Force an override of the active session, even though the `id`s match.
-                dispatch(setActiveSession(matchingSession, true));
-            }
-        }
     }
 });
 
@@ -119,15 +96,6 @@ export const setActiveSession = validatedApiDispatcher({
         }
         // If we made it here, the activeSession is changing.
         await dispatch(setActiveSessionAction(payload));
-        // now that we have updated the active session, call all the dispatchers
-        // who requested to be updated whenever the active session changes.
-        // Save their return values so that we can await them after they're
-        // dispatched. This way the browser can do parallel fetching.
-        const promises = [];
-        for (const action of onActiveSessionChangeActions) {
-            promises.push(dispatch(action()));
-        }
-        await Promise.all(promises);
     }
 });
 

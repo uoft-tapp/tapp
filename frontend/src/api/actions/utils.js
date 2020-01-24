@@ -99,26 +99,6 @@ export function flattenIdFactory(
         return ret;
     };
 }
-
-export const onActiveSessionChangeActions = [];
-
-/**
- * Registers an action to be called whenever activeSession changes.
- * If the action is a function, it should expect no arguments. It may
- * be a redux-thunk.
- *
- * @export
- * @param {(function|object)} dispatcher
- */
-export function runOnActiveSessionChange(action) {
-    // if we passed in a regular object, encapsulate it
-    // in a function.
-    if (!(action instanceof Function)) {
-        action = () => action;
-    }
-    onActiveSessionChangeActions.push(action);
-}
-
 /**
  * Create a dispatcher that validates `payload` accoring to the specified
  * `propTypes`. If validation fails, a warning will be printed to the console

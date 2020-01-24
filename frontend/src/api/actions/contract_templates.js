@@ -6,11 +6,7 @@ import {
     FETCH_ALL_CONTRACT_TEMPLATES_SUCCESS
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import {
-    actionFactory,
-    runOnActiveSessionChange,
-    validatedApiDispatcher
-} from "./utils";
+import { actionFactory, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { contractTemplatesReducer } from "../reducers/contract_templates";
 import { createSelector } from "reselect";
@@ -103,8 +99,3 @@ export const allContractTemplatesSelector = createSelector(
     localStoreSelector,
     state => state.all
 );
-
-// Any time the active session changes, we want to refetch
-// all data. Calling `runOnActiveSessionChange` ensures that
-// when the active session changes all data is re-fetched
-runOnActiveSessionChange(fetchContractTemplates);
