@@ -1,5 +1,8 @@
+html, body, #root {
+    height: 100%;
+    width: 100%;
+}
 #dev-frame {
-    position: absolute;
     width: 100%;
     height: 100%;
     background-color: blue;
