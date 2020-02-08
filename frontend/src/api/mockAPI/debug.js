@@ -21,7 +21,9 @@ export class Debug {
     }
     clearData() {
         this.makeSnapshot("beforeclear");
-        Object.keys(this.data).forEach(key => delete this.data[key]);
+        Object.keys(this.data).forEach(
+            key => (this.data[key] = createBlankCopy(this.data[key]))
+        );
         return this.getAllData();
     }
     restoreSnapshot(name = "snapshot") {
@@ -62,3 +64,27 @@ export const debugRoutes = {
         })
     }
 };
+
+/**
+ * Returns the blank value of the same type
+ * as the passed-in data
+ *
+ * @param {*} data
+ * @returns
+ */
+function createBlankCopy(data) {
+    if (typeof data === "object") {
+        if (data instanceof Array) {
+            return [];
+        } else {
+            return {};
+        }
+    } else if (typeof data === "string") {
+        return "";
+    } else {
+        // If `data` is not of type string, array or object
+        // use the constructor, which will return blank value
+        // of that particular type.
+        return data.constructor();
+    }
+}
