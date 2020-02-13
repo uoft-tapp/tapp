@@ -55,10 +55,6 @@ expect.extend({
 });
 
 
-
-
-
-
 /**
  * Seeding the database with the minimal set of API calls to create an assignment.
  */
@@ -145,10 +141,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         console.log("minimal assignment: \n", minimalAssignment);
     });
 }
-
-
-
-
 
 
 /**
