@@ -54,7 +54,6 @@ expect.extend({
     }
 });
 
-
 /**
  * Seeding the database with the minimal set of API calls to create an assignment.
  */
@@ -80,7 +79,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         const { payload: minimalSession } = await apiGET("/admin/sessions");
         console.log("minimal session: \n", minimalSession);
     });
-    
+
     //Create Position
     const minimalPositionData = {
         session_id: 1,
@@ -96,25 +95,24 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             `/sessions/${minimalPositionData.session_id}/positions`,
             minimalPositionData
         );
-        const { payload: minimalPosition } = await apiGET(`/sessions/${minimalPositionData.session_id}/positions`);
+        const { payload: minimalPosition } = await apiGET(
+            `/sessions/${minimalPositionData.session_id}/positions`
+        );
         console.log("minimal position: \n", minimalPosition);
     });
 
     //Create Applicant
     const minimalApplicantData = {
-        utorid: 'cole',
-        student_number: '10000000',
-        first_name: 'Cole',
-        last_name: 'Zemel',
-        email: 'cole.zemel@gmail.com',
-        phone: '4166666666'
-    }
+        utorid: "cole",
+        student_number: "10000000",
+        first_name: "Cole",
+        last_name: "Zemel",
+        email: "cole.zemel@gmail.com",
+        phone: "4166666666"
+    };
 
     it("create an applicant", async () => {
-        const resp1 = await apiPOST(
-            `/admin/applicants`,
-            minimalApplicantData
-        );
+        const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
         const { payload: minimalApplicant } = await apiGET(`/applicants`);
         console.log("minimal applicant: \n", minimalApplicant);
     });
@@ -123,25 +121,26 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     const minimalAssignmentData = {
         position_id: 1,
         applicant_id: 1,
-        start_date: '2020/01/01',
-        end_date: '2020/05/01',
-        note: 'N/A',
-        offer_override_pdf: 'N/A',
+        start_date: "2020/01/01",
+        end_date: "2020/05/01",
+        note: "N/A",
+        offer_override_pdf: "N/A",
         active_offer_status: 1,
         active_offer_id: 12345678
-    }
+    };
 
     it("create an assignment", async () => {
         const resp1 = await apiPOST(
             `/admin/assignments`,
             minimalAssignmentData
         );
-        const { payload: minimalAssignment } = await apiGET(`/assignments/${minimalAssignmentData.id}`);
+        const { payload: minimalAssignment } = await apiGET(
+            `/assignments/${minimalAssignmentData.id}`
+        );
         console.log(minimalAssignmentData);
         console.log("minimal assignment: \n", minimalAssignment);
     });
 }
-
 
 /**
  * Tests for the API. These are encapsulated in a function so that
