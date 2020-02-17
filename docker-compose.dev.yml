@@ -11,6 +11,7 @@ services:
     backend:
         volumes:
             - "./backend:/app"
+            - "./pg_data:/backup"
     db:
         volumes:
             - "./pg_data/db:/var/lib/postgresql/data"
