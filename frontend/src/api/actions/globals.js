@@ -13,3 +13,5 @@ export function setGlobals(globals = {}, location = window.location) {
     }
     return { type: "SET_GLOBALS", payload: globals };
 }
+
+export const globalsSelector = state => state.ui.globals;

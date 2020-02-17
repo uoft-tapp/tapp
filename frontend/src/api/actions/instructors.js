@@ -6,11 +6,7 @@ import {
     DELETE_ONE_INSTRUCTOR_SUCCESS
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import {
-    actionFactory,
-    runOnActiveSessionChange,
-    validatedApiDispatcher
-} from "./utils";
+import { actionFactory, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { instructorsReducer } from "../reducers/instructors";
 import { createSelector } from "reselect";
@@ -81,8 +77,3 @@ export const instructorsSelector = createSelector(
     localStoreSelector,
     state => state._modelData
 );
-
-// Any time the active session changes, we want to refetch
-// all data. Calling `runOnActiveSessionChange` ensures that
-// when the active session changes all data is re-fetched
-runOnActiveSessionChange(fetchInstructors);

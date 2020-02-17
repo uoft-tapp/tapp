@@ -8,7 +8,6 @@ import {
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
-    runOnActiveSessionChange,
     validatedApiDispatcher,
     arrayToHash,
     flattenIdFactory,
@@ -176,8 +175,3 @@ export const positionsSelector = createSelector(
         );
     }
 );
-
-// Any time the active session changes, we want to refetch
-// all data. Calling `runOnActiveSessionChange` ensures that
-// when the active session changes all data is re-fetched
-runOnActiveSessionChange(fetchPositions);

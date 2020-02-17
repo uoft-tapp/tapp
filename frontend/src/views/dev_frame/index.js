@@ -5,8 +5,8 @@ import { NavLink, Switch, Route } from "react-router-dom";
 
 import "./main.css";
 import { Navbar, Nav } from "react-bootstrap";
-import { ToggleMockApi } from "../../components/mockAPI";
-import { fetchSessions } from "../../api/actions";
+import { ToggleMockApi } from "./mockAPI";
+import { initFromStage } from "../../api/actions/init";
 
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
@@ -95,7 +95,7 @@ const swaggerData = {
 // When toggled, `ToggleMockApi` will try
 // to refetch all the sessions, so pass it an
 // appropriate dispatcher.
-const ConnectedToggleMockApi = connect(null, { fetchSessions })(ToggleMockApi);
+const ConnectedToggleMockApi = connect(null, { initFromStage })(ToggleMockApi);
 
 function DevFrame(props) {
     return (

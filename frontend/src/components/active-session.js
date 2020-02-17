@@ -5,7 +5,7 @@ import { Badge, Dropdown } from "react-bootstrap";
 import { apiPropTypes } from "../api/defs/prop-types";
 
 export function ActiveSessionDisplay(props) {
-    const { sessions = [], activeSession, setActiveSession } = props;
+    const { sessions = [], activeSession, initFromStage } = props;
     // keep track of the dropdown visibility so that the filter can be cleared
     // whenever the dropdown is invisible.
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
@@ -22,7 +22,9 @@ export function ActiveSessionDisplay(props) {
             Selected session:
             <Dropdown
                 onSelect={i => {
-                    setActiveSession(sessions[i]);
+                    initFromStage("setActiveSession", {
+                        activeSession: sessions[i]
+                    });
                 }}
                 onToggle={desiredVisibility =>
                     setDropdownVisible(desiredVisibility)
@@ -42,7 +44,7 @@ export function ActiveSessionDisplay(props) {
     );
 }
 ActiveSessionDisplay.propTypes = {
-    setActiveSession: PropTypes.func.isRequired,
+    initFromStage: PropTypes.func.isRequired,
     sessions: PropTypes.arrayOf(apiPropTypes.session).isRequired,
     activeSession: apiPropTypes.session
 };

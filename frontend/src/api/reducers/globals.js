@@ -1,5 +1,5 @@
 import { createReducer } from "redux-create-reducer";
-import { SET_GLOBALS } from "./constants";
+import { SET_GLOBALS } from "../constants";
 
 export const globalReducer = createReducer(
     {},
