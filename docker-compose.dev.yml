@@ -8,9 +8,9 @@ services:
             - "8000:8000"
         volumes:
             - "./frontend:/app"
-    api:
+    backend:
         volumes:
-            - "./api:/app"
+            - "./backend:/app"
     db:
         volumes:
             - "./pg_data/db:/var/lib/postgresql/data"
