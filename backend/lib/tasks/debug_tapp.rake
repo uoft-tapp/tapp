@@ -15,7 +15,7 @@ namespace :debug do
             timestamp = Time.now.strftime('%Y_%m_%d__%H_%M_%S')
             file_name = "#{SNAPSHOTS_DIR}/#{timestamp}_#{db}.psql"
             con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-            cmd = "pg_dump -v -f #{file_name} #{con_string}"
+            cmd = "pg_dump -F c -v -f #{file_name} #{con_string}"
             puts cmd
         end
         `#{cmd}`
