@@ -8,6 +8,7 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { usersReducer } from "../reducers/users";
+import { initFromStage } from "./init";
 
 // actions
 const fetchActiveUserSuccess = actionFactory(FETCH_ACTIVE_USER_SUCCESS);
@@ -56,8 +57,13 @@ export const setActiveUserRole = validatedApiDispatcher({
     name: "setActiveUserRole",
     description: "Sets the role of the active user",
     onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async dispatch => {
-        dispatch(setActiveUserRoleSuccess(payload));
+    dispatcher: (payload, options = {}) => async dispatch => {
+        await dispatch(setActiveUserRoleSuccess(payload));
+        if (!options.skipInit) {
+            await dispatch(
+                initFromStage("setActiveUserRole", { startAfterStage: true })
+            );
+        }
     }
 });
 

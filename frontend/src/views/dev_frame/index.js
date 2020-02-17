@@ -6,12 +6,12 @@ import { NavLink, Switch, Route } from "react-router-dom";
 import "./main.css";
 import { Navbar, Nav } from "react-bootstrap";
 import { ToggleMockApi } from "./mockAPI";
-import { initFromStage } from "../../api/actions/init";
 
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
 import { mockAPI } from "../../api/mockAPI";
+import { setMockAPIState } from "../../api/actions";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -95,7 +95,9 @@ const swaggerData = {
 // When toggled, `ToggleMockApi` will try
 // to refetch all the sessions, so pass it an
 // appropriate dispatcher.
-const ConnectedToggleMockApi = connect(null, { initFromStage })(ToggleMockApi);
+const ConnectedToggleMockApi = connect(null, { setMockAPIState })(
+    ToggleMockApi
+);
 
 function DevFrame(props) {
     return (

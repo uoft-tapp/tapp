@@ -1,5 +1,14 @@
-import { setActiveSession, fetchSessions, sessionsSelector } from "./sessions";
-import { fetchActiveUser, setActiveUserRole } from "./users";
+import {
+    setActiveSession,
+    fetchSessions,
+    sessionsSelector,
+    activeSessionSelector
+} from "./sessions";
+import {
+    fetchActiveUser,
+    setActiveUserRole,
+    activeRoleSelector
+} from "./users";
 import { fetchApplicants } from "./applicants";
 import { fetchApplications } from "./applications";
 import { fetchAssignments } from "./assignments";
@@ -7,6 +16,7 @@ import { fetchContractTemplates } from "./contract_templates";
 import { fetchInstructors } from "./instructors";
 import { fetchPositions } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
+import { parseURLSearchString } from "../../libs/urlUtils";
 
 /**
  * A helper function to replace all API actions to
@@ -32,94 +42,113 @@ function toggleMockApi(enableMockAPI) {
 }
 
 /**
- * A helper function to update all necessary global variables
+ * Prepare an object to be used to set global variables. The
+ * return value is the same as the input except with `null` entries
+ * removed.
  *
- * @param {bool} enableMockAPI
- * @param {object} newActiveSession
- * @param {function} getState
- * @returns
+ * @param {*} globals
+ * @returns {object} same as input but with `null` values removed.
  */
-function updateGlobals(enableMockAPI, newActiveSession, getState) {
-    const state = getState();
-    let globals = globalsSelector(state);
-
-    if (enableMockAPI != null) {
-        globals = {
-            ...globals,
-            mockAPI: enableMockAPI
-        };
+function prepareGlobals(globals) {
+    const ret = {};
+    for (const [key, val] of Object.entries(globals)) {
+        if (val != null) {
+            ret[key] = val;
+        }
     }
-
-    if (newActiveSession) {
-        globals = {
-            ...globals,
-            activeSession: newActiveSession.id
-        };
-    }
-
-    return setGlobals(globals);
+    return ret;
 }
 
 /**
- * The old way this is used to work is that after component mounted
- * actions that needs to be made asynchronously are executed in
- * `componentDidMount` of `App.js`, but leaving the `toggleMockAPI`
- * controlled by the mockAPI component.
- * However, this leads to a racing condition such that when mockAPI
- * should be turned on, the toggling action does not occur before all
- * the API calls are made. Hence the app is trying to fetch from the real
- * API instead of the mock API.
- * In addition, on the event of turning on and off the mock API, switching
- * active user role and setting active sessions, a similar consecutive API
- * actions are made comparing to the initialization.
+ * Various actions have side effects, requiring additional actions to
+ * be dispatched. For example, if a session changes, all data related to
+ * that session needs to be re-fetched.
  *
- * The new approach is to make each actions in `iniOrder` array, which
- * contains all the consecutive API actions that need to be made on
- * application load, as a stage, and move the actual toggling of the mock
- * API to this level instead of leaving it to the mockAPI component. Whenever
- * a related events occur (for example, changing active session), the action
- * creator will call this `initFromStage` action with the matching stage and
- * this function will perform different API actions that is necessary
- * after the specified `stage`
+ * This function allows you to specify "stage" to start the init procedure at.
+ * It will handle re-fetching any dependent data and dispatching any
+ * required actions depending on the stage specified.
  *
  * @export
- * @param {string} stage
- * @param {object} options
+ * @param {string} stage - What stage to start the init procedure at
+ * @param {{ startAfterStage: boolean }} options - if true, start from the stage following the specified stage; if false, start from the specified stage
  * @returns {function} an async function that handles all the API calls.
  */
-export function initFromStage(stage, options) {
+export function initFromStage(stage, options = { startAfterStage: false }) {
+    const startAfterStage = !!options.startAfterStage;
+
     return async (dispatch, getState) => {
-        const {
-            activeSession = null,
-            activeUserRole = "admin",
-            mockAPI = null
-        } = options;
+        const parsedGlobals = { mockAPI: null, activeSession: null };
 
         /**
          * A helper function to determine if the `currentStage`
          * should be run
          *
-         * @param {string} currentStage
+         * @param {string} queryStage
          * @returns {boolean} whether the `currentStage` action
          * should be performed
          */
-        const shouldRunStage = currentStage => {
+        function shouldRunStage(queryStage) {
             const initOrder = [
+                "pageLoad",
                 "toggleMockAPI",
                 "setActiveUser",
                 "setActiveUserRole",
                 "fetchSessions",
                 "setActiveSession",
-                "updateGlobals"
+                "updateGlobals",
+                "fetchSessionDependentData"
             ];
 
-            const startIndex = initOrder.indexOf(stage);
+            // Is the queried stage dependent on the current stage?
+            // If `startAfterStage` is set, we actually want to know
+            // if we are the *next* stage.
+            const stageDependent =
+                initOrder.indexOf(stage) + startAfterStage <=
+                initOrder.indexOf(queryStage);
 
-            return startIndex <= initOrder.indexOf(currentStage);
-        };
+            // `"setActiveSession" requires that an active session be set before
+            // it gets run.
+            if (stageDependent && queryStage === "setActiveSession") {
+                const state = getState();
+                const sessions = sessionsSelector(state);
+                const activeSession = activeSessionSelector(state) || {
+                    id: parsedGlobals.activeSession
+                };
+                if (sessions.find(session => session.id === activeSession.id)) {
+                    return true;
+                }
+                return false;
+            }
+
+            // All session dependent data depends on an active session being set
+            if (stageDependent && queryStage === "fetchSessionDependentData") {
+                const state = getState();
+                const activeSession = activeSessionSelector(state);
+                if (activeSession && activeSession.id != null) {
+                    return true;
+                }
+                return false;
+            }
+
+            return stageDependent;
+        }
+
+        if (shouldRunStage("pageLoad")) {
+            // When the page loads we parse the URL and pull out any globals that
+            // need setting
+            if (window.location) {
+                Object.assign(
+                    parsedGlobals,
+                    parseURLSearchString(window.location.search)
+                );
+                // Immediately set any global variables in the Redux store.
+                await dispatch(setGlobals(prepareGlobals(parsedGlobals)));
+            }
+        }
 
         if (shouldRunStage("toggleMockAPI")) {
-            toggleMockApi(mockAPI);
+            const globals = globalsSelector(getState());
+            toggleMockApi(globals.mockAPI);
         }
 
         if (shouldRunStage("setActiveUser")) {
@@ -127,45 +156,53 @@ export function initFromStage(stage, options) {
         }
 
         if (shouldRunStage("setActiveUserRole")) {
-            await dispatch(setActiveUserRole(activeUserRole));
+            const activeRole = activeRoleSelector(getState());
+            await dispatch(setActiveUserRole(activeRole, { skipInit: true }));
         }
 
         if (shouldRunStage("fetchSessions")) {
             await dispatch(fetchSessions());
         }
 
-        if (shouldRunStage("setActiveSession") && activeSession !== null) {
+        if (shouldRunStage("setActiveSession")) {
             // after sessions are fetched, we compare with the active session.
             // The active session might need to be "updated" if the ID matches but
             // the data doesn't
             const state = getState();
             const sessions = sessionsSelector(state);
+            const activeSession = activeSessionSelector(state);
+            // There are two places where the active session could be store:
+            // in the URL as a global and in the Redux store. Prefer the value
+            // in the URL.
             const matchingSession =
-                sessions.filter(s => s.id === activeSession.id)[0] ||
-                activeSession;
+                sessions.find(
+                    session => session.id === parsedGlobals.activeSession
+                ) || activeSession;
 
-            await dispatch(setActiveSession(matchingSession));
+            await dispatch(
+                setActiveSession(matchingSession, { skipInit: true })
+            );
         }
 
         if (shouldRunStage("updateGlobals")) {
-            await dispatch(updateGlobals(mockAPI, activeSession, getState));
+            await dispatch(setGlobals(prepareGlobals(parsedGlobals)));
         }
 
-        const promises = [];
+        console.log(stage, options);
+        if (shouldRunStage("fetchSessionDependentData")) {
+            // `fetchActions` array contains all the fetch API calls that need to be
+            // made in order to obtain all data that the app needs.
+            const fetchActions = [
+                fetchApplicants,
+                fetchApplications,
+                fetchAssignments,
+                fetchContractTemplates,
+                fetchInstructors,
+                fetchPositions
+            ];
 
-        // `fetchActions` array contains all the fetch API calls that need to be
-        // made in order to obtain all data that the app needs. Each action would
-        // be execute and dispatch later in the `fetchActions.map`.
-        const fetchActions = [
-            fetchApplicants,
-            fetchApplications,
-            fetchAssignments,
-            fetchContractTemplates,
-            fetchInstructors,
-            fetchPositions
-        ];
-
-        fetchActions.map(action => dispatch(action()));
-        await Promise.all(promises);
+            // The order of fetching here doesn't matter, so dispatch all at once
+            await Promise.all(fetchActions.map(action => dispatch(action())));
+        }
     };
 }
