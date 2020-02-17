@@ -7,10 +7,10 @@ module Response
         # serializer if we are an active record. Otherwise, pass the
         # payload through.
         payload = if payload.is_a?(ActiveRecord::Base)
-            ActiveModelSerializers::SerializableResource.new(payload)
-        else
-            payload
-        end
+                      ActiveModelSerializers::SerializableResource.new(payload)
+                  else
+                      payload
+                  end
         render json: { status: 'success', message: '', payload: payload }
     end
 
