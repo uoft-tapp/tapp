@@ -1,16 +1,21 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
+SNAPSHOTS_DIR = '/backup/snapshots'
 # Rake tasks adapted from https://gist.github.com/hopsoft/56ba6f55fe48ad7f8b90
 
 namespace :debug do
     desc 'Snapshots the db and saves to db/snapshots/{timestamp}_tapp_{environment}.psql'
     task :snapshot do
+        # make sure the snapshots directory exists before we attempt to save to it
+        FileUtils.mkdir_p SNAPSHOTS_DIR
         cmd = nil
         with_config do |app, host, db, user, pass|
-            timestamp = Time.now.strftime('%Y%m%d%H%M%S')
-            file_name = "#{Rails.root}/db/snapshots/#{timestamp}_#{db}.psql"
+            timestamp = Time.now.strftime('%Y_%m_%d__%H_%M_%S')
+            file_name = "#{SNAPSHOTS_DIR}/#{timestamp}_#{db}.psql"
             con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-            cmd = "pg_dump -v -f #{file_name} #{con_string}"
+            cmd = "pg_dump -F c -v -f #{file_name} #{con_string}"
             puts cmd
         end
         `#{cmd}`
@@ -20,12 +25,12 @@ namespace :debug do
     task :restore do
         cmd = nil
         with_config do |app, host, db, user, pass|
-            last_snapshot_file = `cd #{Rails.root}/db/snapshots && ls | tail -n 1`
+            last_snapshot_file = `cd #{SNAPSHOTS_DIR} && ls | tail -n 1`
             if last_snapshot_file.blank?
                 puts 'There is no snapshot to restore from.'
                 return
             else
-                file_name = "#{Rails.root}/db/snapshots/#{last_snapshot_file}"
+                file_name = "#{SNAPSHOTS_DIR}/#{last_snapshot_file}"
                 con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
                 cmd = "pg_restore -d #{con_string} -v -c -C #{file_name}"
             end

@@ -2,7 +2,7 @@
     "name": "frontend",
     "homepage": ".",
     "version": "0.1.0",
-    "proxy": "http://api:3000",
+    "proxy": "http://backend:3000",
     "private": true,
     "dependencies": {
         "bootstrap": "^4.3.1",

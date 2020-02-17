@@ -8,7 +8,7 @@ const { expect, test } = global;
 test("no-op", () => {});
 
 /** URL prefix for making API calls from inside a docker image */
-export const API_URL = "http://api:3000/api/v1";
+export const API_URL = "http://backend:3000/api/v1";
 
 // Ensure that `path` starts with a `/`
 function _ensurePath(path) {

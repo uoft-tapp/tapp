@@ -25,7 +25,7 @@ matrix:
         - docker
       before_script:
         - cp dev.env .env
-        - docker-compose up --build -d api
+        - docker-compose up --build -d backend
         - docker ps -a
       script:
         - ./tests/run-ruby-linting-tests.sh
@@ -43,8 +43,8 @@ matrix:
         - cp dev.env .env
         - docker-compose up --build -d
         - docker ps -a
-        - docker-compose run api rake db:create
-        - docker-compose run api rake db:migrate
+        - docker-compose run backend rake db:create
+        - docker-compose run backend rake db:migrate
       script:
         - ./tests/run-unit-tests.sh
       after_failure:

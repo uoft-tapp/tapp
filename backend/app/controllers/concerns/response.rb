@@ -2,8 +2,15 @@
 
 # responds with json and HTTP code status
 module Response
-    def render_success(payload)
-        payload = ActiveModelSerializers::SerializableResource.new(payload)
+    def render_success(payload = {})
+        # active records have their own serializers, so use the
+        # serializer if we are an active record. Otherwise, pass the
+        # payload through.
+        payload = if payload.is_a?(ActiveRecord::Base)
+                      ActiveModelSerializers::SerializableResource.new(payload)
+                  else
+                      payload
+                  end
         render json: { status: 'success', message: '', payload: payload }
     end
 

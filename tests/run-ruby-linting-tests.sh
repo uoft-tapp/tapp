@@ -18,6 +18,6 @@ echo 'If they are not, please run `docker-compose up` and rerun this script.'
 # Run all tapp unit tests
 echo "Running Unit Tests..."
 # set the CI variable to true so that `npm test` doesn't run in --watch mode.
-docker-compose run api rubocop
+docker-compose run backend rubocop
 
 exit $EXIT_CODE

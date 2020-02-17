@@ -175,8 +175,8 @@ Finally, we can build the docker images and migrate the database
 
 ```
 docker-compose build
-docker-compose run api rake db:setup
-docker-compose run api rake db:migrate
+docker-compose run backend rake db:setup
+docker-compose run backend rake db:migrate
 ```
 
 Now you can run the project with
@@ -232,7 +232,7 @@ rake db:setup
 or from the host environment run
 
 ```
-docker-compose run api rake db:setup
+docker-compose run backend rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB 
