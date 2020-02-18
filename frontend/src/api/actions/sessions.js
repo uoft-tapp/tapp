@@ -12,6 +12,7 @@ import { actionFactory, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { sessionsReducer } from "../reducers/sessions";
 import { activeRoleSelector } from "./users";
+import { initFromStage } from "./init";
 
 // actions
 const fetchSessionsSuccess = actionFactory(FETCH_SESSIONS_SUCCESS);
@@ -79,23 +80,30 @@ export const deleteSession = payload =>
 export const setActiveSession = validatedApiDispatcher({
     name: "setActiveSession",
     description: "Set the active session",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: true,
-    dispatcher: (payload, forceChange = false) => async (
-        dispatch,
-        getState
-    ) => {
-        // Check to see if the active session is actually different. If it is, we will
-        // trigger side-effects
+    dispatcher: (payload, options = {}) => async (dispatch, getState) => {
+        const { skipInit } = options;
         const state = getState();
-        if (
-            !forceChange &&
-            (activeSessionSelector(state) || { id: null }).id === payload.id
-        ) {
+        const currentActiveSession = activeSessionSelector(state);
+        if (currentActiveSession === payload) {
+            return;
+        }
+        // passing in null will unset the active session
+        if (payload == null) {
+            await dispatch(setActiveSessionAction(null));
+            return;
+        }
+        if ((currentActiveSession || { id: null }).id === payload.id) {
             return;
         }
         // If we made it here, the activeSession is changing.
         await dispatch(setActiveSessionAction(payload));
+        // Make sure all tasks we depend on get run
+        if (!skipInit) {
+            await dispatch(
+                initFromStage("setActiveSession", { startAfterStage: true })
+            );
+        }
     }
 });
 

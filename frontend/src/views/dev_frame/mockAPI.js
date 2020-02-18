@@ -14,7 +14,7 @@ import { setGlobals, globalsSelector } from "../../api/actions";
  * @returns {React.ElementType}
  */
 let ToggleMockApi = function ToggleMockApi(props) {
-    const { globals, initFromStage } = props;
+    const { globals, setMockAPIState } = props;
     const active = globals.mockAPI;
 
     return (
@@ -27,17 +27,13 @@ let ToggleMockApi = function ToggleMockApi(props) {
             <ButtonGroup>
                 <Button
                     variant={active ? "primary" : "secondary"}
-                    onClick={() =>
-                        initFromStage("toggleMockAPI", { mockAPI: true })
-                    }
+                    onClick={() => setMockAPIState(true)}
                 >
                     On
                 </Button>
                 <Button
                     variant={active ? "secondary" : "primary"}
-                    onClick={() =>
-                        initFromStage("toggleMockAPI", { mockAPI: false })
-                    }
+                    onClick={() => setMockAPIState(false)}
                 >
                     Off
                 </Button>

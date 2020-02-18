@@ -8,7 +8,7 @@ export function ActiveUserDisplay(props) {
     const {
         activeUser = { utorid: "<noid>", roles: [] },
         activeRole,
-        initFromStage
+        setActiveUserRole
     } = props;
 
     const roles = activeUser.roles;
@@ -27,9 +27,7 @@ export function ActiveUserDisplay(props) {
             {" as"}
             <Dropdown
                 onSelect={i => {
-                    initFromStage("setActiveUserRole", {
-                        activeUserRole: roles[i]
-                    });
+                    setActiveUserRole(roles[i]);
                 }}
                 onToggle={desiredVisibility =>
                     setDropdownVisible(desiredVisibility)
@@ -57,5 +55,5 @@ export function ActiveUserDisplay(props) {
 ActiveUserDisplay.propTypes = {
     activeUser: apiPropTypes.user,
     activeRole: PropTypes.string,
-    initFromStage: PropTypes.func.isRequired
+    setActiveUserRole: PropTypes.func.isRequired
 };
