@@ -188,7 +188,6 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             await dispatch(setGlobals(prepareGlobals(parsedGlobals)));
         }
 
-        console.log(stage, options);
         if (shouldRunStage("fetchSessionDependentData")) {
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
