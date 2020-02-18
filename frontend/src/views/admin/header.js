@@ -2,11 +2,11 @@ import React from "react";
 import { Header } from "../../components/header";
 import { connect } from "react-redux";
 import {
-    setActiveUserRole,
-    setActiveSession,
     usersSelector,
     sessionsSelector,
-    activeSessionSelector
+    activeSessionSelector,
+    setActiveUserRole,
+    setActiveSession
 } from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";

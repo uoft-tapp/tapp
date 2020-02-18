@@ -116,3 +116,6 @@ export const UPSERT_USERS_SUCCESS = "UPSERT_USERS_SUCCESS";
 
 // `debug` constants
 export const DEBUG_SET_ACTIVE_USER_SUCCESS = "DEBUG_SET_ACTIVE_USER_SUCCESS";
+
+// global constants
+export const SET_GLOBALS = "SET_GLOBALS";

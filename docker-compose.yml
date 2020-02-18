@@ -7,11 +7,11 @@ services:
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    api:
+    backend:
         depends_on:
             - "db"
         command: sh -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-        build: ./api
+        build: ./backend
         ports:
             - "3000:3000"
         environment:
