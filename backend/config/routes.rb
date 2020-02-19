@@ -45,14 +45,14 @@ Rails.application.routes.draw do
                 end
 
                 # Instructors
-                resources :instructors, only: %i[create] do
+                resources :instructors, only: %i[index create] do
                     collection do
                         post :delete
                     end
                 end
 
                 # Positions
-                resources :positions, only: %i[index create] do
+                resources :positions, only: %i[create] do
                     collection do
                         post :delete
                     end
