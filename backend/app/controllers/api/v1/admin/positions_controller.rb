@@ -10,7 +10,7 @@ class Api::V1::Admin::PositionsController < ApplicationController
 
     # POST /positions/delete
     def delete
-        render_success(object: @position, condition: proc { @position.destroy! })
+        render_on_condition(object: @position, condition: proc { @position.destroy! })
     end
 
     # This method may be manually called from other controllers. Because
