@@ -91,8 +91,8 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         applicant_id: 1,
         start_date: "2020-01-01",
         end_date: "2020-05-01",
-        note: "N/A",
-        offer_override_pdf: "N/A",
+        note: null,
+        offer_override_pdf: null,
         active_offer_status: 1,
         active_offer_id: 12345678
     };
