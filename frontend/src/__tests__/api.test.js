@@ -64,7 +64,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     const minimalSessionData = {
         start_date: new Date("2020/02/10").toISOString(),
         end_date: new Date("2020/12/31").toISOString(),
-        name: "Minimal Session Data",
+        name: "Initial Session",
         rate1: 50
     };
 
