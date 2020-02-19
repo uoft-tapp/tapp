@@ -62,8 +62,8 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     let session = null;
 
     const minimalSessionData = {
-        start_date: new Date("2020/02/10").toISOString(),
-        end_date: new Date("2020/12/31").toISOString(),
+        start_date: new Date("2020-02-10").toISOString(),
+        end_date: new Date("2020-12-31").toISOString(),
         name: "Initial Session",
         rate1: 50
     };
@@ -73,8 +73,8 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         position_code: "CSC494",
         position_title: "Capstone Project",
         hours_per_assignment: 20,
-        start_date: "2020/01/01",
-        end_date: "2020/05/01"
+        start_date: "2020-01-01",
+        end_date: "2020-05-01"
     };
 
     const minimalApplicantData = {
@@ -89,8 +89,8 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     const minimalAssignmentData = {
         position_id: 1,
         applicant_id: 1,
-        start_date: "2020/01/01",
-        end_date: "2020/05/01",
+        start_date: "2020-01-01",
+        end_date: "2020-05-01",
         note: "N/A",
         offer_override_pdf: "N/A",
         active_offer_status: 1,
