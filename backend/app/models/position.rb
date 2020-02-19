@@ -6,14 +6,18 @@ class Position < ApplicationRecord
     has_many :assignments
     has_many :position_preferences
     has_many :applications, through: :position_preferences
-    has_one :position_data_for_ad
-    has_one :position_data_for_matching
+    has_one :position_data_for_ad, dependent: :destroy
+    has_one :position_data_for_matching, dependent: :destroy
     belongs_to :session
     belongs_to :contract_template
 
     validates :hours_per_assignment, numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
     validates :start_date, :end_date, presence: true
+
+    def as_position_service
+        PositionService.new(position: self)
+    end
 end
 
 # == Schema Information

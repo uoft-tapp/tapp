@@ -45,7 +45,7 @@ Rails.application.routes.draw do
                 end
 
                 # Instructors
-                resources :instructors, only: %i[index create] do
+                resources :instructors, only: %i[create] do
                     collection do
                         post :delete
                     end

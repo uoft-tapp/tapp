@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::AssignmentsController < ApplicationController
+    # GET /contract_templates
+    def index
+        render_success Assignment.by_session(params[:session_id])
+    end
+
     # GET /assignments/:assignment_id
     def show
         @assignment = Assignment.find(params[:id])
