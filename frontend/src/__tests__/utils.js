@@ -251,3 +251,5 @@ export const assignmentPropTypes = apiPropTypes.assignment;
 export const wageChunkPropTypes = apiPropTypes.wageChunk;
 
 export const reportingTagsPropTypes = apiPropTypes.reportingTags;
+
+export const applicantPropTypes = apiPropTypes.applicant;
