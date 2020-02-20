@@ -85,7 +85,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     //Create Session
     it("seed a session", async () => {
         const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
-        console.log("minimal session: \n", resp1);
     });
 
     //Create Position
@@ -104,13 +103,11 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             `/sessions/${minimalPositionData.session_id}/positions`,
             minimalPositionData
         );
-        console.log("minimal position: \n", resp1);
     });
 
     //Create Applicant
     it("seed an applicant", async () => {
         const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
-        console.log("minimal applicant: \n", resp1);
     });
 
     //Create Assignment
@@ -136,7 +133,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             `/admin/assignments`,
             minimalAssignmentData
         );
-        console.log("minimal applicant: \n", resp1);
     });
 }
 
