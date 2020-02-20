@@ -68,15 +68,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         rate1: 50
     };
 
-    const minimalPositionData = {
-        session_id: 1,
-        position_code: "CSC494",
-        position_title: "Capstone Project",
-        hours_per_assignment: 20,
-        start_date: "2020-01-01",
-        end_date: "2020-05-01"
-    };
-
     const minimalApplicantData = {
         utorid: "cole",
         student_number: "10000000",
@@ -84,17 +75,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         last_name: "Zemel",
         email: "cole.zemel@gmail.com",
         phone: "4166666666"
-    };
-
-    const minimalAssignmentData = {
-        position_id: 1,
-        applicant_id: 1,
-        start_date: "2020-01-01",
-        end_date: "2020-05-01",
-        note: null,
-        offer_override_pdf: null,
-        active_offer_status: 1,
-        active_offer_id: 12345678
     };
 
     beforeAll(async () => {
@@ -105,40 +85,58 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     //Create Session
     it("seed a session", async () => {
         const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
-        // const { payload: minimalSession } = await apiGET("/admin/sessions");
         console.log("minimal session: \n", resp1);
     });
 
     //Create Position
     it("seed a position", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const minimalPositionData = {
+            session_id: minimalSession[0].id,
+            position_code: "CSC494",
+            position_title: "Capstone Project",
+            hours_per_assignment: 20,
+            start_date: "2020-01-01",
+            end_date: "2020-05-01"
+        };
+
         const resp1 = await apiPOST(
             `/sessions/${minimalPositionData.session_id}/positions`,
             minimalPositionData
         );
-        const { payload: minimalPosition } = await apiGET(
-            `/sessions/${minimalPositionData.session_id}/positions`
-        );
-        console.log("minimal position: \n", minimalPosition);
+        console.log("minimal position: \n", resp1);
     });
 
     //Create Applicant
     it("seed an applicant", async () => {
         const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
-        const { payload: minimalApplicant } = await apiGET(`/applicants`);
-        console.log("minimal applicant: \n", minimalApplicant);
+        console.log("minimal applicant: \n", resp1);
     });
 
     //Create Assignment
     it("seed an assignment", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const { payload: minimalPosition } = await apiGET(
+            `/sessions/${minimalSession[0].id}/positions`
+        );
+        const { payload: minimalApplicant } = await apiGET(`/applicants`);
+        const minimalAssignmentData = {
+            position_id: minimalPosition[0].id,
+            applicant_id: minimalApplicant[0].id,
+            start_date: "2020-01-01",
+            end_date: "2020-05-01",
+            note: null,
+            offer_override_pdf: null,
+            active_offer_status: 1
+            // Need an API route for Offer
+            // active_offer_id:
+        };
+
         const resp1 = await apiPOST(
             `/admin/assignments`,
             minimalAssignmentData
         );
-        const { payload: minimalAssignment } = await apiGET(
-            `/assignments/${minimalAssignmentData.id}`
-        );
-        console.log(minimalAssignmentData);
-        console.log("minimal assignment: \n", minimalAssignment);
+        console.log("minimal applicant: \n", resp1);
     });
 }
 
