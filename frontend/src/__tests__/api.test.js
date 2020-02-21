@@ -86,18 +86,35 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
     });
 
+    //Create a Contract Template
+    it("seed a contract template", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const minimalContractTemplateData = {
+            session_id: minimalSession[0].id,
+            template_name: "template",
+            template_file: "template.pdf"
+        };
+
+        const resp1 = await apiPOST(
+            `/sessions/${minimalContractTemplateData.session_id}/contract_templates`,
+            minimalContractTemplateData
+        );
+    });
+
     //Create Position
     it("seed a position", async () => {
         const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const { payload: minimalContractTemplate } = await apiGET(
+            `/admin/sessions/${minimalSession[0].id}/contract_templates`
+        );
         const minimalPositionData = {
             session_id: minimalSession[0].id,
             position_code: "CSC494",
             position_title: "Capstone Project",
             hours_per_assignment: 20,
             start_date: "2020-01-01",
-            end_date: "2020-05-01"
-            // TODO:
-            // contract_template_id:
+            end_date: "2020-05-01",
+            contract_template_id: minimalContractTemplate[0].id
         };
 
         const resp1 = await apiPOST(
