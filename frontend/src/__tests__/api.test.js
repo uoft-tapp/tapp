@@ -69,11 +69,11 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     };
 
     const minimalApplicantData = {
-        utorid: "cole",
+        utorid: "johnd",
         student_number: "10000000",
-        first_name: "Cole",
-        last_name: "Zemel",
-        email: "cole.zemel@gmail.com",
+        first_name: "John",
+        last_name: "Doe",
+        email: "fake@email.com",
         phone: "4166666666"
     };
 
@@ -97,6 +97,8 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             hours_per_assignment: 20,
             start_date: "2020-01-01",
             end_date: "2020-05-01"
+            // TODO:
+            // contract_template_id:
         };
 
         const resp1 = await apiPOST(
@@ -125,6 +127,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             note: null,
             offer_override_pdf: null,
             active_offer_status: 1
+            // TODO:
             // Need an API route for Offer
             // active_offer_id:
         };
