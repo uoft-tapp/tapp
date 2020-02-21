@@ -78,7 +78,6 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
     };
 
     beforeAll(async () => {
-        await apiPOST("/admin/debug/snapshot");
         await apiPOST("/admin/debug/clear_data");
     }, 15000);
 
