@@ -2,10 +2,41 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line
-const { expect, test } = global;
+const { expect, test, it, describe, beforeAll, afterAll } = global;
 
-// Jest demands there be a test in every file, so we put a no-op test here.
-test("no-op", () => {});
+// add a custom `.toContainObject` method to `expect()` to see if an array contains
+// an object with matching props. Taken from
+// https://medium.com/@andrei.pfeiffer/jest-matching-objects-in-array-50fe2f4d6b98
+expect.extend({
+    toContainObject(received, argument) {
+        const pass = this.equals(
+            received,
+            expect.arrayContaining([expect.objectContaining(argument)])
+        );
+
+        if (pass) {
+            return {
+                message: () =>
+                    `expected ${this.utils.printReceived(
+                        received
+                    )} not to contain object ${this.utils.printExpected(
+                        argument
+                    )}`,
+                pass: true
+            };
+        } else {
+            return {
+                message: () =>
+                    `expected ${this.utils.printReceived(
+                        received
+                    )} to contain object ${this.utils.printExpected(argument)}`,
+                pass: false
+            };
+        }
+    }
+});
+
+export { expect, test, it, describe, beforeAll, afterAll };
 
 /** URL prefix for making API calls from inside a docker image */
 export const API_URL = "http://backend:3000/api/v1";

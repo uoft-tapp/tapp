@@ -11,286 +11,20 @@ import {
     addPosition,
     deletePosition,
     checkPropTypes,
-    sessionPropTypes,
     offerTemplateMinimalPropTypes,
     offerTemplatePropTypes,
     positionPropTypes,
     instructorPropTypes,
-    errorPropTypes
+    errorPropTypes,
+    expect,
+    describe,
+    it,
+    beforeAll,
+    afterAll
 } from "./utils";
 import { mockAPI } from "../api/mockAPI";
-// eslint-disable-next-line
-const { describe, it, expect, beforeAll, afterAll } = global;
-
-// add a custom `.toContainObject` method to `expect()` to see if an array contains
-// an object with matching props. Taken from
-// https://medium.com/@andrei.pfeiffer/jest-matching-objects-in-array-50fe2f4d6b98
-expect.extend({
-    toContainObject(received, argument) {
-        const pass = this.equals(
-            received,
-            expect.arrayContaining([expect.objectContaining(argument)])
-        );
-
-        if (pass) {
-            return {
-                message: () =>
-                    `expected ${this.utils.printReceived(
-                        received
-                    )} not to contain object ${this.utils.printExpected(
-                        argument
-                    )}`,
-                pass: true
-            };
-        } else {
-            return {
-                message: () =>
-                    `expected ${this.utils.printReceived(
-                        received
-                    )} to contain object ${this.utils.printExpected(argument)}`,
-                pass: false
-            };
-        }
-    }
-});
-
-/**
- * Seeding the database with the minimal set of API calls to create an assignment.
- */
-function dataBaseSeed(api = { apiGET, apiPOST }) {
-    const { apiGET, apiPOST } = api;
-    let session = null;
-
-    const minimalSessionData = {
-        start_date: new Date("2020-02-10").toISOString(),
-        end_date: new Date("2020-12-31").toISOString(),
-        name: "Initial Session",
-        rate1: 50
-    };
-
-    const minimalApplicantData = {
-        utorid: "johnd",
-        student_number: "10000000",
-        first_name: "John",
-        last_name: "Doe",
-        email: "fake@email.com",
-        phone: "4166666666"
-    };
-
-    beforeAll(async () => {
-        await apiPOST("/admin/debug/clear_data");
-    }, 15000);
-
-    //Create Session
-    it("seed a session", async () => {
-        const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
-    });
-
-    //Create a Contract Template
-    it("seed a contract template", async () => {
-        const { payload: minimalSession } = await apiGET("/admin/sessions");
-        const minimalContractTemplateData = {
-            session_id: minimalSession[0].id,
-            template_name: "template",
-            template_file: "template.pdf"
-        };
-
-        const resp1 = await apiPOST(
-            `/sessions/${minimalContractTemplateData.session_id}/contract_templates`,
-            minimalContractTemplateData
-        );
-    });
-
-    //Create Position
-    it("seed a position", async () => {
-        const { payload: minimalSession } = await apiGET("/admin/sessions");
-        const { payload: minimalContractTemplate } = await apiGET(
-            `/admin/sessions/${minimalSession[0].id}/contract_templates`
-        );
-        const minimalPositionData = {
-            session_id: minimalSession[0].id,
-            position_code: "CSC494",
-            position_title: "Capstone Project",
-            hours_per_assignment: 20,
-            start_date: "2020-01-01",
-            end_date: "2020-05-01",
-            contract_template_id: minimalContractTemplate[0].id
-        };
-
-        const resp1 = await apiPOST(
-            `/sessions/${minimalPositionData.session_id}/positions`,
-            minimalPositionData
-        );
-    });
-
-    //Create Applicant
-    it("seed an applicant", async () => {
-        const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
-    });
-
-    //Create Assignment
-    it("seed an assignment", async () => {
-        const { payload: minimalSession } = await apiGET("/admin/sessions");
-        const { payload: minimalPosition } = await apiGET(
-            `/sessions/${minimalSession[0].id}/positions`
-        );
-        const { payload: minimalApplicant } = await apiGET(`/applicants`);
-        const minimalAssignmentData = {
-            position_id: minimalPosition[0].id,
-            applicant_id: minimalApplicant[0].id,
-            start_date: "2020-01-01",
-            end_date: "2020-05-01",
-            note: null,
-            offer_override_pdf: null,
-            active_offer_status: 1
-            // TODO:
-            // Need an API route for Offer
-            // active_offer_id:
-        };
-
-        const resp1 = await apiPOST(
-            `/admin/assignments`,
-            minimalAssignmentData
-        );
-    });
-}
-
-/**
- * Tests for the API. These are encapsulated in a function so that
- * different `apiGET` and `apiPOST` functions can be passed in. For example,
- * they may be functions that make actual requests via http or they may
- * be from the mock API.
- *
- * @param {object} api
- * @param {Function} api.apiGET A function that when passed a route will return the get response
- * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
- */
-function sessionsTests(api = { apiGET, apiPOST }) {
-    const { apiGET, apiPOST } = api;
-    let session = null;
-
-    beforeAll(async () => {
-        await apiPOST("/admin/debug/snapshot");
-        await apiPOST("/admin/debug/clear_data");
-    }, 15000);
-    afterAll(async () => {
-        await apiPOST("/admin/debug/restore_snapshot");
-    });
-
-    const newSessionData = {
-        start_date: new Date("2019/09/09").toISOString(),
-        end_date: new Date("2019/12/31").toISOString(),
-        // add a random string to the session name so we don't accidentally collide with another
-        // session's name
-        name: "Newly Created Sessions (" + Math.random() + ")",
-        rate1: 56.54
-    };
-
-    it("create a session", async () => {
-        // get all the sessions so that we can check that our newly inserted session has
-        // a unique id.
-        const { payload: initialSessions } = await apiGET("/admin/sessions");
-        // do we get a success response when creating the session?
-        const resp1 = await apiPOST("/admin/sessions", newSessionData);
-        expect(resp1).toMatchObject({ status: "success" });
-        const { payload: createdSession } = resp1;
-        // make sure the propTypes are right
-        checkPropTypes(sessionPropTypes, createdSession);
-        // make sure the data we get back is the same we put in
-        expect(createdSession).toMatchObject(newSessionData);
-        // make sure we have an id
-        expect(createdSession.id).not.toBeNull();
-        // make sure the id is unique and wasn't already a session id
-        expect(initialSessions.map(x => x.id)).not.toContain(createdSession.id);
-
-        // fetch all sessions and make sure we're in there
-        const { payload: withNewSessions } = await apiGET("/admin/sessions");
-        expect(withNewSessions.length).toBeGreaterThan(initialSessions.length);
-        // make sure the id of our new session came back
-        expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
-
-        // save this session for use in later tests
-        session = resp1.payload;
-    });
-
-    it("fetch sessions", async () => {
-        const resp = await apiGET("/admin/sessions");
-
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
-    });
-
-    it("update a session", async () => {
-        const newData = { ...session, rate1: 57.75 };
-        const resp1 = await apiPOST("/admin/sessions", newData);
-        expect(resp1).toMatchObject({ status: "success" });
-        expect(resp1.payload).toMatchObject(newData);
-
-        // get the sessions list and make sure we're updated there as well
-        const resp2 = await apiGET("/admin/sessions");
-        // filter session list to get the updated session obj
-        const updatedSession = resp2.payload.filter(s => s.id == session.id);
-        expect(updatedSession).toContainObject(newData);
-    });
-
-    it("throw error when `name` is empty", async () => {
-        // create new session with empty name
-        const newData1 = { ...newSessionData, name: "" };
-        const newData2 = { ...newSessionData, name: undefined };
-
-        const resp1 = await apiPOST("/admin/sessions", newData1);
-        expect(resp1).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp1);
-
-        const resp2 = await apiPOST("/admin/sessions", newData2);
-        expect(resp2).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp2);
-    });
-
-    it("throw error when `name` is not unique", async () => {
-        // name identical to the exisiting session
-        const newData = { ...newSessionData, name: session.name };
-        // POST to create new session
-        const resp1 = await apiPOST("/admin/sessions", newData);
-
-        // expected an error as name not unique
-        expect(resp1).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp1);
-    });
-
-    it("throw error when deleting item with invalid id", async () => {
-        // get the max session id
-        const resp1 = await apiGET("/admin/sessions");
-        expect(resp1).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
-        const maxId = Math.max(...resp1.payload.map(s => s.id));
-
-        // delete with non-existing id
-        const resp2 = await apiPOST("/admin/sessions/delete", {
-            id: maxId + 1 // add 1 to make the id invalid
-        });
-        // expected an error with non-identical session id
-        expect(resp2).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp2);
-
-        // delete with id = null
-        const resp3 = await apiPOST("/admin/sessions/delete", {
-            id: null
-        });
-        // expected an error with non-identical session id
-        expect(resp3).toMatchObject({ status: "error" });
-        checkPropTypes(errorPropTypes, resp3);
-    });
-
-    it("delete session", async () => {
-        const resp1 = await apiPOST("/admin/sessions/delete", {
-            id: session.id
-        });
-        expect(resp1).toMatchObject({ status: "success" });
-        const { payload: withoutNewSessions } = await apiGET("/admin/sessions");
-        expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
-    });
-}
+import { databaseSeeder } from "./setup";
+import { sessionsTests } from "./session-tests";
 
 function templateTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
@@ -692,48 +426,59 @@ function unknownRouteTests(api = { apiGet, apiPost }) {
 }
 
 // Run the actual tests for both the API and the Mock API
-// describe("API tests", () => {
-//     describe("`/sessions` tests", () => {
-//         sessionsTests({ apiGET, apiPOST });
-//     });
-//     describe.only("template tests", () => {
-//         templateTests({ apiGET, apiPOST });
-//     });
-//     // // XXX position_template was renamed contract_template. The backend needs to be fixed,
-//     // // but it is being rewritten, so skip the test for now
-//     // describe.skip("`/positions` tests", () => {
-//     //     positionsTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("`/instructors` tests", () => {
-//     //     instructorsTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("`/assignments` tests", () => {
-//     //     assignmentsTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("wage_chunk tests", () => {
-//     //     wageChunksTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("offers tests", () => {
-//     //     offersTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("reporting_tag tests", () => {
-//     //     reportingTagsTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("`/applications` tests", () => {
-//     //     applicationsTests({ apiGET, apiPOST });
-//     // });
-//     // describe.skip("unknown api route tests", () => {
-//     //     unknownRouteTests({ apiGET, apiPOST });
-//     // });
-// });
+describe("API tests", () => {
+    const api = { apiGET, apiPOST };
+    
+    it("Seed the database", async () => {
+        await databaseSeeder.seed(api);
+        await databaseSeeder.verifySeed(api);
+    }, 30000);
+    
+    describe("`/sessions` tests", () => {
+        sessionsTests(api);
+    });
+    //     describe("`/sessions` tests", () => {
+    //         sessionsTests({ apiGET, apiPOST });
+    //     });
+    //     describe.only("template tests", () => {
+    //         templateTests({ apiGET, apiPOST });
+    //     });
+    //     // // XXX position_template was renamed contract_template. The backend needs to be fixed,
+    //     // // but it is being rewritten, so skip the test for now
+    //     // describe.skip("`/positions` tests", () => {
+    //     //     positionsTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("`/instructors` tests", () => {
+    //     //     instructorsTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("`/assignments` tests", () => {
+    //     //     assignmentsTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("wage_chunk tests", () => {
+    //     //     wageChunksTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("offers tests", () => {
+    //     //     offersTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("reporting_tag tests", () => {
+    //     //     reportingTagsTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("`/applications` tests", () => {
+    //     //     applicationsTests({ apiGET, apiPOST });
+    //     // });
+    //     // describe.skip("unknown api route tests", () => {
+    //     //     unknownRouteTests({ apiGET, apiPOST });
+    //     // });
+});
 
 describe("Mock API tests", () => {
-    describe("database seeding", () => {
-        dataBaseSeed(mockAPI);
+    it("Seed the database", async () => {
+        await databaseSeeder.seed(mockAPI);
+        await databaseSeeder.verifySeed(mockAPI);
     });
-    // describe("`/sessions` tests", () => {
-    //     sessionsTests(mockAPI);
-    // });
+    describe("`/sessions` tests", () => {
+        sessionsTests(mockAPI);
+    });
     // describe("template tests", () => {
     //     templateTests(mockAPI);
     // });

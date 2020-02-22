@@ -85,15 +85,6 @@ export class Assignment extends MockAPIController {
         // Call `find` to make sure the `hours` field is computed
         const upsertedAssignment = this.find(super.upsert(assignment));
 
-        // If `hours` is passed into the assignment, we need to modify the wage chunks
-        // associated with the assignment (but only if the hours differ).
-        if (
-            assignment.hours == null ||
-            +upsertedAssignment.hours === +assignment.hours
-        ) {
-            return upsertedAssignment;
-        }
-
         // Make sure the assignment is in the assignments_by_session list
         const session_id = new Position(this.data).findAssociatedSession(
             upsertedAssignment.position_id
@@ -102,6 +93,15 @@ export class Assignment extends MockAPIController {
             this.data.assignments_by_session[session_id].push(
                 upsertedAssignment.id
             );
+        }
+
+        // If `hours` is passed into the assignment, we need to modify the wage chunks
+        // associated with the assignment (but only if the hours differ).
+        if (
+            assignment.hours == null ||
+            +upsertedAssignment.hours === +assignment.hours
+        ) {
+            return upsertedAssignment;
         }
 
         let wageChunks = new WageChunk(this.data).findAllByAssignment(
