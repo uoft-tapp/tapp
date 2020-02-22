@@ -24,21 +24,16 @@ class Api::V1::Admin::PositionsController < ApplicationController
                 service = @position.as_position_service
                 service.update(params: position_params)
             end
-            render_success @position if @position
-            return
-        end
-
         # create a new position if one doesn't currently exist
-        start_transaction_and_rollback_on_exception do
-            service = PositionService.new(params: position_params.except(:id))
-            service.perform
-            @position = service.position
+        else
+            start_transaction_and_rollback_on_exception do
+                service = PositionService.new(params: position_params.except(:id))
+                service.perform
+                @position = service.position
+            end
         end
 
-        # if @position == nil at this point, there was an error which
-        # is being currently rendered. Therefore, we'd better not try to render
-        # a success.
-        render_success @position if @position
+        render_success @position
     end
 
     def find_position
