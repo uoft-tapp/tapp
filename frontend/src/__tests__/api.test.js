@@ -59,7 +59,6 @@ expect.extend({
  */
 function dataBaseSeed(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
-    let session = null;
 
     const minimalSessionData = {
         start_date: new Date("2020-02-10").toISOString(),
@@ -81,9 +80,13 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
         await apiPOST("/admin/debug/clear_data");
     }, 15000);
 
+    afterAll(async () => {
+        await apiPOST("/admin/debug/snapshot");
+    });
+
     //Create Session
     it("seed a session", async () => {
-        const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
+        await apiPOST("/admin/sessions", minimalSessionData);
     });
 
     //Create a Contract Template
@@ -95,7 +98,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             template_file: "template.pdf"
         };
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/sessions/${minimalContractTemplateData.session_id}/contract_templates`,
             minimalContractTemplateData
         );
@@ -117,7 +120,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             contract_template_id: minimalContractTemplate[0].id
         };
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/sessions/${minimalPositionData.session_id}/positions`,
             minimalPositionData
         );
@@ -125,7 +128,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
 
     //Create Applicant
     it("seed an applicant", async () => {
-        const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
+        await apiPOST(`/admin/applicants`, minimalApplicantData);
     });
 
     //Create Assignment
@@ -148,10 +151,7 @@ function dataBaseSeed(api = { apiGET, apiPOST }) {
             // active_offer_id:
         };
 
-        const resp1 = await apiPOST(
-            `/admin/assignments`,
-            minimalAssignmentData
-        );
+        await apiPOST(`/admin/assignments`, minimalAssignmentData);
     });
 }
 
