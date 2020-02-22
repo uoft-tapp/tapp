@@ -7,7 +7,15 @@ module TransactionHandler
         ActiveRecord::Base.transaction do
             yield
         rescue StandardError => e
-            render_error(message: e.message)
+            begin
+                render_error(message: e.message)
+            rescue NoMethodError
+                # if `start_transaction_and_rollback_on_exception` is executed
+                # outside of a controller context, `render_error` will itself fail.
+                # We aren't interested in its error. We want to bubble up the original
+                # error that started it all.
+                raise e
+            end
         end
     end
 end

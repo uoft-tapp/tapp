@@ -15,6 +15,11 @@ class Assignment < ApplicationRecord
     validates_uniqueness_of :applicant_id, scope: [:position_id]
 
     scope :by_position, ->(position_id) { where(position_id: position_id).order(:id) }
+    scope(:by_session, lambda do |session_id|
+        joins(:position)
+            .where('positions.session_id = ?', session_id)
+            .distinct.order(:id)
+    end)
 
     after_create :split_and_create_wage_chunks
 

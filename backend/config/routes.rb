@@ -52,7 +52,7 @@ Rails.application.routes.draw do
                 end
 
                 # Positions
-                resources :positions, only: %i[index create] do
+                resources :positions, only: %i[create] do
                     collection do
                         post :delete
                     end
