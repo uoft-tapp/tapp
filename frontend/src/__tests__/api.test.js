@@ -55,6 +55,107 @@ expect.extend({
 });
 
 /**
+ * Seeding the database with the minimal set of API calls to create an assignment.
+ */
+function dataBaseSeed(api = { apiGET, apiPOST }) {
+    const { apiGET, apiPOST } = api;
+    let session = null;
+
+    const minimalSessionData = {
+        start_date: new Date("2020-02-10").toISOString(),
+        end_date: new Date("2020-12-31").toISOString(),
+        name: "Initial Session",
+        rate1: 50
+    };
+
+    const minimalApplicantData = {
+        utorid: "johnd",
+        student_number: "10000000",
+        first_name: "John",
+        last_name: "Doe",
+        email: "fake@email.com",
+        phone: "4166666666"
+    };
+
+    beforeAll(async () => {
+        await apiPOST("/admin/debug/clear_data");
+    }, 15000);
+
+    //Create Session
+    it("seed a session", async () => {
+        const resp1 = await apiPOST("/admin/sessions", minimalSessionData);
+    });
+
+    //Create a Contract Template
+    it("seed a contract template", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const minimalContractTemplateData = {
+            session_id: minimalSession[0].id,
+            template_name: "template",
+            template_file: "template.pdf"
+        };
+
+        const resp1 = await apiPOST(
+            `/sessions/${minimalContractTemplateData.session_id}/contract_templates`,
+            minimalContractTemplateData
+        );
+    });
+
+    //Create Position
+    it("seed a position", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const { payload: minimalContractTemplate } = await apiGET(
+            `/admin/sessions/${minimalSession[0].id}/contract_templates`
+        );
+        const minimalPositionData = {
+            session_id: minimalSession[0].id,
+            position_code: "CSC494",
+            position_title: "Capstone Project",
+            hours_per_assignment: 20,
+            start_date: "2020-01-01",
+            end_date: "2020-05-01",
+            contract_template_id: minimalContractTemplate[0].id
+        };
+
+        const resp1 = await apiPOST(
+            `/sessions/${minimalPositionData.session_id}/positions`,
+            minimalPositionData
+        );
+    });
+
+    //Create Applicant
+    it("seed an applicant", async () => {
+        const resp1 = await apiPOST(`/admin/applicants`, minimalApplicantData);
+    });
+
+    //Create Assignment
+    it("seed an assignment", async () => {
+        const { payload: minimalSession } = await apiGET("/admin/sessions");
+        const { payload: minimalPosition } = await apiGET(
+            `/sessions/${minimalSession[0].id}/positions`
+        );
+        const { payload: minimalApplicant } = await apiGET(`/applicants`);
+        const minimalAssignmentData = {
+            position_id: minimalPosition[0].id,
+            applicant_id: minimalApplicant[0].id,
+            start_date: "2020-01-01",
+            end_date: "2020-05-01",
+            note: null,
+            offer_override_pdf: null,
+            active_offer_status: 1
+            // TODO:
+            // Need an API route for Offer
+            // active_offer_id:
+        };
+
+        const resp1 = await apiPOST(
+            `/admin/assignments`,
+            minimalAssignmentData
+        );
+    });
+}
+
+/**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
  * they may be functions that make actual requests via http or they may
@@ -591,52 +692,55 @@ function unknownRouteTests(api = { apiGet, apiPost }) {
 }
 
 // Run the actual tests for both the API and the Mock API
-describe("API tests", () => {
-    describe("`/sessions` tests", () => {
-        sessionsTests({ apiGET, apiPOST });
-    });
-    describe.only("template tests", () => {
-        templateTests({ apiGET, apiPOST });
-    });
-    // // XXX position_template was renamed contract_template. The backend needs to be fixed,
-    // // but it is being rewritten, so skip the test for now
-    // describe.skip("`/positions` tests", () => {
-    //     positionsTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("`/instructors` tests", () => {
-    //     instructorsTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("`/assignments` tests", () => {
-    //     assignmentsTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("wage_chunk tests", () => {
-    //     wageChunksTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("offers tests", () => {
-    //     offersTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("reporting_tag tests", () => {
-    //     reportingTagsTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("`/applications` tests", () => {
-    //     applicationsTests({ apiGET, apiPOST });
-    // });
-    // describe.skip("unknown api route tests", () => {
-    //     unknownRouteTests({ apiGET, apiPOST });
-    // });
-});
+// describe("API tests", () => {
+//     describe("`/sessions` tests", () => {
+//         sessionsTests({ apiGET, apiPOST });
+//     });
+//     describe.only("template tests", () => {
+//         templateTests({ apiGET, apiPOST });
+//     });
+//     // // XXX position_template was renamed contract_template. The backend needs to be fixed,
+//     // // but it is being rewritten, so skip the test for now
+//     // describe.skip("`/positions` tests", () => {
+//     //     positionsTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("`/instructors` tests", () => {
+//     //     instructorsTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("`/assignments` tests", () => {
+//     //     assignmentsTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("wage_chunk tests", () => {
+//     //     wageChunksTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("offers tests", () => {
+//     //     offersTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("reporting_tag tests", () => {
+//     //     reportingTagsTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("`/applications` tests", () => {
+//     //     applicationsTests({ apiGET, apiPOST });
+//     // });
+//     // describe.skip("unknown api route tests", () => {
+//     //     unknownRouteTests({ apiGET, apiPOST });
+//     // });
+// });
 
-describe.skip("Mock API tests", () => {
-    describe("`/sessions` tests", () => {
-        sessionsTests(mockAPI);
+describe("Mock API tests", () => {
+    describe("database seeding", () => {
+        dataBaseSeed(mockAPI);
     });
-    describe("template tests", () => {
-        templateTests(mockAPI);
-    });
-    describe("`/positions` tests", () => {
-        positionsTests(mockAPI);
-    });
-    describe("`/instructors` tests", () => {
-        instructorsTests(mockAPI);
-    });
+    // describe("`/sessions` tests", () => {
+    //     sessionsTests(mockAPI);
+    // });
+    // describe("template tests", () => {
+    //     templateTests(mockAPI);
+    // });
+    // describe("`/positions` tests", () => {
+    //     positionsTests(mockAPI);
+    // });
+    // describe("`/instructors` tests", () => {
+    //     instructorsTests(mockAPI);
+    // });
 });
