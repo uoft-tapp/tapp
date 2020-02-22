@@ -5,8 +5,8 @@ class CreatePositions < ActiveRecord::Migration[6.0]
       t.string :position_code
       t.string :position_title
       t.float :hours_per_assignment
-      t.datetime :start_date, null: false
-      t.datetime :end_date, null: false
+      t.datetime :start_date
+      t.datetime :end_date
 
       t.timestamps
     end
