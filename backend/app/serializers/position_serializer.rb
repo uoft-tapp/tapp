@@ -5,7 +5,6 @@ class PositionSerializer < ActiveModel::Serializer
         super(*args, **kwargs)
         # We want to combine position's data with position_data_for_matching
         # and position_data_for_ad. `PositionService` does exactly this.
-        puts "SERIALIZING", object
         @service = PositionService.new(position: object)
     end
 

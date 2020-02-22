@@ -368,18 +368,12 @@ function instructorsTests({ apiGET, apiPOST }) {
 
     it.todo("fail to delete instructor from a position with invalid id");
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
 function assignmentsTests({ apiGET, apiPOST }) {
     it.todo("get assignments for session");
     it.todo("get assignments for position");
     it.todo("create and delete assignment for position");
     it.todo("update assignment dates/note/offer_override_pdf");
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
 function wageChunksTests({ apiGET, apiPOST }) {
     it.todo("get wage_chunks for position");
     it.todo("create and delete wage_chunk for position");
@@ -388,9 +382,6 @@ function wageChunksTests({ apiGET, apiPOST }) {
         "automatic creation of wage chunk for position when `hours` is set"
     );
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
 function offersTests({ apiGET, apiPOST }) {
     // maybe we don't need this in the API?
     it.todo("get offers for session");
@@ -401,9 +392,6 @@ function offersTests({ apiGET, apiPOST }) {
     it.todo("increment nag count");
     it.todo("error when attempting to update a frozen field");
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
 function reportingTagsTests({ apiGET, apiPOST }) {
     it.todo("get reporting_tags for session");
     it.todo("get reporting_tags for position");
@@ -411,9 +399,6 @@ function reportingTagsTests({ apiGET, apiPOST }) {
     it.todo("create and delete reporting_tags for position");
     it.todo("create and delete reporting_tags for wage_chunk");
 }
-// XXX we need to ignore eslint until we write some
-// actual tests that use `apiGET` and `apiPOST`
-// eslint-disable-next-line
 function applicationsTests({ apiGET, apiPOST }) {}
 
 function unknownRouteTests(api = { apiGet, apiPost }) {
@@ -428,12 +413,12 @@ function unknownRouteTests(api = { apiGet, apiPost }) {
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
     const api = { apiGET, apiPOST };
-    
+
     it("Seed the database", async () => {
         await databaseSeeder.seed(api);
         await databaseSeeder.verifySeed(api);
     }, 30000);
-    
+
     describe("`/sessions` tests", () => {
         sessionsTests(api);
     });
