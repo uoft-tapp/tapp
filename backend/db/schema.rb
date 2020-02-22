@@ -83,9 +83,9 @@ ActiveRecord::Schema.define(version: 2019_11_29_181519) do
   end
 
   create_table "instructors", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "email", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
     t.string "utorid", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -169,8 +169,8 @@ ActiveRecord::Schema.define(version: 2019_11_29_181519) do
     t.string "position_code"
     t.string "position_title"
     t.float "hours_per_assignment"
-    t.datetime "start_date", null: false
-    t.datetime "end_date", null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "contract_template_id", null: false

@@ -13,7 +13,7 @@ class Position < ApplicationRecord
 
     validates :hours_per_assignment, numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
-    validates :start_date, :end_date, presence: true
+    validates :start_date, :end_date
 
     def as_position_service
         PositionService.new(position: self)
@@ -29,8 +29,8 @@ end
 #  position_code        :string
 #  position_title       :string
 #  hours_per_assignment :float
-#  start_date           :datetime         not null
-#  end_date             :datetime         not null
+#  start_date           :datetime
+#  end_date             :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  contract_template_id :integer          not null
