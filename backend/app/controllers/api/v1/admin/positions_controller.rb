@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::PositionsController < ApplicationController
-    before_action :find_position, :store_params
+    before_action :store_params, :find_position
 
     # POST /positions
     def create
-        render_success upsert(params: @params, position: @position)
+        upsert
     end
 
     # POST /positions/delete
@@ -13,30 +13,33 @@ class Api::V1::Admin::PositionsController < ApplicationController
         render_on_condition(object: @position, condition: proc { @position.destroy! })
     end
 
+    private
+
     # This method may be manually called from other controllers. Because
     # of that, it doesn't render, instead leaving rendering up to the caller
-    def upsert(params:, position: nil)
-        @params = params
-        @position = position
-
+    def upsert
         # update the position if we have one
         if @position
             start_transaction_and_rollback_on_exception do
                 service = @position.as_position_service
                 service.update(params: position_params)
-                return @position
             end
+            render_success @position if @position
+            return
         end
 
         # create a new position if one doesn't currently exist
         start_transaction_and_rollback_on_exception do
-            service = PositionService.new(params: position_params)
+            service = PositionService.new(params: position_params.except(:id))
             service.perform
             @position = service.position
         end
-    end
 
-    private
+        # if @position == nil at this point, there was an error which
+        # is being currently rendered. Therefore, we'd better not try to render
+        # a success.
+        render_success @position if @position
+    end
 
     def find_position
         @position = Position.find(params[:id])
