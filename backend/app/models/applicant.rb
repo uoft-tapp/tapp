@@ -16,7 +16,7 @@ class Applicant < ApplicationRecord
         # they could have been given an assignment bypassing the application.
         left_outer_joins(:applications, assignments: :position)
             .where('applications.session_id = ? OR positions.session_id = ?', session_id, session_id)
-            .distinct
+            .distinct.order(:id)
     end
 end
 
