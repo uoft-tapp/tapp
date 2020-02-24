@@ -5,7 +5,7 @@ class Api::V1::Admin::AssignmentWageChunksController < ApplicationController
 
     # GET /wage_chunks
     def index
-        @assignment.wage_chunks
+        render_success @assignment.wage_chunks
     end
 
     # POST /wage_chunks

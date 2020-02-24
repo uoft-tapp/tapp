@@ -32,8 +32,8 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
     end
 
     def applicant_params
-        params.slice(:email, :first_name, :last_name, :phone, :student_number,
-                      :utorid).permit!
+        params.slice(:email, :first_name, :last_name, :phone,
+                     :student_number, :utorid).permit!
     end
 
     def update
