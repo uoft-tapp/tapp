@@ -7,7 +7,7 @@ class Applicant < ApplicationRecord
     has_many :applications
     has_one :applicant_data_for_matching
 
-    validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
+    validates_presence_of :utorid
     validates_uniqueness_of :student_number, case_sensitive: false
     validates_uniqueness_of :utorid
 

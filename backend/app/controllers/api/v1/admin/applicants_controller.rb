@@ -19,7 +19,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
     # POST /applicants
     def create
         @applicant = Applicant.find_by(id: params[:id])
-        update && return if @application
+        update && return if @applicant
         @applicant = Applicant.new(applicant_params)
         render_on_condition(object: @applicant,
                             condition: proc { @applicant.save! })
@@ -32,8 +32,8 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
     end
 
     def applicant_params
-        params.permit(:email, :first_name, :last_name, :phone, :student_number,
-                      :utorid)
+        params.slice(:email, :first_name, :last_name, :phone, :student_number,
+                      :utorid).permit!
     end
 
     def update
