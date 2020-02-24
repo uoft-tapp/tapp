@@ -35,14 +35,13 @@ ActiveRecord::Schema.define(version: 2019_11_29_181519) do
 
   create_table "applicants", force: :cascade do |t|
     t.string "utorid", null: false
-    t.string "student_number", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "email", null: false
+    t.string "student_number"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
     t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["student_number"], name: "index_applicants_on_student_number", unique: true
     t.index ["utorid"], name: "index_applicants_on_utorid", unique: true
   end
 
