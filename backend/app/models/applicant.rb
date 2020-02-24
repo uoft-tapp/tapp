@@ -12,8 +12,10 @@ class Applicant < ApplicationRecord
     validates_uniqueness_of :utorid
 
     def self.by_session(session_id)
-        joins(:applications)
-            .where('applications.session_id = ?', session_id)
+        # An applicant can come from an application for the current session, or
+        # they could have been given an assignment bypassing the application.
+        left_outer_joins(:applications, assignments: :position)
+            .where('applications.session_id = ? OR positions.session_id = ?', session_id, session_id)
             .distinct
     end
 end

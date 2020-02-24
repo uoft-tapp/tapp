@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
             namespace :admin do
                 # Active User
+                get :active_user, to: 'users#active_user'
                 # resource :active_user, only: [:index]
 
                 # Applicants

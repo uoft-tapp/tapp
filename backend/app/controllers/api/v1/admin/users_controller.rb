@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::UsersController < ApplicationController
+    def active_user
+        # XXX this is only temporary for debugging. It should be replaced with
+        # something that gets the user from Shibboleth, etc.
+        render_success(
+            email: 'henry.smith@utoronto.ca',
+            utorid: 'smithh',
+            roles: ['admin', 'instructor']
+        )
+    end
+
     # GET /users
     def index
         render_success User.all

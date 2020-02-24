@@ -9,6 +9,8 @@ import {
     docApiPropTypes
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
+import { Application } from "./applications";
+import { Assignment } from "./assignments";
 
 export class Applicant extends MockAPIController {
     constructor(data) {
@@ -33,12 +35,21 @@ export class Applicant extends MockAPIController {
                 )} cannot be found`
             );
         }
-        // The applicants for this session are those who have submitted an application for this session
-        const applicantIds = findAllById(
-            [matchingSession.id],
-            this.data.applications,
-            "session_id"
-        ).map(x => x.applicant_id);
+        // The applicants for this session are those who have submitted an
+        // application for this session or those who have an assignment in this
+        // session.
+        const applications = new Application(this.data).findAllBySession(
+            matchingSession
+        );
+        const assignments = new Assignment(this.data).findAllBySession(
+            matchingSession
+        );
+        // Get a unique list of applicant ids
+        const applicantIds = Array.from(
+            new Set(
+                applications.map(x => x.id).concat(assignments.map(x => x.id))
+            )
+        );
         return findAllById(applicantIds, this.ownData);
     }
 }

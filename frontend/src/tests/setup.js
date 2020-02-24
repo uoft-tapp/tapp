@@ -159,6 +159,9 @@ async function verifySeededDatabase(
     );
     expect(resp.payload).toContainObject(seeded.contractTemplate);
 
+    resp = await apiGET(`/admin/sessions/${seeded.session.id}/applicants`);
+    expect(resp.payload).toContainObject(seeded.applicant);
+
     resp = await apiGET(`/admin/sessions/${seeded.session.id}/positions`);
     expect(resp.payload).toContainObject(seeded.position);
 
