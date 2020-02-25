@@ -17,7 +17,9 @@ export function AdminContractTemplatesView() {
             <ConnectedContractTemplateList />
             <ConnectedAddContractTemplateDialog
                 show={addDialogVisible}
-                onHide={setAddDialogVisible}
+                onHide={() => {
+                    setAddDialogVisible(false);
+                }}
             />
         </div>
     );
