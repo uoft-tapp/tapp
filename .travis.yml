@@ -2,75 +2,74 @@ sudo: required
 
 language: ruby
 services:
-  - docker
+    - docker
 
 matrix:
-  include:
-    # run the code linters/formatters
-    - name: "Code Formatting Tests"
-      language: node_js
-      node_js:
-        - "10"
-      cache: yarn
-      before_script:
-        # ESLint version is restricted to version 6.1.0 as per issue 209
-        - yarn add eslint@6.1.0 babel-eslint@10.0.2 eslint-plugin-react prettier prettier-check
-      script:
-        # allow these tests to fail for now...
-        - ./tests/run-formatting-tests.sh
+    include:
+        # run the code linters/formatters
+        - name: "Code Formatting Tests"
+          language: node_js
+          node_js:
+              - "12"
+          before_script:
+              # ESLint version is restricted to version 6.1.0 as per issue 209
+              - yarn add eslint@6.1.0 babel-eslint@10.0.2 eslint-plugin-react prettier prettier-check
+          script:
+              # allow these tests to fail for now...
+              - ./tests/run-formatting-tests.sh
 
-    - name: "Ruby Formatting Tests"
-      language: ruby
-      services:
-        - docker
-      before_script:
-        - cp dev.env .env
-        - docker-compose up --build -d backend
-        - docker ps -a
-      script:
-        - ./tests/run-ruby-linting-tests.sh
-      after_failure:
-        - docker-compose logs
-      after_script:
-        - docker-compose down
+        - name: "Ruby Formatting Tests"
+          language: ruby
+          services:
+              - docker
+          before_script:
+              - cp dev.env .env
+              - docker-compose up --build -d backend
+              - docker ps -a
+          script:
+              - ./tests/run-ruby-linting-tests.sh
+          after_failure:
+              - docker-compose logs
+          after_script:
+              - docker-compose down
 
-    # run the development build and test suites
-    - name: "Unit Tests"
-      language: ruby
-      services:
-        - docker
-      before_script:
-        - cp dev.env .env
-        - docker-compose up --build -d
-        - docker ps -a
-        - docker-compose run backend rake db:create
-        - docker-compose run backend rake db:migrate
-      script:
-        - ./tests/run-unit-tests.sh
-      after_failure:
-        - docker-compose logs
-      after_script:
-        - docker-compose down
+        # run the development build and test suites
+        - name: "Unit Tests"
+          language: ruby
+          services:
+              - docker
+          before_script:
+              - cp dev.env .env
+              - docker-compose up --build -d
+              - docker ps -a
+              - docker-compose run backend rake db:create
+              - docker-compose run backend rake db:migrate
+          script:
+              - ./tests/run-unit-tests.sh
+          after_failure:
+              - docker-compose logs
+          after_script:
+              - docker-compose down
 
-    # run the production build/deployment
-    - name: "Production Build"
-      language: ruby
-      services:
-        - docker
-      before_script:
-        - cp dev.env .env
-        - docker-compose up --build -d
-        - docker ps -a
-      script:
-        - docker-compose run frontend npm run dev-build
-      after_failure:
-        - docker-compose logs
-      after_script:
-        - docker-compose down
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: $GITHUB_PAGES_TOKEN
-        local_dir: frontend/build
-        on:
-          branch: master
+        # run the production build/deployment
+        - name: "Production Build"
+          language: ruby
+          services:
+              - docker
+          before_script:
+              - cp dev.env .env
+              - docker-compose up --build -d
+              - docker ps -a
+          script:
+              - docker-compose run frontend npm run dev-build
+          after_failure:
+              - docker-compose logs
+          after_script:
+              - docker-compose down
+          deploy:
+              provider: pages
+              skip_cleanup: true
+              github_token: $GITHUB_PAGES_TOKEN
+              local_dir: frontend/build
+              on:
+                  branch: master
