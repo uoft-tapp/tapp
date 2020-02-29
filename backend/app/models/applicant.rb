@@ -7,14 +7,16 @@ class Applicant < ApplicationRecord
     has_many :applications
     has_one :applicant_data_for_matching
 
-    validates_presence_of :first_name, :last_name, :email, :student_number, :utorid
+    validates_presence_of :utorid
     validates_uniqueness_of :student_number, case_sensitive: false
     validates_uniqueness_of :utorid
 
     def self.by_session(session_id)
-        joins(:applications)
-            .where('applications.session_id = ?', session_id)
-            .distinct
+        # An applicant can come from an application for the current session, or
+        # they could have been given an assignment bypassing the application.
+        left_outer_joins(:applications, assignments: :position)
+            .where('applications.session_id = ? OR positions.session_id = ?', session_id, session_id)
+            .distinct.order(:id)
     end
 end
 
@@ -24,16 +26,15 @@ end
 #
 #  id             :integer          not null, primary key
 #  utorid         :string           not null
-#  student_number :string           not null
-#  first_name     :string           not null
-#  last_name      :string           not null
-#  email          :string           not null
+#  student_number :string
+#  first_name     :string
+#  last_name      :string
+#  email          :string
 #  phone          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
 # Indexes
 #
-#  index_applicants_on_student_number  (student_number) UNIQUE
-#  index_applicants_on_utorid          (utorid) UNIQUE
+#  index_applicants_on_utorid  (utorid) UNIQUE
 #

@@ -21,7 +21,7 @@ class Api::V1::Admin::PositionsController < ApplicationController
         # update the position if we have one
         if @position
             start_transaction_and_rollback_on_exception do
-                service = @position.as_position_service
+                service = PositionService.new(position: @position)
                 service.update(params: position_params)
             end
         # create a new position if one doesn't currently exist

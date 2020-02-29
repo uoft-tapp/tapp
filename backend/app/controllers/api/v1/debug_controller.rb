@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::Admin::DebugController < ApplicationController
+class Api::V1::DebugController < ApplicationController
     # GET /active_user
     def active_user
         @active_user = ActiveUser.last

@@ -52,3 +52,6 @@ Bundler/OrderedGems:
 
 Style/Documentation:
     Enabled: false
+
+Style/WordArray:
+    Enabled: false

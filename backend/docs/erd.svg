@@ -263,9 +263,9 @@
 <text text-anchor="start" x="405.5" y="-286.5" font-family="Arial" font-size="10.00" fill="#000000">hours_per_assignment </text>
 <text text-anchor="start" x="507.5" y="-286.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
 <text text-anchor="start" x="405.5" y="-273.5" font-family="Arial" font-size="10.00" fill="#000000">start_date </text>
-<text text-anchor="start" x="452.5" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime ∗</text>
+<text text-anchor="start" x="452.5" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 <text text-anchor="start" x="405.5" y="-260.5" font-family="Arial" font-size="10.00" fill="#000000">end_date </text>
-<text text-anchor="start" x="448.5" y="-260.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime ∗</text>
+<text text-anchor="start" x="448.5" y="-260.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 <text text-anchor="start" x="405.5" y="-247.5" font-family="Arial" font-size="10.00" fill="#000000">contract_template_id </text>
 <text text-anchor="start" x="499.5" y="-247.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
 </g>
@@ -286,7 +286,7 @@
 <text text-anchor="start" x="225" y="-332.5" font-family="Arial" font-size="10.00" fill="#000000">last_name </text>
 <text text-anchor="start" x="274" y="-332.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
 <text text-anchor="start" x="225" y="-319.5" font-family="Arial" font-size="10.00" fill="#000000">email </text>
-<text text-anchor="start" x="252" y="-319.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
+<text text-anchor="start" x="252" y="-319.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="225" y="-306.5" font-family="Arial" font-size="10.00" fill="#000000">utorid </text>
 <text text-anchor="start" x="253" y="-306.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 </g>

@@ -14,7 +14,7 @@ class PositionService
     def perform
         @position = Position.new(position_params)
         @position.save!
-        @position.instructor_ids = instructor_id_params if instructor_id_params
+        @position.instructor_ids = instructor_ids if instructor_ids
         @position_data_for_ad = @position.create_position_data_for_ad(position_data_for_ad_params)
         @position_data_for_matching = @position.create_position_data_for_matching(position_data_for_matching_params)
         @position_data_for_matching.save!

@@ -23,6 +23,10 @@ class Assignment < ApplicationRecord
 
     after_create :split_and_create_wage_chunks
 
+    def hours
+        wage_chunks.sum(:hours)
+    end
+
     private
 
     def split_and_create_wage_chunks
