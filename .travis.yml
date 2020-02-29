@@ -74,4 +74,3 @@ matrix:
         local_dir: frontend/build
         on:
           branch: master
-          
