@@ -19,7 +19,9 @@ export function AdminAssignmentsView() {
             <ConnectedOfferTable />
             <ConnectedAddAssignmentDialog
                 show={addDialogVisible}
-                onHide={setAddDialogVisible}
+                onHide={() => {
+                    setAddDialogVisible(false);
+                }}
             />
             <div>
                 <ConnectedViewAssignmentDetailsButton />
