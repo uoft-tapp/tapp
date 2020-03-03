@@ -10,7 +10,7 @@ import {
     sessionPropTypes,
     errorPropTypes
 } from "./utils";
-
+import { databaseSeeder } from "./setup";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
@@ -38,6 +38,20 @@ export function sessionsTests(api) {
         rate1: 56.54
     };
 
+    it("fetch sessions", async () => {
+        // do we get a success response when geting all sessions from snapshot
+        const resp = await apiGET("/admin/sessions");
+        expect(resp).toMatchObject({ status: "success" });
+
+        // check the type of payload
+        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
+
+        // compare the responsed session and seeded session they should be exactly the same
+        const responsedSession = resp.payload[0];
+        const seededSession = databaseSeeder.seededData.session;
+        expect(responsedSession).toEqual(seededSession);
+    });
+
     it("create a session", async () => {
         // get all the sessions so that we can check that our newly inserted session has
         // a unique id.
@@ -63,13 +77,6 @@ export function sessionsTests(api) {
 
         // save this session for use in later tests
         session = resp1.payload;
-    });
-
-    it("fetch sessions", async () => {
-        const resp = await apiGET("/admin/sessions");
-
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
     });
 
     it("update a session", async () => {
