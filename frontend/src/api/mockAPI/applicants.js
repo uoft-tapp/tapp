@@ -44,7 +44,7 @@ export class Applicant extends MockAPIController {
         const assignments = new Assignment(this.data).findAllBySession(
             matchingSession
         );
-        console.log("the both", applications, assignments);
+        // console.log("the both", applications, assignments);
         // Get a unique list of applicant ids
         const applicantIds = Array.from(
             new Set(
