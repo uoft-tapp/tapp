@@ -1,22 +1,12 @@
 import PropTypes from "prop-types";
 import {
-    apiGET,
-    apiPOST,
-    addSession,
-    deleteSession,
-    addPosition,
-    deletePosition,
     checkPropTypes,
     offerTemplateMinimalPropTypes,
     offerTemplatePropTypes,
-    positionPropTypes,
-    instructorPropTypes,
     errorPropTypes,
     expect,
-    describe,
     it,
-    beforeAll,
-    afterAll
+    beforeAll
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**

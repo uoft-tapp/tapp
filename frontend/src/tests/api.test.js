@@ -286,9 +286,9 @@ describe("API tests", () => {
         sessionsTests(api);
     });
 
-    describe("template tests", () => {
-        templatesTests(api);
-    });
+    // describe("template tests", () => {
+    //     templatesTests(api);
+    // });
     //     // // XXX position_template was renamed contract_template. The backend needs to be fixed,
     //     // // but it is being rewritten, so skip the test for now
     //     // describe.skip("`/positions` tests", () => {
