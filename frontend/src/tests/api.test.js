@@ -26,7 +26,7 @@ import { mockAPI } from "../api/mockAPI";
 import { databaseSeeder } from "./setup";
 import { sessionsTests } from "./session-tests";
 import { templatesTests } from "./template-tests";
-
+import { positionsTests } from "./position-tests";
 
 function instructorsTests({ apiGET, apiPOST }) {
     let session = null,
