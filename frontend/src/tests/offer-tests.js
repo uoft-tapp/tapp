@@ -1,7 +1,7 @@
-/* eslint-disable */
-
 import { it } from "./utils";
 
+// TODO: Remove eslint disable
+// eslint-disable-next-line
 export function offersTests({ apiGET, apiPOST }) {
     // maybe we don't need this in the API?
     it.todo("get offers for session");

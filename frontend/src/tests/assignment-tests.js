@@ -1,7 +1,7 @@
-/* eslint-disable */
-
 import { it } from "./utils";
 
+// TODO: Remove eslint disable
+// eslint-disable-next-line
 export function assignmentsTests({ apiGET, apiPOST }) {
     it.todo("get assignments for session");
     it.todo("get assignments for position");
