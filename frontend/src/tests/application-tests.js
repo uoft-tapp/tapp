@@ -1,5 +1,3 @@
-/* eslint-disable */
-
-import { it } from "./utils";
-
+// TODO: Remove eslint disable
+// eslint-disable-next-line
 export function applicationsTests({ apiGET, apiPOST }) {}

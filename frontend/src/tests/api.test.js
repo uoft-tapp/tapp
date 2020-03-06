@@ -1,9 +1,7 @@
 /**
  * @jest-environment node
  */
-/* eslint-disable */
-import PropTypes from "prop-types";
-import { apiGET, apiPOST, expect, describe, it } from "./utils";
+import { apiGET, apiPOST, describe, it } from "./utils";
 import { mockAPI } from "../api/mockAPI";
 import { databaseSeeder } from "./setup";
 import { sessionsTests } from "./session-tests";
