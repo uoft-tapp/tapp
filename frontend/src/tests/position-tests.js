@@ -1,7 +1,5 @@
 import PropTypes from "prop-types";
 import {
-    apiGET,
-    apiPOST,
     checkPropTypes,
     positionPropTypes,
     errorPropTypes,
