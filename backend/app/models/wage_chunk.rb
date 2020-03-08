@@ -19,21 +19,18 @@ class WageChunk < ApplicationRecord
     def compute_rate_from_session
         @session ||= assignment.position.session
         # If there is no rate2, then rate1 is the only rate
-        if @session.rate1 && @session.rate2.blank?
-            return @session.rate1
-        end
+        return @session.rate1 if @session.rate1 && @session.rate2.blank?
 
         # if we have two rates and they both lie on one side
         # of a year boundary, then use rate1. Otherwise, use rate2
         end_of_year = @session.start_date.end_of_year
-        if start_date <= end_of_year && end_date <= end_of_year
-            return @session.rate1
-        end
+        return @session.rate1 if start_date <= end_of_year && end_date <= end_of_year
+
         @session.rate2
     end
 
     def set_rates
-        self.rate = compute_rate_from_session if !self.rate.blank?
+        self.rate = compute_rate_from_session unless rate.blank?
     end
 end
 

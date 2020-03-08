@@ -54,7 +54,7 @@ class Assignment < ApplicationRecord
         # they preserve any reporting tags they may have.
 
         # Delete any old wage_chunks
-        self.wage_chunks.destroy_all
+        wage_chunks.destroy_all
 
         if end_date.year > start_date.year
             boundary_date = start_date.end_of_year
