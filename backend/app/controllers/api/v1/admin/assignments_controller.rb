@@ -14,7 +14,7 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
 
     # POST /assignments
     def create
-        @assignment = Assignment.find_by(id: params[:assignment_id])
+        @assignment = Assignment.find_by(id: params[:id])
         update && return if @assignment
         @assignment = Assignment.new(assignment_params)
         render_on_condition(object: @assignment,
@@ -25,6 +25,11 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
 
     def assignment_params
         params.permit(:applicant_id, :position_id, :start_date, :end_date,
-                      :note, :offer_override_pdf, :active_offer_status)
+                      :note, :offer_override_pdf, :active_offer_status, :hours)
+    end
+
+    def update
+        render_on_condition(object: @assignment,
+                            condition: proc { @assignment.update!(assignment_params) })
     end
 end
