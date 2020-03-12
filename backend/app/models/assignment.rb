@@ -28,12 +28,23 @@ class Assignment < ApplicationRecord
     end
 
     def hours=(value)
-        split_and_create_wage_chunks(hours: value)
+        if new_record?
+            # When a new record is created, `split_and_create_wage_chunks`
+            # is called afterwards. It must be called afterwards, because wage chunks
+            # cannot be created until after an assignment has been created. Save the
+            # hours to use in that function
+            @initial_hours = value
+        else
+            # if the record has already been created, the `after_create` functions
+            # will not be called, so call the manually.
+            @initial_hours = nil
+            split_and_create_wage_chunks(hours: value)
+        end
     end
 
     private
 
-    def split_and_create_wage_chunks(hours: nil)
+    def split_and_create_wage_chunks(hours: @initial_hours)
         # Don't set the hours unless they're different from the
         # computed hours
         return if hours == self.hours
