@@ -18,9 +18,12 @@ module Response
         if error
             # if an actual error object was supplied, log the error before returning
             # it to the client.
-            logger.warn do
-                "ERROR: #{message}\n" +
-                    ("TRACEBACK:\n\t" + error.backtrace.join("\n\t") if Rails.env.development?)
+            begin
+                logger.warn do
+                    "ERROR: #{message}\n" +
+                        ("TRACEBACK:\n\t" + error.backtrace.join("\n\t") if Rails.env.development?)
+                end
+            rescue StandardError # rubocop:disable Lint/HandleExceptions
             end
         end
         render json: { status: 'error', message: message, payload: payload }
