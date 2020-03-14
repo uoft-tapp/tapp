@@ -8,7 +8,7 @@ module TransactionHandler
             yield
         rescue StandardError => e
             begin
-                render_error(message: e.message)
+                render_error(message: e.message, error: e)
             rescue NoMethodError
                 # if `start_transaction_and_rollback_on_exception` is executed
                 # outside of a controller context, `render_error` will itself fail.

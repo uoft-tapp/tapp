@@ -14,7 +14,18 @@ module Response
         end
     end
 
-    def render_error(message:, payload: {})
+    def render_error(message:, payload: {}, error: nil)
+        if error
+            # if an actual error object was supplied, log the error before returning
+            # it to the client.
+            begin
+                logger.warn do
+                    "ERROR: #{message}\n" +
+                        ("TRACEBACK:\n\t" + error.backtrace.join("\n\t") if Rails.env.development?)
+                end
+            rescue StandardError # rubocop:disable Lint/HandleExceptions
+            end
+        end
         render json: { status: 'error', message: message, payload: payload }
     end
 
@@ -22,7 +33,7 @@ module Response
         if condition.call
             render_success object
         else
-            render_error object.errors.full_messages.join('; ')
+            render_error(message: object.errors.full_messages.join('; '), error: object.errors)
         end
     end
 end

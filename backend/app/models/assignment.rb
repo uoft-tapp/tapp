@@ -27,9 +27,28 @@ class Assignment < ApplicationRecord
         wage_chunks.sum(:hours)
     end
 
+    def hours=(value)
+        if new_record?
+            # When a new record is created, `split_and_create_wage_chunks`
+            # is called afterwards. It must be called afterwards, because wage chunks
+            # cannot be created until after an assignment has been created. Save the
+            # hours to use in that function
+            @initial_hours = value
+        else
+            # if the record has already been created, the `after_create` functions
+            # will not be called, so call the manually.
+            @initial_hours = nil
+            split_and_create_wage_chunks(hours: value)
+        end
+    end
+
     private
 
-    def split_and_create_wage_chunks
+    def split_and_create_wage_chunks(hours: @initial_hours)
+        # Don't set the hours unless they're different from the
+        # computed hours
+        return if hours == self.hours
+
         start_date = self.start_date
         end_date = self.end_date
         if start_date.blank? && end_date.blank?
@@ -39,8 +58,14 @@ class Assignment < ApplicationRecord
 
         return unless start_date && end_date
 
-        assignment_hours = position.hours_per_assignment
+        assignment_hours = hours || position.hours_per_assignment
         return unless assignment_hours
+
+        # TODO: Wage chunks should be reused if possible; that way
+        # they preserve any reporting tags they may have.
+
+        # Delete any old wage_chunks
+        wage_chunks.destroy_all
 
         if end_date.year > start_date.year
             boundary_date = start_date.end_of_year

@@ -5,6 +5,6 @@ module ExceptionHandler
     extend ActiveSupport::Concern
 
     included do
-        rescue_from(StandardError) { |e| render_error(message: e.message) }
+        rescue_from(StandardError) { |e| render_error(message: e.message, error: e) }
     end
 end

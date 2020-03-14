@@ -35,6 +35,7 @@ class DatabaseSeeder {
             assignment: {
                 position_id: null,
                 applicant_id: null,
+                hours: 70,
                 start_date: new Date("2020-01-01").toISOString(),
                 end_date: new Date("2020-05-01").toISOString()
             }
