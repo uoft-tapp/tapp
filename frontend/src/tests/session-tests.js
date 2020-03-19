@@ -23,7 +23,7 @@ import { databaseSeeder } from "./setup";
  */
 export function sessionsTests(api) {
     const { apiGET, apiPOST } = api;
-    let session = null;
+    let session = databaseSeeder.seededData.session;
 
     beforeAll(async () => {
         await apiPOST("/debug/restore_snapshot");
@@ -56,6 +56,7 @@ export function sessionsTests(api) {
         // get all the sessions so that we can check that our newly inserted session has
         // a unique id.
         const { payload: initialSessions } = await apiGET("/admin/sessions");
+
         // do we get a success response when creating the session?
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
         expect(resp1).toMatchObject({ status: "success" });
@@ -76,12 +77,13 @@ export function sessionsTests(api) {
         expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
 
         // save this session for use in later tests
-        session = resp1.payload;
     });
 
     it("update a session", async () => {
         const newData = { ...session, rate1: 57.75 };
         const resp1 = await apiPOST("/admin/sessions", newData);
+        // console.log(resp1);
+
         expect(resp1).toMatchObject({ status: "success" });
         expect(resp1.payload).toMatchObject(newData);
 
@@ -93,11 +95,17 @@ export function sessionsTests(api) {
     });
 
     it("throw error when `name` is empty", async () => {
-        // create new session with empty name
-        const newData1 = { ...newSessionData, name: "" };
-        const newData2 = { ...newSessionData, name: undefined };
+        console.log(newSessionData);
+        console.log(session);
 
+        // create new session with empty name
+        // const newData1 = { ...newSessionData, name: "" };
+        // const newData2 = { ...newSessionData, name: undefined };
+        const newData1 = { ...session, name: "" };
+        const newData2 = { ...session, name: undefined };
         const resp1 = await apiPOST("/admin/sessions", newData1);
+        console.log(resp1);
+
         expect(resp1).toMatchObject({ status: "error" });
         checkPropTypes(errorPropTypes, resp1);
 
