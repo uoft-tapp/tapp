@@ -76,4 +76,7 @@ describe("Mock API tests", () => {
     describe.skip("`/instructors` tests", () => {
         instructorsTests(mockAPI);
     });
+    describe("`/applications` tests", () => {
+        applicationsTests(mockAPI);
+    });
 });
