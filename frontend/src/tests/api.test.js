@@ -28,7 +28,7 @@ describe("API tests", () => {
         sessionsTests(api);
     });
 
-    describe.skip("template tests", () => {
+    describe("template tests", () => {
         templatesTests(api);
     });
     // XXX position_template was renamed contract_template. The backend needs to be fixed,
