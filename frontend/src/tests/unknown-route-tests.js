@@ -1,7 +1,7 @@
-import { expect, it } from "./utils";
+import { expect, it, apiGET, apiPOST } from "./utils";
 
 export function unknownRouteTests(api = { apiGET, apiPOST }) {
-    const { apiGET, apiPOST } = api;
+    const { apiGET } = api;
 
     it("should fail GET request with unknown '/api' routes", async () => {
         const resp = await apiGET("/some_string");
