@@ -39,7 +39,7 @@ describe("API tests", () => {
     describe.skip("`/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/assignments` tests", () => {
+    describe("`/assignments` tests", () => {
         assignmentsTests({ apiGET, apiPOST });
     });
     describe.skip("wage_chunk tests", () => {
@@ -72,6 +72,9 @@ describe("Mock API tests", () => {
     });
     describe("`/positions` tests", () => {
         positionsTests(mockAPI);
+    });
+    describe("`/assignments` tests", () => {
+        assignmentsTests(mockAPI);
     });
     describe.skip("`/instructors` tests", () => {
         instructorsTests(mockAPI);
