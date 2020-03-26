@@ -26,6 +26,22 @@ export class Session extends MockAPIController {
             throw new Error(message);
         }
     }
+    validateUpdate(session) {
+        const message = getAttributesCheckMessage(session, this.ownData, {
+            name: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
+    upsert(obj) {
+        if (this.rawFind(obj)) {
+            this.validateUpdate(obj);
+            return this.updateIfFound(obj);
+        }
+        this.validateNew(obj);
+        return this.create(obj);
+    }
 }
 
 export const sessionsRoutes = {
