@@ -10,7 +10,7 @@ import {
 
 import { databaseSeeder } from "./setup";
 
-export function positionsTests(api = { apiGET, apiPOST }) {
+export function positionsTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null,
         position = null,
