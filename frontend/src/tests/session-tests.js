@@ -24,12 +24,10 @@ import { databaseSeeder } from "./setup";
 export function sessionsTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null;
-    console.log(databaseSeeder.seededData.session);
 
     beforeAll(async () => {
         await apiPOST("/debug/restore_snapshot");
         session = databaseSeeder.seededData.session;
-        console.log(databaseSeeder.seededData.session);
     }, 30000);
 
     const newSessionData = {
