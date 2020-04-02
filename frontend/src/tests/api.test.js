@@ -51,7 +51,7 @@ describe("API tests", () => {
     describe.skip("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
     });
-    describe("`/applications` tests", () => {
+    describe.skip("`/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
     });
     describe.skip("unknown api route tests", () => {
