@@ -1,13 +1,17 @@
 # TAPP
+
 TA application, assignment, and matching.
 
 ## Contributing
+
 <details>
 <summary>If you would like to contribute to the project, we ask that you follow the following conventions.</summary>
 <p>
 
 ## Travis CI
+
 We use Travis CI for our continuous integration pipeline. As of right now, we have 3 tests that should pass:
+
 ```
 1. Yarn linting tests for our front end
 2. Rubocop linting tests for our back end
@@ -16,16 +20,16 @@ We use Travis CI for our continuous integration pipeline. As of right now, we ha
 
 ### Issues
 
-**Scope** 
+**Scope**
 
-- Everything you contribute, no matter how small, should always start with a new issue. The scope of these problems can be quite broad, if necessary, and can be decomposed into collection of smaller issues as the team sees fit. This allows us to be both in documented conversation about what work needs to be done, and to be aware of who has taken on different tasks.
+-   Everything you contribute, no matter how small, should always start with a new issue. The scope of these problems can be quite broad, if necessary, and can be decomposed into collection of smaller issues as the team sees fit. This allows us to be both in documented conversation about what work needs to be done, and to be aware of who has taken on different tasks.
 
-**Structure** 
+**Structure**
 
-- The issue title and description should be as descriptive as possible. 
-- If you want to take on an issue, assign yourself to it first so that we can track which ones need attending to. 
-- We allow two special kinds of issues, proposal and question. Their issue titles should start with [proposal] or [question] respectively, and are meant for issues that require team input. 
-- Please label issues as appropriate to the labels that already exist. If you would like to add a new one, open a proposal issue for it. 
+-   The issue title and description should be as descriptive as possible.
+-   If you want to take on an issue, assign yourself to it first so that we can track which ones need attending to.
+-   We allow two special kinds of issues, proposal and question. Their issue titles should start with [proposal] or [question] respectively, and are meant for issues that require team input.
+-   Please label issues as appropriate to the labels that already exist. If you would like to add a new one, open a proposal issue for it.
 
 ### Branches
 
@@ -37,34 +41,34 @@ i.e. TAPP-1
 
 ### Commits
 
-**Scope** 
+**Scope**
 
-- An individual commit should always track the smallest unit of work possible, within reason. We want to seperate concerns, as this helps for better debugging, revieweing and log readability. 
+-   An individual commit should always track the smallest unit of work possible, within reason. We want to seperate concerns, as this helps for better debugging, revieweing and log readability.
 
-**Structure** 
+**Structure**
 
-The general structure should always be: 
+The general structure should always be:
 
-[change type]([change region]): [short msg]  
-[detailed msg]
+[change type]([change region]): [short msg][detailed msg]
 
 Where
 **[change type]** is one of:
 
-- feat: A new feature
-- fix: A bug fix
-- ehancement: An improvement on a feature
-- refactor: A code refactor
-- style: A purely stylistic change to the code
-- test: Any change to or addition of tests
+-   feat: A new feature
+-   fix: A bug fix
+-   ehancement: An improvement on a feature
+-   refactor: A code refactor
+-   style: A purely stylistic change to the code
+-   test: Any change to or addition of tests
 
-**[change region]** is a name of a logical region of code in the project, i.e. 
-- docker
-- api
-- db
-- frontend
-- documentation
-- ... etc
+**[change region]** is a name of a logical region of code in the project, i.e.
+
+-   docker
+-   api
+-   db
+-   frontend
+-   documentation
+-   ... etc
 
 **[short msg]** should not exceed 50 chars
 
@@ -89,21 +93,22 @@ adding a new position would always fail.
 
 **Scope**
 
-- The title of PR should either be exactly the issue title, or a rewording
-- The PR description should mention the associated issue with a hashtag, so that it can be linked 
-- All commits meant to resolve an issue must be reviewed by at least one member of the team
-- The reviewer will not merge commits until their changes are addressed, if requests for change apply
-- The reviewee should either rebase their changes onto their commits and push, or push follow up commits addressing reviewer changes
-- The reviewer must be the one to merge the PR after they approve their changes
-- If the PR commits must be rebased, the reviewee is responsible for doing this and should do so in a seperate commit
-- Github's automatic merge commits are acceptable
-- The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
-</p>
-</details>
+-   The title of PR should either be exactly the issue title, or a rewording
+-   The PR description should mention the associated issue with a hashtag, so that it can be linked
+-   All commits meant to resolve an issue must be reviewed by at least one member of the team
+-   The reviewer will not merge commits until their changes are addressed, if requests for change apply
+-   The reviewee should either rebase their changes onto their commits and push, or push follow up commits addressing reviewer changes
+-   The reviewer must be the one to merge the PR after they approve their changes
+-   If the PR commits must be rebased, the reviewee is responsible for doing this and should do so in a seperate commit
+-   Github's automatic merge commits are acceptable
+-   The reviewer must delete the associated branch once the PR is merged (GH provides an option for this)
+    </p>
+    </details>
 
 ## Getting Started
+
 These instructions will get a copy of the project up and running on your
-local machine for development and testing purposes. Currently, the entire app 
+local machine for development and testing purposes. Currently, the entire app
 (using React/Redux, Ruby 2.5.1 and a Postgres database) is dockerized.
 
 ### Prerequisties
@@ -112,12 +117,11 @@ local machine for development and testing purposes. Currently, the entire app
 2. [Docker Compose](https://docs.docker.com/compose/install/) (Must be installed seperately on Linux)
 3. Ruby, only if you would like to use the precommit hook
 
-*If you are running OSx or Windows, your Docker installation will have come with docker-compose.*
+_If you are running OSx or Windows, your Docker installation will have come with docker-compose._
 
 ### Rubocop and eslint precommit hook
 
-
-If you want to work on the Rails API, we maintain a script that installs a linter (rubocop) and sets up a 
+If you want to work on the Rails API, we maintain a script that installs a linter (rubocop) and sets up a
 precommit hook making the linter run automatically whenever you commit.
 
 If you would like to install it, invoke:
@@ -130,22 +134,24 @@ bash ./init.sh
 
 The app is organized into three entities:
 
-- A rails app, which serves the API
-- A postgress database that the API interacts with directly
-- A React app, which serves as the frontend for the app
+-   A rails app, which serves the API
+-   A postgress database that the API interacts with directly
+-   A React app, which serves as the frontend for the app
 
 ### Running the app with Docker
 
 #### Overview
+
 We have four docker compose files that are important to know:
+
 1. `docker-compose.yml` is our base docker-compose file. This by itself will
    build the db and the API
 2. `docker-compose.dev.yml` is our development docker-compose file (`docker-compose.override.yml` is
-    a symbolic link to this file). This will
+   a symbolic link to this file). This will
    dynamically serve the frontend via a local webpack dev server.
 3. `docker-compose.prod.yml` is our production docker-compose file. This will
    also build the db and API, but not the front end
-3. `docker-compose.frontend.yml` This will use webpack to build
+4. `docker-compose.frontend.yml` This will use webpack to build
    the frontend for serving as a static asset.
 
 #### Development Environment First Install
@@ -199,12 +205,11 @@ This is equivalent to the command `docker-compose -f docker-compose.yml -f docke
 or `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
 since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`.
 
-
 #### Debugging
 
 To view the STDOUT from a docker container of a running server, you can invoke
 
-```docker-compose logs -tf <image>```
+`docker-compose logs -tf <image>`
 
 To stop everything, use `docker-compose down`.
 
@@ -235,11 +240,11 @@ or from the host environment run
 docker-compose run backend rake db:setup
 ```
 
-This will create your local database, run all migrations and populate the DB 
+This will create your local database, run all migrations and populate the DB
 with seed data. Note that seed data is loaded from `api/db/seed/` folder where
 each json file represents a table.
 
-Once your DB is setup, you can gain SQL access to it by first navigating into 
+Once your DB is setup, you can gain SQL access to it by first navigating into
 the DB container, then invoking:
 
 ```
@@ -247,22 +252,25 @@ $ psql tapp_development tapp
 ```
 
 ## Annotations
+
 We use the annotate gem to automatically annotate our models whenever a migration
 to run. If you need to annotate manually, run `bundle exec annotate -p bottom` inside
 the docker container.
 
 ## Rubocop
-As mentioned, we use rubocop for linting and code styling. We have a pre-commit hook 
+
+As mentioned, we use rubocop for linting and code styling. We have a pre-commit hook
 ready that everytime you commit something, rubocop will automatically run on your
 staged file to check for styling issues. The configuration is in `.rubocop.yml`
 and you can add more (or change) or current styling with configurations found
-on the [rubocop](https://rubocop.readthedocs.io/en/latest/) documentation.  To
+on the [rubocop](https://rubocop.readthedocs.io/en/latest/) documentation. To
 run it manually, just call `rubocop` or `bundle exec rubocop`.
 
 ## Unit tests
+
 We use RSpec as our testing suite. Our tests for models are located under
 `spec/models`. Factories are provided by `FactoryBot` and are located under
-`spec/factories`.  To run them, go into your local tapp container, and run:
+`spec/factories`. To run them, go into your local tapp container, and run:
 
 ```
 # Get your test database similar to your development database
@@ -280,7 +288,9 @@ rspec spec/models/position_spec.rb
 # For example,
 rspec spec/models/position_spec.rb:17
 ```
+
 ## API Documentation
+
 We currently have a Swagger UI locally hosted under the `dist` folder. Within
 it is an "index.html" that you can drag to a local browser that will open up
 our documentation for our API routes. To make changes, go to the public `gist`
@@ -292,26 +302,31 @@ OpenAPI 3.0.2 specifications are located
 
 This online [editor](editor.swagger.io) helps with a live loading of the documentation to write
 documentation. Just copy paste the current YAML into the editor to start editing.
+
 ## Playbook
 
 ### Gemfile.lock synchronization
+
 To keep the Gemfile.lock synced up with what we have on our host machine, run
-`docker-compose run <image> bundle install` followed by `docker-compose up
---build`.  
+`docker-compose run <image> bundle install` followed by `docker-compose up --build`.
 
 Example: `docker-compose run tapp bundle install`.
 
 ### Migration modifications
+
 If you need to modify a migration file, please do the following within the
-docker container: 
+docker container:
+
 ```
 # Undo a specific version number
 rake db:down VERSION=####
 ```
+
 where the #### is the version you want to down from `rake db:migrate:status`.
 Modify your database migration file, then run `rake db:migrate`
 
 ### Database 'tapp user not created' error
+
 It is sometimes possible that you get a `tapp user not created` issue when
 creating the db. To resolve this, remove the `db` folder from the `tmp`
 directory, and then re-create everything with `rake db:setup`
@@ -321,25 +336,31 @@ scratch and `rake db:migrate`.
 
 ## Common Issues
 
-1. Docker believes that a server is already running, and fails to run the api container. 
+1. Docker believes that a server is already running, and fails to run the api container.
 
-After `running docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail. 
+After running `docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail.
 
 To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
 
 2. Docker cannot start up a front-end service, complaining that it can't find an image.
 
 You can resolve this by using `docker containers ls -a`, finding all
-deactivated containers, and then removing them with `docker container rm
-[container ID]`. Then, you should be able to run `./start_local.sh`
+deactivated containers, and then removing them with `docker container rm [container ID]`. Then, you should be able to run `./start_local.sh`
 
-3. Travis CI fails to execute a script.
+3. When RE-installing the dev environment, the database fails to setup.
+
+After running `docker-compose run backend rake db:setup` you may see a message that reads `FATAL: role "root" does not exist` or `FATAL: role "tapp" does not exist`.
+
+To resolve this issue, delete the folder `pg_data` that was created from your previous dev environment installation to allow docker to create this again. Then, you should be able to run `docker-compose run backend rake db:setup`.
+
+4. Travis CI fails to execute a script.
 
 This issue usually comes up when adding a new executable script on travis. Your
 build fails because the script is `permission denied`. To resolve this, you
 must check in the file with executable permissions.
 
 For example, say `build.sh` is unable to execute. To fix this, you must do:
+
 ```
 git update-index --add --chmod=+x build.sh
 git commit -m "Make build.sh executable"
