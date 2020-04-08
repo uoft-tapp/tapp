@@ -174,7 +174,7 @@ is served on a different port. To prevent confusion if you try to access TAPP th
 port, set up a static asset to be served by rails.
 
 ```
-mkdir api/public && echo "Please go to localhost:8000 for frontend" > api/public/index.html
+mkdir backend/public && echo "Please go to localhost:8000 for frontend" > backend/public/index.html
 ```
 
 Finally, we can build the docker images and migrate the database
@@ -338,7 +338,11 @@ scratch and `rake db:migrate`.
 
 1. Docker believes that a server is already running, and fails to run the api container.
 
+<<<<<<< HEAD
 After running `docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail.
+=======
+After `running docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail.
+>>>>>>> 1d130bf719f1b521c9fcb98f5fb89f1be0d19957
 
 To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
 
@@ -346,8 +350,11 @@ To resolve this issue, halt the docker-compose command (killing the other contai
 
 You can resolve this by using `docker containers ls -a`, finding all
 deactivated containers, and then removing them with `docker container rm [container ID]`. Then, you should be able to run `./start_local.sh`
+<<<<<<< HEAD
 
 3. When RE-installing the dev environment, the database fails to setup.
+=======
+>>>>>>> 1d130bf719f1b521c9fcb98f5fb89f1be0d19957
 
 After running `docker-compose run backend rake db:setup` you may see a message that reads `FATAL: role "root" does not exist` or `FATAL: role "tapp" does not exist`.
 
