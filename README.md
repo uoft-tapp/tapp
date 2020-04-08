@@ -223,7 +223,7 @@ line, you can do so by invoking:
 docker-compose exec [service] sh
 ```
 
-For instance, to interact with the rails app, invoke `docker-compose exec api sh`.
+For instance, to interact with the rails app, invoke `docker-compose exec backend sh`.
 
 ### Initializing the Database
 
