@@ -123,9 +123,20 @@ export function sessionsTests(api) {
     });
 
     it("throw error on create when `name` is not unique", async () => {
-        // name identical to the exisiting session
+        // name identical to the existing session
         const newData = { ...newSessionData, name: session.name };
         // POST to create new session
+        const resp1 = await apiPOST("/admin/sessions", newData);
+
+        // expected an error as name not unique
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+    });
+
+    it("throw error on update when `name` is not unique", async () => {
+        // name identical to the existing session with a valid id
+        const newData = { ...session, name: newSessionData.name };
+        // POST to update the session
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
