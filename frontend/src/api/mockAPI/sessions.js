@@ -26,35 +26,27 @@ export class Session extends MockAPIController {
             throw new Error(message);
         }
     }
-    validateUpdate(session) {
-        if ("name" in session) {
-            if (session.name === undefined || session.name.length === 0) {
-                throw new Error("Invalid property: name.");
+
+    validateProp(obj, prop) {
+        if (prop === "name") {
+            if (obj.prop === undefined || obj.prop.length === 0) {
+                throw new Error(
+                    `Property ${prop} cannot be empty or undefined.`
+                );
             } else {
                 const filteredData = this.findAll().filter(
-                    item => item.id !== session.id
+                    item => item.id !== obj.id
                 );
-                const message = getAttributesCheckMessage(
-                    session,
-                    filteredData,
-                    {
-                        name: { unique: true }
-                    }
-                );
+                const message = getAttributesCheckMessage(obj, filteredData, {
+                    name: { unique: true }
+                });
                 if (message) {
                     throw new Error(message);
                 }
             }
         }
-    }
 
-    upsert(obj) {
-        if (this.rawFind(obj)) {
-            this.validateUpdate(obj);
-            return this.updateIfFound(obj);
-        }
-        this.validateNew(obj);
-        return this.create(obj);
+        return true;
     }
 }
 

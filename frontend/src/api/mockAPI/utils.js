@@ -134,10 +134,8 @@ export function getAttributesCheckMessage(
 ) {
     for (const [prop, requirements] of Object.entries(props)) {
         // Required attributes cannot be null or the empty string
-        if (
-            requirements.required &&
-            (obj[prop] == null || obj[prop] === "" || obj[prop] === undefined)
-        ) {
+        // Note: `== null` check null and undefined
+        if (requirements.required && (obj[prop] == null || obj[prop] === "")) {
             return `Property ${prop} cannot be empty`;
         }
         // Search the data for something with a matching prop. If we find
@@ -248,6 +246,18 @@ export class MockAPIController {
     validateNew() {
         throw new Error("Subclasses must impliment `validateNew()`");
     }
+
+    /**
+     * Validates a property of an item instance. Throws an error
+     * if this property are invalid/incompatable.
+     *
+     * @param {object} obj
+     * @param {string} prop
+     * @memberof MockAPIController
+     */
+    validateProp(obj, prop) {
+        return true;
+    }
     /**
      * Update an item if it can be found. Otherwise, return null.
      *
@@ -264,6 +274,7 @@ export class MockAPIController {
         // properties
         for (const prop in obj) {
             if (prop != null) {
+                this.validateProp(obj, prop);
                 item[prop] = obj[prop];
             }
         }
