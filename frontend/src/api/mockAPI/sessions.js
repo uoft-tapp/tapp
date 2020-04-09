@@ -27,13 +27,28 @@ export class Session extends MockAPIController {
         }
     }
     validateUpdate(session) {
-        const message = getAttributesCheckMessage(session, this.ownData, {
-            name: { required: true, unique: true },
-        });
-        if (message) {
-            throw new Error(message);
+        if ("name" in session) {
+            if (session.name === undefined || session.name.length === 0) {
+                // console.log("Invalid!!!!!!!!!!!!!!!!!!");
+                throw new Error("Invalid property: name.");
+            } else {
+                const filteredData = this.findAll().filter(
+                    (item) => item.id !== session.id
+                );
+                const message = getAttributesCheckMessage(
+                    session,
+                    filteredData,
+                    {
+                        name: { unique: true },
+                    }
+                );
+                if (message) {
+                    throw new Error(message);
+                }
+            }
         }
     }
+
     upsert(obj) {
         if (this.rawFind(obj)) {
             this.validateUpdate(obj);

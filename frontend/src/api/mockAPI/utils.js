@@ -136,7 +136,7 @@ export function getAttributesCheckMessage(
         // Required attributes cannot be null or the empty string
         if (
             requirements.required &&
-            (obj[prop] == null || obj[prop] === "" || obj[prop] == undefined)
+            (obj[prop] == null || obj[prop] === "" || obj[prop] === undefined)
         ) {
             return `Property ${prop} cannot be empty`;
         }
