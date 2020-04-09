@@ -29,7 +29,6 @@ export class Session extends MockAPIController {
     validateUpdate(session) {
         if ("name" in session) {
             if (session.name === undefined || session.name.length === 0) {
-                // console.log("Invalid!!!!!!!!!!!!!!!!!!");
                 throw new Error("Invalid property: name.");
             } else {
                 const filteredData = this.findAll().filter(
