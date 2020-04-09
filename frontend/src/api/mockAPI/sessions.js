@@ -17,7 +17,12 @@ export class Session extends MockAPIController {
         return newSession;
     }
     validateUpdate(session) {
-        return;
+        const message = getAttributesCheckMessage(session, this.ownData, {
+            name: { required: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
     }
     validateNew(session) {
         // if we're here, we need to create a new session
