@@ -16,6 +16,9 @@ export class Session extends MockAPIController {
         this.data.assignments_by_session[newSession.id] = [];
         return newSession;
     }
+    validateUpdate(session) {
+        return;
+    }
     validateNew(session) {
         // if we're here, we need to create a new session
         // but check if the session name is empty or duplicate
