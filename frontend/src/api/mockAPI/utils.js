@@ -134,7 +134,10 @@ export function getAttributesCheckMessage(
 ) {
     for (const [prop, requirements] of Object.entries(props)) {
         // Required attributes cannot be null or the empty string
-        if (requirements.required && (obj[prop] == null || obj[prop] === "")) {
+        if (
+            requirements.required &&
+            (obj[prop] == null || obj[prop] === "" || obj[prop] === undefined)
+        ) {
             return `Property ${prop} cannot be empty`;
         }
         // Search the data for something with a matching prop. If we find

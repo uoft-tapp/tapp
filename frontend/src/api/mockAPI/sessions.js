@@ -16,14 +16,7 @@ export class Session extends MockAPIController {
         this.data.assignments_by_session[newSession.id] = [];
         return newSession;
     }
-    validateUpdate(session) {
-        const message = getAttributesCheckMessage(session, this.ownData, {
-            name: { required: true }
-        });
-        if (message) {
-            throw new Error(message);
-        }
-    }
+
     validateNew(session) {
         // if we're here, we need to create a new session
         // but check if the session name is empty or duplicate
@@ -33,6 +26,37 @@ export class Session extends MockAPIController {
         if (message) {
             throw new Error(message);
         }
+    }
+
+    validateUpdate(session) {
+        if ("name" in session) {
+            if (session.name === undefined || session.name.length === 0) {
+                throw new Error("Invalid property: name.");
+            } else {
+                const filteredData = this.findAll().filter(
+                    item => item.id !== session.id
+                );
+                const message = getAttributesCheckMessage(
+                    session,
+                    filteredData,
+                    {
+                        name: { unique: true }
+                    }
+                );
+                if (message) {
+                    throw new Error(message);
+                }
+            }
+        }
+    }
+
+    upsert(obj) {
+        if (this.rawFind(obj)) {
+            this.validateUpdate(obj);
+            return this.updateIfFound(obj);
+        }
+        this.validateNew(obj);
+        return this.create(obj);
     }
 }
 
