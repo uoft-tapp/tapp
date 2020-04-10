@@ -29,7 +29,7 @@ export class Session extends MockAPIController {
 
     validateProp(obj, prop) {
         if (prop === "name") {
-            if (obj.prop === undefined || obj.prop.length === 0) {
+            if (obj[prop] === undefined || obj[prop].length === 0) {
                 throw new Error(
                     `Property ${prop} cannot be empty or undefined.`
                 );
