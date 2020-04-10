@@ -24,7 +24,7 @@ describe("API tests", () => {
         await databaseSeeder.verifySeed(api);
     }, 30000);
 
-    describe("`/sessions` tests", () => {
+    describe.skip("`/sessions` tests", () => {
         sessionsTests(api);
     });
 
