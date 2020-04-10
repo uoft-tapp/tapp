@@ -255,8 +255,9 @@ export class MockAPIController {
      * @param {string} prop
      * @memberof MockAPIController
      */
+    // eslint-disable-next-line no-console
     validateProp(obj, prop) {
-        if (obj[prop]) return true;
+        return true;
     }
     /**
      * Update an item if it can be found. Otherwise, return null.
