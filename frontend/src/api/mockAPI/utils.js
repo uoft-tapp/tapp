@@ -256,7 +256,7 @@ export class MockAPIController {
      * @memberof MockAPIController
      */
     validateProp(obj, prop) {
-        return true;
+        if (obj[prop]) return true;
     }
     /**
      * Update an item if it can be found. Otherwise, return null.
