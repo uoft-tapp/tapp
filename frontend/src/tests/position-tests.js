@@ -7,7 +7,7 @@ import {
     it,
     beforeAll,
     apiGET,
-    apiPOST,
+    apiPOST
 } from "./utils";
 
 import { databaseSeeder } from "./setup";
@@ -22,7 +22,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         position_title: "Calculus I",
         hours_per_assignment: 70,
         start_date: "2018/05/09",
-        end_date: "2018/09/09",
+        end_date: "2018/09/09"
     };
     // set up a session to be available before tests run
     beforeAll(async () => {
@@ -85,7 +85,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         // we already have a position
         const resp1 = await apiPOST(`/sessions/${session.id}/positions`, {
             ...newPositionData,
-            position_code: "",
+            position_code: ""
         });
         checkPropTypes(errorPropTypes, resp1);
     });
@@ -97,7 +97,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             // add a random string to the session name so we don't accidentally collide with another
             // session's name
             name: "Newly Created Sessions (" + Math.random() + ")",
-            rate1: 56.54,
+            rate1: 56.54
         };
         const newPositionData2 = {
             position_code: "MAT135F",
@@ -105,7 +105,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             hours_per_assignment: 70,
             start_date: "2019/09/09",
             end_date: "2019/12/31",
-            contract_template_id: contractTemplate.id,
+            contract_template_id: contractTemplate.id
         };
         // create a new session to add a template to
         const resp1 = await apiPOST("/sessions", newSessionData);
