@@ -33,7 +33,7 @@ describe("API tests", () => {
     describe("template tests", () => {
         templatesTests(api);
     });
-    describe.skip("`/admin/positions` tests", () => {
+    describe("`/admin/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
     describe.skip("`/admin/instructors` tests", () => {
