@@ -256,7 +256,7 @@ export class MockAPIController {
      * @memberof MockAPIController
      */
     // eslint-disable-next-line no-unused-vars
-    validateProp(obj, prop) {
+    validateProp(prop, value, id) {
         return true;
     }
     /**
@@ -275,7 +275,7 @@ export class MockAPIController {
         // properties
         for (const prop in obj) {
             if (prop != null) {
-                this.validateProp(obj, prop);
+                this.validateProp(prop, obj[prop], obj.id);
                 item[prop] = obj[prop];
             }
         }

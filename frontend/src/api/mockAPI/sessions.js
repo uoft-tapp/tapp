@@ -27,19 +27,24 @@ export class Session extends MockAPIController {
         }
     }
 
-    validateProp(obj, prop) {
+    validateProp(prop, value, id) {
         if (prop === "name") {
-            if (obj[prop] === undefined || obj[prop].length === 0) {
+            if (value === undefined || value.length === 0) {
                 throw new Error(
                     `Property ${prop} cannot be empty or undefined.`
                 );
             } else {
                 const filteredData = this.findAll().filter(
-                    item => item.id !== obj.id
+                    item => item.id !== id
                 );
-                const message = getAttributesCheckMessage(obj, filteredData, {
-                    name: { unique: true }
-                });
+
+                const message = getAttributesCheckMessage(
+                    { name: value },
+                    filteredData,
+                    {
+                        name: { unique: true }
+                    }
+                );
                 if (message) {
                     throw new Error(message);
                 }
