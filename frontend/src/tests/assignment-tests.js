@@ -4,7 +4,7 @@ import {
     expect,
     beforeAll,
     checkPropTypes,
-    assignmentPropTypes,
+    assignmentPropTypes
 } from "./utils";
 import { databaseSeeder } from "./setup";
 
@@ -36,7 +36,7 @@ export function assignmentsTests({ apiGET, apiPOST }) {
             hours_per_assignment: 70,
             start_date: "2019/09/09",
             end_date: "2019/12/31",
-            contract_template_id: contractTemplate.id,
+            contract_template_id: contractTemplate.id
         };
 
         const { payload: position } = await apiPOST(
@@ -50,7 +50,7 @@ export function assignmentsTests({ apiGET, apiPOST }) {
             position_id: position.id,
             applicant_id: applicant.id,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z"
         };
         const resp = await apiPOST("/admin/assignments", newAssignmentData);
 
@@ -67,11 +67,11 @@ export function assignmentsTests({ apiGET, apiPOST }) {
             `/admin/sessions/${session.id}/assignments`
         );
 
-        expect(withNewAssignments.map((x) => x.id)).toContain(
+        expect(withNewAssignments.map(x => x.id)).toContain(
             createdAssignment.id
         );
         expect(
-            withNewAssignments.filter((s) => s.id === createdAssignment.id)
+            withNewAssignments.filter(s => s.id === createdAssignment.id)
         ).toContainObject(createdAssignment);
 
         expect(withNewAssignments.length).toEqual(2);
@@ -95,7 +95,7 @@ export function assignmentsTests({ apiGET, apiPOST }) {
             end_date: "2019-12-25T00:00:00.000Z",
             note: "updated",
             offer_override_pdf: "pdf",
-            hours: 80,
+            hours: 80
         };
 
         const resp = await apiPOST(`/admin/assignments`, updatedAssignmentData);
@@ -113,11 +113,11 @@ export function assignmentsTests({ apiGET, apiPOST }) {
             `/admin/sessions/${session.id}/assignments`
         );
 
-        expect(withUpdatedAssignment.map((x) => x.id)).toContain(
+        expect(withUpdatedAssignment.map(x => x.id)).toContain(
             updatedAssignment.id
         );
         expect(
-            withUpdatedAssignment.filter((s) => s.id === updatedAssignment.id)
+            withUpdatedAssignment.filter(s => s.id === updatedAssignment.id)
         ).toContainObject(updatedAssignment);
 
         expect(withUpdatedAssignment.length).toEqual(2);
