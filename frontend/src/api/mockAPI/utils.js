@@ -134,6 +134,7 @@ export function getAttributesCheckMessage(
 ) {
     for (const [prop, requirements] of Object.entries(props)) {
         // Required attributes cannot be null or the empty string
+        // Note: `== null` check null and undefined
         if (requirements.required && (obj[prop] == null || obj[prop] === "")) {
             return `Property ${prop} cannot be empty`;
         }
@@ -245,6 +246,19 @@ export class MockAPIController {
     validateNew() {
         throw new Error("Subclasses must impliment `validateNew()`");
     }
+
+    /**
+     * Validates a property of an item instance. Throws an error
+     * if this property are invalid/incompatable.
+     *
+     * @param {object} obj
+     * @param {string} prop
+     * @memberof MockAPIController
+     */
+    // eslint-disable-next-line no-unused-vars
+    validateProp(prop, value, id) {
+        return true;
+    }
     /**
      * Update an item if it can be found. Otherwise, return null.
      *
@@ -261,6 +275,7 @@ export class MockAPIController {
         // properties
         for (const prop in obj) {
             if (prop != null) {
+                this.validateProp(prop, obj[prop], obj.id);
                 item[prop] = obj[prop];
             }
         }
