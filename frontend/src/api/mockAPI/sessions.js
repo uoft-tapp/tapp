@@ -26,6 +26,33 @@ export class Session extends MockAPIController {
             throw new Error(message);
         }
     }
+
+    validateProp(prop, value, id) {
+        if (prop === "name") {
+            // check if `name` is empty
+            if (value === undefined || value.length === 0) {
+                throw new Error(
+                    `Property ${prop} cannot be empty or undefined.`
+                );
+            }
+            // if `name` is not empty, make sure it is unique after the update
+            // by filtering out the request session
+            const filteredData = this.findAll().filter(item => item.id !== id);
+            // and make sure `name` is unique to the rest
+            const message = getAttributesCheckMessage(
+                { name: value },
+                filteredData,
+                {
+                    name: { unique: true }
+                }
+            );
+            if (message) {
+                throw new Error(message);
+            }
+        }
+
+        return true;
+    }
 }
 
 export const sessionsRoutes = {
