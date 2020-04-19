@@ -105,10 +105,10 @@ export function templatesTests(api) {
         const updateData = {
             ...templateToUpdate[0],
             id: templateToUpdate[0].id,
-            contract_name: "Standard"
+            template_name: "Standard"
         };
         const resp1 = await apiPOST(
-            `/sessions/${session.id}/contract_templates`,
+            `/admin/sessions/${session.id}/contract_templates`,
             updateData
         );
 
@@ -117,7 +117,7 @@ export function templatesTests(api) {
 
         // make sure the template before update is gone
         const resp2 = await apiGET(
-            `/sessions/${session.id}/contract_templates`
+            `/admin/sessions/${session.id}/contract_templates`
         );
 
         expect(resp2.payload).toContainObject(updateData);
@@ -136,7 +136,7 @@ export function templatesTests(api) {
 
         // expected an error to crete new template with empty template_file
         const resp1 = await apiPOST(
-            `/sessions/${session.id}/contract_templates`,
+            `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData1
         );
         expect(resp1).toMatchObject({ status: "error" });
@@ -144,7 +144,7 @@ export function templatesTests(api) {
 
         // expected an error to crete new template with empty template_name
         const resp2 = await apiPOST(
-            `/sessions/${session.id}/contract_templates`,
+            `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
         expect(resp2).toMatchObject({ status: "error" });
@@ -152,7 +152,7 @@ export function templatesTests(api) {
 
         // fetching the templates list and make sure it does not contain the above templates
         const resp3 = await apiGET(
-            `/sessions/${session.id}/contract_templates`
+            `/admin/sessions/${session.id}/contract_templates`
         );
         expect(resp3.payload).not.toContainObject(newTemplateData1);
         expect(resp3.payload).not.toContainObject(newTemplateData2);
