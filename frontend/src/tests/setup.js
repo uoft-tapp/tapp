@@ -99,7 +99,7 @@ async function seedDatabase(
     // We must first ensure there is a user with the proper permissions
     // set as the active user. Otherwise, subsequent requests will fail
     resp = await apiPOST("/debug/users", seeded.active_user);
-    Object.assign(seeded.active_user, resp.payload)
+    Object.assign(seeded.active_user, resp.payload);
     await apiPOST("/debug/active_user", seeded.active_user);
 
     // Session
