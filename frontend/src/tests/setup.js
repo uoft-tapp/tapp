@@ -195,12 +195,12 @@ async function verifySeededDatabase(
     expect(resp.payload).toContainObject(seeded.position);
 
     resp = await apiGET(`/admin/sessions/${seeded.session.id}/assignments`);
-    // console.log("RESP: \n", resp.payload);
-    // console.log("SEEDED: \n", seeded.assignment);
+    console.log("ASS. RESP: \n", resp.payload);
+    console.log("SEEDED ASS.: \n", seeded.assignment);
     expect(resp.payload).toContainObject(seeded.assignment);
 
     resp = await apiGET(`/admin/sessions/${seeded.session.id}/applications`);
-    console.log("RESP: \n", resp.payload);
-    console.log("SEEDED: \n", seeded.application);
+    console.log("APP. RESP: \n", resp.payload);
+    console.log("SEEDED APP: \n", seeded.application);
     expect(resp.payload).toContainObject(seeded.application);
 }
