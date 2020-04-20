@@ -144,7 +144,6 @@ function generatePropTypes(PropTypes) {
         user: PropTypes.shape({
             utorid: PropTypes.string,
             roles: PropTypes.arrayOf(PropTypes.string),
-            email: PropTypes.string
         })
     };
 }

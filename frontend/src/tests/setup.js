@@ -38,6 +38,10 @@ class DatabaseSeeder {
                 hours: 70,
                 start_date: new Date("2020-01-01").toISOString(),
                 end_date: new Date("2020-05-01").toISOString()
+            },
+            active_user: {
+                utorid: "smithh",
+                roles: ["admin", "instructor", "ta"]
             }
         };
     }
@@ -91,6 +95,12 @@ async function seedDatabase(
     //
 
     let resp = null;
+
+    // We must first ensure there is a user with the proper permissions
+    // set as the active user. Otherwise, subsequent requests will fail
+    resp = await apiPOST("/debug/users", seeded.active_user);
+    Object.assign(seeded.active_user, resp.payload)
+    await apiPOST("/debug/active_user", seeded.active_user);
 
     // Session
     resp = await apiPOST("/admin/sessions", seeded.session);

@@ -51,4 +51,8 @@ Rails.application.configure do
 
   BetterErrors.use_pry!
   config.hosts = nil
+
+  # Allow us to set the active user manually
+  config.active_user_override = true
+  config.active_user_id = 1
 end

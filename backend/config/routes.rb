@@ -8,10 +8,12 @@ Rails.application.routes.draw do
                 resources :debug, only: [] do
                     collection do
                         get :active_user, to: 'debug#active_user'
-                        post :active_user, to: 'debug#create_active_user'
+                        post :active_user, to: 'debug#set_active_user'
                         post :clear_data, to: 'debug#clear_data'
                         post :restore_snapshot, to: 'debug#restore_snapshot'
                         post :snapshot, to: 'debug#snapshot'
+                        get :users, to: 'debug#users'
+                        post :users, to: 'debug#upsert_user'
                     end
                 end
             end
