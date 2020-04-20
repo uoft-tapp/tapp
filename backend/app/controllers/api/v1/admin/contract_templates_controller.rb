@@ -9,8 +9,12 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
 
     # POST /contract_templates
     def create
+        @contract_template = ContractTemplate.find_by(id: params[:id])
+        update && return if @contract_template
+        # if we aren't updating, we need to create a contract_template
+        # for the specified session.
         @session = Session.find(params[:session_id])
-        template = @session.contract_templates.new(contract_template_create_params)
+        template = @session.contract_templates.new(contract_template_params)
         render_on_condition(object: template, condition: proc { template.save! })
     end
 
@@ -27,7 +31,12 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
 
     private
 
-    def contract_template_create_params
-        params.permit(:template_file, :template_name, :session_id)
+    def contract_template_params
+        params.permit(:template_file, :template_name, :session_id, :id)
+    end
+
+    def update
+        render_on_condition(object: @contract_template,
+                            condition: proc { @contract_template.update!(contract_template_params) })
     end
 end

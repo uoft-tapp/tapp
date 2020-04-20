@@ -24,22 +24,20 @@ describe("API tests", () => {
         await databaseSeeder.verifySeed(api);
     }, 30000);
 
-    describe("`/sessions` tests", () => {
+    describe.skip("`/sessions` tests", () => {
         sessionsTests(api);
     });
 
-    describe.skip("template tests", () => {
+    describe("template tests", () => {
         templatesTests(api);
     });
-    // XXX position_template was renamed contract_template. The backend needs to be fixed,
-    // but it is being rewritten, so skip the test for now
     describe.skip("`/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
     describe.skip("`/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/assignments` tests", () => {
+    describe("`/assignments` tests", () => {
         assignmentsTests({ apiGET, apiPOST });
     });
     describe.skip("wage_chunk tests", () => {
@@ -72,6 +70,9 @@ describe("Mock API tests", () => {
     });
     describe("`/positions` tests", () => {
         positionsTests(mockAPI);
+    });
+    describe("`/assignments` tests", () => {
+        assignmentsTests(mockAPI);
     });
     describe.skip("`/instructors` tests", () => {
         instructorsTests(mockAPI);
