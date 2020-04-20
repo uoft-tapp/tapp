@@ -22,53 +22,41 @@ import { databaseSeeder } from "./setup";
 export function applicationsTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null,
-        applicant = null;
-
-    const newApplicationData = {
-        comments: "",
-        program: "Phd",
-        department: "Computer Science",
-        previous_uoft_ta_experience: "Last year I TAed a bunch",
-        yip: 2,
-        annotation: "",
-        position_preferences: [
-            {
-                preference_level: 2,
-                position_id: 10
-            },
-            {
-                preference_level: 3,
-                position_id: 15
-            }
-        ]
-    };
+        applicant = null,
+        application = null;
 
     // set up a session to be available before tests run
     beforeAll(async () => {
         await apiPOST("/debug/restore_snapshot");
         session = databaseSeeder.seededData.session;
         applicant = databaseSeeder.seededData.applicant;
-        newApplicationData.session_id = session.id;
-        newApplicationData.applicant_id = applicant.id;
+        application = databaseSeeder.seededData.application;
+        application = {
+            ...application,
+            session_id: session.id,
+            applicant_id: applicant.id
+        };
     }, 30000);
 
     it("fetch applications", async () => {
         // grab the applications of the new session
-        const resp1 = await apiGET(
-            `/admin/sessions/${session.id}/applications`
-        );
+        const resp = await apiGET(`/admin/sessions/${session.id}/applications`);
 
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp).toMatchObject({ status: "success" });
+
+        // console.log("RESPONSE: \n", resp.payload);
+        // make sure we got the seeded assignment data
+        expect(resp.payload).toMatchObject([application]);
 
         // check the type of payload
-        checkPropTypes(PropTypes.arrayOf(applicationPropTypes), resp1.payload);
+        checkPropTypes(PropTypes.arrayOf(applicationPropTypes), resp.payload);
     });
 
-    it("add an application to a session", async () => {
-        const resp2 = await apiPOST(`/admin/applications`, newApplicationData);
+    it.skip("add an application to a session", async () => {
+        const resp = await apiPOST(`/admin/applications`, application.payload);
 
-        expect(resp2).toMatchObject({ status: "success" });
-        checkPropTypes(applicationPropTypes, resp2.payload);
-        expect(resp2.payload).toMatchObject(newApplicationData);
+        expect(resp).toMatchObject({ status: "success" });
+        checkPropTypes(applicationPropTypes, resp.payload);
+        expect(resp.payload).toMatchObject(application.payload);
     });
 }

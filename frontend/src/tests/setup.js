@@ -38,6 +38,24 @@ class DatabaseSeeder {
                 hours: 70,
                 start_date: new Date("2020-01-01").toISOString(),
                 end_date: new Date("2020-05-01").toISOString()
+            },
+            application: {
+                comments: "",
+                program: "Phd",
+                department: "Computer Science",
+                previous_uoft_ta_experience: "Last year I TAed a bunch",
+                yip: 2,
+                annotation: "",
+                position_preferences: [
+                    // {
+                    //     preference_level: 2,
+                    //     position_id: 10
+                    // },
+                    // {
+                    //     preference_level: 3,
+                    //     position_id: 15
+                    // }
+                ]
             }
         };
     }
@@ -77,7 +95,8 @@ async function seedDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
+        application: null
     }
 ) {
     const { apiPOST } = api;
@@ -128,6 +147,14 @@ async function seedDatabase(
     resp = await apiPOST(`/admin/assignments`, seeded.assignment);
     Object.assign(seeded.assignment, resp.payload);
 
+    // Application
+    Object.assign(seeded.application, {
+        applicant_id: seeded.applicant.id,
+        session_id: seeded.session.id
+    });
+    resp = await apiPOST("/admin/applications", seeded.application);
+    Object.assign(seeded.application, resp.payload);
+
     //
     // Take a snapshot of the newly seeded data so we can "restore" it
     // before each test.
@@ -145,7 +172,8 @@ async function verifySeededDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
+        application: null
     }
 ) {
     const { apiGET } = api;
@@ -167,5 +195,12 @@ async function verifySeededDatabase(
     expect(resp.payload).toContainObject(seeded.position);
 
     resp = await apiGET(`/admin/sessions/${seeded.session.id}/assignments`);
+    // console.log("RESP: \n", resp.payload);
+    // console.log("SEEDED: \n", seeded.assignment);
     expect(resp.payload).toContainObject(seeded.assignment);
+
+    resp = await apiGET(`/admin/sessions/${seeded.session.id}/applications`);
+    console.log("RESP: \n", resp.payload);
+    console.log("SEEDED: \n", seeded.application);
+    expect(resp.payload).toContainObject(seeded.application);
 }
