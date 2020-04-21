@@ -21,6 +21,11 @@ export class User extends MockAPIController {
         if (query == null) {
             return null;
         }
+        // If we pass an `id`, rely on that, otherwise,
+        // use the `utorid`.
+        if (query.id != null) {
+            return find(query, this.ownData);
+        }
         if (query.utorid != null) {
             return find(query, this.ownData, "utorid");
         }

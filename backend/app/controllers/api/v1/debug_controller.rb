@@ -26,8 +26,8 @@ class Api::V1::DebugController < ApplicationController
 
     # POST /active_user
     def set_active_user
-        @active_user = User.find_by(id: set_active_user_params[:id])
-        @active_user |= User.find_by(utorid: set_active_user_params[:utorid])
+        @active_user = User.find_by(id: set_active_user_params[:id]) ||
+                       User.find_by(utorid: set_active_user_params[:utorid])
         if @active_user
             Rails.application.config.active_user_id = @active_user.id
             return render_success @active_user
