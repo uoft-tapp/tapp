@@ -2,8 +2,9 @@
 
 class ActiveUserService
     def self.active_user
-        # XXX this is only temporary for debugging. It should be replaced with
-        # something that gets the user from Shibboleth, etc.
+        # If we're running in debug mode, we can fake the active user.
+        # The config variable `active_user_override` is only set in debug/test mode,
+        # so we can rely on it; if it exists, we're in debug mode.
         if (Rails.application.config.respond_to? :active_user_override) &&
            Rails.application.config.active_user_override
 
@@ -15,6 +16,9 @@ class ActiveUserService
             # user to the database.
             return User.new(utorid: 'defaultactive', roles: ['admin', 'instructor', 'ta'])
         end
+
+        # XXX this is only temporary for debugging. It should be replaced with
+        # something that gets the user from Shibboleth, etc.
 
         # rubocop:disable Style/RaiseArgs
         raise NotImplementedError.new 'active_user Route is not implimented yet for production mode'
