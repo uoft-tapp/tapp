@@ -8,7 +8,8 @@ import {
     beforeAll,
     checkPropTypes,
     sessionPropTypes,
-    errorPropTypes
+    errorPropTypes,
+    toMatchSuccessDebug
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -41,7 +42,8 @@ export function sessionsTests(api) {
     it("fetch sessions", async () => {
         // do we get a success response when geting all sessions from snapshot
         const resp = await apiGET("/admin/sessions");
-        expect(resp).toMatchObject({ status: "success" });
+        toMatchSuccessDebug(resp);
+        // expect(resp).toMatchObject({ status: "success" });
 
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);

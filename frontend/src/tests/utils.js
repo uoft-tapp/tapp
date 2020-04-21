@@ -36,6 +36,25 @@ expect.extend({
     }
 });
 
+/**
+ * Customize the `.toMatchObject` method to print the value of the recieved
+ * array if the test fails
+ *
+ * @export
+ * @param {object} resp The recieved array
+ * @param {object} obj  The json object to compare resp to
+ * @returns
+ */
+export function toMatchSuccessDebug(resp) {
+    try {
+        expect(resp).toMatchObject({ status: "failed" });
+    } catch (err) {
+        // err.message = "resp: \n", resp`;
+        console.log("resp: \n", resp);
+        throw err;
+    }
+}
+
 export { expect, test, it, describe, beforeAll, afterAll };
 
 /** URL prefix for making API calls from inside a docker image */
