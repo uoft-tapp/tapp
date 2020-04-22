@@ -8,7 +8,7 @@
 module Constraint
     class AuthenticatedAdmin
         def matches?(request)
-            active_offer = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user
             if active_user.is_admin?
                 return true
             end
@@ -19,7 +19,7 @@ module Constraint
 
     class AuthenticatedInstructor
         def matches?(request)
-            active_offer = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user
             if active_user.is_instructor?
                 return true
             end
@@ -30,7 +30,7 @@ module Constraint
 
     class AuthenticatedTA
         def matches?(request)
-            active_offer = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user
             if active_user.is_ta?
                 return true
             end
