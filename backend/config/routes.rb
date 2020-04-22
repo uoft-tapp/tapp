@@ -8,7 +8,8 @@
 module Constraint
     class AuthenticatedAdmin
         def matches?(request)
-            if ActiveUserService.active_user.is_admin?
+            active_offer = ActiveUserService.active_user
+            if active_user.is_admin?
                 return true
             end
             Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /admin route without permission."
@@ -18,7 +19,8 @@ module Constraint
 
     class AuthenticatedInstructor
         def matches?(request)
-            if ActiveUserService.active_user.is_instructor?
+            active_offer = ActiveUserService.active_user
+            if active_user.is_instructor?
                 return true
             end
             Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /instructor route without permission."
@@ -28,7 +30,8 @@ module Constraint
 
     class AuthenticatedTA
         def matches?(request)
-            if ActiveUserService.active_user.is_ta?
+            active_offer = ActiveUserService.active_user
+            if active_user.is_ta?
                 return true
             end
             Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /ta route without permission."
