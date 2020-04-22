@@ -45,12 +45,11 @@ expect.extend({
  * @param {object} obj  The json object to compare resp to
  * @returns
  */
-export function toMatchSuccessDebug(resp) {
+export function toMatchObjectDebug(resp, obj) {
     try {
-        expect(resp).toMatchObject({ status: "failed" });
+        expect(resp).toMatchObject(obj);
     } catch (err) {
-        // err.message = "resp: \n", resp`;
-        console.log("resp: \n", resp);
+        console.warn("resp: \n", resp);
         throw err;
     }
 }

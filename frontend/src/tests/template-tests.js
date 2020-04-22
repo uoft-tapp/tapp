@@ -6,7 +6,8 @@ import {
     errorPropTypes,
     expect,
     it,
-    beforeAll
+    beforeAll,
+    toMatchObjectDebug
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -42,7 +43,7 @@ export function templatesTests(api) {
     it("fetch available templates", async () => {
         const resp = await apiGET("/admin/available_contract_templates");
 
-        expect(resp).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp, { status: "success" });
         checkPropTypes(
             PropTypes.arrayOf(offerTemplateMinimalPropTypes),
             resp.payload
@@ -55,7 +56,7 @@ export function templatesTests(api) {
         const resp1 = await apiGET(
             `/admin/sessions/${session.id}/contract_templates`
         );
-        expect(resp1).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp1, { status: "success" });
 
         checkPropTypes(
             PropTypes.arrayOf(offerTemplatePropTypes),
@@ -68,16 +69,16 @@ export function templatesTests(api) {
             newTemplateData1
         );
 
-        expect(resp2).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp2, { status: "success" });
         checkPropTypes(offerTemplatePropTypes, resp2.payload);
-        expect(resp2.payload).toMatchObject(newTemplateData1);
+        toMatchObjectDebug(resp2.payload, newTemplateData1);
 
         // another one
         const resp3 = await apiPOST(
             `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
-        expect(resp3).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp3, { status: "success" });
 
         // fetch all templates us the templates we just created
         const resp4 = await apiGET(
@@ -112,8 +113,8 @@ export function templatesTests(api) {
             updateData
         );
 
-        expect(resp1).toMatchObject({ status: "success" });
-        expect(resp1.payload).toMatchObject(updateData);
+        toMatchObjectDebug(resp1, { status: "success" });
+        toMatchObjectDebug(resp1.payload, updateData);
 
         // make sure the template before update is gone
         const resp2 = await apiGET(
@@ -139,7 +140,7 @@ export function templatesTests(api) {
             `/sessions/${session.id}/contract_templates`,
             newTemplateData1
         );
-        expect(resp1).toMatchObject({ status: "error" });
+        toMatchObjectDebug(resp1, { status: "error" });
         checkPropTypes(errorPropTypes, resp1);
 
         // expected an error to crete new template with empty template_name
@@ -147,7 +148,7 @@ export function templatesTests(api) {
             `/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
-        expect(resp2).toMatchObject({ status: "error" });
+        toMatchObjectDebug(resp2, { status: "error" });
         checkPropTypes(errorPropTypes, resp2);
 
         // fetching the templates list and make sure it does not contain the above templates

@@ -9,7 +9,8 @@ import {
     expect,
     it,
     beforeAll,
-    afterAll
+    afterAll,
+    toMatchObjectDebug
 } from "./utils";
 
 export function instructorsTests({ apiGET, apiPOST }) {
@@ -38,12 +39,12 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // create a new instructor
         const resp1 = await apiPOST(`/instructors`, newInstructorData);
-        expect(resp1).toMatchObject({ status: "success" });
-        expect(resp1.payload).toMatchObject(newInstructorData);
+        toMatchObjectDebug(resp1, { status: "success" });
+        toMatchObjectDebug(resp1.payload, newInstructorData);
 
         // make sure instructor is on instructor list
         const resp2 = await apiGET(`/instructors`);
-        expect(resp2).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp2, { status: "success" });
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
@@ -52,7 +53,7 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
     it("get instructors", async () => {
         const resp = await apiGET("/instructors");
-        expect(resp).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp, { status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
@@ -64,21 +65,21 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // update the instructor
         const resp = await apiPOST(`/instructors`, updateInstructorData);
-        expect(resp).toMatchObject({ status: "success" });
-        expect(resp.payload).toMatchObject(updateInstructorData);
+        toMatchObjectDebug(resp, { status: "success" });
+        toMatchObjectDebug(resp.payload, updateInstructorData);
     });
 
     // delete an instructor
     it("delete instructor", async () => {
         const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        expect(resp1).toMatchObject({
+        toMatchObjectDebug(resp1, {
             status: "success",
             payload: { id: instructor.id }
         });
 
         // make sure the instructor is deleted
         const resp2 = await apiGET("/instructors");
-        expect(resp2).toMatchObject({ status: "success" });
+        toMatchObjectDebug(resp2, { status: "success" });
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2).not.toContainObject(instructor);
     });
