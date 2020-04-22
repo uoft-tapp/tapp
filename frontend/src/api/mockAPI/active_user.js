@@ -1,4 +1,4 @@
-import { MockAPIController, find } from "./utils";
+import { MockAPIController, find, getAttributesCheckMessage } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
@@ -9,9 +9,22 @@ export class User extends MockAPIController {
     constructor(data) {
         super(data, data.users);
     }
+    validateNew(user) {
+        const message = getAttributesCheckMessage(user, this.ownData, {
+            utorid: { required: true, unique: true }
+        });
+        if (message) {
+            throw new Error(message);
+        }
+    }
     rawFind(query) {
         if (query == null) {
             return null;
+        }
+        // If we pass an `id`, rely on that, otherwise,
+        // use the `utorid`.
+        if (query.id != null) {
+            return find(query, this.ownData);
         }
         if (query.utorid != null) {
             return find(query, this.ownData, "utorid");
@@ -36,8 +49,7 @@ export const activeUserRoutes = {
     get: {
         "/users": documentCallback({
             func: data => new User(data).findAll(),
-            summary:
-                "Get all available contract templates (these are literal files on the server).",
+            summary: "Get all available users.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user)
         }),
         "/active_user": documentCallback({

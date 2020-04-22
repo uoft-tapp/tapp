@@ -18,6 +18,8 @@ end
 #
 #  id         :integer          not null, primary key
 #  utorid     :string
+#  roles_mask :integer
+#  last_seen  :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

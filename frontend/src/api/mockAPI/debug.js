@@ -35,12 +35,41 @@ export class Debug {
 }
 
 export const debugRoutes = {
-    get: {},
+    get: {
+        "/debug/active_user": documentCallback({
+            func: data => new User(data).getActiveUser(),
+            summary:
+                "Gets the active user; in debug mode this is specified by posting to `active_user`.",
+            returns: docApiPropTypes.user
+        }),
+        "/debug/users": documentCallback({
+            func: data => new User(data).findAll(),
+            summary: "Get a list of all users",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user)
+        })
+    },
     post: {
         "/debug/active_user": documentCallback({
-            func: (data, params, body) => new User(data).upsert(body),
+            func: (data, params, body) => {
+                const user = new User(data);
+                const found_user = user.find(body);
+                if (!found_user) {
+                    throw new Error(
+                        `Could not find user matching ${JSON.stringify(body)}`
+                    );
+                }
+                user.setActiveUser(found_user);
+                return user.getActiveUser();
+            },
             summary:
                 "Sets the active user; this will override whatever credentials are passed to the server.",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
+            posts: docApiPropTypes.user
+        }),
+        "/debug/users": documentCallback({
+            func: (data, params, body) => new User(data).upsert(body),
+            summary:
+                "Adds a user; this is done without any permission checks, so it can be used to bootstrap permissions during debug.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
             posts: docApiPropTypes.user
         }),

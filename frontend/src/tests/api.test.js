@@ -14,6 +14,8 @@ import { offersTests } from "./offer-tests";
 import { reportingTagsTests } from "./reporting-tag-tests";
 import { applicationsTests } from "./application-tests";
 import { unknownRouteTests } from "./unknown-route-tests";
+import { usersTests } from "./user-tests";
+import { userPermissionsTests } from "./user-permission-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -24,20 +26,20 @@ describe("API tests", () => {
         await databaseSeeder.verifySeed(api);
     }, 30000);
 
-    describe.skip("`/sessions` tests", () => {
+    describe.skip("`/admin/sessions` tests", () => {
         sessionsTests(api);
     });
 
     describe("template tests", () => {
         templatesTests(api);
     });
-    describe.skip("`/positions` tests", () => {
+    describe.skip("`/admin/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/instructors` tests", () => {
+    describe.skip("`/admin/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
-    describe("`/assignments` tests", () => {
+    describe("`/admin/assignments` tests", () => {
         assignmentsTests({ apiGET, apiPOST });
     });
     describe.skip("wage_chunk tests", () => {
@@ -49,11 +51,17 @@ describe("API tests", () => {
     describe.skip("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/applications` tests", () => {
+    describe.skip("`/admin/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
     });
     describe.skip("unknown api route tests", () => {
         unknownRouteTests({ apiGET, apiPOST });
+    });
+    describe("`/admin/users` tests", () => {
+        usersTests({ apiGET, apiPOST });
+    });
+    describe("User permissions tests", () => {
+        userPermissionsTests({ apiGET, apiPOST });
     });
 });
 
@@ -62,19 +70,25 @@ describe("Mock API tests", () => {
         await databaseSeeder.seed(mockAPI);
         await databaseSeeder.verifySeed(mockAPI);
     });
-    describe("`/sessions` tests", () => {
+    describe("`/admin/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
     describe("template tests", () => {
         templatesTests(mockAPI);
     });
-    describe("`/positions` tests", () => {
+    describe("`/admin/positions` tests", () => {
         positionsTests(mockAPI);
     });
-    describe("`/assignments` tests", () => {
+    describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
     });
-    describe.skip("`/instructors` tests", () => {
+    describe.skip("`/admin/instructors` tests", () => {
         instructorsTests(mockAPI);
+    });
+    describe("`/admin/users` tests", () => {
+        usersTests(mockAPI);
+    });
+    describe("User permissions tests", () => {
+        userPermissionsTests(mockAPI);
     });
 });
