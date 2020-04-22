@@ -10,7 +10,7 @@ import {
     it,
     beforeAll,
     afterAll,
-    toMatchSuccessDebug
+    checkResponseSuccess
 } from "./utils";
 
 export function instructorsTests({ apiGET, apiPOST }) {
@@ -39,12 +39,12 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // create a new instructor
         const resp1 = await apiPOST(`/instructors`, newInstructorData);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         expect(resp1.payload).toMatchObject(newInstructorData);
 
         // make sure instructor is on instructor list
         const resp2 = await apiGET(`/instructors`);
-        toMatchSuccessDebug(resp2);
+        checkResponseSuccess(resp2);
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
@@ -53,7 +53,7 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
     it("get instructors", async () => {
         const resp = await apiGET("/instructors");
-        toMatchSuccessDebug(resp);
+        checkResponseSuccess(resp);
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
@@ -65,7 +65,7 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // update the instructor
         const resp = await apiPOST(`/instructors`, updateInstructorData);
-        toMatchSuccessDebug(resp);
+        checkResponseSuccess(resp);
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
@@ -79,7 +79,7 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // make sure the instructor is deleted
         const resp2 = await apiGET("/instructors");
-        toMatchSuccessDebug(resp2);
+        checkResponseSuccess(resp2);
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2).not.toContainObject(instructor);
     });

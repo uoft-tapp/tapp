@@ -44,11 +44,11 @@ expect.extend({
  * @param {object} resp The recieved array
  * @returns
  */
-export function toMatchSuccessDebug(resp) {
+export function checkResponseSuccess(resp) {
     try {
         expect(resp).toMatchObject({ status: "success" });
     } catch (err) {
-        console.warn("resp: \n", resp);
+        err.message = `Response failed. \n\nresp: ${JSON.stringify(resp)} `;
         throw err;
     }
 }

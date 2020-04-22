@@ -7,7 +7,7 @@ import {
     expect,
     it,
     beforeAll,
-    toMatchSuccessDebug
+    checkResponseSuccess
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -43,7 +43,7 @@ export function templatesTests(api) {
     it("fetch available templates", async () => {
         const resp = await apiGET("/admin/available_contract_templates");
 
-        toMatchSuccessDebug(resp);
+        checkResponseSuccess(resp);
         checkPropTypes(
             PropTypes.arrayOf(offerTemplateMinimalPropTypes),
             resp.payload
@@ -56,7 +56,7 @@ export function templatesTests(api) {
         const resp1 = await apiGET(
             `/admin/sessions/${session.id}/contract_templates`
         );
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
 
         checkPropTypes(
             PropTypes.arrayOf(offerTemplatePropTypes),
@@ -69,7 +69,7 @@ export function templatesTests(api) {
             newTemplateData1
         );
 
-        toMatchSuccessDebug(resp2);
+        checkResponseSuccess(resp2);
         checkPropTypes(offerTemplatePropTypes, resp2.payload);
         expect(resp2.payload).toMatchObject(newTemplateData1);
 
@@ -78,7 +78,7 @@ export function templatesTests(api) {
             `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
-        toMatchSuccessDebug(resp3);
+        checkResponseSuccess(resp3);
 
         // fetch all templates us the templates we just created
         const resp4 = await apiGET(
@@ -113,7 +113,7 @@ export function templatesTests(api) {
             updateData
         );
 
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         expect(resp1.payload).toMatchObject(updateData);
 
         // make sure the template before update is gone

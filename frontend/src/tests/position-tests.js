@@ -8,7 +8,7 @@ import {
     beforeAll,
     apiGET,
     apiPOST,
-    toMatchSuccessDebug
+    checkResponseSuccess
 } from "./utils";
 
 import { databaseSeeder } from "./setup";
@@ -39,7 +39,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             `/sessions/${session.id}/positions`,
             newPositionData
         );
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         // make sure we got back what we put in
         expect(resp1.payload).toMatchObject(newPositionData);
 
@@ -49,7 +49,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
 
     it("get positions for session", async () => {
         const resp1 = await apiGET(`/sessions/${session.id}/positions`);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         checkPropTypes(PropTypes.arrayOf(positionPropTypes), resp1.payload);
 
         // make sure the position we created is in that list
@@ -60,7 +60,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         const id = position.id;
         const newData = { id, hours_per_assignment: 75 };
         const resp1 = await apiPOST(`/positions`, newData);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         expect(resp1.payload).toMatchObject(newData);
 
         // get the positions list and make sure we're updated there as well
@@ -110,7 +110,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         };
         // create a new session to add a template to
         const resp1 = await apiPOST("/sessions", newSessionData);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         const sessionId = resp1.payload.id;
 
         // create a new position of the same code associated with new session
@@ -118,7 +118,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             `/sessions/${sessionId}/positions`,
             newPositionData2
         );
-        toMatchSuccessDebug(resp2);
+        checkResponseSuccess(resp2);
         // make sure we get back what we put in
         expect(resp2.payload).toMatchObject(newPositionData2);
 
@@ -129,7 +129,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
 
     it("delete position", async () => {
         const resp1 = await apiPOST(`/positions/delete`, position);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
 
         const resp2 = await apiGET(`/sessions/${session.id}/positions`);
         expect(resp2.payload).not.toContainObject(position);

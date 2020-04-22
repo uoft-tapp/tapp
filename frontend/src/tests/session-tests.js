@@ -9,7 +9,7 @@ import {
     checkPropTypes,
     sessionPropTypes,
     errorPropTypes,
-    toMatchSuccessDebug
+    checkResponseSuccess
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -42,7 +42,7 @@ export function sessionsTests(api) {
     it("fetch sessions", async () => {
         // do we get a success response when geting all sessions from snapshot
         const resp = await apiGET("/admin/sessions");
-        toMatchSuccessDebug(resp);
+        checkResponseSuccess(resp);
 
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
@@ -59,7 +59,7 @@ export function sessionsTests(api) {
         const { payload: initialSessions } = await apiGET("/admin/sessions");
         // do we get a success response when creating the session?
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         const { payload: createdSession } = resp1;
         // make sure the propTypes are right
         checkPropTypes(sessionPropTypes, createdSession);
@@ -83,7 +83,7 @@ export function sessionsTests(api) {
     it("update a session", async () => {
         const newData = { ...session, rate1: 57.75 };
         const resp1 = await apiPOST("/admin/sessions", newData);
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         expect(resp1.payload).toMatchObject(newData);
 
         // get the sessions list and make sure we're updated there as well
@@ -121,7 +121,7 @@ export function sessionsTests(api) {
     it("throw error when deleting item with invalid id", async () => {
         // get the max session id
         const resp1 = await apiGET("/admin/sessions");
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
         const maxId = Math.max(...resp1.payload.map(s => s.id));
 
@@ -146,7 +146,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions/delete", {
             id: session.id
         });
-        toMatchSuccessDebug(resp1);
+        checkResponseSuccess(resp1);
         const { payload: withoutNewSessions } = await apiGET("/admin/sessions");
         expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
     });
