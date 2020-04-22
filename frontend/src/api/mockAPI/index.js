@@ -10,7 +10,7 @@ import { applicantsRoutes } from "./applicants";
 import { applicationsRoutes } from "./applications";
 import { wageChunkRoutes } from "./wage_chunks";
 import { debugRoutes } from "./debug";
-import { activeUserRoutes } from "./active_user";
+import { activeUserRoutes, User } from "./active_user";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -92,6 +92,7 @@ export class MockAPI {
             // if we have a match, run the selector with the parsed data
             if (match) {
                 try {
+                    this.authenticateActiveUserBasedOnRole(match.role);
                     const payload = this.getRoutes[route.spec](
                         this.data,
                         match
@@ -135,6 +136,7 @@ export class MockAPI {
             // if we have a match, run the selector with the parsed data
             if (match) {
                 try {
+                    this.authenticateActiveUserBasedOnRole(match.role);
                     const payload = this.postRoutes[route.spec](
                         this.data,
                         match,
@@ -155,6 +157,29 @@ export class MockAPI {
             message: `could not find route matching ${url}`
         };
     };
+
+    /**
+     * Authenticates the `active_user` as having the role `role`.
+     * If the user is not authenticated, an error is thrown.
+     *
+     * @param {string} role
+     * @returns
+     * @memberof MockAPI
+     */
+    authenticateActiveUserBasedOnRole(role) {
+        if (role == null) {
+            return;
+        }
+        const active_user = new User(this.data).getActiveUser();
+        if (active_user == null) {
+            return;
+        }
+        if (!active_user.roles.includes(role)) {
+            throw new Error(
+                `Not authenticated for accessing routes with prefix /${role}`
+            );
+        }
+    }
 
     /**
      * Replaces the global `window.fetch` object with calls to `apiGET` and

@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { checkPropTypes, expect, it, beforeAll, userPropTypes } from "./utils";
+import { databaseSeeder } from "./setup";
 
 /**
  * Tests for the API. These are encapsulated in a function so that
@@ -75,15 +76,18 @@ export function usersTests(api) {
         checkPropTypes(userPropTypes, resp.payload);
     });
 
-    // This must be the last test in the file since it sets
-    // the active user to one that doesn't have the "admin"
-    // role, all subsequent requests to the `/admin` route will fail
     it("[debug only] sets the active user", async () => {
         let resp = await apiPOST("/debug/active_user", { id: newUserData.id });
         expect(resp).toMatchObject({ status: "success" });
 
-        resp = await apiGET("/admin/active_user");
+        resp = await apiGET("/debug/active_user");
 
         expect(resp.payload).toEqual(newUserData);
+
+        // Set the active user back to the default so everything
+        // is left in a nice state after the tests run.
+        resp = await apiPOST("/debug/active_user", {
+            id: databaseSeeder.seededData.active_user.id
+        });
     });
 }

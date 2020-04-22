@@ -43,7 +43,9 @@ class Api::V1::DebugController < ApplicationController
 
     # POST /clear_data
     def clear_data
-        Rake::Task['db:schema:load'].execute
+        # 'db:truncate_all' is about 50% faster than 'db:schema:load', which accomplished
+        # the same thing.
+        Rake::Task['db:truncate_all'].execute
         render_success
     end
 

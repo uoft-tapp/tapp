@@ -15,6 +15,7 @@ import { reportingTagsTests } from "./reporting-tag-tests";
 import { applicationsTests } from "./application-tests";
 import { unknownRouteTests } from "./unknown-route-tests";
 import { usersTests } from "./user-tests";
+import { userPermissionsTests } from "./user-permission-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -59,6 +60,9 @@ describe("API tests", () => {
     describe("`/admin/users` tests", () => {
         usersTests({ apiGET, apiPOST });
     });
+    describe("User permissions tests", () => {
+        userPermissionsTests({ apiGET, apiPOST });
+    });
 });
 
 describe("Mock API tests", () => {
@@ -83,5 +87,8 @@ describe("Mock API tests", () => {
     });
     describe("`/admin/users` tests", () => {
         usersTests(mockAPI);
+    });
+    describe("User permissions tests", () => {
+        userPermissionsTests(mockAPI);
     });
 });
