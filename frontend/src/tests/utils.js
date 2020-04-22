@@ -37,17 +37,16 @@ expect.extend({
 });
 
 /**
- * Customize the `.toMatchObject` method to print the value of the recieved
- * array if the test fails
+ * Customize the `.toMatchObject` method to print the contents of the recieved
+ * object if the response call fails
  *
  * @export
  * @param {object} resp The recieved array
- * @param {object} obj  The json object to compare resp to
  * @returns
  */
-export function toMatchObjectDebug(resp, obj) {
+export function toMatchSuccessDebug(resp) {
     try {
-        expect(resp).toMatchObject(obj);
+        expect(resp).toMatchObject({ status: "success" });
     } catch (err) {
         console.warn("resp: \n", resp);
         throw err;

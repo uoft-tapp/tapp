@@ -10,7 +10,7 @@ import {
     it,
     beforeAll,
     afterAll,
-    toMatchObjectDebug
+    toMatchSuccessDebug
 } from "./utils";
 
 export function instructorsTests({ apiGET, apiPOST }) {
@@ -39,12 +39,12 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // create a new instructor
         const resp1 = await apiPOST(`/instructors`, newInstructorData);
-        toMatchObjectDebug(resp1, { status: "success" });
-        toMatchObjectDebug(resp1.payload, newInstructorData);
+        toMatchSuccessDebug(resp1);
+        expect(resp1.payload).toMatchObject(newInstructorData);
 
         // make sure instructor is on instructor list
         const resp2 = await apiGET(`/instructors`);
-        toMatchObjectDebug(resp2, { status: "success" });
+        toMatchSuccessDebug(resp2);
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
@@ -53,7 +53,7 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
     it("get instructors", async () => {
         const resp = await apiGET("/instructors");
-        toMatchObjectDebug(resp, { status: "success" });
+        toMatchSuccessDebug(resp);
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
@@ -65,21 +65,21 @@ export function instructorsTests({ apiGET, apiPOST }) {
 
         // update the instructor
         const resp = await apiPOST(`/instructors`, updateInstructorData);
-        toMatchObjectDebug(resp, { status: "success" });
-        toMatchObjectDebug(resp.payload, updateInstructorData);
+        toMatchSuccessDebug(resp);
+        expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
     // delete an instructor
     it("delete instructor", async () => {
         const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        toMatchObjectDebug(resp1, {
+        expect(resp1).toMatchObject({
             status: "success",
             payload: { id: instructor.id }
         });
 
         // make sure the instructor is deleted
         const resp2 = await apiGET("/instructors");
-        toMatchObjectDebug(resp2, { status: "success" });
+        toMatchSuccessDebug(resp2);
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2).not.toContainObject(instructor);
     });
