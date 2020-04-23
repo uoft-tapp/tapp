@@ -35,8 +35,6 @@ export const upsertUser = validatedApiDispatcher({
     dispatcher: user => async dispatch => {
         const data = await apiPOST(`/admin/users`, user);
         dispatch(upsertUserSuccess(data));
-        // After we update a wage chunk, we should refetch the assignment to make sure
-        // there isn't stale data
         await dispatch(fetchUsers(user));
     }
 });
@@ -67,14 +65,47 @@ export const setActiveUserRole = validatedApiDispatcher({
     }
 });
 
+export const debugOnlyFetchUsers = validatedApiDispatcher({
+    name: "debugOnlyFetchUsers",
+    description:
+        "Fetch all users; this is available only in debug mode and bypasses any user permissions",
+    propTypes: {},
+    onErrorDispatch: e => upsertError(e.toString()),
+    dispatcher: () => async dispatch => {
+        const data = await apiGET(`/debug/users`);
+        dispatch(fetchUsersSuccess(data));
+    }
+});
+
+export const debugOnlySetActiveUser = validatedApiDispatcher({
+    name: "debugOnlySetActiveUser",
+    description:
+        "Sets the active user (i.e. fakes the 'logged on' user); available only in debug mode",
+    onErrorDispatch: e => fetchError(e.toString()),
+    dispatcher: (user, options = {}) => async dispatch => {
+        const data = await apiPOST(`/debug/active_user`, user);
+        await dispatch(fetchActiveUserSuccess(data));
+        // The new user we switch to might not have the same roles as the previous user.
+        // Default to the highest-authority role available, which is the first in the list.
+        await dispatch(setActiveUserRoleSuccess(data.roles[0]));
+
+        // After the active user has been set, we need to re-download (almost) all data
+        // with the permissions of the new active user.
+        if (!options.skipInit) {
+            await dispatch(initFromStage("setActiveUser"));
+        }
+    }
+});
+
 // selectors
 
 // Each reducer is given an isolated state; instead of needed to remember to
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-
-// wage chunk data is stored with the assignments in the redux store
 export const localStoreSelector = usersReducer._localStoreSelector;
-export const usersSelector = localStoreSelector;
-export const activeRoleSelector = state => usersSelector(state).active_role;
+export const usersSelector = state => localStoreSelector(state).users;
+export const activeUserSelector = state =>
+    localStoreSelector(state).active_user;
+export const activeRoleSelector = state =>
+    localStoreSelector(state).active_role;
