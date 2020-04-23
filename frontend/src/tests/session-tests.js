@@ -74,10 +74,9 @@ export function sessionsTests(api) {
         // fetch all sessions and make sure we're in there
         const { payload: withNewSessions } = await apiGET("/admin/sessions");
         expect(withNewSessions.length).toBeGreaterThan(initialSessions.length);
+        expect(withNewSessions).toContainObject(createdSession);
         // make sure the id of our new session came back
         expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
-
-        // save this session for use in later tests
     });
 
     it("update a session", async () => {
