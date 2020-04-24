@@ -33,6 +33,7 @@ export function ActiveUserDisplay(props) {
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
+                flip={true}
             >
                 <Dropdown.Toggle split variant="light">
                     {label}

@@ -128,11 +128,15 @@ Rails.application.routes.draw do
 
             namespace :instructor do
                 constraints(Constraint::AuthenticatedInstructor.new) do
+                    # Active User
+                    get :active_user, to: 'users#active_user'
                 end
             end
 
             namespace :ta do
                 constraints(Constraint::AuthenticatedTA.new) do
+                    # Active User
+                    get :active_user, to: 'users#active_user'
                 end
             end
         end

@@ -11,7 +11,14 @@ import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
 import { mockAPI } from "../../api/mockAPI";
-import { setMockAPIState } from "../../api/actions";
+import {
+    setMockAPIState,
+    usersSelector,
+    activeUserSelector,
+    debugOnlySetActiveUser,
+    debugOnlyFetchUsers
+} from "../../api/actions";
+import { ActiveUserButton } from "./active-user-switch";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -92,6 +99,14 @@ const swaggerData = {
     }
 };
 
+const ConnectedActiveUserButton = connect(
+    state => ({
+        activeUser: activeUserSelector(state),
+        users: usersSelector(state)
+    }),
+    { fetchUsers: debugOnlyFetchUsers, setActiveUser: debugOnlySetActiveUser }
+)(ActiveUserButton);
+
 // When toggled, `ToggleMockApi` will try
 // to refetch all the sessions, so pass it an
 // appropriate dispatcher.
@@ -121,6 +136,7 @@ function DevFrame(props) {
                         </BootstrapNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
+                        <ConnectedActiveUserButton />
                         <ConnectedToggleMockApi />
                     </Navbar.Collapse>
                 </Navbar>

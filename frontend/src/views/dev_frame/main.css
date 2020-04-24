@@ -20,3 +20,12 @@
     height: 100%;
     overflow: auto;
 }
+.logged-in-as-container {
+    display: flex;
+    align-items: baseline;
+    margin-right: 1em;
+    margin-left: 4px;
+}
+.logged-in-as-container label {
+    margin-right: .5em;
+}
