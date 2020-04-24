@@ -27,6 +27,7 @@ export function sessionsTests(api) {
 
     beforeAll(async () => {
         await apiPOST("/debug/restore_snapshot");
+        session = databaseSeeder.seededData.session;
     }, 30000);
 
     const newSessionData = {
@@ -56,6 +57,7 @@ export function sessionsTests(api) {
         // get all the sessions so that we can check that our newly inserted session has
         // a unique id.
         const { payload: initialSessions } = await apiGET("/admin/sessions");
+
         // do we get a success response when creating the session?
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
         expect(resp1).toMatchObject({ status: "success" });
@@ -72,16 +74,15 @@ export function sessionsTests(api) {
         // fetch all sessions and make sure we're in there
         const { payload: withNewSessions } = await apiGET("/admin/sessions");
         expect(withNewSessions.length).toBeGreaterThan(initialSessions.length);
+        expect(withNewSessions).toContainObject(createdSession);
         // make sure the id of our new session came back
         expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
-
-        // save this session for use in later tests
-        session = resp1.payload;
     });
 
     it("update a session", async () => {
         const newData = { ...session, rate1: 57.75 };
         const resp1 = await apiPOST("/admin/sessions", newData);
+
         expect(resp1).toMatchObject({ status: "success" });
         expect(resp1.payload).toMatchObject(newData);
 
@@ -92,7 +93,7 @@ export function sessionsTests(api) {
         expect(updatedSession).toContainObject(newData);
     });
 
-    it("throw error when `name` is empty", async () => {
+    it("throw error on create when `name` is empty", async () => {
         // create new session with empty name
         const newData1 = { ...newSessionData, name: "" };
         const newData2 = { ...newSessionData, name: undefined };
@@ -106,10 +107,35 @@ export function sessionsTests(api) {
         checkPropTypes(errorPropTypes, resp2);
     });
 
-    it("throw error when `name` is not unique", async () => {
-        // name identical to the exisiting session
+    it("throw error on update when `name` is empty", async () => {
+        // update a session with invalid name
+        const newData1 = { ...session, name: "" };
+        const newData2 = { ...session, name: undefined };
+        const resp1 = await apiPOST("/admin/sessions", newData1);
+
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+
+        const resp2 = await apiPOST("/admin/sessions", newData2);
+        expect(resp2).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp2);
+    });
+
+    it("throw error on create when `name` is not unique", async () => {
+        // name identical to the existing session
         const newData = { ...newSessionData, name: session.name };
         // POST to create new session
+        const resp1 = await apiPOST("/admin/sessions", newData);
+
+        // expected an error as name not unique
+        expect(resp1).toMatchObject({ status: "error" });
+        checkPropTypes(errorPropTypes, resp1);
+    });
+
+    it("throw error on update when `name` is not unique", async () => {
+        // name identical to the existing session with a valid id
+        const newData = { ...session, name: newSessionData.name };
+        // POST to update the session
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
