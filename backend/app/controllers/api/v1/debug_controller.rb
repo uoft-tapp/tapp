@@ -15,8 +15,7 @@ class Api::V1::DebugController < ApplicationController
         update_user && return if @user
 
         @user = User.new(user_params)
-        render_on_condition(object: @user,
-                            condition: proc { @user.save! })
+        render_on_condition(object: @user, condition: proc { @user.save! })
     end
 
     # GET /active_user
@@ -26,13 +25,16 @@ class Api::V1::DebugController < ApplicationController
 
     # POST /active_user
     def set_active_user
-        @active_user = User.find_by(id: set_active_user_params[:id]) ||
-                       User.find_by(utorid: set_active_user_params[:utorid])
+        @active_user =
+            User.find_by(id: set_active_user_params[:id]) ||
+                User.find_by(utorid: set_active_user_params[:utorid])
         if @active_user
             Rails.application.config.active_user_id = @active_user.id
             return render_success @active_user
         end
-        render_error(message: "Could not find user matching #{set_active_user_params}")
+        render_error(
+            message: "Could not find user matching #{set_active_user_params}"
+        )
     end
 
     # POST /snapshot
@@ -66,9 +68,8 @@ class Api::V1::DebugController < ApplicationController
     end
 
     def update_user
-        render_on_condition(object: @user,
-                            condition: proc {
-                                @user.update!(user_params)
-                            })
+        render_on_condition(
+            object: @user, condition: proc { @user.update!(user_params) }
+        )
     end
 end

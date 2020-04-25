@@ -19,7 +19,9 @@ describe Api::V1::Admin::SessionsController do
             expect(response.status).to eq(200)
             payload = JSON.parse(response.body)['payload']
             expect(payload).to be_an_instance_of(Array)
-            expect(payload.first).to eq(session.as_json(only: %i[end_date id start_date name]))
+            expect(payload.first).to eq(
+                session.as_json(only: %i[end_date id start_date name])
+            )
         end
     end
 
@@ -57,9 +59,7 @@ describe Api::V1::Admin::SessionsController do
     describe 'POST /sessions/delete' do
         let!(:session) { create(:session, :summer) }
 
-        before(:each) do
-            expect(Session.count).to eq(1)
-        end
+        before(:each) { expect(Session.count).to eq(1) }
 
         context 'with a valid Session' do
             before(:each) do

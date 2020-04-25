@@ -55,3 +55,9 @@ Style/Documentation:
 
 Style/WordArray:
     Enabled: false
+
+Layout/MultilineOperationIndentation:
+    Enabled: false
+
+Style/IfUnlessModifier:
+    Enabled: false

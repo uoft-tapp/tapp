@@ -9,22 +9,33 @@ module Response
             # active records have their own serializers, so use the
             # serializer if we are an active record. Otherwise, pass the
             # payload through.
-            payload = ActiveModelSerializers::SerializableResource.new(payload) if payload
+            if payload
+                payload =
+                    ActiveModelSerializers::SerializableResource.new(payload)
+            end
             render json: { status: 'success', message: '', payload: payload }
         end
     end
 
     def render_error(message:, payload: {}, error: nil)
+        # if an actual error object was supplied, log the error before returning
+        # it to the client.
+
         if error
-            # if an actual error object was supplied, log the error before returning
-            # it to the client.
             begin
                 logger.warn do
                     "ERROR: #{message}\n" +
-                        ("TRACEBACK:\n\t" + error.backtrace.join("\n\t") if Rails.env.development?)
+                        (
+                            if Rails.env.development?
+                                "TRACEBACK:\n\t" + error.backtrace.join("\n\t")
+                            end
+                        )
                 end
-            rescue StandardError # rubocop:disable Lint/HandleExceptions
+            # rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
+            rescue StandardError
+
             end
+            # rubocop:enable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
         end
         render json: { status: 'error', message: message, payload: payload }
     end
@@ -33,7 +44,10 @@ module Response
         if condition.call
             render_success object
         else
-            render_error(message: object.errors.full_messages.join('; '), error: object.errors)
+            render_error(
+                message: object.errors.full_messages.join('; '),
+                error: object.errors
+            )
         end
     end
 end

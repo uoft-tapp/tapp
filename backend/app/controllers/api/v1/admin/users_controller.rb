@@ -19,8 +19,7 @@ class Api::V1::Admin::UsersController < ApplicationController
         update && return if @user
 
         @user = User.new(user_params)
-        render_on_condition(object: @user,
-                            condition: proc { @user.save! })
+        render_on_condition(object: @user, condition: proc { @user.save! })
     end
 
     private
@@ -30,9 +29,8 @@ class Api::V1::Admin::UsersController < ApplicationController
     end
 
     def update
-        render_on_condition(object: @user,
-                            condition: proc {
-                                @user.update!(user_params)
-                            })
+        render_on_condition(
+            object: @user, condition: proc { @user.update!(user_params) }
+        )
     end
 end

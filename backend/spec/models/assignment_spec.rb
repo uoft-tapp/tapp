@@ -12,7 +12,9 @@ RSpec.describe Assignment, type: :model do
 
     describe 'validations' do
         subject { build(:assignment) }
-        it { should validate_uniqueness_of(:applicant_id).scoped_to(:position_id) }
+        it do
+            should validate_uniqueness_of(:applicant_id).scoped_to(:position_id)
+        end
     end
 end
 

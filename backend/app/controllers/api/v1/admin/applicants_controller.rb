@@ -21,8 +21,9 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
         @applicant = Applicant.find_by(id: params[:id])
         update && return if @applicant
         @applicant = Applicant.new(applicant_params)
-        render_on_condition(object: @applicant,
-                            condition: proc { @applicant.save! })
+        render_on_condition(
+            object: @applicant, condition: proc { @applicant.save! }
+        )
     end
 
     private
@@ -32,12 +33,20 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
     end
 
     def applicant_params
-        params.slice(:email, :first_name, :last_name, :phone,
-                     :student_number, :utorid).permit!
+        params.slice(
+            :email,
+            :first_name,
+            :last_name,
+            :phone,
+            :student_number,
+            :utorid
+        ).permit!
     end
 
     def update
-        render_on_condition(object: @applicant,
-                            condition: proc { @applicant.update!(applicant_params) })
+        render_on_condition(
+            object: @applicant,
+            condition: proc { @applicant.update!(applicant_params) }
+        )
     end
 end

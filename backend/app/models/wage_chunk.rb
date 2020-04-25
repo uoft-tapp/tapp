@@ -24,7 +24,9 @@ class WageChunk < ApplicationRecord
         # if we have two rates and they both lie on one side
         # of a year boundary, then use rate1. Otherwise, use rate2
         end_of_year = @session.start_date.end_of_year
-        return @session.rate1 if start_date <= end_of_year && end_date <= end_of_year
+        if start_date <= end_of_year && end_date <= end_of_year
+            return @session.rate1
+        end
 
         @session.rate2
     end

@@ -9,10 +9,10 @@ module Constraint
     class AuthenticatedAdmin
         def matches?(request)
             active_user = ActiveUserService.active_user
-            if active_user.is_admin?
-                return true
-            end
-            Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /admin route without permission."
+            return true if active_user.is_admin?
+            Rails.logger.warn "Permission Denied: User '#{
+                                  active_user.utorid
+                              }' attempted to access a /admin route without permission."
             false
         end
     end
@@ -20,10 +20,10 @@ module Constraint
     class AuthenticatedInstructor
         def matches?(request)
             active_user = ActiveUserService.active_user
-            if active_user.is_instructor?
-                return true
-            end
-            Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /instructor route without permission."
+            return true if active_user.is_instructor?
+            Rails.logger.warn "Permission Denied: User '#{
+                                  active_user.utorid
+                              }' attempted to access a /instructor route without permission."
             false
         end
     end
@@ -31,10 +31,10 @@ module Constraint
     class AuthenticatedTA
         def matches?(request)
             active_user = ActiveUserService.active_user
-            if active_user.is_ta?
-                return true
-            end
-            Rails.logger.warn "Permission Denied: User '#{active_user.utorid}' attempted to access a /ta route without permission."
+            return true if active_user.is_ta?
+            Rails.logger.warn "Permission Denied: User '#{
+                                  active_user.utorid
+                              }' attempted to access a /ta route without permission."
             false
         end
     end
@@ -72,8 +72,13 @@ Rails.application.routes.draw do
 
                     # Assignments
                     resources :assignments, only: %i[show create] do
-                        resources :wage_chunks, controller: :assignment_wage_chunks, only: %i[index create]
-                        resources :offers, path: :active_offer, controller: :active_offers, only: :index do
+                        resources :wage_chunks,
+                                  controller: :assignment_wage_chunks,
+                                  only: %i[index create]
+                        resources :offers,
+                                  path: :active_offer,
+                                  controller: :active_offers,
+                                  only: :index do
                             collection do
                                 post 'create'
                                 post :accept
@@ -86,32 +91,29 @@ Rails.application.routes.draw do
                     end
 
                     # Contract Templates
-                    get :available_contract_templates, to: 'contract_templates#available'
+                    get :available_contract_templates,
+                        to: 'contract_templates#available'
 
                     # Instructors
                     resources :instructors, only: %i[index create] do
-                        collection do
-                            post :delete
-                        end
+                        collection { post :delete }
                     end
 
                     # Positions
                     resources :positions, only: %i[create] do
-                        collection do
-                            post :delete
-                        end
+                        collection { post :delete }
                     end
 
                     # Sessions
                     resources :sessions, only: %i[index create] do
-                        collection do
-                            post :delete, to: 'sessions#delete'
-                        end
+                        collection { post :delete, to: 'sessions#delete' }
                         resources :applicants, only: %i[index]
                         resources :applications, only: %i[index]
                         resources :assignments, only: %i[index]
                         resources :contract_templates, only: %i[index create]
-                        resources :positions, controller: :session_positions, only: %i[index create]
+                        resources :positions,
+                                  controller: :session_positions,
+                                  only: %i[index create]
                     end
 
                     # Users
@@ -119,9 +121,7 @@ Rails.application.routes.draw do
 
                     # Wage Chunks
                     resources :wage_chunks, only: %i[create] do
-                        collection do
-                            post :delete
-                        end
+                        collection { post :delete }
                     end
                 end
             end

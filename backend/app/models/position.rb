@@ -11,7 +11,8 @@ class Position < ApplicationRecord
     belongs_to :session
     belongs_to :contract_template
 
-    validates :hours_per_assignment, numericality: { only_float: true }, allow_nil: true
+    validates :hours_per_assignment,
+              numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
 end
 

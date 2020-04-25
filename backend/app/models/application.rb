@@ -7,8 +7,10 @@ class Application < ApplicationRecord
     belongs_to :applicant
     belongs_to :session
 
-    scope :all_applications, -> { includes(:applicant_data_for_matching).all.order(:id) }
-    scope :by_session, ->(session_id) { all_applications.where(session_id: session_id) }
+    scope :all_applications,
+          -> { includes(:applicant_data_for_matching).all.order(:id) }
+    scope :by_session,
+          ->(session_id) { all_applications.where(session_id: session_id) }
 end
 
 # == Schema Information

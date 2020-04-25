@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 class ApplicationSerializer < ActiveModel::Serializer
-    attributes :id, :comments, :program, :department, :previous_uoft_experience,
-               :yip, :annotation
+    attributes :id,
+               :comments,
+               :program,
+               :department,
+               :previous_uoft_experience,
+               :yip,
+               :annotation
 
     def program
         object.applicant_data_for_matching&.program

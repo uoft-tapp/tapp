@@ -7,7 +7,7 @@ class PositionPreference < ApplicationRecord
     belongs_to :application
 
     validates :preference_level, numericality: true, allow_nil: true
-    validates_uniqueness_of :application_id, scope: [:position_id]
+    validates_uniqueness_of :application_id, scope: %i[position_id]
 end
 
 # == Schema Information

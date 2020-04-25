@@ -29,20 +29,26 @@ class AssignmentWageChunkCreateService
     end
 
     def add_missing_wage_chunk_attrs
-        raise AssignmentWageChunkCreateService::WageChunkMissing if @wage_chunks.blank?
-
-        @wage_chunks = @wage_chunks.map do |x|
-            time = Time.zone.now
-            x.to_h.merge!(assignment_id: @assignment.id,
-                          created_at: time,
-                          updated_at: time)
+        if @wage_chunks.blank?
+            raise AssignmentWageChunkCreateService::WageChunkMissing
         end
+
+        @wage_chunks =
+            @wage_chunks.map do |x|
+                time = Time.zone.now
+                x.to_h.merge!(
+                    assignment_id: @assignment.id,
+                    created_at: time,
+                    updated_at: time
+                )
+            end
     end
 
     def upsert_and_return_wage_chunks
-        @assignment.wage_chunks
-                   .upsert_all(@wage_chunks,
-                               returning: RETURNING_VALUES)
+        @assignment.wage_chunks.upsert_all(
+            @wage_chunks,
+            returning: RETURNING_VALUES
+        )
     end
 
     class WageChunkMissing < StandardError
