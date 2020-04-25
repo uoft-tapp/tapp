@@ -33,12 +33,12 @@ export function ActiveUserDisplay(props) {
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
-                flip={true}
+                alignRight
             >
                 <Dropdown.Toggle split variant="light">
                     {label}
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu flip={true}>
                     {(roles || []).map((role, index) => (
                         <Dropdown.Item
                             key={index}

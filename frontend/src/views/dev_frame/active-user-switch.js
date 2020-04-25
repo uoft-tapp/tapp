@@ -1,6 +1,8 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
 
+const ident = () => {};
+
 /**
  * A toggle switch for turning on and off the Mock API. An instance
  * of the Mock API is included in this component, and this component
@@ -14,8 +16,8 @@ import { Dropdown } from "react-bootstrap";
 function ActiveUserButton({
     users = [],
     activeUser = {},
-    setActiveUser = () => {},
-    fetchUsers = () => {}
+    setActiveUser = ident,
+    fetchUsers = ident
 }) {
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
 
@@ -26,7 +28,7 @@ function ActiveUserButton({
         if (dropdownVisible) {
             fetchUsers();
         }
-    }, [dropdownVisible]);
+    }, [dropdownVisible, fetchUsers]);
 
     return (
         <span
@@ -44,12 +46,12 @@ function ActiveUserButton({
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
-                flip={true}
+                alignRight
             >
                 <Dropdown.Toggle split variant="dark">
                     {activeUser.utorid}{" "}
                 </Dropdown.Toggle>
-                <Dropdown.Menu>
+                <Dropdown.Menu flip={true}>
                     {(users || []).map((user, i) => (
                         <Dropdown.Item
                             key={i}
