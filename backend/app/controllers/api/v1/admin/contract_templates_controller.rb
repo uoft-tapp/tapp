@@ -15,17 +15,18 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
         # for the specified session.
         @session = Session.find(params[:session_id])
         template = @session.contract_templates.new(contract_template_params)
-        render_on_condition(object: template, condition: proc { template.save! })
+        render_on_condition(
+            object: template, condition: proc { template.save! }
+        )
     end
 
     # GET /available_contract_templates
     def available
         dir = "#{Rails.root}/app/views/contract_templates/"
-        files = Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
-            {
-                template_file: entry.sub(dir, '')
-            }
-        end
+        files =
+            Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
+                { template_file: entry.sub(dir, '') }
+            end
         render_success files
     end
 
@@ -36,7 +37,10 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
     end
 
     def update
-        render_on_condition(object: @contract_template,
-                            condition: proc { @contract_template.update!(contract_template_params) })
+        render_on_condition(
+            object: @contract_template,
+            condition:
+                proc { @contract_template.update!(contract_template_params) }
+        )
     end
 end

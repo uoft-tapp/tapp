@@ -5,7 +5,8 @@ class PositionDataForAd < ApplicationRecord
     belongs_to :position
 
     validates :ad_num_assignments, numericality: true, allow_nil: true
-    validates :ad_hours_per_assignment, numericality: { only_float: true }, allow_nil: true
+    validates :ad_hours_per_assignment,
+              numericality: { only_float: true }, allow_nil: true
 end
 
 # == Schema Information

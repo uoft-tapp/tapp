@@ -11,8 +11,9 @@ class Api::V1::Admin::InstructorsController < ApplicationController
         @instructor = Instructor.find_by(id: params[:instructor_id])
         update && return if @instructor
         @instructor = Instructor.new(instructor_params)
-        render_on_condition(object: @instructor,
-                            condition: proc { @instructor.save! })
+        render_on_condition(
+            object: @instructor, condition: proc { @instructor.save! }
+        )
     end
 
     # POST /instructors/delete
@@ -29,9 +30,9 @@ class Api::V1::Admin::InstructorsController < ApplicationController
     end
 
     def update
-        render_on_condition(object: @instructor,
-                            condition: proc {
-                                @instructor.update!(instructor_params)
-                            })
+        render_on_condition(
+            object: @instructor,
+            condition: proc { @instructor.update!(instructor_params) }
+        )
     end
 end

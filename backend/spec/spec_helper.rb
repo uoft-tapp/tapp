@@ -28,19 +28,14 @@ RSpec.configure do |config|
     # rspec-expectations config goes here. You can use an alternate
     # assertion/expectation library such as wrong or the stdlib/minitest
     # assertions if you prefer.
-
     config.before(:suite) do
         DatabaseCleaner.strategy = :transaction
         DatabaseCleaner.clean_with(:truncation)
     end
 
-    config.before(:each) do
-        DatabaseCleaner.start
-    end
+    config.before(:each) { DatabaseCleaner.start }
 
-    config.after(:each) do
-        DatabaseCleaner.clean
-    end
+    config.after(:each) { DatabaseCleaner.clean }
 
     config.expect_with :rspec do |expectations|
         # This option will default to `true` in RSpec 4. It makes the `description`
@@ -50,7 +45,8 @@ RSpec.configure do |config|
         #     # => "be bigger than 2 and smaller than 4"
         # ...rather than:
         #     # => "be bigger than 2"
-        expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+        expectations.include_chain_clauses_in_custom_matcher_descriptions =
+            true
     end
 
     # rspec-mocks config goes here. You can use an alternate test double
@@ -59,7 +55,8 @@ RSpec.configure do |config|
         # Prevents you from mocking or stubbing a method that does not exist on
         # a real object. This is generally recommended, and will default to
         # `true` in RSpec 4.
-        mocks.verify_partial_doubles = true
+        mocks.verify_partial_doubles =
+            true
     end
 
     # This option will default to `:apply_to_host_groups` in RSpec 4 (and will

@@ -8,9 +8,8 @@ class Offer < ApplicationRecord
     enum status: OFFER_STATUS
 
     scope :inactive_offers, -> { where.not(status: :pending) }
-    scope :withdraw_all, lambda {
-        update_all(status: :withdrawn, withdrawn_date: Time.zone.now)
-    }
+    scope :withdraw_all,
+          -> { update_all(status: :withdrawn, withdrawn_date: Time.zone.now) }
 
     before_create :populate_offer
     before_update :set_status_date
@@ -21,8 +20,12 @@ class Offer < ApplicationRecord
         applicant_attrs = %i[first_name last_name email]
         applicant = assignment.applicant.as_json(only: applicant_attrs)
 
-        position_attrs = %i[position_code position_title position_start_date
-                            position_end_date]
+        position_attrs = %i[
+            position_code
+            position_title
+            position_start_date
+            position_end_date
+        ]
         position = applicant.as_json(only: position_attrs)
 
         self.attributes = attributes.merge!(applicant, position)

@@ -10,8 +10,11 @@ class Api::V1::Admin::AssignmentWageChunksController < ApplicationController
 
     # POST /wage_chunks
     def create
-        service = AssignmentWageChunkCreateService.new(assignment: @assignment,
-                                                       wage_chunk_params: wage_chunks_create_params)
+        service =
+            AssignmentWageChunkCreateService.new(
+                assignment: @assignment,
+                wage_chunk_params: wage_chunks_create_params
+            )
         start_transaction_and_rollback_on_exception do
             service.perform
             render_success service.values

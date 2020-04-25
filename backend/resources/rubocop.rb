@@ -44,7 +44,7 @@ require 'rubocop'
 require 'pathname'
 
 module DirtyCop
-    extend self # In your face, style guide!
+    extend self
 
     def bury_evidence?(file, line)
         !report_offense_at?(file, line)
@@ -77,7 +77,8 @@ module DirtyCop
             arg = ARGV.shift
             case arg
             when '--local'
-                ref = `git rev-parse --abbrev-ref --symbolic-full-name @{u}`.chomp
+                ref =
+                    `git rev-parse --abbrev-ref --symbolic-full-name @{u}`.chomp
                 exit 1 unless $CHILD_STATUS.success?
             when '--staged'
                 ref = '--cached'
@@ -109,9 +110,7 @@ module DirtyCop
     end
 
     def files_modified_since(ref)
-        `git diff --diff-filter=AM --name-only #{ref}`
-            .lines
-            .map(&:chomp)
+        `git diff --diff-filter=AM --name-only #{ref}`.lines.map(&:chomp)
             .map { |file| File.absolute_path(file) }
     end
 
@@ -119,32 +118,26 @@ module DirtyCop
         result = {}
 
         suspects = files_modified_since(ref)
-        suspects.each do |file|
-            result[file] = lines_modified_since(file, ref)
-        end
+        suspects.each { |file| result[file] = lines_modified_since(file, ref) }
 
         result
     end
 
     def lines_modified_since(file, ref)
         ranges =
-            `git diff -p -U0 #{ref} #{file}`
-            .lines
-            .grep(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/) do
-                Regexp.last_match(1).to_i...(Regexp.last_match(1).to_i +
-                (Regexp.last_match(2) || 1).to_i)
-            end
-            .reverse
+            `git diff -p -U0 #{ref} #{file}`.lines.grep(
+                /^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/
+            ) do
+                Regexp.last_match(1).to_i...(
+                    Regexp.last_match(1).to_i + (Regexp.last_match(2) || 1).to_i
+                )
+            end.reverse
 
         return [] if ranges.empty?
 
         mask = Array.new(ranges.first.end)
 
-        ranges.each do |range|
-            range.each do |line|
-                mask[line] = true
-            end
-        end
+        ranges.each { |range| range.each { |line| mask[line] = true } }
 
         mask
     end
@@ -154,7 +147,7 @@ module DirtyCop
         puts
         puts File.read(__FILE__)[/(?:^#(?:[^!].*)?\n)+/s].gsub(/^#/, '   ')
         exit
-    end
+    end # In your face, style guide!
 end
 
 module RuboCop

@@ -12,14 +12,17 @@ class Assignment < ApplicationRecord
     belongs_to :applicant
     belongs_to :position
 
-    validates_uniqueness_of :applicant_id, scope: [:position_id]
+    validates_uniqueness_of :applicant_id, scope: %i[position_id]
 
-    scope :by_position, ->(position_id) { where(position_id: position_id).order(:id) }
-    scope(:by_session, lambda do |session_id|
-        joins(:position)
-            .where('positions.session_id = ?', session_id)
-            .distinct.order(:id)
-    end)
+    scope :by_position,
+          ->(position_id) { where(position_id: position_id).order(:id) }
+    scope(
+        :by_session,
+        lambda do |session_id|
+            joins(:position).where('positions.session_id = ?', session_id)
+                .distinct.order(:id)
+        end
+    )
 
     after_create :split_and_create_wage_chunks
 
@@ -70,16 +73,26 @@ class Assignment < ApplicationRecord
         if end_date.year > start_date.year
             boundary_date = start_date.end_of_year
             assignment_hours_split = assignment_hours / 2.to_f
-            wage_chunks.create!([{ start_date: start_date,
-                                   end_date: boundary_date,
-                                   hours: assignment_hours_split },
-                                 { start_date: (boundary_date + 1.day)
-                                               .beginning_of_year,
-                                   end_date: end_date,
-                                   hours: assignment_hours_split }])
+            wage_chunks.create!(
+                [
+                    {
+                        start_date: start_date,
+                        end_date: boundary_date,
+                        hours: assignment_hours_split
+                    },
+                    {
+                        start_date: (boundary_date + 1.day).beginning_of_year,
+                        end_date: end_date,
+                        hours: assignment_hours_split
+                    }
+                ]
+            )
         else
-            wage_chunks.create!(start_date: start_date, end_date: end_date,
-                                hours: assignment_hours)
+            wage_chunks.create!(
+                start_date: start_date,
+                end_date: end_date,
+                hours: assignment_hours
+            )
         end
     end
 end

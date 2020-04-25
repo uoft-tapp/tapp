@@ -5,7 +5,7 @@
 class ContractTemplate < ApplicationRecord
     belongs_to :session
 
-    validates_uniqueness_of :template_name, scope: [:session]
+    validates_uniqueness_of :template_name, scope: %i[session]
     validates_presence_of :template_name, :template_file
 
     scope :by_session, ->(session_id) { where(session: session_id).order(:id) }
