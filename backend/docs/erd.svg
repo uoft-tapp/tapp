@@ -145,63 +145,65 @@
 <!-- m_Offer -->
 <g id="node9" class="node">
 <title>m_Offer</title>
-<path fill="none" stroke="#000000" d="M823,-376.5C823,-376.5 949,-376.5 949,-376.5 955,-376.5 961,-382.5 961,-388.5 961,-388.5 961,-706.5 961,-706.5 961,-712.5 955,-718.5 949,-718.5 949,-718.5 823,-718.5 823,-718.5 817,-718.5 811,-712.5 811,-706.5 811,-706.5 811,-388.5 811,-388.5 811,-382.5 817,-376.5 823,-376.5"/>
-<text text-anchor="start" x="870" y="-705.7" font-family="Arial Bold" font-size="11.00" fill="#000000">Offer</text>
-<polyline fill="none" stroke="#000000" points="811,-698.5 961,-698.5 "/>
-<text text-anchor="start" x="818" y="-685.5" font-family="Arial" font-size="10.00" fill="#000000">assignment_id </text>
-<text text-anchor="start" x="885" y="-685.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="818" y="-672.5" font-family="Arial" font-size="10.00" fill="#000000">offer_template </text>
-<text text-anchor="start" x="884" y="-672.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-659.5" font-family="Arial" font-size="10.00" fill="#000000">offer_override_pdf </text>
-<text text-anchor="start" x="900" y="-659.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-646.5" font-family="Arial" font-size="10.00" fill="#000000">first_name </text>
-<text text-anchor="start" x="867" y="-646.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-633.5" font-family="Arial" font-size="10.00" fill="#000000">last_name </text>
-<text text-anchor="start" x="867" y="-633.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-620.5" font-family="Arial" font-size="10.00" fill="#000000">email </text>
-<text text-anchor="start" x="845" y="-620.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-607.5" font-family="Arial" font-size="10.00" fill="#000000">position_code </text>
-<text text-anchor="start" x="882" y="-607.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-594.5" font-family="Arial" font-size="10.00" fill="#000000">position_title </text>
-<text text-anchor="start" x="876" y="-594.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-581.5" font-family="Arial" font-size="10.00" fill="#000000">position_start_date </text>
-<text text-anchor="start" x="904" y="-581.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-568.5" font-family="Arial" font-size="10.00" fill="#000000">position_end_date </text>
-<text text-anchor="start" x="900" y="-568.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-555.5" font-family="Arial" font-size="10.00" fill="#000000">first_time_ta </text>
-<text text-anchor="start" x="876" y="-555.5" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
-<text text-anchor="start" x="818" y="-542.5" font-family="Arial" font-size="10.00" fill="#000000">instructor_contact_desc </text>
-<text text-anchor="start" x="926" y="-542.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-529.5" font-family="Arial" font-size="10.00" fill="#000000">pay_period_desc </text>
-<text text-anchor="start" x="895" y="-529.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-516.5" font-family="Arial" font-size="10.00" fill="#000000">installments </text>
-<text text-anchor="start" x="874" y="-516.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
-<text text-anchor="start" x="818" y="-503.5" font-family="Arial" font-size="10.00" fill="#000000">ta_coordinator_name </text>
-<text text-anchor="start" x="912" y="-503.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-490.5" font-family="Arial" font-size="10.00" fill="#000000">ta_coordinator_email </text>
-<text text-anchor="start" x="912" y="-490.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-477.5" font-family="Arial" font-size="10.00" fill="#000000">emailed_date </text>
-<text text-anchor="start" x="879" y="-477.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-464.5" font-family="Arial" font-size="10.00" fill="#000000">signature </text>
-<text text-anchor="start" x="861" y="-464.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-451.5" font-family="Arial" font-size="10.00" fill="#000000">accepted_date </text>
-<text text-anchor="start" x="885" y="-451.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-438.5" font-family="Arial" font-size="10.00" fill="#000000">rejected_date </text>
-<text text-anchor="start" x="880" y="-438.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-425.5" font-family="Arial" font-size="10.00" fill="#000000">withdrawn_date </text>
-<text text-anchor="start" x="888" y="-425.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
-<text text-anchor="start" x="818" y="-412.5" font-family="Arial" font-size="10.00" fill="#000000">nag_count </text>
-<text text-anchor="start" x="867" y="-412.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
-<text text-anchor="start" x="818" y="-399.5" font-family="Arial" font-size="10.00" fill="#000000">url_token </text>
-<text text-anchor="start" x="861" y="-399.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-386.5" font-family="Arial" font-size="10.00" fill="#000000">status </text>
-<text text-anchor="start" x="849" y="-386.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer ∗</text>
+<path fill="none" stroke="#000000" d="M823,-376C823,-376 949,-376 949,-376 955,-376 961,-382 961,-388 961,-388 961,-719 961,-719 961,-725 955,-731 949,-731 949,-731 823,-731 823,-731 817,-731 811,-725 811,-719 811,-719 811,-388 811,-388 811,-382 817,-376 823,-376"/>
+<text text-anchor="start" x="870" y="-718.2" font-family="Arial Bold" font-size="11.00" fill="#000000">Offer</text>
+<polyline fill="none" stroke="#000000" points="811,-711 961,-711 "/>
+<text text-anchor="start" x="818" y="-697.5" font-family="Arial" font-size="10.00" fill="#000000">assignment_id </text>
+<text text-anchor="start" x="885" y="-697.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
+<text text-anchor="start" x="818" y="-684.5" font-family="Arial" font-size="10.00" fill="#000000">offer_template </text>
+<text text-anchor="start" x="884" y="-684.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-671.5" font-family="Arial" font-size="10.00" fill="#000000">offer_override_pdf </text>
+<text text-anchor="start" x="900" y="-671.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-658.5" font-family="Arial" font-size="10.00" fill="#000000">first_name </text>
+<text text-anchor="start" x="867" y="-658.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-645.5" font-family="Arial" font-size="10.00" fill="#000000">last_name </text>
+<text text-anchor="start" x="867" y="-645.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-632.5" font-family="Arial" font-size="10.00" fill="#000000">email </text>
+<text text-anchor="start" x="845" y="-632.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-619.5" font-family="Arial" font-size="10.00" fill="#000000">position_code </text>
+<text text-anchor="start" x="882" y="-619.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-606.5" font-family="Arial" font-size="10.00" fill="#000000">position_title </text>
+<text text-anchor="start" x="876" y="-606.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-593.5" font-family="Arial" font-size="10.00" fill="#000000">position_start_date </text>
+<text text-anchor="start" x="904" y="-593.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-580.5" font-family="Arial" font-size="10.00" fill="#000000">position_end_date </text>
+<text text-anchor="start" x="900" y="-580.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-567.5" font-family="Arial" font-size="10.00" fill="#000000">first_time_ta </text>
+<text text-anchor="start" x="876" y="-567.5" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
+<text text-anchor="start" x="818" y="-554.5" font-family="Arial" font-size="10.00" fill="#000000">instructor_contact_desc </text>
+<text text-anchor="start" x="926" y="-554.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-541.5" font-family="Arial" font-size="10.00" fill="#000000">pay_period_desc </text>
+<text text-anchor="start" x="895" y="-541.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-528.5" font-family="Arial" font-size="10.00" fill="#000000">hours </text>
+<text text-anchor="start" x="846" y="-528.5" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="818" y="-515.5" font-family="Arial" font-size="10.00" fill="#000000">installments </text>
+<text text-anchor="start" x="874" y="-515.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<text text-anchor="start" x="818" y="-502.5" font-family="Arial" font-size="10.00" fill="#000000">ta_coordinator_name </text>
+<text text-anchor="start" x="912" y="-502.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-489.5" font-family="Arial" font-size="10.00" fill="#000000">ta_coordinator_email </text>
+<text text-anchor="start" x="912" y="-489.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-476.5" font-family="Arial" font-size="10.00" fill="#000000">emailed_date </text>
+<text text-anchor="start" x="879" y="-476.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-463.5" font-family="Arial" font-size="10.00" fill="#000000">signature </text>
+<text text-anchor="start" x="861" y="-463.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-450.5" font-family="Arial" font-size="10.00" fill="#000000">accepted_date </text>
+<text text-anchor="start" x="885" y="-450.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-437.5" font-family="Arial" font-size="10.00" fill="#000000">rejected_date </text>
+<text text-anchor="start" x="880" y="-437.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-424.5" font-family="Arial" font-size="10.00" fill="#000000">withdrawn_date </text>
+<text text-anchor="start" x="888" y="-424.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
+<text text-anchor="start" x="818" y="-411.5" font-family="Arial" font-size="10.00" fill="#000000">nag_count </text>
+<text text-anchor="start" x="867" y="-411.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<text text-anchor="start" x="818" y="-398.5" font-family="Arial" font-size="10.00" fill="#000000">url_token </text>
+<text text-anchor="start" x="861" y="-398.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-385.5" font-family="Arial" font-size="10.00" fill="#000000">status </text>
+<text text-anchor="start" x="849" y="-385.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer ∗</text>
 </g>
 <!-- m_Assignment&#45;&gt;m_Offer -->
 <g id="edge12" class="edge">
 <title>m_Assignment&#45;&gt;m_Offer</title>
-<path fill="none" stroke="#000000" d="M765.1405,-535.6019C777,-536.7694 789.3847,-537.9886 801.5122,-539.1826"/>
-<polygon fill="#000000" stroke="#000000" points="801.4579,-542.3423 810.7232,-540.0893 802.0751,-536.0726 801.4579,-542.3423"/>
+<path fill="none" stroke="#000000" d="M765.1405,-537.8446C777,-539.3808 789.3847,-540.9851 801.5122,-542.556"/>
+<polygon fill="#000000" stroke="#000000" points="801.3931,-545.7168 810.7232,-543.7491 802.2025,-539.469 801.3931,-545.7168"/>
 </g>
 <!-- m_WageChunk -->
 <g id="node17" class="node">
@@ -223,8 +225,8 @@
 <!-- m_Assignment&#45;&gt;m_WageChunk -->
 <g id="edge16" class="edge">
 <title>m_Assignment&#45;&gt;m_WageChunk</title>
-<path fill="none" stroke="#000000" d="M763.9936,-461.3249C767.9141,-456.4695 771.6246,-451.5086 775,-446.5 797.928,-412.4784 786.6185,-394.4955 811,-361.5 813.0938,-358.6664 815.34,-355.8789 817.7001,-353.1484"/>
-<polygon fill="#000000" stroke="#000000" points="820.4338,-354.8273 824.1873,-346.0618 815.7868,-350.5734 820.4338,-354.8273"/>
+<path fill="none" stroke="#000000" d="M764.0181,-461.3414C767.9326,-456.4819 771.635,-451.5157 775,-446.5 798.085,-412.0904 786.3137,-393.7795 811,-360.5 812.8117,-358.0577 814.7394,-355.6523 816.7578,-353.2907"/>
+<polygon fill="#000000" stroke="#000000" points="819.3456,-355.1264 823.0601,-346.3443 814.6797,-350.8932 819.3456,-355.1264"/>
 </g>
 <!-- m_ContractTemplate -->
 <g id="node7" class="node">

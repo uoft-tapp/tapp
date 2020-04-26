@@ -14,6 +14,7 @@ class CreateOffers < ActiveRecord::Migration[6.0]
             t.boolean :first_time_ta
             t.string :instructor_contact_desc
             t.string :pay_period_desc
+            t.float :hours
             t.integer :installments
             t.string :ta_coordinator_name
             t.string :ta_coordinator_email
