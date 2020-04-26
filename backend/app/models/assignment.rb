@@ -24,10 +24,14 @@ class Assignment < ApplicationRecord
         end
     )
 
-    after_create :split_and_create_wage_chunks
+    after_create :create_wage_chunks
 
     def hours
-        wage_chunks.sum(:hours)
+        if wage_chunks.blank?
+            position.hours_per_assignment
+        else
+            wage_chunks.sum(:hours)
+        end
     end
 
     def hours=(value)
@@ -41,28 +45,35 @@ class Assignment < ApplicationRecord
             # if the record has already been created, the `after_create` functions
             # will not be called, so call the manually.
             @initial_hours = nil
-            split_and_create_wage_chunks(hours: value)
+            create_wage_chunks(hours: value)
         end
+    end
+
+    def start_date=(value)
+        self[:start_date] = value.blank? ? position.start_date : value
+    end
+
+    def end_date=(value)
+        self[:end_date] = value.blank? ? position.end_date : value
     end
 
     private
 
-    def split_and_create_wage_chunks(hours: @initial_hours)
+    def create_wage_chunks(hours: @initial_hours)
         # Don't set the hours unless they're different from the
         # computed hours
-        return if hours == self.hours
-
-        start_date = self.start_date
-        end_date = self.end_date
-        if start_date.blank? && end_date.blank?
-            start_date = position.start_date
-            end_date = position.end_date
-        end
-
+        assignment_hours = self.hours
+        return unless assignment_hours
+        return if hours == assignment_hours
         return unless start_date && end_date
 
-        assignment_hours = hours || position.hours_per_assignment
-        return unless assignment_hours
+        # Compute the number of wage chunks needed. If January 1st
+        # falls between the start_date and the end_date, then two are needed.
+        # otherwise one is needed.
+        wage_chunks_needed = 1
+        if start_date.at_beginning_of_year.next_year < end_date
+            wage_chunks_needed = 2
+        end
 
         # TODO: Wage chunks should be reused if possible; that way
         # they preserve any reporting tags they may have.
@@ -70,7 +81,7 @@ class Assignment < ApplicationRecord
         # Delete any old wage_chunks
         wage_chunks.destroy_all
 
-        if end_date.year > start_date.year
+        if wage_chunks_needed == 2
             boundary_date = start_date.end_of_year
             assignment_hours_split = assignment_hours / 2.to_f
             wage_chunks.create!(

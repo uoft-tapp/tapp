@@ -35,7 +35,7 @@ export function templatesTests(api) {
     // set up a session to be available before tests run
 
     beforeAll(async () => {
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
         session = databaseSeeder.seededData.session;
     }, 30000);
 

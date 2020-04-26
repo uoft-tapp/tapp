@@ -1,13 +1,15 @@
 FROM madnight/docker-alpine-wkhtmltopdf:latest as wkhtmltopdf_image
 FROM ruby:2.6.5-alpine3.10
 
-# Add tzdata because the Gemfile doesn't successfully add the dependency via geminstall.
+# Add `tzdata` because the Gemfile doesn't successfully add the dependency via geminstall.
+# Add `less` because the ruby console attempts to call `less` and errors when it doesn't exist
 RUN apk update && apk add build-base \
   nodejs \
   postgresql-dev \
   tzdata \
   graphviz \
-  postgresql-client
+  postgresql-client \
+  less
 
 RUN apk add --update --no-cache \
   libgcc libstdc++ libx11 glib libxrender libxext libintl \

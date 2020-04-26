@@ -3,8 +3,8 @@
 class Position < ApplicationRecord
     has_and_belongs_to_many :instructors
     has_and_belongs_to_many :reporting_tags
-    has_many :assignments
-    has_many :position_preferences
+    has_many :assignments, dependent: :destroy
+    has_many :position_preferences, dependent: :destroy
     has_many :applications, through: :position_preferences
     has_one :position_data_for_ad, dependent: :destroy
     has_one :position_data_for_matching, dependent: :destroy
@@ -14,6 +14,22 @@ class Position < ApplicationRecord
     validates :hours_per_assignment,
               numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
+
+    def start_date
+        # If we have a non-null date, return that. Otherwise
+        # we return the date from the session
+        return self[:start_date] if self[:start_date]
+
+        session.start_date
+    end
+
+    def end_date
+        # If we have a non-null date, return that. Otherwise
+        # we return the date from the session
+        return self[:end_date] if self[:end_date]
+
+        session.end_date
+    end
 end
 
 # == Schema Information

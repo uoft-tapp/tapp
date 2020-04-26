@@ -33,6 +33,32 @@ expect.extend({
                 pass: false
             };
         }
+    },
+    toHaveStatus(received, argument) {
+        if (received == null) {
+            throw new Error(
+                "Cannot check the status of a null/undefined response"
+            );
+        }
+        if (received.status === argument) {
+            return {
+                pass: true,
+                message: () =>
+                    `expected API response to not have ${this.utils.printExpected(
+                        {
+                            status: argument
+                        }
+                    )} but received ${this.utils.printReceived(received)}`
+            };
+        } else {
+            return {
+                pass: false,
+                message: () =>
+                    `expected API response to have ${this.utils.printExpected({
+                        status: argument
+                    })} but received ${this.utils.printReceived(received)}`
+            };
+        }
     }
 });
 

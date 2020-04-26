@@ -20,16 +20,14 @@ export function positionsTests(api = { apiGET, apiPOST }) {
 
     let newPosition;
 
-    // set up a session to be available before tests run
     beforeAll(async () => {
-        // this session will be available for all tests
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
     });
 
     it("get positions for session", async () => {
         const resp1 = await apiGET(`/admin/sessions/${session.id}/positions`);
 
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
 
         // make sure the position we created is in that list
         expect(resp1.payload).toContainObject(position);
@@ -160,7 +158,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         };
         // create a new session to add a template to
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         const sessionId = resp1.payload.id;
 
         // create a new position of the same code associated with new session
@@ -168,7 +166,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             `/admin/sessions/${sessionId}/positions`,
             newPositionData2
         );
-        expect(resp2).toMatchObject({ status: "success" });
+        expect(resp2).toHaveStatus("success");
         // make sure we get back what we put in
         expect(resp2.payload).toMatchObject(newPositionData2);
 
@@ -179,5 +177,9 @@ export function positionsTests(api = { apiGET, apiPOST }) {
 
     it.todo(
         "create a position with instructors list specified and have instructors automatically added to the position"
+    );
+
+    it.todo(
+        "When the start/end_date of a position is null, the start/end_date of the sessions is returned instead"
     );
 }

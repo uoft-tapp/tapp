@@ -20,7 +20,7 @@ export function userPermissionsTests(api) {
     };
 
     beforeAll(async () => {
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
     }, 30000);
 
     it("Admin user can access admin route", async () => {

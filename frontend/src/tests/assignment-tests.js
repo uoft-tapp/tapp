@@ -8,14 +8,19 @@ import {
 } from "./utils";
 import { databaseSeeder } from "./setup";
 
-export function assignmentsTests({ apiGET, apiPOST }) {
-    const session = databaseSeeder.seededData.session;
-    const applicant = databaseSeeder.seededData.applicant;
-    const assignment = databaseSeeder.seededData.assignment;
-    const contractTemplate = databaseSeeder.seededData.contractTemplate;
+export function assignmentsTests(api) {
+    const { apiGET, apiPOST } = api;
+    let session;
+    let applicant;
+    let assignment;
+    let contractTemplate;
 
     beforeAll(async () => {
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
+        session = databaseSeeder.seededData.session;
+        applicant = databaseSeeder.seededData.applicant;
+        assignment = databaseSeeder.seededData.assignment;
+        contractTemplate = databaseSeeder.seededData.contractTemplate;
     }, 30000);
 
     it("get assignments for session", async () => {
@@ -122,4 +127,8 @@ export function assignmentsTests({ apiGET, apiPOST }) {
 
         expect(withUpdatedAssignment.length).toEqual(2);
     });
+
+    it.todo(
+        "assignments created with null start/end_date inherit the start/end_date from the parent position"
+    );
 }

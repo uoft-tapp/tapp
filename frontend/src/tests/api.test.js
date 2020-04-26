@@ -26,13 +26,14 @@ describe("API tests", () => {
         await databaseSeeder.verifySeed(api);
     }, 30000);
 
-    describe.skip("`/admin/sessions` tests", () => {
+    describe("`/admin/sessions` tests", () => {
         sessionsTests(api);
-    });
+    }, 30000);
 
     describe("template tests", () => {
         templatesTests(api);
     });
+
     describe("`/admin/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
