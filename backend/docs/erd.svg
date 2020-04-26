@@ -13,29 +13,20 @@
 <!-- m_ActiveRecord::InternalMetadata -->
 <g id="node1" class="node">
 <title>m_ActiveRecord::InternalMetadata</title>
-<path fill="none" stroke="#000000" d="M14.5,-67C14.5,-67 167.5,-67 167.5,-67 173.5,-67 179.5,-73 179.5,-79 179.5,-79 179.5,-98 179.5,-98 179.5,-104 173.5,-110 167.5,-110 167.5,-110 14.5,-110 14.5,-110 8.5,-110 2.5,-104 2.5,-98 2.5,-98 2.5,-79 2.5,-79 2.5,-73 8.5,-67 14.5,-67"/>
-<text text-anchor="start" x="8" y="-97.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ActiveRecord::InternalMetadata</text>
-<polyline fill="none" stroke="#000000" points="2.5,-90 179.5,-90 "/>
-<text text-anchor="start" x="26" y="-76.5" font-family="Arial" font-size="10.00" fill="#000000">value </text>
-<text text-anchor="start" x="53" y="-76.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<path fill="none" stroke="#000000" d="M14.5,-140C14.5,-140 167.5,-140 167.5,-140 173.5,-140 179.5,-146 179.5,-152 179.5,-152 179.5,-171 179.5,-171 179.5,-177 173.5,-183 167.5,-183 167.5,-183 14.5,-183 14.5,-183 8.5,-183 2.5,-177 2.5,-171 2.5,-171 2.5,-152 2.5,-152 2.5,-146 8.5,-140 14.5,-140"/>
+<text text-anchor="start" x="8" y="-170.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ActiveRecord::InternalMetadata</text>
+<polyline fill="none" stroke="#000000" points="2.5,-163 179.5,-163 "/>
+<text text-anchor="start" x="26" y="-149.5" font-family="Arial" font-size="10.00" fill="#000000">value </text>
+<text text-anchor="start" x="53" y="-149.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_ActiveRecord::SchemaMigration -->
 <g id="node2" class="node">
 <title>m_ActiveRecord::SchemaMigration</title>
-<path fill="none" stroke="#000000" d="M12,-140.5C12,-140.5 170,-140.5 170,-140.5 176,-140.5 182,-146.5 182,-152.5 182,-152.5 182,-164.5 182,-164.5 182,-170.5 176,-176.5 170,-176.5 170,-176.5 12,-176.5 12,-176.5 6,-176.5 0,-170.5 0,-164.5 0,-164.5 0,-152.5 0,-152.5 0,-146.5 6,-140.5 12,-140.5"/>
-<text text-anchor="start" x="5" y="-155.7" font-family="Arial Bold" font-size="11.00" fill="#000000">ActiveRecord::SchemaMigration</text>
-</g>
-<!-- m_ActiveUser -->
-<g id="node3" class="node">
-<title>m_ActiveUser</title>
-<path fill="none" stroke="#000000" d="M31,-207C31,-207 151,-207 151,-207 157,-207 163,-213 163,-219 163,-219 163,-238 163,-238 163,-244 157,-250 151,-250 151,-250 31,-250 31,-250 25,-250 19,-244 19,-238 19,-238 19,-219 19,-219 19,-213 25,-207 31,-207"/>
-<text text-anchor="start" x="60" y="-237.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ActiveUser</text>
-<polyline fill="none" stroke="#000000" points="19,-230 163,-230 "/>
-<text text-anchor="start" x="26" y="-216.5" font-family="Arial" font-size="10.00" fill="#000000">credentials </text>
-<text text-anchor="start" x="77" y="-216.5" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
+<path fill="none" stroke="#000000" d="M12,-213.5C12,-213.5 170,-213.5 170,-213.5 176,-213.5 182,-219.5 182,-225.5 182,-225.5 182,-237.5 182,-237.5 182,-243.5 176,-249.5 170,-249.5 170,-249.5 12,-249.5 12,-249.5 6,-249.5 0,-243.5 0,-237.5 0,-237.5 0,-225.5 0,-225.5 0,-219.5 6,-213.5 12,-213.5"/>
+<text text-anchor="start" x="5" y="-228.7" font-family="Arial Bold" font-size="11.00" fill="#000000">ActiveRecord::SchemaMigration</text>
 </g>
 <!-- m_Applicant -->
-<g id="node4" class="node">
+<g id="node3" class="node">
 <title>m_Applicant</title>
 <path fill="none" stroke="#000000" d="M230,-546.5C230,-546.5 350,-546.5 350,-546.5 356,-546.5 362,-552.5 362,-558.5 362,-558.5 362,-642.5 362,-642.5 362,-648.5 356,-654.5 350,-654.5 350,-654.5 230,-654.5 230,-654.5 224,-654.5 218,-648.5 218,-642.5 218,-642.5 218,-558.5 218,-558.5 218,-552.5 224,-546.5 230,-546.5"/>
 <text text-anchor="start" x="262.5" y="-641.7" font-family="Arial Bold" font-size="11.00" fill="#000000">Applicant</text>
@@ -54,7 +45,7 @@
 <text text-anchor="start" x="255" y="-556.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_ApplicantDataForMatching -->
-<g id="node5" class="node">
+<g id="node4" class="node">
 <title>m_ApplicantDataForMatching</title>
 <path fill="none" stroke="#000000" d="M629,-625.5C629,-625.5 757,-625.5 757,-625.5 763,-625.5 769,-631.5 769,-637.5 769,-637.5 769,-721.5 769,-721.5 769,-727.5 763,-733.5 757,-733.5 757,-733.5 629,-733.5 629,-733.5 623,-733.5 617,-727.5 617,-721.5 617,-721.5 617,-637.5 617,-637.5 617,-631.5 623,-625.5 629,-625.5"/>
 <text text-anchor="start" x="622" y="-720.7" font-family="Arial Bold" font-size="11.00" fill="#000000">ApplicantDataForMatching</text>
@@ -78,7 +69,7 @@
 <path fill="none" stroke="#000000" d="M486.5,-603.5C531.5762,-603.8986 578.9714,-620.077 616.9708,-637.4035"/>
 </g>
 <!-- m_Application -->
-<g id="node6" class="node">
+<g id="node5" class="node">
 <title>m_Application</title>
 <path fill="none" stroke="#000000" d="M426.5,-389C426.5,-389 546.5,-389 546.5,-389 552.5,-389 558.5,-395 558.5,-401 558.5,-401 558.5,-446 558.5,-446 558.5,-452 552.5,-458 546.5,-458 546.5,-458 426.5,-458 426.5,-458 420.5,-458 414.5,-452 414.5,-446 414.5,-446 414.5,-401 414.5,-401 414.5,-395 420.5,-389 426.5,-389"/>
 <text text-anchor="start" x="454" y="-445.2" font-family="Arial Bold" font-size="11.00" fill="#000000">Application</text>
@@ -97,7 +88,7 @@
 <polygon fill="#000000" stroke="#000000" points="443.6076,-466.3754 448.1865,-458.0114 439.3911,-461.6944 443.6076,-466.3754"/>
 </g>
 <!-- m_Assignment -->
-<g id="node7" class="node">
+<g id="node6" class="node">
 <title>m_Assignment</title>
 <path fill="none" stroke="#000000" d="M633,-461.5C633,-461.5 753,-461.5 753,-461.5 759,-461.5 765,-467.5 765,-473.5 765,-473.5 765,-583.5 765,-583.5 765,-589.5 759,-595.5 753,-595.5 753,-595.5 633,-595.5 633,-595.5 627,-595.5 621,-589.5 621,-583.5 621,-583.5 621,-473.5 621,-473.5 621,-467.5 627,-461.5 633,-461.5"/>
 <text text-anchor="start" x="659" y="-582.7" font-family="Arial Bold" font-size="11.00" fill="#000000">Assignment</text>
@@ -133,7 +124,7 @@
 <polygon fill="#000000" stroke="#000000" points="616.6897,-621.1725 625.2976,-625.2747 621.1267,-616.6999 616.6897,-621.1725"/>
 </g>
 <!-- m_PositionPreference -->
-<g id="node14" class="node">
+<g id="node13" class="node">
 <title>m_PositionPreference</title>
 <path fill="none" stroke="#000000" d="M632,-363C632,-363 754,-363 754,-363 760,-363 766,-369 766,-375 766,-375 766,-420 766,-420 766,-426 760,-432 754,-432 754,-432 632,-432 632,-432 626,-432 620,-426 620,-420 620,-420 620,-375 620,-375 620,-369 626,-363 632,-363"/>
 <text text-anchor="start" x="640.5" y="-419.2" font-family="Arial Bold" font-size="11.00" fill="#000000">PositionPreference</text>
@@ -152,7 +143,7 @@
 <polygon fill="#000000" stroke="#000000" points="611.233,-410.9701 619.7689,-406.7204 610.4459,-404.7194 611.233,-410.9701"/>
 </g>
 <!-- m_Offer -->
-<g id="node10" class="node">
+<g id="node9" class="node">
 <title>m_Offer</title>
 <path fill="none" stroke="#000000" d="M823,-376.5C823,-376.5 949,-376.5 949,-376.5 955,-376.5 961,-382.5 961,-388.5 961,-388.5 961,-706.5 961,-706.5 961,-712.5 955,-718.5 949,-718.5 949,-718.5 823,-718.5 823,-718.5 817,-718.5 811,-712.5 811,-706.5 811,-706.5 811,-388.5 811,-388.5 811,-382.5 817,-376.5 823,-376.5"/>
 <text text-anchor="start" x="870" y="-705.7" font-family="Arial Bold" font-size="11.00" fill="#000000">Offer</text>
@@ -213,7 +204,7 @@
 <polygon fill="#000000" stroke="#000000" points="801.4579,-542.3423 810.7232,-540.0893 802.0751,-536.0726 801.4579,-542.3423"/>
 </g>
 <!-- m_WageChunk -->
-<g id="node18" class="node">
+<g id="node17" class="node">
 <title>m_WageChunk</title>
 <path fill="none" stroke="#000000" d="M823,-251C823,-251 949,-251 949,-251 955,-251 961,-257 961,-263 961,-263 961,-334 961,-334 961,-340 955,-346 949,-346 949,-346 823,-346 823,-346 817,-346 811,-340 811,-334 811,-334 811,-263 811,-263 811,-257 817,-251 823,-251"/>
 <text text-anchor="start" x="852" y="-333.2" font-family="Arial Bold" font-size="11.00" fill="#000000">WageChunk</text>
@@ -236,7 +227,7 @@
 <polygon fill="#000000" stroke="#000000" points="820.4338,-354.8273 824.1873,-346.0618 815.7868,-350.5734 820.4338,-354.8273"/>
 </g>
 <!-- m_ContractTemplate -->
-<g id="node8" class="node">
+<g id="node7" class="node">
 <title>m_ContractTemplate</title>
 <path fill="none" stroke="#000000" d="M230,-197C230,-197 350,-197 350,-197 356,-197 362,-203 362,-209 362,-209 362,-254 362,-254 362,-260 356,-266 350,-266 350,-266 230,-266 230,-266 224,-266 218,-260 218,-254 218,-254 218,-209 218,-209 218,-203 224,-197 230,-197"/>
 <text text-anchor="start" x="241" y="-253.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ContractTemplate</text>
@@ -249,7 +240,7 @@
 <text text-anchor="start" x="284" y="-206.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗</text>
 </g>
 <!-- m_Position -->
-<g id="node11" class="node">
+<g id="node10" class="node">
 <title>m_Position</title>
 <path fill="none" stroke="#000000" d="M410,-238C410,-238 563,-238 563,-238 569,-238 575,-244 575,-250 575,-250 575,-347 575,-347 575,-353 569,-359 563,-359 563,-359 410,-359 410,-359 404,-359 398,-353 398,-347 398,-347 398,-250 398,-250 398,-244 404,-238 410,-238"/>
 <text text-anchor="start" x="462.5" y="-346.2" font-family="Arial Bold" font-size="11.00" fill="#000000">Position</text>
@@ -276,7 +267,7 @@
 <polygon fill="#000000" stroke="#000000" points="388.214,-268.3157 397.7491,-268.2389 390.2472,-262.3528 388.214,-268.3157"/>
 </g>
 <!-- m_Instructor -->
-<g id="node9" class="node">
+<g id="node8" class="node">
 <title>m_Instructor</title>
 <path fill="none" stroke="#000000" d="M230,-296.5C230,-296.5 350,-296.5 350,-296.5 356,-296.5 362,-302.5 362,-308.5 362,-308.5 362,-366.5 362,-366.5 362,-372.5 356,-378.5 350,-378.5 350,-378.5 230,-378.5 230,-378.5 224,-378.5 218,-372.5 218,-366.5 218,-366.5 218,-308.5 218,-308.5 218,-302.5 224,-296.5 230,-296.5"/>
 <text text-anchor="start" x="262" y="-365.7" font-family="Arial Bold" font-size="11.00" fill="#000000">Instructor</text>
@@ -304,7 +295,7 @@
 <polygon fill="#000000" stroke="#000000" points="614.2603,-456.0572 622.3714,-461.0705 619.157,-452.0932 614.2603,-456.0572"/>
 </g>
 <!-- m_PositionDataForAd -->
-<g id="node12" class="node">
+<g id="node11" class="node">
 <title>m_PositionDataForAd</title>
 <path fill="none" stroke="#000000" d="M629.5,-113C629.5,-113 756.5,-113 756.5,-113 762.5,-113 768.5,-119 768.5,-125 768.5,-125 768.5,-222 768.5,-222 768.5,-228 762.5,-234 756.5,-234 756.5,-234 629.5,-234 629.5,-234 623.5,-234 617.5,-228 617.5,-222 617.5,-222 617.5,-125 617.5,-125 617.5,-119 623.5,-113 629.5,-113"/>
 <text text-anchor="start" x="640.5" y="-221.2" font-family="Arial Bold" font-size="11.00" fill="#000000">PositionDataForAd</text>
@@ -330,7 +321,7 @@
 <path fill="none" stroke="#000000" d="M575.273,-244.7633C589.2651,-236.2935 603.6192,-227.6046 617.2796,-219.3356"/>
 </g>
 <!-- m_PositionDataForMatching -->
-<g id="node13" class="node">
+<g id="node12" class="node">
 <title>m_PositionDataForMatching</title>
 <path fill="none" stroke="#000000" d="M623,-.5C623,-.5 763,-.5 763,-.5 769,-.5 775,-6.5 775,-12.5 775,-12.5 775,-70.5 775,-70.5 775,-76.5 769,-82.5 763,-82.5 763,-82.5 623,-82.5 623,-82.5 617,-82.5 611,-76.5 611,-70.5 611,-70.5 611,-12.5 611,-12.5 611,-6.5 617,-.5 623,-.5"/>
 <text text-anchor="start" x="626" y="-69.7" font-family="Arial Bold" font-size="11.00" fill="#000000">PositionDataForMatching</text>
@@ -356,34 +347,34 @@
 <polygon fill="#000000" stroke="#000000" points="611.308,-361.8286 620.7854,-362.8789 614.0316,-356.1477 611.308,-361.8286"/>
 </g>
 <!-- m_ReportingTag -->
-<g id="node15" class="node">
+<g id="node14" class="node">
 <title>m_ReportingTag</title>
-<path fill="none" stroke="#000000" d="M628.5,-264C628.5,-264 757.5,-264 757.5,-264 763.5,-264 769.5,-270 769.5,-276 769.5,-276 769.5,-321 769.5,-321 769.5,-327 763.5,-333 757.5,-333 757.5,-333 628.5,-333 628.5,-333 622.5,-333 616.5,-327 616.5,-321 616.5,-321 616.5,-276 616.5,-276 616.5,-270 622.5,-264 628.5,-264"/>
+<path fill="none" stroke="#000000" d="M633,-264C633,-264 753,-264 753,-264 759,-264 765,-270 765,-276 765,-276 765,-321 765,-321 765,-327 759,-333 753,-333 753,-333 633,-333 633,-333 627,-333 621,-327 621,-321 621,-321 621,-276 621,-276 621,-270 627,-264 633,-264"/>
 <text text-anchor="start" x="655" y="-320.2" font-family="Arial Bold" font-size="11.00" fill="#000000">ReportingTag</text>
-<polyline fill="none" stroke="#000000" points="616.5,-313 769.5,-313 "/>
-<text text-anchor="start" x="624" y="-299.5" font-family="Arial" font-size="10.00" fill="#000000">position_id </text>
-<text text-anchor="start" x="674" y="-299.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="624" y="-286.5" font-family="Arial" font-size="10.00" fill="#000000">wage_chunk_id </text>
-<text text-anchor="start" x="694" y="-286.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="624" y="-273.5" font-family="Arial" font-size="10.00" fill="#000000">name </text>
-<text text-anchor="start" x="652" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<polyline fill="none" stroke="#000000" points="621,-313 765,-313 "/>
+<text text-anchor="start" x="628" y="-299.5" font-family="Arial" font-size="10.00" fill="#000000">position_id </text>
+<text text-anchor="start" x="678" y="-299.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="628" y="-286.5" font-family="Arial" font-size="10.00" fill="#000000">wage_chunk_id </text>
+<text text-anchor="start" x="698" y="-286.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="628" y="-273.5" font-family="Arial" font-size="10.00" fill="#000000">name </text>
+<text text-anchor="start" x="656" y="-273.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 </g>
 <!-- m_Position&#45;&gt;m_ReportingTag -->
 <g id="edge2" class="edge">
 <title>m_Position&#45;&gt;m_ReportingTag</title>
-<path fill="none" stroke="#000000" d="M584.2794,-298.5C591.8425,-298.5 599.4448,-298.5 606.9234,-298.5"/>
+<path fill="none" stroke="#000000" d="M584.5737,-298.5C593.6298,-298.5 602.7391,-298.5 611.6221,-298.5"/>
 <polygon fill="#000000" stroke="#000000" points="584.273,-295.3501 575.273,-298.5 584.273,-301.6501 584.273,-295.3501"/>
-<polygon fill="#000000" stroke="#000000" points="607.318,-301.6501 616.318,-298.5 607.3179,-295.3501 607.318,-301.6501"/>
+<polygon fill="#000000" stroke="#000000" points="611.7854,-301.6501 620.7854,-298.5 611.7853,-295.3501 611.7854,-301.6501"/>
 </g>
 <!-- m_ReportingTag&#45;&gt;m_WageChunk -->
 <g id="edge18" class="edge">
 <title>m_ReportingTag&#45;&gt;m_WageChunk</title>
-<path fill="none" stroke="#000000" d="M778.8551,-298.5C786.3422,-298.5 793.9157,-298.5 801.3926,-298.5"/>
-<polygon fill="#000000" stroke="#000000" points="778.5559,-295.3501 769.5559,-298.5 778.5559,-301.6501 778.5559,-295.3501"/>
-<polygon fill="#000000" stroke="#000000" points="801.7978,-301.6501 810.7977,-298.5 801.7977,-295.3501 801.7978,-301.6501"/>
+<path fill="none" stroke="#000000" d="M774.299,-298.5C783.3562,-298.5 792.5968,-298.5 801.6906,-298.5"/>
+<polygon fill="#000000" stroke="#000000" points="774.1406,-295.3501 765.1405,-298.5 774.1405,-301.6501 774.1406,-295.3501"/>
+<polygon fill="#000000" stroke="#000000" points="801.7232,-301.6501 810.7232,-298.5 801.7232,-295.3501 801.7232,-301.6501"/>
 </g>
 <!-- m_Session -->
-<g id="node16" class="node">
+<g id="node15" class="node">
 <title>m_Session</title>
 <path fill="none" stroke="#000000" d="M31,-280C31,-280 151,-280 151,-280 157,-280 163,-286 163,-292 163,-292 163,-363 163,-363 163,-369 157,-375 151,-375 151,-375 31,-375 31,-375 25,-375 19,-369 19,-363 19,-363 19,-292 19,-292 19,-286 25,-280 31,-280"/>
 <text text-anchor="start" x="67.5" y="-362.2" font-family="Arial Bold" font-size="11.00" fill="#000000">Session</text>
@@ -419,7 +410,7 @@
 <polygon fill="#000000" stroke="#000000" points="406.7471,-366.9296 412.0842,-359.0278 402.9843,-361.8767 406.7471,-366.9296"/>
 </g>
 <!-- m_User -->
-<g id="node17" class="node">
+<g id="node16" class="node">
 <title>m_User</title>
 <path fill="none" stroke="#000000" d="M31,-405C31,-405 151,-405 151,-405 157,-405 163,-411 163,-417 163,-417 163,-462 163,-462 163,-468 157,-474 151,-474 151,-474 31,-474 31,-474 25,-474 19,-468 19,-462 19,-462 19,-417 19,-417 19,-411 25,-405 31,-405"/>
 <text text-anchor="start" x="76.5" y="-461.2" font-family="Arial Bold" font-size="11.00" fill="#000000">User</text>
@@ -432,7 +423,7 @@
 <text text-anchor="start" x="72" y="-414.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 </g>
 <!-- m_primary::SchemaMigration -->
-<g id="node19" class="node">
+<g id="node18" class="node">
 <title>m_primary::SchemaMigration</title>
 <path fill="none" stroke="#000000" d="M27.5,-504.5C27.5,-504.5 154.5,-504.5 154.5,-504.5 160.5,-504.5 166.5,-510.5 166.5,-516.5 166.5,-516.5 166.5,-528.5 166.5,-528.5 166.5,-534.5 160.5,-540.5 154.5,-540.5 154.5,-540.5 27.5,-540.5 27.5,-540.5 21.5,-540.5 15.5,-534.5 15.5,-528.5 15.5,-528.5 15.5,-516.5 15.5,-516.5 15.5,-510.5 21.5,-504.5 27.5,-504.5"/>
 <text text-anchor="start" x="21" y="-519.7" font-family="Arial Bold" font-size="11.00" fill="#000000">primary::SchemaMigration</text>

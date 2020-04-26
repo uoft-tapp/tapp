@@ -13,8 +13,8 @@ end
 # Table name: reporting_tags
 #
 #  id            :integer          not null, primary key
-#  position_id   :integer          not null
-#  wage_chunk_id :integer          not null
+#  position_id   :integer
+#  wage_chunk_id :integer
 #  name          :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

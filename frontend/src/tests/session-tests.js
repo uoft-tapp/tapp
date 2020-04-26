@@ -26,7 +26,7 @@ export function sessionsTests(api) {
     let session = null;
 
     beforeAll(async () => {
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
         session = databaseSeeder.seededData.session;
     }, 30000);
 
@@ -83,7 +83,7 @@ export function sessionsTests(api) {
         const newData = { ...session, rate1: 57.75 };
         const resp1 = await apiPOST("/admin/sessions", newData);
 
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(newData);
 
         // get the sessions list and make sure we're updated there as well
@@ -110,7 +110,7 @@ export function sessionsTests(api) {
     it("throw error on update when `name` is empty", async () => {
         // update a session with invalid name
         const newData1 = { ...session, name: "" };
-        const newData2 = { ...session, name: undefined };
+        const newData2 = { ...session, name: null };
         const resp1 = await apiPOST("/admin/sessions", newData1);
 
         expect(resp1).toMatchObject({ status: "error" });
@@ -146,7 +146,7 @@ export function sessionsTests(api) {
     it("throw error when deleting item with invalid id", async () => {
         // get the max session id
         const resp1 = await apiGET("/admin/sessions");
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
         const maxId = Math.max(...resp1.payload.map(s => s.id));
 
@@ -155,6 +155,7 @@ export function sessionsTests(api) {
             id: maxId + 1 // add 1 to make the id invalid
         });
         // expected an error with non-identical session id
+        expect(resp2).toHaveStatus("error");
         expect(resp2).toMatchObject({ status: "error" });
         checkPropTypes(errorPropTypes, resp2);
 
@@ -163,7 +164,7 @@ export function sessionsTests(api) {
             id: null
         });
         // expected an error with non-identical session id
-        expect(resp3).toMatchObject({ status: "error" });
+        expect(resp3).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp3);
     });
 
@@ -171,7 +172,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions/delete", {
             id: session.id
         });
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         const { payload: withoutNewSessions } = await apiGET("/admin/sessions");
         expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
     });

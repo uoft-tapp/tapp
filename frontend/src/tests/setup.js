@@ -99,6 +99,7 @@ async function seedDatabase(
     // We must first ensure there is a user with the proper permissions
     // set as the active user. Otherwise, subsequent requests will fail
     resp = await apiPOST("/debug/users", seeded.active_user);
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.active_user, resp.payload);
     await apiPOST("/debug/active_user", seeded.active_user);
 
@@ -107,6 +108,7 @@ async function seedDatabase(
     // Save the data that was returned to us. What's most important
     // is the session id. Use Object.assign so that all memory
     // references to the original seeded.session are kept intact.
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.session, resp.payload);
 
     // Contract Template
@@ -114,10 +116,12 @@ async function seedDatabase(
         `/admin/sessions/${seeded.session.id}/contract_templates`,
         seeded.contractTemplate
     );
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.contractTemplate, resp.payload);
 
     // Applicant
     resp = await apiPOST(`/admin/applicants`, seeded.applicant);
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.applicant, resp.payload);
 
     // Position
@@ -128,6 +132,7 @@ async function seedDatabase(
         `/admin/sessions/${seeded.session.id}/positions`,
         seeded.position
     );
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.position, resp.payload);
 
     // Assignment
@@ -136,13 +141,8 @@ async function seedDatabase(
         applicant_id: seeded.applicant.id
     });
     resp = await apiPOST(`/admin/assignments`, seeded.assignment);
+    expect(resp).toHaveStatus("success");
     Object.assign(seeded.assignment, resp.payload);
-
-    //
-    // Take a snapshot of the newly seeded data so we can "restore" it
-    // before each test.
-    //
-    await apiPOST("/debug/snapshot");
 }
 
 /**

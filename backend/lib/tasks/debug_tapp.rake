@@ -15,7 +15,7 @@ namespace :debug do
             timestamp = Time.now.strftime('%Y_%m_%d__%H_%M_%S')
             file_name = "#{SNAPSHOTS_DIR}/#{timestamp}_#{db}.psql"
             con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-            cmd = "pg_dump -F c -v -f #{file_name} #{con_string}"
+            cmd = "pg_dump --clean -F c -v -f #{file_name} #{con_string}"
             puts cmd
         end
         `#{cmd}`
@@ -32,11 +32,21 @@ namespace :debug do
             else
                 file_name = "#{SNAPSHOTS_DIR}/#{last_snapshot_file}"
                 con_string = "postgresql://#{user}:#{pass}@#{host}:5432/#{db}"
-                cmd = "pg_restore -d #{con_string} -v -c -C #{file_name}"
+                # -j 4    specifies use 4 threads to write simultaneously
+                # -a      specifies to only add data and not recreate the schema
+                # The -a option saves a lot of time. The `-c -C` options,
+                # in theory would clear the database before restoring. However, they fail
+                # if there is an active connection, which there always is with rails running.
+                # Therefore we compromize.
+                #
+                # XXX: You must clear_data before restoring a snapshot
+                # to get the database back to its original state.
+                cmd = "pg_restore -j 4 -d #{con_string} -a #{file_name}"
             end
         end
         ActiveRecord::Tasks::DatabaseTasks.drop_all
         ActiveRecord::Tasks::DatabaseTasks.create_all
+        Rails.logger.info "Running command to restore databse: #{cmd}"
         `#{cmd}`
         db_config = ActiveRecord::Base.configurations[Rails.env]
         ActiveRecord::Base.establish_connection(db_config)
@@ -47,9 +57,11 @@ end
 private
 
 def with_config
-    yield Rails.application.class.module_parent_name.underscore,
-    ActiveRecord::Base.connection_config[:host],
-    ActiveRecord::Base.connection_config[:database],
-    ActiveRecord::Base.connection_config[:username],
-    ActiveRecord::Base.connection_config[:password]
+    yield Rails.application.class.module_parent_name
+        .underscore, ActiveRecord::Base.connection_config[
+        :host
+    ], ActiveRecord::Base.connection_config[:database], ActiveRecord::Base
+        .connection_config[
+        :username
+    ], ActiveRecord::Base.connection_config[:password]
 end

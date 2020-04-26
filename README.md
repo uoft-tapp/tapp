@@ -213,6 +213,16 @@ To view the STDOUT from a docker container of a running server, you can invoke
 
 To stop everything, use `docker-compose down`.
 
+To run the ruby console hooked into the current rails session, run
+
+`docker-compose exec backend rails c`
+
+To manually inspect the binary snapshots in  the `pg_dump` folder, run
+
+`pg_restore  2020_04_26__01_12_39_tapp_development.psql`
+
+which will display the output to the command line (it won't actually insert into a database.)
+
 ### Navigating into the containers from the command line
 
 Currently, we define three services under docker-compose: frontend, api, and

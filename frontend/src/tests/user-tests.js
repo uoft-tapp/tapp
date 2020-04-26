@@ -21,7 +21,7 @@ export function usersTests(api) {
     };
 
     beforeAll(async () => {
-        await apiPOST("/debug/restore_snapshot");
+        await databaseSeeder.seed(api);
     }, 30000);
 
     it("Fetches users", async () => {
