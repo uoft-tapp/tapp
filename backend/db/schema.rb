@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
     t.boolean "first_time_ta"
     t.string "instructor_contact_desc"
     t.string "pay_period_desc"
+    t.float "hours"
     t.integer "installments"
     t.string "ta_coordinator_name"
     t.string "ta_coordinator_email"

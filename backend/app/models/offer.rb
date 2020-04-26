@@ -62,6 +62,7 @@ end
 #  first_time_ta           :boolean
 #  instructor_contact_desc :string
 #  pay_period_desc         :string
+#  hours                   :float
 #  installments            :integer
 #  ta_coordinator_name     :string
 #  ta_coordinator_email    :string
