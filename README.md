@@ -64,7 +64,7 @@ Where
 **[change region]** is a name of a logical region of code in the project, i.e.
 
 -   docker
--   api
+-   backend
 -   db
 -   frontend
 -   documentation
@@ -83,7 +83,7 @@ This patch introduces a new front end view for adding positions to the system.
 ```
 
 ```
-fix(api): Fix api endpoint for adding positions
+fix(api): Fix backend endpoint for adding positions
 
 This patch fixes a bug in the API whereby attempts to hit the endpoint meant for
 adding a new position would always fail.
@@ -174,7 +174,7 @@ is served on a different port. To prevent confusion if you try to access TAPP th
 port, set up a static asset to be served by rails.
 
 ```
-mkdir api/public && echo "Please go to localhost:8000 for frontend" > api/public/index.html
+mkdir backend/public && echo "Please go to localhost:8000 for frontend" > backend/public/index.html
 ```
 
 Finally, we can build the docker images and migrate the database
@@ -223,9 +223,28 @@ To manually inspect the binary snapshots in  the `pg_dump` folder, run
 
 which will display the output to the command line (it won't actually insert into a database.)
 
+##### Running tests from a ram-drive
+
+Since the test suite clears the database several times, it can be slow! To speed things
+up by a factor of ~10x, you can run the database from a ram drive instead. In linux, you can
+set up your ram drive with
+
+```
+cd <tapp home director>
+mkdir /dev/shm/pg_data
+sudo mount --bind /dev/shm/pg_data pg_data
+```
+
+After this, writes to `pg_data` will happen directly in ram.  On OSX, follow the instructions
+here: https://superuser.com/questions/456803/create-ram-disk-mount-to-specific-folder-in-osx
+
+After mounting `pg_data` on a ram-drive, you'll have to rerun `db:setup` and `db:migrate`. Data
+in the ram-drive (since it's stored outside of docker) will persist after a `docker-compose down`.
+However, it will not survive a computer reset.
+
 ### Navigating into the containers from the command line
 
-Currently, we define three services under docker-compose: frontend, api, and
+Currently, we define three services under docker-compose: frontend, backend, and
 db. If you would like to interact with any of the containers from the command
 line, you can do so by invoking:
 
@@ -234,6 +253,44 @@ docker-compose exec [service] sh
 ```
 
 For instance, to interact with the rails app, invoke `docker-compose exec backend sh`.
+
+#### `docker-compose` basics
+
+`docker-compose` is a program that manages docker containers, allowing multiple containers
+to be automatically started given a list of dependencies. The basic commands are
+
+```
+docker-compose up
+```
+
+and
+
+```
+docker-compose down
+```
+
+which start and stop the images defined in the local `yml` file. Whenever docker starts, it creates
+a new copy of the container, and when it is stopped, that container is discarded. That means
+there will be no persistent data. The workaround is to tell docker that there are specific folders
+in the container that should get passed through to the host's file system (for example, `pg_data`).
+That way, when the docker container writes to that folder, changes can be persisted.
+
+There are two ways to run commands in a container with `docker-compose`: `run` and `exec`. A command like
+
+```
+docker-compose run frontend npm test
+```
+
+will start a new container for the `frontend` service and execute the command `npm test` in that container.
+In contrast,
+
+```
+docker-compose exec frontend npm test
+```
+
+will execute the command `npm test` on an **already running** instance of the `frontend` container. Thus,
+if you want to poke around in the internals of an already running container, use `exec`. For most other
+purposes, `run` what you want.
 
 ### Initializing the Database
 
@@ -251,7 +308,7 @@ docker-compose run backend rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB
-with seed data. Note that seed data is loaded from `api/db/seed/` folder where
+with seed data. Note that seed data is loaded from `backend/db/seed/` folder where
 each json file represents a table.
 
 Once your DB is setup, you can gain SQL access to it by first navigating into
@@ -346,11 +403,11 @@ scratch and `rake db:migrate`.
 
 ## Common Issues
 
-1. Docker believes that a server is already running, and fails to run the api container.
+1. Docker believes that a server is already running, and fails to run the backend container.
 
-After running `docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The api container will fail.
+After running `docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The backend container will fail.
 
-To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `api/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
+To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `backend/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
 
 2. Docker cannot start up a front-end service, complaining that it can't find an image.
 
