@@ -1,32 +1,29 @@
 import PropTypes from "prop-types";
 import {
-    addSession,
-    deleteSession,
-    addPosition,
-    deletePosition,
-    checkPropTypes,
-    instructorPropTypes,
-    expect,
     it,
+    expect,
     beforeAll,
-    afterAll
+    checkPropTypes,
+    instructorPropTypes
 } from "./utils";
+import { databaseSeeder } from "./setup";
+/**
+ * Tests for the API. These are encapsulated in a function so that
+ * different `apiGET` and `apiPOST` functions can be passed in. For example,
+ * they may be functions that make actual requests via http or they may
+ * be from the mock API.
+ *
+ * @param {object} api
+ * @param {Function} api.apiGET A function that when passed a route will return the get response
+ * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
+ */
+export function instructorsTests(api) {
+    const { apiGET, apiPOST } = api;
+    let instructor = null;
 
-export function instructorsTests({ apiGET, apiPOST }) {
-    let session = null,
-        position = null,
-        instructor = null;
-    // set up a session to be available before tests run
     beforeAll(async () => {
-        // this session will be available for all tests
-        session = await addSession({ apiGET, apiPOST });
-        position = await addPosition({ apiGET, apiPOST }, session);
-    });
-    // delete the session after the tests run
-    afterAll(async () => {
-        await deletePosition({ apiGET, apiPOST }, position);
-        await deleteSession({ apiGET, apiPOST }, session);
-    });
+        await databaseSeeder.seed(api);
+    }, 30000);
 
     it("create instructor", async () => {
         const newInstructorData = {
