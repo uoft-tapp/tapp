@@ -41,9 +41,13 @@ export class WageChunk extends MockAPIController {
                 // the year following the session start date.
                 const start_date = new Date(wageChunk.start_date);
                 const end_date = new Date(wageChunk.end_date);
-                const session_start_date = new Date(session.start_date)
+                const session_start_date = new Date(session.start_date);
                 // For `Date`, 11 is december
-                const december = new Date(session_start_date.getFullYear(), 11, 31);
+                const december = new Date(
+                    session_start_date.getFullYear(),
+                    11,
+                    31
+                );
                 if (start_date <= december && end_date <= december) {
                     ret.rate = session.rate1;
                 } else {

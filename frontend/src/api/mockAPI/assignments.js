@@ -17,7 +17,6 @@ import { Session } from "./sessions";
 import { Position } from "./positions";
 import { WageChunk } from "./wage_chunks";
 import { Applicant } from "./applicants";
-import { ContractTemplate } from "./contract_templates";
 
 export class Assignment extends MockAPIController {
     constructor(data) {
@@ -216,7 +215,6 @@ class ActiveOffer extends MockAPIController {
         ).getWageChunkInfo(assignment);
         const position = new Assignment(this.data).getPosition(assignment);
         const applicant = new Assignment(this.data).getApplicant(assignment);
-        const session = new Position(this.data).getSession(position);
         const instructors = new Position(this.data).getInstructors(position);
         const contractTemplate = new Position(this.data).getContractTemplate(
             position
