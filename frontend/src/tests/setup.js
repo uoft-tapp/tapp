@@ -42,6 +42,12 @@ class DatabaseSeeder {
             active_user: {
                 utorid: "smithh",
                 roles: ["admin", "instructor", "ta"]
+            },
+            instructor: {
+                first_name: "Professor",
+                last_name: "Smith",
+                email: "prof.smith@utoronto.ca",
+                utorid: "smithpro"
             }
         };
     }
@@ -81,7 +87,8 @@ async function seedDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
+        instructor: null
     }
 ) {
     const { apiPOST } = api;
@@ -143,6 +150,11 @@ async function seedDatabase(
     resp = await apiPOST(`/admin/assignments`, seeded.assignment);
     expect(resp).toHaveStatus("success");
     Object.assign(seeded.assignment, resp.payload);
+
+    // Instructor
+    resp = await apiPOST(`/admin/instructors`, seeded.instructor);
+    expect(resp).toHaveStatus("success");
+    Object.assign(seeded.instructor, resp.payload);
 }
 
 /**
@@ -155,7 +167,8 @@ async function verifySeededDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
+        instructor: null
     }
 ) {
     const { apiGET } = api;
@@ -178,4 +191,7 @@ async function verifySeededDatabase(
 
     resp = await apiGET(`/admin/sessions/${seeded.session.id}/assignments`);
     expect(resp.payload).toContainObject(seeded.assignment);
+
+    resp = await apiGET(`/admin/instructors`);
+    expect(resp.payload).toContainObject(seeded.instructor);
 }

@@ -37,7 +37,7 @@ describe("API tests", () => {
     describe("`/admin/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/admin/instructors` tests", () => {
+    describe("`/admin/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
     describe("`/admin/assignments` tests", () => {
@@ -83,7 +83,7 @@ describe("Mock API tests", () => {
     describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
     });
-    describe.skip("`/admin/instructors` tests", () => {
+    describe("`/admin/instructors` tests", () => {
         instructorsTests(mockAPI);
     });
     describe("`/admin/users` tests", () => {
