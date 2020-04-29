@@ -8,11 +8,16 @@ import {
     findAllById,
     sum,
     splitDateRangeAtNewYear,
-    MockAPIController
+    MockAPIController,
+    wageChunkArrayToStartAndEndDates,
+    formatInstructorsContact,
+    wageChunkArrayToPayPeriodDescription
 } from "./utils";
 import { Session } from "./sessions";
 import { Position } from "./positions";
 import { WageChunk } from "./wage_chunks";
+import { Applicant } from "./applicants";
+import { ContractTemplate } from "./contract_templates";
 
 export class Assignment extends MockAPIController {
     constructor(data) {
@@ -35,6 +40,16 @@ export class Assignment extends MockAPIController {
             this.ownData
             // Call "find" again to make sure every item gets packaged appropriately
         ).map(x => new Assignment(this.data).find(x));
+    }
+    getPosition(assignment) {
+        return new Position(this.data).find({
+            id: assignment.position_id
+        });
+    }
+    getApplicant(assignment) {
+        return new Applicant(this.data).find({
+            id: assignment.applicant_id
+        });
     }
     /**
      * Grabs a bunch of data from the wage chunks related to an assignment
@@ -187,49 +202,111 @@ class ActiveOffer extends MockAPIController {
         }
         return matchingAssignment;
     }
+    getAssignment(offer) {
+        return new Assignment(this.data).find({
+            id: offer.assignment_id
+        });
+    }
+    find(query) {
+        // This is where the magic happens. We create all the data needed for the offer here.
+        const baseOffer = this.rawFind(query);
+        const assignment = this.getAssignment(baseOffer);
+        const { hours, wageChunks } = new Assignment(
+            this.data
+        ).getWageChunkInfo(assignment);
+        const position = new Assignment(this.data).getPosition(assignment);
+        const applicant = new Assignment(this.data).getApplicant(assignment);
+        const session = new Position(this.data).getSession(position);
+        const instructors = new Position(this.data).getInstructors(position);
+        const contractTemplate = new Position(this.data).getContractTemplate(
+            position
+        );
+
+        const { start_date, end_date } = wageChunkArrayToStartAndEndDates(
+            wageChunks
+        );
+
+        const offer = {
+            accepted_date: null,
+            rejected_date: null,
+            withdrawn_date: null,
+            signature: "",
+            nag_count: 0,
+            // All mutable fields should come before `baseOffer` is destructured.
+            // Fields that come after are computed and cannot be directly set.
+            ...baseOffer,
+            contract_template: contractTemplate.template_file,
+            contract_override_pdf: assignment.contract_override_pdf,
+            first_name: applicant.first_name,
+            last_name: applicant.last_name,
+            email: applicant.email,
+            position_code: position.position_code,
+            position_title: position.position_title,
+            position_start_date: start_date,
+            position_end_date: end_date,
+            first_time_ta: null,
+            instructor_contact_desc: formatInstructorsContact(instructors),
+            pay_period_desc: wageChunkArrayToPayPeriodDescription(wageChunks),
+            hours,
+            ta_coordinator_name: "Dr. Coordinator",
+            ta_coordinator_email: "coordinator@utoronto.ca"
+        };
+
+        return offer;
+    }
     withdrawByAssignment(assignment) {
         const offer = this.findByAssignment(this._ensureAssignment(assignment));
-        return this.upsert({
-            ...offer,
-            status: "withdrawn",
-            withdrawn_date: new Date().toISOString()
-        });
+        return this.find(
+            this.upsert({
+                ...offer,
+                status: "withdrawn",
+                withdrawn_date: new Date().toISOString()
+            })
+        );
     }
     rejectByAssignment(assignment) {
         const offer = this.findByAssignment(this._ensureAssignment(assignment));
-        return this.upsert({
-            ...offer,
-            status: "rejected",
-            rejected_date: new Date().toISOString()
-        });
+        return this.find(
+            this.upsert({
+                ...offer,
+                status: "rejected",
+                rejected_date: new Date().toISOString()
+            })
+        );
     }
     acceptByAssignment(assignment) {
         const offer = this.findByAssignment(this._ensureAssignment(assignment));
-        return this.upsert({
-            ...offer,
-            status: "accepted",
-            accepted_date: new Date().toISOString()
-        });
+        return this.find(
+            this.upsert({
+                ...offer,
+                status: "accepted",
+                accepted_date: new Date().toISOString()
+            })
+        );
     }
     emailByAssignment(assignment) {
         const offer = this.findByAssignment(this._ensureAssignment(assignment));
-        return this.upsert({
-            ...offer,
-            status: "pending",
-            emailed_date: new Date().toISOString()
-        });
+        return this.find(
+            this.upsert({
+                ...offer,
+                status: "pending",
+                emailed_date: new Date().toISOString()
+            })
+        );
     }
     nagByAssignment(assignment) {
         const offer = this.findByAssignment(this._ensureAssignment(assignment));
         if (!offer.emailed_date) {
             throw new Error(
-                `The ative offer for assignment with id=${assignment.id} has not been emailed yet, so a nag email cannot be sent`
+                `The active offer for assignment with id=${assignment.id} has not been emailed yet, so a nag email cannot be sent`
             );
         }
-        return this.upsert({
-            ...offer,
-            nag_count: (offer.nag_count || 0) + 1
-        });
+        return this.find(
+            this.upsert({
+                ...offer,
+                nag_count: (offer.nag_count || 0) + 1
+            })
+        );
     }
     createByAssignment(assignment) {
         const matchingAssignment = this._ensureAssignment(assignment);
@@ -241,10 +318,12 @@ class ActiveOffer extends MockAPIController {
                 )}`
             );
         }
-        return this.create({
-            assignment_id: matchingAssignment.assignment_id,
-            status: "pending"
-        });
+        return this.find(
+            this.create({
+                assignment_id: matchingAssignment.id,
+                status: "pending"
+            })
+        );
     }
 }
 

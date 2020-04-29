@@ -1,6 +1,7 @@
 import { documentCallback, docApiPropTypes } from "../defs/doc-generation";
 import { find, MockAPIController, findAllById } from "./utils";
 import { Assignment } from "./assignments";
+import { Position } from "./positions";
 
 export class WageChunk extends MockAPIController {
     constructor(data) {
@@ -20,11 +21,45 @@ export class WageChunk extends MockAPIController {
                 )}`
             );
         }
+        // Make sure we apply `this.find` so that the rates are computed.
         return findAllById(
             [matchingAssignment.id],
             this.ownData,
             "assignment_id"
-        );
+        ).map(x => this.find(x));
+    }
+    find(wageChunk) {
+        const rawWageChunk = this.rawFind(wageChunk);
+        const ret = { ...rawWageChunk };
+        if (ret.rate == null) {
+            // If the rate is not set, look it up from the session
+            const session = this.getSession(wageChunk);
+            if (session.rate2 == null) {
+                ret.rate = session.rate1;
+            } else {
+                // Rates switch from session.rate1 to session.rate2 on January 1 of
+                // the year following the session start date.
+                const start_date = new Date(wageChunk.start_date);
+                const end_date = new Date(wageChunk.end_date);
+                const session_start_date = new Date(session.start_date)
+                // For `Date`, 11 is december
+                const december = new Date(session_start_date.getFullYear(), 11, 31);
+                if (start_date <= december && end_date <= december) {
+                    ret.rate = session.rate1;
+                } else {
+                    ret.rate = session.rate2;
+                }
+            }
+        }
+        return ret;
+    }
+    getSession(wageChunk) {
+        const rawWageChunk = this.rawFind(wageChunk);
+        const assignment = new Assignment(this.data).rawFind({
+            id: rawWageChunk.assignment_id
+        });
+        const position = new Assignment(this.data).getPosition(assignment);
+        return new Position(this.data).getSession(position);
     }
     upsertByAssignment(wageChunk, assignment) {
         const matchingAssignment = new Assignment(this.data).rawFind(

@@ -11,6 +11,8 @@ import {
     docApiPropTypes
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
+import { ContractTemplate } from "./contract_templates";
+import { Instructor } from "./instructors";
 
 export class Position extends MockAPIController {
     constructor(data) {
@@ -30,6 +32,36 @@ export class Position extends MockAPIController {
                 throw new Error(message);
             }
         }
+    }
+    find(query) {
+        const rawPosition = this.rawFind(query);
+        // Find which session we're part of
+
+        let session_id = null;
+        for (const [_session_id, assignment_ids] of Object.entries(
+            this.data.positions_by_session
+        )) {
+            if (assignment_ids.includes(rawPosition.id)) {
+                session_id = _session_id;
+                break;
+            }
+        }
+        return { ...rawPosition, session_id };
+    }
+    getSession(position) {
+        return new Session(this.data).find({
+            id: position.session_id
+        });
+    }
+    getContractTemplate(position) {
+        return new ContractTemplate(this.data).find({
+            id: position.contract_template_id
+        });
+    }
+    getInstructors(position) {
+        return position.instructor_ids.map(id =>
+            new Instructor(this.data).find({ id })
+        );
     }
     delete(position) {
         const matchingPosition = this.rawFind(position);
