@@ -14,8 +14,8 @@ end
 #
 #  id                      :integer          not null, primary key
 #  assignment_id           :integer          not null
-#  offer_template          :string
-#  offer_override_pdf      :string
+#  contract_template       :string
+#  contract_override_pdf   :string
 #  first_name              :string
 #  last_name               :string
 #  email                   :string

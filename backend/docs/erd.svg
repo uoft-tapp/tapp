@@ -103,8 +103,8 @@
 <text text-anchor="start" x="671" y="-523.5" font-family="Arial Italic" font-size="10.00" fill="#999999">datetime</text>
 <text text-anchor="start" x="628" y="-510.5" font-family="Arial" font-size="10.00" fill="#000000">note </text>
 <text text-anchor="start" x="650" y="-510.5" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
-<text text-anchor="start" x="628" y="-497.5" font-family="Arial" font-size="10.00" fill="#000000">offer_override_pdf </text>
-<text text-anchor="start" x="710" y="-497.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="628" y="-497.5" font-family="Arial" font-size="10.00" fill="#000000">contract_override_pdf </text>
+<text text-anchor="start" x="725" y="-497.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="628" y="-484.5" font-family="Arial" font-size="10.00" fill="#000000">active_offer_status </text>
 <text text-anchor="start" x="715" y="-484.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer ∗</text>
 <text text-anchor="start" x="628" y="-471.5" font-family="Arial" font-size="10.00" fill="#000000">active_offer_id </text>
@@ -150,10 +150,10 @@
 <polyline fill="none" stroke="#000000" points="811,-711 961,-711 "/>
 <text text-anchor="start" x="818" y="-697.5" font-family="Arial" font-size="10.00" fill="#000000">assignment_id </text>
 <text text-anchor="start" x="885" y="-697.5" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="818" y="-684.5" font-family="Arial" font-size="10.00" fill="#000000">offer_template </text>
-<text text-anchor="start" x="884" y="-684.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="818" y="-671.5" font-family="Arial" font-size="10.00" fill="#000000">offer_override_pdf </text>
-<text text-anchor="start" x="900" y="-671.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-684.5" font-family="Arial" font-size="10.00" fill="#000000">contract_template </text>
+<text text-anchor="start" x="900" y="-684.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="818" y="-671.5" font-family="Arial" font-size="10.00" fill="#000000">contract_override_pdf </text>
+<text text-anchor="start" x="915" y="-671.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="818" y="-658.5" font-family="Arial" font-size="10.00" fill="#000000">first_name </text>
 <text text-anchor="start" x="867" y="-658.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="818" y="-645.5" font-family="Arial" font-size="10.00" fill="#000000">last_name </text>

@@ -3,8 +3,8 @@
 FactoryBot.define do
     factory :offer do
         assignment { nil }
-        offer_template { 'MyString' }
-        offer_override_pdf { 'MyString' }
+        contract_template { 'MyString' }
+        contract_override_pdf { 'MyString' }
         first_name { 'MyString' }
         last_name { 'MyString' }
         email { 'MyString' }
@@ -34,8 +34,8 @@ end
 #
 #  id                      :integer          not null, primary key
 #  assignment_id           :integer          not null
-#  offer_template          :string
-#  offer_override_pdf      :string
+#  contract_template       :string
+#  contract_override_pdf   :string
 #  first_name              :string
 #  last_name               :string
 #  email                   :string

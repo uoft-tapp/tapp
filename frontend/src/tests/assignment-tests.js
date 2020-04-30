@@ -92,14 +92,14 @@ export function assignmentsTests(api) {
         checkPropTypes(assignmentPropTypes, resp.payload);
     });
 
-    it("update assignment dates/note/offer_override_pdf/hours", async () => {
-        // update dates/note/offer_override_pdf/hours"
+    it("update assignment dates/note/contract_override_pdf/hours", async () => {
+        // update dates/note/contract_override_pdf/hours"
         const updatedAssignmentData = {
             ...assignment,
             start_date: "2019-09-05T00:00:00.000Z",
             end_date: "2019-12-25T00:00:00.000Z",
             note: "updated",
-            offer_override_pdf: "pdf",
+            contract_override_pdf: "pdf",
             hours: 80
         };
 
