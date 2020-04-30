@@ -5,6 +5,15 @@ class Instructor < ApplicationRecord
 
     validates_presence_of :last_name, :first_name, :utorid
     validates_uniqueness_of :utorid
+
+    # Returns a formatted string displaying the instructor's contact information
+    def contact_info
+        if email?
+            "#{first_name} #{last_name} <#{email}>"
+        else
+            "#{first_name} #{last_name}"
+        end
+    end
 end
 
 # == Schema Information

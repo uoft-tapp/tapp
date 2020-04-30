@@ -6,8 +6,8 @@ class Assignment < ApplicationRecord
     ACTIVE_OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
     enum active_offer_status: ACTIVE_OFFER_STATUS
 
-    has_many :offers
-    has_many :wage_chunks, dependent: :delete_all
+    has_many :offers, dependent: :destroy
+    has_many :wage_chunks, dependent: :destroy
     belongs_to :active_offer, class_name: 'Offer', optional: true
     belongs_to :applicant
     belongs_to :position

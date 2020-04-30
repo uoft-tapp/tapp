@@ -24,14 +24,26 @@ module Response
         if error
             begin
                 logger.warn do
-                    "ERROR: #{message}\n" +
-                        (
-                            if Rails.env.development?
-                                "TRACEBACK:\n\t" + error.backtrace.join("\n\t")
-                            end
-                        )
+                    bc = ActiveSupport::BacktraceCleaner.new
+                    bc.add_filter { |line| line.gsub(Rails.root.to_s, '') } # strip the Rails.root prefix
+                    bc.add_silencer { |line| line =~ /puma|gems/ } # skip any lines from puma or rubygems
+
+                    red_start = ''
+                    yellow_start = ''
+                    color_end = ''
+                    if Rails.env.development?
+                        # Format the traceback message to be in color if we're in dev mode.
+                        # 31m is red.
+                        red_start = "\e[31m"
+                        yellow_start = "\e[33m"
+                        color_end = "\e[0m"
+                    end
+                    red_start + "ERROR: #{message}\n" + red_start +
+                        "Traceback:\n\t" + yellow_start +
+                        bc.clean(error.backtrace).join("\n\t" + yellow_start) +
+                        color_end
                 end
-            # rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
+                # rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
             rescue StandardError
 
             end
