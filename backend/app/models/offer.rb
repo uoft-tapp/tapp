@@ -18,17 +18,32 @@ class Offer < ApplicationRecord
 
     def populate_offer
         applicant_attrs = %i[first_name last_name email]
-        applicant = assignment.applicant.as_json(only: applicant_attrs)
-
         position_attrs = %i[
             position_code
             position_title
             position_start_date
             position_end_date
         ]
-        position = applicant.as_json(only: position_attrs)
 
-        self.attributes = attributes.merge!(applicant, position)
+        applicant = assignment.applicant
+        position = assignment.position
+
+        # inherit attributes defined from the applicant and the position
+        self.attributes =
+            attributes.merge!(
+                applicant.as_json(only: applicant_attrs),
+                position.as_json(only: position_attrs)
+            )
+        # define the computed attributes
+        self.hours = assignment.hours
+        self.instructor_contact_desc =
+            position.instructors.map(&:contact_info).to_sentence
+        self.contract_template = position.contract_template.template_file
+        self.contract_override_pdf = assignment.contract_override_pdf
+        formatting_service =
+            WageChunkFormattingService.new(assignment: assignment)
+        self.pay_period_desc = formatting_service.pay_period_description
+        self
     end
 
     def set_status_date
