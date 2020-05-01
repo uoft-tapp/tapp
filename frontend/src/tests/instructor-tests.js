@@ -18,22 +18,12 @@ import { databaseSeeder } from "./setup";
  * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
  */
 export function instructorsTests(api) {
-    const {
-        apiGET
-        // , apiPOST
-    } = api;
+    const { apiGET, apiPOST } = api;
     // let instructor = null;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
     }, 30000);
-
-    // const newInstructorData = {
-    //     first_name: "Anand",
-    //     last_name: "Liu",
-    //     email: "anand.liu.sample@utoronto.ca",
-    //     utorid: "anandl"
-    // };
 
     it("fetch instructors", async () => {
         const resp = await apiGET("/admin/instructors");
@@ -42,32 +32,34 @@ export function instructorsTests(api) {
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
 
-        // compare the responsed instructor and seeded instructor they should be exactly the same
+        // compare the responsed instructor and seeded instructor. They should be exactly the same
         const responsedInstructor = resp.payload[0];
         const seededInstructor = databaseSeeder.seededData.instructor;
         expect(responsedInstructor).toEqual(seededInstructor);
     });
 
-    // it("create instructor", async () => {
-    //     // create a new instructor
-    //     const resp1 = await apiPOST(`/instructors`, newInstructorData);
-    //     expect(resp1).toMatchObject({ status: "success" });
-    //     expect(resp1.payload).toMatchObject(newInstructorData);
+    it("create instructor", async () => {
+        const newInstructorData = {
+            first_name: "Anand",
+            last_name: "Liu",
+            email: "anand.liu.sample@utoronto.ca",
+            utorid: "anandl"
+        };
 
-    //     // make sure instructor is on instructor list
-    //     const resp2 = await apiGET(`/instructors`);
-    //     expect(resp2).toMatchObject({ status: "success" });
-    //     expect(resp2.payload).toContainObject(newInstructorData);
+        // create a new instructor
+        const resp1 = await apiPOST(`/admin/instructors`, newInstructorData);
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload).toMatchObject(newInstructorData);
+        checkPropTypes(instructorPropTypes, resp1.payload);
 
-    //     // set instructor to used by later test
-    //     instructor = resp1.payload;
-    // });
+        // make sure instructor is on instructor list
+        const resp2 = await apiGET(`/instructors`);
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(newInstructorData);
 
-    // it("get instructors", async () => {
-    //     const resp = await apiGET("/instructors");
-    //     expect(resp).toMatchObject({ status: "success" });
-    //     checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
-    // });
+        // // set instructor to used by later test
+        // instructor = resp1.payload;
+    });
 
     // it("update an instructor", async () => {
     //     const updateInstructorData = {
