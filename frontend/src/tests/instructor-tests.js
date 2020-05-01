@@ -19,7 +19,7 @@ import { databaseSeeder } from "./setup";
  */
 export function instructorsTests(api) {
     const { apiGET, apiPOST } = api;
-    // let instructor = null;
+    let instructor = null;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -53,40 +53,40 @@ export function instructorsTests(api) {
         checkPropTypes(instructorPropTypes, resp1.payload);
 
         // make sure instructor is on instructor list
-        const resp2 = await apiGET(`/instructors`);
+        const resp2 = await apiGET(`/admin/instructors`);
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(newInstructorData);
 
-        // // set instructor to used by later test
-        // instructor = resp1.payload;
+        // set instructor to used by later test
+        instructor = resp1.payload;
     });
 
-    // it("update an instructor", async () => {
-    //     const updateInstructorData = {
-    //         id: instructor.id,
-    //         email: "anand.liu@gmail.com"
-    //     };
+    it.skip("update an instructor", async () => {
+        const updateInstructorData = {
+            id: instructor.id,
+            email: "anand.liu@gmail.com"
+        };
 
-    //     // update the instructor
-    //     const resp = await apiPOST(`/instructors`, updateInstructorData);
-    //     expect(resp).toMatchObject({ status: "success" });
-    //     expect(resp.payload).toMatchObject(updateInstructorData);
-    // });
+        // update the instructor
+        const resp = await apiPOST(`/instructors`, updateInstructorData);
+        expect(resp).toMatchObject({ status: "success" });
+        expect(resp.payload).toMatchObject(updateInstructorData);
+    });
 
-    // // delete an instructor
-    // it("delete instructor", async () => {
-    //     const resp1 = await apiPOST(`/instructors/delete`, instructor);
-    //     expect(resp1).toMatchObject({
-    //         status: "success",
-    //         payload: { id: instructor.id }
-    //     });
+    // delete an instructor
+    it.skip("delete instructor", async () => {
+        const resp1 = await apiPOST(`/instructors/delete`, instructor);
+        expect(resp1).toMatchObject({
+            status: "success",
+            payload: { id: instructor.id }
+        });
 
-    //     // make sure the instructor is deleted
-    //     const resp2 = await apiGET("/instructors");
-    //     expect(resp2).toMatchObject({ status: "success" });
-    //     checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
-    //     expect(resp2).not.toContainObject(instructor);
-    // });
+        // make sure the instructor is deleted
+        const resp2 = await apiGET("/instructors");
+        expect(resp2).toMatchObject({ status: "success" });
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
+        expect(resp2).not.toContainObject(instructor);
+    });
 
-    // it.todo("fail to delete instructor from a position with invalid id");
+    it.todo("fail to delete instructor from a position with invalid id");
 }
