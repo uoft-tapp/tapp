@@ -31,11 +31,6 @@ export function instructorsTests(api) {
 
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
-
-        // compare the responsed instructor and seeded instructor. They should be exactly the same
-        const responsedInstructor = resp.payload[0];
-        const seededInstructor = databaseSeeder.seededData.instructor;
-        expect(responsedInstructor).toEqual(seededInstructor);
     });
 
     it("create instructor", async () => {
