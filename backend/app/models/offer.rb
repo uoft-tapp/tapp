@@ -39,6 +39,7 @@ class Offer < ApplicationRecord
         self.pay_period_desc = formatting_service.pay_period_description
         self.position_start_date = position.start_date
         self.position_end_date = position.end_date
+        self
     end
 
     def set_status_date
