@@ -32,7 +32,6 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
             :end_date,
             :note,
             :contract_override_pdf,
-            :active_offer_status,
             :hours
         )
     end

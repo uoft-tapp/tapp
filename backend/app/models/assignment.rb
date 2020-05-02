@@ -3,9 +3,6 @@
 # A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
-    ACTIVE_OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
-    enum active_offer_status: ACTIVE_OFFER_STATUS
-
     has_many :offers, dependent: :destroy
     has_many :wage_chunks, dependent: :destroy
     belongs_to :active_offer, class_name: 'Offer', optional: true
@@ -45,8 +42,20 @@ class Assignment < ApplicationRecord
             # if the record has already been created, the `after_create` functions
             # will not be called, so call the manually.
             @initial_hours = nil
-            create_wage_chunks(hours: value)
+            create_wage_chunks(hours: value) unless value == self.hours
         end
+    end
+
+    def active_offer_status
+        active_offer.blank? ? nil : active_offer.status
+    end
+
+    def start_date
+        self[:start_date].blank? ? position.start_date : self[:start_date]
+    end
+
+    def end_date
+        self[:end_date].blank? ? position.end_date : self[:end_date]
     end
 
     def start_date=(value)
@@ -64,7 +73,6 @@ class Assignment < ApplicationRecord
         # computed hours
         assignment_hours = self.hours
         return unless assignment_hours
-        return if hours == assignment_hours
         return unless start_date && end_date
 
         # Compute the number of wage chunks needed. If January 1st

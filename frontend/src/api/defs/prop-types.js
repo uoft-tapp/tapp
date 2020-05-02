@@ -84,7 +84,10 @@ function generatePropTypes(PropTypes) {
             active_offer_status: PropTypes.oneOf([
                 "accepted",
                 "rejected",
+                "withdrawn",
+                "provisional",
                 "pending",
+                "no_offer",
                 null
             ])
         }),

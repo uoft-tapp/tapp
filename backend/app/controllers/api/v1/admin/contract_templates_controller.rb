@@ -22,10 +22,10 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
 
     # GET /available_contract_templates
     def available
-        dir = "#{Rails.root}/app/views/contract_templates/"
+        contract_dir = Rails.application.config.contract_template_dir
         files =
-            Dir.glob("#{dir}/#{ENV['DEPARTMENT']}/*").map do |entry|
-                { template_file: entry.sub(dir, '') }
+            Dir.glob("#{contract_dir}/*.html").map do |entry|
+                { template_file: entry.sub(contract_dir, '') }
             end
         render_success files
     end
