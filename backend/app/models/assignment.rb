@@ -42,7 +42,7 @@ class Assignment < ApplicationRecord
             # if the record has already been created, the `after_create` functions
             # will not be called, so call the manually.
             @initial_hours = nil
-            create_wage_chunks(hours: value) unless value == self.hours
+            create_wage_chunks(hours: value) unless value == hours
         end
     end
 
@@ -69,9 +69,7 @@ class Assignment < ApplicationRecord
     private
 
     def create_wage_chunks(hours: @initial_hours)
-        # Don't set the hours unless they're different from the
-        # computed hours
-        assignment_hours = self.hours
+        assignment_hours = hours
         return unless assignment_hours
         return unless start_date && end_date
 

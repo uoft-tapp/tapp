@@ -68,6 +68,6 @@ class Public::ContractsController < ActionController::Base
             status: offer.status
         }
         subs = subs.merge(styles).stringify_keys
-        rendered = template.render(subs)
+        template.render(subs)
     end
 end
