@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class Offer < ApplicationRecord
-    OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
+    OFFER_STATUS = %i[provisional pending accepted rejected withdrawn].freeze
     belongs_to :assignment
 
     has_secure_token :url_token
     enum status: OFFER_STATUS
 
-    scope :inactive_offers, -> { where.not(status: :pending) }
     scope :withdraw_all,
           -> { update_all(status: :withdrawn, withdrawn_date: Time.zone.now) }
 
@@ -18,12 +17,7 @@ class Offer < ApplicationRecord
 
     def populate_offer
         applicant_attrs = %i[first_name last_name email]
-        position_attrs = %i[
-            position_code
-            position_title
-            position_start_date
-            position_end_date
-        ]
+        position_attrs = %i[position_code position_title]
 
         applicant = assignment.applicant
         position = assignment.position
@@ -43,6 +37,8 @@ class Offer < ApplicationRecord
         formatting_service =
             WageChunkFormattingService.new(assignment: assignment)
         self.pay_period_desc = formatting_service.pay_period_description
+        self.position_start_date = position.start_date
+        self.position_end_date = position.end_date
         self
     end
 

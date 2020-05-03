@@ -61,3 +61,6 @@ Layout/MultilineOperationIndentation:
 
 Style/IfUnlessModifier:
     Enabled: false
+
+Layout/IndentFirstArgument:
+    Enabled: false
