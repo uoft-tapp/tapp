@@ -95,6 +95,17 @@ export class Position extends MockAPIController {
         // If this is not an upsert, validate the paramters. Otherwise, don't validate.
         if (!this.rawFind(obj)) {
             this.validateNew(obj, matchingSession);
+
+            // if the start/end date is not set,
+            // use the session dates
+            obj.start_date =
+                obj.start_date === undefined
+                    ? matchingSession.start_date
+                    : obj.start_date;
+            obj.end_date =
+                obj.end_date === undefined
+                    ? matchingSession.end_date
+                    : obj.end_date;
         }
         const newPosition = this.upsert(obj);
         // Make sure there is an array for to store the contract_templates by session,
