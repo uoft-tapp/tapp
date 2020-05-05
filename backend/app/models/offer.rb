@@ -13,6 +13,16 @@ class Offer < ApplicationRecord
     before_create :populate_offer
     before_update :set_status_date
 
+    # Can an applicant accept this offer?
+    def can_accept?
+        !accepted? && !rejected? && !withdrawn?
+    end
+
+    # Can an applicant reject this offer?
+    def can_reject?
+        !accepted? && !rejected? && !withdrawn?
+    end
+
     private
 
     def populate_offer
