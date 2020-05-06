@@ -3,25 +3,81 @@
 # `ApplicationControler` is set to always return JSON. In this controller we want to return
 # html and pdf, so we subclass ActionController directly
 class Public::ContractsController < ActionController::Base
-    def show
-        offer = Offer.find_by_url_token(show_params[:id])
+    include Response
+    include TransactionHandler
 
-        unless offer
-            render status: 404,
-                   inline: "No offer found with id='#{show_params[:id]}'"
-            return
-        end
+    # /public/contracts/<id>
+    def show
+        return unless valid_offer?(url_token: show_params[:id])
 
         # for PDF and HTML rendering, we start by rendering the contract as an html document
-        rendered = get_contract_html(offer)
+        rendered = get_contract_html(@offer)
         if !show_params[:format].blank? &&
                show_params[:format].downcase == 'pdf'
-            pdf_name = "#{offer.position_code}-contract-#{offer.last_name}"
+            pdf_name = "#{@offer.position_code}-contract-#{@offer.last_name}"
             render pdf: pdf_name, inline: rendered
             return
         end
 
         render(inline: rendered)
+    end
+
+    # /public/contracts/<contract_id>/accept
+    def accept
+        return unless valid_offer?(url_token: params[:contract_id])
+
+        unless @offer.can_accept?
+            render_error(
+                message:
+                    'Cannot accept an offer that is already accepted/rejected/withdrawn'
+            ) && return
+        end
+
+        start_transaction_and_rollback_on_exception do
+            @offer.signature = params[:signature]
+            @offer.accepted!
+            @offer.save!
+        end
+        render_success {}
+    end
+
+    # /public/contracts/<contract_id>/reject
+    def reject
+        return unless valid_offer?(url_token: params[:contract_id])
+
+        unless @offer.can_reject?
+            render_error(
+                message:
+                    'Cannot reject an offer that is already accepted/rejected/withdrawn'
+            ) && return
+        end
+
+        start_transaction_and_rollback_on_exception do
+            @offer.rejected!
+            @offer.save!
+        end
+        render_success {}
+    end
+
+    # /public/contracts/<contract_id>/view
+    def view
+        return unless valid_offer?(url_token: params[:contract_id])
+
+        # render the view offer template as a liquid template
+        template_root = Rails.root.join('app/views/contracts/')
+        template_file = template_root.join('view-offer.html')
+        template = Liquid::Template.parse(File.read(template_file))
+
+        # We want everything to be served as a single HTML file with
+        # scripts and css included. However, this is annoying in development.
+        # To avoid additional build steps (like webpack, etc.), we just use
+        # Liquid templates to stuff the css and JS directly into the html.
+        header_subs = {
+            'scripts' => File.read(template_root.join('view-offer.js')),
+            'styles' => File.read(template_root.join('view-offer.css'))
+        }
+
+        render(inline: template.render(offer_substitutions.merge(header_subs)))
     end
 
     private
@@ -48,7 +104,15 @@ class Public::ContractsController < ActionController::Base
             'style_font' => File.read("#{contract_dir}/font.css"),
             'style_header' => File.read("#{contract_dir}/header.css")
         }
-        subs = {
+
+        subs = offer_substitutions(offer: offer).merge(styles).stringify_keys
+        template.render(subs)
+    end
+
+    # Prepare a hash to be used by a Liquid
+    # template based on the offer
+    def offer_substitutions(offer: @offer)
+        {
             first_name: offer.first_name,
             last_name: offer.last_name,
             email: offer.email,
@@ -65,9 +129,24 @@ class Public::ContractsController < ActionController::Base
             accepted_date: offer.accepted_date,
             withdrawn_date: offer.withdrawn_date,
             rejected_date: offer.rejected_date,
-            status: offer.status
-        }
-        subs = subs.merge(styles).stringify_keys
-        template.render(subs)
+            status: offer.status,
+            url_token: offer.url_token
+        }.stringify_keys
+    end
+
+    # tests to see if a valid offer exists corresponding to the specified
+    # url token. Will render a 404 if not found. Should be used as
+    #    return unless valid_offer?(...)
+    #
+    # Stores the found offer in `@offer`
+    def valid_offer?(url_token: nil)
+        offer = Offer.find_by_url_token(url_token)
+
+        unless offer
+            render status: 404, inline: "No offer found with id='#{url_token}'"
+            return false
+        end
+
+        @offer = offer
     end
 end

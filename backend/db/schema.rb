@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
     t.datetime "end_date"
     t.text "note"
     t.string "contract_override_pdf"
-    t.integer "active_offer_status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "active_offer_id"
