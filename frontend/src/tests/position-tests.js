@@ -50,7 +50,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             newPositionData
         );
 
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
 
         newPosition = resp1.payload;
 
@@ -84,7 +84,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         };
 
         const resp = await apiPOST(`/admin/positions`, updatedPositionData);
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         const { payload: updatedPosition } = resp;
         expect(updatedPosition).toMatchObject(updatedPositionData);
@@ -102,15 +102,33 @@ export function positionsTests(api = { apiGET, apiPOST }) {
 
     it("delete position", async () => {
         const resp1 = await apiPOST(`/admin/positions/delete`, newPosition);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
 
         const resp2 = await apiGET(`/admin/sessions/${session.id}/positions`);
         expect(resp2.payload).not.toContainObject(newPosition);
     });
 
-    it.todo("error when updating a position to have an empty position_code");
+    it("error when updating a position to have an empty position_code", async () => {
+        const updatedPositionData = {
+            ...newPosition,
+            position_code: ""
+        };
 
-    it.todo("error when creating a position for a session with an invalid id");
+        const resp = await apiPOST(`/admin/positions`, updatedPositionData);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
+
+    it("error when creating a position for a session with an invalid id", async () => {
+        const updatedPositionData = {
+            ...newPosition,
+            id: -1
+        };
+
+        const resp = await apiPOST(`/admin/positions`, updatedPositionData);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 
     it("error when creating two positions with the same position_code in the same session", async () => {
         // we already have a position
@@ -124,7 +142,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             newPositionData
         );
 
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
     });
 
@@ -175,11 +193,37 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         expect(resp3.payload).toContainObject(resp2.payload);
     });
 
-    it.todo(
-        "create a position with instructors list specified and have instructors automatically added to the position"
-    );
+    it("When the start/end_date of a position is null, the start/end_date of the sessions is returned instead", async () => {
+        const newPositionData = {
+            position_code: "POS100F",
+            position_title: "Position with no start/end date",
+            hours_per_assignment: 70,
+            contract_template_id: contractTemplate.id
+        };
 
-    it.todo(
-        "When the start/end_date of a position is null, the start/end_date of the sessions is returned instead"
-    );
+        const resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPositionData
+        );
+        expect(resp).toHaveStatus("success");
+
+        const newPosition = resp.payload;
+
+        // check the start/end date is the same as session
+        const dates = {
+            start_date: session.start_date,
+            end_date: session.end_date
+        };
+        expect(newPosition).toMatchObject(dates);
+
+        // get the list of positions again and make sure the start/end
+        // date is correct
+        const { payload: withNewPosition } = await apiGET(
+            `/admin/sessions/${session.id}/positions`
+        );
+
+        expect(
+            withNewPosition.find(s => s.id === newPosition.id)
+        ).toMatchObject(dates);
+    });
 }
