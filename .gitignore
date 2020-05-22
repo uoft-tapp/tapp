@@ -6,3 +6,4 @@ node_modules
 .byebug_history
 .DS_Store
 pg_data/*
+!backend/app/controllers/public

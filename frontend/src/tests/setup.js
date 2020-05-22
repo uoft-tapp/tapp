@@ -14,7 +14,7 @@ class DatabaseSeeder {
             },
             contractTemplate: {
                 template_name: "Regular",
-                template_file: "/path/to/regular/template.html"
+                template_file: "default-template.html"
             },
             position: {
                 position_code: "CSC494",

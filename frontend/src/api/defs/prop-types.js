@@ -78,13 +78,16 @@ function generatePropTypes(PropTypes) {
             start_date: PropTypes.string,
             end_date: PropTypes.string,
             note: PropTypes.string,
-            offer_override_pdf: PropTypes.string,
+            contract_override_pdf: PropTypes.string,
             applicant_id: id.isRequired,
             position_id: id.isRequired,
             active_offer_status: PropTypes.oneOf([
                 "accepted",
                 "rejected",
+                "withdrawn",
+                "provisional",
                 "pending",
+                "no_offer",
                 null
             ])
         }),

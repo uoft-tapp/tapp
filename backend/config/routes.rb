@@ -142,6 +142,14 @@ Rails.application.routes.draw do
         end
     end
 
+    namespace :public do
+        resources :contracts, only: %i[show] do
+            get :view, to: "contracts#view"
+            post :accept, to: "contracts#accept"
+            post :reject, to: "contracts#reject"
+        end
+    end
+
     # Catch all other route requests and deliver a standard error payload.
     # Routes that are inaccessible due to lacking permission also end up here.
     #

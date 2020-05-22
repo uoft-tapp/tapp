@@ -3,11 +3,8 @@
 # A class representing an assignment. This class has many offers and belongs to
 # applicant and position.
 class Assignment < ApplicationRecord
-    ACTIVE_OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
-    enum active_offer_status: ACTIVE_OFFER_STATUS
-
-    has_many :offers
-    has_many :wage_chunks, dependent: :delete_all
+    has_many :offers, dependent: :destroy
+    has_many :wage_chunks, dependent: :destroy
     belongs_to :active_offer, class_name: 'Offer', optional: true
     belongs_to :applicant
     belongs_to :position
@@ -45,8 +42,20 @@ class Assignment < ApplicationRecord
             # if the record has already been created, the `after_create` functions
             # will not be called, so call the manually.
             @initial_hours = nil
-            create_wage_chunks(hours: value)
+            create_wage_chunks(hours: value) unless value == hours
         end
+    end
+
+    def active_offer_status
+        active_offer.blank? ? nil : active_offer.status
+    end
+
+    def start_date
+        self[:start_date].blank? ? position.start_date : self[:start_date]
+    end
+
+    def end_date
+        self[:end_date].blank? ? position.end_date : self[:end_date]
     end
 
     def start_date=(value)
@@ -60,11 +69,8 @@ class Assignment < ApplicationRecord
     private
 
     def create_wage_chunks(hours: @initial_hours)
-        # Don't set the hours unless they're different from the
-        # computed hours
-        assignment_hours = self.hours
+        assignment_hours = hours
         return unless assignment_hours
-        return if hours == assignment_hours
         return unless start_date && end_date
 
         # Compute the number of wage chunks needed. If January 1st
@@ -112,17 +118,16 @@ end
 #
 # Table name: assignments
 #
-#  id                  :integer          not null, primary key
-#  position_id         :integer          not null
-#  applicant_id        :integer          not null
-#  start_date          :datetime
-#  end_date            :datetime
-#  note                :text
-#  offer_override_pdf  :string
-#  active_offer_status :integer          default("0"), not null
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  active_offer_id     :integer
+#  id                    :integer          not null, primary key
+#  position_id           :integer          not null
+#  applicant_id          :integer          not null
+#  start_date            :datetime
+#  end_date              :datetime
+#  note                  :text
+#  contract_override_pdf :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  active_offer_id       :integer
 #
 # Indexes
 #

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=yes"
+        />
+        <meta charset="utf-8" />
+        <%= csrf_meta_tags %>
+        
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=fetch,Promise,Object.entries"></script>
+        <title>TA Offer</title>
+
+        <!-- When not run through the liquid templating engine, the { % ... % } characters appear in the page.
+        By wrapping everything in a div with `display: none` we hide it; the JS and CSS will still load correctly -->
+
+        <div style="display: none">
+            {% if styles %}
+            <style>
+                {{ styles }}
+            </style>
+            {% else %}
+            <link rel="stylesheet" type="text/css" href="view-offer.css" />
+            {% endif %}
+
+            <script>
+                window.URL_TOKEN = "{{ url_token }}";
+            </script>
+            {% if scripts %}
+            <script>
+                try {
+                    {{ scripts }}
+                } catch (e) {
+                    console.log("Encountered error", e);
+                }
+            </script>
+            {% else %}
+            <script type="text/javascript" src="./view-offer.js"></script>
+            {% endif %}
+        </div>
+    </head>
+    <body>
+        <div class="header">
+            <form id="logout" action="/logout" method="post">
+                <span>User: <b>{{ utorid }}</b></span>
+                <button id="logout-button" type="submit" class="button">
+                    Logout
+                </button>
+            </form>
+            <h1>Offer of Teaching Assistantship for {{ position_code }}</h1>
+        </div>
+        <div class="content">
+            <div class="decision">
+                <h3>
+                    <a
+                        href="/public/contracts/{{ url_token }}.pdf"
+                        role="button"
+                        class="button"
+                        >Download PDF</a
+                    >
+                </h3>
+                <h1>
+                    Status:
+                    <span class="{{ status }} capitalize">{{ status }}</span>
+                </h1>
+                <form id="decision">
+                    <h3>
+                        I hereby accept the Teaching Assistantship position
+                        offered:
+                    </h3>
+                    <div class="decision-container">
+                        <input
+                            type="radio"
+                            value="accept"
+                            id="radio-accept"
+                            name="decision"
+                        />
+                        <label for="radio-accept">
+                            Accept
+                        </label>
+                        <input
+                            type="radio"
+                            value="reject"
+                            id="radio-reject"
+                            name="decision"
+                        />
+                        <label for="radio-reject">
+                            Reject
+                        </label>
+                        <div class="signature">
+                            <div class="">
+                                <label for="signature_name">
+                                    <p>
+                                        I confirm that I will be registered as a
+                                        University of Toronto student or PDF on
+                                        the date that this appointment begins. I
+                                        understand that if I should cease to be
+                                        registered as a University of Toronto
+                                        student or PDF during the period of this
+                                        appointment, for any reason other than
+                                        convocation, I must immediately notify
+                                        my supervisor, and my appointment may be
+                                        terminated.
+                                    </p>
+                                    <p>
+                                        To accept this contract, type your
+                                        initials:
+                                    </p>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="signature_name"
+                                    id="signature_name"
+                                    maxlength="10"
+                                />
+                                <div class="input-placeholder">.</div>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            class="button"
+                            onclick="submitDecision()"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+                <div class="admonishment">
+                    <p>
+                        <b>Important:</b> In order to arrange payroll, if this
+                        is your first TAship or your SIN number has been changed
+                        since your last TAship, {{ to_coordinator_email }}
+                    </p>
+                </div>
+            </div>
+            <div class="contract-view">
+                <iframe src="/public/contracts/{{ url_token }}"></iframe>
+            </div>
+        </div>
+    </body>
+</html>

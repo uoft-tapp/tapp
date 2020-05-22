@@ -2,8 +2,8 @@ class CreateOffers < ActiveRecord::Migration[6.0]
     def change
         create_table :offers do |t|
             t.references :assignment, null: false, foreign_key: true
-            t.string :offer_template
-            t.string :offer_override_pdf
+            t.string :contract_template
+            t.string :contract_override_pdf
             t.string :first_name
             t.string :last_name
             t.string :email

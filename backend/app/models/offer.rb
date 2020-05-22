@@ -1,34 +1,55 @@
 # frozen_string_literal: true
 
 class Offer < ApplicationRecord
-    OFFER_STATUS = %i[pending accepted rejected withdrawn].freeze
+    OFFER_STATUS = %i[provisional pending accepted rejected withdrawn].freeze
     belongs_to :assignment
 
     has_secure_token :url_token
     enum status: OFFER_STATUS
 
-    scope :inactive_offers, -> { where.not(status: :pending) }
     scope :withdraw_all,
           -> { update_all(status: :withdrawn, withdrawn_date: Time.zone.now) }
 
     before_create :populate_offer
     before_update :set_status_date
 
+    # Can an applicant accept this offer?
+    def can_accept?
+        !accepted? && !rejected? && !withdrawn?
+    end
+
+    # Can an applicant reject this offer?
+    def can_reject?
+        !accepted? && !rejected? && !withdrawn?
+    end
+
     private
 
     def populate_offer
         applicant_attrs = %i[first_name last_name email]
-        applicant = assignment.applicant.as_json(only: applicant_attrs)
+        position_attrs = %i[position_code position_title]
 
-        position_attrs = %i[
-            position_code
-            position_title
-            position_start_date
-            position_end_date
-        ]
-        position = applicant.as_json(only: position_attrs)
+        applicant = assignment.applicant
+        position = assignment.position
 
-        self.attributes = attributes.merge!(applicant, position)
+        # inherit attributes defined from the applicant and the position
+        self.attributes =
+            attributes.merge!(
+                applicant.as_json(only: applicant_attrs),
+                position.as_json(only: position_attrs)
+            )
+        # define the computed attributes
+        self.hours = assignment.hours
+        self.instructor_contact_desc =
+            position.instructors.map(&:contact_info).to_sentence
+        self.contract_template = position.contract_template.template_file
+        self.contract_override_pdf = assignment.contract_override_pdf
+        formatting_service =
+            WageChunkFormattingService.new(assignment: assignment)
+        self.pay_period_desc = formatting_service.pay_period_description
+        self.position_start_date = position.start_date
+        self.position_end_date = position.end_date
+        self
     end
 
     def set_status_date
@@ -50,8 +71,8 @@ end
 #
 #  id                      :integer          not null, primary key
 #  assignment_id           :integer          not null
-#  offer_template          :string
-#  offer_override_pdf      :string
+#  contract_template       :string
+#  contract_override_pdf   :string
 #  first_name              :string
 #  last_name               :string
 #  email                   :string

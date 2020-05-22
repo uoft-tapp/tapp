@@ -55,8 +55,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text "note"
-    t.string "offer_override_pdf"
-    t.integer "active_offer_status", default: 0, null: false
+    t.string "contract_override_pdf"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "active_offer_id"
@@ -94,8 +93,8 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
 
   create_table "offers", force: :cascade do |t|
     t.bigint "assignment_id", null: false
-    t.string "offer_template"
-    t.string "offer_override_pdf"
+    t.string "contract_template"
+    t.string "contract_override_pdf"
     t.string "first_name"
     t.string "last_name"
     t.string "email"

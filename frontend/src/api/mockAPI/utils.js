@@ -297,3 +297,101 @@ export class MockAPIController {
         return this.create(obj);
     }
 }
+
+/**
+ * Extract the earliest start date and latest end date from
+ * an array of wage chunks.
+ *
+ * @export
+ * @param {[object]} wageChunks
+ * @returns {{start_date: date, end_date: date}}
+ */
+export function wageChunkArrayToStartAndEndDates(wageChunks) {
+    const startDates = wageChunks.map(x => x.start_date);
+    const endDates = wageChunks.map(x => x.end_date);
+    startDates.sort();
+    endDates.sort();
+    return {
+        start_date: startDates[0],
+        end_date: endDates[endDates.length - 1]
+    };
+}
+
+/**
+ * Join an array of strings with the conjunction "and", if suitable.
+ *
+ * @param {[string]} items
+ * @returns {string}
+ */
+function joinWithConjunction(items) {
+    if (items == null || items.length === 0) {
+        return "";
+    }
+    if (items.length === 1) {
+        return items[0];
+    }
+    if (items.length === 2) {
+        return `${items[0]} and ${items[1]}`;
+    }
+    items = [...items];
+    items[items.length - 1] = "and " + items[items.length - 1];
+    return items.join(", ");
+}
+
+/**
+ * Format a list of instructors to appear in a contract.
+ *
+ * @export
+ * @param {[object]} instructors
+ * @returns {string}
+ */
+export function formatInstructorsContact(instructors) {
+    const contacts = instructors.map(
+        x => `${x.first_name} ${x.last_name} <${x.email}>`
+    );
+    return joinWithConjunction(contacts);
+}
+
+/**
+ * Take an array of wage chunks and create a formatted string describing every separate
+ * pay period. If there are multiple wage chunks with the same rate, their hours are combined
+ * and the pay window is made large enough to contain those chunks.
+ *
+ * @export
+ * @param {[object]} wageChunks
+ * @returns {string}
+ */
+export function wageChunkArrayToPayPeriodDescription(wageChunks) {
+    // Every different pay rate needs to be explained separately
+    // So first make a hash based on pay rates
+    const rateData = {};
+    for (const wageChunk of wageChunks) {
+        let { rate, start_date, end_date, hours } = wageChunk;
+        start_date = new Date(start_date);
+        end_date = new Date(end_date);
+        rateData[rate] = rateData[rate] || { hours: 0, rate };
+        const data = rateData[rate];
+        data.hours += hours;
+        data.start_date = data.start_date || start_date;
+        data.start_date = Math.min(data.start_date, start_date);
+        data.end_date = data.end_date || end_date;
+        data.end_date = Math.max(data.end_date, end_date);
+    }
+    const descriptions = Object.values(rateData).map(
+        ({ hours, rate, start_date, end_date }) => {
+            start_date = new Date(start_date);
+            end_date = new Date(end_date);
+
+            return `${hours} hours at $${rate}/hour from ${start_date.toLocaleDateString(
+                "EN-ca",
+                { month: "long", day: "numeric", year: "numeric" }
+            )} to ${end_date.toLocaleDateString("EN-ca", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            })}`;
+        }
+    );
+
+    return joinWithConjunction(descriptions);
+}

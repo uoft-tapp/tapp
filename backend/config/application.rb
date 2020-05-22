@@ -33,5 +33,10 @@ module Tapp
         # Middleware like session, flash, cookies can be added back manually.
         # Skip views, helpers and assets when generating a new resource.
         config.api_only = true
+
+        # Set up the the directories where persistent files are stored
+        config.contract_template_dir =
+            ENV.fetch('CONTRACT_TEMPLATE_DIR', '/storage/contract_templates')
+                .presence || '/storage/contract_templates'
     end
 end

@@ -24,3 +24,4 @@ services:
             RAILS_LOG_TO_STDOUT: ${RAILS_LOG_TO_STDOUT}
             DEPARTMENT: ${DEPARTMENT}
             BASE_URL: ${BASE_URL}
+            CONTRACT_TEMPLATE_DIR: ${CONTRACT_TEMPLATE_DIR}

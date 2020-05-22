@@ -6,8 +6,7 @@ class CreateAssignments < ActiveRecord::Migration[6.0]
             t.datetime :start_date
             t.datetime :end_date
             t.text :note
-            t.string :offer_override_pdf
-            t.integer :active_offer_status, default: 0, null: false
+            t.string :contract_override_pdf
 
             t.timestamps
         end
