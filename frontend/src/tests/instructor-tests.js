@@ -59,29 +59,30 @@ export function instructorsTests(api) {
     it.skip("update an instructor", async () => {
         const updateInstructorData = {
             id: instructor.id,
-            email: "anand.liu@gmail.com"
+            first_name: instructor.first_name,
+            last_name: instructor.last_name,
+            email: "anand.liu@gmail.com",
+            utorid: instructor.utorid
         };
 
         // update the instructor
-        const resp = await apiPOST(`/instructors`, updateInstructorData);
-        expect(resp).toMatchObject({ status: "success" });
+        const resp = await apiPOST(`/admin/instructors`, updateInstructorData);
+        expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
     // delete an instructor
-    it.skip("delete instructor", async () => {
-        const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        expect(resp1).toMatchObject({
-            status: "success",
-            payload: { id: instructor.id }
-        });
+    it("delete instructor", async () => {
+        const resp1 = await apiPOST(`/admin/instructors/delete`, instructor);
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload).toMatchObject({ id: instructor.id });
 
         // make sure the instructor is deleted
-        const resp2 = await apiGET("/instructors");
-        expect(resp2).toMatchObject({ status: "success" });
+        const resp2 = await apiGET("/admin/instructors");
+        expect(resp2).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
-        expect(resp2).not.toContainObject(instructor);
+        expect(resp2.payload).not.toContainObject(instructor);
     });
 
-    it.todo("fail to delete instructor from a position with invalid id");
+    it.todo("fail to delete instructor with invalid id");
 }
