@@ -26,7 +26,7 @@ export function assignmentsTests(api) {
     it("get assignments for session", async () => {
         const resp = await apiGET(`/admin/sessions/${session.id}/assignments`);
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         // make sure we got the seeded assignment data
         expect(resp.payload).toMatchObject([assignment]);
         // check the type of payload
@@ -59,7 +59,7 @@ export function assignmentsTests(api) {
         };
         const resp = await apiPOST("/admin/assignments", newAssignmentData);
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         const { payload: createdAssignment } = resp;
         // make sure the propTypes are right
         checkPropTypes(assignmentPropTypes, createdAssignment);
@@ -85,7 +85,7 @@ export function assignmentsTests(api) {
     it("get assignment by id", async () => {
         const resp = await apiGET(`/admin/assignments/${assignment.id}`);
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         // make sure we got the seeded assignment data
         expect(resp.payload).toMatchObject(assignment);
         // check the type of payload
@@ -104,7 +104,7 @@ export function assignmentsTests(api) {
         };
 
         const resp = await apiPOST(`/admin/assignments`, updatedAssignmentData);
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         const { payload: updatedAssignment } = resp;
         // make sure the propTypes are right
