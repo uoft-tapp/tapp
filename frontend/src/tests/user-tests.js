@@ -27,14 +27,14 @@ export function usersTests(api) {
     it("Fetches users", async () => {
         const resp = await apiGET("/admin/users");
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(userPropTypes), resp.payload);
     });
 
     it("Adds a user", async () => {
         const resp = await apiPOST("/admin/users", newUserData);
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(newUserData);
         // Save any extra attributes we got, such as an `id`
         Object.assign(newUserData, resp.payload);
@@ -50,7 +50,7 @@ export function usersTests(api) {
         });
 
         // Empty the roles
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         expect(resp.payload.roles).toEqual([]);
 
         // Set the roles to "ta" only
@@ -72,13 +72,13 @@ export function usersTests(api) {
     it("Fetches the active user", async () => {
         const resp = await apiGET("/admin/active_user");
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(userPropTypes, resp.payload);
     });
 
     it("[debug only] sets the active user", async () => {
         let resp = await apiPOST("/debug/active_user", { id: newUserData.id });
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         resp = await apiGET("/debug/active_user");
 
