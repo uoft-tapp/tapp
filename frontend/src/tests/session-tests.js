@@ -42,7 +42,7 @@ export function sessionsTests(api) {
     it("fetch sessions", async () => {
         // do we get a success response when geting all sessions from snapshot
         const resp = await apiGET("/admin/sessions");
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
@@ -60,7 +60,7 @@ export function sessionsTests(api) {
 
         // do we get a success response when creating the session?
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         const { payload: createdSession } = resp1;
         // make sure the propTypes are right
         checkPropTypes(sessionPropTypes, createdSession);
@@ -99,11 +99,11 @@ export function sessionsTests(api) {
         const newData2 = { ...newSessionData, name: undefined };
 
         const resp1 = await apiPOST("/admin/sessions", newData1);
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
 
         const resp2 = await apiPOST("/admin/sessions", newData2);
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
     });
 
@@ -113,11 +113,11 @@ export function sessionsTests(api) {
         const newData2 = { ...session, name: null };
         const resp1 = await apiPOST("/admin/sessions", newData1);
 
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
 
         const resp2 = await apiPOST("/admin/sessions", newData2);
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
     });
 
@@ -128,7 +128,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
     });
 
@@ -139,7 +139,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
     });
 
@@ -156,7 +156,7 @@ export function sessionsTests(api) {
         });
         // expected an error with non-identical session id
         expect(resp2).toHaveStatus("error");
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
 
         // delete with id = null

@@ -35,12 +35,12 @@ export function instructorsTests(api) {
 
         // create a new instructor
         const resp1 = await apiPOST(`/instructors`, newInstructorData);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(newInstructorData);
 
         // make sure instructor is on instructor list
         const resp2 = await apiGET(`/instructors`);
-        expect(resp2).toMatchObject({ status: "success" });
+        expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
@@ -49,7 +49,7 @@ export function instructorsTests(api) {
 
     it("get instructors", async () => {
         const resp = await apiGET("/instructors");
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
     });
 
@@ -61,21 +61,19 @@ export function instructorsTests(api) {
 
         // update the instructor
         const resp = await apiPOST(`/instructors`, updateInstructorData);
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
     // delete an instructor
     it("delete instructor", async () => {
         const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        expect(resp1).toMatchObject({
-            status: "success",
-            payload: { id: instructor.id }
-        });
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload).toMatchObject({ id: instructor.id });
 
         // make sure the instructor is deleted
         const resp2 = await apiGET("/instructors");
-        expect(resp2).toMatchObject({ status: "success" });
+        expect(resp2).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
         expect(resp2).not.toContainObject(instructor);
     });

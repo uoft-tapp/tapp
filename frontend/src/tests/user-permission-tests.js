@@ -26,7 +26,7 @@ export function userPermissionsTests(api) {
     it("Admin user can access admin route", async () => {
         // the default user has all roles, including the admin role
         const resp = await apiGET("/admin/active_user");
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
     });
 
     it("A non-admin cannot access the admin route", async () => {
@@ -39,7 +39,7 @@ export function userPermissionsTests(api) {
 
         // Try to fetch an admin route
         resp = await apiGET("/admin/active_user");
-        expect(resp).toMatchObject({ status: "error" });
+        expect(resp).toHaveStatus("error");
 
         // Set the active_user back to the default.
         resp = await apiPOST("/debug/active_user", {
