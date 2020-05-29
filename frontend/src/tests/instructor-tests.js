@@ -4,6 +4,7 @@ import {
     expect,
     beforeAll,
     checkPropTypes,
+    errorPropTypes,
     instructorPropTypes
 } from "./utils";
 import { databaseSeeder } from "./setup";
@@ -56,13 +57,11 @@ export function instructorsTests(api) {
         instructor = resp1.payload;
     });
 
-    it.skip("update an instructor", async () => {
+    it("update an instructor", async () => {
         const updateInstructorData = {
+            ...instructor,
             id: instructor.id,
-            first_name: instructor.first_name,
-            last_name: instructor.last_name,
-            email: "anand.liu@gmail.com",
-            utorid: instructor.utorid
+            email: "newemail@toronto.ca"
         };
 
         // update the instructor
@@ -84,5 +83,14 @@ export function instructorsTests(api) {
         expect(resp2.payload).not.toContainObject(instructor);
     });
 
-    it.todo("fail to delete instructor with invalid id");
+    it("fail to delete instructor with invalid id", async () => {
+        const updatedInstructorData = {
+            ...instructor,
+            id: -1
+        };
+
+        const resp = await apiPOST(`/admin/instructor`, updatedInstructorData);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 }
