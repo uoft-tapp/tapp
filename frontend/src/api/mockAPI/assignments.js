@@ -182,7 +182,8 @@ class ActiveOffer extends MockAPIController {
         if (
             activeOffer.status === "accepted" ||
             activeOffer.status === "rejected" ||
-            activeOffer.status === "pending"
+            activeOffer.status === "pending" ||
+            activeOffer.status === "provisional"
         ) {
             return activeOffer;
         }
@@ -306,22 +307,32 @@ class ActiveOffer extends MockAPIController {
             })
         );
     }
-    createByAssignment(assignment) {
-        const matchingAssignment = this._ensureAssignment(assignment);
+    createByAssignment(assignmentId) {
+        const matchingAssignment = this._ensureAssignment(assignmentId);
         const offer = this.findByAssignment(matchingAssignment);
         if (offer) {
             throw new Error(
-                `An offer already exists for assignment=${JSON.stringify(
-                    assignment
+                `An offer already exists for assignmentId=${JSON.stringify(
+                    assignmentId
                 )}`
             );
         }
-        return this.find(
+
+        const newOffer = this.find(
             this.create({
                 assignment_id: matchingAssignment.id,
-                status: "pending"
+                status: "provisional"
             })
         );
+
+        if (!this.data.offer) {
+            this.data.offers = [newOffer]
+        } else {
+            this.data.offer.push(newOffer)
+        }
+
+        return newOffer
+
     }
 }
 

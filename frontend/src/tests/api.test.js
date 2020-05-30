@@ -83,6 +83,9 @@ describe("Mock API tests", () => {
     describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
     });
+    describe("offers tests", () => {
+        offersTests(mockAPI);
+    });
     describe.skip("`/admin/instructors` tests", () => {
         instructorsTests(mockAPI);
     });

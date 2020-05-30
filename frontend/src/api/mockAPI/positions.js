@@ -17,6 +17,7 @@ import { Instructor } from "./instructors";
 export class Position extends MockAPIController {
     constructor(data) {
         super(data, data.positions);
+
     }
     validateNew(position, session = null) {
         // If we're inserting to a session, the position_code must be unique
@@ -59,6 +60,10 @@ export class Position extends MockAPIController {
         });
     }
     getInstructors(position) {
+
+        if (!position.instructor_ids) {
+            return []
+        }
         return position.instructor_ids.map(id =>
             new Instructor(this.data).find({ id })
         );
