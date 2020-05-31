@@ -326,13 +326,12 @@ class ActiveOffer extends MockAPIController {
         );
 
         if (!this.data.offer) {
-            this.data.offers = [newOffer]
+            this.data.offers = [newOffer];
         } else {
-            this.data.offer.push(newOffer)
+            this.data.offer.push(newOffer);
         }
 
-        return newOffer
-
+        return newOffer;
     }
 }
 

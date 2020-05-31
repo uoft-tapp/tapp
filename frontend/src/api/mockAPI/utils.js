@@ -346,9 +346,8 @@ function joinWithConjunction(items) {
  * @returns {string}
  */
 export function formatInstructorsContact(instructors) {
-
     if (!instructors) {
-        return []
+        return [];
     }
     const contacts = instructors.map(
         x => `${x.first_name} ${x.last_name} <${x.email}>`
