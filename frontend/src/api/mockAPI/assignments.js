@@ -307,13 +307,13 @@ class ActiveOffer extends MockAPIController {
             })
         );
     }
-    createByAssignment(assignmentId) {
-        const matchingAssignment = this._ensureAssignment(assignmentId);
+    createByAssignment(assignment) {
+        const matchingAssignment = this._ensureAssignment(assignment);
         const offer = this.findByAssignment(matchingAssignment);
         if (offer) {
             throw new Error(
-                `An offer already exists for assignmentId=${JSON.stringify(
-                    assignmentId
+                `An offer already exists for assignment=${JSON.stringify(
+                    assignment
                 )}`
             );
         }
