@@ -23,7 +23,7 @@ export function offersTests(api) {
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
-        expect(resp.payload).toEqual(null);
+        expect(resp.payload).toBeNull();
 
         // create a new offer with assignment id
         const resp1 = await apiPOST(
@@ -71,17 +71,23 @@ export function offersTests(api) {
             `/assignments/${assignment.id}/active_offer/email`
         );
 
+        // check status
         expect(resp).toHaveStatus("success");
-        expect(resp.payload).toEqual({ ...newOffer, status: "pending" });
+        // check the respond
+        expect(resp.payload).toMatchObject({
+            ...newOffer,
+            status: "pending"
+        });
 
         newOffer = resp.payload;
     });
 
-    it("nag", async () => {
+    it("increment nag count correctly", async () => {
         // before nagging, make sure the status of the offer is pending
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
+
         expect(resp.payload).toEqual(newOffer);
 
         // set the number of time of nagging
@@ -112,8 +118,6 @@ export function offersTests(api) {
     // public: accept / reject on status: pending, can't do no action when it is not pending
     it.todo("modify position/assignment and existing offers should not change");
     it.todo("accept/reject/withdraw offer");
-
-    it.todo("increment nag count correctly");
 
     // dates, status, signature can't be changed
     // maybe we don't need this since there are limited access to offer (status, nag)

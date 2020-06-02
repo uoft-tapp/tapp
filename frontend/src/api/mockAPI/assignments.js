@@ -318,20 +318,14 @@ class ActiveOffer extends MockAPIController {
             );
         }
 
-        const newOffer = this.find(
-            this.create({
-                assignment_id: matchingAssignment.id,
-                status: "provisional"
-            })
+        return this.upsert(
+            this.find(
+                this.create({
+                    assignment_id: matchingAssignment.id,
+                    status: "provisional"
+                })
+            )
         );
-
-        if (!this.data.offer) {
-            this.data.offers = [newOffer];
-        } else {
-            this.data.offer.push(newOffer);
-        }
-
-        return newOffer;
     }
 }
 
