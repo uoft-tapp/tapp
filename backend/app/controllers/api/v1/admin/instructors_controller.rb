@@ -20,7 +20,7 @@ class Api::V1::Admin::InstructorsController < ApplicationController
     def delete
         @instructor = Instructor.find(params[:id])
         @instructor.positions.clear
-        render_success @instructor
+        render_success @instructor 
     end
 
     private
