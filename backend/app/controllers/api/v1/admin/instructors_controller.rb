@@ -8,7 +8,7 @@ class Api::V1::Admin::InstructorsController < ApplicationController
 
     # POST /instructors
     def create
-        @instructor = Instructor.find_by(id: params[:instructor_id])
+        @instructor = Instructor.find_by(id: params[:id])
         update && return if @instructor
         @instructor = Instructor.new(instructor_params)
         render_on_condition(
@@ -20,7 +20,9 @@ class Api::V1::Admin::InstructorsController < ApplicationController
     def delete
         @instructor = Instructor.find(params[:id])
         @instructor.positions.clear
-        render_success @instructor
+        render_on_condition(
+            object: @instructor, condition: proc { @instructor.destroy! }
+        )
     end
 
     private
