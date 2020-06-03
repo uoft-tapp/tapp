@@ -97,13 +97,7 @@ export class MockAPI {
                         this.data,
                         match
                     );
-                    if (payload == null) {
-                        throw new Error(
-                            `Could not find data for route ${
-                                route.spec
-                            } with params ${JSON.stringify(match)}`
-                        );
-                    }
+
                     return {
                         status: "success",
                         message: "",

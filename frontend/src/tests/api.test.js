@@ -74,7 +74,7 @@ describe("Mock API tests", () => {
     describe("`/admin/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
-    describe("template tests", () => {
+    describe("`/admin/sessions/:session_id/contract_templates` tests", () => {
         templatesTests(mockAPI);
     });
     describe("`/admin/positions` tests", () => {
@@ -82,6 +82,9 @@ describe("Mock API tests", () => {
     });
     describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
+    });
+    describe("`/assignments/:assignment_id/active_offer/` tests", () => {
+        offersTests(mockAPI);
     });
     describe("`/admin/instructors` tests", () => {
         instructorsTests(mockAPI);

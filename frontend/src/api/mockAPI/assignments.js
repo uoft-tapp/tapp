@@ -182,7 +182,8 @@ class ActiveOffer extends MockAPIController {
         if (
             activeOffer.status === "accepted" ||
             activeOffer.status === "rejected" ||
-            activeOffer.status === "pending"
+            activeOffer.status === "pending" ||
+            activeOffer.status === "provisional"
         ) {
             return activeOffer;
         }
@@ -316,11 +317,14 @@ class ActiveOffer extends MockAPIController {
                 )}`
             );
         }
-        return this.find(
-            this.create({
-                assignment_id: matchingAssignment.id,
-                status: "pending"
-            })
+
+        return this.upsert(
+            this.find(
+                this.create({
+                    assignment_id: matchingAssignment.id,
+                    status: "provisional"
+                })
+            )
         );
     }
 }

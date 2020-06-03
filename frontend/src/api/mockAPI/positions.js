@@ -59,6 +59,9 @@ export class Position extends MockAPIController {
         });
     }
     getInstructors(position) {
+        if (!position.instructor_ids) {
+            return [];
+        }
         return position.instructor_ids.map(id =>
             new Instructor(this.data).find({ id })
         );
