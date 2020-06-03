@@ -217,9 +217,9 @@ To run the ruby console hooked into the current rails session, run
 
 `docker-compose exec backend rails c`
 
-To manually inspect the binary snapshots in  the `pg_dump` folder, run
+To manually inspect the binary snapshots in the `pg_dump` folder, run
 
-`pg_restore  2020_04_26__01_12_39_tapp_development.psql`
+`pg_restore 2020_04_26__01_12_39_tapp_development.psql`
 
 which will display the output to the command line (it won't actually insert into a database.)
 
@@ -230,12 +230,12 @@ up by a factor of ~10x, you can run the database from a ram drive instead. In li
 set up your ram drive with
 
 ```
-cd <tapp home director>
+cd <tapp home directory>
 mkdir /dev/shm/pg_data
 sudo mount --bind /dev/shm/pg_data pg_data
 ```
 
-After this, writes to `pg_data` will happen directly in ram.  On OSX, follow the instructions
+After this, writes to `pg_data` will happen directly in ram. On OSX, follow the instructions
 here: https://superuser.com/questions/456803/create-ram-disk-mount-to-specific-folder-in-osx
 
 After mounting `pg_data` on a ram-drive, you'll have to rerun `db:setup` and `db:migrate`. Data
@@ -411,7 +411,7 @@ To resolve this issue, halt the docker-compose command (killing the other contai
 
 2. Docker cannot start up a front-end service, complaining that it can't find an image.
 
-You can resolve this by using `docker containers ls -a`, finding all
+You can resolve this by using `docker container ls -a`, finding all
 deactivated containers, and then removing them with `docker container rm [container ID]`. Then, you should be able to run `./start_local.sh`
 
 3. When RE-installing the dev environment, the database fails to setup.
