@@ -5,7 +5,7 @@ import {
     instructorsSelector,
     positionsSelector,
     assignmentsSelector,
-    applicantsSelector
+    applicantsSelector,
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
 import { SessionEditor } from "../../components/forms/session-editor";
@@ -24,37 +24,37 @@ import { InstructorEditor } from "../../components/instructors";
 import { AssignmentEditor } from "../../components/forms/assignment-editor";
 import { ContractTemplateEditor } from "../../components/forms/contract-template-editor";
 
-const ConnectedApplicantList = connect(state => ({
-    applicants: applicantsSelector(state)
+const ConnectedApplicantList = connect((state) => ({
+    applicants: applicantsSelector(state),
 }))(ApplicantsList);
 
-const ConnectedContractTemplatesList = connect(state => ({
-    contractTemplates: contractTemplatesSelector(state)
+const ConnectedContractTemplatesList = connect((state) => ({
+    contractTemplates: contractTemplatesSelector(state),
 }))(ContractTemplatesList);
 
-const ConnectedPositionsList = connect(state => ({
-    positions: positionsSelector(state)
+const ConnectedPositionsList = connect((state) => ({
+    positions: positionsSelector(state),
 }))(PositionsList);
 
-const ConnectedAssignmentsList = connect(state => ({
-    assignments: assignmentsSelector(state)
+const ConnectedAssignmentsList = connect((state) => ({
+    assignments: assignmentsSelector(state),
 }))(AssignmentsList);
 
-const ConnectedSearchBox = connect(state => ({
-    data: applicantsSelector(state)
+const ConnectedSearchBox = connect((state) => ({
+    data: applicantsSelector(state),
 }))(SearchBox);
 
-const ConnectedEmailButton = connect(state => ({
-    data: offerTableSelector(state).selectedAssignmentIds
+const ConnectedEmailButton = connect((state) => ({
+    data: offerTableSelector(state).selectedAssignmentIds,
 }))(EmailButton);
 
-const ConnectedPositionEditor = connect(state => ({
-    instructors: instructorsSelector(state)
+const ConnectedPositionEditor = connect((state) => ({
+    instructors: instructorsSelector(state),
 }))(PositionEditor);
 
-const ConnectedAssignmentEditor = connect(state => ({
+const ConnectedAssignmentEditor = connect((state) => ({
     positions: positionsSelector(state),
-    applicants: applicantsSelector(state)
+    applicants: applicantsSelector(state),
 }))(AssignmentEditor);
 
 /**
@@ -89,13 +89,13 @@ function DashboardWidget(props) {
 function Dashboard() {
     const [assignment, setAssignment] = React.useState({
         position_id: 0,
-        applicant_id: 0
+        applicant_id: 0,
     });
     const [position, setPosition] = React.useState({ position_code: "" });
     const [instructor, setInstructor] = React.useState({
         last_name: "Baggins",
         first_name: "Bilbo",
-        utorid: "bilbob"
+        utorid: "bilbob",
     });
     const [session, setSession] = React.useState({ name: "" });
     const [contractTemplate, setContractTemplate] = React.useState({});
@@ -107,7 +107,7 @@ function Dashboard() {
                     setContractTemplate={setContractTemplate}
                     availableTemplates={[
                         { template_file: "/math/OTO.html" },
-                        { template_file: "/cs/invigilate.html" }
+                        { template_file: "/cs/invigilate.html" },
                     ]}
                 />
             </DashboardWidget>

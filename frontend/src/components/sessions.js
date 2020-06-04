@@ -8,7 +8,7 @@ const DEFAULT_COLUMNS = [
     { Header: "Start", accessor: "start_date" },
     { Header: "End", accessor: "end_date" },
     { Header: "Rate (Pre-January)", accessor: "rate1" },
-    { Header: "Rate (Post-January)", accessor: "rate2" }
+    { Header: "Rate (Post-January)", accessor: "rate2" },
 ];
 
 /**
@@ -37,5 +37,5 @@ SessionsList.propTypes = {
     sessions: PropTypes.arrayOf(docApiPropTypes.session).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
-    )
+    ),
 };

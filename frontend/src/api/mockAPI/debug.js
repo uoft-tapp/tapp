@@ -1,7 +1,7 @@
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 import { User } from "./active_user";
 
@@ -22,7 +22,7 @@ export class Debug {
     clearData() {
         this.makeSnapshot("beforeclear");
         Object.keys(this.data).forEach(
-            key => (this.data[key] = createBlankCopy(this.data[key]))
+            (key) => (this.data[key] = createBlankCopy(this.data[key]))
         );
         return this.getAllData();
     }
@@ -37,16 +37,16 @@ export class Debug {
 export const debugRoutes = {
     get: {
         "/debug/active_user": documentCallback({
-            func: data => new User(data).getActiveUser(),
+            func: (data) => new User(data).getActiveUser(),
             summary:
                 "Gets the active user; in debug mode this is specified by posting to `active_user`.",
-            returns: docApiPropTypes.user
+            returns: docApiPropTypes.user,
         }),
         "/debug/users": documentCallback({
-            func: data => new User(data).findAll(),
+            func: (data) => new User(data).findAll(),
             summary: "Get a list of all users",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
+        }),
     },
     post: {
         "/debug/active_user": documentCallback({
@@ -64,34 +64,34 @@ export const debugRoutes = {
             summary:
                 "Sets the active user; this will override whatever credentials are passed to the server.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
-            posts: docApiPropTypes.user
+            posts: docApiPropTypes.user,
         }),
         "/debug/users": documentCallback({
             func: (data, params, body) => new User(data).upsert(body),
             summary:
                 "Adds a user; this is done without any permission checks, so it can be used to bootstrap permissions during debug.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
-            posts: docApiPropTypes.user
+            posts: docApiPropTypes.user,
         }),
         "/debug/clear_data": documentCallback({
-            func: data => {
+            func: (data) => {
                 return new Debug(data).clearData();
             },
-            summary: "Deletes all data in the database"
+            summary: "Deletes all data in the database",
         }),
         "/debug/snapshot": documentCallback({
-            func: data => {
+            func: (data) => {
                 return new Debug(data).makeSnapshot();
             },
-            summary: "Makes a snapshot of the current state of the database"
+            summary: "Makes a snapshot of the current state of the database",
         }),
         "/debug/restore_snapshot": documentCallback({
-            func: data => {
+            func: (data) => {
                 return new Debug(data).restoreSnapshot();
             },
-            summary: "Restores the last snapshot of the database"
-        })
-    }
+            summary: "Restores the last snapshot of the database",
+        }),
+    },
 };
 
 /**

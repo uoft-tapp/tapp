@@ -13,7 +13,7 @@ const DEFAULT_COLUMNS = [
     {
         Header: "Instructors",
         accessor: "instructors",
-        Cell: props => (
+        Cell: (props) => (
             <React.Fragment>
                 {props.value.map((instructor = {}) => {
                     const name = `${instructor.first_name} ${instructor.last_name}`;
@@ -24,9 +24,12 @@ const DEFAULT_COLUMNS = [
                     );
                 })}
             </React.Fragment>
-        )
+        ),
     },
-    { Header: "Contract Template", accessor: "contract_template.template_name" }
+    {
+        Header: "Contract Template",
+        accessor: "contract_template.template_name",
+    },
 ];
 
 /**
@@ -55,5 +58,5 @@ PositionsList.propTypes = {
     positions: PropTypes.arrayOf(docApiPropTypes.position).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
-    )
+    ),
 };

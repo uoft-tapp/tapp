@@ -4,7 +4,7 @@ export const readFile = (component, loadDataFunc) => {
         const reader = new FileReader();
         let importFunc = importChoices(files[0].name, loadDataFunc);
         reader.readAsText(files[0]);
-        reader.onload = event => importFunc(event.target.result);
+        reader.onload = (event) => importFunc(event.target.result);
     }
     component.value = "";
 };
@@ -42,11 +42,11 @@ export const downloadFile = async (route, loadMessage) => {
 const optSuccess = (success, content) => {
     return {
         success: success,
-        content: content
+        content: content,
     };
 };
 
-const getFilename = res => {
+const getFilename = (res) => {
     try {
         return res.headers
             .get("Content-Disposition")
@@ -59,7 +59,7 @@ const getFilename = res => {
 const importChoices = (file, loadDataFunc) => {
     switch (getExtension(file)) {
         case ".json":
-            return data => {
+            return (data) => {
                 try {
                     loadDataFunc(optSuccess(true, JSON.parse(data)));
                 } catch (err) {
@@ -67,13 +67,13 @@ const importChoices = (file, loadDataFunc) => {
                 }
             };
         default:
-            return data => {
+            return (data) => {
                 loadDataFunc(optSuccess(true, data));
             };
     }
 };
 
-const getExtension = file => {
+const getExtension = (file) => {
     let extension = file.match(/\.\w+$/g);
     if (extension.length > 0) return extension[0];
     else return null;

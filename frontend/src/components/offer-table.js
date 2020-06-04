@@ -14,35 +14,35 @@ const COLUMNS = [
     {
         Header: "Student Number",
         accessor: "applicant.student_number",
-        width: 100
+        width: 100,
     },
     {
         Header: "Position",
         accessor: "position.position_code",
-        width: 130
+        width: 130,
     },
     {
         Header: "Hours",
         accessor: "hours",
-        width: 100
+        width: 100,
     },
     {
         Header: "Contract",
         accessor: "position.contract_template.template_name",
-        width: 100
+        width: 100,
     },
     {
         Header: "First Time?",
         accessor: "applicant.first_time_ta",
-        Cell: props => (
+        Cell: (props) => (
             <div style={{ backgroundColor: "red" }}>
                 {("" + props.value).toUpperCase()}
             </div>
         ),
-        width: 100
+        width: 100,
     }, // boolean
     { Header: "Status", accessor: "status", width: 100 },
-    { Header: "Nag Count", accessor: "nag_count", width: 100 }
+    { Header: "Nag Count", accessor: "nag_count", width: 100 },
 ];
 
 /**
@@ -54,7 +54,7 @@ const COLUMNS = [
 function rowToStr(row) {
     // flatten to a string two levels deep
     return Object.values(row)
-        .map(x => (typeof x === "string" ? x : Object.values(x).join(" ")))
+        .map((x) => (typeof x === "string" ? x : Object.values(x).join(" ")))
         .join(" ")
         .toLowerCase();
 }
@@ -73,7 +73,7 @@ function OfferTable(props) {
     const { data, selected, setSelected, columns = COLUMNS } = props;
     // internally we use a more efficient datastructure than a list to keep track of `selected` things.
     const _selected = new Set(selected);
-    const _setSelected = _selected => {
+    const _setSelected = (_selected) => {
         // convert `_selected` back to a list before setting it.
         setSelected([..._selected]);
     };
@@ -86,7 +86,9 @@ function OfferTable(props) {
     }
 
     const filteredData = filterString
-        ? data.filter(row => rowToStr(row).includes(filterString.toLowerCase()))
+        ? data.filter((row) =>
+              rowToStr(row).includes(filterString.toLowerCase())
+          )
         : data;
 
     // we need a reference to the internal table so that we can get the "visible data"
@@ -110,7 +112,7 @@ function OfferTable(props) {
             return reactTableRef
                 .getWrappedInstance()
                 .getResolvedState()
-                .sortedData.map(x => x._original);
+                .sortedData.map((x) => x._original);
         } catch (e) {
             return [];
         }
@@ -123,7 +125,7 @@ function OfferTable(props) {
         const displayedData = getDisplayedData();
         if (
             displayedData.length > 0 &&
-            displayedData.every(row => _selected.has(row.id))
+            displayedData.every((row) => _selected.has(row.id))
         ) {
             allSelected = true;
         }
@@ -155,7 +157,7 @@ function OfferTable(props) {
         // in the range between the newly clicked row and the last clicked row
 
         // Get the displayed row data so we don't misselect things.
-        const rowIds = getDisplayedData().map(row => row.id);
+        const rowIds = getDisplayedData().map((row) => row.id);
         const lastSelectedIndex = rowIds.indexOf(lastSelected);
         if (lastSelectedIndex === -1) {
             // If the "last selected" thing is hidden, we should behave like the no-shift case
@@ -164,13 +166,13 @@ function OfferTable(props) {
         const selectedIndex = rowIds.indexOf(row.id);
         const [start, end] = [
             Math.min(lastSelectedIndex, selectedIndex),
-            Math.max(lastSelectedIndex, selectedIndex)
+            Math.max(lastSelectedIndex, selectedIndex),
         ];
 
         _setSelected(
             new Set([
                 ..._selected,
-                ...rowIds.filter((v, i) => i <= end && i >= start)
+                ...rowIds.filter((v, i) => i <= end && i >= start),
             ])
         );
     }
@@ -178,7 +180,7 @@ function OfferTable(props) {
     function onToggleAll() {
         // If everything is selected, set the selected status to `false`
         // otherwise, set it to true.
-        const rowIds = getDisplayedData().map(row => row.id);
+        const rowIds = getDisplayedData().map((row) => row.id);
         if (allSelected) {
             const newSelected = new Set(_selected);
             for (const id of rowIds) {
@@ -192,7 +194,7 @@ function OfferTable(props) {
 
     let tableComponent = (
         <SelectTable
-            ref={r => (reactTableRef = r)}
+            ref={(r) => (reactTableRef = r)}
             data={filteredData}
             columns={columns}
             toggleSelection={onToggleRow}
@@ -214,7 +216,7 @@ function OfferTable(props) {
             Filter:{" "}
             <input
                 type="text"
-                onChange={e => setFilterString(e.target.value)}
+                onChange={(e) => setFilterString(e.target.value)}
             />
             {tableComponent}
         </div>
@@ -227,9 +229,9 @@ OfferTable.propTypes = {
     columns: PropTypes.arrayOf(
         PropTypes.shape({
             Header: PropTypes.string,
-            accessor: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+            accessor: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         })
-    )
+    ),
 };
 
 export { OfferTable };

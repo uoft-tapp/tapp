@@ -3,7 +3,7 @@ import {
     UPSERT_ONE_WAGE_CHUNK_SUCCESS,
     DELETE_ONE_WAGE_CHUNK_SUCCESS,
     FETCH_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
-    UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS
+    UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
@@ -27,8 +27,8 @@ const deleteOneWageChunkSuccess = actionFactory(DELETE_ONE_WAGE_CHUNK_SUCCESS);
 export const fetchWageChunksForAssignment = validatedApiDispatcher({
     name: "fetchWageChunksForAssignment",
     description: "Fetch wage chunks associated with an assignment",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         // When we fetch wage chunks for an assignment, we only get the wage chunks for that particular assignment
         const { id: assignmentId } = payload;
@@ -36,13 +36,13 @@ export const fetchWageChunksForAssignment = validatedApiDispatcher({
             `/${role}/assignments/${assignmentId}/wage_chunks`
         );
         dispatch(fetchWageChunksForAssignmentSuccess(data));
-    }
+    },
 });
 
 export const upsertWageChunksForAssignment = validatedApiDispatcher({
     name: "upsertWageChunksForAssignment",
     description: "Fetch wage chunks associated with an assignment",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (assignment, payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         // When we fetch wage chunks for an assignment, we only get the wage chunks for that particular assignment
@@ -55,31 +55,31 @@ export const upsertWageChunksForAssignment = validatedApiDispatcher({
         // After we update a wage chunk, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const upsertWageChunk = validatedApiDispatcher({
     name: "upsertWageChunk",
     description: "Add/insert wage chunk",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/wage_chunks`, payload);
         dispatch(upsertOneWageChunkSuccess(data));
-    }
+    },
 });
 
 export const deleteWageChunk = validatedApiDispatcher({
     name: "deleteWageChunk",
     description: "Delete a wage chunk",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/wage_chunks/delete`, payload);
         dispatch(deleteOneWageChunkSuccess(data));
-    }
+    },
 });
 
 // selectors
@@ -93,8 +93,8 @@ export const deleteWageChunk = validatedApiDispatcher({
 export const localStoreSelector = assignmentsReducer._localStoreSelector;
 export const wageChunksByAssignmentSelector = createSelector(
     localStoreSelector,
-    state =>
-        function(assignment) {
+    (state) =>
+        function (assignment) {
             const assignment_id = assignment.id;
             if (!state._wageChunksByAssignmentId[assignment_id]) {
                 return [];

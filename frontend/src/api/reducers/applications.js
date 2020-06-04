@@ -2,12 +2,12 @@ import {
     FETCH_APPLICATIONS_SUCCESS,
     FETCH_ONE_APPLICATION_SUCCESS,
     UPSERT_ONE_APPLICATION_SUCCESS,
-    DELETE_ONE_APPLICATION_SUCCESS
+    DELETE_ONE_APPLICATION_SUCCESS,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
-    _modelData: []
+    _modelData: [],
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,

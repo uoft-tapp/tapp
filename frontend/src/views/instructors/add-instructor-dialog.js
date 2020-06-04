@@ -8,7 +8,7 @@ import { strip } from "../../libs/utils";
 const BLANK_INSTRUCTOR = {
     first_name: "",
     last_name: "",
-    utorid: ""
+    utorid: "",
 };
 
 /**
@@ -28,7 +28,7 @@ function getConficts(instructor, instructors) {
         ret.delayShow = "A first name, last name, and utorid is required";
     }
     const matchingInstructor = instructors.find(
-        x => strip(x.utorid) === strip(instructor.utorid)
+        (x) => strip(x.utorid) === strip(instructor.utorid)
     );
     if (matchingInstructor) {
         ret.immediateShow = (
@@ -97,6 +97,6 @@ function AddInstructorDialog(props) {
  * AddInstructorDialog that has been connected to the redux store
  */
 export const ConnectedAddInstructorDialog = connect(
-    state => ({ instructors: instructorsSelector(state) }),
+    (state) => ({ instructors: instructorsSelector(state) }),
     { upsertInstructor }
 )(AddInstructorDialog);

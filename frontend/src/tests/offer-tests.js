@@ -76,7 +76,7 @@ export function offersTests(api) {
         // check the respond
         expect(resp.payload).toMatchObject({
             ...newOffer,
-            status: "pending"
+            status: "pending",
         });
 
         newOffer = resp.payload;

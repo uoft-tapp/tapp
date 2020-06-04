@@ -2,7 +2,7 @@ import { MockAPIController, find, getAttributesCheckMessage } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 
 export class User extends MockAPIController {
@@ -11,7 +11,7 @@ export class User extends MockAPIController {
     }
     validateNew(user) {
         const message = getAttributesCheckMessage(user, this.ownData, {
-            utorid: { required: true, unique: true }
+            utorid: { required: true, unique: true },
         });
         if (message) {
             throw new Error(message);
@@ -48,23 +48,23 @@ export class User extends MockAPIController {
 export const activeUserRoutes = {
     get: {
         "/users": documentCallback({
-            func: data => new User(data).findAll(),
+            func: (data) => new User(data).findAll(),
             summary: "Get all available users.",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user)
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
         }),
         "/active_user": documentCallback({
-            func: data => new User(data).getActiveUser(),
+            func: (data) => new User(data).getActiveUser(),
             summary: "Gets the currently active user.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
-            roles: ["instructor", "ta"]
-        })
+            roles: ["instructor", "ta"],
+        }),
     },
     post: {
         "/users": documentCallback({
             func: (data, params, body) => new User(data).upsert(body),
             summary: "Upserts user info",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
-            posts: docApiPropTypes.user
-        })
-    }
+            posts: docApiPropTypes.user,
+        }),
+    },
 };

@@ -49,7 +49,7 @@ function EditFieldDialog(props) {
                 <input
                     type="text"
                     value={fieldVal}
-                    onChange={e => setFieldVal(e.currentTarget.value)}
+                    onChange={(e) => setFieldVal(e.currentTarget.value)}
                 />{" "}
                 {changeIndicator}
             </Modal.Body>
@@ -119,5 +119,5 @@ EditFieldDialog.propTypes = {
     title: PropTypes.node,
     value: PropTypes.any.isRequired,
     onChange: PropTypes.func,
-    editable: PropTypes.bool
+    editable: PropTypes.bool,
 };

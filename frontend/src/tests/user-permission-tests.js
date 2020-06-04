@@ -16,7 +16,7 @@ export function userPermissionsTests(api) {
 
     const newUserData = {
         utorid: "userxx",
-        roles: ["instructor"]
+        roles: ["instructor"],
     };
 
     beforeAll(async () => {
@@ -43,7 +43,7 @@ export function userPermissionsTests(api) {
 
         // Set the active_user back to the default.
         resp = await apiPOST("/debug/active_user", {
-            id: databaseSeeder.seededData.active_user.id
+            id: databaseSeeder.seededData.active_user.id,
         });
     });
 

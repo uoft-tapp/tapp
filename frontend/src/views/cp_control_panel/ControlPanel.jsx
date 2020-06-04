@@ -6,7 +6,7 @@ import { positionsSelector } from "../../api/actions";
 
 const ConnectedFilteredList = connect((state, ownProps) => ({
     positions: positionsSelector(state),
-    listRenderer: ownProps.listRenderer
+    listRenderer: ownProps.listRenderer,
 }))(FilteredList);
 
 function ControlPanel() {

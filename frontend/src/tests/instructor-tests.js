@@ -5,7 +5,7 @@ import {
     beforeAll,
     checkPropTypes,
     errorPropTypes,
-    instructorPropTypes
+    instructorPropTypes,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -39,7 +39,7 @@ export function instructorsTests(api) {
             first_name: "Anand",
             last_name: "Liu",
             email: "anand.liu.sample@utoronto.ca",
-            utorid: "anandl"
+            utorid: "anandl",
         };
 
         // create a new instructor
@@ -61,7 +61,7 @@ export function instructorsTests(api) {
         const updateInstructorData = {
             ...instructor,
             id: instructor.id,
-            email: "newemail@toronto.ca"
+            email: "newemail@toronto.ca",
         };
 
         // update the instructor
@@ -86,7 +86,7 @@ export function instructorsTests(api) {
     it("fail to delete instructor with invalid id", async () => {
         const updatedInstructorData = {
             ...instructor,
-            id: -1
+            id: -1,
         };
 
         const resp = await apiPOST(`/admin/instructor`, updatedInstructorData);

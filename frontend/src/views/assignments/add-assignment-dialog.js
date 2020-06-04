@@ -6,7 +6,7 @@ import {
     positionsSelector,
     applicantsSelector,
     assignmentsSelector,
-    upsertAssignment
+    upsertAssignment,
 } from "../../api/actions";
 import { AssignmentEditor } from "../../components/forms/assignment-editor";
 
@@ -16,7 +16,7 @@ function getConficts(assignment, assignments = []) {
         ret.delayShow = "A position and applicant is required";
     }
     const matchingAssignment = assignments.find(
-        x =>
+        (x) =>
             strip((x.position || {}).id) ===
                 strip((assignment.position || {}).id) &&
             strip((x.applicant || {}).id) ===
@@ -41,7 +41,7 @@ const BLANK_ASSIGNMENT = {
     position: { id: null },
     applicant: { id: null },
     position_id: -1,
-    applicant_id: -1
+    applicant_id: -1,
 };
 
 export function AddAssignmentDialog(props) {
@@ -51,7 +51,7 @@ export function AddAssignmentDialog(props) {
         positions,
         applicants,
         assignments,
-        upsertAssignment
+        upsertAssignment,
     } = props;
     const [newAssignment, setNewAssignment] = React.useState(BLANK_ASSIGNMENT);
 
@@ -104,10 +104,10 @@ export function AddAssignmentDialog(props) {
 }
 
 export const ConnectedAddAssignmentDialog = connect(
-    state => ({
+    (state) => ({
         positions: positionsSelector(state),
         applicants: applicantsSelector(state),
-        assignments: assignmentsSelector(state)
+        assignments: assignmentsSelector(state),
     }),
     { upsertAssignment }
 )(AddAssignmentDialog);

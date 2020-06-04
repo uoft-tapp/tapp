@@ -6,7 +6,7 @@ export const globalReducer = createReducer(
     {
         [SET_GLOBALS]: (state, action) => ({
             ...state,
-            ...action.payload
-        })
+            ...action.payload,
+        }),
     }
 );

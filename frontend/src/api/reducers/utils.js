@@ -15,7 +15,7 @@ import { createReducer as _origCreateReducer } from "redux-create-reducer";
  */
 export function upsertItem(modelData, newItem) {
     let didUpdate = false;
-    const newModelData = modelData.map(item => {
+    const newModelData = modelData.map((item) => {
         if (item.id === newItem.id) {
             didUpdate = 1;
             return newItem;
@@ -53,25 +53,25 @@ export function createBasicReducerObject(
     return {
         [FETCH_MANY]: (state, action) => ({
             ...state,
-            _modelData: action.payload
+            _modelData: action.payload,
         }),
         [FETCH_ONE]: (state, action) => ({
             ...state,
-            _modelData: upsertItem(state._modelData, action.payload)
+            _modelData: upsertItem(state._modelData, action.payload),
         }),
         [UPSERT_ONE]: (state, action) => ({
             ...state,
-            _modelData: upsertItem(state._modelData, action.payload)
+            _modelData: upsertItem(state._modelData, action.payload),
         }),
         [DELETE_ONE]: (state, action) => {
             const deletedItem = action.payload;
             return {
                 ...state,
                 _modelData: state._modelData.filter(
-                    item => item.id !== deletedItem.id
-                )
+                    (item) => item.id !== deletedItem.id
+                ),
             };
-        }
+        },
     };
 }
 
@@ -155,7 +155,7 @@ function _localStoreSelector(state, _storePath) {
  * @returns {Function} A selector that returns the local state (based on `_storePath`) when passed the global state
  */
 export function createLocalStoreSelector(_storePath) {
-    return state => _localStoreSelector(state, _storePath);
+    return (state) => _localStoreSelector(state, _storePath);
 }
 
 /**

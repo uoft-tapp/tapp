@@ -11,7 +11,7 @@ import {
     applicationsReducer,
     assignmentsReducer,
     instructorsReducer,
-    contractTemplatesReducer
+    contractTemplatesReducer,
 } from "./api/reducers";
 import { usersReducer } from "./api/reducers/users";
 
@@ -36,14 +36,14 @@ const reducer = combineReducers({
         assignments: assignmentsReducer,
         instructors: instructorsReducer,
         contractTemplates: contractTemplatesReducer,
-        users: usersReducer
+        users: usersReducer,
     }),
     ui: combineReducers({
         notifications: notificationReducer,
         form: formReducer,
         offerTable: offerTableReducer,
-        globals: globalReducer
-    })
+        globals: globalReducer,
+    }),
 });
 
 export default reducer;

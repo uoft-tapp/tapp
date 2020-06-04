@@ -6,7 +6,7 @@ import {
     errorPropTypes,
     expect,
     it,
-    beforeAll
+    beforeAll,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -26,11 +26,11 @@ export function templatesTests(api) {
 
     const newTemplateData1 = {
         template_file: "this_is_a_test_template.html",
-        template_name: "OTO"
+        template_name: "OTO",
     };
     const newTemplateData2 = {
         template_file: "this_is_a_test_template.html",
-        template_name: "Invigilate"
+        template_name: "Invigilate",
     };
     // set up a session to be available before tests run
 
@@ -92,7 +92,7 @@ export function templatesTests(api) {
 
     it("update a template", async () => {
         // create template had been tested
-        const templateToUpdate = testTemplates.filter(t => {
+        const templateToUpdate = testTemplates.filter((t) => {
             return (
                 t.template_file === newTemplateData2.template_file &&
                 t.template_name === newTemplateData2.template_name
@@ -105,7 +105,7 @@ export function templatesTests(api) {
         const updateData = {
             ...templateToUpdate[0],
             id: templateToUpdate[0].id,
-            template_name: "Standard"
+            template_name: "Standard",
         };
         const resp1 = await apiPOST(
             `/admin/sessions/${session.id}/contract_templates`,
@@ -127,11 +127,11 @@ export function templatesTests(api) {
     it("throw error when `template_file` or `template_name` is empty", async () => {
         const newTemplateData1 = {
             template_file: "",
-            template_name: "Standard"
+            template_name: "Standard",
         };
         const newTemplateData2 = {
             template_file: "this_is_a_test_template.html",
-            template_name: ""
+            template_name: "",
         };
 
         // expected an error to crete new template with empty template_file

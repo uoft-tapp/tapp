@@ -22,7 +22,7 @@ expect.extend({
                     )} not to contain object ${this.utils.printExpected(
                         argument
                     )}`,
-                pass: true
+                pass: true,
             };
         } else {
             return {
@@ -30,7 +30,7 @@ expect.extend({
                     `expected ${this.utils.printReceived(
                         received
                     )} to contain object ${this.utils.printExpected(argument)}`,
-                pass: false
+                pass: false,
             };
         }
     },
@@ -46,20 +46,20 @@ expect.extend({
                 message: () =>
                     `expected API response to not have ${this.utils.printExpected(
                         {
-                            status: argument
+                            status: argument,
                         }
-                    )} but received ${this.utils.printReceived(received)}`
+                    )} but received ${this.utils.printReceived(received)}`,
             };
         } else {
             return {
                 pass: false,
                 message: () =>
                     `expected API response to have ${this.utils.printExpected({
-                        status: argument
-                    })} but received ${this.utils.printReceived(received)}`
+                        status: argument,
+                    })} but received ${this.utils.printReceived(received)}`,
             };
         }
-    }
+    },
 });
 
 export { expect, test, it, describe, beforeAll };
@@ -170,7 +170,7 @@ export async function addContractTemplateToSession(api, session, num = 1) {
         return {
             template_file: `this_is_a_test_template_${i}.html`,
             template_name:
-                ["Standard", "OTO", "Invigilate"][i] || `Standard v ${i}`
+                ["Standard", "OTO", "Invigilate"][i] || `Standard v ${i}`,
         };
     }
     let resp = {};
@@ -198,7 +198,7 @@ export async function addSession(api, include = { contract_templates: true }) {
         // add a random string to the session name so we don't accidentally collide with another
         // session's name
         name: "Newly Created Sessions (" + Math.random() + ")",
-        rate1: 56.54
+        rate1: 56.54,
     };
     let resp = {};
     resp = await api.apiPOST(`/admin/sessions`, newSessionData);
@@ -236,7 +236,7 @@ export async function addPosition(api, session) {
         position_title: "Calculus I",
         hours_per_assignment: 70,
         start_date: "2018/05/09",
-        end_date: "2018/09/09"
+        end_date: "2018/09/09",
     };
     const resp = await api.apiPOST(
         `/admin/sessions/${session.id}/positions`,

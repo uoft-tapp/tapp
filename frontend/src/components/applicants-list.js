@@ -6,9 +6,9 @@ export class ApplicantsList extends React.Component {
         applicants: PropTypes.arrayOf(
             PropTypes.shape({
                 first_name: PropTypes.string,
-                last_name: PropTypes.string
+                last_name: PropTypes.string,
             })
-        ).isRequired
+        ).isRequired,
     };
     render() {
         const { applicants } = this.props;
@@ -16,7 +16,7 @@ export class ApplicantsList extends React.Component {
         if (applicants.length > 0) {
             applicantsList = (
                 <ul>
-                    {applicants.map(applicant => (
+                    {applicants.map((applicant) => (
                         <li key={applicant.id}>
                             {applicant.first_name} {applicant.last_name}
                         </li>

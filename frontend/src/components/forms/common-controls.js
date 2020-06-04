@@ -23,8 +23,8 @@ export function fieldEditorFactory(boundData, setBoundData) {
      * @param {string} attr
      * @returns
      */
-    function setAttrFactory(attr, coerceFunc = x => x) {
-        return e => {
+    function setAttrFactory(attr, coerceFunc = (x) => x) {
+        return (e) => {
             const newVal = e.target.value || "";
             const newData = { ...boundData, [attr]: coerceFunc(newVal) };
             setBoundData(newData);
@@ -43,10 +43,10 @@ export function fieldEditorFactory(boundData, setBoundData) {
      */
     function createFieldEditor(title, attr, type = "text", inputAttrs = {}) {
         // Function called on the value before it is passed to setBoundData
-        let coerceFunc = x => x;
+        let coerceFunc = (x) => x;
         // Function that is called on the value before it is passed to the `<input />`
         // element
-        let valueFunc = x => x || "";
+        let valueFunc = (x) => x || "";
 
         // depending on the type we want to coerce values appropriately
         switch (type) {
@@ -54,8 +54,8 @@ export function fieldEditorFactory(boundData, setBoundData) {
                 coerceFunc = Number;
                 break;
             case "date":
-                coerceFunc = x => new Date(x).toISOString();
-                valueFunc = x => {
+                coerceFunc = (x) => new Date(x).toISOString();
+                valueFunc = (x) => {
                     try {
                         return new Date(x).toISOString().slice(0, 10);
                     } catch (e) {

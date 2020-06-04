@@ -33,7 +33,7 @@ function EditableInstructorsList(props) {
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
-        return props => (
+        return (props) => (
             <EditableCell
                 field={field}
                 upsertInstructor={upsertInstructor}
@@ -46,23 +46,23 @@ function EditableInstructorsList(props) {
         {
             Header: "Last Name",
             accessor: "last_name",
-            Cell: generateCell("last_name")
+            Cell: generateCell("last_name"),
         },
         {
             Header: "First Name",
             accessor: "first_name",
-            Cell: generateCell("first_name")
+            Cell: generateCell("first_name"),
         },
         {
             Header: "Email",
             accessor: "email",
-            Cell: generateCell("email")
+            Cell: generateCell("email"),
         },
         {
             Header: "UTORid",
             accessor: "utorid",
-            Cell: generateCell("utorid")
-        }
+            Cell: generateCell("utorid"),
+        },
     ];
 
     return <InstructorsList columns={columns} {...rest} />;
@@ -73,8 +73,8 @@ function EditableInstructorsList(props) {
  * for live updates and editability.
  */
 export const ConnectedInstructorsList = connect(
-    state => ({
-        instructors: instructorsSelector(state)
+    (state) => ({
+        instructors: instructorsSelector(state),
     }),
     { upsertInstructor }
 )(EditableInstructorsList);
