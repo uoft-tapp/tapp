@@ -94,7 +94,7 @@ export const localStoreSelector = assignmentsReducer._localStoreSelector;
 export const wageChunksByAssignmentSelector = createSelector(
     localStoreSelector,
     state =>
-        function(assignment) {
+        function (assignment) {
             const assignment_id = assignment.id;
             if (!state._wageChunksByAssignmentId[assignment_id]) {
                 return [];

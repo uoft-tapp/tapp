@@ -84,7 +84,7 @@ export function flattenIdFactory(
     outPropName,
     isArrayOfIds = false
 ) {
-    return function(obj) {
+    return function (obj) {
         // if the `inPropName` field doesn't exist, don't change anything
         // and don't error!
         if (obj[inPropName] == null) {

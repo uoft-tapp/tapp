@@ -33,7 +33,7 @@ function AssignmentDetails(props) {
      * @param {number} i
      */
     function changeHoursFactory(i) {
-        return function(hours) {
+        return function (hours) {
             const newWageChunks = wageChunks.map((chunk, j) => {
                 if (i !== j) {
                     return chunk;

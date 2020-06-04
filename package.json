@@ -7,13 +7,15 @@
         "babel-eslint": "^10.0.3",
         "eslint": "6.1.0",
         "eslint-plugin-react": "^7.13.0",
-        "prettier": "1.19.1",
+        "prettier": "^2.0.5",
         "prettier-check": "^2.0.0",
         "prettier-diff": "^0.0.16"
     },
     "prettier": {
         "tabWidth": 4,
         "semi": true,
-        "endOfLine": "lf"
+        "endOfLine": "lf",
+        "arrowParens": "avoid",
+        "trailingComma": "none"
     }
 }
