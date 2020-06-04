@@ -51,5 +51,5 @@ export function EmailButton(props) {
 }
 
 EmailButton.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.any)
+    data: PropTypes.arrayOf(PropTypes.any),
 };

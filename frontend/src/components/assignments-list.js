@@ -7,7 +7,7 @@ function AssignmentsList(props) {
     if (assignments.length > 0) {
         assignmentsList = (
             <ul>
-                {assignments.map(assignment => (
+                {assignments.map((assignment) => (
                     <li key={assignment.id}>
                         {assignment.position.position_code} ({assignment.hours}{" "}
                         hours): {assignment.applicant.first_name}{" "}
@@ -29,9 +29,9 @@ AssignmentsList.propTypes = {
         PropTypes.shape({
             id: PropTypes.number,
             position: PropTypes.object,
-            applicant: PropTypes.object
+            applicant: PropTypes.object,
         })
-    ).isRequired
+    ).isRequired,
 };
 
 export { AssignmentsList };

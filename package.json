@@ -14,8 +14,6 @@
     "prettier": {
         "tabWidth": 4,
         "semi": true,
-        "endOfLine": "lf",
-        "arrowParens": "avoid",
-        "trailingComma": "none"
+        "endOfLine": "lf"
     }
 }

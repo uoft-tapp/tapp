@@ -8,7 +8,7 @@ import {
     beforeAll,
     checkPropTypes,
     sessionPropTypes,
-    errorPropTypes
+    errorPropTypes,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -36,7 +36,7 @@ export function sessionsTests(api) {
         // add a random string to the session name so we don't accidentally collide with another
         // session's name
         name: "Newly Created Sessions (" + Math.random() + ")",
-        rate1: 56.54
+        rate1: 56.54,
     };
 
     it("fetch sessions", async () => {
@@ -69,14 +69,16 @@ export function sessionsTests(api) {
         // make sure we have an id
         expect(createdSession.id).not.toBeNull();
         // make sure the id is unique and wasn't already a session id
-        expect(initialSessions.map(x => x.id)).not.toContain(createdSession.id);
+        expect(initialSessions.map((x) => x.id)).not.toContain(
+            createdSession.id
+        );
 
         // fetch all sessions and make sure we're in there
         const { payload: withNewSessions } = await apiGET("/admin/sessions");
         expect(withNewSessions.length).toBeGreaterThan(initialSessions.length);
         expect(withNewSessions).toContainObject(createdSession);
         // make sure the id of our new session came back
-        expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
+        expect(withNewSessions.map((x) => x.id)).toContain(createdSession.id);
     });
 
     it("update a session", async () => {
@@ -89,7 +91,7 @@ export function sessionsTests(api) {
         // get the sessions list and make sure we're updated there as well
         const resp2 = await apiGET("/admin/sessions");
         // filter session list to get the updated session obj
-        const updatedSession = resp2.payload.filter(s => s.id == session.id);
+        const updatedSession = resp2.payload.filter((s) => s.id == session.id);
         expect(updatedSession).toContainObject(newData);
     });
 
@@ -148,11 +150,11 @@ export function sessionsTests(api) {
         const resp1 = await apiGET("/admin/sessions");
         expect(resp1).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
-        const maxId = Math.max(...resp1.payload.map(s => s.id));
+        const maxId = Math.max(...resp1.payload.map((s) => s.id));
 
         // delete with non-existing id
         const resp2 = await apiPOST("/admin/sessions/delete", {
-            id: maxId + 1 // add 1 to make the id invalid
+            id: maxId + 1, // add 1 to make the id invalid
         });
         // expected an error with non-identical session id
         expect(resp2).toHaveStatus("error");
@@ -161,7 +163,7 @@ export function sessionsTests(api) {
 
         // delete with id = null
         const resp3 = await apiPOST("/admin/sessions/delete", {
-            id: null
+            id: null,
         });
         // expected an error with non-identical session id
         expect(resp3).toHaveStatus("error");
@@ -170,10 +172,10 @@ export function sessionsTests(api) {
 
     it("delete session", async () => {
         const resp1 = await apiPOST("/admin/sessions/delete", {
-            id: session.id
+            id: session.id,
         });
         expect(resp1).toHaveStatus("success");
         const { payload: withoutNewSessions } = await apiGET("/admin/sessions");
-        expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
+        expect(withoutNewSessions.map((x) => x.id)).not.toContain(session.id);
     });
 }

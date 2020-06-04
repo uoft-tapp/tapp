@@ -26,7 +26,7 @@ export class WageChunk extends MockAPIController {
             [matchingAssignment.id],
             this.ownData,
             "assignment_id"
-        ).map(x => this.find(x));
+        ).map((x) => this.find(x));
     }
     find(wageChunk) {
         const rawWageChunk = this.rawFind(wageChunk);
@@ -60,7 +60,7 @@ export class WageChunk extends MockAPIController {
     getSession(wageChunk) {
         const rawWageChunk = this.rawFind(wageChunk);
         const assignment = new Assignment(this.data).rawFind({
-            id: rawWageChunk.assignment_id
+            id: rawWageChunk.assignment_id,
         });
         const position = new Assignment(this.data).getPosition(assignment);
         return new Position(this.data).getSession(position);
@@ -78,7 +78,7 @@ export class WageChunk extends MockAPIController {
         }
         return this.upsert({
             ...wageChunk,
-            assignment_id: matchingAssignment.id
+            assignment_id: matchingAssignment.id,
         });
     }
     /**
@@ -107,7 +107,7 @@ export class WageChunk extends MockAPIController {
             }
         }
         // Now we can upsert all the wageChunks
-        wageChunks.forEach(chunk =>
+        wageChunks.forEach((chunk) =>
             this.upsertByAssignment(chunk, matchingAssignment)
         );
         // Recompute the wage chunks list. This is "needless"
@@ -123,13 +123,13 @@ export const wageChunkRoutes = {
             func: (data, params, body) => new WageChunk(data).upsert(body),
             posts: docApiPropTypes.wageChunk,
             summary: "Upsert a wage_chunk",
-            returns: docApiPropTypes.wageChunk
+            returns: docApiPropTypes.wageChunk,
         }),
         "/wage_chunks/delete": documentCallback({
             func: (data, params, body) => new WageChunk(data).delete(body),
             posts: docApiPropTypes.wageChunk,
             summary: "Delete a wage_chunk. Must have a valid id specified.",
-            returns: docApiPropTypes.wageChunk
-        })
-    }
+            returns: docApiPropTypes.wageChunk,
+        }),
+    },
 };

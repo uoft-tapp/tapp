@@ -6,7 +6,7 @@ export const mockData = {
             end_date: "2019-12-31T00:00:00.000Z",
             name: "2019 Fall",
             rate1: 45.55,
-            rate2: 47.33
+            rate2: 47.33,
         },
         {
             id: 2,
@@ -14,51 +14,51 @@ export const mockData = {
             end_date: "2020-04-30T00:00:00.000Z",
             name: "2021 Spring",
             rate1: 45.55,
-            rate2: null
-        }
+            rate2: null,
+        },
     ],
     available_contract_templates: [
         {
-            template_file: "/math/default.html"
+            template_file: "/math/default.html",
         },
         {
-            template_file: "/math/default2018.html"
+            template_file: "/math/default2018.html",
         },
         {
-            template_file: "/math/invigilate.html"
+            template_file: "/math/invigilate.html",
         },
         {
-            template_file: "/math/invigilate2014.html"
+            template_file: "/math/invigilate2014.html",
         },
         {
-            template_file: "/math/oto.html"
-        }
+            template_file: "/math/oto.html",
+        },
     ],
     contract_templates: [
         {
             id: 1,
             template_name: "standard",
-            template_file: "/math/default.html"
+            template_file: "/math/default.html",
         },
         {
             id: 2,
             template_name: "oto",
-            template_file: "/math/oto.html"
+            template_file: "/math/oto.html",
         },
         {
             id: 3,
             template_name: "standard",
-            template_file: "/math/default2018.html"
+            template_file: "/math/default2018.html",
         },
         {
             id: 4,
             template_name: "invigilate",
-            template_file: "/math/invigilate.html"
-        }
+            template_file: "/math/invigilate.html",
+        },
     ],
     contract_templates_by_session: {
         "1": [1, 2],
-        "2": [3, 4]
+        "2": [3, 4],
     },
     instructors: [
         {
@@ -66,33 +66,33 @@ export const mockData = {
             last_name: "Smith",
             first_name: "Henry",
             email: "hery.smith@utoronto.ca",
-            utorid: "smithh"
+            utorid: "smithh",
         },
         {
             id: 1001,
             last_name: "Garcia",
             first_name: "Emily",
             email: "emily.garcia@utoronto.ca",
-            utorid: "garciae"
+            utorid: "garciae",
         },
         {
             id: 1002,
             last_name: "Miller",
             first_name: "Megan",
             email: "megan.miller@utoronto.ca",
-            utorid: "millerm"
+            utorid: "millerm",
         },
         {
             id: 1003,
             last_name: "Beera",
             first_name: "Lizzy",
             email: "lizzy.beera@utoronto.ca",
-            utorid: "beeral"
-        }
+            utorid: "beeral",
+        },
     ],
     positions_by_session: {
         "1": [10, 11, 14, 15, 16],
-        "2": [12, 13]
+        "2": [12, 13],
     },
     positions: [
         {
@@ -117,29 +117,29 @@ export const mockData = {
                 {
                     preference_level: 2,
                     applicant_id: 2000,
-                    instructor_id: 1000
+                    instructor_id: 1000,
                 },
                 {
                     preference_level: 1,
                     applicant_id: 2002,
-                    instructor_id: 1000
+                    instructor_id: 1000,
                 },
                 {
                     preference_level: -1,
                     applicant_id: 2005,
-                    instructor_id: 1001
+                    instructor_id: 1001,
                 },
                 {
                     preference_level: 1,
                     applicant_id: 2002,
-                    instructor_id: 1001
+                    instructor_id: 1001,
                 },
                 {
                     preference_level: 1,
                     applicant_id: 2006,
-                    instructor_id: 1001
-                }
-            ]
+                    instructor_id: 1001,
+                },
+            ],
         },
         {
             id: 11,
@@ -149,7 +149,7 @@ export const mockData = {
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             contract_template_id: 2,
-            instructor_ids: []
+            instructor_ids: [],
         },
         {
             id: 12,
@@ -165,19 +165,19 @@ export const mockData = {
                 {
                     preference_level: -1,
                     applicant_id: 2005,
-                    instructor_id: 1000
+                    instructor_id: 1000,
                 },
                 {
                     preference_level: 2,
                     applicant_id: 2001,
-                    instructor_id: 1000
+                    instructor_id: 1000,
                 },
                 {
                     preference_level: 1,
                     applicant_id: 2006,
-                    instructor_id: 1000
-                }
-            ]
+                    instructor_id: 1000,
+                },
+            ],
         },
         {
             id: 13,
@@ -192,14 +192,14 @@ export const mockData = {
                 {
                     preference_level: 2,
                     applicant_id: 2000,
-                    instructor_id: 1002
+                    instructor_id: 1002,
                 },
                 {
                     preference_level: 1,
                     applicant_id: 2002,
-                    instructor_id: 1002
-                }
-            ]
+                    instructor_id: 1002,
+                },
+            ],
         },
         {
             instructor_ids: [1002],
@@ -211,7 +211,7 @@ export const mockData = {
             contract_template_id: 1,
             start_date: "2021-01-01T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 14
+            id: 14,
         },
         {
             instructor_ids: [1000],
@@ -227,7 +227,7 @@ export const mockData = {
             current_enrollment: 1500,
             current_waitlisted: 78,
             desired_num_assignments: 22,
-            id: 15
+            id: 15,
         },
         {
             instructor_ids: [1001],
@@ -239,8 +239,8 @@ export const mockData = {
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
             desired_num_assignments: 3,
-            id: 16
-        }
+            id: 16,
+        },
     ],
     applicants: [
         {
@@ -250,7 +250,7 @@ export const mockData = {
             first_name: "Ron",
             last_name: "Weasley",
             email: "ron@potter.com",
-            phone: "543-223-9993"
+            phone: "543-223-9993",
         },
         {
             id: 2001,
@@ -258,7 +258,7 @@ export const mockData = {
             student_number: "999666999",
             first_name: "Harry",
             last_name: "Potter",
-            email: "harry@potter.com"
+            email: "harry@potter.com",
         },
         {
             id: 2002,
@@ -266,7 +266,7 @@ export const mockData = {
             email: "smithb@mail.utoronto.ca",
             first_name: "Bethany",
             last_name: "Smith",
-            student_number: "131382748"
+            student_number: "131382748",
         },
         {
             id: 2003,
@@ -274,7 +274,7 @@ export const mockData = {
             email: "wilsonh@mail.utoronto.ca",
             first_name: "Hanna",
             last_name: "Wilson",
-            student_number: "600366904"
+            student_number: "600366904",
         },
         {
             id: 2004,
@@ -282,7 +282,7 @@ export const mockData = {
             email: "molinat@mail.utoronto.ca",
             first_name: "Troy",
             last_name: "Molina",
-            student_number: "328333023"
+            student_number: "328333023",
         },
         {
             id: 2005,
@@ -290,7 +290,7 @@ export const mockData = {
             email: "howeyb@mail.utoronto.ca",
             first_name: "Brett",
             last_name: "Howey",
-            student_number: "329613524"
+            student_number: "329613524",
         },
         {
             id: 2006,
@@ -298,25 +298,25 @@ export const mockData = {
             email: "brownd@mail.utoronto.ca",
             first_name: "David",
             last_name: "Brown",
-            student_number: "29151485"
-        }
+            student_number: "29151485",
+        },
     ],
     assignments_by_session: {
         "1": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
-        "2": []
+        "2": [],
     },
     assignments: [
         {
             id: 100,
             position_id: 10,
             applicant_id: 2001,
-            hours: 90
+            hours: 90,
         },
         {
             id: 101,
             position_id: 10,
             applicant_id: 2005,
-            hours: 95
+            hours: 95,
         },
         {
             note: "",
@@ -324,7 +324,7 @@ export const mockData = {
             applicant_id: 2000,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
-            id: 102
+            id: 102,
         },
         {
             note: "",
@@ -332,7 +332,7 @@ export const mockData = {
             applicant_id: 2002,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
-            id: 103
+            id: 103,
         },
         {
             note: "",
@@ -340,7 +340,7 @@ export const mockData = {
             applicant_id: 2001,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 104
+            id: 104,
         },
         {
             note: "",
@@ -348,7 +348,7 @@ export const mockData = {
             applicant_id: 2002,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 105
+            id: 105,
         },
         {
             note: "",
@@ -356,7 +356,7 @@ export const mockData = {
             applicant_id: 2005,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 106
+            id: 106,
         },
         {
             note: "",
@@ -364,7 +364,7 @@ export const mockData = {
             applicant_id: 2000,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 107
+            id: 107,
         },
         {
             note: "",
@@ -372,7 +372,7 @@ export const mockData = {
             applicant_id: 2006,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 108
+            id: 108,
         },
         {
             note: "",
@@ -380,8 +380,8 @@ export const mockData = {
             applicant_id: 2002,
             start_date: "2021-01-01T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
-            id: 109
-        }
+            id: 109,
+        },
     ],
     wage_chunks: [
         {
@@ -390,7 +390,7 @@ export const mockData = {
             hours: 20,
             start_date: "2019-09-08T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
-            rate: 10.01
+            rate: 10.01,
         },
         {
             id: 3001,
@@ -398,7 +398,7 @@ export const mockData = {
             hours: 35,
             start_date: "2020-01-01T00:00:00.000Z",
             end_date: "2020-04-20T00:00:00.000Z",
-            rate: 12.02
+            rate: 12.02,
         },
         {
             id: 3002,
@@ -406,121 +406,121 @@ export const mockData = {
             hours: 95,
             start_date: "2019-09-01T00:00:00.000Z",
             end_date: "2020-04-20T00:00:00.000Z",
-            rate: null
+            rate: null,
         },
         {
             id: 3003,
             assignment_id: 102,
             hours: 225,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T00:00:00.000Z"
+            end_date: "2019-12-31T00:00:00.000Z",
         },
         {
             id: 3004,
             assignment_id: 103,
             hours: 225,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T00:00:00.000Z"
+            end_date: "2019-12-31T00:00:00.000Z",
         },
         {
             id: 3005,
             assignment_id: 104,
             hours: 125,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T05:00:00.000Z"
+            end_date: "2019-12-31T05:00:00.000Z",
         },
         {
             id: 3006,
             assignment_id: 104,
             hours: 125,
             start_date: "2020-01-01T05:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
+            end_date: "2020-04-03T00:00:00.000Z",
         },
         {
             id: 3007,
             assignment_id: 105,
             hours: 125,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T05:00:00.000Z"
+            end_date: "2019-12-31T05:00:00.000Z",
         },
         {
             id: 3008,
             assignment_id: 105,
             hours: 125,
             start_date: "2020-01-01T05:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
+            end_date: "2020-04-03T00:00:00.000Z",
         },
         {
             id: 3009,
             assignment_id: 106,
             hours: 125,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T05:00:00.000Z"
+            end_date: "2019-12-31T05:00:00.000Z",
         },
         {
             id: 3010,
             assignment_id: 106,
             hours: 125,
             start_date: "2020-01-01T05:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
+            end_date: "2020-04-03T00:00:00.000Z",
         },
         {
             id: 3011,
             assignment_id: 107,
             hours: 100,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T05:00:00.000Z"
+            end_date: "2019-12-31T05:00:00.000Z",
         },
         {
             id: 3012,
             assignment_id: 107,
             hours: 100,
             start_date: "2020-01-01T05:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
+            end_date: "2020-04-03T00:00:00.000Z",
         },
         {
             id: 3013,
             assignment_id: 108,
             hours: 100,
             start_date: "2019-09-02T00:00:00.000Z",
-            end_date: "2019-12-31T05:00:00.000Z"
+            end_date: "2019-12-31T05:00:00.000Z",
         },
         {
             id: 3014,
             assignment_id: 108,
             hours: 100,
             start_date: "2020-01-01T05:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
+            end_date: "2020-04-03T00:00:00.000Z",
         },
         {
             id: 3015,
             assignment_id: 109,
             hours: 100,
             start_date: "2021-01-01T00:00:00.000Z",
-            end_date: "2020-04-03T00:00:00.000Z"
-        }
+            end_date: "2020-04-03T00:00:00.000Z",
+        },
     ],
     offers: [
         {
             id: 10000,
             assignment_id: 100,
-            status: "withdrawn"
+            status: "withdrawn",
         },
         {
             id: 10001,
             assignment_id: 100,
-            status: "pending"
+            status: "pending",
         },
         {
             id: 10002,
             assignment_id: 101,
-            status: "accepted"
+            status: "accepted",
         },
         {
             id: 10003,
             assignment_id: 102,
-            status: "withdrawn"
-        }
+            status: "withdrawn",
+        },
     ],
     applications: [
         {
@@ -535,13 +535,13 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 2,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 15
-                }
-            ]
+                    position_id: 15,
+                },
+            ],
         },
         {
             comments: "",
@@ -555,13 +555,13 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 0,
-                    position_id: 12
+                    position_id: 12,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
-                }
-            ]
+                    position_id: 13,
+                },
+            ],
         },
         {
             comments: "",
@@ -575,21 +575,21 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 3,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
+                    position_id: 13,
                 },
                 {
                     preference_level: 2,
-                    position_id: 12
+                    position_id: 12,
                 },
                 {
                     preference_level: 0,
-                    position_id: 11
-                }
-            ]
+                    position_id: 11,
+                },
+            ],
         },
         {
             comments: "",
@@ -603,21 +603,21 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 2,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
+                    position_id: 13,
                 },
                 {
                     preference_level: 0,
-                    position_id: 12
+                    position_id: 12,
                 },
                 {
                     preference_level: 1,
-                    position_id: 11
-                }
-            ]
+                    position_id: 11,
+                },
+            ],
         },
         {
             comments: "",
@@ -631,17 +631,17 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 3,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 0,
-                    position_id: 13
+                    position_id: 13,
                 },
                 {
                     preference_level: 2,
-                    position_id: 12
-                }
-            ]
+                    position_id: 12,
+                },
+            ],
         },
         {
             comments: "",
@@ -655,21 +655,21 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 3,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
+                    position_id: 13,
                 },
                 {
                     preference_level: 2,
-                    position_id: 12
+                    position_id: 12,
                 },
                 {
                     preference_level: 0,
-                    position_id: 11
-                }
-            ]
+                    position_id: 11,
+                },
+            ],
         },
         {
             comments: "",
@@ -683,21 +683,21 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 3,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
+                    position_id: 13,
                 },
                 {
                     preference_level: 2,
-                    position_id: 12
+                    position_id: 12,
                 },
                 {
                     preference_level: 0,
-                    position_id: 11
-                }
-            ]
+                    position_id: 11,
+                },
+            ],
         },
         {
             comments: "",
@@ -711,36 +711,36 @@ export const mockData = {
             position_preferences: [
                 {
                     preference_level: 1,
-                    position_id: 10
+                    position_id: 10,
                 },
                 {
                     preference_level: 3,
-                    position_id: 13
-                }
-            ]
-        }
+                    position_id: 13,
+                },
+            ],
+        },
     ],
     users: [
         {
             email: "hery.smith@utoronto.ca",
             utorid: "smithh",
-            roles: ["admin", "instructor"]
+            roles: ["admin", "instructor"],
         },
         {
             email: "emily.garcia@utoronto.ca",
             utorid: "garciae",
-            roles: ["instructor"]
+            roles: ["instructor"],
         },
         {
             email: "megan.miller@utoronto.ca",
             utorid: "millerm",
-            roles: ["instructor"]
+            roles: ["instructor"],
         },
         {
             email: "lizzy.beera@utoronto.ca",
             utorid: "beeral",
-            roles: ["instructor"]
-        }
+            roles: ["instructor"],
+        },
     ],
-    active_user: "smithh"
+    active_user: "smithh",
 };

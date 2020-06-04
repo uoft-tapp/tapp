@@ -58,7 +58,7 @@ function propTypesProxy(obj, callChain = []) {
         },
         ownKeys(obj) {
             return [...Reflect.ownKeys(obj), "callChain", "toJSON"];
-        }
+        },
     };
 
     return new Proxy(obj, handler);
@@ -76,7 +76,7 @@ const PROPTYPES_TO_SWAGGER_TYPES = {
     bool: "boolean",
     object: "object",
     array: "array",
-    any: {}
+    any: {},
 };
 
 function wrappedPropTypesToSwagger(pt) {
@@ -158,12 +158,12 @@ function wrapInStandardApiResponseForSwagger(payload = { type: "object" }) {
         properties: {
             status: {
                 type: "string",
-                enum: ["success", "error"]
+                enum: ["success", "error"],
             },
             message: { type: "string" },
-            payload
+            payload,
         },
-        required: ["status"]
+        required: ["status"],
     };
 }
 
@@ -207,15 +207,15 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
     // other routes are restricted depending on the list specified in `roles`.
     const prefixRoles = ["admin", ...(docs.roles || [])];
     ret.summary =
-        `(prefixes: ${prefixRoles.map(x => "/" + x).join(", ")}) ` +
+        `(prefixes: ${prefixRoles.map((x) => "/" + x).join(", ")}) ` +
         docs.summary;
     // If there are templateVars, they should become `paramters`
     if (templateVars.length > 0) {
-        ret.parameters = templateVars.map(x => ({
+        ret.parameters = templateVars.map((x) => ({
             name: x,
             in: "path",
             description: x,
-            required: true
+            required: true,
         }));
     }
     // `docs.returns` holds information about what the route will return
@@ -225,9 +225,9 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
                 "application/json": {
                     schema: wrapInStandardApiResponseForSwagger(
                         wrappedPropTypesToSwagger(docs.returns)
-                    )
-                }
-            }
+                    ),
+                },
+            },
         };
     }
     // `docs.posts` holds information about what you can put in the
@@ -236,9 +236,9 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
         ret.requestBody = {
             content: {
                 "application/json": {
-                    schema: wrappedPropTypesToSwagger(docs.posts)
-                }
-            }
+                    schema: wrappedPropTypesToSwagger(docs.posts),
+                },
+            },
         };
     }
 
@@ -260,7 +260,7 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
             continue;
         }
         ret[templatePath] = Object.assign(ret[templatePath] || {}, {
-            get: documentedCallbackToSwagger(val.docs, templateVars)
+            get: documentedCallbackToSwagger(val.docs, templateVars),
         });
     }
     for (const [path, val] of Object.entries(postRoutes)) {
@@ -269,7 +269,7 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
             continue;
         }
         ret[templatePath] = Object.assign(ret[templatePath] || {}, {
-            post: documentedCallbackToSwagger(val.docs, templateVars)
+            post: documentedCallbackToSwagger(val.docs, templateVars),
         });
     }
 
@@ -278,14 +278,14 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
     const tags = Array.from(
         new Set(
             Object.keys(ret)
-                .map(x => x.split("/")[1])
-                .filter(x => x)
+                .map((x) => x.split("/")[1])
+                .filter((x) => x)
         )
     );
     // If a route contains one of the "tags", then it should be annotated
     // accordingly (with each relavent tag)
     for (const [path, info] of Object.entries(ret)) {
-        const applicableTags = tags.filter(x => path.includes(x));
+        const applicableTags = tags.filter((x) => path.includes(x));
         if (info.get && applicableTags.length > 0) {
             info.get.tags = applicableTags;
         }
@@ -315,7 +315,7 @@ function documentCallback({ func, exclude = false, ...attrs }) {
     const ret = (...args) => func(...args);
     ret.docs = {
         exclude,
-        ...attrs
+        ...attrs,
     };
     return ret;
 }
@@ -326,5 +326,5 @@ export {
     urlTemplateToSwagger,
     mockApiRoutesAsSwaggerPaths,
     documentCallback,
-    docApiPropTypes
+    docApiPropTypes,
 };

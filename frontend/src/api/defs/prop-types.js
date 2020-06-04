@@ -15,33 +15,33 @@ function generatePropTypes(PropTypes) {
         apiResponse: PropTypes.shape({
             status: PropTypes.oneOf(["success", "error"]).isRequired,
             message: PropTypes.string,
-            payload: PropTypes.any
+            payload: PropTypes.any,
         }),
         apiResponseSuccess: PropTypes.shape({
             status: PropTypes.oneOf(["success"]).isRequired,
             message: PropTypes.string,
-            payload: PropTypes.any
+            payload: PropTypes.any,
         }),
         apiResponseError: PropTypes.shape({
             status: PropTypes.oneOf(["error"]).isRequired,
             message: PropTypes.string.isRequired,
-            payload: PropTypes.any
+            payload: PropTypes.any,
         }),
         idOnly: PropTypes.shape({
-            id
+            id,
         }),
         session: PropTypes.shape({
             id,
             start_date: PropTypes.string,
             end_date: PropTypes.string,
-            name: PropTypes.string.isRequired
+            name: PropTypes.string.isRequired,
         }),
         contractTemplateMinimal: PropTypes.shape({
-            template_file: PropTypes.string
+            template_file: PropTypes.string,
         }),
         contractTemplate: PropTypes.shape({
             template_file: PropTypes.string,
-            template_name: PropTypes.string
+            template_name: PropTypes.string,
         }),
         position: PropTypes.shape({
             position_code: PropTypes.string.isRequired,
@@ -64,15 +64,15 @@ function generatePropTypes(PropTypes) {
                 PropTypes.shape({
                     preference_level: PropTypes.number,
                     applicant_id: id,
-                    instructor_id: id
+                    instructor_id: id,
                 })
-            )
+            ),
         }),
         instructor: PropTypes.shape({
             first_name: PropTypes.string.isRequired,
             last_name: PropTypes.string.isRequired,
             email: PropTypes.string,
-            utorid: PropTypes.string.isRequired
+            utorid: PropTypes.string.isRequired,
         }),
         assignment: PropTypes.shape({
             start_date: PropTypes.string,
@@ -88,8 +88,8 @@ function generatePropTypes(PropTypes) {
                 "provisional",
                 "pending",
                 "no_offer",
-                null
-            ])
+                null,
+            ]),
         }),
         applicant: PropTypes.shape({
             utorid: PropTypes.string.isRequired,
@@ -97,16 +97,16 @@ function generatePropTypes(PropTypes) {
             first_name: PropTypes.string.isRequired,
             last_name: PropTypes.string.isRequired,
             email: PropTypes.string,
-            phone: PropTypes.string
+            phone: PropTypes.string,
         }),
         wageChunk: PropTypes.shape({
             start_date: PropTypes.string,
             end_date: PropTypes.string,
             hours: PropTypes.number,
-            rate: PropTypes.number
+            rate: PropTypes.number,
         }),
         reportingTag: PropTypes.shape({
-            name: PropTypes.string
+            name: PropTypes.string,
         }),
         offer: PropTypes.shape({
             first_name: PropTypes.string,
@@ -126,7 +126,7 @@ function generatePropTypes(PropTypes) {
             status: PropTypes.string,
             accepted_date: PropTypes.string,
             rejected_date: PropTypes.string,
-            withdrawn_date: PropTypes.string
+            withdrawn_date: PropTypes.string,
         }),
         application: PropTypes.shape({
             session_id: id,
@@ -140,14 +140,14 @@ function generatePropTypes(PropTypes) {
             position_preference: PropTypes.arrayOf(
                 PropTypes.shape({
                     preference_level: PropTypes.number,
-                    position_id: id
+                    position_id: id,
                 })
-            )
+            ),
         }),
         user: PropTypes.shape({
             utorid: PropTypes.string,
-            roles: PropTypes.arrayOf(PropTypes.string)
-        })
+            roles: PropTypes.arrayOf(PropTypes.string),
+        }),
     };
 }
 

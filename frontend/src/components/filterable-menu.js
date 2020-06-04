@@ -25,7 +25,7 @@ const FilterableMenuContents = React.forwardRef((props, ref) => {
     }
     // Filter the child `Dropdown.Item` items
     const sessionList = React.Children.toArray(children).filter(
-        child =>
+        (child) =>
             !filter.trim() ||
             child.props.children.toLowerCase().includes(filter.trim())
     );
@@ -88,9 +88,9 @@ FilterableMenu.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.any.isRequired,
-            name: PropTypes.string.isRequired
+            name: PropTypes.string.isRequired,
         })
     ),
     activeItemId: PropTypes.any,
-    clearFilter: PropTypes.bool
+    clearFilter: PropTypes.bool,
 };

@@ -2,7 +2,7 @@ import { getAttributesCheckMessage, MockAPIController } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 
 export class Session extends MockAPIController {
@@ -20,7 +20,7 @@ export class Session extends MockAPIController {
         // if we're here, we need to create a new session
         // but check if the session name is empty or duplicate
         const message = getAttributesCheckMessage(session, this.ownData, {
-            name: { required: true, unique: true }
+            name: { required: true, unique: true },
         });
         if (message) {
             throw new Error(message);
@@ -37,13 +37,15 @@ export class Session extends MockAPIController {
             }
             // if `name` is not empty, make sure it is unique after the update
             // by filtering out the request session
-            const filteredData = this.findAll().filter(item => item.id !== id);
+            const filteredData = this.findAll().filter(
+                (item) => item.id !== id
+            );
             // and make sure `name` is unique to the rest
             const message = getAttributesCheckMessage(
                 { name: value },
                 filteredData,
                 {
-                    name: { unique: true }
+                    name: { unique: true },
                 }
             );
             if (message) {
@@ -58,10 +60,10 @@ export class Session extends MockAPIController {
 export const sessionsRoutes = {
     get: {
         "/sessions": documentCallback({
-            func: data => new Session(data).findAll(),
+            func: (data) => new Session(data).findAll(),
             summary: "Get all available sessions",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.session)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.session),
+        }),
     },
     post: {
         "/sessions": documentCallback({
@@ -72,7 +74,7 @@ export const sessionsRoutes = {
             },
             summary: "Upsert a session",
             returns: docApiPropTypes.session,
-            posts: docApiPropTypes.session
+            posts: docApiPropTypes.session,
         }),
         "/sessions/delete": documentCallback({
             func: (data, params, body) => {
@@ -80,7 +82,7 @@ export const sessionsRoutes = {
             },
             summary: "Delete a session",
             posts: docApiPropTypes.idOnly,
-            returns: docApiPropTypes.session
-        })
-    }
+            returns: docApiPropTypes.session,
+        }),
+    },
 };

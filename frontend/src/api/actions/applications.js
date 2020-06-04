@@ -3,7 +3,7 @@ import {
     FETCH_APPLICATIONS_SUCCESS,
     FETCH_ONE_APPLICATION_SUCCESS,
     UPSERT_ONE_APPLICATION_SUCCESS,
-    DELETE_ONE_APPLICATION_SUCCESS
+    DELETE_ONE_APPLICATION_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
@@ -11,7 +11,7 @@ import {
     arrayToHash,
     validatedApiDispatcher,
     flattenIdFactory,
-    splitObjByProps
+    splitObjByProps,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicationsReducer } from "../reducers/applications";
@@ -38,7 +38,7 @@ function prepForApi(data) {
     if (filtered["position_preferences"]) {
         ret["position_preferences"] = filtered[
             "position_preferences"
-        ].map(preference => positionToPositionId(preference));
+        ].map((preference) => positionToPositionId(preference));
     }
 
     return applicantToApplicantId(ret);
@@ -48,7 +48,7 @@ function prepForApi(data) {
 export const fetchApplications = validatedApiDispatcher({
     name: "fetchApplications",
     description: "Fetch applications",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
@@ -56,30 +56,30 @@ export const fetchApplications = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/applications`
         );
         dispatch(fetchApplicationsSuccess(data));
-    }
+    },
 });
 
 export const fetchApplication = validatedApiDispatcher({
     name: "fetchApplication",
     description: "Fetch application",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/applications/${payload.id}`
         );
         dispatch(fetchOneApplicationSuccess(data));
-    }
+    },
 });
 
 export const upsertApplication = validatedApiDispatcher({
     name: "upsertApplication",
     description: "Add/insert application",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
@@ -87,15 +87,15 @@ export const upsertApplication = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(upsertOneApplicationSuccess(data));
-    }
+    },
 });
 
 export const deleteApplication = validatedApiDispatcher({
     name: "deleteApplication",
     description: "Delete application",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const data = await apiPOST(
@@ -103,7 +103,7 @@ export const deleteApplication = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(deleteOneApplicationSuccess(data));
-    }
+    },
 });
 
 // selectors
@@ -115,7 +115,7 @@ export const deleteApplication = validatedApiDispatcher({
 export const localStoreSelector = applicationsReducer._localStoreSelector;
 export const _applicationsSelector = createSelector(
     localStoreSelector,
-    state => state._modelData
+    (state) => state._modelData
 );
 
 // Get the current list of applications and recompute `applicant_id` and `position_id`
@@ -140,9 +140,9 @@ export const applicationsSelector = createSelector(
                 position_preferences: (position_preferences || []).map(
                     ({ position_id, ...rest }) => ({
                         position: positionsById[position_id],
-                        ...rest
+                        ...rest,
                     })
-                )
+                ),
             })
         );
     }

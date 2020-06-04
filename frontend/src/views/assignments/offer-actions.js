@@ -9,7 +9,7 @@ import {
     offerForAssignmentNag,
     offerForAssignmentWithdraw,
     setOfferForAssignmentAccepted,
-    setOfferForAssignmentRejected
+    setOfferForAssignmentRejected,
 } from "../../api/actions/offers";
 
 function OfferActionButtons(props) {
@@ -20,7 +20,7 @@ function OfferActionButtons(props) {
         offerForAssignmentNag,
         offerForAssignmentWithdraw,
         setOfferForAssignmentAccepted,
-        setOfferForAssignmentRejected
+        setOfferForAssignmentRejected,
     } = props;
 
     function createOffers() {
@@ -68,14 +68,14 @@ function OfferActionButtons(props) {
     );
 }
 export const ConnectedOfferActionButtons = connect(
-    state => {
+    (state) => {
         // pass in the currently selected assignments.
         const { selectedAssignmentIds } = offerTableSelector(state);
         const assignments = assignmentsSelector(state);
         return {
-            assignments: assignments.filter(x =>
+            assignments: assignments.filter((x) =>
                 selectedAssignmentIds.includes(x.id)
-            )
+            ),
         };
     },
     {
@@ -84,6 +84,6 @@ export const ConnectedOfferActionButtons = connect(
         offerForAssignmentNag,
         offerForAssignmentWithdraw,
         setOfferForAssignmentAccepted,
-        setOfferForAssignmentRejected
+        setOfferForAssignmentRejected,
     }
 )(OfferActionButtons);

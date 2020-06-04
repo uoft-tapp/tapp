@@ -3,7 +3,7 @@ import {
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
-    DELETE_ONE_POSITION_SUCCESS
+    DELETE_ONE_POSITION_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
@@ -11,7 +11,7 @@ import {
     validatedApiDispatcher,
     arrayToHash,
     flattenIdFactory,
-    splitObjByProps
+    splitObjByProps,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { positionsReducer } from "../reducers/positions";
@@ -31,7 +31,7 @@ const deleteOnePositionSuccess = actionFactory(DELETE_ONE_POSITION_SUCCESS);
 export const fetchPositions = validatedApiDispatcher({
     name: "fetchPositions",
     description: "Fetch positions",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const role = activeRoleSelector(getState());
@@ -39,22 +39,22 @@ export const fetchPositions = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/positions`
         );
         dispatch(fetchPositionsSuccess(data));
-    }
+    },
 });
 
 export const fetchPosition = validatedApiDispatcher({
     name: "fetchPosition",
     description: "Fetch position",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const role = activeRoleSelector(getState());
         const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/positions/${payload.id}`
         );
         dispatch(fetchOnePositionSuccess(data));
-    }
+    },
 });
 
 // Some helper functions to convert the data that the UI uses
@@ -82,7 +82,7 @@ function prepForApi(data) {
     if (filtered["instructor_preferences"]) {
         ret["instructor_preferences"] = filtered[
             "instructor_preferences"
-        ].map(preference =>
+        ].map((preference) =>
             applicantToApplicantId(instructorToInstructorId(preference))
         );
     }
@@ -96,8 +96,8 @@ export const upsertPosition = validatedApiDispatcher({
     name: "upsertPosition",
     description: "Add/insert position",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
@@ -105,15 +105,15 @@ export const upsertPosition = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(upsertOnePositionSuccess(data));
-    }
+    },
 });
 
 export const deletePosition = validatedApiDispatcher({
     name: "deletePosition",
     description: "Delete position",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const { id: activeSessionId } = getState().model.sessions.activeSession;
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
@@ -121,7 +121,7 @@ export const deletePosition = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(deleteOnePositionSuccess(data));
-    }
+    },
 });
 
 // selectors
@@ -133,7 +133,7 @@ export const deletePosition = validatedApiDispatcher({
 export const localStoreSelector = positionsReducer._localStoreSelector;
 const _positionsSelector = createSelector(
     localStoreSelector,
-    state => state._modelData
+    (state) => state._modelData
 );
 /**
  * Get the positions, but populate the `instructors` array with the full instructor
@@ -144,7 +144,7 @@ export const positionsSelector = createSelector(
         _positionsSelector,
         instructorsSelector,
         contractTemplatesSelector,
-        applicantsSelector
+        applicantsSelector,
     ],
     (positions, instructors, contractTemplates, applicants) => {
         // Hash the instructors by `id` for fast lookup
@@ -162,15 +162,15 @@ export const positionsSelector = createSelector(
                 ...rest
             }) => ({
                 ...rest,
-                instructors: instructor_ids.map(x => instructorsById[x]),
+                instructors: instructor_ids.map((x) => instructorsById[x]),
                 contract_template: contractTemplatesById[contract_template_id],
                 instructor_preferences: (instructor_preferences || []).map(
                     ({ applicant_id, instructor_id, ...rest }) => ({
                         instructor: instructorsById[instructor_id],
                         applicant: applicantsById[applicant_id],
-                        ...rest
+                        ...rest,
                     })
-                )
+                ),
             })
         );
     }

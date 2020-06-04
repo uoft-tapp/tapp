@@ -2,7 +2,7 @@ import {
     FETCH_ACTIVE_USER_SUCCESS,
     FETCH_USERS_SUCCESS,
     UPSERT_USERS_SUCCESS,
-    SET_ACTIVE_USER_ROLE_SUCCESS
+    SET_ACTIVE_USER_ROLE_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
@@ -20,49 +20,49 @@ const setActiveUserRoleSuccess = actionFactory(SET_ACTIVE_USER_ROLE_SUCCESS);
 export const fetchActiveUser = validatedApiDispatcher({
     name: "fetchActiveUser",
     description: "Fetch the active user",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/active_user`);
         dispatch(fetchActiveUserSuccess(data));
-    }
+    },
 });
 
 export const upsertUser = validatedApiDispatcher({
     name: "upsertUsers",
     description: "Upserts a user (setting their role(s))",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: user => async dispatch => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (user) => async (dispatch) => {
         const data = await apiPOST(`/admin/users`, user);
         dispatch(upsertUserSuccess(data));
         await dispatch(fetchUsers(user));
-    }
+    },
 });
 
 export const fetchUsers = validatedApiDispatcher({
     name: "fetchUsers",
     description: "Fetch all users",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
+    onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/users`);
         dispatch(fetchUsersSuccess(data));
-    }
+    },
 });
 
 export const setActiveUserRole = validatedApiDispatcher({
     name: "setActiveUserRole",
     description: "Sets the role of the active user",
-    onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: (payload, options = {}) => async dispatch => {
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload, options = {}) => async (dispatch) => {
         await dispatch(setActiveUserRoleSuccess(payload));
         if (!options.skipInit) {
             await dispatch(
                 initFromStage("setActiveUserRole", { startAfterStage: true })
             );
         }
-    }
+    },
 });
 
 export const debugOnlyFetchUsers = validatedApiDispatcher({
@@ -70,19 +70,19 @@ export const debugOnlyFetchUsers = validatedApiDispatcher({
     description:
         "Fetch all users; this is available only in debug mode and bypasses any user permissions",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: () => async dispatch => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: () => async (dispatch) => {
         const data = await apiGET(`/debug/users`);
         dispatch(fetchUsersSuccess(data));
-    }
+    },
 });
 
 export const debugOnlySetActiveUser = validatedApiDispatcher({
     name: "debugOnlySetActiveUser",
     description:
         "Sets the active user (i.e. fakes the 'logged on' user); available only in debug mode",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: (user, options = {}) => async dispatch => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (user, options = {}) => async (dispatch) => {
         const data = await apiPOST(`/debug/active_user`, user);
         await dispatch(fetchActiveUserSuccess(data));
         // The new user we switch to might not have the same roles as the previous user.
@@ -94,7 +94,7 @@ export const debugOnlySetActiveUser = validatedApiDispatcher({
         if (!options.skipInit) {
             await dispatch(initFromStage("setActiveUser"));
         }
-    }
+    },
 });
 
 // selectors
@@ -104,8 +104,8 @@ export const debugOnlySetActiveUser = validatedApiDispatcher({
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
 export const localStoreSelector = usersReducer._localStoreSelector;
-export const usersSelector = state => localStoreSelector(state).users;
-export const activeUserSelector = state =>
+export const usersSelector = (state) => localStoreSelector(state).users;
+export const activeUserSelector = (state) =>
     localStoreSelector(state).active_user;
-export const activeRoleSelector = state =>
+export const activeRoleSelector = (state) =>
     localStoreSelector(state).active_role;

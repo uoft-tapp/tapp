@@ -1,12 +1,12 @@
 import {
     getAttributesCheckMessage,
     findAllById,
-    MockAPIController
+    MockAPIController,
 } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
 
@@ -19,7 +19,7 @@ export class ContractTemplate extends MockAPIController {
         // The name and file are required
         const message = getAttributesCheckMessage(template, this.ownData, {
             template_name: { required: true },
-            template_file: { required: true }
+            template_file: { required: true },
         });
         if (message) {
             throw new Error(message);
@@ -30,7 +30,7 @@ export class ContractTemplate extends MockAPIController {
                 template,
                 this.findAllBySession(session),
                 {
-                    template_name: { required: true, unique: true }
+                    template_name: { required: true, unique: true },
                 }
             );
             if (message) {
@@ -66,19 +66,19 @@ export class ContractTemplate extends MockAPIController {
 export const templatesRoutes = {
     get: {
         "/available_contract_templates": documentCallback({
-            func: data => [...data.available_contract_templates],
+            func: (data) => [...data.available_contract_templates],
             summary:
                 "Get all available contract templates (these are literal files on the server).",
             returns: wrappedPropTypes.arrayOf(
                 docApiPropTypes.contractTemplateMinimal
-            )
+            ),
         }),
         "/sessions/:session_id/contract_templates": documentCallback({
             func: (data, params) =>
                 new ContractTemplate(data).findAllBySession(params.session_id),
             summary: "Get contract templates associated with this session.",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.contractTemplate)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.contractTemplate),
+        }),
     },
     post: {
         "/sessions/:session_id/contract_templates": documentCallback({
@@ -91,7 +91,7 @@ export const templatesRoutes = {
             summary:
                 "Associate a position template with a session; this method upserts",
             posts: docApiPropTypes.contractTemplate,
-            returns: docApiPropTypes.contractTemplate
-        })
-    }
+            returns: docApiPropTypes.contractTemplate,
+        }),
+    },
 };

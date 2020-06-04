@@ -3,12 +3,12 @@ import {
     FETCH_ONE_APPLICANT_SUCCESS,
     UPSERT_ONE_APPLICANT_SUCCESS,
     DELETE_ONE_APPLICANT_SUCCESS,
-    ADD_APPLICANT_TO_SESSION_SUCCESS
+    ADD_APPLICANT_TO_SESSION_SUCCESS,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
-    _modelData: []
+    _modelData: [],
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
@@ -29,7 +29,7 @@ const basicReducers = createBasicReducerObject(
 function insertIfMissing(target, source) {
     const missingItems = [];
     for (let item of target) {
-        if (!source.some(x => x.id === item.id)) {
+        if (!source.some((x) => x.id === item.id)) {
             // the current item is new
             missingItems.push(item);
         }
@@ -44,6 +44,6 @@ export const applicantsReducer = createReducer(initialState, {
     ...basicReducers,
     [ADD_APPLICANT_TO_SESSION_SUCCESS]: (state, action) => ({
         ...state,
-        _modelData: insertIfMissing(state._modelData, action.payload)
-    })
+        _modelData: insertIfMissing(state._modelData, action.payload),
+    }),
 });

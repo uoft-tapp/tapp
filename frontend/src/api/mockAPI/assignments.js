@@ -1,7 +1,7 @@
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 import {
     getAttributesCheckMessage,
@@ -11,7 +11,7 @@ import {
     MockAPIController,
     wageChunkArrayToStartAndEndDates,
     formatInstructorsContact,
-    wageChunkArrayToPayPeriodDescription
+    wageChunkArrayToPayPeriodDescription,
 } from "./utils";
 import { Session } from "./sessions";
 import { Position } from "./positions";
@@ -26,7 +26,7 @@ export class Assignment extends MockAPIController {
         // No uniqueness required, so pass in an empty array ([]) to the verifier
         const message = getAttributesCheckMessage(assignment, [], {
             position_id: { required: true },
-            applicant_id: { required: true }
+            applicant_id: { required: true },
         });
         if (message) {
             throw new Error(message);
@@ -38,16 +38,16 @@ export class Assignment extends MockAPIController {
             this.data.assignments_by_session[matchingSession.id] || [],
             this.ownData
             // Call "find" again to make sure every item gets packaged appropriately
-        ).map(x => new Assignment(this.data).find(x));
+        ).map((x) => new Assignment(this.data).find(x));
     }
     getPosition(assignment) {
         return new Position(this.data).find({
-            id: assignment.position_id
+            id: assignment.position_id,
         });
     }
     getApplicant(assignment) {
         return new Applicant(this.data).find({
-            id: assignment.applicant_id
+            id: assignment.applicant_id,
         });
     }
     /**
@@ -60,7 +60,7 @@ export class Assignment extends MockAPIController {
         const wageChunks = new WageChunk(this.data).findAllByAssignment(
             assignment
         );
-        const hours = sum(...wageChunks.map(x => x.hours));
+        const hours = sum(...wageChunks.map((x) => x.hours));
         return { hours, wageChunks };
     }
     /**
@@ -133,7 +133,7 @@ export class Assignment extends MockAPIController {
                     {
                         hours: 0,
                         start_date: range.start_date,
-                        end_date: range.end_date
+                        end_date: range.end_date,
                     },
                     upsertedAssignment
                 );
@@ -151,7 +151,7 @@ export class Assignment extends MockAPIController {
         for (const chunk of wageChunks) {
             new WageChunk(this.data).upsert({
                 ...chunk,
-                hours: (chunk.hours || 0) + perChunkDelta
+                hours: (chunk.hours || 0) + perChunkDelta,
             });
         }
 
@@ -204,7 +204,7 @@ class ActiveOffer extends MockAPIController {
     }
     getAssignment(offer) {
         return new Assignment(this.data).find({
-            id: offer.assignment_id
+            id: offer.assignment_id,
         });
     }
     find(query) {
@@ -248,7 +248,7 @@ class ActiveOffer extends MockAPIController {
             pay_period_desc: wageChunkArrayToPayPeriodDescription(wageChunks),
             hours,
             ta_coordinator_name: "Dr. Coordinator",
-            ta_coordinator_email: "coordinator@utoronto.ca"
+            ta_coordinator_email: "coordinator@utoronto.ca",
         };
 
         return offer;
@@ -259,7 +259,7 @@ class ActiveOffer extends MockAPIController {
             this.upsert({
                 ...offer,
                 status: "withdrawn",
-                withdrawn_date: new Date().toISOString()
+                withdrawn_date: new Date().toISOString(),
             })
         );
     }
@@ -269,7 +269,7 @@ class ActiveOffer extends MockAPIController {
             this.upsert({
                 ...offer,
                 status: "rejected",
-                rejected_date: new Date().toISOString()
+                rejected_date: new Date().toISOString(),
             })
         );
     }
@@ -279,7 +279,7 @@ class ActiveOffer extends MockAPIController {
             this.upsert({
                 ...offer,
                 status: "accepted",
-                accepted_date: new Date().toISOString()
+                accepted_date: new Date().toISOString(),
             })
         );
     }
@@ -289,7 +289,7 @@ class ActiveOffer extends MockAPIController {
             this.upsert({
                 ...offer,
                 status: "pending",
-                emailed_date: new Date().toISOString()
+                emailed_date: new Date().toISOString(),
             })
         );
     }
@@ -303,7 +303,7 @@ class ActiveOffer extends MockAPIController {
         return this.find(
             this.upsert({
                 ...offer,
-                nag_count: (offer.nag_count || 0) + 1
+                nag_count: (offer.nag_count || 0) + 1,
             })
         );
     }
@@ -322,7 +322,7 @@ class ActiveOffer extends MockAPIController {
             this.find(
                 this.create({
                     assignment_id: matchingAssignment.id,
-                    status: "provisional"
+                    status: "provisional",
                 })
             )
         );
@@ -335,34 +335,34 @@ export const assignmentsRoutes = {
             func: (data, params) =>
                 new Assignment(data).findAllBySession(params.session_id),
             summary: "Get assignments associated with a session",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.assignment)
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.assignment),
         }),
         "/assignments/:assignment_id": documentCallback({
             func: (data, params) =>
                 new Assignment(data).find(params.assignment_id),
             summary: "Get an assignment",
-            returns: docApiPropTypes.assignment
+            returns: docApiPropTypes.assignment,
         }),
         "/assignments/:assignment_id/active_offer": documentCallback({
             func: (data, params) =>
                 new Assignment(data).getActiveOffer(params.assignment_id),
             summary: "Get the active offer associated with an assignment",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params) =>
                 new Assignment(data).getWageChunkInfo(params.assignment_id)
                     .wageChunks,
             summary: "Get the wage_chunks associated with an assignment",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
+        }),
     },
     post: {
         "/assignments": documentCallback({
             func: (data, params, body) => new Assignment(data).upsert(body),
             posts: docApiPropTypes.assignment,
             summary: "Upsert an assignment",
-            returns: docApiPropTypes.assignment
+            returns: docApiPropTypes.assignment,
         }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params, body) => {
@@ -374,7 +374,7 @@ export const assignmentsRoutes = {
             summary:
                 "Sets the wage chunks of an assignment to the specified list. The contents of the list are upserted. Omitted wage chunks are deleted.",
             posts: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk)
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
         }),
         "/assignments/:assignment_id/active_offer/withdraw": documentCallback({
             func: (data, params) =>
@@ -382,39 +382,39 @@ export const assignmentsRoutes = {
                     params.assignment_id
                 ),
             summary: "Withdraws the active offer for the specified assignment",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/reject": documentCallback({
             func: (data, params) =>
                 new ActiveOffer(data).rejectByAssignment(params.assignment_id),
             summary: "Rejects the active offer for the specified assignment",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/accept": documentCallback({
             func: (data, params) =>
                 new ActiveOffer(data).acceptByAssignment(params.assignment_id),
             summary: "Accepts the active offer for the specified assignment",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/create": documentCallback({
             func: (data, params) =>
                 new ActiveOffer(data).createByAssignment(params.assignment_id),
             summary:
                 "Creates an offer for the specified assignment, provided there are no active offers for this assignment.",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/email": documentCallback({
             func: (data, params) =>
                 new ActiveOffer(data).emailByAssignment(params.assignment_id),
             summary: "Emails the active offer for the specified assignment",
-            returns: docApiPropTypes.offer
+            returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/nag": documentCallback({
             func: (data, params) =>
                 new ActiveOffer(data).nagByAssignment(params.assignment_id),
             summary:
                 "Sends a nag email for the active offer for the specified assignment which has already been emailed once",
-            returns: docApiPropTypes.offer
-        })
-    }
+            returns: docApiPropTypes.offer,
+        }),
+    },
 };

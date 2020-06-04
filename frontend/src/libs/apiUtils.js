@@ -6,8 +6,8 @@ const API_URL = "/api/v1";
 const FETCH_INIT = {
     credentials: "same-origin",
     headers: {
-        "Content-Type": "application/json"
-    }
+        "Content-Type": "application/json",
+    },
 };
 
 /**
@@ -68,7 +68,7 @@ async function _processFetchResponse(resp, path) {
             // overridden in this case
             throw new ApiError({
                 message: "Server response did not have `status === 'success`",
-                ...json
+                ...json,
             });
         }
         return json.payload;
@@ -90,7 +90,7 @@ async function apiGET(path) {
     path = _ensurePath(path);
     const resp = await fetch(API_URL + path, {
         ...FETCH_INIT,
-        method: "GET"
+        method: "GET",
     });
     return await _processFetchResponse(resp, path);
 }
@@ -109,7 +109,7 @@ async function apiPOST(path, body = {}) {
     const resp = await fetch(API_URL + path, {
         ...FETCH_INIT,
         method: "POST",
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
     });
     return await _processFetchResponse(resp, path);
 }

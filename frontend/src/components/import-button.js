@@ -36,7 +36,7 @@ export function ImportButton(props) {
      * @param {event} e
      */
     function importFile(e) {
-        let importClicked = data => {
+        let importClicked = (data) => {
             // passed in data is of json format
             console.log(data);
             throw new Error("Not implemented!");
@@ -93,5 +93,5 @@ export function ImportButton(props) {
 }
 
 ImportButton.propTypes = {
-    uploadFunc: PropTypes.func
+    uploadFunc: PropTypes.func,
 };

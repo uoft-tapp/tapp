@@ -2,12 +2,12 @@ import {
     setActiveSession,
     fetchSessions,
     sessionsSelector,
-    activeSessionSelector
+    activeSessionSelector,
 } from "./sessions";
 import {
     fetchActiveUser,
     setActiveUserRole,
-    activeRoleSelector
+    activeRoleSelector,
 } from "./users";
 import { fetchApplicants } from "./applicants";
 import { fetchApplications } from "./applications";
@@ -96,7 +96,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 "fetchSessions",
                 "setActiveSession",
                 "updateGlobals",
-                "fetchSessionDependentData"
+                "fetchSessionDependentData",
             ];
 
             // Is the queried stage dependent on the current stage?
@@ -112,9 +112,11 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 const state = getState();
                 const sessions = sessionsSelector(state);
                 const activeSession = activeSessionSelector(state) || {
-                    id: parsedGlobals.activeSession
+                    id: parsedGlobals.activeSession,
                 };
-                if (sessions.find(session => session.id === activeSession.id)) {
+                if (
+                    sessions.find((session) => session.id === activeSession.id)
+                ) {
                     return true;
                 }
                 return false;
@@ -176,7 +178,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             // in the URL.
             const matchingSession =
                 sessions.find(
-                    session => session.id === parsedGlobals.activeSession
+                    (session) => session.id === parsedGlobals.activeSession
                 ) || activeSession;
 
             await dispatch(
@@ -197,11 +199,11 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 fetchAssignments,
                 fetchContractTemplates,
                 fetchInstructors,
-                fetchPositions
+                fetchPositions,
             ];
 
             // The order of fetching here doesn't matter, so dispatch all at once
-            await Promise.all(fetchActions.map(action => dispatch(action())));
+            await Promise.all(fetchActions.map((action) => dispatch(action())));
         }
     };
 }

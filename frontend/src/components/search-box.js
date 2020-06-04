@@ -7,22 +7,22 @@ export class SearchBox extends React.Component {
         data: PropTypes.arrayOf(
             PropTypes.shape({
                 first_name: PropTypes.string,
-                last_name: PropTypes.string
+                last_name: PropTypes.string,
             })
-        ).isRequired
+        ).isRequired,
     };
 
     constructor(props) {
         super(props);
         this.state = {
             filters: "",
-            data: this.props.data
+            data: this.props.data,
         };
     }
 
     filter(event) {
         let input = event.target.value;
-        let newData = this.props.data.filter(x => {
+        let newData = this.props.data.filter((x) => {
             for (let key in x) {
                 let v = x[key] && x[key].toString().toLowerCase();
                 if (v && v.indexOf(input.toLowerCase()) !== -1) {
@@ -33,7 +33,7 @@ export class SearchBox extends React.Component {
         });
         this.setState({
             filters: input,
-            data: newData
+            data: newData,
         });
     }
 
@@ -50,7 +50,7 @@ export class SearchBox extends React.Component {
         if (applicants.length > 0) {
             applicantsList = (
                 <ul>
-                    {applicants.map(applicant => (
+                    {applicants.map((applicant) => (
                         <li key={applicant.id}>
                             {applicant.first_name} {applicant.last_name}
                         </li>

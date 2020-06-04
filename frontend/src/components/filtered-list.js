@@ -26,7 +26,7 @@ export function FilteredList(props) {
             <input
                 type="text"
                 value={query}
-                onChange={e => setQuery(e.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
             />
             <Renderer data={filteredData} {...rest} />
         </div>
@@ -36,5 +36,5 @@ export function FilteredList(props) {
 FilteredList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.any),
     listRenderer: PropTypes.elementType,
-    filterFunc: PropTypes.func
+    filterFunc: PropTypes.func,
 };

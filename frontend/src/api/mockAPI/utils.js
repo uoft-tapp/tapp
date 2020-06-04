@@ -37,19 +37,19 @@ export function splitDateRangeAtNewYear(start_date, end_date) {
         return [
             {
                 start_date: start_date.toISOString(),
-                end_date: december.toISOString()
+                end_date: december.toISOString(),
             },
             {
                 start_date: january.toISOString(),
-                end_date: end_date.toISOString()
-            }
+                end_date: end_date.toISOString(),
+            },
         ];
     }
     return [
         {
             start_date: start_date.toISOString(),
-            end_date: end_date.toISOString()
-        }
+            end_date: end_date.toISOString(),
+        },
     ];
 }
 
@@ -62,7 +62,7 @@ export function splitDateRangeAtNewYear(start_date, end_date) {
  * @returns {number|string}
  */
 export function getUnusedId(data, prop = "id") {
-    const ids = data.map(x => +x[prop]).filter(x => x != null);
+    const ids = data.map((x) => +x[prop]).filter((x) => x != null);
     const max = Math.max(0, ...ids);
     if (isNaN(max)) {
         // Somehow there was some other type mixed in with the ids. In this case,
@@ -87,7 +87,7 @@ export function find(obj, data = [], prop = "id") {
     // Sometimes ids are given as ints and sometimes as strings;
     // we should work interchangibly with both.
     // eslint-disable-next-line
-    return data.find(s => s[prop] == obj[prop]);
+    return data.find((s) => s[prop] == obj[prop]);
 }
 
 /**
@@ -102,8 +102,8 @@ export function find(obj, data = [], prop = "id") {
  */
 export function findAllById(ids = [], data = [], prop = "id") {
     // ids can be numbers or strings; make sure we get a match in either case.
-    ids = ids.map(x => "" + x);
-    return data.filter(x => ids.includes("" + x[prop]));
+    ids = ids.map((x) => "" + x);
+    return data.filter((x) => ids.includes("" + x[prop]));
 }
 
 /**
@@ -307,13 +307,13 @@ export class MockAPIController {
  * @returns {{start_date: date, end_date: date}}
  */
 export function wageChunkArrayToStartAndEndDates(wageChunks) {
-    const startDates = wageChunks.map(x => x.start_date);
-    const endDates = wageChunks.map(x => x.end_date);
+    const startDates = wageChunks.map((x) => x.start_date);
+    const endDates = wageChunks.map((x) => x.end_date);
     startDates.sort();
     endDates.sort();
     return {
         start_date: startDates[0],
-        end_date: endDates[endDates.length - 1]
+        end_date: endDates[endDates.length - 1],
     };
 }
 
@@ -350,7 +350,7 @@ export function formatInstructorsContact(instructors) {
         return [];
     }
     const contacts = instructors.map(
-        x => `${x.first_name} ${x.last_name} <${x.email}>`
+        (x) => `${x.first_name} ${x.last_name} <${x.email}>`
     );
     return joinWithConjunction(contacts);
 }
@@ -391,7 +391,7 @@ export function wageChunkArrayToPayPeriodDescription(wageChunks) {
             )} to ${end_date.toLocaleDateString("EN-ca", {
                 month: "long",
                 day: "numeric",
-                year: "numeric"
+                year: "numeric",
             })}`;
         }
     );

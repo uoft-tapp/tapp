@@ -20,7 +20,7 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 }
 /* eslint-enable */
 
-const render = Component => {
+const render = (Component) => {
     return ReactDOM.render(
         <HashRouter>
             <Provider store={store}>

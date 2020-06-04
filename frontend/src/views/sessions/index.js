@@ -5,8 +5,8 @@ import { Button } from "react-bootstrap";
 import { sessionsSelector } from "../../api/actions";
 import { SessionsList } from "../../components/sessions";
 
-const ConnectedSessionList = connect(state => ({
-    sessions: sessionsSelector(state)
+const ConnectedSessionList = connect((state) => ({
+    sessions: sessionsSelector(state),
 }))(SessionsList);
 
 export function AdminSessionsView() {

@@ -21,10 +21,10 @@ export function ActiveSessionDisplay(props) {
         <Badge>
             Selected session:
             <Dropdown
-                onSelect={i => {
+                onSelect={(i) => {
                     setActiveSession(sessions[i]);
                 }}
-                onToggle={desiredVisibility =>
+                onToggle={(desiredVisibility) =>
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
@@ -44,5 +44,5 @@ export function ActiveSessionDisplay(props) {
 ActiveSessionDisplay.propTypes = {
     setActiveSession: PropTypes.func.isRequired,
     sessions: PropTypes.arrayOf(apiPropTypes.session).isRequired,
-    activeSession: apiPropTypes.session
+    activeSession: apiPropTypes.session,
 };

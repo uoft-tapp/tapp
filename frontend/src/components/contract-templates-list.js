@@ -5,7 +5,7 @@ import { docApiPropTypes } from "../api/defs/doc-generation";
 
 const DEFAULT_COLUMNS = [
     { Header: "Template Name", accessor: "template_name" },
-    { Header: "Template File", accessor: "template_file" }
+    { Header: "Template File", accessor: "template_file" },
 ];
 
 /**
@@ -35,5 +35,5 @@ ContractTemplatesList.propTypes = {
         .isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
-    )
+    ),
 };

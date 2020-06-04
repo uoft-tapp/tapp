@@ -35,9 +35,9 @@ export class MockAPI {
         activeUserRoutes.get,
         {
             "/all_data": documentCallback({
-                func: data => data,
-                exclude: true
-            })
+                func: (data) => data,
+                exclude: true,
+            }),
         }
     );
     postRoutes = Object.assign(
@@ -57,7 +57,7 @@ export class MockAPI {
     constructor(seedData) {
         this.active = false;
         this.data = seedData;
-        this._getRoutesParsers = Object.keys(this.getRoutes).map(routeStr => {
+        this._getRoutesParsers = Object.keys(this.getRoutes).map((routeStr) => {
             // We want to peel of the role from the start of the route, but we don't want
             // to consider it part of the route for documentation purposes. Since `routeStr`
             // is used to find the callback of the route, we hack `Route` so that `spec`
@@ -66,15 +66,17 @@ export class MockAPI {
             r.spec = routeStr;
             return r;
         });
-        this._postRoutesParsers = Object.keys(this.postRoutes).map(routeStr => {
-            // We want to peel of the role from the start of the route, but we don't want
-            // to consider it part of the route for documentation purposes. Since `routeStr`
-            // is used to find the callback of the route, we hack `Route` so that `spec`
-            // is the same as `routeStr`.
-            const r = new Route("(/:role)" + routeStr);
-            r.spec = routeStr;
-            return r;
-        });
+        this._postRoutesParsers = Object.keys(this.postRoutes).map(
+            (routeStr) => {
+                // We want to peel of the role from the start of the route, but we don't want
+                // to consider it part of the route for documentation purposes. Since `routeStr`
+                // is used to find the callback of the route, we hack `Route` so that `spec`
+                // is the same as `routeStr`.
+                const r = new Route("(/:role)" + routeStr);
+                r.spec = routeStr;
+                return r;
+            }
+        );
     }
 
     /**
@@ -86,7 +88,7 @@ export class MockAPI {
      * @memberof MockAPI
      * @param {string} url An API route without `/api/v1` (e.g., `/sessions`)
      */
-    apiGET = url => {
+    apiGET = (url) => {
         for (const route of this._getRoutesParsers) {
             const match = route.match(url);
             // if we have a match, run the selector with the parsed data
@@ -101,7 +103,7 @@ export class MockAPI {
                     return {
                         status: "success",
                         message: "",
-                        payload
+                        payload,
                     };
                 } catch (e) {
                     return { status: "error", message: e.toString() };
@@ -110,7 +112,7 @@ export class MockAPI {
         }
         return {
             status: "error",
-            message: `could not find route matching ${url}`
+            message: `could not find route matching ${url}`,
         };
     };
 
@@ -139,7 +141,7 @@ export class MockAPI {
                     return {
                         status: "success",
                         message: "",
-                        payload
+                        payload,
                     };
                 } catch (e) {
                     return { status: "error", message: e.toString() };
@@ -148,7 +150,7 @@ export class MockAPI {
         }
         return {
             status: "error",
-            message: `could not find route matching ${url}`
+            message: `could not find route matching ${url}`,
         };
     };
 
@@ -219,11 +221,11 @@ export class MockAPI {
             // the `fetch` api.
             const responseObj = new Response(
                 new Blob([JSON.stringify(mockResponse)], {
-                    type: "application/json"
+                    type: "application/json",
                 }),
                 { status: 200, statusText: "OK" }
             );
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 window.setTimeout(() => resolve(responseObj), delay);
             });
         };

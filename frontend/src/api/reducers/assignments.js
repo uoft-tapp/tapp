@@ -4,7 +4,7 @@ import {
     UPSERT_ONE_ASSIGNMENT_SUCCESS,
     DELETE_ONE_ASSIGNMENT_SUCCESS,
     FETCH_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
-    UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS
+    UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
@@ -12,7 +12,7 @@ const initialState = {
     _modelData: [],
     // Since we don't want to fetch all wage chunks all the time,
     // we fetch them on a per-assignment basis and store them here.
-    _wageChunksByAssignmentId: {}
+    _wageChunksByAssignmentId: {},
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
@@ -41,8 +41,8 @@ function setWageChunks(state, action) {
         ...state,
         _wageChunksByAssignmentId: {
             ...state._wageChunksByAssignmentId,
-            [assignmentId]: action.payload
-        }
+            [assignmentId]: action.payload,
+        },
     };
 }
 
@@ -51,5 +51,5 @@ export const assignmentsReducer = createReducer(initialState, {
     // wage chunks are closely associated with assignments, so their actions happen
     // here
     [FETCH_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS]: setWageChunks,
-    [UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS]: setWageChunks
+    [UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS]: setWageChunks,
 });

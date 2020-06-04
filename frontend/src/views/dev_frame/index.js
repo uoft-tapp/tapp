@@ -16,7 +16,7 @@ import {
     usersSelector,
     activeUserSelector,
     debugOnlySetActiveUser,
-    debugOnlyFetchUsers
+    debugOnlyFetchUsers,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
 
@@ -39,7 +39,7 @@ function BootstrapNavLink(props) {
     );
 }
 BootstrapNavLink.propTypes = {
-    to: PropTypes.string
+    to: PropTypes.string,
 };
 
 const swaggerData = {
@@ -47,13 +47,13 @@ const swaggerData = {
     info: {
         description:
             "TAPP is a program for TA management--for making TA assignments and distributing TA contracts.",
-        title: "TAPP"
+        title: "TAPP",
     },
     servers: [
         { url: "/api/v1/admin" },
         { url: "/api/v1/instructor" },
         { url: "/api/v1/ta" },
-        { url: "/api/v1" }
+        { url: "/api/v1" },
     ],
     paths: {
         /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documenation
@@ -95,14 +95,14 @@ const swaggerData = {
             }
         },
 */
-        ...mockApiRoutesAsSwaggerPaths(mockAPI)
-    }
+        ...mockApiRoutesAsSwaggerPaths(mockAPI),
+    },
 };
 
 const ConnectedActiveUserButton = connect(
-    state => ({
+    (state) => ({
         activeUser: activeUserSelector(state),
-        users: usersSelector(state)
+        users: usersSelector(state),
     }),
     { fetchUsers: debugOnlyFetchUsers, setActiveUser: debugOnlySetActiveUser }
 )(ActiveUserButton);

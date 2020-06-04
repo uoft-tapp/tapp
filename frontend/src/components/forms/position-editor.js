@@ -15,7 +15,7 @@ const DEFAULT_POSITION = {
     contract_template: {},
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
-    instructors: []
+    instructors: [],
 };
 
 /**
@@ -31,7 +31,7 @@ export function PositionEditor(props) {
         setPosition,
         instructors = [],
         contractTemplates = [],
-        defaultContractTemplate = {}
+        defaultContractTemplate = {},
     } = props;
     const position = { ...DEFAULT_POSITION, ...positionProp };
 
@@ -83,7 +83,7 @@ export function PositionEditor(props) {
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Instructors..."
-                    labelKey={option =>
+                    labelKey={(option) =>
                         `${option.first_name} ${option.last_name}`
                     }
                     selected={position.instructors}
@@ -100,7 +100,7 @@ export function PositionEditor(props) {
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Contract template..."
-                    labelKey={option => `${option.template_name}`}
+                    labelKey={(option) => `${option.template_name}`}
                     selected={[position.contract_template]}
                     options={contractTemplates}
                     onChange={setContractType}
@@ -137,5 +137,5 @@ PositionEditor.propTypes = {
     setPosition: PropTypes.func.isRequired,
     instructors: PropTypes.arrayOf(docApiPropTypes.instructor),
     defaultContractTemplate: docApiPropTypes.contractTemplate,
-    contractTemplates: PropTypes.arrayOf(docApiPropTypes.contractTemplate)
+    contractTemplates: PropTypes.arrayOf(docApiPropTypes.contractTemplate),
 };

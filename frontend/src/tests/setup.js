@@ -10,11 +10,11 @@ class DatabaseSeeder {
                 start_date: new Date("2020-02-10").toISOString(),
                 end_date: new Date("2020-12-31").toISOString(),
                 name: "Initial Session",
-                rate1: 50
+                rate1: 50,
             },
             contractTemplate: {
                 template_name: "Regular",
-                template_file: "default-template.html"
+                template_file: "default-template.html",
             },
             position: {
                 position_code: "CSC494",
@@ -22,7 +22,7 @@ class DatabaseSeeder {
                 hours_per_assignment: 20,
                 start_date: new Date("2020-01-01").toISOString(),
                 end_date: new Date("2020-05-01").toISOString(),
-                contract_template_id: null
+                contract_template_id: null,
             },
             applicant: {
                 utorid: "johnd",
@@ -30,19 +30,19 @@ class DatabaseSeeder {
                 first_name: "John",
                 last_name: "Doe",
                 email: "fake@email.com",
-                phone: "4166666666"
+                phone: "4166666666",
             },
             assignment: {
                 position_id: null,
                 applicant_id: null,
                 hours: 70,
                 start_date: new Date("2020-01-01").toISOString(),
-                end_date: new Date("2020-05-01").toISOString()
+                end_date: new Date("2020-05-01").toISOString(),
             },
             active_user: {
                 utorid: "smithh",
-                roles: ["admin", "instructor", "ta"]
-            }
+                roles: ["admin", "instructor", "ta"],
+            },
         };
     }
 
@@ -81,7 +81,7 @@ async function seedDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
     }
 ) {
     const { apiPOST } = api;
@@ -126,7 +126,7 @@ async function seedDatabase(
 
     // Position
     Object.assign(seeded.position, {
-        contract_template_id: seeded.contractTemplate.id
+        contract_template_id: seeded.contractTemplate.id,
     });
     resp = await apiPOST(
         `/admin/sessions/${seeded.session.id}/positions`,
@@ -138,7 +138,7 @@ async function seedDatabase(
     // Assignment
     Object.assign(seeded.assignment, {
         position_id: seeded.position.id,
-        applicant_id: seeded.applicant.id
+        applicant_id: seeded.applicant.id,
     });
     resp = await apiPOST(`/admin/assignments`, seeded.assignment);
     expect(resp).toHaveStatus("success");
@@ -155,7 +155,7 @@ async function verifySeededDatabase(
         contractTemplate: null,
         position: null,
         applicant: null,
-        assignment: null
+        assignment: null,
     }
 ) {
     const { apiGET } = api;

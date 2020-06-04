@@ -15,7 +15,7 @@ function getConficts(session, sessions = []) {
         ret.delayShow = "A first name, start date, and end date is required";
     }
     const matchingSession = sessions.find(
-        x => strip(x.name) === strip(session.name)
+        (x) => strip(x.name) === strip(session.name)
     );
     if (matchingSession) {
         ret.immediateShow = (
@@ -30,7 +30,7 @@ const BLANK_SESSION = {
     start_date: "",
     end_date: "",
     rate1: "",
-    rate2: ""
+    rate2: "",
 };
 
 export function AddSessionDialog(props) {
@@ -84,6 +84,6 @@ export function AddSessionDialog(props) {
 }
 
 export const ConnectedAddSessionDialog = connect(
-    state => ({ sessions: sessionsSelector(state) }),
+    (state) => ({ sessions: sessionsSelector(state) }),
     { upsertSession }
 )(AddSessionDialog);

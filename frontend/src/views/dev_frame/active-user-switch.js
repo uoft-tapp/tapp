@@ -17,7 +17,7 @@ function ActiveUserButton({
     users = [],
     activeUser = {},
     setActiveUser = ident,
-    fetchUsers = ident
+    fetchUsers = ident,
 }) {
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
 
@@ -39,10 +39,10 @@ function ActiveUserButton({
         >
             <label>Logged in as</label>
             <Dropdown
-                onSelect={i => {
+                onSelect={(i) => {
                     setActiveUser(users[i]);
                 }}
-                onToggle={desiredVisibility =>
+                onToggle={(desiredVisibility) =>
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}

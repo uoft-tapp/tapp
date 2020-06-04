@@ -4,6 +4,6 @@
 import { connect } from "react-redux";
 import Notifications from "react-notification-system-redux";
 
-export const ConnectedNotifications = connect(state => ({
-    notifications: state.ui.notifications
+export const ConnectedNotifications = connect((state) => ({
+    notifications: state.ui.notifications,
 }))(Notifications);

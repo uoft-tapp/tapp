@@ -7,7 +7,7 @@ import { Col, Form } from "react-bootstrap";
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
     { Header: "First Name", accessor: "first_name" },
-    { Header: "UTORid", accessor: "utorid" }
+    { Header: "UTORid", accessor: "utorid" },
 ];
 
 /**
@@ -36,13 +36,13 @@ InstructorsList.propTypes = {
     instructors: PropTypes.arrayOf(docApiPropTypes.instructor).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
-    )
+    ),
 };
 
 const DEFAULT_INSTRUCTOR = {
     utorid: "",
     last_name: "",
-    first_name: ""
+    first_name: "",
 };
 
 /**
@@ -64,7 +64,7 @@ export function InstructorEditor(props) {
      * @returns
      */
     function setAttrFactory(attr) {
-        return e => {
+        return (e) => {
             const newVal = e.target.value || "";
             const newInstructor = { ...instructor, [attr]: newVal };
             setInstructor(newInstructor);
@@ -110,5 +110,5 @@ export function InstructorEditor(props) {
 }
 InstructorEditor.propTypes = {
     instructor: docApiPropTypes.instructor,
-    setInstructor: PropTypes.func
+    setInstructor: PropTypes.func,
 };

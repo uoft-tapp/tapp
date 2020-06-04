@@ -29,7 +29,7 @@ export function SessionEditor(props) {
                     "number",
                     {
                         step: "0.01",
-                        min: 0
+                        min: 0,
                     }
                 )}
                 {createFieldEditor(
@@ -38,7 +38,7 @@ export function SessionEditor(props) {
                     "number",
                     {
                         step: "0.01",
-                        min: 0
+                        min: 0,
                     }
                 )}
             </DialogRow>
@@ -47,5 +47,5 @@ export function SessionEditor(props) {
 }
 SessionEditor.propTypes = {
     session: docApiPropTypes.session.isRequired,
-    setSession: PropTypes.func.isRequired
+    setSession: PropTypes.func.isRequired,
 };
