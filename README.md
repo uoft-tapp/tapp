@@ -435,3 +435,12 @@ git push
 ```
 
 This should resolve the issue
+
+5. `docker-compose run backend rake db:setup` fails for *Windows 10* users
+
+This issue is a weird one caused by Docker Desktop not working perfectly with Windows Subsystem for Linux 2 (WSL2). When you run `docker-compose up`, you will see "tapp-database exited with code 1". 
+you can fix it by changing one line in `docker-compose.dev.yml`:
+change `- "./pg_data/db:/var/lib/postgresql/data"`
+to `- "./pg_data/db:/var/lib/postgresql"`.
+
+This should resolve the issue.
