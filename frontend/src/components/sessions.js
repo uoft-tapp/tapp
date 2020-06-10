@@ -9,14 +9,16 @@ import { EditableField } from "./edit-field-widgets";
 const DEFAULT_COLUMNS = [
     { Header: "Name", accessor: "name" },
     { Header: "Start", accessor: "start_date" },
-    { Header: "End", accessor: "end_date" },
+    {
+        Header: "End", accessor: "end_date"
+    },
     { Header: "Rate (Pre-January)", accessor: "rate1" },
     { Header: "Rate (Post-January)", accessor: "rate2" },
 ];
 
 function _formatDate(dateString) {
     const date = new Date(dateString);
-    return `${date.toDateString()} dsdsd`;
+    return `${date.toLocaleDateString("en-US", { month: 'long', year: 'numeric', day: 'numeric' })}`;
 }
 
 /**
@@ -53,20 +55,20 @@ export function SessionsList(props) {
     const formattedSessions =
         sessions.length > 0
             ? sessions.map((session) => ({
-                  ...session,
-                  start_date: _formatDate(session.start_date),
-                  end_date: _formatDate(session.end_date),
-                  rate1: EditableCell(
-                      "Rate (pre-January)",
-                      session.rate1,
-                      undefined
-                  ),
-                  rate2: EditableCell(
-                      "Rate (post-January)",
-                      session.rate2,
-                      undefined
-                  ),
-              }))
+                ...session,
+                start_date: _formatDate(session.start_date),
+                end_date: _formatDate(session.end_date),
+                rate1: EditableCell(
+                    "Rate (pre-January)",
+                    session.rate1,
+                    undefined
+                ),
+                rate2: EditableCell(
+                    "Rate (post-January)",
+                    session.rate2,
+                    undefined
+                ),
+            }))
             : sessions;
 
     return (
