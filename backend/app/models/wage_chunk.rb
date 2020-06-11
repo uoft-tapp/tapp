@@ -32,7 +32,7 @@ class WageChunk < ApplicationRecord
     end
 
     def set_rates
-        self.rate = compute_rate_from_session unless rate.blank?
+        self.rate = compute_rate_from_session if rate.blank?
     end
 end
 

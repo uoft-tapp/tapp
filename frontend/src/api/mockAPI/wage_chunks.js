@@ -100,16 +100,16 @@ export class WageChunk extends MockAPIController {
             );
         }
         const existingWageChunks = this.findAllByAssignment(assignment);
+        // Now we can upsert all the wageChunks
+        wageChunks.forEach((chunk) =>
+            this.upsertByAssignment(chunk, matchingAssignment)
+        );
         // every wage chunk that is not in the `wageChunks` list gets deleted
         for (const wageChunk of existingWageChunks) {
             if (!find(wageChunk, wageChunks)) {
                 this.delete(wageChunk);
             }
         }
-        // Now we can upsert all the wageChunks
-        wageChunks.forEach((chunk) =>
-            this.upsertByAssignment(chunk, matchingAssignment)
-        );
         // Recompute the wage chunks list. This is "needless"
         // logically, but it might catch some bugs at some point.
         return this.findAllByAssignment(matchingAssignment);
