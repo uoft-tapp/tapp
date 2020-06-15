@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
-// import { fieldEditorFactory } from './common-controls'
-import { EditableField } from "./edit-field-widgets";
-
+import { formatDate } from "../libs/utils"
 const DEFAULT_COLUMNS = [
     { Header: "Name", accessor: "name" },
     { Header: "Start", accessor: "start_date" },
@@ -14,10 +12,7 @@ const DEFAULT_COLUMNS = [
     { Header: "Rate (Post-January)", accessor: "rate2" },
 ];
 
-function _formatDate(dateString) {
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString("en-US", { month: 'long', year: 'numeric', day: 'numeric' })}`;
-}
+
 
 
 /**
@@ -35,8 +30,8 @@ export function SessionsList(props) {
         sessions.length > 0
             ? sessions.map((session) => ({
                 ...session,
-                start_date: _formatDate(session.start_date),
-                end_date: _formatDate(session.end_date),
+                start_date: formatDate(session.start_date),
+                end_date: formatDate(session.end_date),
                 rate1: session.rate1,
                 rate2: session.rate2
             }))
