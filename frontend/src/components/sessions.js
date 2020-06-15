@@ -25,15 +25,12 @@ const DEFAULT_COLUMNS = [
  */
 export function SessionsList(props) {
     const { sessions, columns = DEFAULT_COLUMNS } = props;
-    console.log(sessions);
     const formattedSessions =
         sessions.length > 0
             ? sessions.map((session) => ({
                 ...session,
                 start_date: formatDate(session.start_date),
-                end_date: formatDate(session.end_date),
-                rate1: session.rate1,
-                rate2: session.rate2
+                end_date: formatDate(session.end_date)
             }))
             : sessions;
 
