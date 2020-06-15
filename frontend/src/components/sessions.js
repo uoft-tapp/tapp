@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
-import { formatDate } from "../libs/utils"
+import { formatDate } from "../libs/utils";
 const DEFAULT_COLUMNS = [
     { Header: "Name", accessor: "name" },
     { Header: "Start", accessor: "start_date" },
@@ -11,9 +11,6 @@ const DEFAULT_COLUMNS = [
     { Header: "Rate (Pre-January)", accessor: "rate1" },
     { Header: "Rate (Post-January)", accessor: "rate2" },
 ];
-
-
-
 
 /**
  * List the sessions using a ReactTable. `columns` can be passed
@@ -28,10 +25,10 @@ export function SessionsList(props) {
     const formattedSessions =
         sessions.length > 0
             ? sessions.map((session) => ({
-                ...session,
-                start_date: formatDate(session.start_date),
-                end_date: formatDate(session.end_date)
-            }))
+                  ...session,
+                  start_date: formatDate(session.start_date),
+                  end_date: formatDate(session.end_date),
+              }))
             : sessions;
 
     return (

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Badge } from "react-bootstrap";
-import { formatDate } from "../libs/utils"
+import { formatDate } from "../libs/utils";
 
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
@@ -46,10 +46,10 @@ export function PositionsList(props) {
     const formattedPositions =
         positions.length > 0
             ? positions.map((position) => ({
-                ...position,
-                start_date: formatDate(position.start_date),
-                end_date: formatDate(position.end_date)
-            }))
+                  ...position,
+                  start_date: formatDate(position.start_date),
+                  end_date: formatDate(position.end_date),
+              }))
             : positions;
     return (
         <React.Fragment>

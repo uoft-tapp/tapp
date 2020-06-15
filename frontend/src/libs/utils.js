@@ -16,9 +16,13 @@ export function strip(x) {
  * Formats the input date string to be human readable
  * Input string is of the form 2019-01-01T00:00:00.000Z
  * Output string is of the form January 1, 2019
- * @param {string} dateString 
+ * @param {string} dateString
  */
 export function formatDate(dateString) {
     const date = new Date(dateString);
-    return `${date.toLocaleDateString("en-US", { month: 'long', year: 'numeric', day: 'numeric' })}`;
+    return `${date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+        day: "numeric",
+    })}`;
 }
