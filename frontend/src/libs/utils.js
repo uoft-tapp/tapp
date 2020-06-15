@@ -20,8 +20,8 @@ export function strip(x) {
  */
 export function formatDate(dateString) {
     const date = new Date(dateString);
-    return `${date.toLocaleDateString("en-US", {
-        month: "long",
+    return `${date.toLocaleDateString("en-CA", {
+        month: "short",
         year: "numeric",
         day: "numeric",
     })}`;

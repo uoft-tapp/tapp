@@ -9,8 +9,16 @@ const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
     { Header: "Position Title", accessor: "position_title" },
     { Header: "Hours", accessor: "hours_per_assignment" },
-    { Header: "Start", accessor: "start_date" },
-    { Header: "End", accessor: "end_date" },
+    {
+        Header: "Start",
+        accessor: "start_date",
+        Cell: (row) => formatDate(row.value),
+    },
+    {
+        Header: "End",
+        accessor: "end_date",
+        Cell: (row) => formatDate(row.value),
+    },
     {
         Header: "Instructors",
         accessor: "instructors",
@@ -43,19 +51,11 @@ const DEFAULT_COLUMNS = [
  */
 export function PositionsList(props) {
     const { positions, columns = DEFAULT_COLUMNS } = props;
-    const formattedPositions =
-        positions.length > 0
-            ? positions.map((position) => ({
-                  ...position,
-                  start_date: formatDate(position.start_date),
-                  end_date: formatDate(position.end_date),
-              }))
-            : positions;
     return (
         <React.Fragment>
             <h3>Positions</h3>
             <ReactTable
-                data={formattedPositions}
+                data={positions}
                 columns={columns}
                 showPagination={false}
                 minRows={1}
