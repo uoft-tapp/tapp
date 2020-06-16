@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Navbar, NavDropdown, Image, Tab, Tabs } from "react-bootstrap";
-import { Route, NavLink, useHistory } from "react-router-dom";
+import { Nav, Tab, Col, Row } from "react-bootstrap";
+import { Route, NavLink } from "react-router-dom";
 import Logo from "../res/logo.png";
 
 /**
@@ -47,46 +47,63 @@ BootstrapNavLink.propTypes = {
 export function Header(props) {
     const { routes = [], infoComponents = null } = props;
     const [key, setKey] = React.useState(routes[0].route);
-    const history = useHistory();
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
     }
     return (
-        <React.Fragment>
-            <Tabs
-                className="navbar-tabs"
-                activeKey={key}
-                onSelect={(k) => {
-                    setKey(k);
-                    history.push(k);
-                }}
-            >
-                {routes.map((route) => (
-                    <Tab eventKey={route.route} title={route.name} />
-                ))}
-            </Tabs>
-            <Nav>
-                {routes
-                    .filter((route) => route.route === key)
-                    .map((route) => (
-                        <Route path={route.route} key={route.route}>
-                            {(route.subroutes || []).map((subroute) => {
-                                const fullroute = `${route.route}${subroute.route}`;
-                                return (
-                                    <BootstrapNavLink
-                                        to={fullroute}
-                                        key={fullroute}
-                                        title={subroute.description}
-                                    >
-                                        {subroute.name}
-                                    </BootstrapNavLink>
-                                );
-                            })}
-                        </Route>
-                    ))}
-            </Nav>
-        </React.Fragment>
+        <Tab.Container
+            activeKey={key}
+            onSelect={(k) => {
+                setKey(k);
+            }}
+        >
+            <Row>
+                <Col sm={9}>
+                    <Nav className="flex-row navbar-tabs">
+                        {routes.map((route) => (
+                            <Nav.Item>
+                                <BootstrapNavLink
+                                    eventKey={route.route}
+                                    to={route.route}
+                                >
+                                    {route.name}
+                                </BootstrapNavLink>
+                            </Nav.Item>
+                        ))}
+                    </Nav>
+                </Col>
+                <Col sm={3}>
+                    <Row>
+                        {infoComponents.map((component, index) => (
+                            <div key={index}>{component}</div>
+                        ))}
+                    </Row>
+                </Col>
+                <Tab.Content>
+                    <Nav>
+                        {routes
+                            .filter((route) => route.route === key)
+                            .map((route) => (
+                                <Route path={route.route} key={route.route}>
+                                    {(route.subroutes || []).map((subroute) => {
+                                        const fullroute = `${route.route}${subroute.route}`;
+                                        return (
+                                            <BootstrapNavLink
+                                                to={fullroute}
+                                                key={fullroute}
+                                                title={subroute.description}
+                                            >
+                                                {subroute.name}
+                                            </BootstrapNavLink>
+                                        );
+                                    })}
+                                </Route>
+                            ))}
+                    </Nav>
+                </Tab.Content>
+            </Row>
+        </Tab.Container>
     );
 }
 
