@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, Navbar, NavDropdown, Image, Tab, Tabs } from "react-bootstrap";
-import { Route, NavLink } from "react-router-dom";
+import { Route, NavLink, useHistory } from "react-router-dom";
 import Logo from "../res/logo.png";
 
 /**
@@ -43,9 +43,11 @@ BootstrapNavLink.propTypes = {
  * @param {object[]} props.routes
  * @returns
  */
+
 export function Header(props) {
     const { routes = [], infoComponents = null } = props;
     const [key, setKey] = React.useState(routes[0].route);
+    const history = useHistory();
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
@@ -55,10 +57,13 @@ export function Header(props) {
             <Tabs
                 className="navbar-tabs"
                 activeKey={key}
-                onSelect={(k) => setKey(k)}
+                onSelect={(k) => {
+                    setKey(k);
+                    history.push(k);
+                }}
             >
                 {routes.map((route) => (
-                    <Tab eventKey={route.route} title={route.name}></Tab>
+                    <Tab eventKey={route.route} title={route.name} />
                 ))}
             </Tabs>
             <Nav>

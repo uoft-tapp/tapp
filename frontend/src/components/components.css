@@ -19,7 +19,9 @@
 }
 
 .navbar-tabs {
-    padding: 1em 1em 0 1em !important;
+    padding: 1rem 1rem 0 0.5rem !important;
+    font-size: 1.25rem;
+    font-weight: bold;
 }
 .navbar-logo {
     height: 3em;
