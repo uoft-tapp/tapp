@@ -24,8 +24,8 @@ function AdminHeader() {
             routes={[
                 {
                     route: "/tapp",
-                    name: "TAPP",
-                    description: "TAPP Main View",
+                    name: "Admin",
+                    description: "Admin View",
                     subroutes: [
                         {
                             route: "/sessions",
@@ -60,9 +60,9 @@ function AdminHeader() {
                     ],
                 },
                 {
-                    route: "/cp",
-                    name: "CP",
-                    description: "Contract Presentment",
+                    route: "/matching",
+                    name: "Matching",
+                    description: "Matching",
                     subroutes: [
                         {
                             route: "/statistics",
@@ -73,10 +73,10 @@ function AdminHeader() {
                     ],
                 },
                 {
-                    route: "/dashboard",
-                    name: "Dashboard",
-                    description: "List of all widgets",
-                    hidden: true,
+                    route: "/appointments_positions",
+                    name: "Appointments & Positions",
+                    description: "Appointments & Positions",
+                    // hidden: true,
                 },
             ]}
             infoComponents={[

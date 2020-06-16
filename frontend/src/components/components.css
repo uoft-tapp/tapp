@@ -17,3 +17,10 @@
     border-radius: 15px;
     border: 2px solid rgb(0, 95, 204);
 }
+
+.navbar-tabs {
+    padding: 1em 1em 0 1em !important;
+}
+.navbar-logo {
+    height: 3em;
+}
