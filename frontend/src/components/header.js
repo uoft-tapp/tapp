@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, Tab, Col, Row } from "react-bootstrap";
-import { Route, NavLink } from "react-router-dom";
-import Logo from "../res/logo.png";
+import { NavLink } from "react-router-dom";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -21,6 +20,14 @@ export function BootstrapNavLink(props) {
 BootstrapNavLink.propTypes = {
     to: PropTypes.string,
 };
+
+function BootstrapNavItem(props) {
+    return (
+        <Nav.Item>
+            <BootstrapNavLink {...props} />
+        </Nav.Item>
+    );
+}
 
 /**
  * Render a header that dynamically adjusts depending on the route
@@ -52,54 +59,47 @@ export function Header(props) {
         return <div>No Routes in Header</div>;
     }
     return (
-        <Tab.Container
-            activeKey={key}
-            onSelect={(k) => {
-                setKey(k);
-            }}
-        >
-            <Row>
-                <Col sm={9}>
-                    <Nav className="flex-row navbar-tabs">
+        <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
+            <Row className="justify-content-between right-padding">
+                <Col auto>
+                    <Nav className="flex-row navbar-tabs" variant="tabs">
                         {routes.map((route) => (
-                            <Nav.Item>
-                                <BootstrapNavLink
-                                    eventKey={route.route}
-                                    to={route.route}
-                                >
-                                    {route.name}
-                                </BootstrapNavLink>
-                            </Nav.Item>
+                            <BootstrapNavItem
+                                eventKey={route.route}
+                                to={route.route}
+                            >
+                                {route.name}
+                            </BootstrapNavItem>
                         ))}
                     </Nav>
                 </Col>
-                <Col sm={3}>
-                    <Row>
+                <Col md={"auto"}>
+                    <Row class>
                         {infoComponents.map((component, index) => (
                             <div key={index}>{component}</div>
                         ))}
                     </Row>
                 </Col>
+            </Row>
+            <Row className="navbar-subtabs">
                 <Tab.Content>
-                    <Nav>
+                    <Nav variant="pills">
                         {routes
                             .filter((route) => route.route === key)
-                            .map((route) => (
-                                <Route path={route.route} key={route.route}>
-                                    {(route.subroutes || []).map((subroute) => {
-                                        const fullroute = `${route.route}${subroute.route}`;
-                                        return (
-                                            <BootstrapNavLink
-                                                to={fullroute}
-                                                key={fullroute}
-                                                title={subroute.description}
-                                            >
-                                                {subroute.name}
-                                            </BootstrapNavLink>
-                                        );
-                                    })}
-                                </Route>
-                            ))}
+                            .map((route) =>
+                                (route.subroutes || []).map((subroute) => {
+                                    const fullroute = `${route.route}${subroute.route}`;
+                                    return (
+                                        <BootstrapNavItem
+                                            to={fullroute}
+                                            title={subroute.description}
+                                            key={fullroute}
+                                        >
+                                            {subroute.name}
+                                        </BootstrapNavItem>
+                                    );
+                                })
+                            )}
                     </Nav>
                 </Tab.Content>
             </Row>

@@ -23,6 +23,11 @@
     font-size: 1.25rem;
     font-weight: bold;
 }
-.navbar-logo {
-    height: 3em;
+
+.right-padding {
+    padding-right: 1em;
+}
+
+.navbar-subtabs {
+    padding: 1rem 1rem 1rem 0.5rem;
 }
