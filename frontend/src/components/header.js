@@ -53,20 +53,22 @@ function BootstrapNavItem(props) {
 
 export function Header(props) {
     const { routes = [], infoComponents = null } = props;
-    const [key, setKey] = React.useState(routes[0].route);
+    const [activeKey, setActiveKey] = React.useState(routes[0].route);
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
     }
     return (
-        <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
+        <Tab.Container activeKey={activeKey}>
             <Row className="justify-content-between right-padding">
-                <Col auto>
+                <Col md={"auto"}>
                     <Nav className="flex-row navbar-tabs" variant="tabs">
                         {routes.map((route) => (
                             <BootstrapNavItem
                                 eventKey={route.route}
                                 to={route.route}
+                                key={route.route}
+                                onSelect={(k) => setActiveKey(k)}
                             >
                                 {route.name}
                             </BootstrapNavItem>
@@ -74,7 +76,7 @@ export function Header(props) {
                     </Nav>
                 </Col>
                 <Col md={"auto"}>
-                    <Row class>
+                    <Row>
                         {infoComponents.map((component, index) => (
                             <div key={index}>{component}</div>
                         ))}
@@ -85,7 +87,7 @@ export function Header(props) {
                 <Tab.Content>
                     <Nav variant="pills">
                         {routes
-                            .filter((route) => route.route === key)
+                            .filter((route) => route.route === activeKey)
                             .map((route) =>
                                 (route.subroutes || []).map((subroute) => {
                                     const fullroute = `${route.route}${subroute.route}`;
