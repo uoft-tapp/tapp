@@ -52,11 +52,6 @@ function AdminHeader() {
                             name: "Assignments",
                             description: "Manage Assignments",
                         },
-                        {
-                            route: "/summary",
-                            name: "Summary",
-                            description: "Overivew of all data",
-                        },
                     ],
                 },
                 {
