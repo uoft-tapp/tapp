@@ -20,11 +20,6 @@ const DEFAULT_COLUMNS = [
     { Header: "Rate (Post-January)", accessor: "rate2" },
 ];
 
-function _formatDate(dateString) {
-    const date = new Date(dateString);
-    return `${date.toDateString()} dsdsd`;
-}
-
 /**
  * A cell that renders editable rate information
  *
@@ -55,12 +50,11 @@ function EditableCell(title, value, onChange) {
  */
 export function SessionsList(props) {
     const { sessions, columns = DEFAULT_COLUMNS } = props;
-    git;
     return (
         <React.Fragment>
             <h3>Sessions</h3>
             <ReactTable
-                data={formattedSessions}
+                data={sessions}
                 columns={columns}
                 showPagination={false}
                 minRows={1}
