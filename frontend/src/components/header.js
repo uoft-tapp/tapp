@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Route, NavLink } from "react-router-dom";
+import { Nav, Tab, Col, Row } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -20,6 +20,14 @@ export function BootstrapNavLink(props) {
 BootstrapNavLink.propTypes = {
     to: PropTypes.string,
 };
+
+function BootstrapNavItem(props) {
+    return (
+        <Nav.Item>
+            <BootstrapNavLink {...props} />
+        </Nav.Item>
+    );
+}
 
 /**
  * Render a header that dynamically adjusts depending on the route
@@ -42,65 +50,63 @@ BootstrapNavLink.propTypes = {
  * @param {object[]} props.routes
  * @returns
  */
+
 export function Header(props) {
     const { routes = [], infoComponents = null } = props;
+    const [key, setKey] = React.useState(routes[0].route);
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
     }
-
     return (
-        <Navbar bg="light" variant="light">
-            <Navbar.Brand>
-                <NavDropdown
-                    title={routes.map((route) => (
-                        <Route path={route.route} key={route.route}>
-                            {route.name}
-                        </Route>
-                    ))}
-                >
-                    {routes
-                        .filter((route) => !route.hidden)
-                        .map((route) => (
-                            <NavDropdown.Item
-                                key={route.route}
-                                as="span"
-                                tabIndex="0"
+        <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
+            <Row className="justify-content-between right-padding">
+                <Col auto>
+                    <Nav className="flex-row navbar-tabs" variant="tabs">
+                        {routes.map((route) => (
+                            <BootstrapNavItem
+                                eventKey={route.route}
+                                to={route.route}
                             >
-                                <BootstrapNavLink
-                                    to={route.route}
-                                    title={route.description}
-                                >
-                                    {route.name}
-                                </BootstrapNavLink>
-                            </NavDropdown.Item>
+                                {route.name}
+                            </BootstrapNavItem>
                         ))}
-                </NavDropdown>
-            </Navbar.Brand>
-            <Nav className="mr-auto">
-                {routes.map((route) => (
-                    <Route path={route.route} key={route.route}>
-                        {(route.subroutes || []).map((subroute) => {
-                            const fullroute = `${route.route}${subroute.route}`;
-                            return (
-                                <BootstrapNavLink
-                                    to={fullroute}
-                                    key={fullroute}
-                                    title={subroute.description}
-                                >
-                                    {subroute.name}
-                                </BootstrapNavLink>
-                            );
-                        })}
-                    </Route>
-                ))}
-            </Nav>
-            {infoComponents.map((component, index) => (
-                <div key={index}>{component}</div>
-            ))}
-        </Navbar>
+                    </Nav>
+                </Col>
+                <Col md={"auto"}>
+                    <Row class>
+                        {infoComponents.map((component, index) => (
+                            <div key={index}>{component}</div>
+                        ))}
+                    </Row>
+                </Col>
+            </Row>
+            <Row className="navbar-subtabs">
+                <Tab.Content>
+                    <Nav variant="pills">
+                        {routes
+                            .filter((route) => route.route === key)
+                            .map((route) =>
+                                (route.subroutes || []).map((subroute) => {
+                                    const fullroute = `${route.route}${subroute.route}`;
+                                    return (
+                                        <BootstrapNavItem
+                                            to={fullroute}
+                                            title={subroute.description}
+                                            key={fullroute}
+                                        >
+                                            {subroute.name}
+                                        </BootstrapNavItem>
+                                    );
+                                })
+                            )}
+                    </Nav>
+                </Tab.Content>
+            </Row>
+        </Tab.Container>
     );
 }
+
 Header.propTypes = {
     routes: PropTypes.arrayOf(
         PropTypes.shape({
