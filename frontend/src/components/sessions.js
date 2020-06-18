@@ -21,26 +21,6 @@ const DEFAULT_COLUMNS = [
 ];
 
 /**
- * A cell that renders editable rate information
- *
- * @param {*} props
- * @returns
- */
-function EditableCell(title, value, onChange) {
-    return (
-        <EditableField title={title} value={value} onChange={onChange}>
-            {value}
-        </EditableField>
-    );
-    // const title = `Edit ${props.column.Header}`;
-    // const { upsertInstructor, field } = props;
-    // function onChange(newVal) {
-    //     const applicantId = props.original.id;
-    //     upsertInstructor({ id: applicantId, [field]: newVal });
-    // }
-}
-
-/**
  * List the sessions using a ReactTable. `columns` can be passed
  * in to customize columns/cell renderers.
  *
