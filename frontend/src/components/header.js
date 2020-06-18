@@ -61,12 +61,13 @@ export function Header(props) {
     return (
         <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
             <Row className="justify-content-between right-padding">
-                <Col auto>
+                <Col md={"auto"}>
                     <Nav className="flex-row navbar-tabs" variant="tabs">
                         {routes.map((route) => (
                             <BootstrapNavItem
                                 eventKey={route.route}
                                 to={route.route}
+                                key={route.route}
                             >
                                 {route.name}
                             </BootstrapNavItem>
@@ -74,7 +75,7 @@ export function Header(props) {
                     </Nav>
                 </Col>
                 <Col md={"auto"}>
-                    <Row class>
+                    <Row>
                         {infoComponents.map((component, index) => (
                             <div key={index}>{component}</div>
                         ))}
