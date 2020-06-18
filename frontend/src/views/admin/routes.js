@@ -2,7 +2,7 @@ export const routes = [
     {
         route: "/tapp",
         name: "Admin",
-        description: "TAPP Main View",
+        description: "Admin View",
         subroutes: [
             {
                 route: "/sessions",
@@ -29,17 +29,12 @@ export const routes = [
                 name: "Assignments",
                 description: "Manage Assignments",
             },
-            {
-                route: "/summary",
-                name: "Summary",
-                description: "Overivew of all data",
-            },
         ],
     },
     {
-        route: "/cp", //TODO: route doesn't exist
-        name: "CP",
-        description: "Matching", //TODO: better desc
+        route: "/matching",
+        name: "Matching",
+        description: "Matching",
         subroutes: [
             {
                 route: "/statistics",
@@ -49,8 +44,9 @@ export const routes = [
         ],
     },
     {
-        route: "/dashboard",
-        name: "Dashboard",
-        description: "Applications and Postings",
+        route: "/appointments_positions",
+        name: "Appointments & Positions",
+        description: "Appointments & Positions",
+        // hidden: true,
     },
 ];
