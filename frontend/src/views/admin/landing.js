@@ -1,9 +1,54 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Jumbotron, Button } from "react-bootstrap";
+import { Jumbotron, Button, Accordion, Card } from "react-bootstrap";
 import { activeSessionSelector } from "../../api/actions";
+import { routes } from "./routes";
 
-function NoActiveSessionJumbotron() {
+function AccordionItem(route) {
+    return (
+        <Card>
+            <Card.Header>
+                <Accordion.Toggle
+                    as={Button}
+                    variant="link"
+                    eventKey={route.route}
+                >
+                    <strong>{route.name}</strong>
+                </Accordion.Toggle>
+            </Card.Header>
+            <Accordion.Collapse eventKey={route.route}>
+                <Card.Body>
+                    <Accordion>
+                        {(route.subroutes || []).map((subroute) => {
+                            const fullroute = `${route.route}${subroute.route}`;
+                            return (
+                                <Card>
+                                    <Card.Header>
+                                        <Accordion.Toggle
+                                            as={Button}
+                                            variant="link"
+                                            eventKey={fullroute}
+                                            key={fullroute}
+                                        >
+                                            {subroute.name}
+                                        </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey={fullroute}>
+                                        <Card.Body>
+                                            {subroute.description}
+                                        </Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            );
+                        })}
+                    </Accordion>
+                </Card.Body>
+            </Accordion.Collapse>
+        </Card>
+    );
+}
+
+function NoActiveSessionJumbotron(setLearnMore) {
     return (
         <Jumbotron>
             <h1>Welcome to TAPP!</h1>
@@ -12,16 +57,35 @@ function NoActiveSessionJumbotron() {
             </p>
             <p>Choose an active session from the selected session menu.</p>
             <p>
-                <Button variant="primary">Learn more about TAPP</Button>
+                <Button variant="primary" onClick={(e) => setLearnMore(true)}>
+                    Learn more about TAPP
+                </Button>
+            </p>
+        </Jumbotron>
+    );
+}
+
+function LearnMoreJumbotron(routes, activeAccordion, setActiveAccordion) {
+    return (
+        <Jumbotron>
+            <h1>Welcome to TAPP!</h1>
+            <p>Expand any item below to learn more:</p>
+            <p>
+                <Accordion>
+                    {routes.map((route) => AccordionItem(route))}
+                </Accordion>
             </p>
         </Jumbotron>
     );
 }
 function Landing(props) {
-    if (props.activeSession === null) {
-        return NoActiveSessionJumbotron();
+    const [learnMore, setLearnMore] = React.useState(false);
+    const [activeAccordion, setActiveAccordion] = React.useState();
+    if (props.activeSession === null && !learnMore) {
+        return NoActiveSessionJumbotron(setLearnMore);
+    } else {
     }
-    return <div>This is a landing page.</div>;
+    return LearnMoreJumbotron(routes, activeAccordion, setActiveAccordion);
 }
 
 const mapActiveSessionStateToProps = (state) => ({

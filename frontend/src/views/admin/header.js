@@ -11,7 +11,7 @@ import {
 } from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";
-
+import { routes } from "./routes";
 /**
  * Header showing the routes that a user with `role=admin`
  * can see.
@@ -72,7 +72,7 @@ function AdminHeader() {
                     route: "/appointments_and_positions",
                     name: "Appointments & Positions",
                     description: "Appointments & Positions",
-                    hidden: true,
+                    // hidden: true,
                 },
             ]}
             infoComponents={[
