@@ -8,7 +8,7 @@ import {
 } from "../../api/actions";
 import { ActiveSessionDisplay } from "../../components/active-session";
 
-import { routes } from "./routes";
+import { routes } from "./header";
 
 function AccordionItem(route) {
     return (
