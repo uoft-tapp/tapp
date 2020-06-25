@@ -119,6 +119,10 @@ export function offersTests(api) {
     it.todo("modify position/assignment and existing offers should not change");
     it.todo("accept/reject/withdraw offer");
 
-    it.todo("error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected/pending");
-    it.todo("create an offer for an assignment that has an active offer that is withdrawn/preliminary");
+    it.todo(
+        "error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected/pending"
+    );
+    it.todo(
+        "create an offer for an assignment that has an active offer that is withdrawn/preliminary"
+    );
 }
