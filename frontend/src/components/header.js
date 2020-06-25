@@ -87,6 +87,7 @@ export function Header(props) {
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;
+                const active = location.pathname === fullroute;
                 return (
                     <BootstrapNavItem
                         to={fullroute}
@@ -94,7 +95,15 @@ export function Header(props) {
                         key={fullroute}
                     >
                         <h5>
-                            <small>{subroute.name}</small>
+                            <small
+                                className={
+                                    active
+                                        ? "font-weight-bold text-white"
+                                        : "text-body"
+                                }
+                            >
+                                {subroute.name}
+                            </small>
                         </h5>
                     </BootstrapNavItem>
                 );
