@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, Tab, Col, Row } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -21,7 +21,17 @@ function BootstrapNavItem(props) {
 }
 BootstrapNavItem.propTypes = {
     to: PropTypes.string,
+    active: PropTypes.bool,
 };
+
+/**
+ * Returns the top level route for a full path ("/tapp/sessions" -> "/tapp")
+ * @param {string} pathname
+ */
+function getRoute(pathname) {
+    const pieces = pathname.substring(1).split("/");
+    return pieces.length === 1 ? pathname.substring(1) : pieces[0];
+}
 
 /**
  * Render a header that dynamically adjusts depending on the route
@@ -46,24 +56,34 @@ BootstrapNavItem.propTypes = {
  */
 
 export function Header(props) {
+    let location = useLocation();
+    let currentRoute = getRoute(location.pathname);
     const { routes = [], infoComponents = null } = props;
-    const [activeKey, setActiveKey] = React.useState(routes[0].route);
 
     const activeTabs = routes
         .filter((route) => route.hidden !== true)
-        .map((route) => (
-            <BootstrapNavItem
-                eventKey={route.route}
-                to={route.route}
-                key={route.route}
-                onSelect={(k) => setActiveKey(k)}
-                className={activeKey === route.route ? "active-tab" : undefined}
-            >
-                {route.name}
-            </BootstrapNavItem>
-        ));
+        .map((route) => {
+            const active = currentRoute === route.route.substring(1);
+            return (
+                <BootstrapNavItem
+                    eventKey={route.route}
+                    to={route.route}
+                    key={route.route}
+                >
+                    <h5
+                        className={
+                            active
+                                ? "font-weight-bold text-primary"
+                                : "font-weight-bold text-body"
+                        }
+                    >
+                        {route.name}
+                    </h5>
+                </BootstrapNavItem>
+            );
+        });
     const activeSubroutes = routes
-        .filter((route) => route.route === activeKey)
+        .filter((route) => currentRoute === route.route.substring(1))
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;
@@ -73,7 +93,9 @@ export function Header(props) {
                         title={subroute.description}
                         key={fullroute}
                     >
-                        {subroute.name}
+                        <h5>
+                            <small>{subroute.name}</small>
+                        </h5>
                     </BootstrapNavItem>
                 );
             })
@@ -83,10 +105,13 @@ export function Header(props) {
         return <div>No Routes in Header</div>;
     }
     return (
-        <Tab.Container activeKey={activeKey} defaultActiveKey={routes[0].route}>
-            <Row className="justify-content-between right-padding">
+        <Tab.Container activeKey={currentRoute} defaultActiveKey={"tapp"}>
+            <Row className="justify-content-between pr-3 ">
                 <Col md={"auto"}>
-                    <Nav className="flex-row navbar-tabs" variant="tabs">
+                    <Nav
+                        className="flex-row pt-3 pr-3 pb-0 pl-2"
+                        variant="tabs"
+                    >
                         {activeTabs}
                     </Nav>
                 </Col>
@@ -98,7 +123,7 @@ export function Header(props) {
                     </Row>
                 </Col>
             </Row>
-            <Row className="navbar-subtabs">
+            <Row className="py-2 pr-3 pl-3">
                 <Tab.Content>
                     <Nav variant="pills">{activeSubroutes}</Nav>
                 </Tab.Content>
