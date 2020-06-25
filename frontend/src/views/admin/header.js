@@ -11,7 +11,6 @@ import {
 } from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";
-import { routes } from "./routes";
 /**
  * Header showing the routes that a user with `role=admin`
  * can see.

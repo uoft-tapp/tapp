@@ -1,7 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Jumbotron, Button, Accordion, Card } from "react-bootstrap";
-import { activeSessionSelector } from "../../api/actions";
+import {
+    sessionsSelector,
+    activeSessionSelector,
+    setActiveSession,
+} from "../../api/actions";
+import { ActiveSessionDisplay } from "../../components/active-session";
+
 import { routes } from "./routes";
 
 function AccordionItem(route) {
@@ -55,7 +61,10 @@ function NoActiveSessionJumbotron(setLearnMore) {
             <p>
                 There is <strong>no active session</strong> selected.
             </p>
-            <p>Choose an active session from the selected session menu.</p>
+            <p>
+                Choose an active session from the selected session menu below.
+            </p>
+            <ConnectedActiveSessionDisplay />
             <p>
                 <Button variant="primary" onClick={(e) => setLearnMore(true)}>
                     Learn more about TAPP
@@ -89,8 +98,15 @@ function Landing(props) {
 }
 
 const mapActiveSessionStateToProps = (state) => ({
+    sessions: sessionsSelector(state),
     activeSession: activeSessionSelector(state),
 });
+
+const mapSessionsDispatchToProps = { setActiveSession };
+const ConnectedActiveSessionDisplay = connect(
+    mapActiveSessionStateToProps,
+    mapSessionsDispatchToProps
+)(ActiveSessionDisplay);
 
 const ConnectedLandingView = connect(mapActiveSessionStateToProps)(Landing);
 export { ConnectedLandingView as Landing };
