@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
-import { Col, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { DialogRow } from "./forms/common-controls";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
@@ -95,15 +96,14 @@ export function InstructorEditor(props) {
     return (
         <Form>
             <Form.Row>
-                <Form.Group as={Col}>
+                <DialogRow>
                     {createFieldEditor("First Name", "first_name")}
-                </Form.Group>
-                <Form.Group as={Col}>
                     {createFieldEditor("Last Name", "last_name")}
-                </Form.Group>
-                <Form.Group as={Col}>
+                </DialogRow>
+                <DialogRow>
+                    {createFieldEditor("Email", "email")}
                     {createFieldEditor("UTORid", "utorid")}
-                </Form.Group>
+                </DialogRow>
             </Form.Row>
         </Form>
     );
