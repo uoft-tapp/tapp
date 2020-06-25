@@ -5,14 +5,14 @@ import {
     contractTemplatesSelector,
     allContractTemplatesSelector,
     upsertContractTemplate,
-    fetchAllContractTemplates
+    fetchAllContractTemplates,
 } from "../../api/actions";
 import { strip } from "../../libs/utils";
 import { ContractTemplateEditor } from "../../components/forms/contract-template-editor";
 
 const BLANK_CONTRACT_TEMPLATE = {
     template_name: "",
-    template_file: ""
+    template_file: "",
 };
 
 /**
@@ -31,7 +31,7 @@ function getConficts(contractTemplate, contractTemplates) {
         ret.delayShow = "A template name and template file is required";
     }
     const matchingTemplate = contractTemplates.find(
-        x => strip(x.template_name) === strip(contractTemplate.template_name)
+        (x) => strip(x.template_name) === strip(contractTemplate.template_name)
     );
     if (matchingTemplate) {
         ret.immediateShow = (
@@ -55,7 +55,7 @@ function AddContractTemplateDialog(props) {
         contractTemplates,
         availableTemplates,
         upsertContractTemplate,
-        fetchAllContractTemplates
+        fetchAllContractTemplates,
     } = props;
     const [newContractTemplate, setNewContractTemplate] = React.useState(
         BLANK_CONTRACT_TEMPLATE
@@ -115,9 +115,9 @@ function AddContractTemplateDialog(props) {
  * AddContractTemplateDialog that has been connected to the redux store
  */
 export const ConnectedAddContractTemplateDialog = connect(
-    state => ({
+    (state) => ({
         contractTemplates: contractTemplatesSelector(state),
-        availableTemplates: allContractTemplatesSelector(state)
+        availableTemplates: allContractTemplatesSelector(state),
     }),
     { upsertContractTemplate, fetchAllContractTemplates }
 )(AddContractTemplateDialog);

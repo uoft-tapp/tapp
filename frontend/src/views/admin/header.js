@@ -7,7 +7,7 @@ import {
     setActiveUserRole,
     setActiveSession,
     activeUserSelector,
-    activeRoleSelector
+    activeRoleSelector,
 } from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";
@@ -30,34 +30,34 @@ function AdminHeader() {
                         {
                             route: "/sessions",
                             name: "Sessions",
-                            description: "Manage Sessions"
+                            description: "Manage Sessions",
                         },
                         {
                             route: "/contract_templates",
                             name: "Contract Templates",
-                            description: "Manage Contract Templates"
+                            description: "Manage Contract Templates",
                         },
                         {
                             route: "/instructors",
                             name: "Instructors",
-                            description: "Manage Instructors"
+                            description: "Manage Instructors",
                         },
                         {
                             route: "/positions",
                             name: "Positions",
-                            description: "Manage Positions"
+                            description: "Manage Positions",
                         },
                         {
                             route: "/assignments",
                             name: "Assignments",
-                            description: "Manage Assignments"
+                            description: "Manage Assignments",
                         },
                         {
                             route: "/summary",
                             name: "Summary",
-                            description: "Overivew of all data"
-                        }
-                    ]
+                            description: "Overivew of all data",
+                        },
+                    ],
                 },
                 {
                     route: "/cp",
@@ -68,28 +68,28 @@ function AdminHeader() {
                             route: "/statistics",
                             name: "Statistics",
                             description:
-                                "See statistics about accepted/rejected contracts"
-                        }
-                    ]
+                                "See statistics about accepted/rejected contracts",
+                        },
+                    ],
                 },
                 {
                     route: "/dashboard",
                     name: "Dashboard",
                     description: "List of all widgets",
-                    hidden: true
-                }
+                    hidden: true,
+                },
             ]}
             infoComponents={[
                 <ConnectedActiveSessionDisplay />,
-                <ConnectedActiveUserDisplay />
+                <ConnectedActiveUserDisplay />,
             ]}
         />
     );
 }
 
-const mapSessionsStateToProps = state => ({
+const mapSessionsStateToProps = (state) => ({
     sessions: sessionsSelector(state),
-    activeSession: activeSessionSelector(state)
+    activeSession: activeSessionSelector(state),
 });
 
 const mapSessionsDispatchToProps = { setActiveSession };
@@ -99,9 +99,9 @@ const ConnectedActiveSessionDisplay = connect(
     mapSessionsDispatchToProps
 )(ActiveSessionDisplay);
 
-const mapActiveUserStateToProps = state => ({
+const mapActiveUserStateToProps = (state) => ({
     activeUser: activeUserSelector(state),
-    activeRole: activeRoleSelector(state)
+    activeRole: activeRoleSelector(state),
 });
 
 const mapActiveUserDispatchToProps = { setActiveUserRole };

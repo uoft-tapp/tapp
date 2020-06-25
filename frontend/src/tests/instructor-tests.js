@@ -4,7 +4,8 @@ import {
     expect,
     beforeAll,
     checkPropTypes,
-    instructorPropTypes
+    errorPropTypes,
+    instructorPropTypes,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -25,60 +26,71 @@ export function instructorsTests(api) {
         await databaseSeeder.seed(api);
     }, 30000);
 
+    it("fetch instructors", async () => {
+        const resp = await apiGET("/admin/instructors");
+        expect(resp).toHaveStatus("success");
+
+        // check the type of payload
+        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
+    });
+
     it("create instructor", async () => {
         const newInstructorData = {
             first_name: "Anand",
             last_name: "Liu",
             email: "anand.liu.sample@utoronto.ca",
-            utorid: "anandl"
+            utorid: "anandl",
         };
 
         // create a new instructor
-        const resp1 = await apiPOST(`/instructors`, newInstructorData);
-        expect(resp1).toMatchObject({ status: "success" });
+        const resp1 = await apiPOST(`/admin/instructors`, newInstructorData);
+        expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(newInstructorData);
+        checkPropTypes(instructorPropTypes, resp1.payload);
 
         // make sure instructor is on instructor list
-        const resp2 = await apiGET(`/instructors`);
-        expect(resp2).toMatchObject({ status: "success" });
+        const resp2 = await apiGET(`/admin/instructors`);
+        expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(newInstructorData);
 
         // set instructor to used by later test
         instructor = resp1.payload;
     });
 
-    it("get instructors", async () => {
-        const resp = await apiGET("/instructors");
-        expect(resp).toMatchObject({ status: "success" });
-        checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp.payload);
-    });
-
     it("update an instructor", async () => {
         const updateInstructorData = {
+            ...instructor,
             id: instructor.id,
-            email: "anand.liu@gmail.com"
+            email: "newemail@toronto.ca",
         };
 
         // update the instructor
-        const resp = await apiPOST(`/instructors`, updateInstructorData);
-        expect(resp).toMatchObject({ status: "success" });
+        const resp = await apiPOST(`/admin/instructors`, updateInstructorData);
+        expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(updateInstructorData);
     });
 
     // delete an instructor
     it("delete instructor", async () => {
-        const resp1 = await apiPOST(`/instructors/delete`, instructor);
-        expect(resp1).toMatchObject({
-            status: "success",
-            payload: { id: instructor.id }
-        });
+        const resp1 = await apiPOST(`/admin/instructors/delete`, instructor);
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload).toMatchObject({ id: instructor.id });
 
         // make sure the instructor is deleted
-        const resp2 = await apiGET("/instructors");
-        expect(resp2).toMatchObject({ status: "success" });
+        const resp2 = await apiGET("/admin/instructors");
+        expect(resp2).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(instructorPropTypes), resp2.payload);
-        expect(resp2).not.toContainObject(instructor);
+        expect(resp2.payload).not.toContainObject(instructor);
     });
 
-    it.todo("fail to delete instructor from a position with invalid id");
+    it("fail to delete instructor with invalid id", async () => {
+        const updatedInstructorData = {
+            ...instructor,
+            id: -1,
+        };
+
+        const resp = await apiPOST(`/admin/instructor`, updatedInstructorData);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 }

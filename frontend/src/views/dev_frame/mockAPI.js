@@ -42,8 +42,8 @@ let ToggleMockApi = function ToggleMockApi(props) {
     );
 };
 
-ToggleMockApi = connect(state => ({ globals: globalsSelector(state) }), {
-    setGlobals
+ToggleMockApi = connect((state) => ({ globals: globalsSelector(state) }), {
+    setGlobals,
 })(ToggleMockApi);
 
 export { ToggleMockApi };

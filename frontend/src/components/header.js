@@ -18,7 +18,7 @@ export function BootstrapNavLink(props) {
     );
 }
 BootstrapNavLink.propTypes = {
-    to: PropTypes.string
+    to: PropTypes.string,
 };
 
 /**
@@ -53,15 +53,15 @@ export function Header(props) {
         <Navbar bg="light" variant="light">
             <Navbar.Brand>
                 <NavDropdown
-                    title={routes.map(route => (
+                    title={routes.map((route) => (
                         <Route path={route.route} key={route.route}>
                             {route.name}
                         </Route>
                     ))}
                 >
                     {routes
-                        .filter(route => !route.hidden)
-                        .map(route => (
+                        .filter((route) => !route.hidden)
+                        .map((route) => (
                             <NavDropdown.Item
                                 key={route.route}
                                 as="span"
@@ -78,9 +78,9 @@ export function Header(props) {
                 </NavDropdown>
             </Navbar.Brand>
             <Nav className="mr-auto">
-                {routes.map(route => (
+                {routes.map((route) => (
                     <Route path={route.route} key={route.route}>
-                        {(route.subroutes || []).map(subroute => {
+                        {(route.subroutes || []).map((subroute) => {
                             const fullroute = `${route.route}${subroute.route}`;
                             return (
                                 <BootstrapNavLink
@@ -111,10 +111,10 @@ Header.propTypes = {
                 PropTypes.shape({
                     route: PropTypes.string.isRequired,
                     name: PropTypes.string.isRequired,
-                    description: PropTypes.string
+                    description: PropTypes.string,
                 })
-            )
+            ),
         })
     ),
-    infoComponents: PropTypes.array
+    infoComponents: PropTypes.array,
 };

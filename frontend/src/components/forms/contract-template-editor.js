@@ -10,7 +10,7 @@ import { fieldEditorFactory, DialogRow } from "./common-controls";
 
 const DEFAULT_CONTRACT_TEMPLATE = {
     template_name: "",
-    template_file: ""
+    template_file: "",
 };
 
 /**
@@ -24,11 +24,11 @@ export function ContractTemplateEditor(props) {
     const {
         contractTemplate: contractTemplateProp,
         setContractTemplate,
-        availableTemplates = []
+        availableTemplates = [],
     } = props;
     const contractTemplate = {
         ...DEFAULT_CONTRACT_TEMPLATE,
-        ...contractTemplateProp
+        ...contractTemplateProp,
     };
 
     // update the selected template_file; this comes with side effects
@@ -36,7 +36,7 @@ export function ContractTemplateEditor(props) {
         const templateFile = templates[templates.length - 1] || "";
         setContractTemplate({
             ...contractTemplate,
-            template_file: templateFile
+            template_file: templateFile,
         });
     }
 
@@ -63,13 +63,13 @@ export function ContractTemplateEditor(props) {
                         ignoreDiacritics={true}
                         placeholder="File name..."
                         multiple
-                        labelKey={option => `${option}`}
+                        labelKey={(option) => `${option}`}
                         selected={
                             !contractTemplate.template_file
                                 ? []
                                 : [contractTemplate.template_file]
                         }
-                        options={availableTemplates.map(x => x.template_file)}
+                        options={availableTemplates.map((x) => x.template_file)}
                         onChange={setTemplateFile}
                     />
                 </React.Fragment>
@@ -82,5 +82,5 @@ ContractTemplateEditor.propTypes = {
     setContractTemplate: PropTypes.func.isRequired,
     availableTemplates: PropTypes.arrayOf(
         docApiPropTypes.contractTemplateMinimal
-    )
+    ),
 };

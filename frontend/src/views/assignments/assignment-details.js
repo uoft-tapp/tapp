@@ -6,7 +6,7 @@ import {
     assignmentsSelector,
     wageChunksByAssignmentSelector,
     fetchWageChunksForAssignment,
-    upsertWageChunksForAssignment
+    upsertWageChunksForAssignment,
 } from "../../api/actions";
 import { EditableField } from "../../components/edit-field-widgets";
 function AssignmentDetails(props) {
@@ -14,7 +14,7 @@ function AssignmentDetails(props) {
         assignment,
         wageChunksByAssignment,
         fetchWageChunksForAssignment,
-        upsertWageChunksForAssignment
+        upsertWageChunksForAssignment,
     } = props;
     const [wageChunks, setWageChunks] = React.useState([]);
     React.useEffect(() => {
@@ -33,7 +33,7 @@ function AssignmentDetails(props) {
      * @param {number} i
      */
     function changeHoursFactory(i) {
-        return function(hours) {
+        return function (hours) {
             const newWageChunks = wageChunks.map((chunk, j) => {
                 if (i !== j) {
                     return chunk;
@@ -76,8 +76,8 @@ function AssignmentDetails(props) {
 }
 
 const ConnectedAssignmentDetails = connect(
-    state => ({
-        wageChunksByAssignment: wageChunksByAssignmentSelector(state)
+    (state) => ({
+        wageChunksByAssignment: wageChunksByAssignmentSelector(state),
     }),
     { fetchWageChunksForAssignment, upsertWageChunksForAssignment }
 )(AssignmentDetails);
@@ -98,13 +98,13 @@ function ViewAssignmentDetailsButton(props) {
         </React.Fragment>
     );
 }
-export const ConnectedViewAssignmentDetailsButton = connect(state => {
+export const ConnectedViewAssignmentDetailsButton = connect((state) => {
     // pass in the currently selected assignments.
     const { selectedAssignmentIds } = offerTableSelector(state);
     const assignments = assignmentsSelector(state);
     return {
-        assignments: assignments.filter(x =>
+        assignments: assignments.filter((x) =>
             selectedAssignmentIds.includes(x.id)
-        )
+        ),
     };
 })(ViewAssignmentDetailsButton);

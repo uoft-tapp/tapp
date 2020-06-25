@@ -7,7 +7,7 @@ import {
     it,
     beforeAll,
     apiGET,
-    apiPOST
+    apiPOST,
 } from "./utils";
 
 import { databaseSeeder } from "./setup";
@@ -42,7 +42,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             hours_per_assignment: 70,
             start_date: new Date("2018/05/09").toISOString(),
             end_date: new Date("2018/09/09").toISOString(),
-            contract_template_id: contractTemplate.id
+            contract_template_id: contractTemplate.id,
         };
 
         const resp1 = await apiPOST(
@@ -66,10 +66,10 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             `/admin/sessions/${session.id}/positions`
         );
 
-        expect(withNewPosition.map(x => x.id)).toContain(newPosition.id);
+        expect(withNewPosition.map((x) => x.id)).toContain(newPosition.id);
 
         expect(
-            withNewPosition.filter(s => s.id === newPosition.id)
+            withNewPosition.filter((s) => s.id === newPosition.id)
         ).toContainObject(newPosition);
 
         expect(withNewPosition.length).toEqual(2);
@@ -80,7 +80,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             ...newPosition,
             hours_per_assignment: 75,
             start_date: new Date("2018/06/09").toISOString(),
-            end_date: new Date("2018/10/09").toISOString()
+            end_date: new Date("2018/10/09").toISOString(),
         };
 
         const resp = await apiPOST(`/admin/positions`, updatedPositionData);
@@ -111,7 +111,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
     it("error when updating a position to have an empty position_code", async () => {
         const updatedPositionData = {
             ...newPosition,
-            position_code: ""
+            position_code: "",
         };
 
         const resp = await apiPOST(`/admin/positions`, updatedPositionData);
@@ -122,7 +122,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
     it("error when creating a position for a session with an invalid id", async () => {
         const updatedPositionData = {
             ...newPosition,
-            id: -1
+            id: -1,
         };
 
         const resp = await apiPOST(`/admin/positions`, updatedPositionData);
@@ -134,7 +134,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         // we already have a position
         const newPositionData = {
             ...position,
-            id: null
+            id: null,
         };
 
         const resp1 = await apiPOST(
@@ -151,7 +151,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         const resp1 = await apiPOST(`/admin/sessions/${session.id}/positions`, {
             ...position,
             id: null,
-            position_code: ""
+            position_code: "",
         });
         checkPropTypes(errorPropTypes, resp1);
     });
@@ -163,7 +163,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             // add a random string to the session name so we don't accidentally collide with another
             // session's name
             name: "Newly Created Sessions (" + Math.random() + ")",
-            rate1: 56.54
+            rate1: 56.54,
         };
 
         const newPositionData2 = {
@@ -172,7 +172,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             hours_per_assignment: 70,
             start_date: new Date("2019/09/09").toISOString(),
             end_date: new Date("2019/12/31").toISOString(),
-            contract_template_id: contractTemplate.id
+            contract_template_id: contractTemplate.id,
         };
         // create a new session to add a template to
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
@@ -198,7 +198,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             position_code: "POS100F",
             position_title: "Position with no start/end date",
             hours_per_assignment: 70,
-            contract_template_id: contractTemplate.id
+            contract_template_id: contractTemplate.id,
         };
 
         const resp = await apiPOST(
@@ -212,7 +212,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         // check the start/end date is the same as session
         const dates = {
             start_date: session.start_date,
-            end_date: session.end_date
+            end_date: session.end_date,
         };
         expect(newPosition).toMatchObject(dates);
 
@@ -223,7 +223,7 @@ export function positionsTests(api = { apiGET, apiPOST }) {
         );
 
         expect(
-            withNewPosition.find(s => s.id === newPosition.id)
+            withNewPosition.find((s) => s.id === newPosition.id)
         ).toMatchObject(dates);
     });
 }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
     assignmentsSelector,
     upsertApplicant,
-    upsertAssignment
+    upsertAssignment,
 } from "../../api/actions";
 import { OfferTable } from "../../components/offer-table";
 import { EditableField } from "../../components/edit-field-widgets";
@@ -68,7 +68,7 @@ function EditableOfferTable(props) {
 
     // Bind an `ApplicantCell` to a particular field
     function generateApplicantCell(field) {
-        return props => (
+        return (props) => (
             <ApplicantCell
                 field={field}
                 upsertApplicant={upsertApplicant}
@@ -79,7 +79,7 @@ function EditableOfferTable(props) {
 
     // Bind an `AssignmentCell` to a particular field
     function generateAssignmentCell(field) {
-        return props => (
+        return (props) => (
             <AssignmentCell
                 field={field}
                 upsertAssignment={upsertAssignment}
@@ -92,32 +92,32 @@ function EditableOfferTable(props) {
         {
             Header: "Last Name",
             accessor: "applicant.last_name",
-            Cell: generateApplicantCell("last_name")
+            Cell: generateApplicantCell("last_name"),
         },
         {
             Header: "First Name",
             accessor: "applicant.first_name",
-            Cell: generateApplicantCell("first_name")
+            Cell: generateApplicantCell("first_name"),
         },
         {
             Header: "Email",
             accessor: "applicant.email",
-            Cell: generateApplicantCell("email")
+            Cell: generateApplicantCell("email"),
         },
         {
             Header: "Position",
-            accessor: "position.position_code"
+            accessor: "position.position_code",
         },
         {
             Header: "Hours",
             accessor: "hours",
-            Cell: generateAssignmentCell("hours")
+            Cell: generateAssignmentCell("hours"),
         },
         {
             Header: "Status",
             id: "status",
-            accessor: data => capitalize(data.active_offer_status || "")
-        }
+            accessor: (data) => capitalize(data.active_offer_status || ""),
+        },
     ];
 
     return <OfferTable columns={columns} {...rest} />;
@@ -128,9 +128,9 @@ function EditableOfferTable(props) {
  * for live updates and editability.
  */
 export const ConnectedOfferTable = connect(
-    state => ({
+    (state) => ({
         data: assignmentsSelector(state),
-        selected: offerTableSelector(state).selectedAssignmentIds
+        selected: offerTableSelector(state).selectedAssignmentIds,
     }),
     { upsertApplicant, upsertAssignment, setSelected: setSelectedRows }
 )(EditableOfferTable);

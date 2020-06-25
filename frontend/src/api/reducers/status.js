@@ -3,7 +3,7 @@ import { API_INTERACTION_START, API_INTERACTION_END } from "../constants";
 
 const initialState = {
     ongoingInteraction: false,
-    ongoingInteractionsList: []
+    ongoingInteractionsList: [],
 };
 
 // Keep a list of all ongoing interactions that are in progress.
@@ -15,18 +15,18 @@ export const statusReducer = createReducer(initialState, {
         ongoingInteraction: true,
         ongoingInteractionsList: [
             ...state.ongoingInteractionsList,
-            action.payload
-        ]
+            action.payload,
+        ],
     }),
     [API_INTERACTION_END]: (state, action) => {
         // remove the current interaction
         const ongoingInteractionsList = state.ongoingInteractionsList.filter(
-            i => i.id !== action.payload.id
+            (i) => i.id !== action.payload.id
         );
         return {
             ...state,
             ongoingInteraction: ongoingInteractionsList.length > 0,
-            ongoingInteractionsList: ongoingInteractionsList
+            ongoingInteractionsList: ongoingInteractionsList,
         };
-    }
+    },
 });

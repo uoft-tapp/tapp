@@ -3,17 +3,26 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Badge } from "react-bootstrap";
+import { formatDate } from "../libs/utils";
 
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
     { Header: "Position Title", accessor: "position_title" },
     { Header: "Hours", accessor: "hours_per_assignment" },
-    { Header: "Start", accessor: "start_date" },
-    { Header: "End", accessor: "end_date" },
+    {
+        Header: "Start",
+        accessor: "start_date",
+        Cell: (row) => formatDate(row.value),
+    },
+    {
+        Header: "End",
+        accessor: "end_date",
+        Cell: (row) => formatDate(row.value),
+    },
     {
         Header: "Instructors",
         accessor: "instructors",
-        Cell: props => (
+        Cell: (props) => (
             <React.Fragment>
                 {props.value.map((instructor = {}) => {
                     const name = `${instructor.first_name} ${instructor.last_name}`;
@@ -24,9 +33,12 @@ const DEFAULT_COLUMNS = [
                     );
                 })}
             </React.Fragment>
-        )
+        ),
     },
-    { Header: "Contract Template", accessor: "contract_template.template_name" }
+    {
+        Header: "Contract Template",
+        accessor: "contract_template.template_name",
+    },
 ];
 
 /**
@@ -55,5 +67,5 @@ PositionsList.propTypes = {
     positions: PropTypes.arrayOf(docApiPropTypes.position).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
-    )
+    ),
 };

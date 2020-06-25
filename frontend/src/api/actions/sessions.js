@@ -5,7 +5,7 @@ import {
     FETCH_ONE_SESSION_SUCCESS,
     UPSERT_ONE_SESSION_SUCCESS,
     DELETE_ONE_SESSION_SUCCESS,
-    SET_ACTIVE_SESSION
+    SET_ACTIVE_SESSION,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
@@ -25,49 +25,49 @@ const setActiveSessionAction = actionFactory(SET_ACTIVE_SESSION);
 export const fetchSessions = validatedApiDispatcher({
     name: "fetchSessions",
     description: "Fetch sessions",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/sessions`);
         await dispatch(fetchSessionsSuccess(data));
-    }
+    },
 });
 
 export const fetchSession = validatedApiDispatcher({
     name: "fetchSession",
     description: "Fetch session",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/sessions/${payload.id}`);
         dispatch(fetchOneSessionSuccess(data));
-    }
+    },
 });
 
 export const upsertSession = validatedApiDispatcher({
     name: "upsertSession",
     description: "Add/insert session",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/sessions`, payload);
         dispatch(upsertOneSessionSuccess(data));
-    }
+    },
 });
 
-export const deleteSession = payload =>
+export const deleteSession = (payload) =>
     validatedApiDispatcher({
         name: "deleteSession",
         description: "Delete session",
         propTypes: { id: PropTypes.any.isRequired },
-        onErrorDispatch: e => deleteError(e.toString()),
+        onErrorDispatch: (e) => deleteError(e.toString()),
         dispatcher: async (dispatch, getState) => {
             const role = activeRoleSelector(getState());
             const data = await apiPOST(`/${role}/sessions/delete`, payload);
             dispatch(deleteOneSessionSuccess(data));
-        }
+        },
     });
 
 /**
@@ -104,16 +104,16 @@ export const setActiveSession = validatedApiDispatcher({
                 initFromStage("setActiveSession", { startAfterStage: true })
             );
         }
-    }
+    },
 });
 
 // selectors
 export const localStoreSelector = sessionsReducer._localStoreSelector;
 export const sessionsSelector = createSelector(
     localStoreSelector,
-    state => state._modelData
+    (state) => state._modelData
 );
 export const activeSessionSelector = createSelector(
     localStoreSelector,
-    state => state.activeSession
+    (state) => state.activeSession
 );

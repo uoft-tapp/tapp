@@ -1,12 +1,12 @@
 import {
     getAttributesCheckMessage,
     deleteInArray,
-    MockAPIController
+    MockAPIController,
 } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 
 export class Instructor extends MockAPIController {
@@ -17,7 +17,7 @@ export class Instructor extends MockAPIController {
         const message = getAttributesCheckMessage(instructor, this.ownData, {
             utorid: { required: true, unique: true },
             first_name: { required: true },
-            last_name: { required: true }
+            last_name: { required: true },
         });
         if (message) {
             throw new Error(message);
@@ -48,10 +48,10 @@ export class Instructor extends MockAPIController {
 export const instructorsRoutes = {
     get: {
         "/instructors": documentCallback({
-            func: data => new Instructor(data).findAll(),
+            func: (data) => new Instructor(data).findAll(),
             summary: "Get a list of all instructors",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.instructor)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.instructor),
+        }),
     },
     post: {
         "/instructors": documentCallback({
@@ -60,7 +60,7 @@ export const instructorsRoutes = {
             },
             summary: "Upsert an instructor",
             posts: docApiPropTypes.instructor,
-            returns: docApiPropTypes.instructor
+            returns: docApiPropTypes.instructor,
         }),
         "/instructors/delete": documentCallback({
             func: (data, params, body) => {
@@ -68,7 +68,7 @@ export const instructorsRoutes = {
             },
             summary: "Delete an instructor (removes from all positions)",
             posts: docApiPropTypes.idOnly,
-            returns: docApiPropTypes.instructor
-        })
-    }
+            returns: docApiPropTypes.instructor,
+        }),
+    },
 };

@@ -11,7 +11,7 @@ const { store, persistor } = configureStore();
 
 // In production, we don't want to wrap the app in a dev frame,
 // but we do want to in development
-let DevFrame = function(props) {
+let DevFrame = function (props) {
     return <React.Fragment>{props.children}</React.Fragment>;
 };
 /* eslint-disable */
@@ -20,7 +20,7 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 }
 /* eslint-enable */
 
-const render = Component => {
+const render = (Component) => {
     return ReactDOM.render(
         <HashRouter>
             <Provider store={store}>

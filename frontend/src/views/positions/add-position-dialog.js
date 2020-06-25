@@ -5,7 +5,7 @@ import {
     upsertPosition,
     positionsSelector,
     instructorsSelector,
-    contractTemplatesSelector
+    contractTemplatesSelector,
 } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { PositionEditor } from "../../components/forms/position-editor";
@@ -20,7 +20,7 @@ function getConficts(position, positions = []) {
         ret.delayShow = "A position code, start date, and end date is required";
     }
     const matchingSession = positions.find(
-        x => strip(x.position_code) === strip(position.position_code)
+        (x) => strip(x.position_code) === strip(position.position_code)
     );
     if (matchingSession) {
         ret.immediateShow = (
@@ -37,7 +37,7 @@ const BLANK_POSITION = {
     contract_template_id: null,
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
-    instructors: []
+    instructors: [],
 };
 
 export function AddPositionDialog(props) {
@@ -47,7 +47,7 @@ export function AddPositionDialog(props) {
         positions,
         upsertPosition,
         instructors,
-        contractTemplates
+        contractTemplates,
     } = props;
     const [newPosition, setNewPosition] = React.useState(BLANK_POSITION);
 
@@ -65,15 +65,15 @@ export function AddPositionDialog(props) {
         // If all else fails, pick the first template in the list
         const defaultTemplate =
             contractTemplates.find(
-                x => x.template_name.toLowerCase() === "standard"
+                (x) => x.template_name.toLowerCase() === "standard"
             ) ||
             contractTemplates.find(
-                x => x.template_name.toLowerCase() === "default"
+                (x) => x.template_name.toLowerCase() === "default"
             ) ||
-            contractTemplates.find(x =>
+            contractTemplates.find((x) =>
                 x.template_name.toLowerCase().includes("standard")
             ) ||
-            contractTemplates.find(x =>
+            contractTemplates.find((x) =>
                 x.template_name.toLowerCase().includes("default")
             ) ||
             contractTemplates[0];
@@ -126,10 +126,10 @@ export function AddPositionDialog(props) {
 }
 
 export const ConnectedAddPositionDialog = connect(
-    state => ({
+    (state) => ({
         positions: positionsSelector(state),
         instructors: instructorsSelector(state),
-        contractTemplates: contractTemplatesSelector(state)
+        contractTemplates: contractTemplatesSelector(state),
     }),
     { upsertPosition }
 )(AddPositionDialog);

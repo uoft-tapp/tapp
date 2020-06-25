@@ -37,7 +37,7 @@ describe("API tests", () => {
     describe("`/admin/positions` tests", () => {
         positionsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/admin/instructors` tests", () => {
+    describe("`/admin/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
     describe("`/admin/assignments` tests", () => {
@@ -74,7 +74,7 @@ describe("Mock API tests", () => {
     describe("`/admin/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
-    describe("template tests", () => {
+    describe("`/admin/sessions/:session_id/contract_templates` tests", () => {
         templatesTests(mockAPI);
     });
     describe("`/admin/positions` tests", () => {
@@ -83,7 +83,10 @@ describe("Mock API tests", () => {
     describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
     });
-    describe.skip("`/admin/instructors` tests", () => {
+    describe("`/assignments/:assignment_id/active_offer/` tests", () => {
+        offersTests(mockAPI);
+    });
+    describe("`/admin/instructors` tests", () => {
         instructorsTests(mockAPI);
     });
     describe("`/admin/users` tests", () => {

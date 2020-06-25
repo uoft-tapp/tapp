@@ -1,12 +1,12 @@
 import {
     getAttributesCheckMessage,
     MockAPIController,
-    findAllById
+    findAllById,
 } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
 
@@ -17,7 +17,7 @@ export class Application extends MockAPIController {
     validateNew(applicant) {
         const message = getAttributesCheckMessage(applicant, this.ownData, {
             session_id: { required: true },
-            applicant_id: { required: true }
+            applicant_id: { required: true },
         });
         if (message) {
             throw new Error(message);
@@ -43,15 +43,15 @@ export const applicationsRoutes = {
             func: (data, params) =>
                 new Application(data).findAllBySession(params.session_id),
             summary: "Get all applications associated with the given session",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.application)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.application),
+        }),
     },
     post: {
         "/applications": documentCallback({
             func: (data, params, body) => new Application(data).upsert(body),
             summary: "Upsert an application",
             posts: docApiPropTypes.application,
-            returns: docApiPropTypes.application
-        })
-    }
+            returns: docApiPropTypes.application,
+        }),
+    },
 };

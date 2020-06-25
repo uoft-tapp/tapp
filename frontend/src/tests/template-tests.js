@@ -6,7 +6,7 @@ import {
     errorPropTypes,
     expect,
     it,
-    beforeAll
+    beforeAll,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -26,11 +26,11 @@ export function templatesTests(api) {
 
     const newTemplateData1 = {
         template_file: "this_is_a_test_template.html",
-        template_name: "OTO"
+        template_name: "OTO",
     };
     const newTemplateData2 = {
         template_file: "this_is_a_test_template.html",
-        template_name: "Invigilate"
+        template_name: "Invigilate",
     };
     // set up a session to be available before tests run
 
@@ -42,7 +42,7 @@ export function templatesTests(api) {
     it("fetch available templates", async () => {
         const resp = await apiGET("/admin/available_contract_templates");
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(
             PropTypes.arrayOf(offerTemplateMinimalPropTypes),
             resp.payload
@@ -55,7 +55,7 @@ export function templatesTests(api) {
         const resp1 = await apiGET(
             `/admin/sessions/${session.id}/contract_templates`
         );
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
 
         checkPropTypes(
             PropTypes.arrayOf(offerTemplatePropTypes),
@@ -68,7 +68,7 @@ export function templatesTests(api) {
             newTemplateData1
         );
 
-        expect(resp2).toMatchObject({ status: "success" });
+        expect(resp2).toHaveStatus("success");
         checkPropTypes(offerTemplatePropTypes, resp2.payload);
         expect(resp2.payload).toMatchObject(newTemplateData1);
 
@@ -77,7 +77,7 @@ export function templatesTests(api) {
             `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
-        expect(resp3).toMatchObject({ status: "success" });
+        expect(resp3).toHaveStatus("success");
 
         // fetch all templates us the templates we just created
         const resp4 = await apiGET(
@@ -92,7 +92,7 @@ export function templatesTests(api) {
 
     it("update a template", async () => {
         // create template had been tested
-        const templateToUpdate = testTemplates.filter(t => {
+        const templateToUpdate = testTemplates.filter((t) => {
             return (
                 t.template_file === newTemplateData2.template_file &&
                 t.template_name === newTemplateData2.template_name
@@ -105,14 +105,14 @@ export function templatesTests(api) {
         const updateData = {
             ...templateToUpdate[0],
             id: templateToUpdate[0].id,
-            template_name: "Standard"
+            template_name: "Standard",
         };
         const resp1 = await apiPOST(
             `/admin/sessions/${session.id}/contract_templates`,
             updateData
         );
 
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(updateData);
 
         // make sure the template before update is gone
@@ -127,11 +127,11 @@ export function templatesTests(api) {
     it("throw error when `template_file` or `template_name` is empty", async () => {
         const newTemplateData1 = {
             template_file: "",
-            template_name: "Standard"
+            template_name: "Standard",
         };
         const newTemplateData2 = {
             template_file: "this_is_a_test_template.html",
-            template_name: ""
+            template_name: "",
         };
 
         // expected an error to crete new template with empty template_file
@@ -139,7 +139,7 @@ export function templatesTests(api) {
             `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData1
         );
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
 
         // expected an error to crete new template with empty template_name
@@ -147,7 +147,7 @@ export function templatesTests(api) {
             `/admin/sessions/${session.id}/contract_templates`,
             newTemplateData2
         );
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
 
         // fetching the templates list and make sure it does not contain the above templates

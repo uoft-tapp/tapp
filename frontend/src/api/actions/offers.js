@@ -5,7 +5,7 @@ import {
     OFFER_CREATE_SUCCESS,
     OFFER_EMAIL_SUCCESS,
     OFFER_NAG_SUCCESS,
-    OFFER_WITHDRAW_SUCCESS
+    OFFER_WITHDRAW_SUCCESS,
 } from "../constants";
 import { fetchError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
@@ -30,21 +30,21 @@ export const offerWithdrawSuccess = actionFactory(OFFER_WITHDRAW_SUCCESS);
 export const fetchActiveOfferForAssignment = validatedApiDispatcher({
     name: "fetchActiveOfferForAssignment",
     description: "Fetch an offer associated with an assignment",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(
             `/${role}/assignments/${payload.id}/active_offer`
         );
         dispatch(fetchOfferSucces(data));
-    }
+    },
 });
 
 export const setOfferForAssignmentAccepted = validatedApiDispatcher({
     name: "setOfferForAssignmentAccepted",
     description: "Set an offer as accepted",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/accept`
@@ -53,14 +53,14 @@ export const setOfferForAssignmentAccepted = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const setOfferForAssignmentRejected = validatedApiDispatcher({
     name: "setOfferForAssignmentRejected",
     description: "Set an offer as rejected",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/reject`
@@ -69,14 +69,14 @@ export const setOfferForAssignmentRejected = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const offerForAssignmentWithdraw = validatedApiDispatcher({
     name: "offerForAssignmentWithdraw",
     description: "Withdraw an offer",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/withdraw`
@@ -85,14 +85,14 @@ export const offerForAssignmentWithdraw = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const offerForAssignmentCreate = validatedApiDispatcher({
     name: "offerForAssignmentCreate",
     description: "Create an offer",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/create`
@@ -101,14 +101,14 @@ export const offerForAssignmentCreate = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const offerForAssignmentEmail = validatedApiDispatcher({
     name: "offerForAssignmentEmail",
     description: "Email an offer",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/email`
@@ -117,14 +117,14 @@ export const offerForAssignmentEmail = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });
 
 export const offerForAssignmentNag = validatedApiDispatcher({
     name: "offerForAssignmentNag",
     description: "Send a nag email for an offer",
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: assignment => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/nag`
@@ -133,5 +133,5 @@ export const offerForAssignmentNag = validatedApiDispatcher({
         // After we update an offer, we should refetch the assignment to make sure
         // there isn't stale data
         await dispatch(fetchAssignment(assignment));
-    }
+    },
 });

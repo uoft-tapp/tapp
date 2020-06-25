@@ -38,9 +38,9 @@ export function arrayToHash(l, indexBy = "id") {
  * @returns {function(object): {type: string, payload: object}}
  */
 export function actionFactory(type) {
-    return payload => ({
+    return (payload) => ({
         type,
-        payload
+        payload,
     });
 }
 
@@ -84,7 +84,7 @@ export function flattenIdFactory(
     outPropName,
     isArrayOfIds = false
 ) {
-    return function(obj) {
+    return function (obj) {
         // if the `inPropName` field doesn't exist, don't change anything
         // and don't error!
         if (obj[inPropName] == null) {
@@ -92,7 +92,7 @@ export function flattenIdFactory(
         }
         const [ret, filtered] = splitObjByProps(obj, [inPropName]);
         if (isArrayOfIds) {
-            ret[outPropName] = filtered[inPropName].map(x => x.id);
+            ret[outPropName] = filtered[inPropName].map((x) => x.id);
         } else {
             ret[outPropName] = filtered[inPropName].id;
         }
@@ -125,12 +125,12 @@ export function validatedApiDispatcher({
     propTypes,
     name,
     description,
-    onErrorDispatch
+    onErrorDispatch,
 }) {
     return (...args) => {
         // we return a new dispatcher that performs some validation
         // and then dispatches as usual
-        return async dispatch => {
+        return async (dispatch) => {
             // validate `args`. `args` is an array containing the arguments.
             // if propTypes is an array, it lists the propTypes for every argument,
             // otherwise there is just one argument.

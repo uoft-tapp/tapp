@@ -8,7 +8,7 @@ import {
     beforeAll,
     checkPropTypes,
     sessionPropTypes,
-    errorPropTypes
+    errorPropTypes,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 /**
@@ -36,13 +36,13 @@ export function sessionsTests(api) {
         // add a random string to the session name so we don't accidentally collide with another
         // session's name
         name: "Newly Created Sessions (" + Math.random() + ")",
-        rate1: 56.54
+        rate1: 56.54,
     };
 
     it("fetch sessions", async () => {
         // do we get a success response when geting all sessions from snapshot
         const resp = await apiGET("/admin/sessions");
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
@@ -60,7 +60,7 @@ export function sessionsTests(api) {
 
         // do we get a success response when creating the session?
         const resp1 = await apiPOST("/admin/sessions", newSessionData);
-        expect(resp1).toMatchObject({ status: "success" });
+        expect(resp1).toHaveStatus("success");
         const { payload: createdSession } = resp1;
         // make sure the propTypes are right
         checkPropTypes(sessionPropTypes, createdSession);
@@ -69,14 +69,16 @@ export function sessionsTests(api) {
         // make sure we have an id
         expect(createdSession.id).not.toBeNull();
         // make sure the id is unique and wasn't already a session id
-        expect(initialSessions.map(x => x.id)).not.toContain(createdSession.id);
+        expect(initialSessions.map((x) => x.id)).not.toContain(
+            createdSession.id
+        );
 
         // fetch all sessions and make sure we're in there
         const { payload: withNewSessions } = await apiGET("/admin/sessions");
         expect(withNewSessions.length).toBeGreaterThan(initialSessions.length);
         expect(withNewSessions).toContainObject(createdSession);
         // make sure the id of our new session came back
-        expect(withNewSessions.map(x => x.id)).toContain(createdSession.id);
+        expect(withNewSessions.map((x) => x.id)).toContain(createdSession.id);
     });
 
     it("update a session", async () => {
@@ -89,7 +91,7 @@ export function sessionsTests(api) {
         // get the sessions list and make sure we're updated there as well
         const resp2 = await apiGET("/admin/sessions");
         // filter session list to get the updated session obj
-        const updatedSession = resp2.payload.filter(s => s.id == session.id);
+        const updatedSession = resp2.payload.filter((s) => s.id == session.id);
         expect(updatedSession).toContainObject(newData);
     });
 
@@ -99,11 +101,11 @@ export function sessionsTests(api) {
         const newData2 = { ...newSessionData, name: undefined };
 
         const resp1 = await apiPOST("/admin/sessions", newData1);
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
 
         const resp2 = await apiPOST("/admin/sessions", newData2);
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
     });
 
@@ -113,11 +115,11 @@ export function sessionsTests(api) {
         const newData2 = { ...session, name: null };
         const resp1 = await apiPOST("/admin/sessions", newData1);
 
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
 
         const resp2 = await apiPOST("/admin/sessions", newData2);
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
     });
 
@@ -128,7 +130,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
     });
 
@@ -139,7 +141,7 @@ export function sessionsTests(api) {
         const resp1 = await apiPOST("/admin/sessions", newData);
 
         // expected an error as name not unique
-        expect(resp1).toMatchObject({ status: "error" });
+        expect(resp1).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp1);
     });
 
@@ -148,20 +150,20 @@ export function sessionsTests(api) {
         const resp1 = await apiGET("/admin/sessions");
         expect(resp1).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp1.payload);
-        const maxId = Math.max(...resp1.payload.map(s => s.id));
+        const maxId = Math.max(...resp1.payload.map((s) => s.id));
 
         // delete with non-existing id
         const resp2 = await apiPOST("/admin/sessions/delete", {
-            id: maxId + 1 // add 1 to make the id invalid
+            id: maxId + 1, // add 1 to make the id invalid
         });
         // expected an error with non-identical session id
         expect(resp2).toHaveStatus("error");
-        expect(resp2).toMatchObject({ status: "error" });
+        expect(resp2).toHaveStatus("error");
         checkPropTypes(errorPropTypes, resp2);
 
         // delete with id = null
         const resp3 = await apiPOST("/admin/sessions/delete", {
-            id: null
+            id: null,
         });
         // expected an error with non-identical session id
         expect(resp3).toHaveStatus("error");
@@ -170,10 +172,10 @@ export function sessionsTests(api) {
 
     it("delete session", async () => {
         const resp1 = await apiPOST("/admin/sessions/delete", {
-            id: session.id
+            id: session.id,
         });
         expect(resp1).toHaveStatus("success");
         const { payload: withoutNewSessions } = await apiGET("/admin/sessions");
-        expect(withoutNewSessions.map(x => x.id)).not.toContain(session.id);
+        expect(withoutNewSessions.map((x) => x.id)).not.toContain(session.id);
     });
 }

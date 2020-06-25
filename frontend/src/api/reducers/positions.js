@@ -3,12 +3,12 @@ import {
     FETCH_ONE_POSITION_SUCCESS,
     UPSERT_ONE_POSITION_SUCCESS,
     DELETE_ONE_POSITION_SUCCESS,
-    ADD_INSTRUCTOR_TO_POSITION_SUCCESS
+    ADD_INSTRUCTOR_TO_POSITION_SUCCESS,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
-    _modelData: []
+    _modelData: [],
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
@@ -34,13 +34,13 @@ export const positionsReducer = createReducer(initialState, {
             }
             return {
                 ...position,
-                instructors: instructors
+                instructors: instructors,
             };
         }
 
         return {
             ...state,
-            _modelData: state._modelData.map(updateInstructors)
+            _modelData: state._modelData.map(updateInstructors),
         };
-    }
+    },
 });

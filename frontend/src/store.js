@@ -10,7 +10,7 @@ const configureStore = () => {
     const persistConfig = {
         key: "root",
         storage,
-        whitelist: ["auth", "application"]
+        whitelist: ["auth", "application"],
     };
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     const store = createStore(

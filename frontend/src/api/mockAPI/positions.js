@@ -3,12 +3,12 @@ import {
     getAttributesCheckMessage,
     deleteInArray,
     findAllById,
-    MockAPIController
+    MockAPIController,
 } from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
-    docApiPropTypes
+    docApiPropTypes,
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
 import { ContractTemplate } from "./contract_templates";
@@ -25,7 +25,7 @@ export class Position extends MockAPIController {
                 position,
                 this.findAllBySession(session),
                 {
-                    position_code: { required: true, unique: true }
+                    position_code: { required: true, unique: true },
                 }
             );
             if (message) {
@@ -50,16 +50,19 @@ export class Position extends MockAPIController {
     }
     getSession(position) {
         return new Session(this.data).find({
-            id: position.session_id
+            id: position.session_id,
         });
     }
     getContractTemplate(position) {
         return new ContractTemplate(this.data).find({
-            id: position.contract_template_id
+            id: position.contract_template_id,
         });
     }
     getInstructors(position) {
-        return position.instructor_ids.map(id =>
+        if (!position.instructor_ids) {
+            return [];
+        }
+        return position.instructor_ids.map((id) =>
             new Instructor(this.data).find({ id })
         );
     }
@@ -124,7 +127,7 @@ export class Position extends MockAPIController {
                 )}`
             );
         }
-        const ret = Object.keys(this.data.positions_by_session).find(x =>
+        const ret = Object.keys(this.data.positions_by_session).find((x) =>
             this.data.positions_by_session[x].includes(matchingPosition.id)
         );
         // Make sure we recast the id as an int
@@ -138,8 +141,8 @@ export const positionsRoutes = {
             func: (data, params) =>
                 new Position(data).findAllBySession(params.session_id),
             summary: "Get positions associated with this session.",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.position)
-        })
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.position),
+        }),
     },
     post: {
         "/sessions/:session_id/positions": documentCallback({
@@ -152,7 +155,7 @@ export const positionsRoutes = {
             summary:
                 "Upsert a position associated with a session. If a new position is created, it will be automatically associated with the given session",
             posts: docApiPropTypes.position,
-            returns: docApiPropTypes.position
+            returns: docApiPropTypes.position,
         }),
         "/positions": documentCallback({
             func: (data, params, body) => {
@@ -167,7 +170,7 @@ export const positionsRoutes = {
             },
             summary: "Update a position",
             posts: docApiPropTypes.position,
-            returns: docApiPropTypes.position
+            returns: docApiPropTypes.position,
         }),
         "/positions/delete": documentCallback({
             func: (data, params, body) => {
@@ -175,7 +178,7 @@ export const positionsRoutes = {
             },
             summary: "Delete a position",
             posts: docApiPropTypes.idOnly,
-            returns: docApiPropTypes.session
-        })
-    }
+            returns: docApiPropTypes.session,
+        }),
+    },
 };

@@ -17,7 +17,7 @@ export function usersTests(api) {
 
     const newUserData = {
         utorid: "userxx",
-        roles: ["instructor"]
+        roles: ["instructor"],
     };
 
     beforeAll(async () => {
@@ -27,14 +27,14 @@ export function usersTests(api) {
     it("Fetches users", async () => {
         const resp = await apiGET("/admin/users");
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(userPropTypes), resp.payload);
     });
 
     it("Adds a user", async () => {
         const resp = await apiPOST("/admin/users", newUserData);
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(newUserData);
         // Save any extra attributes we got, such as an `id`
         Object.assign(newUserData, resp.payload);
@@ -46,23 +46,23 @@ export function usersTests(api) {
     it("Changes a user's role", async () => {
         let resp = await apiPOST("/admin/users", {
             id: newUserData.id,
-            roles: []
+            roles: [],
         });
 
         // Empty the roles
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         expect(resp.payload.roles).toEqual([]);
 
         // Set the roles to "ta" only
         resp = await apiPOST("/admin/users", {
             id: newUserData.id,
-            roles: ["ta"]
+            roles: ["ta"],
         });
         expect(resp.payload.roles).toEqual(["ta"]);
 
         // Make sure that we've been saved in the full user list
         resp = await apiGET("/admin/users");
-        const ta = resp.payload.find(x => x.id === newUserData.id);
+        const ta = resp.payload.find((x) => x.id === newUserData.id);
         expect(ta).toEqual({ ...newUserData, roles: ["ta"] });
 
         // Save the updated state
@@ -72,13 +72,13 @@ export function usersTests(api) {
     it("Fetches the active user", async () => {
         const resp = await apiGET("/admin/active_user");
 
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
         checkPropTypes(userPropTypes, resp.payload);
     });
 
     it("[debug only] sets the active user", async () => {
         let resp = await apiPOST("/debug/active_user", { id: newUserData.id });
-        expect(resp).toMatchObject({ status: "success" });
+        expect(resp).toHaveStatus("success");
 
         resp = await apiGET("/debug/active_user");
 
@@ -87,7 +87,7 @@ export function usersTests(api) {
         // Set the active user back to the default so everything
         // is left in a nice state after the tests run.
         resp = await apiPOST("/debug/active_user", {
-            id: databaseSeeder.seededData.active_user.id
+            id: databaseSeeder.seededData.active_user.id,
         });
     });
 }

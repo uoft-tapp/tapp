@@ -3,13 +3,13 @@ import {
     FETCH_ONE_SESSION_SUCCESS,
     UPSERT_ONE_SESSION_SUCCESS,
     DELETE_ONE_SESSION_SUCCESS,
-    SET_ACTIVE_SESSION
+    SET_ACTIVE_SESSION,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: [],
-    activeSession: null
+    activeSession: null,
 };
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
@@ -25,6 +25,6 @@ export const sessionsReducer = createReducer(initialState, {
     ...basicReducers,
     [SET_ACTIVE_SESSION]: (state, action) => ({
         ...state,
-        activeSession: action.payload
-    })
+        activeSession: action.payload,
+    }),
 });

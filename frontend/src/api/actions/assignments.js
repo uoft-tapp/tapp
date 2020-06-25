@@ -3,14 +3,14 @@ import {
     FETCH_ASSIGNMENTS_SUCCESS,
     FETCH_ONE_ASSIGNMENT_SUCCESS,
     UPSERT_ONE_ASSIGNMENT_SUCCESS,
-    DELETE_ONE_ASSIGNMENT_SUCCESS
+    DELETE_ONE_ASSIGNMENT_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     validatedApiDispatcher,
     arrayToHash,
-    flattenIdFactory
+    flattenIdFactory,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { assignmentsReducer } from "../reducers/assignments";
@@ -29,7 +29,7 @@ const deleteOneAssignmentSuccess = actionFactory(DELETE_ONE_ASSIGNMENT_SUCCESS);
 export const fetchAssignments = validatedApiDispatcher({
     name: "fetchAssignments",
     description: "Fetch assignments",
-    onErrorDispatch: e => fetchError(e.toString()),
+    onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const { id: activeSessionId } = getState().model.sessions.activeSession;
@@ -37,19 +37,19 @@ export const fetchAssignments = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/assignments`
         );
         dispatch(fetchAssignmentsSuccess(data));
-    }
+    },
 });
 
 export const fetchAssignment = validatedApiDispatcher({
     name: "fetchAssignment",
     description: "Fetch assignment",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => fetchError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/assignments/${payload.id}`);
         dispatch(fetchOneAssignmentSuccess(data));
-    }
+    },
 });
 
 // Some helper functions to convert the data that the UI uses
@@ -64,27 +64,27 @@ export const upsertAssignment = validatedApiDispatcher({
     name: "upsertAssignment",
     description: "Add/insert assignment",
     propTypes: {},
-    onErrorDispatch: e => upsertError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/assignments`, prepForApi(payload));
         dispatch(upsertOneAssignmentSuccess(data));
-    }
+    },
 });
 
 export const deleteAssignment = validatedApiDispatcher({
     name: "deleteAssignment",
     description: "Delete assignment",
     propTypes: { id: PropTypes.any.isRequired },
-    onErrorDispatch: e => deleteError(e.toString()),
-    dispatcher: payload => async (dispatch, getState) => {
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/delete`,
             prepForApi(payload)
         );
         dispatch(deleteOneAssignmentSuccess(data));
-    }
+    },
 });
 
 // selectors
@@ -100,7 +100,7 @@ export const localStoreSelector = assignmentsReducer._localStoreSelector;
  */
 const _assignmentsSelector = createSelector(
     localStoreSelector,
-    state => state._modelData
+    (state) => state._modelData
 );
 /**
  * Get the current assignments. This selector is memoized and will only
@@ -117,7 +117,7 @@ export const assignmentsSelector = createSelector(
         return assignments.map(({ position_id, applicant_id, ...rest }) => ({
             ...rest,
             position: positions[position_id] || {},
-            applicant: applicants[applicant_id] || {}
+            applicant: applicants[applicant_id] || {},
         }));
     }
 );

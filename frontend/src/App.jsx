@@ -26,8 +26,8 @@ class App extends React.Component {
 }
 
 const ConnectedApp = connect(
-    state => ({
-        globals: globalsSelector(state)
+    (state) => ({
+        globals: globalsSelector(state),
     }),
     { initFromStage }
 )(App);

@@ -13,7 +13,7 @@ const DEFAULT_ASSIGNMENT = {
     position: { id: null },
     position_id: null,
     applicant: { id: null },
-    applicant_id: null
+    applicant_id: null,
 };
 
 /**
@@ -28,7 +28,7 @@ export function AssignmentEditor(props) {
         assignment: assignmentProp,
         setAssignment,
         applicants,
-        positions
+        positions,
     } = props;
     const assignment = { ...DEFAULT_ASSIGNMENT, ...assignmentProp };
 
@@ -41,7 +41,7 @@ export function AssignmentEditor(props) {
             position_id: position.id,
             hours: position.hours_per_assignment,
             start_date: position.start_date,
-            end_date: position.end_date
+            end_date: position.end_date,
         });
     }
 
@@ -51,7 +51,7 @@ export function AssignmentEditor(props) {
         setAssignment({
             ...assignment,
             applicant,
-            applicant_id: applicant.id
+            applicant_id: applicant.id,
         });
     }
 
@@ -67,7 +67,7 @@ export function AssignmentEditor(props) {
                         ignoreDiacritics={true}
                         placeholder="Position..."
                         multiple
-                        labelKey={option =>
+                        labelKey={(option) =>
                             `${option.position_code} (${option.position_title})`
                         }
                         selected={
@@ -86,7 +86,7 @@ export function AssignmentEditor(props) {
                         ignoreDiacritics={true}
                         placeholder="Applicant..."
                         multiple
-                        labelKey={option =>
+                        labelKey={(option) =>
                             `${option.first_name} ${option.last_name}`
                         }
                         selected={
@@ -115,5 +115,5 @@ AssignmentEditor.propTypes = {
     assignment: docApiPropTypes.assignment.isRequired,
     setAssignment: PropTypes.func.isRequired,
     positions: PropTypes.arrayOf(docApiPropTypes.position),
-    applicants: PropTypes.arrayOf(docApiPropTypes.applicant)
+    applicants: PropTypes.arrayOf(docApiPropTypes.applicant),
 };

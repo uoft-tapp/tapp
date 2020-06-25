@@ -3,13 +3,13 @@ import {
     FETCH_ONE_CONTRACT_TEMPLATE_SUCCESS,
     UPSERT_ONE_CONTRACT_TEMPLATE_SUCCESS,
     DELETE_ONE_CONTRACT_TEMPLATE_SUCCESS,
-    FETCH_ALL_CONTRACT_TEMPLATES_SUCCESS
+    FETCH_ALL_CONTRACT_TEMPLATES_SUCCESS,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
 
 const initialState = {
     _modelData: [],
-    all: []
+    all: [],
 };
 
 // basicReducers is an object whose keys are FETCH_*_SUCCESS, etc,
@@ -25,6 +25,6 @@ export const contractTemplatesReducer = createReducer(initialState, {
     ...basicReducers,
     [FETCH_ALL_CONTRACT_TEMPLATES_SUCCESS]: (state, action) => ({
         ...state,
-        all: action.payload
-    })
+        all: action.payload,
+    }),
 });
