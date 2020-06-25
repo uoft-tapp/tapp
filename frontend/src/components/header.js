@@ -10,24 +10,18 @@ import { NavLink } from "react-router-dom";
  * @param {*} props
  * @returns
  */
-export function BootstrapNavLink(props) {
-    return (
-        <Nav.Link as={NavLink} activeClassName="text-dark" {...props}>
-            {props.children}
-        </Nav.Link>
-    );
-}
-BootstrapNavLink.propTypes = {
-    to: PropTypes.string,
-};
-
 function BootstrapNavItem(props) {
     return (
         <Nav.Item>
-            <BootstrapNavLink {...props} />
+            <Nav.Link as={NavLink} {...props}>
+                {props.children}
+            </Nav.Link>
         </Nav.Item>
     );
 }
+BootstrapNavItem.propTypes = {
+    to: PropTypes.string,
+};
 
 /**
  * Render a header that dynamically adjusts depending on the route
@@ -55,24 +49,45 @@ export function Header(props) {
     const { routes = [], infoComponents = null } = props;
     const [activeKey, setActiveKey] = React.useState(routes[0].route);
 
+    const activeTabs = routes
+        .filter((route) => route.hidden !== true)
+        .map((route) => (
+            <BootstrapNavItem
+                eventKey={route.route}
+                to={route.route}
+                key={route.route}
+                onSelect={(k) => setActiveKey(k)}
+                className={activeKey === route.route ? "active-tab" : undefined}
+            >
+                {route.name}
+            </BootstrapNavItem>
+        ));
+    const activeSubroutes = routes
+        .filter((route) => route.route === activeKey)
+        .map((route) =>
+            (route.subroutes || []).map((subroute) => {
+                const fullroute = `${route.route}${subroute.route}`;
+                return (
+                    <BootstrapNavItem
+                        to={fullroute}
+                        title={subroute.description}
+                        key={fullroute}
+                    >
+                        {subroute.name}
+                    </BootstrapNavItem>
+                );
+            })
+        );
+
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
     }
     return (
-        <Tab.Container activeKey={activeKey}>
+        <Tab.Container activeKey={activeKey} defaultActiveKey={routes[0].route}>
             <Row className="justify-content-between right-padding">
                 <Col md={"auto"}>
                     <Nav className="flex-row navbar-tabs" variant="tabs">
-                        {routes.map((route) => (
-                            <BootstrapNavItem
-                                eventKey={route.route}
-                                to={route.route}
-                                key={route.route}
-                                onSelect={(k) => setActiveKey(k)}
-                            >
-                                {route.name}
-                            </BootstrapNavItem>
-                        ))}
+                        {activeTabs}
                     </Nav>
                 </Col>
                 <Col md={"auto"}>
@@ -85,24 +100,7 @@ export function Header(props) {
             </Row>
             <Row className="navbar-subtabs">
                 <Tab.Content>
-                    <Nav variant="pills">
-                        {routes
-                            .filter((route) => route.route === activeKey)
-                            .map((route) =>
-                                (route.subroutes || []).map((subroute) => {
-                                    const fullroute = `${route.route}${subroute.route}`;
-                                    return (
-                                        <BootstrapNavItem
-                                            to={fullroute}
-                                            title={subroute.description}
-                                            key={fullroute}
-                                        >
-                                            {subroute.name}
-                                        </BootstrapNavItem>
-                                    );
-                                })
-                            )}
-                    </Nav>
+                    <Nav variant="pills">{activeSubroutes}</Nav>
                 </Tab.Content>
             </Row>
         </Tab.Container>

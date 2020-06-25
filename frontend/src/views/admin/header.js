@@ -71,12 +71,13 @@ function AdminHeader() {
                                 "See statistics about accepted/rejected contracts",
                         },
                     ],
+                    // hidden: true,
                 },
                 {
-                    route: "/appointments_positions",
+                    route: "/appointments_and_positions",
                     name: "Appointments & Positions",
                     description: "Appointments & Positions",
-                    // hidden: true,
+                    hidden: true,
                 },
             ]}
             infoComponents={[
