@@ -66,7 +66,7 @@ function NoActiveSessionJumbotron(setLearnMore) {
             </p>
             <ConnectedActiveSessionDisplay />
             <p>
-                <Button variant="primary" onClick={(e) => setLearnMore(true)}>
+                <Button variant="primary" onClick={() => setLearnMore(true)}>
                     Learn more about TAPP
                 </Button>
             </p>
@@ -74,7 +74,7 @@ function NoActiveSessionJumbotron(setLearnMore) {
     );
 }
 
-function LearnMoreJumbotron(routes, activeAccordion, setActiveAccordion) {
+function LearnMoreJumbotron(routes) {
     return (
         <Jumbotron>
             <h1>Welcome to TAPP!</h1>
@@ -89,12 +89,10 @@ function LearnMoreJumbotron(routes, activeAccordion, setActiveAccordion) {
 }
 function Landing(props) {
     const [learnMore, setLearnMore] = React.useState(false);
-    const [activeAccordion, setActiveAccordion] = React.useState();
     if (props.activeSession === null && !learnMore) {
         return NoActiveSessionJumbotron(setLearnMore);
-    } else {
     }
-    return LearnMoreJumbotron(routes, activeAccordion, setActiveAccordion);
+    return LearnMoreJumbotron(routes);
 }
 
 const mapActiveSessionStateToProps = (state) => ({
