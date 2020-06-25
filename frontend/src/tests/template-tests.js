@@ -157,4 +157,7 @@ export function templatesTests(api) {
         expect(resp3.payload).not.toContainObject(newTemplateData1);
         expect(resp3.payload).not.toContainObject(newTemplateData2);
     });
+
+    it.todo("upload a template");
+    it.todo("preview a template");
 }

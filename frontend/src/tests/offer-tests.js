@@ -119,7 +119,10 @@ export function offersTests(api) {
     it.todo("modify position/assignment and existing offers should not change");
     it.todo("accept/reject/withdraw offer");
 
-    // dates, status, signature can't be changed
-    // maybe we don't need this since there are limited access to offer (status, nag)
-    it.todo("error when attempting to update a frozen field");
+    it.todo(
+        "error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected/pending"
+    );
+    it.todo(
+        "create an offer for an assignment that has an active offer that is withdrawn/preliminary"
+    );
 }
