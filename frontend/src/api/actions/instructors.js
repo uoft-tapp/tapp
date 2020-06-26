@@ -66,6 +66,26 @@ export const deleteInstructor = validatedApiDispatcher({
     },
 });
 
+export const exportInstructors = validatedApiDispatcher({
+    name: "exportInstructors",
+    description: "Export instructors",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (formatter, format = "spreadsheet") => async (
+        dispatch,
+        getState
+    ) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all instructors from the server in case things happened to be out of sync.
+        await dispatch(fetchInstructors());
+        const instructors = instructorsSelector(getState());
+
+        return formatter(instructors, format);
+    },
+});
 // selectors
 
 // Each reducer is given an isolated state; instead of needed to remember to

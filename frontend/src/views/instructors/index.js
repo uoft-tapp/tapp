@@ -2,6 +2,8 @@ import React from "react";
 import { ConnectedInstructorsList } from "./editable-instructors-list";
 import { ConnectedAddInstructorDialog } from "./add-instructor-dialog";
 import { Button } from "react-bootstrap";
+import { ConnectedExportInstructorsButton } from "./import-export";
+
 
 export function AdminIstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -14,6 +16,7 @@ export function AdminIstructorsView() {
             >
                 Add Instructor
             </Button>
+            <ConnectedExportInstructorsButton />
             <ConnectedAddInstructorDialog
                 show={addDialogVisible}
                 onHide={() => {

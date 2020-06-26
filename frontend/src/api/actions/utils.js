@@ -177,7 +177,7 @@ export function validatedApiDispatcher({
             try {
                 // We need to await so that promise errors get thrown
                 // as real errors
-                await dispatch(dispatcher(...args));
+                return await dispatch(dispatcher(...args));
             } catch (e) {
                 if (onErrorDispatch) {
                     if (onErrorDispatch instanceof Function) {
