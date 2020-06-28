@@ -107,10 +107,10 @@ export class SpreadsheetRowMapper {
      * the processed spreadsheet headers don't need to exactly match what's given.
      *
      * @param {*} row
+     * @param {boolean} log - whether or not to show lookups using `console.log`
      * @memberof SpreadsheetRowMapper
      */
-    formatRow(row) {
-        console.log("calling", this.empiricalKeyMap);
+    formatRow(row, log = true) {
         const ret = {};
         for (const [key, value] of Object.entries(row)) {
             // If we've found this key before, use the cached version.
@@ -124,19 +124,23 @@ export class SpreadsheetRowMapper {
             }
             const matchedKey = findMatchingKey(key, this.unmatchedKeys);
             if (matchedKey == null) {
-                console.log(
-                    "Could not find a key corresponding to spreadsheet column",
-                    `"${key}"`
-                );
+                if (log) {
+                    console.log(
+                        "Could not find a key corresponding to spreadsheet column",
+                        `"${key}"`
+                    );
+                }
                 this.unknownKeys[key] = true;
                 continue;
             }
-            console.log(
-                "Assuming association between spreadsheet column",
-                `"${key}"`,
-                "and the key",
-                `"${matchedKey}"`
-            );
+            if (log) {
+                console.log(
+                    "Assuming association between spreadsheet column",
+                    `"${key}"`,
+                    "and the key",
+                    `"${matchedKey}"`
+                );
+            }
             this.empiricalKeyMap[key] = matchedKey;
             deleteReferences(matchedKey, this.unmatchedKeys);
             ret[matchedKey] = value;
