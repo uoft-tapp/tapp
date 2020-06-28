@@ -43,7 +43,7 @@ describe("API tests", () => {
     describe("`/admin/assignments` tests", () => {
         assignmentsTests({ apiGET, apiPOST });
     });
-    describe.skip("wage_chunk tests", () => {
+    describe("wage_chunk tests", () => {
         wageChunksTests({ apiGET, apiPOST });
     });
     describe.skip("offers tests", () => {
@@ -82,6 +82,9 @@ describe("Mock API tests", () => {
     });
     describe("`/admin/assignments` tests", () => {
         assignmentsTests(mockAPI);
+    });
+    describe("wage_chunk tests", () => {
+        wageChunksTests(mockAPI);
     });
     describe("`/assignments/:assignment_id/active_offer/` tests", () => {
         offersTests(mockAPI);
