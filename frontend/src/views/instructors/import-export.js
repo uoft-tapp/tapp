@@ -1,68 +1,20 @@
 import React from "react";
-import XLSX from "xlsx";
 import FileSaver from "file-saver";
-import { instructorsSelector, exportInstructors } from "../../api/actions";
+import {
+    instructorsSelector,
+    exportInstructors,
+    upsertInstructors,
+} from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { ExportButton } from "../../components/export-button";
-
-/**
- * Process a list of instructors and return a `File` object containing the data.
- *
- * @param {*} instructors
- * @param {*} dataFormat
- * @returns {File}
- */
-function prepareData(instructors, dataFormat) {
-    const fileName = `instructors_export_${new Date().toLocaleDateString(
-        "en-CA",
-        { year: "numeric", month: "numeric", day: "numeric" }
-    )}`;
-
-    console.log("moo", dataFormat);
-    if (dataFormat === "spreadsheet" || dataFormat === "csv") {
-        const workbook = XLSX.utils.book_new();
-        const sheet = XLSX.utils.aoa_to_sheet(
-            [["Last Name", "First Name", "UTORid", "email"]].concat(
-                instructors.map((instructor) => [
-                    instructor.last_name,
-                    instructor.first_name,
-                    instructor.utorid,
-                    instructor.email,
-                ])
-            )
-        );
-        XLSX.utils.book_append_sheet(workbook, sheet, "Instructors");
-
-        const bookType = dataFormat === "csv" ? "csv" : "xlsx";
-
-        // We convert the data into a blob and return it so that it can be downloaded
-        // by the user's browser
-        const file = new File(
-            [XLSX.write(workbook, { type: "array", bookType })],
-            `${fileName}.${bookType}`,
-            {
-                type:
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            }
-        );
-        return file;
-    }
-
-    if (dataFormat === "json") {
-        const file = new File(
-            [JSON.stringify({ instructors }, null, 4)],
-            `${fileName}.json`,
-            {
-                type: "application/json",
-            }
-        );
-        return file;
-    }
-
-    throw new Error(
-        `Cannot process data to format "${dataFormat}"; try "spreadsheet" or "json".`
-    );
-}
+import { ImportButton } from "../../components/import-button";
+import { InstructorsList } from "../../components/instructors";
+import { Alert } from "react-bootstrap";
+import {
+    normalizeImport,
+    diff,
+    dataToFile,
+} from "../../libs/importExportUtils";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -87,6 +39,28 @@ export function ConnectedExportInstructorsButton() {
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
 
+            // Make a function that converts a list of instructors into a `File` object.
+            function prepareData(instructors, dataFormat) {
+                return dataToFile(
+                    {
+                        toSpreadsheet: () =>
+                            [
+                                ["Last Name", "First Name", "UTORid", "email"],
+                            ].concat(
+                                instructors.map((instructor) => [
+                                    instructor.last_name,
+                                    instructor.first_name,
+                                    instructor.utorid,
+                                    instructor.email,
+                                ])
+                            ),
+                        toJson: () => ({ instructors }),
+                    },
+                    dataFormat,
+                    "instructors"
+                );
+            }
+
             const file = await dispatch(
                 exportInstructors(prepareData, exportType)
             );
@@ -102,4 +76,107 @@ export function ConnectedExportInstructorsButton() {
     }
 
     return <ExportButton onClick={onClick} />;
+}
+
+const instructorSchema = {
+    keys: ["first_name", "last_name", "utorid", "email"],
+    keyMap: {
+        "First Name": "first_name",
+        "Given Name": "first_name",
+        First: "first_name",
+        "Last Name": "last_name",
+        Surname: "last_name",
+        "Family Name": "last_name",
+        Last: "last_name",
+    },
+    requiredKeys: ["utorid"],
+    primaryKey: "utorid",
+};
+
+export function ConnectedImportInstructorButton() {
+    const dispatch = useDispatch();
+    const instructors = useSelector(instructorsSelector);
+    const [fileContent, setFileContent] = React.useState(null);
+    const [diffed, setDiffed] = React.useState(null);
+    const [processingError, setProcessingError] = React.useState(null);
+
+    // Recompute the diff every time the file changes
+    React.useEffect(() => {
+        if (!fileContent) {
+            if (diffed) {
+                setDiffed(null);
+            }
+            return;
+        }
+        try {
+            if (processingError) {
+                setProcessingError(null);
+            }
+            // normalize the data coming from the file
+            const data = normalizeImport(fileContent, instructorSchema);
+            // Compute which instructors have been added/modified
+            const newDiff = diff(instructors, data, instructorSchema);
+
+            setDiffed(newDiff);
+        } catch (e) {
+            setProcessingError(e);
+        }
+    }, [fileContent, instructors]);
+
+    async function onConfirm() {
+        const changedInstructors = diffed.new.concat(
+            diffed.modified.map((x) => x.new)
+        );
+
+        await dispatch(upsertInstructors(changedInstructors));
+
+        setFileContent(null);
+    }
+
+    let dialogContent = <p>No data loaded...</p>;
+    if (processingError) {
+        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+    } else if (diffed) {
+        if (diffed.new.length === 0 && diffed.modified.length === 0) {
+            dialogContent = (
+                <Alert variant="warning">
+                    No difference between imported instructors and those already
+                    on the system.
+                </Alert>
+            );
+        } else {
+            dialogContent = (
+                <>
+                    {diffed.new.length > 0 && (
+                        <Alert variant="primary">
+                            <span className="mb-1">
+                                The following instructors will be{" "}
+                                <strong>added</strong>
+                            </span>
+                            <InstructorsList instructors={diffed.new} />
+                        </Alert>
+                    )}
+                    {diffed.modified.length > 0 && (
+                        <Alert variant="info">
+                            <span className="mb-1">
+                                The following instructors will be{" "}
+                                <strong>modified</strong>
+                            </span>
+                            <InstructorsList
+                                instructors={diffed.modified.map((x) => x.new)}
+                            />
+                        </Alert>
+                    )}
+                </>
+            );
+        }
+    }
+
+    return (
+        <ImportButton
+            onConfirm={onConfirm}
+            onFileChange={setFileContent}
+            dialogContent={dialogContent}
+        />
+    );
 }

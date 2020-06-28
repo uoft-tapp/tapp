@@ -86,6 +86,23 @@ export const exportInstructors = validatedApiDispatcher({
         return formatter(instructors, format);
     },
 });
+
+export const upsertInstructors = validatedApiDispatcher({
+    name: "upsertInstructors",
+    description: "Export instructors",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (instructors) => async (dispatch) => {
+        if (instructors.length === 0) {
+            return;
+        }
+        const dispatchers = instructors.map((instructor) =>
+            dispatch(upsertInstructor(instructor))
+        );
+        await Promise.all(dispatchers);
+        // Re-fetch all instructors from the server in case things happened to be out of sync.
+        await dispatch(fetchInstructors());
+    },
+});
 // selectors
 
 // Each reducer is given an isolated state; instead of needed to remember to

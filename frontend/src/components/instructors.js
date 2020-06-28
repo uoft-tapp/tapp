@@ -8,6 +8,7 @@ import { DialogRow } from "./forms/common-controls";
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
     { Header: "First Name", accessor: "first_name" },
+    { Header: "Email", accessor: "email" },
     { Header: "UTORid", accessor: "utorid" },
 ];
 
@@ -23,7 +24,6 @@ export function InstructorsList(props) {
     const { instructors, columns = DEFAULT_COLUMNS } = props;
     return (
         <React.Fragment>
-            <h3>Instructors</h3>
             <ReactTable
                 data={instructors}
                 columns={columns}
