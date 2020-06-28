@@ -1,5 +1,5 @@
 /*
- * A collection of untilty functions for interfacing with urls
+ * A collection of utility functions for interfacing with urls
  */
 
 /**

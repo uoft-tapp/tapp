@@ -8,6 +8,7 @@ import { strip } from "../../libs/utils";
 const BLANK_INSTRUCTOR = {
     first_name: "",
     last_name: "",
+    email: "",
     utorid: "",
 };
 
