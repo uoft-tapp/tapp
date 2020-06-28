@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Dropdown, ButtonGroup } from "react-bootstrap";
 
-
 /**
  * Export button that offers the ability to export as Spreadsheet/CSV/JSON.
  * `onClick` is called when the button is clicked and supplied with
