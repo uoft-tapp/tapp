@@ -1,13 +1,10 @@
 import React from "react";
-import { connect } from "react-redux";
-import { positionsSelector } from "../../api/actions";
 import { formatColumnName } from "../../libs/utils";
 import { ConnectedAddPositionDialog } from "./add-position-dialog";
 import {
     Badge,
     Button,
     ButtonToolbar,
-    ButtonGroup,
     ToggleButton,
     ToggleButtonGroup,
 } from "react-bootstrap";
