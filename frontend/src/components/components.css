@@ -17,3 +17,7 @@
     border-radius: 15px;
     border: 2px solid rgb(0, 95, 204);
 }
+
+.toggle-button.active {
+    font-weight: bold;
+}
