@@ -21,7 +21,6 @@ function BootstrapNavItem(props) {
 }
 BootstrapNavItem.propTypes = {
     to: PropTypes.string,
-    active: PropTypes.bool,
 };
 
 /**
@@ -63,22 +62,14 @@ export function Header(props) {
     const activeTabs = routes
         .filter((route) => route.hidden !== true)
         .map((route) => {
-            const active = currentRoute === route.route.substring(1);
             return (
                 <BootstrapNavItem
                     eventKey={route.route}
                     to={route.route}
                     key={route.route}
+                    className="primary"
                 >
-                    <h5
-                        className={
-                            active
-                                ? "font-weight-bold text-primary"
-                                : "font-weight-bold text-body"
-                        }
-                    >
-                        {route.name}
-                    </h5>
+                    <h5>{route.name}</h5>
                 </BootstrapNavItem>
             );
         });
@@ -87,23 +78,15 @@ export function Header(props) {
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;
-                const active = location.pathname === fullroute;
                 return (
                     <BootstrapNavItem
                         to={fullroute}
                         title={subroute.description}
                         key={fullroute}
+                        className="secondary"
                     >
                         <h5>
-                            <small
-                                className={
-                                    active
-                                        ? "font-weight-bold text-white"
-                                        : "text-body"
-                                }
-                            >
-                                {subroute.name}
-                            </small>
+                            <small>{subroute.name}</small>
                         </h5>
                     </BootstrapNavItem>
                 );

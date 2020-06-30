@@ -17,3 +17,22 @@
     border-radius: 15px;
     border: 2px solid rgb(0, 95, 204);
 }
+
+.primary.nav-link h5 {
+    font-weight: bold;
+    color: black;
+}
+
+.primary.nav-link.active h5 {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.secondary.nav-link small {
+    color: black;
+}
+
+.secondary.nav-link.active small {
+    font-weight: bold;
+    color: white;
+}
