@@ -6,30 +6,32 @@ import {
 } from "./position-list";
 
 export function AdminPositionsView() {
+    const defaultColumns = new Set(
+        [
+            "position code",
+            "position title",
+            "hours",
+            "start date",
+            "end date",
+            "instructors",
+            "contract template",
+        ].map((column) => column.toLowerCase())
+    );
     const [advancedView, setAdvancedView] = React.useState("simple");
-    const [viewableColumns, setViewableColumns] = React.useState(new Set());
     const [selectedColumns, setSelectedColumns] = React.useState(
-        viewableColumns
+        defaultColumns
     );
 
     return (
         <div>
-            {/** <ConnectedAddPositionDialog
-                show={addDialogVisible}
-                onHide={() => {
-                    setAddDialogVisible(false);
-                }}
-            />**/}
             <ConnectedPositionsListToolbar
+                defaultColumns={defaultColumns}
                 advancedView={advancedView}
                 setAdvancedView={setAdvancedView}
-                setViewableColumns={setViewableColumns}
                 setSelectedColumns={setSelectedColumns}
+                selectedColumns={selectedColumns}
             />
-            <ConnectedPositionsList
-                view={advancedView}
-                viewableColumns={selectedColumns}
-            />
+            <ConnectedPositionsList selectedColumns={selectedColumns} />
         </div>
     );
 }

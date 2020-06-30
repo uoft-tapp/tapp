@@ -26,3 +26,7 @@ export function formatDate(dateString) {
         day: "numeric",
     })}`;
 }
+
+export function formatColumnName(column) {
+    return column.replace(/_/gi, " ");
+}

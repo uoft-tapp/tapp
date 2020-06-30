@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { positionsSelector } from "../../api/actions";
+import { formatColumnName } from "../../libs/utils";
 import { ConnectedAddPositionDialog } from "./add-position-dialog";
 import {
     Badge,
@@ -22,17 +23,44 @@ function getFetchedColumnHeadings(positions) {
     ];
 }
 
+function getColumnSelector(viewableColumns, selectedColumns) {
+    return viewableColumns.map((heading) => {
+        const lowercase = formatColumnName(heading).toLowerCase();
+        const isSelected = selectedColumns.has(lowercase);
+
+        return (
+            <ToggleButton
+                type="checkbox"
+                value={lowercase}
+                key={lowercase}
+                variant="light"
+                size="sm"
+                className="text-left font-weight-lighter text-capitalize text-nowrap flex-grow-0  m-1"
+            >
+                {formatColumnName(heading)}
+                <Badge
+                    variant={
+                        isSelected ? "outline-primary" : "outline-secondary"
+                    }
+                >
+                    {isSelected ? "✓" : "❌"}
+                </Badge>
+            </ToggleButton>
+        );
+    });
+}
+
 export function PositionsListToolbar(props) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const {
         positions,
+        defaultColumns,
         advancedView,
         setAdvancedView,
-        setViewableColumns,
+        selectedColumns,
         setSelectedColumns,
     } = props;
-    console.log(props);
-    const selectedColumns = [];
+    const isAdvanced = advancedView === "advanced";
 
     return (
         <React.Fragment>
@@ -52,27 +80,35 @@ export function PositionsListToolbar(props) {
                 <ToggleButtonGroup
                     type="checkbox"
                     value={selectedColumns}
+                    onChange={(e) => {
+                        if (selectedColumns.has(e[1])) {
+                            selectedColumns.delete(e[1]);
+                        } else {
+                            selectedColumns.add(e[1]);
+                        }
+                        setSelectedColumns(new Set(selectedColumns));
+                    }}
                     name="selectedColumns"
-                    className="d-flex align-content-center flex-wrap mx-3"
+                    className="d-flex align-content-center align-self-center flex-wrap mx-3"
                 >
-                    {getFetchedColumnHeadings(positions).map((heading) => (
-                        <ToggleButton
-                            type="checkbox"
-                            value={heading}
-                            variant="light"
-                            size="sm"
-                            className="text-left font-weight-lighter text-capitalize text-nowrap flex-grow-0 flex-shrink-1"
-                        >
-                            {heading.replace(/_/gi, " ")}
-                        </ToggleButton>
-                    ))}
+                    {isAdvanced &&
+                        getColumnSelector(
+                            getFetchedColumnHeadings(positions),
+                            selectedColumns,
+                            setSelectedColumns
+                        )}
                 </ToggleButtonGroup>
                 <ToggleButtonGroup
                     className="align-self-center"
                     type="radio"
                     value={advancedView}
                     name="advancedView"
-                    onChange={(val) => setAdvancedView(val)}
+                    onChange={(val) => {
+                        if (val === "simple") {
+                            setSelectedColumns(defaultColumns);
+                        }
+                        setAdvancedView(val);
+                    }}
                 >
                     <ToggleButton
                         className="toggle-button text-nowrap"

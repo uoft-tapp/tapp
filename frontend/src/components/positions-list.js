@@ -2,26 +2,33 @@ import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
-import {
-    Badge,
-    Row,
-    ToggleButtonGroup,
-    ButtonToolbar,
-    Button,
-} from "react-bootstrap";
-import { formatDate } from "../libs/utils";
+import { Badge } from "react-bootstrap";
+import { formatDate, formatColumnName } from "../libs/utils";
 
-const DEFAULT_COLUMNS = [
-    { Header: "Position Code", accessor: "position_code" },
-    { Header: "Position Title", accessor: "position_title" },
-    { Header: "Hours", accessor: "hours_per_assignment" },
+const ALL_COLUMNS = [
     {
-        Header: "Start",
+        Header: "ID",
+        accessor: "id",
+    },
+    {
+        Header: "Position Code",
+        accessor: "position_code",
+    },
+    {
+        Header: "Position Title",
+        accessor: "position_title",
+    },
+    {
+        Header: "Hours Per Assignment",
+        accessor: "hours_per_assignment",
+    },
+    {
+        Header: "Start Date",
         accessor: "start_date",
         Cell: (row) => formatDate(row.value),
     },
     {
-        Header: "End",
+        Header: "End Date",
         accessor: "end_date",
         Cell: (row) => formatDate(row.value),
     },
@@ -45,13 +52,6 @@ const DEFAULT_COLUMNS = [
         Header: "Contract Template",
         accessor: "contract_template.template_name",
     },
-];
-function getPreferenceLevelColor(preferenceLevel) {
-    return ["danger", "warning", "primary", "info", "success"][
-        preferenceLevel + 1
-    ];
-}
-const ADVANCED_COLUMNS = [
     {
         Header: "Duties",
         accessor: "duties",
@@ -71,7 +71,7 @@ const ADVANCED_COLUMNS = [
                             className="mr-1"
                             key={`${name}-${index}`}
                         >
-                            {name}
+                            {name}: {preference.preference_level}
                         </Badge>
                     );
                 })}
@@ -83,27 +83,49 @@ const ADVANCED_COLUMNS = [
         accessor: "qualifications",
     },
     {
-        Header: "Enrollment",
+        Header: "Current Enrollment",
         accessor: "current_enrollment",
-        Cell: (row) => {
-            const na = "N/A";
-            const {
-                current_enrollment = na,
-                current_waitlisted = na,
-                id,
-            } = row.row;
-
-            return (
-                <React.Fragment>
-                    <p key={id}>
-                        Enrolled: {current_enrollment} Waitlisted:{" "}
-                        {current_waitlisted}
-                    </p>
-                </React.Fragment>
-            );
-        },
     },
+    {
+        Header: "Current Waitlisted",
+        accessor: "current_waitlisted",
+    },
+    {
+        Header: "Ad Hours Per Assignment",
+        accessor: "ad_hours_per_assignment",
+    },
+    {
+        Header: "Ad Number of Assignments",
+        accessor: "ad_num_assignments",
+    },
+    {
+        Header: "Ad Open Date",
+        accessor: "ad_open_date",
+        Cell: (row) => (row.value ? formatDate(row.value) : ""),
+    },
+    {
+        Header: "Ad Close Date",
+        accessor: "ad_close_date",
+        Cell: (row) => (row.value ? formatDate(row.value) : ""),
+    },
+    {
+        Header: "Desired Number of Assignments",
+        accessor: "desired_num_assignments",
+    },
+    // TODO: probably missing some. compare with api docs for /get/position
 ];
+
+function getPreferenceLevelColor(preferenceLevel) {
+    return ["danger", "warning", "primary", "info", "success"][
+        preferenceLevel + 1
+    ];
+}
+
+function getCustomColumns(selectedColumns) {
+    return ALL_COLUMNS.filter((column) =>
+        selectedColumns.has(formatColumnName(column.accessor))
+    );
+}
 
 /**
  * List the instructors using a ReactTable. `columns` can be passed
@@ -114,26 +136,13 @@ const ADVANCED_COLUMNS = [
  * @returns
  */
 export function PositionsList(props) {
-    const {
-        positions,
-        columns = DEFAULT_COLUMNS,
-        view,
-        viewableColumns,
-        setViewableColumns,
-    } = props;
-    if (view === "advanced") columns.concat(ADVANCED_COLUMNS);
-    const headings = getFetchedColumnHeadings(positions);
-    // if (viewableColumns !== headings) setViewableColumns(headings);
+    const { positions, selectedColumns } = props;
     return (
         <React.Fragment>
             <h3>Positions</h3>
             <ReactTable
                 data={positions}
-                columns={
-                    view === "advanced"
-                        ? columns.concat(ADVANCED_COLUMNS)
-                        : columns
-                }
+                columns={getCustomColumns(selectedColumns)}
                 showPagination={false}
                 minRows={1}
             />
