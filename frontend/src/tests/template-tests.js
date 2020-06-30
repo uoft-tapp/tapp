@@ -165,6 +165,7 @@ export function templatesTests(api) {
         const resp = await apiGET("/admin/available_contract_templates");
         expect(resp).toHaveStatus("success");
 
+        console.log(resp)
         const { template_file } = resp.payload[0];
 
         const resp2 = await apiPOST(
