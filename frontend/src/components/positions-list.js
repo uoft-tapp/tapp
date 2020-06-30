@@ -40,6 +40,65 @@ const DEFAULT_COLUMNS = [
         accessor: "contract_template.template_name",
     },
 ];
+function getPreferenceLevelColor(preferenceLevel) {
+    return ["danger", "warning", "primary", "info", "success"][
+        preferenceLevel + 1
+    ];
+}
+const ADVANCED_COLUMNS = [
+    {
+        Header: "Duties",
+        accessor: "duties",
+    },
+    {
+        Header: "Instructor Preferences",
+        accessor: "instructor_preferences",
+        Cell: (props) => (
+            <React.Fragment>
+                {props.value.map((preference = {}, index) => {
+                    const name = `${preference.instructor.first_name} ${preference.instructor.last_name}`;
+                    return (
+                        <Badge
+                            variant={getPreferenceLevelColor(
+                                preference.preference_level
+                            )}
+                            className="mr-1"
+                            key={`${name}-${index}`}
+                        >
+                            {name}
+                        </Badge>
+                    );
+                })}
+            </React.Fragment>
+        ),
+    },
+    {
+        Header: "Qualifications",
+        accessor: "qualifications",
+    },
+    {
+        Header: "Enrollment",
+        accessor: "current_enrollment",
+        Cell: (row) => {
+            console.log("row", row);
+            const na = "N/A";
+            const {
+                current_enrollment = na,
+                current_waitlisted = na,
+                id,
+            } = row.row;
+
+            return (
+                <React.Fragment>
+                    <p key={id}>
+                        Enrolled: {current_enrollment} Waitlisted:{" "}
+                        {current_waitlisted}
+                    </p>
+                </React.Fragment>
+            );
+        },
+    },
+];
 
 /**
  * List the instructors using a ReactTable. `columns` can be passed
@@ -50,13 +109,19 @@ const DEFAULT_COLUMNS = [
  * @returns
  */
 export function PositionsList(props) {
-    const { positions, columns = DEFAULT_COLUMNS } = props;
+    const { positions, columns = DEFAULT_COLUMNS, view } = props;
+    if (view === "advanced") columns.concat(ADVANCED_COLUMNS);
+    console.log(positions);
     return (
         <React.Fragment>
             <h3>Positions</h3>
             <ReactTable
                 data={positions}
-                columns={columns}
+                columns={
+                    view === "advanced"
+                        ? columns.concat(ADVANCED_COLUMNS)
+                        : columns
+                }
                 showPagination={false}
                 minRows={1}
             />

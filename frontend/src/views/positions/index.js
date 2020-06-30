@@ -53,7 +53,7 @@ export function AdminPositionsView() {
                     setAddDialogVisible(false);
                 }}
             />
-            <ConnectedPositionsList />
+            <ConnectedPositionsList view={advancedView} />
         </div>
     );
 }
