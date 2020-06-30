@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
-import { Badge } from "react-bootstrap";
+import {
+    Badge,
+    Row,
+    ToggleButtonGroup,
+    ButtonToolbar,
+    Button,
+} from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 
 const DEFAULT_COLUMNS = [
@@ -80,7 +86,6 @@ const ADVANCED_COLUMNS = [
         Header: "Enrollment",
         accessor: "current_enrollment",
         Cell: (row) => {
-            console.log("row", row);
             const na = "N/A";
             const {
                 current_enrollment = na,
@@ -109,9 +114,16 @@ const ADVANCED_COLUMNS = [
  * @returns
  */
 export function PositionsList(props) {
-    const { positions, columns = DEFAULT_COLUMNS, view } = props;
+    const {
+        positions,
+        columns = DEFAULT_COLUMNS,
+        view,
+        viewableColumns,
+        setViewableColumns,
+    } = props;
     if (view === "advanced") columns.concat(ADVANCED_COLUMNS);
-    console.log(positions);
+    const headings = getFetchedColumnHeadings(positions);
+    // if (viewableColumns !== headings) setViewableColumns(headings);
     return (
         <React.Fragment>
             <h3>Positions</h3>

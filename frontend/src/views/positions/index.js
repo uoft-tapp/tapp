@@ -1,59 +1,35 @@
 import React from "react";
 import { ConnectedAddPositionDialog } from "./add-position-dialog";
 import {
-    Button,
-    ButtonToolbar,
-    ButtonGroup,
-    ToggleButtonGroup,
-    ToggleButton,
-} from "react-bootstrap";
-import { ConnectedPositionsList } from "./position-list";
+    ConnectedPositionsList,
+    ConnectedPositionsListToolbar,
+} from "./position-list";
 
 export function AdminPositionsView() {
-    const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [advancedView, setAdvancedView] = React.useState("simple");
+    const [viewableColumns, setViewableColumns] = React.useState(new Set());
+    const [selectedColumns, setSelectedColumns] = React.useState(
+        viewableColumns
+    );
+
     return (
         <div>
-            <ButtonToolbar className="d-flex justify-content-between px-3 py-2">
-                <ButtonGroup>
-                    <Button
-                        onClick={() => {
-                            setAddDialogVisible(true);
-                        }}
-                    >
-                        Add Position
-                    </Button>
-                </ButtonGroup>
-                <ToggleButtonGroup
-                    type="radio"
-                    value={advancedView}
-                    name="advancedView"
-                    onChange={(val) => setAdvancedView(val)}
-                >
-                    <ToggleButton
-                        className="toggle-button"
-                        value="simple"
-                        variant="light"
-                    >
-                        Simple View
-                    </ToggleButton>
-                    <ToggleButton
-                        className="toggle-button"
-                        value="advanced"
-                        variant="light"
-                    >
-                        Advanced View
-                    </ToggleButton>
-                </ToggleButtonGroup>
-            </ButtonToolbar>
-
-            <ConnectedAddPositionDialog
+            {/** <ConnectedAddPositionDialog
                 show={addDialogVisible}
                 onHide={() => {
                     setAddDialogVisible(false);
                 }}
+            />**/}
+            <ConnectedPositionsListToolbar
+                advancedView={advancedView}
+                setAdvancedView={setAdvancedView}
+                setViewableColumns={setViewableColumns}
+                setSelectedColumns={setSelectedColumns}
             />
-            <ConnectedPositionsList view={advancedView} />
+            <ConnectedPositionsList
+                view={advancedView}
+                viewableColumns={selectedColumns}
+            />
         </div>
     );
 }
