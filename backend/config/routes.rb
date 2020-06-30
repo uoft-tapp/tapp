@@ -95,6 +95,15 @@ Rails.application.routes.draw do
                         to: 'contract_templates#available'
 
                     # Instructors
+                    resources :contract_templates, only: %i[index create] do
+                        collection { post :delete }
+                        member do
+                            get :view
+                            get :download
+                        end
+                    end
+
+                    # Instructors
                     resources :instructors, only: %i[index create] do
                         collection { post :delete }
                     end

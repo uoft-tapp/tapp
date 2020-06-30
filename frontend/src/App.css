@@ -1,4 +1,19 @@
-html, body, #root {
+html,
+body,
+#root {
     height: 100%;
     width: 100%;
+}
+
+.fullscreen-modal {
+    /* A fullscreen modal doesn't take up the _entire_ screen.
+       We leave some room at the top and bottom (hence -70px) */
+    height: calc(100vh - 70px);
+}
+.fullscreen-modal .modal-content {
+    height: 100%;
+}
+.fullscreen-modal .modal-body {
+    display: flex;
+    flex-direction: column;
 }

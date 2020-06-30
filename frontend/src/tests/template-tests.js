@@ -9,6 +9,7 @@ import {
     beforeAll,
 } from "./utils";
 import { databaseSeeder } from "./setup";
+import { base64ToBytes } from "../api/mockAPI/utils";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
@@ -158,6 +159,44 @@ export function templatesTests(api) {
         expect(resp3.payload).not.toContainObject(newTemplateData2);
     });
 
+    it("Preview/download a template", async () => {
+        // Because previewing a template involves reading a real file off the harddrive,
+        // we need to first create a template corresponding to a real file.
+        const resp = await apiGET("/admin/available_contract_templates");
+        expect(resp).toHaveStatus("success");
+
+        const { template_file } = resp.payload[0];
+
+        const resp2 = await apiPOST(
+            `/admin/sessions/${session.id}/contract_templates`,
+            {
+                template_file,
+                template_name: "Example Template",
+            }
+        );
+        expect(resp2).toHaveStatus("success");
+        const newTemplate = resp2.payload;
+
+        // Now we can try to download this template
+        const resp3 = await apiGET(
+            `/admin/contract_templates/${newTemplate.id}/view`
+        );
+        expect(resp3).toHaveStatus("success");
+        expect(typeof resp3.payload).toBe("string");
+
+        // Try to download the template
+        const resp4 = await apiGET(
+            `/admin/contract_templates/${newTemplate.id}/download`
+        );
+        expect(resp4).toHaveStatus("success");
+        const downloadedTemplate = resp4.payload;
+        expect(downloadedTemplate.file_name).toBe(template_file);
+        expect(typeof downloadedTemplate.mime_type).toBe("string");
+        // Make sure that we can decode the Base64 encoded file contents
+        expect(base64ToBytes(downloadedTemplate.content)).toEqual(
+            expect.anything()
+        );
+    });
+
     it.todo("upload a template");
-    it.todo("preview a template");
 }
