@@ -84,6 +84,42 @@ export const fetchAllContractTemplates = validatedApiDispatcher({
     },
 });
 
+export const previewContractTemplate = validatedApiDispatcher({
+    name: "previewContractTemplate",
+    description:
+        "Preview the html content of a contract template. No redux state is set by this call, but the contents of the template is returned.",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (template_id) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(
+            `/${role}/contract_templates/${template_id}/view`
+        );
+        return data;
+    },
+});
+
+export const downloadContractTemplate = validatedApiDispatcher({
+    name: "downloadContractTemplate",
+    description:
+        "Download the content of a contract template. No redux state is set by this call, but a `File` object with the contents of the template is returned.",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (template_id) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiGET(
+            `/${role}/contract_templates/${template_id}/download`
+        );
+        // The data comes in encoded as base64, so we decode it as binary data.
+        const content = new Uint8Array(
+            atob(data.content)
+                .split("")
+                .map((x) => x.charCodeAt(0))
+        );
+        return new File([content], data.file_name, {
+            type: data.mime_type,
+        });
+    },
+});
+
 // selectors
 
 // Each reducer is given an isolated state; instead of needed to remember to

@@ -2,6 +2,7 @@ import {
     getAttributesCheckMessage,
     findAllById,
     MockAPIController,
+    bytesToBase64,
 } from "./utils";
 import {
     documentCallback,
@@ -37,6 +38,20 @@ export class ContractTemplate extends MockAPIController {
                 throw new Error(message);
             }
         }
+    }
+    getTemplateHtml(template) {
+        template = new ContractTemplate(this.data).find(template);
+        if (
+            !(
+                template.template_file in
+                this.data.contract_templates_by_filename
+            )
+        ) {
+            throw new Error(
+                `Could not find Html for template ${template.template_file}`
+            );
+        }
+        return this.data.contract_templates_by_filename[template.template_file];
     }
     findAllBySession(session) {
         const matchingSession = new Session(this.data).find(session);
@@ -78,6 +93,38 @@ export const templatesRoutes = {
                 new ContractTemplate(data).findAllBySession(params.session_id),
             summary: "Get contract templates associated with this session.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.contractTemplate),
+        }),
+        "/contract_templates/:template_id/view": documentCallback({
+            func: (data, params) =>
+                new ContractTemplate(data).getTemplateHtml(params.template_id),
+            summary:
+                "Get a preview of the contact template (i.e., the actual HTML).",
+            returns: wrappedPropTypes.string,
+        }),
+        "/contract_templates/:template_id/download": documentCallback({
+            func: (data, params) => {
+                const { template_id } = params;
+                const template = new ContractTemplate(data);
+                const templateContent = template.getTemplateHtml(template_id);
+
+                // We're directly sending binary data, so we need to encode the template
+                // as UTF-8 (rather than native Javascript UTF-16)
+                const encodedContent = new TextEncoder().encode(
+                    templateContent
+                );
+                return {
+                    file_name: template.find(template_id).template_file,
+                    mime_type: "text/html",
+                    content: bytesToBase64(encodedContent),
+                };
+            },
+            summary:
+                "Download the raw HTML template associated with the contract-template. No substitutions are made to this file. The `content` filed is encoded in Base64 and may be a binary file (e.g., a zip file).",
+            returns: wrappedPropTypes.shape({
+                file_name: wrappedPropTypes.string,
+                mime_type: wrappedPropTypes.string,
+                content: wrappedPropTypes.string,
+            }),
         }),
     },
     post: {
