@@ -11,8 +11,6 @@ import { ActiveSessionDisplay } from "../../components/active-session";
 import { routes } from "./header";
 
 function AccordionItem(route) {
-    console.log(route);
-
     return (
         <Card key={route.route}>
             <Card.Header>
