@@ -69,6 +69,7 @@ class Assignment < ApplicationRecord
     private
 
     def create_wage_chunks(hours: @initial_hours)
+        hours = position.hours_per_assignment if hours.blank?
         assignment_hours = hours
         return unless assignment_hours
         return unless start_date && end_date

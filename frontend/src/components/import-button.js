@@ -1,20 +1,174 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Dropdown, DropdownButton, Modal } from "react-bootstrap";
-import { readFile } from "../libs/fileManager";
+import XLSX from "xlsx";
+import {
+    Button,
+    Modal,
+    Form,
+    Spinner,
+    Container,
+    Row,
+    Col,
+} from "react-bootstrap";
+
+const DEFAULT_LABEL = "Select a spreadsheet, CSV, or JSON file.";
+
+/**
+ * A dialog for handling file input. The work of showing validation/content is handled by `dialogContent`.
+ * This component handles displaying and parting a file specified by an <input type="file" /> node.
+ *
+ * @param {*} {
+ *     dialogOpen,
+ *     onCancel,
+ *     onConfirm,
+ *     dialogContent,
+ *     onFileChange,
+ * }
+ * @returns
+ */
+function ImportDialog({
+    dialogOpen,
+    onCancel,
+    onConfirm,
+    dialogContent,
+    onFileChange,
+}) {
+    const [fileInputLabel, setFileInputLabel] = React.useState(DEFAULT_LABEL);
+    const [fileArrayBuffer, setFileArrayBuffer] = React.useState(null);
+    const [fileContents, setFileContents] = React.useState(null);
+    const [inProgress, setInProgress] = React.useState(false);
+
+    if (!(onCancel instanceof Function)) {
+        onCancel = () => console.warn("No onCancel function set for dialog");
+    }
+
+    // When file contents changes
+    React.useEffect(() => {
+        if (!fileContents) {
+            return;
+        }
+        if (onFileChange instanceof Function) {
+            onFileChange(fileContents);
+        }
+        console.log("File contents", fileContents);
+    }, [fileContents, onFileChange]);
+
+    // Wrap the <input type="file" /> in an effect that parses the file
+    React.useEffect(() => {
+        if (!fileArrayBuffer) {
+            return;
+        }
+
+        // Attempt to decode the file as JSON. If that doesn't work,
+        // we process it as a spreadsheet.
+
+        const rawData = new Uint8Array(fileArrayBuffer);
+        try {
+            const str = new TextDecoder().decode(rawData);
+            setFileContents({ data: JSON.parse(str), fileType: "json" });
+            return;
+            // eslint-disable-next-line
+        } catch (e) {}
+        try {
+            const workbook = XLSX.read(rawData, { type: "array" });
+            const firstSheet = workbook.SheetNames[0];
+            setFileContents({
+                data: XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]),
+                fileType: "spreadsheet",
+            });
+            return;
+            // eslint-disable-next-line
+        } catch (e) {}
+
+        console.warn(
+            "Could not determine file type for",
+            fileInputLabel,
+            fileArrayBuffer
+        );
+    }, [fileArrayBuffer, fileInputLabel]);
+
+    function _onFileChange(event) {
+        const file = event.target.files[0];
+        setFileInputLabel(file.name);
+
+        const reader = new FileReader();
+        reader.onload = (e) => setFileArrayBuffer(e.target.result);
+        reader.readAsArrayBuffer(file);
+    }
+
+    function _onConfirm() {
+        if (!(onConfirm instanceof Function)) {
+            return;
+        }
+        setInProgress(true);
+        // We wrap `onConfirm` in an async function which will automatically
+        // convert it to a promise if needed.
+        (async () => onConfirm(fileContents))()
+            .then(() => {
+                setInProgress(false);
+            })
+            .catch(console.error)
+            .finally(() => {
+                setInProgress(false);
+                setFileArrayBuffer(null);
+                setFileContents(null);
+                setFileInputLabel(DEFAULT_LABEL);
+            });
+    }
+
+    // When a confirm operation is in progress, a spinner is displayed; otherwise
+    // it's hidden
+    const spinner = inProgress ? (
+        <Spinner animation="border" size="sm" className="mr-1" />
+    ) : null;
+
+    return (
+        <Modal show={dialogOpen} onHide={onCancel} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Import From File</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                <Container>
+                    <Row className="mb-3">
+                        <Col>
+                            <Form>
+                                <Form.File
+                                    label={fileInputLabel}
+                                    onChange={_onFileChange}
+                                    custom
+                                ></Form.File>
+                            </Form>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>{dialogContent}</Col>
+                    </Row>
+                </Container>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button variant="secondary" onClick={onCancel}>
+                    Cancel
+                </Button>
+                <Button variant="primary" onClick={_onConfirm}>
+                    {spinner}
+                    Confirm
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
 /**
  * Renders an dropdown import button component that imports data from file.
+ * When clicked, a dialog is opened where a user can select a file to import.
  *
- * The data should be in json format.
- *
- * @export
- * @param {function(list[object])} props.uploadFunc
+ * @param onFileChange - function called when a file is selected. Do any processing or validation in response to this callback.
+ * @param dialgoContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
+ * @param onConfirm - Called when the "Confirm" button is pressed. Can be an async function. If so, a spinner will be displayed between the time "Confirm" is pressed and the time `onConfirm` finishes executing.
  */
-export function ImportButton(props) {
-    let { uploadFunc } = props;
-    const [data, setData] = useState(null); // eslint-disable-line
-    const [dialogContents, setDialogContents] = useState(""); // eslint-disable-line
+export function ImportButton({ onFileChange, dialogContent, onConfirm }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -24,71 +178,22 @@ export function ImportButton(props) {
         setDialogOpen(false);
     }
 
-    /**
-     * Read the json file content and import the data in it to the backend.
-     *
-     * Implementation details discussed in TAPP meeting on Aug 29:
-     *   - assume frontend data is up to date
-     *   - upload the assignment object
-     *   - if there's an part of inconsistency between the imported data and frontend data
-     *   then apiGET that part of data and re-verify it
-     *
-     * @param {event} e
-     */
-    function importFile(e) {
-        let importClicked = (data) => {
-            // passed in data is of json format
-            console.log(data);
-            throw new Error("Not implemented!");
-
-            /* TODO: 
-            * const diffs = getDiffs(data, ...dataFromBackend);
-            * if (diffs) {
-            *     setData(data)
-            *     setDialogContents(diffs);
-            *     setDialogOpen(true);
-            * } else {
-            *     uploadFunc(data)
-            } */
-        };
-
-        readFile(e.target, importClicked);
+    async function _onConfirm(...args) {
+        await onConfirm(...args);
+        setDialogOpen(false);
     }
 
     return (
-        <div>
-            <DropdownButton id="dropdown-basic-button" title="Import">
-                <input
-                    id="raised-button-file"
-                    type="file"
-                    accept="application/json"
-                    style={{ display: "none" }}
-                    onChange={importFile}
-                />
-                <label htmlFor="raised-button-file">
-                    <Dropdown.Item>Import From File</Dropdown.Item>
-                </label>
-            </DropdownButton>
-
-            <Modal show={dialogOpen} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>The following will be overwritten</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    <p>{dialogContents}</p>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={() => uploadFunc(data)}>
-                        Proceed
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
+        <>
+            <Button onClick={() => setDialogOpen(true)}>Import</Button>
+            <ImportDialog
+                dialogOpen={dialogOpen}
+                onCancel={handleClose}
+                onFileChange={onFileChange}
+                dialogContent={dialogContent}
+                onConfirm={_onConfirm}
+            />
+        </>
     );
 }
 

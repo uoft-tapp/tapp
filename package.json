@@ -3,10 +3,10 @@
     "description": "This environment includes dependencies to run code-formatting checks",
     "license": "MIT",
     "dependencies": {
-        "@prettier/plugin-ruby": "^0.18.1",
+        "@prettier/plugin-ruby": "^0.18.2",
         "babel-eslint": "^10.0.3",
         "eslint": "6.1.0",
-        "eslint-plugin-react": "^7.13.0",
+        "eslint-plugin-react": "^7.20.0",
         "prettier": "^2.0.5",
         "prettier-check": "^2.0.0",
         "prettier-diff": "^0.0.16"

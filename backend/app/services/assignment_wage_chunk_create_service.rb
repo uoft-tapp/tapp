@@ -1,59 +1,19 @@
 # frozen_string_literal: true
 
 class AssignmentWageChunkCreateService
-    RETURNING_VALUES = %w[id hours rate start_date end_date].freeze
+    attr_accessor :wage_chunk
 
-    attr_reader :assignment
-    attr_accessor :wage_chunks
-
-    def initialize(assignment:, wage_chunk_params:)
-        @assignment = assignment
-        @wage_chunks = wage_chunk_params
-        @returned_wage_chunks ||= []
+    def initialize(wage_chunk_params)
+        @wage_chunk_params = wage_chunk_params
     end
 
-    def perform
-        delete_existing_wage_chunks
-        add_missing_wage_chunk_attrs
-        @returned_wage_chunks = upsert_and_return_wage_chunks
-    end
-
-    def values
-        @returned_wage_chunks
-    end
-
-    private
-
-    def delete_existing_wage_chunks
-        @assignment.wage_chunks.where(id: ids).not.delete_all
-    end
-
-    def add_missing_wage_chunk_attrs
-        if @wage_chunks.blank?
-            raise AssignmentWageChunkCreateService::WageChunkMissing
-        end
-
-        @wage_chunks =
-            @wage_chunks.map do |x|
-                time = Time.zone.now
-                x.to_h.merge!(
-                    assignment_id: @assignment.id,
-                    created_at: time,
-                    updated_at: time
-                )
-            end
-    end
-
-    def upsert_and_return_wage_chunks
-        @assignment.wage_chunks.upsert_all(
-            @wage_chunks,
-            returning: RETURNING_VALUES
-        )
-    end
-
-    class WageChunkMissing < StandardError
-        def message
-            I18n.t('assignment_wage_chunk_service.wage_chunk_missing.message')
+    def upsert
+        @wage_chunk = WageChunk.find_by(id: @wage_chunk_params[:id])
+        if @wage_chunk
+            @wage_chunk.update!(@wage_chunk_params)
+        else
+            @wage_chunk = WageChunk.new(@wage_chunk_params)
+            @wage_chunk.save!
         end
     end
 end

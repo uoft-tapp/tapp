@@ -21,9 +21,17 @@ export class Debug {
     }
     clearData() {
         this.makeSnapshot("beforeclear");
-        Object.keys(this.data).forEach(
-            (key) => (this.data[key] = createBlankCopy(this.data[key]))
-        );
+        Object.keys(this.data).forEach((key) => {
+            // Contract templates are supposed to be stored on "disk"
+            // and so they shouldn't be cleared when we clear the database
+            if (
+                key === "available_contract_templates" ||
+                key === "contract_templates_by_filename"
+            ) {
+                return;
+            }
+            this.data[key] = createBlankCopy(this.data[key]);
+        });
         return this.getAllData();
     }
     restoreSnapshot(name = "snapshot") {
