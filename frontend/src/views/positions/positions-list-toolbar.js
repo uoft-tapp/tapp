@@ -36,7 +36,7 @@ function getColumnSelector(viewableColumns, selectedColumns) {
                 key={lowercase}
                 variant="light"
                 size="sm"
-                className="text-left font-weight-lighter text-capitalize text-nowrap flex-grow-0  m-1"
+                className="text-left font-weight-lighter text-capitalize text-nowrap flex-grow-0 m-1"
             >
                 {formatColumnName(heading)}
                 <Badge
