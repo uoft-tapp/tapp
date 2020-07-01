@@ -11,8 +11,10 @@ import { ActiveSessionDisplay } from "../../components/active-session";
 import { routes } from "./header";
 
 function AccordionItem(route) {
+    console.log(route);
+
     return (
-        <Card>
+        <Card key={route.route}>
             <Card.Header>
                 <Accordion.Toggle
                     as={Button}
@@ -78,11 +80,7 @@ function LearnMoreJumbotron(routes) {
         <Jumbotron>
             <h1>Welcome to TAPP!</h1>
             <p>Expand any item below to learn more:</p>
-            <p>
-                <Accordion>
-                    {routes.map((route) => AccordionItem(route))}
-                </Accordion>
-            </p>
+            <Accordion>{routes.map((route) => AccordionItem(route))}</Accordion>
         </Jumbotron>
     );
 }
