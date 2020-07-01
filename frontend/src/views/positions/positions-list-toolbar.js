@@ -9,13 +9,17 @@ import {
     ToggleButtonGroup,
 } from "react-bootstrap";
 
+const BLACKLIST = ["instructor_preferences"]; // Any fields here will not be accessible in the column selector.
+
 function getFetchedColumnHeadings(positions) {
     return [
         ...new Set(
-            positions.reduce(
-                (acc, position) => [...acc, ...Object.keys(position)],
-                []
-            )
+            positions
+                .reduce(
+                    (acc, position) => [...acc, ...Object.keys(position)],
+                    []
+                )
+                .filter((heading) => !BLACKLIST.includes(heading))
         ),
     ];
 }
