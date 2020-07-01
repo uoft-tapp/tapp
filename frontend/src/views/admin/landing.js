@@ -28,13 +28,12 @@ function AccordionItem(route) {
                         {(route.subroutes || []).map((subroute) => {
                             const fullroute = `${route.route}${subroute.route}`;
                             return (
-                                <Card>
+                                <Card key={fullroute}>
                                     <Card.Header>
                                         <Accordion.Toggle
                                             as={Button}
                                             variant="link"
                                             eventKey={fullroute}
-                                            key={fullroute}
                                         >
                                             {subroute.name}
                                         </Accordion.Toggle>
