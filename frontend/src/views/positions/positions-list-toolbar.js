@@ -11,6 +11,13 @@ import {
 
 const BLACKLIST = ["instructor_preferences"]; // Any fields here will not be accessible in the column selector.
 
+/**
+ * Builds an array (with no duplicates) of all column headings which appear at least once in the positions data from the database
+ * All headings which are present in the blacklist (defined above) are removed from this list
+ *
+ * @param {*} positions the positions data which was returned from a GET request to the admin/positions endpoint.
+ * @returns an array with no duplicates containing headings in the format [a-z][a-z]*_[a-z]*
+ */
 function getFetchedColumnHeadings(positions) {
     return [
         ...new Set(
@@ -24,6 +31,12 @@ function getFetchedColumnHeadings(positions) {
     ];
 }
 
+/**
+ * Builds an array of ToggleButton elements for use in the column selector component.
+ *
+ * @param {*} viewableColumns an array of all viewable column names imported from the database in the form [a-z][a-z]*_[a-z]*
+ * @param {*} selectedColumns a set of the the column names which are selected (currently being displayed)
+ */
 function getColumnSelector(viewableColumns, selectedColumns) {
     return viewableColumns.map((heading) => {
         const lowercase = formatColumnName(heading).toLowerCase();
@@ -50,7 +63,11 @@ function getColumnSelector(viewableColumns, selectedColumns) {
         );
     });
 }
-
+/**
+ * A toolbar containing the add position button, the columns selector, and the simple/advanced view toggle button
+ *
+ * @param {*} props
+ */
 export function PositionsListToolbar(props) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const {
@@ -95,8 +112,7 @@ export function PositionsListToolbar(props) {
                     {isAdvanced &&
                         getColumnSelector(
                             getFetchedColumnHeadings(positions),
-                            selectedColumns,
-                            setSelectedColumns
+                            selectedColumns
                         )}
                 </ToggleButtonGroup>
                 <ToggleButtonGroup
