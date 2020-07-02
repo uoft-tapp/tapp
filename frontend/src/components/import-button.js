@@ -20,23 +20,38 @@ const DEFAULT_LABEL = "Select a spreadsheet, CSV, or JSON file.";
  * @param {*} {
  *     dialogOpen,
  *     onCancel,
+ *     onClose,
  *     onConfirm,
  *     dialogContent,
  *     onFileChange,
- * }
+ * } - `onCancel` means the cancel button was clicked. `onClose` means the `x` was clicked or there was a click outside of the dialog window.
  * @returns
  */
 function ImportDialog({
     dialogOpen,
     onCancel,
+    onClose,
     onConfirm,
     dialogContent,
     onFileChange,
+    setInProgress: parentSetInProgress,
 }) {
     const [fileInputLabel, setFileInputLabel] = React.useState(DEFAULT_LABEL);
     const [fileArrayBuffer, setFileArrayBuffer] = React.useState(null);
     const [fileContents, setFileContents] = React.useState(null);
-    const [inProgress, setInProgress] = React.useState(false);
+    const [inProgress, _setInProgress] = React.useState(false);
+
+    // When we are processing we want to set a spinner button
+    // in the dialog as well as communicate to our parent
+    // that we are in the midst of processing. Therefore, we
+    // call both the internal `setInProgress` function as well
+    // as the one from our parent.
+    function setInProgress(val) {
+        _setInProgress(val);
+        if (typeof parentSetInProgress === "function") {
+            parentSetInProgress(val);
+        }
+    }
 
     if (!(onCancel instanceof Function)) {
         onCancel = () => console.warn("No onCancel function set for dialog");
@@ -50,7 +65,6 @@ function ImportDialog({
         if (onFileChange instanceof Function) {
             onFileChange(fileContents);
         }
-        console.log("File contents", fileContents);
     }, [fileContents, onFileChange]);
 
     // Wrap the <input type="file" /> in an effect that parses the file
@@ -123,7 +137,12 @@ function ImportDialog({
     ) : null;
 
     return (
-        <Modal show={dialogOpen} onHide={onCancel} size="lg">
+        <Modal
+            show={dialogOpen}
+            onHide={onClose}
+            size="lg"
+            dialogClassName="wide-modal"
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Import From File</Modal.Title>
             </Modal.Header>
@@ -168,7 +187,12 @@ function ImportDialog({
  * @param dialgoContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
  * @param onConfirm - Called when the "Confirm" button is pressed. Can be an async function. If so, a spinner will be displayed between the time "Confirm" is pressed and the time `onConfirm` finishes executing.
  */
-export function ImportButton({ onFileChange, dialogContent, onConfirm }) {
+export function ImportButton({
+    onFileChange,
+    dialogContent,
+    onConfirm,
+    setInProgress,
+}) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -176,6 +200,11 @@ export function ImportButton({ onFileChange, dialogContent, onConfirm }) {
      */
     function handleClose() {
         setDialogOpen(false);
+    }
+
+    function onCancel() {
+        onFileChange(null);
+        handleClose();
     }
 
     async function _onConfirm(...args) {
@@ -188,10 +217,12 @@ export function ImportButton({ onFileChange, dialogContent, onConfirm }) {
             <Button onClick={() => setDialogOpen(true)}>Import</Button>
             <ImportDialog
                 dialogOpen={dialogOpen}
-                onCancel={handleClose}
+                onCancel={onCancel}
+                onClose={handleClose}
                 onFileChange={onFileChange}
                 dialogContent={dialogContent}
                 onConfirm={_onConfirm}
+                setInProgress={setInProgress}
             />
         </>
     );

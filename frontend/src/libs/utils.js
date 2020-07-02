@@ -19,7 +19,12 @@ export function strip(x) {
  * @param {string} dateString
  */
 export function formatDate(dateString) {
-    const date = new Date(dateString);
+    // Normalize the date string so we can compensate for timezone issues.
+    // This string is now formatted YYYY-MM-DD
+    const normalizedDateString = new Date(dateString).toJSON().slice(0, 10);
+    // Add timezone offset information so that Javascript will
+    // interpret the date in the current timezone
+    const date = new Date(`${normalizedDateString}T00:00:00.000`);
     return `${date.toLocaleDateString("en-CA", {
         month: "short",
         year: "numeric",

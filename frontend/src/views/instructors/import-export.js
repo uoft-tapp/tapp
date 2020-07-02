@@ -91,6 +91,8 @@ const instructorSchema = {
     },
     requiredKeys: ["utorid"],
     primaryKey: "utorid",
+    dateColumns: [],
+    baseName: "instructors",
 };
 
 export function ConnectedImportInstructorButton() {
@@ -99,19 +101,26 @@ export function ConnectedImportInstructorButton() {
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);
     const [processingError, setProcessingError] = React.useState(null);
+    const [inProgress, setInProgress] = React.useState(false);
 
-    // Recompute the diff every time the file changes
+    // Make sure we aren't showing any diff if there's no file loaded.
     React.useEffect(() => {
         if (!fileContent) {
             if (diffed) {
                 setDiffed(null);
             }
+        }
+    }, [diffed, setDiffed, fileContent]);
+
+    // Recompute the diff every time the file changes
+    React.useEffect(() => {
+        // If we have no file or we are currently in the middle of processing another file,
+        // do nothing.
+        if (!fileContent || inProgress) {
             return;
         }
         try {
-            if (processingError) {
-                setProcessingError(null);
-            }
+            setProcessingError(null);
             // normalize the data coming from the file
             const data = normalizeImport(fileContent, instructorSchema);
             // Compute which instructors have been added/modified
@@ -119,9 +128,10 @@ export function ConnectedImportInstructorButton() {
 
             setDiffed(newDiff);
         } catch (e) {
+            console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, instructors]);
+    }, [fileContent, instructors, inProgress]);
 
     async function onConfirm() {
         const changedInstructors = diffed.new.concat(
@@ -177,6 +187,7 @@ export function ConnectedImportInstructorButton() {
             onConfirm={onConfirm}
             onFileChange={setFileContent}
             dialogContent={dialogContent}
+            setInProgress={setInProgress}
         />
     );
 }
