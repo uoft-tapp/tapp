@@ -124,6 +124,44 @@ export const deletePosition = validatedApiDispatcher({
     },
 });
 
+export const exportPositions = validatedApiDispatcher({
+    name: "exportPositions",
+    description: "Export positions",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (formatter, format = "spreadsheet") => async (
+        dispatch,
+        getState
+    ) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all positions from the server in case things happened to be out of sync.
+        await dispatch(fetchPositions());
+        const positions = positionsSelector(getState());
+
+        return formatter(positions, format);
+    },
+});
+
+export const upsertPositions = validatedApiDispatcher({
+    name: "upsertPositions",
+    description: "Export instructors",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (positions) => async (dispatch) => {
+        if (positions.length === 0) {
+            return;
+        }
+        const dispatchers = positions.map((position) =>
+            dispatch(upsertPosition(position))
+        );
+        await Promise.all(dispatchers);
+        // Re-fetch all positions from the server in case things happened to be out of sync.
+        await dispatch(fetchPositions());
+    },
+});
+
 // selectors
 
 // Each reducer is given an isolated state; instead of needed to remember to

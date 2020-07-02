@@ -4,6 +4,7 @@
  */
 import FuzzySet from "fuzzyset";
 import XLSX from "xlsx";
+import chrono from "chrono-node";
 
 /**
  * Validates `data` based on the specified `schema`. At the moment this
@@ -151,6 +152,69 @@ export class SpreadsheetRowMapper {
 }
 
 /**
+ * Find a suitable match in the `people` array for `name`. `name` can
+ * be a utorid or a string `"Last, First"` or a string `"First Last"`.
+ * If no suitable match is found, an error is thrown.
+ *
+ * @export
+ * @param {string} name
+ * @param {{utorid: string, first_name: string, last_name: string}[]} people
+ * @returns
+ */
+export function matchByUtoridOrName(name, people) {
+    let match = people.find((x) => x.utorid === name);
+    if (match) {
+        // We found an exact match by UTORid
+        return match;
+    }
+
+    const nameHash = {};
+    for (const person of people) {
+        // We want to be able to match no matter the order in which the names are specified.
+        nameHash[`${person.last_name}, ${person.first_name}`] = person;
+        nameHash[`${person.first_name} ${person.last_name}`] = person;
+    }
+
+    const fuzzySet = FuzzySet(Object.keys(nameHash));
+    match = fuzzySet.get(name, null, 0.7);
+    if (match) {
+        let matchedKey = match;
+        if (Array.isArray(match)) {
+            // If we get an array as a result, it will be of the form [[<%match>, <value matched>]]
+            matchedKey = match[0][1];
+        }
+        return nameHash[matchedKey];
+    }
+
+    throw new Error(`Could not find a match for "${name}"`);
+}
+
+/**
+ * Parse a date string or integer and return a normalized date string.
+ *
+ * @param {string | number} str - input date; either a string or an excel date integer
+ * @returns {string} - date in YYYY-MM-DD:T00:00:00.000 format
+ */
+function parseDate(str) {
+    // Dates parsed from excel will come in as a number. Convert those to an appropriate string first.
+    if (typeof str === "number") {
+        // Convert to seconds since epoc
+        const sec = Math.round((str - 25569) * 86400 * 1000);
+        // Excel ignores timezone information, so we need to parse this and
+        // remove the timezone tag.
+        str = new Date(sec).toJSON().replace("Z", "");
+    }
+    // Parse the date accepting many different formats
+    let date = chrono.parseDate(str);
+    // We need to jump through some hoops to remove all the timezone information.
+    try {
+        return date.toJSON().replace(/T.*/, "T00:00:00.000Z");
+    } catch (e) {
+        throw new Error(`Cannot parse "${str}" as date`);
+    }
+}
+
+/**
  * Use `schema` to normalize `data` to be an array of objects specified
  * by `schema`. `data` is expected to be an object with `fileType`
  * and `data` attributes. `data.fileType` may be `"json"` or `"spreadsheet"`.
@@ -162,14 +226,17 @@ export class SpreadsheetRowMapper {
  * @param {*} [schema={ keys: [], requiredKeys: [] }]
  * @returns
  */
-export function normalizeImport(data, schema = { keys: [], requiredKeys: [] }) {
-    const { keys } = schema;
-    const ret = [];
+export function normalizeImport(
+    data,
+    schema = { keys: [], requiredKeys: [], dateColumns: [] }
+) {
+    const { keys, baseName } = schema;
+    let ret = [];
     if (data.fileType === "json") {
         // Unwrap data so that it's just an array
         data = data.data;
-        if (data.instructors) {
-            data = data.instructors;
+        if (data[baseName]) {
+            data = data[baseName];
         }
         for (const item of data) {
             const newItem = {};
@@ -192,9 +259,62 @@ export function normalizeImport(data, schema = { keys: [], requiredKeys: [] }) {
         }
     }
 
+    if (schema.dateColumns && schema.dateColumns.length > 0) {
+        ret = ret.map((row) => {
+            const newRow = { ...row };
+            for (const col of schema.dateColumns) {
+                newRow[col] = parseDate(newRow[col]);
+            }
+            return newRow;
+        });
+    }
+
     validate(ret, schema);
 
     return ret;
+}
+
+/**
+ * Recursive determine whether `obj1` and `obj2` are the same. If `obj1`/`obj2` have
+ * an `id` property, they are assumed equal if their ids match.
+ *
+ * @param {*} obj1
+ * @param {*} obj2
+ * @returns
+ */
+function recursiveIsSame(obj1, obj2) {
+    // Short-circuit if they are literally equal.
+    if (obj1 === obj2 || (obj1 == null && obj2 == null)) {
+        return true;
+    }
+    // strings, numbers, undefined, and null are all literally equal,
+    // so these types shouldn't exist in the code at this point.
+    if (
+        obj1 == null ||
+        obj2 == null ||
+        typeof obj1 === "string" ||
+        typeof obj1 === "number"
+    ) {
+        return false;
+    }
+    // so we just have arrays and objects remaining (ignoring strange things like NaN)
+    if (Array.isArray(obj1)) {
+        return (
+            obj1.length === obj2.length &&
+            obj1.every((a, i) => recursiveIsSame(a, obj2[i]))
+        );
+    }
+    // For objects, if they have the same ID, we will assume they are equal, otherwise
+    // do a deep comparison.
+    if ("id" in obj1) {
+        return obj1.id === obj2.id;
+    }
+    return (
+        recursiveIsSame(Object.keys(obj1), Object.keys(obj2)) &&
+        Object.keys(obj1).every((prop) =>
+            recursiveIsSame(obj1[prop], obj2[prop])
+        )
+    );
 }
 
 /**
@@ -234,7 +354,9 @@ export function diff(
         // If an item exists with matching primary key, check to see if any of the fields
         // have changed
         if (oldItem) {
-            if (keys.every((key) => oldItem[key] === newItem[key])) {
+            if (
+                keys.every((key) => recursiveIsSame(oldItem[key], newItem[key]))
+            ) {
                 ret.duplicate.push(newItem);
             } else {
                 ret.modified.push({

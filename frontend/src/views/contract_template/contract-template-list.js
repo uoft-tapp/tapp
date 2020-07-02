@@ -76,6 +76,7 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
                             flexGrow: 1,
                         }}
                         srcDoc={isLoading ? null : cachedPreview.content}
+                        title="Contract template preview"
                     />
                 )}
             </Modal.Body>

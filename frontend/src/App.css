@@ -5,6 +5,10 @@ body,
     width: 100%;
 }
 
+.wide-modal {
+    width: 90%;
+    max-width: none;
+}
 .fullscreen-modal {
     /* A fullscreen modal doesn't take up the _entire_ screen.
        We leave some room at the top and bottom (hence -70px) */
