@@ -12,6 +12,7 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
+import { ConnectedDeleteInstructorDialog } from "./delete-instructor-dialog";
 
 export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -53,4 +54,8 @@ export function AdminInstructorsView() {
     );
 }
 
-export { ConnectedInstructorsList, ConnectedAddInstructorDialog };
+export {
+    ConnectedInstructorsList,
+    ConnectedAddInstructorDialog,
+    ConnectedDeleteInstructorDialog,
+};
