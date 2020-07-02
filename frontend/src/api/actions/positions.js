@@ -157,7 +157,7 @@ export const upsertPositions = validatedApiDispatcher({
             dispatch(upsertPosition(position))
         );
         await Promise.all(dispatchers);
-        // Re-fetch all instructors from the server in case things happened to be out of sync.
+        // Re-fetch all positions from the server in case things happened to be out of sync.
         await dispatch(fetchPositions());
     },
 });
