@@ -6,9 +6,9 @@
     "private": true,
     "dependencies": {
         "bootstrap": "^4.4.1",
+        "chrono-node": "^1.4.6",
         "file-saver": "^2.0.2",
         "fuzzyset": "^1.0.5",
-        "moment": "^2.27.0",
         "react": "^16.12.0",
         "react-bootstrap": "^1.0.1",
         "react-bootstrap-typeahead": "^3.4.7",

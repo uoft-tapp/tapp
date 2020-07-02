@@ -4,7 +4,7 @@
  */
 import FuzzySet from "fuzzyset";
 import XLSX from "xlsx";
-import moment from "moment";
+import chrono from "chrono-node"
 
 /**
  * Validates `data` based on the specified `schema`. At the moment this
@@ -205,16 +205,7 @@ function parseDate(str) {
         str = new Date(sec).toJSON().replace("Z", "");
     }
     // Parse the date accepting many different formats
-    // XXX This doesn't accept "Dec. 31, 2012"; it should be replaced with a better parsing library.
-    let date = moment(str, [
-        "YYYYMMDD",
-        "DD-MM-YYYY",
-        "YYYY-MM-DD",
-        "MM/DD/YYYY",
-        "YYYY/MM/DD",
-        "DD MMM YYYY",
-        "DD MMMM YYYY",
-    ]);
+    let date = chrono.parseDate(str);
     // We need to jump through some hoops to remove all the timezone information.
     try {
         return date.toJSON().replace(/T.*/, "T00:00:00.000Z");
