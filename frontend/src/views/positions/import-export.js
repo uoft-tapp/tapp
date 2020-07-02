@@ -79,7 +79,7 @@ export function ConnectedExportPositionsButton() {
                                     position.instructors
                                         .map(
                                             (instructor) =>
-                                                `${instructor.first_name}, ${instructor.last_name}`
+                                                `${instructor.last_name}, ${instructor.first_name}`
                                         )
                                         .join("; "),
                                     position.duties || "",
