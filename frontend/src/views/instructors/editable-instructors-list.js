@@ -68,7 +68,6 @@ function EditableInstructorsList(props) {
                     setDeleteInstructorId(id);
                     deleteOnClick();
                 }}
-                disabled={disabled}
             >
                 <FaWindowClose />
             </Button>
