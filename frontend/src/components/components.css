@@ -71,3 +71,8 @@
     display: flex;
     align-items: center;
 }
+
+.btn.close:hover {
+    color: red;
+    background-color: rgba(0, 0, 0, 0);
+}
