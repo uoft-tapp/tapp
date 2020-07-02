@@ -60,16 +60,17 @@ function EditableInstructorsList(props) {
         const { deleteOnClick, setDeleteInstructorId } = props;
         const disabled = workingInstructors.has(id);
 
-        return (
+        return disabled ? null : (
             <Button
-                variant="danger"
+                className="close"
+                title={`delete-instructor-${id}`}
                 onClick={() => {
                     setDeleteInstructorId(id);
                     deleteOnClick();
                 }}
                 disabled={disabled}
             >
-                <span>&times;</span>
+                <FaWindowClose />
             </Button>
         );
     }
