@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, Tab, Col, Row } from "react-bootstrap";
-import { NavLink, Route, useRouteMatch } from "react-router-dom";
+import { NavLink, useRouteMatch } from "react-router-dom";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -46,7 +46,7 @@ BootstrapNavItem.propTypes = {
  */
 
 export function Header(props) {
-    const { routes = [], infoComponents = null } = props;
+    const { routes = [], infoComponents = [] } = props;
     let match = useRouteMatch("/:mainRoute/:subRoute?");
     const { mainRoute } = match.params;
 
@@ -65,13 +65,11 @@ export function Header(props) {
         </BootstrapNavItem>
     ));
 
-    const activeSubRoutes = routes
+    const availableSubroutes = routes // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
         .filter((route) => route.route.substring(1) === mainRoute)
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;
-                console.log(route, subroute);
-
                 return (
                     <BootstrapNavItem
                         to={fullroute}
@@ -89,12 +87,9 @@ export function Header(props) {
 
     return (
         <Tab.Container activeKey={mainRoute} defaultActiveKey={"tapp"}>
-            <Row className="justify-content-between pr-3 ">
+            <Row className="main-route-navbar-row">
                 <Col md={"auto"}>
-                    <Nav
-                        className="flex-row pt-3 pr-3 pb-0 pl-2"
-                        variant="tabs"
-                    >
+                    <Nav className="main-route-navbar" variant="tabs">
                         {activeMainRoutes}
                     </Nav>
                 </Col>
@@ -106,9 +101,9 @@ export function Header(props) {
                     </Row>
                 </Col>
             </Row>
-            <Row className="py-2 pr-3 pl-3">
+            <Row className="secondary-route-navbar">
                 <Tab.Content>
-                    <Nav variant="pills">{activeSubRoutes}</Nav>
+                    <Nav variant="pills">{availableSubroutes}</Nav>
                 </Tab.Content>
             </Row>
         </Tab.Container>
