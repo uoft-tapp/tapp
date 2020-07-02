@@ -6,7 +6,6 @@ import {
     instructorsSelector,
     positionsSelector,
     upsertInstructor,
-    deleteInstructor,
 } from "../../api/actions";
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
@@ -36,7 +35,7 @@ function EditableCell(props) {
 }
 
 function EditableInstructorsList(props) {
-    const { upsertInstructor, deleteInstructor, positions, ...rest } = props;
+    const { upsertInstructor, positions, ...rest } = props;
     const workingInstructors = new Set(
         positions
             .map((position) =>
@@ -58,14 +57,18 @@ function EditableInstructorsList(props) {
 
     function DeleteButtonCell({ original: instructorInfo }) {
         const { id } = instructorInfo;
+        const { deleteOnClick, setDeleteInstructorId } = props;
         const disabled = workingInstructors.has(id);
 
-        function onClick() {
-            deleteInstructor({ id });
-        }
-
         return (
-            <Button variant="danger" onClick={onClick} disabled={disabled}>
+            <Button
+                variant="danger"
+                onClick={() => {
+                    setDeleteInstructorId(id);
+                    deleteOnClick();
+                }}
+                disabled={disabled}
+            >
                 <span>&times;</span>
             </Button>
         );
@@ -110,5 +113,5 @@ export const ConnectedInstructorsList = connect(
         instructors: instructorsSelector(state),
         positions: positionsSelector(state),
     }),
-    { upsertInstructor, deleteInstructor }
+    { upsertInstructor }
 )(EditableInstructorsList);
