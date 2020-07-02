@@ -4,7 +4,7 @@
  */
 import FuzzySet from "fuzzyset";
 import XLSX from "xlsx";
-import chrono from "chrono-node"
+import chrono from "chrono-node";
 
 /**
  * Validates `data` based on the specified `schema`. At the moment this
