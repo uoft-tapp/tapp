@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button } from "react-bootstrap";
 import {
     instructorsSelector,
+    positionsSelector,
     upsertInstructor,
     deleteInstructor,
 } from "../../api/actions";
@@ -35,7 +36,14 @@ function EditableCell(props) {
 }
 
 function EditableInstructorsList(props) {
-    const { upsertInstructor, deleteInstructor, ...rest } = props;
+    const { upsertInstructor, deleteInstructor, positions, ...rest } = props;
+    const workingInstructors = new Set(
+        positions
+            .map((position) =>
+                position.instructors.map((instructor) => instructor.id)
+            )
+            .flat()
+    );
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
@@ -50,14 +58,15 @@ function EditableInstructorsList(props) {
 
     function DeleteButtonCell({ original: instructorInfo }) {
         const { id } = instructorInfo;
+        const disabled = workingInstructors.has(id);
 
         function onClick() {
             deleteInstructor({ id });
         }
 
         return (
-            <Button variant="outline-danger" onClick={onClick}>
-                Delete
+            <Button variant="danger" onClick={onClick} disabled={disabled}>
+                <span>&times;</span>
             </Button>
         );
     }
