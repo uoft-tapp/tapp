@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
+import { createDiffColumnsFromColumns } from "./diff-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
@@ -34,11 +35,23 @@ export function InstructorsList(props) {
     );
 }
 InstructorsList.propTypes = {
-    instructors: PropTypes.arrayOf(docApiPropTypes.instructor).isRequired,
+    instructors: PropTypes.oneOfType([
+        PropTypes.arrayOf(docApiPropTypes.instructor),
+        PropTypes.any,
+    ]).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
     ),
 };
+
+export function InstructorsDiffList({ modifiedInstructors }) {
+    return (
+        <InstructorsList
+            instructors={modifiedInstructors}
+            columns={createDiffColumnsFromColumns(DEFAULT_COLUMNS)}
+        />
+    );
+}
 
 const DEFAULT_INSTRUCTOR = {
     utorid: "",

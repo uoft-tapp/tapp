@@ -21,3 +21,10 @@ body,
     display: flex;
     flex-direction: column;
 }
+
+.diff-changed-cell {
+    margin: -3px;
+    padding: 5px;
+    border-radius: 7px;
+    font-size: smaller;
+}

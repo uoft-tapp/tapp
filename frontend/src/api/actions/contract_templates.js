@@ -38,6 +38,7 @@ export const fetchContractTemplates = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/contract_templates`
         );
         dispatch(fetchContractTemplatesSuccess(data));
+        return data;
     },
 });
 
@@ -54,6 +55,7 @@ export const upsertContractTemplate = validatedApiDispatcher({
             payload
         );
         dispatch(upsertOneContractTemplateSuccess(data));
+        return data;
     },
 });
 
@@ -70,6 +72,7 @@ export const deleteContractTemplate = validatedApiDispatcher({
             payload
         );
         dispatch(deleteOneContractTemplateSuccess(data));
+        return data;
     },
 });
 
@@ -81,6 +84,7 @@ export const fetchAllContractTemplates = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/available_contract_templates`);
         dispatch(fetchAllContractTemplatesSuccess(data));
+        return data;
     },
 });
 

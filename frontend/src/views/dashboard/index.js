@@ -14,7 +14,6 @@ import { ContractTemplatesList } from "../../components/contract-templates-list"
 import { ConnectedInstructorsList } from "../instructors";
 import { PositionsList } from "../../components/positions-list";
 import { AssignmentsList } from "../../components/assignments-list";
-import { SearchBox } from "../../components/search-box";
 import { EmailButton } from "../../components/email-button";
 import { ImportButton } from "../../components/import-button";
 import { EditableField } from "../../components/edit-field-widgets";
@@ -39,10 +38,6 @@ const ConnectedPositionsList = connect((state) => ({
 const ConnectedAssignmentsList = connect((state) => ({
     assignments: assignmentsSelector(state),
 }))(AssignmentsList);
-
-const ConnectedSearchBox = connect((state) => ({
-    data: applicantsSelector(state),
-}))(SearchBox);
 
 const ConnectedEmailButton = connect((state) => ({
     data: offerTableSelector(state).selectedAssignmentIds,
@@ -155,9 +150,6 @@ function Dashboard() {
             </DashboardWidget>
             <DashboardWidget title="AssignmentsList">
                 <ConnectedAssignmentsList />
-            </DashboardWidget>
-            <DashboardWidget title="SearchBox">
-                <ConnectedSearchBox />
             </DashboardWidget>
             <DashboardWidget title="ImportButton">
                 <ImportButton />

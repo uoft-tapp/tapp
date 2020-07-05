@@ -1,11 +1,12 @@
 import React from "react";
 import FileSaver from "file-saver";
 import {
-    instructorsSelector,
+    assignmentsSelector,
+    exportAssignments,
+    activeSessionSelector,
+    applicantsSelector,
     positionsSelector,
-    exportPositions,
-    contractTemplatesSelector,
-    upsertPositions,
+    upsertAssignments,
 } from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { ExportButton } from "../../components/export-button";
@@ -13,9 +14,9 @@ import { ImportButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
 import {
-    PositionsList,
-    PositionsDiffList,
-} from "../../components/positions-list";
+    AssignmentsList,
+    AssignmentsDiffList,
+} from "../../components/assignments-list";
 import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
 
@@ -26,8 +27,9 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
  * @export
  * @returns
  */
-export function ConnectedExportPositionsButton() {
+export function ConnectedExportAssignmentsButton() {
     const dispatch = useDispatch();
+    const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
 
     React.useEffect(() => {
@@ -42,71 +44,87 @@ export function ConnectedExportPositionsButton() {
             setExportType(null);
 
             // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(positions, dataFormat) {
+            function prepareData(assignments, dataFormat) {
+                // We want to flatten a lot of the data in `assignments` and only include the information
+                // we need.
+                const assignmentsForSpreadsheet = assignments.map(
+                    (assignment) => ({
+                        first_name: assignment.applicant.first_name,
+                        last_name: assignment.applicant.first_name,
+                        utorid: assignment.applicant.utorid,
+                        position_code: assignment.position.position_code,
+                        start_date: assignment.start_date,
+                        end_date: assignment.end_date,
+                        contract_template: assignment.contract_override_pdf
+                            ? null
+                            : assignment.position.contract_template
+                                  .template_name,
+                        contract_override_pdf: assignment.contract_override_pdf,
+                        hours: assignment.hours,
+                        active_offer_status: assignment.active_offer_status,
+                        wage_chunks: assignment.wage_chunks.map((chunk) => ({
+                            hours: chunk.hours,
+                            rate: chunk.rate,
+                            start_date: chunk.start_date,
+                            end_date: chunk.end_date,
+                        })),
+                    })
+                );
                 return dataToFile(
                     {
                         toSpreadsheet: () =>
                             [
                                 [
+                                    "Last Name",
+                                    "First Name",
+                                    "UTORid",
                                     "Position Code",
-                                    "Position Title",
                                     "Start Date",
                                     "End Date",
-                                    "Hours Per Assignment",
-                                    "Number of Assignments",
+                                    "Hours",
                                     "Contract Template",
-                                    "Instructors",
-                                    "Duties",
-                                    "Qualifications",
-                                    "Current Enrollment",
-                                    "Current Waitlisted",
+                                    "Contract Override PDF",
+                                    "Offer Status",
                                 ],
                             ].concat(
-                                positions.map((position) => [
-                                    position.position_code,
-                                    position.position_title,
-                                    position.start_date &&
-                                        new Date(position.start_date)
+                                assignmentsForSpreadsheet.map((assignment) => [
+                                    assignment.first_name,
+                                    assignment.last_name,
+                                    assignment.utorid,
+                                    assignment.position_code,
+                                    assignment.start_date &&
+                                        new Date(assignment.start_date)
                                             .toJSON()
                                             .slice(0, 10),
-                                    position.end_date &&
-                                        new Date(position.end_date)
+                                    assignment.end_date &&
+                                        new Date(assignment.end_date)
                                             .toJSON()
                                             .slice(0, 10),
-                                    position.hours_per_assignment,
-                                    position.desired_num_assignments,
-                                    position.contract_template.template_name,
-                                    position.instructors
-                                        .map(
-                                            (instructor) =>
-                                                `${instructor.last_name}, ${instructor.first_name}`
-                                        )
-                                        .join("; "),
-                                    position.duties || "",
-                                    position.qualifications || "",
-                                    position.current_enrollment,
-                                    position.current_waitlisted,
+                                    assignment.hours,
+                                    assignment.contract_template,
+                                    assignment.contract_override_pdf,
+                                    assignment.active_offer_status,
                                 ])
                             ),
                         toJson: () => ({
-                            positions: positions.map((position) =>
-                                prepareMinimal.position(position)
+                            assignments: assignments.map((assignment) =>
+                                prepareMinimal.assignment(assignment, session)
                             ),
                         }),
                     },
                     dataFormat,
-                    "positions"
+                    "assignments"
                 );
             }
 
             const file = await dispatch(
-                exportPositions(prepareData, exportType)
+                exportAssignments(prepareData, exportType)
             );
 
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch]);
+    }, [exportType, dispatch, session]);
 
     function onClick(option) {
         setExportType(option);
@@ -115,51 +133,41 @@ export function ConnectedExportPositionsButton() {
     return <ExportButton onClick={onClick} />;
 }
 
-const positionSchema = {
+const assignmentSchema = {
+    // We don't list "active_offer_status" because that cannot be imported. It has to be set
+    // via the TA or manually by the admin.
     keys: [
+        "utorid",
         "position_code",
-        "position_title",
         "start_date",
         "end_date",
-        "hours_per_assignment",
-        "desired_num_assignments",
         "contract_template",
-        "instructors",
-        "duties",
-        "qualifications",
-        "current_enrollment",
-        "current_waitlisted",
-        "ad_open_date",
-        "ad_close_date",
-        "ad_hours_per_assignment",
-        "ad_num_assignments",
+        "contract_override_pdf",
+        "hours",
+        "wage_chunks",
     ],
     keyMap: {
         "Position Code": "position_code",
-        "Course Code": "position_code",
         "Course Name": "position_code",
-        "Position Title": "position_title",
         "Start Date": "start_date",
         Start: "start_date",
         "End Date": "end_date",
         End: "end_date",
-        "Hours Per Assignment": "hours_per_assignment",
-        "Number of Assignments": "desired_num_assignments",
-        "Contract Template": "contract_template",
-        "Current Enrollment": "current_enrollment",
-        "Current Waitlisted": "current_waitlisted",
+        Hours: "hours",
+        "Contract Override PDF": "contract_override_pdf",
     },
     dateColumns: ["start_date", "end_date"],
-    requiredKeys: ["position_code", "contract_template"],
-    primaryKey: "position_code",
-    baseName: "positions",
+    requiredKeys: ["position_code", "utorid"],
+    primaryKey: ["utorid", "position_code"],
+    baseName: "assignments",
 };
 
-export function ConnectedImportPositionsButton() {
+export function ConnectedImportAssignmentsButton() {
     const dispatch = useDispatch();
+    const assignments = useSelector(assignmentsSelector);
+    const applicants = useSelector(applicantsSelector);
     const positions = useSelector(positionsSelector);
-    const instructors = useSelector(instructorsSelector);
-    const contractTemplates = useSelector(contractTemplatesSelector);
+    const session = useSelector(activeSessionSelector);
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);
     const [processingError, setProcessingError] = React.useState(null);
@@ -185,22 +193,21 @@ export function ConnectedImportPositionsButton() {
             setProcessingError(null);
 
             // normalize the data coming from the file
-            let data = normalizeImport(fileContent, positionSchema);
-            // `normalizeImport` only normalizes the column names and dates. We need to make sure the
-            // instructors are correct as well.
+            let data = normalizeImport(fileContent, assignmentSchema);
+            // If data is coming from a spreadsheet, we need to make sure the
+            // `hours` field is coerced to a number
             for (const item of data) {
-                item.instructors = diffImport
-                    .instructorsListFromField(item.instructors || [], {
-                        instructors,
-                    })
-                    .map((x) => x.utorid);
+                if (item.hours) {
+                    item.hours = +item.hours;
+                }
             }
 
             // Compute which positions have been added/modified
-            const newDiff = diffImport.positions(data, {
+            const newDiff = diffImport.assignments(data, {
+                assignments,
                 positions,
-                instructors,
-                contractTemplates,
+                applicants,
+                session,
             });
 
             setDiffed(newDiff);
@@ -208,11 +215,11 @@ export function ConnectedImportPositionsButton() {
             console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, positions, contractTemplates, instructors, inProgress]);
+    }, [fileContent, assignments, positions, applicants, session, inProgress]);
 
     async function onConfirm() {
         const changedPositions = getChanged(diffed);
-        await dispatch(upsertPositions(changedPositions));
+        await dispatch(upsertAssignments(changedPositions));
         setFileContent(null);
     }
 
@@ -230,7 +237,7 @@ export function ConnectedImportPositionsButton() {
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
                 <Alert variant="warning">
-                    No difference between imported positions and those already
+                    No difference between imported assignments and those already
                     on the system.
                 </Alert>
             );
@@ -240,20 +247,20 @@ export function ConnectedImportPositionsButton() {
                     {newItems.length > 0 && (
                         <Alert variant="primary">
                             <span className="mb-1">
-                                The following positions will be{" "}
+                                The following assignments will be{" "}
                                 <strong>added</strong>
                             </span>
-                            <PositionsList positions={newItems} />
+                            <AssignmentsList assignments={newItems} />
                         </Alert>
                     )}
                     {modifiedDiffSpec.length > 0 && (
                         <Alert variant="info">
                             <span className="mb-1">
-                                The following positions will be{" "}
+                                The following assignments will be{" "}
                                 <strong>modified</strong>
                             </span>
-                            <PositionsDiffList
-                                modifiedPositions={modifiedDiffSpec}
+                            <AssignmentsDiffList
+                                modifiedAssignments={modifiedDiffSpec}
                             />
                         </Alert>
                     )}

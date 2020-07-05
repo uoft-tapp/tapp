@@ -27,6 +27,7 @@ export const fetchInstructors = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/instructors`);
         dispatch(fetchInstructorsSuccess(data));
+        return data;
     },
 });
 
@@ -39,6 +40,7 @@ export const fetchInstructor = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/instructors/${payload.id}`);
         dispatch(fetchOneInstructorSuccess(data));
+        return data;
     },
 });
 
@@ -51,6 +53,7 @@ export const upsertInstructor = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/instructors`, payload);
         dispatch(upsertOneInstructorSuccess(data));
+        return data;
     },
 });
 
@@ -100,7 +103,7 @@ export const upsertInstructors = validatedApiDispatcher({
         );
         await Promise.all(dispatchers);
         // Re-fetch all instructors from the server in case things happened to be out of sync.
-        await dispatch(fetchInstructors());
+        return await dispatch(fetchInstructors());
     },
 });
 // selectors

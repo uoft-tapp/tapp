@@ -8,13 +8,14 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { ExportButton } from "../../components/export-button";
 import { ImportButton } from "../../components/import-button";
-import { InstructorsList } from "../../components/instructors";
-import { Alert } from "react-bootstrap";
 import {
-    normalizeImport,
-    diff,
-    dataToFile,
-} from "../../libs/importExportUtils";
+    InstructorsList,
+    InstructorsDiffList,
+} from "../../components/instructors";
+import { Alert } from "react-bootstrap";
+import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
+import { prepareMinimal } from "../../libs/exportUtils";
+import { diffImport, getChanged } from "../../libs/diffUtils";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -25,7 +26,6 @@ import {
  */
 export function ConnectedExportInstructorsButton() {
     const dispatch = useDispatch();
-    const instructors = useSelector(instructorsSelector);
     const [exportType, setExportType] = React.useState(null);
 
     React.useEffect(() => {
@@ -54,7 +54,11 @@ export function ConnectedExportInstructorsButton() {
                                     instructor.email,
                                 ])
                             ),
-                        toJson: () => ({ instructors }),
+                        toJson: () => ({
+                            instructors: instructors.map((instructor) =>
+                                prepareMinimal.instructor(instructor)
+                            ),
+                        }),
                     },
                     dataFormat,
                     "instructors"
@@ -71,7 +75,6 @@ export function ConnectedExportInstructorsButton() {
     }, [exportType, dispatch]);
 
     function onClick(option) {
-        console.log(option, instructors);
         setExportType(option);
     }
 
@@ -124,7 +127,7 @@ export function ConnectedImportInstructorButton() {
             // normalize the data coming from the file
             const data = normalizeImport(fileContent, instructorSchema);
             // Compute which instructors have been added/modified
-            const newDiff = diff(instructors, data, instructorSchema);
+            const newDiff = diffImport.instructors(data, { instructors });
 
             setDiffed(newDiff);
         } catch (e) {
@@ -134,9 +137,7 @@ export function ConnectedImportInstructorButton() {
     }, [fileContent, instructors, inProgress]);
 
     async function onConfirm() {
-        const changedInstructors = diffed.new.concat(
-            diffed.modified.map((x) => x.new)
-        );
+        const changedInstructors = getChanged(diffed);
 
         await dispatch(upsertInstructors(changedInstructors));
 
@@ -147,7 +148,14 @@ export function ConnectedImportInstructorButton() {
     if (processingError) {
         dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
     } else if (diffed) {
-        if (diffed.new.length === 0 && diffed.modified.length === 0) {
+        const newItems = diffed
+            .filter((item) => item.status === "new")
+            .map((item) => item.obj);
+        const modifiedDiffSpec = diffed.filter(
+            (item) => item.status === "modified"
+        );
+
+        if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
                 <Alert variant="warning">
                     No difference between imported instructors and those already
@@ -157,23 +165,23 @@ export function ConnectedImportInstructorButton() {
         } else {
             dialogContent = (
                 <>
-                    {diffed.new.length > 0 && (
+                    {newItems.length > 0 && (
                         <Alert variant="primary">
                             <span className="mb-1">
                                 The following instructors will be{" "}
                                 <strong>added</strong>
                             </span>
-                            <InstructorsList instructors={diffed.new} />
+                            <InstructorsList instructors={newItems} />
                         </Alert>
                     )}
-                    {diffed.modified.length > 0 && (
+                    {modifiedDiffSpec.length > 0 && (
                         <Alert variant="info">
                             <span className="mb-1">
                                 The following instructors will be{" "}
                                 <strong>modified</strong>
                             </span>
-                            <InstructorsList
-                                instructors={diffed.modified.map((x) => x.new)}
+                            <InstructorsDiffList
+                                modifiedInstructors={modifiedDiffSpec}
                             />
                         </Alert>
                     )}

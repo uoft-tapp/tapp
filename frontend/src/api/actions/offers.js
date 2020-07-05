@@ -14,7 +14,7 @@ import { fetchAssignment } from "./assignments";
 import { activeRoleSelector } from "./users";
 
 // actions
-export const fetchOfferSucces = actionFactory(FETCH_ONE_OFFER_SUCCESS);
+export const fetchOfferSuccess = actionFactory(FETCH_ONE_OFFER_SUCCESS);
 export const setOfferAcceptedSuccess = actionFactory(
     SET_OFFER_ACCEPTED_SUCCESS
 );
@@ -36,7 +36,8 @@ export const fetchActiveOfferForAssignment = validatedApiDispatcher({
         const data = await apiGET(
             `/${role}/assignments/${payload.id}/active_offer`
         );
-        dispatch(fetchOfferSucces(data));
+        dispatch(fetchOfferSuccess(data));
+        return data;
     },
 });
 

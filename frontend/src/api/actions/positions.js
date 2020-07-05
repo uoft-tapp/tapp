@@ -147,7 +147,7 @@ export const exportPositions = validatedApiDispatcher({
 
 export const upsertPositions = validatedApiDispatcher({
     name: "upsertPositions",
-    description: "Export instructors",
+    description: "Upsert a list of positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (positions) => async (dispatch) => {
         if (positions.length === 0) {

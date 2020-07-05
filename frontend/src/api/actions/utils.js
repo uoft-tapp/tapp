@@ -179,6 +179,7 @@ export function validatedApiDispatcher({
                 // as real errors
                 return await dispatch(dispatcher(...args));
             } catch (e) {
+                console.warn("API Error", e);
                 if (onErrorDispatch) {
                     if (onErrorDispatch instanceof Function) {
                         dispatch(onErrorDispatch(e));
