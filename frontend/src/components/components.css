@@ -63,6 +63,10 @@
     margin-left: 4px;
 }
 
+.secondary-nav-links {
+    padding-bottom: 3px;
+}
+
 .header-widgets {
     display: flex;
     align-items: center;
