@@ -11,69 +11,68 @@ import {
 } from "../../api/actions";
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";
-
 /**
  * Header showing the routes that a user with `role=admin`
  * can see.
  *
  * @returns
  */
+
+export const routes = [
+    {
+        route: "/tapp",
+        name: "Admin",
+        description: "Admin View",
+        subroutes: [
+            {
+                route: "/sessions",
+                name: "Sessions",
+                description: "Manage Sessions",
+            },
+            {
+                route: "/contract_templates",
+                name: "Contract Templates",
+                description: "Manage Contract Templates",
+            },
+            {
+                route: "/instructors",
+                name: "Instructors",
+                description: "Manage Instructors",
+            },
+            {
+                route: "/positions",
+                name: "Positions",
+                description: "Manage Positions",
+            },
+            {
+                route: "/assignments",
+                name: "Assignments",
+                description: "Manage Assignments",
+            },
+        ],
+    },
+    {
+        route: "/matching",
+        name: "Matching",
+        description: "Matching",
+        subroutes: [
+            {
+                route: "/statistics",
+                name: "Statistics",
+                description: "See statistics about accepted/rejected contracts",
+            },
+        ],
+    },
+    {
+        route: "/appointments_and_positions",
+        name: "Appointments & Positions",
+        description: "Appointments & Positions",
+    },
+];
 function AdminHeader() {
     return (
         <Header
-            routes={[
-                {
-                    route: "/tapp",
-                    name: "TAPP",
-                    description: "TAPP Main View",
-                    subroutes: [
-                        {
-                            route: "/sessions",
-                            name: "Sessions",
-                            description: "Manage Sessions",
-                        },
-                        {
-                            route: "/contract_templates",
-                            name: "Contract Templates",
-                            description: "Manage Contract Templates",
-                        },
-                        {
-                            route: "/instructors",
-                            name: "Instructors",
-                            description: "Manage Instructors",
-                        },
-                        {
-                            route: "/positions",
-                            name: "Positions",
-                            description: "Manage Positions",
-                        },
-                        {
-                            route: "/assignments",
-                            name: "Assignments",
-                            description: "Manage Assignments",
-                        },
-                    ],
-                },
-                {
-                    route: "/cp",
-                    name: "CP",
-                    description: "Contract Presentment",
-                    subroutes: [
-                        {
-                            route: "/statistics",
-                            name: "Statistics",
-                            description:
-                                "See statistics about accepted/rejected contracts",
-                        },
-                    ],
-                },
-                {
-                    route: "/dashboard",
-                    name: "Dashboard",
-                    description: "List of all widgets",
-                    hidden: true,
-                },
-            ]}
+            routes={routes}
             infoComponents={[
                 <ConnectedActiveSessionDisplay />,
                 <ConnectedActiveUserDisplay />,

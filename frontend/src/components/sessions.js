@@ -30,7 +30,6 @@ const DEFAULT_COLUMNS = [
  */
 export function SessionsList(props) {
     const { sessions, columns = DEFAULT_COLUMNS } = props;
-
     return (
         <React.Fragment>
             <h3>Sessions</h3>

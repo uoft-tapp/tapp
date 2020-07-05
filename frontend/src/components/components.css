@@ -17,3 +17,33 @@
     border-radius: 15px;
     border: 2px solid rgb(0, 95, 204);
 }
+.main-route-navbar-row {
+    padding-right: 1em;
+    justify-content: space-between;
+}
+.main-route-navbar {
+    padding: 1em 1em 0em 0.8em;
+}
+
+.secondary-route-navbar {
+    padding: 0.5em 1em;
+}
+
+.primary.nav-link h5 {
+    font-weight: bold;
+    color: black;
+}
+
+.primary.nav-link.active h5 {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.secondary.nav-link small {
+    color: black;
+}
+
+.secondary.nav-link.active small {
+    font-weight: bold;
+    color: white;
+}
