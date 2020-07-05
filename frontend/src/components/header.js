@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Route, NavLink } from "react-router-dom";
+import { Nav, Tab, Col, Row } from "react-bootstrap";
+import { NavLink, useRouteMatch } from "react-router-dom";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -10,14 +10,16 @@ import { Route, NavLink } from "react-router-dom";
  * @param {*} props
  * @returns
  */
-export function BootstrapNavLink(props) {
+function BootstrapNavItem(props) {
     return (
-        <Nav.Link as={NavLink} activeClassName="text-dark" {...props}>
-            {props.children}
-        </Nav.Link>
+        <Nav.Item>
+            <Nav.Link as={NavLink} {...props}>
+                {props.children}
+            </Nav.Link>
+        </Nav.Item>
     );
 }
-BootstrapNavLink.propTypes = {
+BootstrapNavItem.propTypes = {
     to: PropTypes.string,
 };
 
@@ -42,65 +44,72 @@ BootstrapNavLink.propTypes = {
  * @param {object[]} props.routes
  * @returns
  */
+
 export function Header(props) {
-    const { routes = [], infoComponents = null } = props;
+    const { routes = [], infoComponents = [] } = props;
+    let match = useRouteMatch("/:mainRoute/:subRoute?");
+    const { mainRoute } = match.params;
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
     }
 
+    const activeMainRoutes = routes.map((route) => (
+        <BootstrapNavItem
+            eventKey={route.route}
+            to={route.route}
+            key={route.route}
+            className="primary"
+        >
+            <h5>{route.name}</h5>
+        </BootstrapNavItem>
+    ));
+
+    const availableSubroutes = routes // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
+        .filter((route) => route.route.substring(1) === mainRoute)
+        .map((route) =>
+            (route.subroutes || []).map((subroute) => {
+                const fullroute = `${route.route}${subroute.route}`;
+                return (
+                    <BootstrapNavItem
+                        to={fullroute}
+                        title={subroute.name}
+                        key={fullroute}
+                        className="secondary"
+                    >
+                        <h5>
+                            <small>{subroute.name}</small>
+                        </h5>
+                    </BootstrapNavItem>
+                );
+            })
+        );
+
     return (
-        <Navbar bg="light" variant="light">
-            <Navbar.Brand>
-                <NavDropdown
-                    title={routes.map((route) => (
-                        <Route path={route.route} key={route.route}>
-                            {route.name}
-                        </Route>
-                    ))}
-                >
-                    {routes
-                        .filter((route) => !route.hidden)
-                        .map((route) => (
-                            <NavDropdown.Item
-                                key={route.route}
-                                as="span"
-                                tabIndex="0"
-                            >
-                                <BootstrapNavLink
-                                    to={route.route}
-                                    title={route.description}
-                                >
-                                    {route.name}
-                                </BootstrapNavLink>
-                            </NavDropdown.Item>
+        <Tab.Container activeKey={mainRoute} defaultActiveKey={"tapp"}>
+            <Row className="main-route-navbar-row">
+                <Col md={"auto"}>
+                    <Nav className="main-route-navbar" variant="tabs">
+                        {activeMainRoutes}
+                    </Nav>
+                </Col>
+                <Col md={"auto"}>
+                    <Row>
+                        {infoComponents.map((component, index) => (
+                            <div key={index}>{component}</div>
                         ))}
-                </NavDropdown>
-            </Navbar.Brand>
-            <Nav className="mr-auto">
-                {routes.map((route) => (
-                    <Route path={route.route} key={route.route}>
-                        {(route.subroutes || []).map((subroute) => {
-                            const fullroute = `${route.route}${subroute.route}`;
-                            return (
-                                <BootstrapNavLink
-                                    to={fullroute}
-                                    key={fullroute}
-                                    title={subroute.description}
-                                >
-                                    {subroute.name}
-                                </BootstrapNavLink>
-                            );
-                        })}
-                    </Route>
-                ))}
-            </Nav>
-            {infoComponents.map((component, index) => (
-                <div key={index}>{component}</div>
-            ))}
-        </Navbar>
+                    </Row>
+                </Col>
+            </Row>
+            <Row className="secondary-route-navbar">
+                <Tab.Content>
+                    <Nav variant="pills">{availableSubroutes}</Nav>
+                </Tab.Content>
+            </Row>
+        </Tab.Container>
     );
 }
+
 Header.propTypes = {
     routes: PropTypes.arrayOf(
         PropTypes.shape({
