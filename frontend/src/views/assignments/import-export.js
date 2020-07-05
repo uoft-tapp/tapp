@@ -124,7 +124,7 @@ export function ConnectedExportAssignmentsButton() {
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch]);
+    }, [exportType, dispatch, session]);
 
     function onClick(option) {
         setExportType(option);
@@ -215,7 +215,7 @@ export function ConnectedImportAssignmentsButton() {
             console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, assignments, positions, inProgress]);
+    }, [fileContent, assignments, positions, applicants, session, inProgress]);
 
     async function onConfirm() {
         const changedPositions = getChanged(diffed);

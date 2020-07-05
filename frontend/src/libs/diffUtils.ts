@@ -3,18 +3,14 @@
  */
 
 import {
-    WageChunk,
     Session,
     Position,
     Instructor,
     Assignment,
     ContractTemplate,
-    MinimalWageChunk,
-    MinimalSession,
     MinimalPosition,
     MinimalInstructor,
     MinimalAssignment,
-    MinimalContractTemplate,
     Utorid,
     Applicant,
 } from "../api/defs/types";
