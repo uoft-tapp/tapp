@@ -30,6 +30,7 @@ export const fetchSessions = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/sessions`);
         await dispatch(fetchSessionsSuccess(data));
+        return data;
     },
 });
 
@@ -42,6 +43,7 @@ export const fetchSession = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/sessions/${payload.id}`);
         dispatch(fetchOneSessionSuccess(data));
+        return data;
     },
 });
 
@@ -54,6 +56,7 @@ export const upsertSession = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/sessions`, payload);
         dispatch(upsertOneSessionSuccess(data));
+        return data;
     },
 });
 

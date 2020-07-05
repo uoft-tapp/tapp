@@ -58,7 +58,7 @@ function deleteReferences(value, keyMap) {
  * @param {*} [keyMap={}]
  * @returns {string | null}
  */
-export function findMatchingKey(targetKey, keyMap = {}) {
+function findMatchingKey(targetKey, keyMap = {}) {
     if (targetKey in keyMap) {
         return keyMap[targetKey];
     }
@@ -263,113 +263,15 @@ export function normalizeImport(
         ret = ret.map((row) => {
             const newRow = { ...row };
             for (const col of schema.dateColumns) {
-                newRow[col] = parseDate(newRow[col]);
+                if (newRow[col] != null) {
+                    newRow[col] = parseDate(newRow[col]);
+                }
             }
             return newRow;
         });
     }
 
     validate(ret, schema);
-
-    return ret;
-}
-
-/**
- * Recursive determine whether `obj1` and `obj2` are the same. If `obj1`/`obj2` have
- * an `id` property, they are assumed equal if their ids match.
- *
- * @param {*} obj1
- * @param {*} obj2
- * @returns
- */
-function recursiveIsSame(obj1, obj2) {
-    // Short-circuit if they are literally equal.
-    if (obj1 === obj2 || (obj1 == null && obj2 == null)) {
-        return true;
-    }
-    // strings, numbers, undefined, and null are all literally equal,
-    // so these types shouldn't exist in the code at this point.
-    if (
-        obj1 == null ||
-        obj2 == null ||
-        typeof obj1 === "string" ||
-        typeof obj1 === "number"
-    ) {
-        return false;
-    }
-    // so we just have arrays and objects remaining (ignoring strange things like NaN)
-    if (Array.isArray(obj1)) {
-        return (
-            obj1.length === obj2.length &&
-            obj1.every((a, i) => recursiveIsSame(a, obj2[i]))
-        );
-    }
-    // For objects, if they have the same ID, we will assume they are equal, otherwise
-    // do a deep comparison.
-    if ("id" in obj1) {
-        return obj1.id === obj2.id;
-    }
-    return (
-        recursiveIsSame(Object.keys(obj1), Object.keys(obj2)) &&
-        Object.keys(obj1).every((prop) =>
-            recursiveIsSame(obj1[prop], obj2[prop])
-        )
-    );
-}
-
-/**
- * Compute the difference between `currData` and `newData`. Both are expected
- * to be arrays. The difference is computed based on keys specified in `schema.keys`.
- * Values are categorized as `new`, `modified`, or `duplicate`. Whether or not a data
- * is classified as `modified` is determined by the following algorithm:
- *     1) Find if there is an entry in `currData` that shares the same `schema.primaryKey`.
- *     2) Compare all properties specified by `schema.keys` to see if there's a difference.
- *
- * @export
- * @param {*} currData
- * @param {*} newData
- * @param {*} [schema={ keys: [], primaryKey: null }]
- * @returns {{new: object[], modified: {old: object, new:object}[], duplicate: object[]}}
- */
-export function diff(
-    currData,
-    newData,
-    schema = { keys: [], primaryKey: null }
-) {
-    const { keys, primaryKey } = schema;
-    const ret = {
-        new: [],
-        modified: [],
-        duplicate: [],
-    };
-
-    // Index all the data by the primary key
-    const lookupHash = {};
-    for (const item of currData) {
-        lookupHash[item[primaryKey]] = item;
-    }
-
-    for (const newItem of newData) {
-        const oldItem = lookupHash[newItem[primaryKey]];
-        // If an item exists with matching primary key, check to see if any of the fields
-        // have changed
-        if (oldItem) {
-            if (
-                keys.every((key) => recursiveIsSame(oldItem[key], newItem[key]))
-            ) {
-                ret.duplicate.push(newItem);
-            } else {
-                ret.modified.push({
-                    old: oldItem,
-                    // Copy over the id from the old item so that an appropriate upsert
-                    // operation can be done on the backend
-                    new: { ...newItem, id: oldItem.id },
-                });
-            }
-        } else {
-            ret.new.push(newItem);
-        }
-    }
 
     return ret;
 }

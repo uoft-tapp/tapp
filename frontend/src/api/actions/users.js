@@ -25,6 +25,7 @@ export const fetchActiveUser = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/active_user`);
         dispatch(fetchActiveUserSuccess(data));
+        return data;
     },
 });
 
@@ -48,6 +49,7 @@ export const fetchUsers = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/users`);
         dispatch(fetchUsersSuccess(data));
+        return data;
     },
 });
 

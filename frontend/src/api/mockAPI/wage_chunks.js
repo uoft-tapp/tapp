@@ -91,7 +91,9 @@ export class WageChunk extends MockAPIController {
      * @memberof WageChunk
      */
     setAllByAssignment(wageChunks, assignment) {
-        const matchingAssignment = this.rawFind(assignment);
+        const matchingAssignment = new Assignment(this.data).rawFind(
+            assignment
+        );
         if (!matchingAssignment) {
             throw new Error(
                 `Could not find assignment matching ${JSON.stringify(

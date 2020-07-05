@@ -19,6 +19,9 @@ export function strip(x) {
  * @param {string} dateString
  */
 export function formatDate(dateString) {
+    if (!dateString) {
+        return dateString;
+    }
     // Normalize the date string so we can compensate for timezone issues.
     // This string is now formatted YYYY-MM-DD
     const normalizedDateString = new Date(dateString).toJSON().slice(0, 10);

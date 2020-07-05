@@ -18,6 +18,11 @@ import { createSelector } from "reselect";
 import { applicantsSelector } from "./applicants";
 import { positionsSelector } from "./positions";
 import { activeRoleSelector } from "./users";
+import {
+    fetchWageChunksForAssignment,
+    wageChunksByAssignmentSelector,
+    upsertWageChunksForAssignment,
+} from "./wage_chunks";
 
 // actions
 const fetchAssignmentsSuccess = actionFactory(FETCH_ASSIGNMENTS_SUCCESS);
@@ -37,6 +42,7 @@ export const fetchAssignments = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/assignments`
         );
         dispatch(fetchAssignmentsSuccess(data));
+        return data;
     },
 });
 
@@ -49,6 +55,7 @@ export const fetchAssignment = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/assignments/${payload.id}`);
         dispatch(fetchOneAssignmentSuccess(data));
+        return data;
     },
 });
 
@@ -67,8 +74,18 @@ export const upsertAssignment = validatedApiDispatcher({
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(`/${role}/assignments`, prepForApi(payload));
+        let data = await apiPOST(`/${role}/assignments`, prepForApi(payload));
         dispatch(upsertOneAssignmentSuccess(data));
+        if (payload.wage_chunks) {
+            await dispatch(
+                upsertWageChunksForAssignment(payload, payload.wage_chunks)
+            );
+            // The wage chunks could have changed the number of "hours" for the assignment.
+            // Refetch it to make sure the data isn't stale.
+            data = await dispatch(fetchAssignment(data));
+        }
+        dispatch(upsertOneAssignmentSuccess(data));
+        return data;
     },
 });
 
@@ -84,6 +101,57 @@ export const deleteAssignment = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(deleteOneAssignmentSuccess(data));
+    },
+});
+
+export const exportAssignments = validatedApiDispatcher({
+    name: "exportAssignments",
+    description: "Export assignments",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (formatter, format = "spreadsheet") => async (
+        dispatch,
+        getState
+    ) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all assignments from the server in case things happened to be out of sync.
+        await dispatch(fetchAssignments());
+        const assignments = assignmentsSelector(getState());
+
+        // Normally, wage chunk information is not fetched with an assignment. This information
+        // must be fetched separately.
+        const wageChunkPromises = assignments.map((assignment) =>
+            dispatch(fetchWageChunksForAssignment(assignment))
+        );
+        await Promise.all(wageChunkPromises);
+        // Attach the wage chunk information to each assignment
+        for (const assignment of assignments) {
+            assignment.wage_chunks = wageChunksByAssignmentSelector(getState())(
+                assignment
+            );
+        }
+
+        return formatter(assignments, format);
+    },
+});
+
+export const upsertAssignments = validatedApiDispatcher({
+    name: "upsertAssignments",
+    description: "Upsert a list of assignments",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (assignments) => async (dispatch) => {
+        if (assignments.length === 0) {
+            return;
+        }
+        const dispatchers = assignments.map((assignment) =>
+            dispatch(upsertAssignment(assignment))
+        );
+        await Promise.all(dispatchers);
+        // Re-fetch all assignments from the server in case things happened to be out of sync.
+        await dispatch(fetchAssignments());
     },
 });
 

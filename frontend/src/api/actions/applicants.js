@@ -31,6 +31,7 @@ export const fetchApplicants = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/applicants`
         );
         dispatch(fetchApplicantsSuccess(data));
+        return data;
     },
 });
 
@@ -43,6 +44,7 @@ export const fetchApplicant = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiGET(`/${role}/applicants/${payload.id}`);
         dispatch(fetchOneApplicantSuccess(data));
+        return data;
     },
 });
 
@@ -55,6 +57,7 @@ export const upsertApplicant = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = await apiPOST(`/${role}/applicants`, payload);
         dispatch(upsertOneApplicantSuccess(data));
+        return data;
     },
 });
 

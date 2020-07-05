@@ -56,6 +56,7 @@ export const fetchApplications = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/applications`
         );
         dispatch(fetchApplicationsSuccess(data));
+        return data;
     },
 });
 
@@ -71,6 +72,7 @@ export const fetchApplication = validatedApiDispatcher({
             `/${role}/sessions/${activeSessionId}/applications/${payload.id}`
         );
         dispatch(fetchOneApplicationSuccess(data));
+        return data;
     },
 });
 
@@ -87,6 +89,7 @@ export const upsertApplication = validatedApiDispatcher({
             prepForApi(payload)
         );
         dispatch(upsertOneApplicationSuccess(data));
+        return data;
     },
 });
 

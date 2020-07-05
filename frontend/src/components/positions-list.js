@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table";
-import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Badge } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
+import { createDiffColumnsFromColumns } from "./diff-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
@@ -42,6 +42,22 @@ const DEFAULT_COLUMNS = [
 ];
 
 /**
+ * Display a DiffSpec array of positions and highlight the changes.
+ *
+ * @export
+ * @param {*} { modifiedInstructors }
+ * @returns
+ */
+export function PositionsDiffList({ modifiedPositions }) {
+    return (
+        <PositionsList
+            positions={modifiedPositions}
+            columns={createDiffColumnsFromColumns(DEFAULT_COLUMNS)}
+        />
+    );
+}
+
+/**
  * List the instructors using a ReactTable. `columns` can be passed
  * in to customize columns/cell renderers.
  *
@@ -64,7 +80,7 @@ export function PositionsList(props) {
     );
 }
 PositionsList.propTypes = {
-    positions: PropTypes.arrayOf(docApiPropTypes.position).isRequired,
+    positions: PropTypes.array.isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
     ),
