@@ -38,7 +38,7 @@ export function createDiffCell({ accessor, Cell }) {
             );
         }
         // If there is a custom cell renderer, use that. Otherwise, pass the value directly.
-        return Cell ? Cell({value, original: original.obj}) : value;
+        return Cell ? Cell({ value, original: original.obj }) : value;
     }
     return DiffCell;
 }
