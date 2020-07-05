@@ -18,7 +18,9 @@ class App extends React.Component {
         return (
             <React.Fragment>
                 <AdminHeader />
-                <AdminRoutes />
+                <div className="view-container">
+                    <AdminRoutes />
+                </div>
                 <ConnectedNotifications />
             </React.Fragment>
         );

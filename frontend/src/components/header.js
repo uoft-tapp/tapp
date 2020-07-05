@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Tab, Col, Row } from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import { NavLink, useRouteMatch } from "react-router-dom";
+
+import "./components.css";
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -27,7 +29,7 @@ BootstrapNavItem.propTypes = {
  * Render a header that dynamically adjusts depending on the route
  * (as determined by `react-router-dom`). Top-level routes appear in
  * a dropdown menu. Subroutes (which only show when the top-level route is active)
- * appear as a horizontal list. A toplevel route takes the form
+ * appear as a horizontal list. A top-level route takes the form
  *
  * ```
  * {
@@ -47,7 +49,9 @@ BootstrapNavItem.propTypes = {
 
 export function Header(props) {
     const { routes = [], infoComponents = [] } = props;
-    let match = useRouteMatch("/:mainRoute/:subRoute?");
+    let match = useRouteMatch("/:mainRoute/:subRoute?") || {
+        params: { mainRoute: "tapp" },
+    };
     const { mainRoute } = match.params;
 
     if (routes.length === 0) {
@@ -61,11 +65,12 @@ export function Header(props) {
             key={route.route}
             className="primary"
         >
-            <h5>{route.name}</h5>
+            {route.name}
         </BootstrapNavItem>
     ));
 
-    const availableSubroutes = routes // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
+    // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
+    const availableSubroutes = routes
         .filter((route) => route.route.substring(1) === mainRoute)
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
@@ -77,36 +82,28 @@ export function Header(props) {
                         key={fullroute}
                         className="secondary"
                     >
-                        <h5>
-                            <small>{subroute.name}</small>
-                        </h5>
+                        {subroute.name}
                     </BootstrapNavItem>
                 );
             })
         );
 
     return (
-        <Tab.Container activeKey={mainRoute} defaultActiveKey={"tapp"}>
-            <Row className="main-route-navbar-row">
-                <Col md={"auto"}>
-                    <Nav className="main-route-navbar" variant="tabs">
+        <div className="header-container">
+            <div className="header-nav">
+                <Navbar>
+                    <Nav
+                        activeKey={mainRoute}
+                        defaultActiveKey={"tapp"}
+                        className="primary-nav-links"
+                    >
                         {activeMainRoutes}
                     </Nav>
-                </Col>
-                <Col md={"auto"}>
-                    <Row>
-                        {infoComponents.map((component, index) => (
-                            <div key={index}>{component}</div>
-                        ))}
-                    </Row>
-                </Col>
-            </Row>
-            <Row className="secondary-route-navbar">
-                <Tab.Content>
-                    <Nav variant="pills">{availableSubroutes}</Nav>
-                </Tab.Content>
-            </Row>
-        </Tab.Container>
+                </Navbar>
+                <Nav className="secondary-nav-links">{availableSubroutes}</Nav>
+            </div>
+            <div className="header-widgets">{infoComponents}</div>
+        </div>
     );
 }
 
