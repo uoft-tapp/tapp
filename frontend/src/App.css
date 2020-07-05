@@ -28,3 +28,8 @@ body,
     border-radius: 7px;
     font-size: smaller;
 }
+
+.view-container {
+    padding: 1em;
+    box-shadow: inset 0 70px 1px -70px #00356f38;
+}

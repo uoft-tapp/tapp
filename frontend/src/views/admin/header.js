@@ -74,8 +74,8 @@ function AdminHeader() {
         <Header
             routes={routes}
             infoComponents={[
-                <ConnectedActiveSessionDisplay />,
-                <ConnectedActiveUserDisplay />,
+                <ConnectedActiveSessionDisplay key={0} />,
+                <ConnectedActiveUserDisplay key={1} />,
             ]}
         />
     );
