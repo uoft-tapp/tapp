@@ -26,7 +26,9 @@ const render = (Component) => {
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <DevFrame>
-                        <Component />
+                        <div id="app-body">
+                            <Component />
+                        </div>
                     </DevFrame>
                 </PersistGate>
             </Provider>
