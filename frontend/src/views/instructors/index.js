@@ -13,7 +13,7 @@ import {
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
 
-export function AdminIstructorsView() {
+export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
     return (
