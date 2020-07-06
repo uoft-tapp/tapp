@@ -37,8 +37,8 @@ export function AdminInstructorsView() {
                 </ActionButton>
 
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedExportInstructorsAction />
                 <ConnectedImportInstructorAction />
+                <ConnectedExportInstructorsAction />
             </ActionsList>
             <ContentArea>
                 <ConnectedAddInstructorDialog
