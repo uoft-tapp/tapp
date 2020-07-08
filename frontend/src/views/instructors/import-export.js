@@ -6,8 +6,8 @@ import {
     upsertInstructors,
 } from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { ExportButton } from "../../components/export-button";
-import { ImportButton } from "../../components/import-button";
+import { ExportActionButton } from "../../components/export-button";
+import { ImportActionButton } from "../../components/import-button";
 import {
     InstructorsList,
     InstructorsDiffList,
@@ -24,7 +24,7 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
  * @export
  * @returns
  */
-export function ConnectedExportInstructorsButton() {
+export function ConnectedExportInstructorsAction() {
     const dispatch = useDispatch();
     const [exportType, setExportType] = React.useState(null);
 
@@ -78,7 +78,7 @@ export function ConnectedExportInstructorsButton() {
         setExportType(option);
     }
 
-    return <ExportButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} />;
 }
 
 const instructorSchema = {
@@ -98,7 +98,7 @@ const instructorSchema = {
     baseName: "instructors",
 };
 
-export function ConnectedImportInstructorButton() {
+export function ConnectedImportInstructorAction() {
     const dispatch = useDispatch();
     const instructors = useSelector(instructorsSelector);
     const [fileContent, setFileContent] = React.useState(null);
@@ -191,7 +191,7 @@ export function ConnectedImportInstructorButton() {
     }
 
     return (
-        <ImportButton
+        <ImportActionButton
             onConfirm={onConfirm}
             onFileChange={setFileContent}
             dialogContent={dialogContent}

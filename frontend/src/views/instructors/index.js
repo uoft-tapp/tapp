@@ -1,32 +1,54 @@
 import React from "react";
 import { ConnectedInstructorsList } from "./editable-instructors-list";
 import { ConnectedAddInstructorDialog } from "./add-instructor-dialog";
-import { Button } from "react-bootstrap";
+import { FaTrash, FaPlus } from "react-icons/fa";
 import {
-    ConnectedExportInstructorsButton,
-    ConnectedImportInstructorButton,
+    ConnectedImportInstructorAction,
+    ConnectedExportInstructorsAction,
 } from "./import-export";
+import {
+    ActionsList,
+    ActionButton,
+    ActionHeader,
+} from "../../components/action-buttons";
+import { ContentArea } from "../../components/layout";
 
-export function AdminIstructorsView() {
+export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [inDeleteMode, setInDeleteMode] = React.useState(false);
     return (
-        <div>
-            <Button
-                onClick={() => {
-                    setAddDialogVisible(true);
-                }}
-            >
-                Add Instructor
-            </Button>
-            <ConnectedExportInstructorsButton />
-            <ConnectedImportInstructorButton />
-            <ConnectedAddInstructorDialog
-                show={addDialogVisible}
-                onHide={() => {
-                    setAddDialogVisible(false);
-                }}
-            />
-            <ConnectedInstructorsList />
+        <div className="page-body">
+            <ActionsList>
+                <ActionHeader>Available Actions</ActionHeader>
+                <ActionButton
+                    icon={<FaPlus />}
+                    onClick={() => {
+                        setAddDialogVisible(true);
+                    }}
+                >
+                    Add Instructor
+                </ActionButton>
+                <ActionButton
+                    icon={<FaTrash />}
+                    onClick={() => setInDeleteMode(!inDeleteMode)}
+                    active={inDeleteMode}
+                >
+                    Delete Instructor
+                </ActionButton>
+
+                <ActionHeader>Import/Export</ActionHeader>
+                <ConnectedImportInstructorAction />
+                <ConnectedExportInstructorsAction />
+            </ActionsList>
+            <ContentArea>
+                <ConnectedAddInstructorDialog
+                    show={addDialogVisible}
+                    onHide={() => {
+                        setAddDialogVisible(false);
+                    }}
+                />
+                <ConnectedInstructorsList />
+            </ContentArea>
         </div>
     );
 }

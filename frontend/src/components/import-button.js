@@ -10,6 +10,8 @@ import {
     Row,
     Col,
 } from "react-bootstrap";
+import { ActionButton } from "./action-buttons";
+import { FaUpload } from "react-icons/fa";
 
 const DEFAULT_LABEL = "Select a spreadsheet, CSV, or JSON file.";
 
@@ -215,6 +217,61 @@ export function ImportButton({
     return (
         <>
             <Button onClick={() => setDialogOpen(true)}>Import</Button>
+            <ImportDialog
+                dialogOpen={dialogOpen}
+                onCancel={onCancel}
+                onClose={handleClose}
+                onFileChange={onFileChange}
+                dialogContent={dialogContent}
+                onConfirm={_onConfirm}
+                setInProgress={setInProgress}
+            />
+        </>
+    );
+}
+
+ImportButton.propTypes = {
+    uploadFunc: PropTypes.func,
+};
+
+/**
+ * Renders an dropdown import button component that imports data from file.
+ * When clicked, a dialog is opened where a user can select a file to import.
+ *
+ * @param onFileChange - function called when a file is selected. Do any processing or validation in response to this callback.
+ * @param dialgoContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
+ * @param onConfirm - Called when the "Confirm" button is pressed. Can be an async function. If so, a spinner will be displayed between the time "Confirm" is pressed and the time `onConfirm` finishes executing.
+ */
+export function ImportActionButton({
+    onFileChange,
+    dialogContent,
+    onConfirm,
+    setInProgress,
+}) {
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    /**
+     * closes the dialog by setting dialogOpen to false
+     */
+    function handleClose() {
+        setDialogOpen(false);
+    }
+
+    function onCancel() {
+        onFileChange(null);
+        handleClose();
+    }
+
+    async function _onConfirm(...args) {
+        await onConfirm(...args);
+        setDialogOpen(false);
+    }
+
+    return (
+        <>
+            <ActionButton icon={FaUpload} onClick={() => setDialogOpen(true)}>
+                Import
+            </ActionButton>
             <ImportDialog
                 dialogOpen={dialogOpen}
                 onCancel={onCancel}

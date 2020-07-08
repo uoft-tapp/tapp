@@ -5,6 +5,23 @@ body,
     width: 100%;
 }
 
+:root {
+    --actions-background: #a8d6ff16;
+    --actions-background-active: #a8d6ffff;
+    --actions-background-hover: #a8d6ff56;
+    --actions-border: #cee1f7;
+    --actions-color: #007bff;
+
+    /*
+    --actions-background: #479dfc;
+    --actions-color: #fff;
+    */
+}
+:root .x {
+    --actions-background: #479dfc;
+    --actions-color: #fff;
+}
+
 .wide-modal {
     width: 90%;
     max-width: none;
@@ -30,6 +47,30 @@ body,
 }
 
 .view-container {
-    padding: 1em;
+    /* padding: 1em; */
     box-shadow: inset 0 70px 1px -70px #00356f38;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.page-body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.page-content {
+    height: 100%;
+    overflow: auto;
+    flex-grow: 1;
+    background-color: white;
+    padding: 1em;
+    box-shadow: inset 70px 70px 1px -70px #00356f38;
+}
+
+#app-body {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }

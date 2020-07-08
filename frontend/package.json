@@ -5,6 +5,7 @@
     "proxy": "http://backend:3000",
     "private": true,
     "dependencies": {
+        "@types/classnames": "^2.2.10",
         "@types/fuzzyset": "^1.0.2",
         "@types/jest": "^26.0.3",
         "@types/node": "^14.0.14",
@@ -12,6 +13,7 @@
         "@types/react-dom": "^16.9.8",
         "bootstrap": "^4.4.1",
         "chrono-node": "^1.4.6",
+        "classnames": "^2.2.6",
         "file-saver": "^2.0.2",
         "fuzzyset": "^1.0.5",
         "react": "^16.12.0",

@@ -17,6 +17,7 @@ echo "Running Code Formatting Tests..."
 yarn run prettier-check "frontend/src/**/*.js"
 yarn run prettier-check "frontend/src/**/*.ts"
 yarn run prettier-check "frontend/src/**/*.jsx"
+yarn run prettier-check "frontend/src/**/*.tsx"
 yarn run eslint "frontend/src/**/*.js"
 yarn run eslint "frontend/src/**/*.jsx"
 
