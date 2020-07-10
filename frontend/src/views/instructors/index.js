@@ -12,10 +12,12 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
+import { ConnectedDeleteInstructorDialog } from "./delete-instructor-dialog";
 
 export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
+    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
     return (
         <div className="page-body">
             <ActionsList>
@@ -47,7 +49,18 @@ export function AdminInstructorsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedInstructorsList inDeleteMode={inDeleteMode} />
+                <ConnectedInstructorsList
+                    inDeleteMode={inDeleteMode}
+                    setDeleteDialogVisible={() => {
+                        setDeleteDialogVisible(true);
+                    }}
+                />
+                <ConnectedDeleteInstructorDialog
+                    show={deleteDialogVisible}
+                    onHide={() => {
+                        setDeleteDialogVisible(false);
+                    }}
+                />
             </ContentArea>
         </div>
     );

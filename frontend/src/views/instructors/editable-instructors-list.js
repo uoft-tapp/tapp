@@ -4,6 +4,7 @@ import { instructorsSelector, upsertInstructor } from "../../api/actions";
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
 import { FaTrash } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 /**
  * A cell that renders editable applicant information
@@ -30,7 +31,12 @@ function EditableCell(props) {
 }
 
 function EditableInstructorsList(props) {
-    const { upsertInstructor, inDeleteMode, ...rest } = props;
+    const {
+        upsertInstructor,
+        inDeleteMode,
+        setDeleteDialogVisible,
+        ...rest
+    } = props;
     console.log(props);
 
     // Bind an `ApplicantCell` to a particular field
@@ -68,8 +74,13 @@ function EditableInstructorsList(props) {
     ];
 
     const deleteColumn = {
+        // todo: weird top padding
         Header: "Delete",
-        Cell: <FaTrash />,
+        Cell: (
+            <Button onClick={setDeleteDialogVisible} variant="outline-danger">
+                <FaTrash />
+            </Button>
+        ),
     };
 
     return (
