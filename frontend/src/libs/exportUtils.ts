@@ -16,6 +16,7 @@ import {
     MinimalInstructor,
     MinimalAssignment,
     MinimalContractTemplate,
+    MinimalApplicant,
 } from "../api/defs/types";
 
 /**
@@ -204,6 +205,16 @@ export const prepareMinimal = {
 
         return ret;
     },
+    applicant: function (applicant: Applicant): MinimalApplicant {
+        return {
+            first_name: applicant.first_name,
+            last_name: applicant.last_name,
+            utorid: applicant.utorid,
+            email: applicant.email,
+            student_number: applicant.student_number,
+            phone: applicant.phone,
+        };
+    },
 };
 
 /**
@@ -245,6 +256,7 @@ interface prepareFull {
         Instructor,
         { id: number }
     >;
+    applicant: PrepareUpsertable<MinimalApplicant, Applicant, { id: number }>;
     position: PrepareUpsertable<
         MinimalPosition,
         Position,
@@ -294,6 +306,13 @@ export const prepareFull: prepareFull = {
             return { id, ...minInstructor };
         }
         return minInstructor;
+    },
+    applicant: function (minApplicant: MinimalApplicant, context?: any): any {
+        const { id } = context || {};
+        if (id != null) {
+            return { id, ...minApplicant };
+        }
+        return minApplicant;
     },
     position: function (minPosition: MinimalPosition, context?: any): any {
         const { id, instructors, contractTemplates }: Partial<IdContext> =

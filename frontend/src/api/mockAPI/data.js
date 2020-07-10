@@ -1197,6 +1197,7 @@ export const mockData = {
     ],
     applications: [
         {
+            id: 15000,
             comments: "",
             program: "Phd",
             department: "Computer Science",
@@ -1217,6 +1218,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15001,
             comments: "",
             program: "UG",
             department: "Computer Science",
@@ -1237,6 +1239,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15002,
             comments: "",
             program: "Phd",
             department: "Math",
@@ -1265,6 +1268,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15003,
             comments: "",
             program: "Phd",
             department: "Computer Science",
@@ -1293,6 +1297,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15004,
             comments: "",
             program: "UG",
             department: "Computer Science",
@@ -1317,6 +1322,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15005,
             comments: "",
             program: "UG",
             department: "Math",
@@ -1345,6 +1351,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15006,
             comments: "",
             program: "MSc",
             department: "Computer Science",
@@ -1373,6 +1380,7 @@ export const mockData = {
             ],
         },
         {
+            id: 15007,
             comments: "",
             program: "UG",
             department: "Computer Science",

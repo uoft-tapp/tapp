@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 interface ContentAreaProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
     className?: string;
 }
 

@@ -8,8 +8,7 @@ class Applicant < ApplicationRecord
     has_one :applicant_data_for_matching
 
     validates_presence_of :utorid
-    validates_uniqueness_of :student_number, case_sensitive: false
-    validates_uniqueness_of :utorid
+    validates_uniqueness_of :utorid, case_sensitive: false
 
     def self.by_session(session_id)
         # An applicant can come from an application for the current session, or

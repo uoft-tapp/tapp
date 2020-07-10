@@ -13,6 +13,7 @@ import {
     MinimalAssignment,
     Utorid,
     Applicant,
+    MinimalApplicant,
 } from "../api/defs/types";
 import { prepareMinimal, prepareFull } from "./exportUtils";
 import { matchByUtoridOrName } from "./importExportUtils";
@@ -25,7 +26,7 @@ import { matchByUtoridOrName } from "./importExportUtils";
  * @template T - type of minimal representation (e.g., MinimalInstructor)
  * @template U - type of full representation (e.g. Instructor)
  */
-interface DiffSpec<T, U> {
+export interface DiffSpec<T, U> {
     status: "new" | "duplicate" | "modified";
     changes: Partial<Record<keyof T, string>>;
     obj: U | Omit<U, "id">;
@@ -283,6 +284,50 @@ export const diffImport = {
                 positions,
                 applicants,
             });
+        }
+
+        return ret;
+    },
+    applicants: function (
+        importedApplicants: MinimalApplicant[],
+        context: { applicants: Applicant[] }
+    ): DiffSpec<MinimalApplicant, Applicant>[] {
+        return importedApplicants.map((applicant) =>
+            diffImport.applicant(applicant, context)
+        );
+    },
+    applicant: function (
+        applicant: MinimalApplicant,
+        context: { applicants: Applicant[] }
+    ): DiffSpec<MinimalApplicant, Applicant> {
+        const existingApplicants = context.applicants;
+        const ret: DiffSpec<MinimalApplicant, Applicant> = {
+            status: "new",
+            changes: {},
+            obj: null as any, // Set to any temporarily to keep typescript from complaining
+        };
+        // Check to see if there is a matching instructor in the existing list
+        const matchingApplicant = existingApplicants.find(
+            (x) => x.utorid === applicant.utorid
+        );
+
+        if (matchingApplicant) {
+            ret.status = "duplicate";
+            const minimal = prepareMinimal.applicant(matchingApplicant);
+            for (const _prop in minimal) {
+                const prop = _prop as keyof MinimalApplicant;
+                const oldVal = minimal[prop];
+                const newVal = applicant[prop];
+                if (!isSame(oldVal, newVal)) {
+                    ret.status = "modified";
+                    ret.changes[prop] = `"${oldVal}" → "${newVal}"`;
+                }
+            }
+            ret.obj = prepareFull.applicant(applicant, {
+                id: matchingApplicant.id,
+            });
+        } else {
+            ret.obj = prepareFull.applicant(applicant, {});
         }
 
         return ret;
