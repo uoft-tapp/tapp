@@ -47,7 +47,7 @@ export function AdminInstructorsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedInstructorsList />
+                <ConnectedInstructorsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );
