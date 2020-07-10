@@ -11,6 +11,7 @@ import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { applicantsReducer } from "../reducers/applicants";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
+import { activeSessionSelector } from "./sessions";
 
 // actions
 const fetchApplicantsSuccess = actionFactory(FETCH_APPLICANTS_SUCCESS);
@@ -53,9 +54,18 @@ export const upsertApplicant = validatedApiDispatcher({
     description: "Add/insert applicant",
     propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload, bySession = true) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(`/${role}/applicants`, payload);
+        let data;
+        if (bySession) {
+            const session = activeSessionSelector(getState());
+            data = await apiPOST(
+                `/${role}/sessions/${session.id}/applicants`,
+                payload
+            );
+        } else {
+            data = await apiPOST(`/${role}/applicants`, payload);
+        }
         dispatch(upsertOneApplicantSuccess(data));
         return data;
     },
@@ -74,6 +84,44 @@ export const deleteApplicant = validatedApiDispatcher({
             payload
         );
         dispatch(deleteOneApplicantSuccess(data));
+    },
+});
+
+export const exportApplicants = validatedApiDispatcher({
+    name: "exportApplicants",
+    description: "Export applicants",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (formatter, format = "spreadsheet") => async (
+        dispatch,
+        getState
+    ) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all applicants from the server in case things happened to be out of sync.
+        await dispatch(fetchApplicants());
+        const applicants = applicantsSelector(getState());
+
+        return formatter(applicants, format);
+    },
+});
+
+export const upsertApplicants = validatedApiDispatcher({
+    name: "upsertApplicants",
+    description: "Upsert applicants",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (applicants) => async (dispatch) => {
+        if (applicants.length === 0) {
+            return;
+        }
+        const dispatchers = applicants.map((applicant) =>
+            dispatch(upsertApplicant(applicant))
+        );
+        await Promise.all(dispatchers);
+        // Re-fetch all applicants from the server in case things happened to be out of sync.
+        return await dispatch(fetchApplicants());
     },
 });
 

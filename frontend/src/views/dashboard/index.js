@@ -9,7 +9,7 @@ import {
 } from "../../api/actions";
 import { offerTableSelector } from "../offertable/actions";
 import { SessionEditor } from "../../components/forms/session-editor";
-import { ApplicantsList } from "../../components/applicants-list";
+import { ApplicantsList } from "../../components/applicants";
 import { ContractTemplatesList } from "../../components/contract-templates-list";
 import { ConnectedInstructorsList } from "../instructors";
 import { PositionsList } from "../../components/positions-list";

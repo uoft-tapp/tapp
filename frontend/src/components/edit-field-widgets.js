@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { FaEdit } from "react-icons/fa";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Spinner } from "react-bootstrap";
 
 import "./edit-field-widgets.css";
 
@@ -15,6 +15,7 @@ import "./edit-field-widgets.css";
 function EditFieldDialog(props) {
     const { title, value, show, onHide, onChange } = props;
     const [fieldVal, setFieldVal] = React.useState(value);
+    const [inProgress, setInProgress] = React.useState(false);
 
     function cancelClick() {
         setFieldVal(value);
@@ -22,13 +23,24 @@ function EditFieldDialog(props) {
     }
 
     function saveClick() {
-        // eslint-disable-next-line
-        if (fieldVal != value) {
-            // Only call `onChange` if the value has changed
-            onChange(fieldVal, value);
+        async function doSave() {
+            // eslint-disable-next-line
+            if (fieldVal != value) {
+                setInProgress(true);
+                // Only call `onChange` if the value has changed
+                await onChange(fieldVal, value);
+            }
         }
-        onHide();
+        doSave().finally(() => {
+            //onHide();
+            setInProgress(false);
+        });
     }
+    // When a confirm operation is in progress, a spinner is displayed; otherwise
+    // it's hidden
+    const spinner = inProgress ? (
+        <Spinner animation="border" size="sm" className="mr-1" />
+    ) : null;
 
     const changeIndicator =
         // eslint-disable-next-line
@@ -57,7 +69,7 @@ function EditFieldDialog(props) {
                 <Button onClick={cancelClick} variant="outline-secondary">
                     Cancel
                 </Button>
-                <Button onClick={saveClick}>Save</Button>
+                <Button onClick={saveClick}>{spinner}Save</Button>
             </Modal.Footer>
         </Modal>
     );

@@ -8,6 +8,7 @@ import { AdminPositionsView } from "../positions";
 import { AdminAssignmentsView } from "../assignments";
 import { AdminContractTemplatesView } from "../contract_template";
 import { Landing } from "../admin/landing";
+import { AdminApplicantsView } from "../applicants";
 
 export function AdminRoutes() {
     return (
@@ -32,6 +33,9 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/tapp/assignments">
                 <AdminAssignmentsView />
+            </Route>
+            <Route exact path="/tapp/applicants">
+                <AdminApplicantsView />
             </Route>
             <Route exact path="/dashboard">
                 <Dashboard />

@@ -116,7 +116,7 @@ Rails.application.routes.draw do
                     # Sessions
                     resources :sessions, only: %i[index create] do
                         collection { post :delete, to: 'sessions#delete' }
-                        resources :applicants, only: %i[index]
+                        resources :applicants, only: %i[index create]
                         resources :applications, only: %i[index]
                         resources :assignments, only: %i[index]
                         resources :contract_templates, only: %i[index create]

@@ -49,6 +49,11 @@ export const routes = [
                 name: "Assignments",
                 description: "Manage Assignments",
             },
+            {
+                route: "/applicants",
+                name: "Applicants",
+                description: "Manage Applicants",
+            },
         ],
     },
     {

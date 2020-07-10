@@ -399,6 +399,24 @@ export function wageChunkArrayToPayPeriodDescription(wageChunks) {
     return joinWithConjunction(descriptions);
 }
 
+/**
+ * Return a copy of `obj` but filter out any properties whose value
+ * is `null` or `undefined`.
+ *
+ * @export
+ * @param {*} obj
+ * @returns
+ */
+export function filterNullProps(obj) {
+    const ret = {};
+    for (const key in obj) {
+        if (obj[key] != null) {
+            ret[key] = obj[key];
+        }
+    }
+    return ret;
+}
+
 //
 // Base64 Encoding functions from
 // https://gist.github.com/enepomnyaschih/72c423f727d395eeaa09697058238727

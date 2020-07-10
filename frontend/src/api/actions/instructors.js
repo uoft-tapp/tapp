@@ -92,7 +92,7 @@ export const exportInstructors = validatedApiDispatcher({
 
 export const upsertInstructors = validatedApiDispatcher({
     name: "upsertInstructors",
-    description: "Export instructors",
+    description: "Upsert instructors",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (instructors) => async (dispatch) => {
         if (instructors.length === 0) {

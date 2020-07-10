@@ -305,6 +305,8 @@ export const instructorPropTypes = apiPropTypes.instructor;
 
 export const assignmentPropTypes = apiPropTypes.assignment;
 
+export const applicantPropTypes = apiPropTypes.applicant;
+
 export const wageChunkPropTypes = apiPropTypes.wageChunk;
 
 export const reportingTagsPropTypes = apiPropTypes.reportingTags;
