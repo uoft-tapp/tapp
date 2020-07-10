@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { instructorsSelector, upsertInstructor } from "../../api/actions";
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
+import { FaTrash } from "react-icons/fa";
 
 /**
  * A cell that renders editable applicant information
@@ -29,7 +30,8 @@ function EditableCell(props) {
 }
 
 function EditableInstructorsList(props) {
-    const { upsertInstructor, ...rest } = props;
+    const { upsertInstructor, inDeleteMode, ...rest } = props;
+    console.log(props);
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
@@ -65,7 +67,17 @@ function EditableInstructorsList(props) {
         },
     ];
 
-    return <InstructorsList columns={columns} {...rest} />;
+    const deleteColumn = {
+        Header: "Delete",
+        Cell: <FaTrash />,
+    };
+
+    return (
+        <InstructorsList
+            columns={inDeleteMode ? [deleteColumn, ...columns] : columns}
+            {...rest}
+        />
+    );
 }
 
 /**
