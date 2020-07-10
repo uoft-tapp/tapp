@@ -34,10 +34,11 @@ function EditableInstructorsList(props) {
     const {
         upsertInstructor,
         inDeleteMode,
+        setInDeleteMode,
         setDeleteDialogVisible,
+        setInstructorToDelete,
         ...rest
     } = props;
-    console.log(props);
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
@@ -73,14 +74,24 @@ function EditableInstructorsList(props) {
         },
     ];
 
+    function deleteButtonOnClick(instructor) {
+        setInstructorToDelete(instructor);
+        setDeleteDialogVisible(true);
+    }
+
     const deleteColumn = {
         // todo: weird top padding
         Header: "Delete",
-        Cell: (
-            <Button onClick={setDeleteDialogVisible} variant="outline-danger">
-                <FaTrash />
-            </Button>
-        ),
+        Cell: (props) => {
+            return (
+                <Button
+                    onClick={() => deleteButtonOnClick(props.original)}
+                    variant="outline-danger"
+                >
+                    <FaTrash />
+                </Button>
+            );
+        },
     };
 
     return (
