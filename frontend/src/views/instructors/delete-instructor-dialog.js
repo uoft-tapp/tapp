@@ -3,33 +3,14 @@ import { connect } from "react-redux";
 import { deleteInstructor, instructorsSelector } from "../../api/actions";
 import { Modal, Button } from "react-bootstrap";
 
-const BLANK_INSTRUCTOR = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    utorid: "",
-    id: 0,
-};
-
 function DeleteInstructorDialog(props) {
-    const {
-        show,
-        onHide,
-        instructors,
-        deleteInstructor: apiDeleteInstructor,
-    } = props; // terrible name, use to prevent shadowing
-    const [deleteInstructor, setDeleteInstructor] = React.useState(
-        BLANK_INSTRUCTOR
-    );
+    // console.log("delete dialog props:", props);
 
-    React.useEffect(() => {
-        if (!show) {
-            setDeleteInstructor(BLANK_INSTRUCTOR);
-        }
-    }, [show]);
+    const { show, onHide, deleteInstructor, instructorToDelete } = props;
+    const { first_name, last_name, id } = instructorToDelete;
 
     function removeInstructor() {
-        deleteInstructor(deleteInstructor.id);
+        deleteInstructor({ id });
         onHide();
     }
 
@@ -40,8 +21,7 @@ function DeleteInstructorDialog(props) {
             </Modal.Header>
             <Modal.Body>
                 Are you sure you want to delete instructor{" "}
-                {`${deleteInstructor.last_name}, ${deleteInstructor.first_name}`}{" "}
-                ?
+                {`${last_name}, ${first_name}`}?
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={onHide} variant="light">
@@ -56,6 +36,6 @@ function DeleteInstructorDialog(props) {
 }
 
 export const ConnectedDeleteInstructorDialog = connect(
-    (state) => ({ instructors: instructorsSelector(state) }),
+    (state) => ({ instructors: instructorsSelector(state) }), // don't need instructors anymore?
     { deleteInstructor }
 )(DeleteInstructorDialog);
