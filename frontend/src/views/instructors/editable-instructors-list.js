@@ -1,6 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { instructorsSelector, upsertInstructor } from "../../api/actions";
+import {
+    instructorsSelector,
+    upsertInstructor,
+    positionsSelector,
+} from "../../api/actions";
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
 import { FaTrash } from "react-icons/fa";
@@ -37,6 +41,7 @@ function EditableInstructorsList(props) {
         setInDeleteMode,
         setDeleteDialogVisible,
         setInstructorToDelete,
+        positions,
         ...rest
     } = props;
 
@@ -50,6 +55,14 @@ function EditableInstructorsList(props) {
             />
         );
     }
+
+    const workingInstructors = new Set(
+        positions
+            .map((position) =>
+                position.instructors.map((instructor) => instructor.id)
+            )
+            .flat()
+    );
 
     const columns = [
         {
@@ -83,9 +96,11 @@ function EditableInstructorsList(props) {
         // todo: weird top padding
         Header: "Delete",
         Cell: (props) => {
-            return (
+            const instructor = props.original;
+            const disabled = workingInstructors.has(instructor.id);
+            return disabled ? null : (
                 <Button
-                    onClick={() => deleteButtonOnClick(props.original)}
+                    onClick={() => deleteButtonOnClick(instructor)}
                     variant="outline-danger"
                 >
                     <FaTrash />
@@ -109,6 +124,7 @@ function EditableInstructorsList(props) {
 export const ConnectedInstructorsList = connect(
     (state) => ({
         instructors: instructorsSelector(state),
+        positions: positionsSelector(state),
     }),
     { upsertInstructor }
 )(EditableInstructorsList);

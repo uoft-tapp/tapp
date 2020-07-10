@@ -4,8 +4,6 @@ import { deleteInstructor, instructorsSelector } from "../../api/actions";
 import { Modal, Button } from "react-bootstrap";
 
 function DeleteInstructorDialog(props) {
-    // console.log("delete dialog props:", props);
-
     const { show, onHide, deleteInstructor, instructorToDelete } = props;
     const { first_name, last_name, id } = instructorToDelete;
 
@@ -21,7 +19,7 @@ function DeleteInstructorDialog(props) {
             </Modal.Header>
             <Modal.Body>
                 Are you sure you want to delete instructor{" "}
-                {`${last_name}, ${first_name}`}?
+                {`${last_name}, ${first_name}`}? This action cannot be undone.
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={onHide} variant="light">
