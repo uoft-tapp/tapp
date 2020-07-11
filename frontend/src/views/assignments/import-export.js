@@ -9,8 +9,8 @@ import {
     upsertAssignments,
 } from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { ExportButton } from "../../components/export-button";
-import { ImportButton } from "../../components/import-button";
+import { ExportActionButton } from "../../components/export-button";
+import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
 import {
@@ -27,7 +27,7 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
  * @export
  * @returns
  */
-export function ConnectedExportAssignmentsButton() {
+export function ConnectedExportAssignmentsAction() {
     const dispatch = useDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
@@ -130,7 +130,7 @@ export function ConnectedExportAssignmentsButton() {
         setExportType(option);
     }
 
-    return <ExportButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} />;
 }
 
 const assignmentSchema = {
@@ -162,7 +162,7 @@ const assignmentSchema = {
     baseName: "assignments",
 };
 
-export function ConnectedImportAssignmentsButton() {
+export function ConnectedImportAssignmentsAction() {
     const dispatch = useDispatch();
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
@@ -270,7 +270,7 @@ export function ConnectedImportAssignmentsButton() {
     }
 
     return (
-        <ImportButton
+        <ImportActionButton
             onConfirm={onConfirm}
             onFileChange={setFileContent}
             dialogContent={dialogContent}

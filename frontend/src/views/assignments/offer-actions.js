@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, ButtonGroup } from "react-bootstrap";
 import { offerTableSelector } from "../offertable/actions";
 import { assignmentsSelector } from "../../api/actions";
 import {
@@ -11,6 +10,15 @@ import {
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
 } from "../../api/actions/offers";
+import {
+    FaPlusCircle,
+    FaMinusCircle,
+    FaCheckCircle,
+    FaExclamationCircle,
+    FaTimesCircle,
+    FaArrowCircleRight,
+} from "react-icons/fa";
+import { ActionButton } from "../../components/action-buttons";
 
 function OfferActionButtons(props) {
     const selectedAssignments = props.assignments;
@@ -56,14 +64,24 @@ function OfferActionButtons(props) {
 
     return (
         <React.Fragment>
-            <ButtonGroup>
-                <Button onClick={createOffers}>Create Offer</Button>
-                <Button onClick={withdrawOffers}>Withdraw Offer</Button>
-                <Button onClick={emailOffers}>Email Offer</Button>
-                <Button onClick={nagOffers}>Nag Offer</Button>
-                <Button onClick={acceptOffers}>Set as Accepted</Button>
-                <Button onClick={rejectOffers}>Set as Rejected</Button>
-            </ButtonGroup>
+            <ActionButton icon={<FaPlusCircle />} onClick={createOffers}>
+                Create Offer
+            </ActionButton>
+            <ActionButton icon={<FaMinusCircle />} onClick={withdrawOffers}>
+                Withdraw Offer
+            </ActionButton>
+            <ActionButton icon={<FaArrowCircleRight />} onClick={emailOffers}>
+                Email Offer
+            </ActionButton>
+            <ActionButton icon={<FaExclamationCircle />} onClick={nagOffers}>
+                Nag Offer
+            </ActionButton>
+            <ActionButton icon={<FaCheckCircle />} onClick={acceptOffers}>
+                Set as Accepted
+            </ActionButton>
+            <ActionButton icon={<FaTimesCircle />} onClick={rejectOffers}>
+                Set as Rejected
+            </ActionButton>
         </React.Fragment>
     );
 }
