@@ -40,7 +40,6 @@ function EditableInstructorsList(props) {
         upsertInstructor,
         deleteInstructor,
         inDeleteMode,
-        setInDeleteMode,
         positions,
         ...rest
     } = props;
