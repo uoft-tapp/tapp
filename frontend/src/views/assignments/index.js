@@ -1,6 +1,5 @@
 import React from "react";
 import { ConnectedOfferTable } from "../offertable";
-import { Button } from "react-bootstrap";
 import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
 import { ConnectedViewAssignmentDetailsButton } from "./assignment-details";
 import { ConnectedOfferActionButtons } from "./offer-actions";

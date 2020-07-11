@@ -1,6 +1,5 @@
 import React from "react";
 import { ConnectedAddPositionDialog } from "./add-position-dialog";
-import { Button } from "react-bootstrap";
 import { ConnectedPositionsList } from "./position-list";
 import {
     ConnectedExportPositionsAction,

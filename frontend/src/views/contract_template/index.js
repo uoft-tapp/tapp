@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import { ConnectedAddContractTemplateDialog } from "./contract-template-dialog";
 import { ConnectedContractTemplateList } from "./contract-template-list";
 import {
