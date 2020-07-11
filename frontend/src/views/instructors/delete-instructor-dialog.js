@@ -1,16 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
-import { deleteInstructor, instructorsSelector } from "../../api/actions";
 import { Modal, Button } from "react-bootstrap";
 
-function DeleteInstructorDialog(props) {
-    const { show, onHide, deleteInstructor, instructorToDelete } = props;
-    const { first_name, last_name, id } = instructorToDelete;
-
-    function removeInstructor() {
-        deleteInstructor({ id });
-        onHide();
-    }
+export function DeleteInstructorDialog(props) {
+    const { show, onHide, onDelete, instructor = {} } = props;
+    const { first_name, last_name } = instructor;
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -25,15 +18,10 @@ function DeleteInstructorDialog(props) {
                 <Button onClick={onHide} variant="light">
                     Cancel
                 </Button>
-                <Button onClick={removeInstructor} title="Delete Instructor">
+                <Button onClick={onDelete} title="Delete Instructor">
                     OK
                 </Button>
             </Modal.Footer>
         </Modal>
     );
 }
-
-export const ConnectedDeleteInstructorDialog = connect(
-    (state) => ({ instructors: instructorsSelector(state) }), // don't need instructors anymore?
-    { deleteInstructor }
-)(DeleteInstructorDialog);

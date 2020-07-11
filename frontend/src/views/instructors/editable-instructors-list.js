@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import {
     instructorsSelector,
     upsertInstructor,
+    deleteInstructor,
     positionsSelector,
 } from "../../api/actions";
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
-import { FaTrash } from "react-icons/fa";
-import { Button } from "react-bootstrap";
+import { DeleteInstructorDialog } from "./delete-instructor-dialog";
+import { FaMinusCircle, FaTrash } from "react-icons/fa";
 
 /**
  * A cell that renders editable applicant information
@@ -37,13 +38,22 @@ function EditableCell(props) {
 function EditableInstructorsList(props) {
     const {
         upsertInstructor,
+        deleteInstructor,
         inDeleteMode,
         setInDeleteMode,
-        setDeleteDialogVisible,
-        setInstructorToDelete,
         positions,
         ...rest
     } = props;
+
+    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
+    const [instructorToDelete, setInstructorToDelete] = React.useState();
+
+    React.useEffect(() => {
+        // reset to null if close delete dialog
+        if (!deleteDialogVisible) {
+            setInstructorToDelete(undefined);
+        }
+    }, [deleteDialogVisible]);
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
@@ -56,15 +66,37 @@ function EditableInstructorsList(props) {
         );
     }
 
-    const workingInstructors = new Set(
-        positions
-            .map((position) =>
-                position.instructors.map((instructor) => instructor.id)
-            )
-            .flat()
+    const instructorCurrentlyAssignedHash = {};
+    (positions || []).map((position) =>
+        position.instructors.map(
+            (instructor) =>
+                (instructorCurrentlyAssignedHash[instructor.id] = true)
+        )
     );
 
     const columns = [
+        {
+            Header: (
+                <FaTrash className="delete-instructor-column-header-icon" />
+            ),
+            Cell: (props) => {
+                const instructor = props.original;
+                const disabled =
+                    instructorCurrentlyAssignedHash[instructor.id] === true;
+                return disabled ? null : (
+                    <FaMinusCircle
+                        className="delete-instructor-button"
+                        onClick={() => {
+                            setInstructorToDelete(instructor);
+                            setDeleteDialogVisible(true);
+                        }}
+                    />
+                );
+            },
+            show: inDeleteMode,
+            maxWidth: 32,
+            resizable: false,
+        },
         {
             Header: "Last Name",
             accessor: "last_name",
@@ -87,33 +119,21 @@ function EditableInstructorsList(props) {
         },
     ];
 
-    function deleteButtonOnClick(instructor) {
-        setInstructorToDelete(instructor);
-        setDeleteDialogVisible(true);
-    }
-
-    const deleteColumn = {
-        // todo: weird top padding
-        Header: "Delete",
-        Cell: (props) => {
-            const instructor = props.original;
-            const disabled = workingInstructors.has(instructor.id);
-            return disabled ? null : (
-                <Button
-                    onClick={() => deleteButtonOnClick(instructor)}
-                    variant="outline-danger"
-                >
-                    <FaTrash />
-                </Button>
-            );
-        },
-    };
-
     return (
-        <InstructorsList
-            columns={inDeleteMode ? [deleteColumn, ...columns] : columns}
-            {...rest}
-        />
+        <React.Fragment>
+            <InstructorsList columns={columns} {...rest} />
+            <DeleteInstructorDialog
+                show={deleteDialogVisible}
+                onHide={() => {
+                    setDeleteDialogVisible(false);
+                }}
+                onDelete={() => {
+                    deleteInstructor({ id: instructorToDelete.id });
+                    setDeleteDialogVisible(false);
+                }}
+                instructor={instructorToDelete}
+            />
+        </React.Fragment>
     );
 }
 
@@ -126,5 +146,5 @@ export const ConnectedInstructorsList = connect(
         instructors: instructorsSelector(state),
         positions: positionsSelector(state),
     }),
-    { upsertInstructor }
+    { upsertInstructor, deleteInstructor }
 )(EditableInstructorsList);
