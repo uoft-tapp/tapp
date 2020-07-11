@@ -12,29 +12,10 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { ConnectedDeleteInstructorDialog } from "./delete-instructor-dialog";
-
-const BLANK_INSTRUCTOR = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    utorid: "",
-    id: 0,
-};
 
 export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
-    const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
-    const [instructorToDelete, setInstructorToDelete] = React.useState(
-        BLANK_INSTRUCTOR
-    );
-
-    React.useEffect(() => {
-        if (!inDeleteMode || !deleteDialogVisible) {
-            setInstructorToDelete(BLANK_INSTRUCTOR); // reset instructor to delete if not in delete mode or confirm dialog closes
-        }
-    }, [inDeleteMode, deleteDialogVisible]);
 
     return (
         <div className="page-body">
@@ -72,15 +53,6 @@ export function AdminInstructorsView() {
                     setInDeleteMode={() => {
                         setInDeleteMode(true);
                     }}
-                    setDeleteDialogVisible={setDeleteDialogVisible}
-                    setInstructorToDelete={setInstructorToDelete}
-                />
-                <ConnectedDeleteInstructorDialog
-                    show={deleteDialogVisible}
-                    onHide={() => {
-                        setDeleteDialogVisible(false);
-                    }}
-                    instructorToDelete={instructorToDelete}
                 />
             </ContentArea>
         </div>
