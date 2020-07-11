@@ -22,15 +22,12 @@ const DEFAULT_COLUMNS = [
 export function ContractTemplatesList(props) {
     const { contractTemplates, columns = DEFAULT_COLUMNS } = props;
     return (
-        <React.Fragment>
-            <h3>Contract Templates</h3>
-            <ReactTable
-                data={contractTemplates}
-                columns={columns}
-                showPagination={false}
-                minRows={1}
-            />
-        </React.Fragment>
+        <ReactTable
+            data={contractTemplates}
+            columns={columns}
+            showPagination={false}
+            minRows={1}
+        />
     );
 }
 ContractTemplatesList.propTypes = {
