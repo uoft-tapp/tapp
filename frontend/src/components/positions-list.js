@@ -8,7 +8,7 @@ import { createDiffColumnsFromColumns } from "./diff-table";
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
     { Header: "Position Title", accessor: "position_title" },
-    { Header: "Hours", accessor: "hours_per_assignment" },
+    { Header: "Hours", accessor: "hours_per_assignment", maxWidth: 64 },
     {
         Header: "Start",
         accessor: "start_date",
@@ -38,10 +38,12 @@ const DEFAULT_COLUMNS = [
     {
         Header: "Enrolled",
         accessor: "current_enrollment",
+        maxWidth: 80,
     },
     {
         Header: "Waitlisted",
         accessor: "current_waitlisted",
+        maxWidth: 90,
     },
 
     {
@@ -76,18 +78,13 @@ export function PositionsDiffList({ modifiedPositions }) {
  */
 export function PositionsList(props) {
     const { positions, columns = DEFAULT_COLUMNS } = props;
-    console.log(positions);
-
     return (
-        <React.Fragment>
-            <h3>Positions</h3>
-            <ReactTable
-                data={positions}
-                columns={columns}
-                showPagination={false}
-                minRows={1}
-            />
-        </React.Fragment>
+        <ReactTable
+            data={positions}
+            columns={columns}
+            showPagination={false}
+            minRows={1}
+        />
     );
 }
 PositionsList.propTypes = {
