@@ -93,7 +93,7 @@ const mapSessionsStateToProps = (state) => ({
 
 const mapSessionsDispatchToProps = { setActiveSession };
 
-const ConnectedActiveSessionDisplay = connect(
+export const ConnectedActiveSessionDisplay = connect(
     mapSessionsStateToProps,
     mapSessionsDispatchToProps
 )(ActiveSessionDisplay);
