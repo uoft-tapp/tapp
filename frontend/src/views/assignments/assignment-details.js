@@ -8,8 +8,7 @@ import {
     upsertWageChunksForAssignment,
 } from "../../api/actions";
 import { EditableField } from "../../components/edit-field-widgets";
-import { ActionButton } from "../../components/action-buttons";
-import { FaInfoCircle } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 function AssignmentDetails(props) {
     const {
         assignment,
@@ -90,12 +89,9 @@ function ViewAssignmentDetailsButton(props) {
     const [visibleAssignments, setVisibleAssignments] = React.useState([]);
     return (
         <React.Fragment>
-            <ActionButton
-                icon={<FaInfoCircle />}
-                onClick={() => setVisibleAssignments(selectedAssignments)}
-            >
+            <Button onClick={() => setVisibleAssignments(selectedAssignments)}>
                 View Selected Assignment Details
-            </ActionButton>
+            </Button>
             {visibleAssignments.map((assignment, i) => (
                 <ConnectedAssignmentDetails assignment={assignment} key={i} />
             ))}

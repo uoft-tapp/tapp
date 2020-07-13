@@ -33,10 +33,11 @@ export function AdminAssignmentsView() {
                 <ConnectedImportAssignmentsAction />
                 <ConnectedExportAssignmentsAction />
                 <ActionHeader>Selected Assignment Actions</ActionHeader>
-                <ConnectedViewAssignmentDetailsButton />
                 <ConnectedOfferActionButtons />
             </ActionsList>
             <ContentArea>
+                <ConnectedViewAssignmentDetailsButton />
+
                 <ConnectedOfferTable />
                 <ConnectedAddAssignmentDialog
                     show={addDialogVisible}

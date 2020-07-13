@@ -11,12 +11,12 @@ import {
     setOfferForAssignmentRejected,
 } from "../../api/actions/offers";
 import {
-    FaPlusCircle,
-    FaMinusCircle,
-    FaCheckCircle,
-    FaExclamationCircle,
-    FaTimesCircle,
-    FaArrowCircleRight,
+    FaEnvelope,
+    FaBan,
+    FaCheck,
+    FaUserTimes,
+    FaUserClock,
+    FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
 
@@ -64,22 +64,22 @@ function OfferActionButtons(props) {
 
     return (
         <React.Fragment>
-            <ActionButton icon={<FaPlusCircle />} onClick={createOffers}>
+            <ActionButton icon={<FaUserPlus />} onClick={createOffers}>
                 Create Offer
             </ActionButton>
-            <ActionButton icon={<FaMinusCircle />} onClick={withdrawOffers}>
+            <ActionButton icon={<FaUserTimes />} onClick={withdrawOffers}>
                 Withdraw Offer
             </ActionButton>
-            <ActionButton icon={<FaArrowCircleRight />} onClick={emailOffers}>
+            <ActionButton icon={<FaEnvelope />} onClick={emailOffers}>
                 Email Offer
             </ActionButton>
-            <ActionButton icon={<FaExclamationCircle />} onClick={nagOffers}>
+            <ActionButton icon={<FaUserClock />} onClick={nagOffers}>
                 Nag Offer
             </ActionButton>
-            <ActionButton icon={<FaCheckCircle />} onClick={acceptOffers}>
+            <ActionButton icon={<FaCheck />} onClick={acceptOffers}>
                 Set as Accepted
             </ActionButton>
-            <ActionButton icon={<FaTimesCircle />} onClick={rejectOffers}>
+            <ActionButton icon={<FaBan />} onClick={rejectOffers}>
                 Set as Rejected
             </ActionButton>
         </React.Fragment>
