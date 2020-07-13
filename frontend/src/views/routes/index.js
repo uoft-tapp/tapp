@@ -7,7 +7,7 @@ import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView } from "../positions";
 import { AdminAssignmentsView } from "../assignments";
 import { AdminContractTemplatesView } from "../contract_template";
-import { Landing } from "../admin/landing";
+import { Landing } from "../admin/landing.tsx";
 import { AdminApplicantsView } from "../applicants";
 
 export function AdminRoutes() {

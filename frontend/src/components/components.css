@@ -72,9 +72,11 @@
     align-items: center;
 }
 
+.delete-instructor-button {
+    cursor: pointer;
+}
 .delete-instructor-button:hover {
     color: red;
-    cursor: pointer;
 }
 
 .delete-instructor-column-header-icon {

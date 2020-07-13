@@ -45,14 +45,7 @@ function EditableInstructorsList(props) {
     } = props;
 
     const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
-    const [instructorToDelete, setInstructorToDelete] = React.useState();
-
-    React.useEffect(() => {
-        // reset to null if close delete dialog
-        if (!deleteDialogVisible) {
-            setInstructorToDelete(undefined);
-        }
-    }, [deleteDialogVisible]);
+    const [instructorToDelete, setInstructorToDelete] = React.useState(null);
 
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
@@ -125,6 +118,7 @@ function EditableInstructorsList(props) {
                 show={deleteDialogVisible}
                 onHide={() => {
                     setDeleteDialogVisible(false);
+                    setInstructorToDelete(null);
                 }}
                 onDelete={() => {
                     deleteInstructor({ id: instructorToDelete.id });
