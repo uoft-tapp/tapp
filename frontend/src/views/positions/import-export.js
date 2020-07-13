@@ -8,8 +8,8 @@ import {
     upsertPositions,
 } from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
-import { ExportButton } from "../../components/export-button";
-import { ImportButton } from "../../components/import-button";
+import { ExportActionButton } from "../../components/export-button";
+import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
 import {
@@ -26,7 +26,7 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
  * @export
  * @returns
  */
-export function ConnectedExportPositionsButton() {
+export function ConnectedExportPositionsAction() {
     const dispatch = useDispatch();
     const [exportType, setExportType] = React.useState(null);
 
@@ -112,7 +112,7 @@ export function ConnectedExportPositionsButton() {
         setExportType(option);
     }
 
-    return <ExportButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} />;
 }
 
 const positionSchema = {
@@ -155,7 +155,7 @@ const positionSchema = {
     baseName: "positions",
 };
 
-export function ConnectedImportPositionsButton() {
+export function ConnectedImportPositionsAction() {
     const dispatch = useDispatch();
     const positions = useSelector(positionsSelector);
     const instructors = useSelector(instructorsSelector);
@@ -263,7 +263,7 @@ export function ConnectedImportPositionsButton() {
     }
 
     return (
-        <ImportButton
+        <ImportActionButton
             onConfirm={onConfirm}
             onFileChange={setFileContent}
             dialogContent={dialogContent}

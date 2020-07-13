@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button } from "react-bootstrap";
 import { offerTableSelector } from "../offertable/actions";
 import {
     assignmentsSelector,
@@ -9,6 +8,7 @@ import {
     upsertWageChunksForAssignment,
 } from "../../api/actions";
 import { EditableField } from "../../components/edit-field-widgets";
+import { Button } from "react-bootstrap";
 function AssignmentDetails(props) {
     const {
         assignment,

@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, ButtonGroup } from "react-bootstrap";
 import { offerTableSelector } from "../offertable/actions";
 import { assignmentsSelector } from "../../api/actions";
 import {
@@ -11,6 +10,15 @@ import {
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
 } from "../../api/actions/offers";
+import {
+    FaEnvelope,
+    FaBan,
+    FaCheck,
+    FaUserTimes,
+    FaUserClock,
+    FaUserPlus,
+} from "react-icons/fa";
+import { ActionButton } from "../../components/action-buttons";
 
 function OfferActionButtons(props) {
     const selectedAssignments = props.assignments;
@@ -56,14 +64,24 @@ function OfferActionButtons(props) {
 
     return (
         <React.Fragment>
-            <ButtonGroup>
-                <Button onClick={createOffers}>Create Offer</Button>
-                <Button onClick={withdrawOffers}>Withdraw Offer</Button>
-                <Button onClick={emailOffers}>Email Offer</Button>
-                <Button onClick={nagOffers}>Nag Offer</Button>
-                <Button onClick={acceptOffers}>Set as Accepted</Button>
-                <Button onClick={rejectOffers}>Set as Rejected</Button>
-            </ButtonGroup>
+            <ActionButton icon={<FaUserPlus />} onClick={createOffers}>
+                Create Offer
+            </ActionButton>
+            <ActionButton icon={<FaUserTimes />} onClick={withdrawOffers}>
+                Withdraw Offer
+            </ActionButton>
+            <ActionButton icon={<FaEnvelope />} onClick={emailOffers}>
+                Email Offer
+            </ActionButton>
+            <ActionButton icon={<FaUserClock />} onClick={nagOffers}>
+                Nag Offer
+            </ActionButton>
+            <ActionButton icon={<FaCheck />} onClick={acceptOffers}>
+                Set as Accepted
+            </ActionButton>
+            <ActionButton icon={<FaBan />} onClick={rejectOffers}>
+                Set as Rejected
+            </ActionButton>
         </React.Fragment>
     );
 }
