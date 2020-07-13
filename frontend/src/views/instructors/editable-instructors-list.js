@@ -72,9 +72,10 @@ function EditableInstructorsList(props) {
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
             Cell: (props) => {
+                // Renders a custom cell with a delete button if the instructor is not currently assigned to any position, otherwise nothing
                 const instructor = props.original;
                 const disabled =
-                    instructorCurrentlyAssignedHash[instructor.id] === true;
+                    instructorCurrentlyAssignedHash[instructor.id] === true; // if the instructor is currently assigned, don't return a delete button
                 return disabled ? null : (
                     <FaMinusCircle
                         className="delete-instructor-button"
@@ -121,7 +122,7 @@ function EditableInstructorsList(props) {
                     setInstructorToDelete(null);
                 }}
                 onDelete={() => {
-                    deleteInstructor({ id: instructorToDelete.id });
+                    deleteInstructor(instructorToDelete);
                     setDeleteDialogVisible(false);
                 }}
                 instructor={instructorToDelete}
