@@ -16,6 +16,7 @@ import { ContentArea } from "../../components/layout";
 export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
+
     return (
         <div className="page-body">
             <ActionsList>
@@ -47,7 +48,7 @@ export function AdminInstructorsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedInstructorsList />
+                <ConnectedInstructorsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );

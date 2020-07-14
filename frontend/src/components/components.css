@@ -71,3 +71,14 @@
     display: flex;
     align-items: center;
 }
+
+.delete-instructor-button {
+    cursor: pointer;
+}
+.delete-instructor-button:hover {
+    color: red;
+}
+
+.delete-instructor-column-header-icon {
+    color: red;
+}
