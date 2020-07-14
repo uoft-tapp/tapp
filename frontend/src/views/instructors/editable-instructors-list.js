@@ -35,6 +35,16 @@ function EditableCell(props) {
     );
 }
 
+/**
+ * A button that deletes the instructor
+ * @param {*} onClick: click handler function for clicking the delete icon
+ */
+function DeleteButtonCell({ onClick }) {
+    return (
+        <FaMinusCircle className="delete-instructor-button" onClick={onClick} />
+    );
+}
+
 function EditableInstructorsList(props) {
     const {
         upsertInstructor,
@@ -71,14 +81,13 @@ function EditableInstructorsList(props) {
             Header: (
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
-            Cell: (props) => {
-                // Renders a custom cell with a delete button if the instructor is not currently assigned to any position, otherwise nothing
-                const instructor = props.original;
+            // props.original contains the row data for this particular instructor
+            Cell: ({ original: instructor }) => {
+                // if the instructor is currently assigned, no button will be rendered.
                 const disabled =
-                    instructorCurrentlyAssignedHash[instructor.id] === true; // if the instructor is currently assigned, don't return a delete button
+                    instructorCurrentlyAssignedHash[instructor.id] === true;
                 return disabled ? null : (
-                    <FaMinusCircle
-                        className="delete-instructor-button"
+                    <DeleteButtonCell
                         onClick={() => {
                             setInstructorToDelete(instructor);
                             setDeleteDialogVisible(true);

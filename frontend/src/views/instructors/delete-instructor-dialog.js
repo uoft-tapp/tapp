@@ -18,7 +18,7 @@ export function DeleteInstructorDialog(props) {
                     Cancel
                 </Button>
                 <Button onClick={onDelete} title="Delete Instructor">
-                    OK
+                    Delete
                 </Button>
             </Modal.Footer>
         </Modal>
