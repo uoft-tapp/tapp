@@ -9,7 +9,7 @@ import {
 import { InstructorsList } from "../../components/instructors";
 import { EditableField } from "../../components/edit-field-widgets";
 import { DeleteInstructorDialog } from "./delete-instructor-dialog";
-import { FaMinusCircle, FaTrash } from "react-icons/fa";
+import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
 
 /**
  * A cell that renders editable applicant information
@@ -32,16 +32,6 @@ function EditableCell(props) {
         >
             {props.value}
         </EditableField>
-    );
-}
-
-/**
- * A button that deletes the instructor
- * @param {*} onClick: click handler function for clicking the delete icon
- */
-function DeleteButtonCell({ onClick }) {
-    return (
-        <FaMinusCircle className="delete-instructor-button" onClick={onClick} />
     );
 }
 
@@ -69,32 +59,45 @@ function EditableInstructorsList(props) {
     }
 
     const instructorCurrentlyAssignedHash = {};
-    (positions || []).map((position) =>
-        position.instructors.map(
-            (instructor) =>
-                (instructorCurrentlyAssignedHash[instructor.id] = true)
-        )
-    );
+    for (const position of positions || []) {
+        for (const instructor of position.instructors || []) {
+            instructorCurrentlyAssignedHash[instructor.id] = true;
+        }
+    }
+
+    // props.original contains the row data for this particular instructor
+    function CellDeleteButton({ original: instructor }) {
+        const disabled = instructorCurrentlyAssignedHash[instructor.id];
+        if (disabled) {
+            return (
+                <div className="delete-button-container">
+                    <FaLock
+                        className="delete-instructor-button disabled"
+                        title="This instructor is assigned to a position and so cannot be deleted. Unassign the instructor from all positions to delete."
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="delete-button-container">
+                <FaTimes
+                    className="delete-instructor-button"
+                    title={`Delete ${instructor.last_name}, ${instructor.first_name}`}
+                    onClick={() => {
+                        setInstructorToDelete(instructor);
+                        setDeleteDialogVisible(true);
+                    }}
+                />
+            </div>
+        );
+    }
 
     const columns = [
         {
             Header: (
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
-            // props.original contains the row data for this particular instructor
-            Cell: ({ original: instructor }) => {
-                // if the instructor is currently assigned, no button will be rendered.
-                const disabled =
-                    instructorCurrentlyAssignedHash[instructor.id] === true;
-                return disabled ? null : (
-                    <DeleteButtonCell
-                        onClick={() => {
-                            setInstructorToDelete(instructor);
-                            setDeleteDialogVisible(true);
-                        }}
-                    />
-                );
-            },
+            Cell: CellDeleteButton,
             show: inDeleteMode,
             maxWidth: 32,
             resizable: false,

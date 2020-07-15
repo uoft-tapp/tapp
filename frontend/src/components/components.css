@@ -72,13 +72,24 @@
     align-items: center;
 }
 
+.delete-button-container {
+    text-align: center;
+}
+
+.delete-instructor-button.disabled,
+.delete-instructor-button.disabled:hover {
+    color: rgb(180, 180, 180);
+    cursor: default;
+}
+
 .delete-instructor-button {
+    transition: color 0.2s;
     cursor: pointer;
 }
 .delete-instructor-button:hover {
-    color: red;
+    color: var(--danger);
 }
 
 .delete-instructor-column-header-icon {
-    color: red;
+    color: var(--danger);
 }
