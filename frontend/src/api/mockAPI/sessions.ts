@@ -1,33 +1,45 @@
-import { getAttributesCheckMessage, MockAPIController } from "./utils";
+import {
+    getAttributesCheckMessage,
+    MockAPIController,
+    errorUnlessRole,
+} from "./utils";
 import {
     documentCallback,
     wrappedPropTypes,
     docApiPropTypes,
 } from "../defs/doc-generation";
+import { Session as SessionType } from "../defs/types";
+
+interface RouteParams {
+    role: "admin" | "instructor" | "ta";
+    [key: string]: string;
+}
 
 export class Session extends MockAPIController {
-    constructor(data) {
+    constructor(data: any) {
         super(data, data.sessions);
     }
-    create(session) {
-        const newSession = super.create(session);
+    create(session: Partial<SessionType>): SessionType {
+        const newSession = super.create(session) as SessionType;
         // If we insert a new session, we need to make sure we create
         // a corresponding assignments_by_session array
         this.data.assignments_by_session[newSession.id] = [];
         return newSession;
     }
-    validateNew(session) {
+    findAll(...args: any[]): SessionType[] {
+        return super.findAll(...args) as SessionType[];
+    }
+    validateNew(session: Partial<SessionType>) {
         // if we're here, we need to create a new session
         // but check if the session name is empty or duplicate
         const message = getAttributesCheckMessage(session, this.ownData, {
             name: { required: true, unique: true },
-        });
+        } as any);
         if (message) {
             throw new Error(message);
         }
     }
-
-    validateProp(prop, value, id) {
+    validateProp(prop: keyof SessionType, value: any, id: number) {
         if (prop === "name") {
             // check if `name` is empty
             if (value === undefined || value.length === 0) {
@@ -46,7 +58,7 @@ export class Session extends MockAPIController {
                 filteredData,
                 {
                     name: { unique: true },
-                }
+                } as any
             );
             if (message) {
                 throw new Error(message);
@@ -60,14 +72,19 @@ export class Session extends MockAPIController {
 export const sessionsRoutes = {
     get: {
         "/sessions": documentCallback({
-            func: (data) => new Session(data).findAll(),
+            func: (data: any) => new Session(data).findAll(),
             summary: "Get all available sessions",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.session),
         }),
     },
     post: {
         "/sessions": documentCallback({
-            func: (data, params, body) => {
+            func: (
+                data: any,
+                params: RouteParams,
+                body: Partial<SessionType>
+            ) => {
+                errorUnlessRole(params, "admin");
                 // body should be a session object. If it contains an id,
                 // update an existing session. Otherwise, create a new one.
                 return new Session(data).upsert(body);
@@ -77,8 +94,13 @@ export const sessionsRoutes = {
             posts: docApiPropTypes.session,
         }),
         "/sessions/delete": documentCallback({
-            func: (data, params, body) => {
-                return new Session(data).delete(body);
+            func: (
+                data: any,
+                params: RouteParams,
+                body: Partial<SessionType>
+            ) => {
+                errorUnlessRole(params, "admin");
+                return new Session(data).delete(body as any);
             },
             summary: "Delete a session",
             posts: docApiPropTypes.idOnly,

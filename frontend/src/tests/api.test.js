@@ -17,6 +17,7 @@ import { unknownRouteTests } from "./unknown-route-tests";
 import { usersTests } from "./user-tests";
 import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
+import { instructorsPermissionTests } from "./instructor-permission-test";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -68,9 +69,14 @@ describe("API tests", () => {
     describe("User permissions tests", () => {
         userPermissionsTests({ apiGET, apiPOST });
     });
+    describe("Instructor permissions tests", () => {
+        instructorsPermissionTests({ apiGET, apiPOST });
+    });
 });
 
 describe("Mock API tests", () => {
+    const { apiGET, apiPOST } = mockAPI;
+
     it("Seed the database", async () => {
         await databaseSeeder.seed(mockAPI);
         await databaseSeeder.verifySeed(mockAPI);
@@ -104,5 +110,8 @@ describe("Mock API tests", () => {
     });
     describe("`/admin/applicants` tests", () => {
         applicantTests(mockAPI);
+    });
+    describe("Instructor permissions tests", () => {
+        instructorsPermissionTests({ apiGET, apiPOST });
     });
 });

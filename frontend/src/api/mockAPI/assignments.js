@@ -12,11 +12,13 @@ import {
     wageChunkArrayToStartAndEndDates,
     formatInstructorsContact,
     wageChunkArrayToPayPeriodDescription,
+    errorUnlessRole,
 } from "./utils";
 import { Session } from "./sessions";
 import { Position } from "./positions";
 import { WageChunk } from "./wage_chunks";
 import { Applicant } from "./applicants";
+import { Instructor } from "./instructors";
 
 export class Assignment extends MockAPIController {
     constructor(data) {
@@ -157,6 +159,29 @@ export class Assignment extends MockAPIController {
 
         // Find the assignment again, to make sure all computed fields are properly computed
         return this.find(upsertedAssignment);
+    }
+    /**
+     * Returns the list of all assignments for positions that are (a) for the
+     * specified session, and (b) taught by the specified instructor.
+     *
+     * @param {*} session
+     * @param {*} instructor
+     * @returns
+     * @memberof Assignment
+     */
+    findAllBySessionAndInstructor(session, instructor) {
+        session = new Session(this.data).find(session);
+        instructor = new Instructor(this.data).find(instructor);
+        const instructorPositions = new Position(this.data).getForInstructor(
+            instructor
+        );
+        const assignments = this.findAllBySession(session);
+        const positionIds = instructorPositions.map((position) => position.id);
+
+        // Only return assignments for positions that the instructor is instructing
+        return assignments.filter((assignment) =>
+            positionIds.includes(assignment.position_id)
+        );
     }
 }
 
@@ -332,8 +357,26 @@ class ActiveOffer extends MockAPIController {
 export const assignmentsRoutes = {
     get: {
         "/sessions/:session_id/assignments": documentCallback({
-            func: (data, params) =>
-                new Assignment(data).findAllBySession(params.session_id),
+            func: (data, params) => {
+                if (params.role === "admin") {
+                    return new Assignment(data).findAllBySession(
+                        params.session_id
+                    );
+                }
+                if (params.role === "instructor") {
+                    const activeInstructor = new Instructor(
+                        data
+                    ).getFromActiveUser();
+                    if (!activeInstructor) {
+                        return [];
+                    }
+                    return new Assignment(data).findAllBySessionAndInstructor(
+                        params.session_id,
+                        activeInstructor
+                    );
+                }
+                errorUnlessRole(params, "");
+            },
             summary: "Get assignments associated with a session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.assignment),
         }),
@@ -359,13 +402,17 @@ export const assignmentsRoutes = {
     },
     post: {
         "/assignments": documentCallback({
-            func: (data, params, body) => new Assignment(data).upsert(body),
+            func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
+                return new Assignment(data).upsert(body);
+            },
             posts: docApiPropTypes.assignment,
             summary: "Upsert an assignment",
             returns: docApiPropTypes.assignment,
         }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
                 return new WageChunk(data).setAllByAssignment(
                     body,
                     params.assignment_id
@@ -377,41 +424,63 @@ export const assignmentsRoutes = {
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
         }),
         "/assignments/:assignment_id/active_offer/withdraw": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).withdrawByAssignment(
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).withdrawByAssignment(
                     params.assignment_id
-                ),
+                );
+            },
             summary: "Withdraws the active offer for the specified assignment",
             returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/reject": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).rejectByAssignment(params.assignment_id),
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).rejectByAssignment(
+                    params.assignment_id
+                );
+            },
             summary: "Rejects the active offer for the specified assignment",
             returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/accept": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).acceptByAssignment(params.assignment_id),
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).acceptByAssignment(
+                    params.assignment_id
+                );
+            },
             summary: "Accepts the active offer for the specified assignment",
             returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/create": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).createByAssignment(params.assignment_id),
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).createByAssignment(
+                    params.assignment_id
+                );
+            },
             summary:
                 "Creates an offer for the specified assignment, provided there are no active offers for this assignment.",
             returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/email": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).emailByAssignment(params.assignment_id),
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).emailByAssignment(
+                    params.assignment_id
+                );
+            },
             summary: "Emails the active offer for the specified assignment",
             returns: docApiPropTypes.offer,
         }),
         "/assignments/:assignment_id/active_offer/nag": documentCallback({
-            func: (data, params) =>
-                new ActiveOffer(data).nagByAssignment(params.assignment_id),
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).nagByAssignment(
+                    params.assignment_id
+                );
+            },
             summary:
                 "Sends a nag email for the active offer for the specified assignment which has already been emailed once",
             returns: docApiPropTypes.offer,

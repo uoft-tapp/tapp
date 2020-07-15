@@ -34,7 +34,7 @@
 <text text-anchor="start" x="225" y="-615.5" font-family="Arial" font-size="10.00" fill="#000000">utorid </text>
 <text text-anchor="start" x="253" y="-615.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string ∗ U</text>
 <text text-anchor="start" x="225" y="-602.5" font-family="Arial" font-size="10.00" fill="#000000">student_number </text>
-<text text-anchor="start" x="298" y="-602.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string U</text>
+<text text-anchor="start" x="298" y="-602.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="225" y="-589.5" font-family="Arial" font-size="10.00" fill="#000000">first_name </text>
 <text text-anchor="start" x="274" y="-589.5" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
 <text text-anchor="start" x="225" y="-576.5" font-family="Arial" font-size="10.00" fill="#000000">last_name </text>

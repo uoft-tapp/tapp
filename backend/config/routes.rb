@@ -94,7 +94,7 @@ Rails.application.routes.draw do
                     get :available_contract_templates,
                         to: 'contract_templates#available'
 
-                    # Instructors
+                    # Contract Templates
                     resources :contract_templates, only: %i[index create] do
                         collection { post :delete }
                         member do
@@ -139,6 +139,18 @@ Rails.application.routes.draw do
                 constraints(Constraint::AuthenticatedInstructor.new) do
                     # Active User
                     get :active_user, to: 'users#active_user'
+
+                    # Sessions
+                    resources :sessions, only: %i[index] do
+                        resources :applicants, only: %i[index]
+                        resources :applications, only: %i[index]
+                        resources :assignments, only: %i[index]
+                        resources :contract_templates, only: %i[index]
+                        resources :positions, only: %i[index]
+                    end
+
+                    # Instructors
+                    resources :instructors, only: %i[index]
                 end
             end
 
@@ -153,9 +165,9 @@ Rails.application.routes.draw do
 
     namespace :public do
         resources :contracts, only: %i[show] do
-            get :view, to: "contracts#view"
-            post :accept, to: "contracts#accept"
-            post :reject, to: "contracts#reject"
+            get :view, to: 'contracts#view'
+            post :accept, to: 'contracts#accept'
+            post :reject, to: 'contracts#reject'
         end
     end
 

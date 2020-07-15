@@ -4,6 +4,7 @@ import {
     deleteInArray,
     findAllById,
     MockAPIController,
+    errorUnlessRole,
 } from "./utils";
 import {
     documentCallback,
@@ -64,6 +65,22 @@ export class Position extends MockAPIController {
         }
         return position.instructor_ids.map((id) =>
             new Instructor(this.data).find({ id })
+        );
+    }
+    /**
+     * Returns a list of positions that the specified `instructor` is an instructor for.
+     *
+     * @param {*} instructor
+     * @memberof Position
+     */
+    getForInstructor(instructor) {
+        instructor = new Instructor(this.data).find(instructor);
+        if (!instructor) {
+            throw new Error(`Cannot find a matching instructor`);
+        }
+        const positions = this.findAll();
+        return positions.filter((position) =>
+            (position.instructor_ids || []).includes(instructor.id)
         );
     }
     delete(position) {
@@ -138,8 +155,31 @@ export class Position extends MockAPIController {
 export const positionsRoutes = {
     get: {
         "/sessions/:session_id/positions": documentCallback({
-            func: (data, params) =>
-                new Position(data).findAllBySession(params.session_id),
+            func: (data, params) => {
+                if (params.role === "admin") {
+                    return new Position(data).findAllBySession(
+                        params.session_id
+                    );
+                }
+                if (params.role === "instructor") {
+                    // Only return the the positions belonging to the current session
+                    // for which the activeUser is an instructor.
+                    const activeInstructor = new Instructor(
+                        data
+                    ).getFromActiveUser();
+                    if (!activeInstructor) {
+                        return [];
+                    }
+                    return new Position(data)
+                        .findAllBySession(params.session_id)
+                        .filter((position) =>
+                            position.instructor_ids.includes(
+                                activeInstructor.id
+                            )
+                        );
+                }
+                errorUnlessRole(params, "");
+            },
             summary: "Get positions associated with this session.",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.position),
         }),
@@ -159,6 +199,7 @@ export const positionsRoutes = {
         }),
         "/positions": documentCallback({
             func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
                 const positions = data.positions;
                 // body should be a session object. If it contains an id,
                 // update an existing session. Otherwise, create a new one.
@@ -174,6 +215,7 @@ export const positionsRoutes = {
         }),
         "/positions/delete": documentCallback({
             func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
                 return new Position(data).delete(body);
             },
             summary: "Delete a position",

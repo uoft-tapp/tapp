@@ -3,6 +3,7 @@ import {
     findAllById,
     MockAPIController,
     filterNullProps,
+    errorUnlessRole,
 } from "./utils";
 import {
     documentCallback,
@@ -13,6 +14,7 @@ import { Session } from "./sessions";
 import { Application } from "./applications";
 import { Assignment } from "./assignments";
 import { stringToNativeType } from "../../libs/urlUtils";
+import { Instructor } from "./instructors";
 
 export class Applicant extends MockAPIController {
     constructor(data) {
@@ -61,8 +63,35 @@ export class Applicant extends MockAPIController {
 export const applicantsRoutes = {
     get: {
         "/sessions/:session_id/applicants": documentCallback({
-            func: (data, params) =>
-                new Applicant(data).findAllBySession(params.session_id),
+            func: (data, params) => {
+                if (params.role === "admin") {
+                    return new Applicant(data).findAllBySession(
+                        params.session_id
+                    );
+                }
+                if (params.role === "instructor") {
+                    const activeInstructor = new Instructor(
+                        data
+                    ).getFromActiveUser();
+                    if (!activeInstructor) {
+                        return [];
+                    }
+                    const applicantIds = new Assignment(data)
+                        .findAllBySessionAndInstructor(
+                            params.session_id,
+                            activeInstructor
+                        )
+                        .map((assignment) => assignment.applicant_id);
+                    // Only return applicants for positions that the instructor is instructing
+                    return new Applicant(data)
+                        .findAll()
+                        .filter((applicant) =>
+                            applicantIds.includes(applicant.id)
+                        );
+                }
+
+                errorUnlessRole(params, "");
+            },
             summary: "Get all applicants associated with the given session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant),
         }),
@@ -80,13 +109,17 @@ export const applicantsRoutes = {
     },
     post: {
         "/applicants": documentCallback({
-            func: (data, params, body) => new Applicant(data).upsert(body),
+            func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
+                return new Applicant(data).upsert(body);
+            },
             summary: "Upsert an applicant",
             posts: docApiPropTypes.applicant,
             returns: docApiPropTypes.applicant,
         }),
         "/sessions/:session_id/applicants": documentCallback({
             func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
                 const applicants = new Applicant(data).findAll();
                 // If we didn't specify an `id` but we did specify a `utorid`,
                 // try to look up the applicant by `utorid`

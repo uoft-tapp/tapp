@@ -1,5 +1,5 @@
 /**
- * A collection of untility functions to help with the mock API
+ * A collection of utility functions to help with the mock API
  */
 
 /**
@@ -124,8 +124,8 @@ export function deleteInArray(obj, data = []) {
  * @export
  * @param {object} obj
  * @param {object[]} [data=[]]
- * @param {boolean} [props={ id: { required: true, unique: true } }]
- * @returns {string|boolean} - `false` if all checks succeed. Otherwise an appropriate error message.
+ * @param {boolean} [props={ name: { required: true, unique: true } }]
+ * @returns {string|false} - `false` if all checks succeed. Otherwise an appropriate error message.
  */
 export function getAttributesCheckMessage(
     obj,
@@ -165,7 +165,8 @@ export class MockAPIController {
      * @returns {object[]}
      * @memberof MockAPIController
      */
-    findAll() {
+    // eslint-disable-next-line
+    findAll(...args) {
         return [...this.ownData];
     }
     /**
@@ -193,6 +194,9 @@ export class MockAPIController {
         }
         if (query.id != null) {
             return find(query, this.ownData);
+        }
+        if (query.utorid != null) {
+            return find({ utorid: query }, this.ownData);
         }
         return find({ id: query }, this.ownData);
     }
@@ -243,8 +247,9 @@ export class MockAPIController {
      * @param {object} obj
      * @memberof MockAPIController
      */
-    validateNew() {
-        throw new Error("Subclasses must impliment `validateNew()`");
+    // eslint-disable-next-line
+    validateNew(obj) {
+        throw new Error("Subclasses must implement `validateNew()`");
     }
 
     /**
@@ -415,6 +420,36 @@ export function filterNullProps(obj) {
         }
     }
     return ret;
+}
+
+export function errorUnlessRole({ role }, targetRule = "admin") {
+    if (role !== targetRule) {
+        throw new Error(`Invalid route for user with role '${role}'`);
+    }
+}
+
+/**
+ * Recursively traverse the object `obj` and delete any property with key `prop`.
+ *
+ * @export
+ * @param {*} obj
+ * @param {string} [prop="id"]
+ * @returns
+ */
+export function recursiveDeleteProp(obj, prop = "id") {
+    if (typeof obj != "object" || obj == null) {
+        return;
+    }
+    if (Array.isArray(obj)) {
+        for (const elm of obj) {
+            recursiveDeleteProp(elm, prop);
+        }
+        return;
+    }
+    delete obj[prop];
+    for (const elm of Object.values(obj)) {
+        recursiveDeleteProp(elm, prop);
+    }
 }
 
 //
