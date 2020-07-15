@@ -68,7 +68,7 @@ export function offersTests(api) {
 
     it("email the active offer to student", async () => {
         const resp = await apiPOST(
-            `/assignments/${assignment.id}/active_offer/email`
+            `/admin/assignments/${assignment.id}/active_offer/email`
         );
 
         // check status
@@ -95,7 +95,7 @@ export function offersTests(api) {
         // nag and check after each nagging
         for (let i = 0; i < nagCount; i++) {
             const resp = await apiPOST(
-                `/assignments/${assignment.id}/active_offer/nag`
+                `/admin/assignments/${assignment.id}/active_offer/nag`
             );
             expect(resp).toHaveStatus("success");
             expect(resp.payload.nag_count).toEqual(i + 1);

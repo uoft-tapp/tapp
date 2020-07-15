@@ -64,3 +64,6 @@ Style/IfUnlessModifier:
 
 Layout/IndentFirstArgument:
     Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+    Enabled: false
