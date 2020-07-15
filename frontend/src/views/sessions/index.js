@@ -9,7 +9,7 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 
 const ConnectedSessionList = connect((state) => ({
     sessions: sessionsSelector(state),
@@ -22,7 +22,7 @@ export function AdminSessionsView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlusCircle />}
+                    icon={<FaPlus />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}

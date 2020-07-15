@@ -200,7 +200,11 @@ export const positionsSelector = createSelector(
                 ...rest
             }) => ({
                 ...rest,
-                instructors: instructor_ids.map((x) => instructorsById[x]),
+                // When the instructor list references an instructor that we haven't loaded
+                // we don't want the frontend to crash, so filter out any null instructors
+                instructors: instructor_ids
+                    .map((x) => instructorsById[x])
+                    .filter((x) => x),
                 contract_template: contractTemplatesById[contract_template_id],
                 instructor_preferences: (instructor_preferences || []).map(
                     ({ applicant_id, instructor_id, ...rest }) => ({

@@ -20,14 +20,14 @@
 }
 
 .edit-glyph:hover {
-    color: blue;
+    color: var(--primary);
     transition: all 0.3s;
 }
 
 .field-dialog-formatted-name {
     white-space: pre;
     font-family: monospace;
-    color: blue;
+    color: var(--primary);
 }
 .field-dialog-formatted-name::before,
 .field-dialog-formatted-name::after {

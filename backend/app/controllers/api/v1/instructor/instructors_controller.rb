@@ -15,7 +15,7 @@ class Api::V1::Instructor::InstructorsController < ApplicationController
         fellow_instructor_ids =
             active_instructor.positions.joins(:instructors).pluck(
                 :"instructors.id"
-            ).uniq
+            )
 
         render_success Instructor.order(:utorid).find(fellow_instructor_ids)
     end

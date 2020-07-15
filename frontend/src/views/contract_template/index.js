@@ -7,7 +7,7 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 
 export function AdminContractTemplatesView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -16,7 +16,7 @@ export function AdminContractTemplatesView() {
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
-                    icon={<FaPlusCircle />}
+                    icon={<FaPlus />}
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}

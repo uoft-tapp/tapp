@@ -18,7 +18,7 @@ export function AdminPositionsView() {
     return (
         <div className="page-body">
             <ActionsList>
-                <ActionHeader>Available actions</ActionHeader>
+                <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
                     icon={<FaPlus />}
                     onClick={() => {
