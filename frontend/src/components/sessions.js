@@ -8,11 +8,12 @@ import { formatDate } from "../libs/utils";
 
 /**
  * A cell that renders editable session information
- * @param {} props
+ * @param {type: ["date", "text"]} props
  */
 function EditableCell(props) {
     const title = `Edit ${props.column.Header}`;
-    const { upsertSession, field } = props;
+    const { upsertSession, field, type, value } = props;
+    const isDate = type === "date";
     function onChange(newVal) {
         const sessionId = props.original.id;
         upsertSession({ id: sessionId, [field]: newVal });
@@ -21,10 +22,11 @@ function EditableCell(props) {
     return (
         <EditableField
             title={title}
-            value={props.value || ""}
+            value={value || ""}
             onChange={onChange}
+            type={type}
         >
-            {props.value}
+            {isDate ? formatDate(value) : value}
         </EditableField>
     );
 }
@@ -45,11 +47,12 @@ export function SessionsList(props) {
         return dispatch(upsertSession(session));
     }
 
-    function generateCell(field) {
+    function generateCell(field, type) {
         return (props) => (
             <EditableCell
                 field={field}
                 upsertSession={_upsertSession}
+                type={type}
                 {...props}
             />
         );
@@ -64,12 +67,12 @@ export function SessionsList(props) {
         {
             Header: "Start",
             accessor: "start_date",
-            Cell: (row) => formatDate(row.value),
+            Cell: generateCell("start_date", "date"),
         },
         {
             Header: "End",
             accessor: "end_date",
-            Cell: (row) => formatDate(row.value),
+            Cell: generateCell("end_date", "date"),
         },
         {
             Header: "Rate (Pre-January)",
