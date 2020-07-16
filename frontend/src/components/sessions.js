@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { docApiPropTypes } from "../api/defs/doc-generation";
 import ReactTable from "react-table";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { sessionsSelector, upsertSession } from "../api/actions";
 import { EditableField } from "../components/edit-field-widgets";
 import { formatDate } from "../libs/utils";
@@ -35,12 +34,27 @@ function EditableCell(props) {
  * in to customize columns/cell renderers.
  *
  * @export
- * @param {{sessions: object[], columns: object[]}} props
+ * @param {{columns: object[]}} props
  * @returns
  */
 export function SessionsList(props) {
+    const sessions = useSelector((state) => sessionsSelector(state));
+    const dispatch = useDispatch();
+
     const DEFAULT_COLUMNS = [
-        { Header: "Name", accessor: "name" },
+        {
+            Header: "Name",
+            accessor: "name",
+            Cell: (props) => (
+                <EditableCell
+                    field="name"
+                    upsertSession={(session) =>
+                        dispatch(upsertSession(session))
+                    }
+                    {...props}
+                />
+            ),
+        },
         {
             Header: "Start",
             accessor: "start_date",
@@ -57,7 +71,9 @@ export function SessionsList(props) {
             Cell: (props) => (
                 <EditableCell
                     field="rate1"
-                    upsertSession={upsertSession}
+                    upsertSession={(session) =>
+                        dispatch(upsertSession(session))
+                    }
                     {...props}
                 />
             ),
@@ -68,14 +84,16 @@ export function SessionsList(props) {
             Cell: (props) => (
                 <EditableCell
                     field="rate2"
-                    upsertSession={upsertSession}
+                    upsertSession={(session) =>
+                        dispatch(upsertSession(session))
+                    }
                     {...props}
                 />
             ),
         },
     ];
 
-    const { sessions, upsertSession, columns = DEFAULT_COLUMNS } = props;
+    const { columns = DEFAULT_COLUMNS } = props;
     return (
         <ReactTable
             data={sessions}
@@ -86,15 +104,7 @@ export function SessionsList(props) {
     );
 }
 SessionsList.propTypes = {
-    sessions: PropTypes.arrayOf(docApiPropTypes.session).isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({ Header: PropTypes.any.isRequired })
     ),
 };
-
-export const ConnectedSessionsList = connect(
-    (state) => ({
-        sessions: sessionsSelector(state),
-    }),
-    { upsertSession }
-)(SessionsList);

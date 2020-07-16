@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
-import { ConnectedSessionsList } from "../../components/sessions";
+import { SessionsList } from "../../components/sessions";
 import {
     ActionsList,
     ActionButton,
@@ -31,7 +31,7 @@ export function AdminSessionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedSessionsList />
+                <SessionsList />
             </ContentArea>
         </div>
     );
