@@ -38,22 +38,28 @@ function EditableCell(props) {
  * @returns
  */
 export function SessionsList(props) {
-    const sessions = useSelector((state) => sessionsSelector(state));
+    const sessions = useSelector(sessionsSelector);
     const dispatch = useDispatch();
+
+    function _upsertSession(session) {
+        return dispatch(upsertSession(session));
+    }
+
+    function generateCell(field) {
+        return (props) => (
+            <EditableCell
+                field={field}
+                upsertSession={_upsertSession}
+                {...props}
+            />
+        );
+    }
 
     const DEFAULT_COLUMNS = [
         {
             Header: "Name",
             accessor: "name",
-            Cell: (props) => (
-                <EditableCell
-                    field="name"
-                    upsertSession={(session) =>
-                        dispatch(upsertSession(session))
-                    }
-                    {...props}
-                />
-            ),
+            Cell: generateCell("name"),
         },
         {
             Header: "Start",
@@ -68,28 +74,12 @@ export function SessionsList(props) {
         {
             Header: "Rate (Pre-January)",
             accessor: "rate1",
-            Cell: (props) => (
-                <EditableCell
-                    field="rate1"
-                    upsertSession={(session) =>
-                        dispatch(upsertSession(session))
-                    }
-                    {...props}
-                />
-            ),
+            Cell: generateCell("rate1"),
         },
         {
             Header: "Rate (Post-January)",
             accessor: "rate2",
-            Cell: (props) => (
-                <EditableCell
-                    field="rate2"
-                    upsertSession={(session) =>
-                        dispatch(upsertSession(session))
-                    }
-                    {...props}
-                />
-            ),
+            Cell: generateCell("rate2"),
         },
     ];
 
