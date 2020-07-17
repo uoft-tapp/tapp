@@ -1,13 +1,16 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard";
-import ControlPanel from "../cp_control_panel/ControlPanel";
 import { AdminInstructorsView } from "../instructors";
 import { AdminSessionsView } from "../sessions";
-import { AdminPositionsView } from "../positions";
-import { AdminAssignmentsView } from "../assignments";
+import { AdminPositionsView, InstructorPositionsView } from "../positions";
+import {
+    AdminAssignmentsView,
+    InstructorAssignmentsView,
+} from "../assignments";
 import { AdminContractTemplatesView } from "../contract_template";
 import { Landing } from "../admin/landing.tsx";
+import { Landing as InstructorLanding } from "../instructor/landing.tsx";
 import { AdminApplicantsView } from "../applicants";
 
 export function AdminRoutes() {
@@ -40,8 +43,27 @@ export function AdminRoutes() {
             <Route exact path="/dashboard">
                 <Dashboard />
             </Route>
-            <Route exact path="/cp">
-                <ControlPanel />
+        </Switch>
+    );
+}
+
+export function InstructorRoutes() {
+    return (
+        <Switch>
+            <Route exact path="/">
+                <Redirect to="/tapp" />
+            </Route>
+            <Route exact path="/tapp">
+                <InstructorLanding />
+            </Route>
+            <Route exact path="/tapp/positions">
+                <InstructorPositionsView />
+            </Route>
+            <Route exact path="/tapp/assignments">
+                <InstructorAssignmentsView />
+            </Route>
+            <Route exact path="/tapp/ddahs">
+                <div>Not implemented yet</div>
             </Route>
         </Switch>
     );

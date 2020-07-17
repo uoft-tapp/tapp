@@ -1,37 +1,51 @@
-import React from "react";
-import { connect } from "react-redux";
-import { initFromStage } from "./api/actions";
-import { ConnectedNotifications } from "./views/notificatons";
-import { AdminRoutes } from "./views/routes";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { initFromStage, activeRoleSelector } from "./api/actions";
+import { ConnectedNotifications } from "./views/notifications";
+import { AdminRoutes, InstructorRoutes } from "./views/routes";
 import { AdminHeader } from "./views/admin";
-import { globalsSelector } from "./api/actions/globals";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { InstructorHeader } from "./views/instructor";
 
-class App extends React.Component {
-    componentDidMount() {
-        this.props.initFromStage("pageLoad");
-    }
+export default function ConnectedApp() {
+    const activeRole = useSelector(activeRoleSelector);
+    const dispatch = useDispatch();
 
-    render() {
-        return (
-            <React.Fragment>
-                <AdminHeader />
+    useEffect(() => {
+        // When the page is first loaded, we need to fetch all the data
+        // associated with the page. This is done via a call to `initFromStage`.
+        dispatch(initFromStage("pageLoad"));
+    }, [dispatch]);
+
+    let body = (
+        <>
+            <AdminHeader />
+            <div className="view-container">
+                <AdminRoutes />
+            </div>
+        </>
+    );
+
+    if (activeRole === "instructor") {
+        body = (
+            <>
+                <InstructorHeader />
                 <div className="view-container">
-                    <AdminRoutes />
+                    <InstructorRoutes />
                 </div>
-                <ConnectedNotifications />
-            </React.Fragment>
+            </>
         );
     }
+    if (activeRole === "ta") {
+        body = "Viewing as TA";
+    }
+
+    return (
+        <React.Fragment>
+            {body}
+            <ConnectedNotifications />
+        </React.Fragment>
+    );
 }
-
-const ConnectedApp = connect(
-    (state) => ({
-        globals: globalsSelector(state),
-    }),
-    { initFromStage }
-)(App);
-
-export default ConnectedApp;
