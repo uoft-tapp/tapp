@@ -1,6 +1,5 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Dashboard from "../dashboard";
 import { AdminInstructorsView } from "../instructors";
 import { AdminSessionsView } from "../sessions";
 import { AdminPositionsView, InstructorPositionsView } from "../positions";
@@ -39,9 +38,6 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/tapp/applicants">
                 <AdminApplicantsView />
-            </Route>
-            <Route exact path="/dashboard">
-                <Dashboard />
             </Route>
         </Switch>
     );
