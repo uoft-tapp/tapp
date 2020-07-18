@@ -2,6 +2,8 @@
  * Types used by the internal API.
  */
 
+export type Role = "admin" | "instructor" | "ta";
+
 export type Utorid = string;
 
 // Minimal types contain the minimum amount of information needed to reconstruct

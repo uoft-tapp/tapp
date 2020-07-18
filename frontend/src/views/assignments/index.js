@@ -49,3 +49,17 @@ export function AdminAssignmentsView() {
         </div>
     );
 }
+
+export function InstructorAssignmentsView() {
+    return (
+        <div className="page-body">
+            <ActionsList>
+                <ActionHeader>Import/Export</ActionHeader>
+                <ConnectedExportAssignmentsAction />
+            </ActionsList>
+            <ContentArea>
+                <ConnectedOfferTable />
+            </ContentArea>
+        </div>
+    );
+}

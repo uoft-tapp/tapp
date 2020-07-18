@@ -60,6 +60,7 @@ export function Header(props) {
 
     const activeMainRoutes = routes.map((route) => (
         <BootstrapNavItem
+            title={route.description}
             eventKey={route.route}
             to={route.route}
             key={route.route}
@@ -78,7 +79,7 @@ export function Header(props) {
                 return (
                     <BootstrapNavItem
                         to={fullroute}
-                        title={subroute.name}
+                        title={subroute.description}
                         key={fullroute}
                         className="secondary"
                     >

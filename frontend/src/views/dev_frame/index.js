@@ -126,11 +126,6 @@ function DevFrame(props) {
                         Dev Mode
                     </Navbar.Brand>
                     <Nav className="mr-auto">
-                        <BootstrapNavLink to="/dashboard">
-                            Dashboard
-                        </BootstrapNavLink>
-                    </Nav>
-                    <Nav className="mr-auto">
                         <BootstrapNavLink to="/api-docs">
                             API Docs
                         </BootstrapNavLink>
