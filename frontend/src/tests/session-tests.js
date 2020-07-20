@@ -47,10 +47,10 @@ export function sessionsTests(api) {
         // check the type of payload
         checkPropTypes(PropTypes.arrayOf(sessionPropTypes), resp.payload);
 
-        // compare the responsed session and seeded session they should be exactly the same
-        const responsedSession = resp.payload[0];
+        // compare the received session and seeded session they should be exactly the same
+        const receivedSession = resp.payload[0];
         const seededSession = databaseSeeder.seededData.session;
-        expect(responsedSession).toEqual(seededSession);
+        expect(receivedSession).toEqual(seededSession);
     });
 
     it("create a session", async () => {
