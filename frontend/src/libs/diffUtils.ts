@@ -14,6 +14,9 @@ import {
     Utorid,
     Applicant,
     MinimalApplicant,
+    MinimalDdah,
+    Ddah,
+    Duty,
 } from "../api/defs/types";
 import { prepareMinimal, prepareFull } from "./exportUtils";
 import { matchByUtoridOrName } from "./importExportUtils";
@@ -332,7 +335,78 @@ export const diffImport = {
 
         return ret;
     },
+    ddahs: function (
+        importedDdahs: MinimalDdah[],
+        context: { ddahs: Ddah[]; assignments: Assignment[] }
+    ): DiffSpec<MinimalDdah, Ddah>[] {
+        return importedDdahs.map((ddah) => diffImport.ddah(ddah, context));
+    },
+    ddah: function (
+        ddah: MinimalDdah,
+        context: { ddahs: Ddah[]; assignments: Assignment[] }
+    ): DiffSpec<MinimalDdah, Ddah> {
+        const existingDdahs = context.ddahs;
+        const ret: DiffSpec<MinimalDdah, Ddah> = {
+            status: "new",
+            changes: {},
+            obj: null as any, // Set to any temporarily to keep typescript from complaining
+        };
+        const assignments = context.assignments;
+
+        // Check to see if there is a matching instructor in the existing list
+        const matchingDdah = existingDdahs.find(
+            (x) =>
+                x.assignment.position.position_code === ddah.position_code &&
+                x.assignment.applicant.utorid === ddah.applicant
+        );
+
+        if (matchingDdah) {
+            ret.status = "duplicate";
+            const minimal = prepareMinimal.ddah(matchingDdah);
+            for (const _prop in minimal) {
+                const prop = _prop as keyof MinimalDdah;
+                const oldVal = minimal[prop];
+                const newVal = ddah[prop];
+                if (!isSame(oldVal, newVal)) {
+                    ret.status = "modified";
+                    if (prop === "duties") {
+                        // Duty diffs need to be handled specially since it's an array of objects
+                        ret.changes[prop] = `"${ddahDutiesToString(
+                            oldVal as any
+                        )}" → "${ddahDutiesToString(newVal as any)}"`;
+                    } else {
+                        ret.changes[prop] = `"${oldVal}" → "${newVal}"`;
+                    }
+                }
+            }
+            ret.obj = prepareFull.ddah(ddah, {
+                id: matchingDdah.id,
+                assignments,
+            });
+        } else {
+            ret.obj = prepareFull.ddah(ddah, { assignments });
+        }
+
+        return ret;
+    },
 };
+
+/**
+ * Format a list of duties as a single string (for print a diff)
+ *
+ * @param {{hours: number, description: string}[]} duties
+ * @returns {string}
+ */
+export function ddahDutiesToString(duties: Duty[]): string {
+    if (duties.length > 0 && duties[0].order != null) {
+        // If we a duties list with an order specified, sort the duties first.
+        // Otherwise, we assume they're in the right order.
+        duties = [...duties].sort((a, b) => a.order - b.order);
+    }
+    return duties
+        .map(({ hours, description }) => `${hours}h - ${description}`)
+        .join("; ");
+}
 
 /**
  * Distinguish between a MinimalAssignment and an Assignment

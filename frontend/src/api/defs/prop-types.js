@@ -127,6 +127,8 @@ function generatePropTypes(PropTypes) {
             accepted_date: PropTypes.string,
             rejected_date: PropTypes.string,
             withdrawn_date: PropTypes.string,
+            url_token: PropTypes.string,
+            nag_count: PropTypes.number,
         }),
         application: PropTypes.shape({
             session_id: id,
@@ -147,6 +149,24 @@ function generatePropTypes(PropTypes) {
         user: PropTypes.shape({
             utorid: PropTypes.string,
             roles: PropTypes.arrayOf(PropTypes.string),
+        }),
+        ddah: PropTypes.shape({
+            assignment_id: id,
+            signature: PropTypes.string,
+            approved_date: PropTypes.string,
+            accepted_date: PropTypes.string,
+            rejected_date: PropTypes.string,
+            revised_date: PropTypes.string,
+            emailed_date: PropTypes.string,
+            url_token: PropTypes.string,
+            duties: PropTypes.arrayOf(
+                PropTypes.shape({
+                    description: PropTypes.string,
+                    hours: PropTypes.number,
+                    revised_hours: PropTypes.number,
+                    order: PropTypes.number,
+                })
+            ),
         }),
     };
 }

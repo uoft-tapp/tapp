@@ -18,6 +18,7 @@ import { usersTests } from "./user-tests";
 import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
+import { ddahTests } from "./ddah-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -72,6 +73,9 @@ describe("API tests", () => {
     describe("Instructor permissions tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
     });
+    describe.skip("DDAH tests", () => {
+        ddahTests({ apiGET, apiPOST });
+    });
 });
 
 describe("Mock API tests", () => {
@@ -113,5 +117,8 @@ describe("Mock API tests", () => {
     });
     describe("Instructor permissions tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
+    });
+    describe("DDAH tests", () => {
+        ddahTests({ apiGET, apiPOST });
     });
 });

@@ -91,9 +91,14 @@ export function fieldEditorFactory(boundData, setBoundData) {
  * @returnType {React.Node}
  */
 export function DialogRow(props) {
-    const { children } = props;
+    const { children, icon = null } = props;
+    let iconNode = null;
+    if (icon) {
+        iconNode = <div className="input-row-icon">{icon}</div>;
+    }
     return (
         <Form.Row style={{ alignItems: "baseline" }}>
+            {iconNode}
             {React.Children.map(children, (child, index) => {
                 return (
                     <Form.Group as={Col} key={index}>

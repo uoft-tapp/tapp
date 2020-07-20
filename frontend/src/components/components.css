@@ -93,3 +93,7 @@
 .delete-instructor-column-header-icon {
     color: var(--danger);
 }
+
+.input-row-icon {
+    align-self: center;
+}

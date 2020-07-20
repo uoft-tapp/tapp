@@ -17,6 +17,7 @@ import { fetchInstructors } from "./instructors";
 import { fetchPositions } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
 import { parseURLSearchString } from "../../libs/urlUtils";
+import { fetchDdahs } from "./ddahs";
 
 /**
  * A helper function to replace all API actions to
@@ -200,6 +201,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 fetchContractTemplates,
                 fetchInstructors,
                 fetchPositions,
+                fetchDdahs,
             ];
 
             // The order of fetching here doesn't matter, so dispatch all at once

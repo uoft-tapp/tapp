@@ -17,6 +17,8 @@ import {
     MinimalAssignment,
     MinimalContractTemplate,
     MinimalApplicant,
+    MinimalDdah,
+    Ddah,
 } from "../api/defs/types";
 
 /**
@@ -215,6 +217,19 @@ export const prepareMinimal = {
             phone: applicant.phone,
         };
     },
+    ddah: function (ddah: Ddah): MinimalDdah {
+        const duties = [...ddah.duties];
+        duties.sort((a, b) => a.order - b.order);
+
+        return {
+            position_code: ddah.assignment.position.position_code,
+            applicant: ddah.assignment.applicant.utorid,
+            duties: duties.map((duty) => ({
+                hours: duty.hours,
+                description: duty.description,
+            })),
+        };
+    },
 };
 
 /**
@@ -275,6 +290,14 @@ interface prepareFull {
             session: Session;
             applicants: Applicant[];
             positions: Position[];
+        }
+    >;
+    ddah: PrepareUpsertable<
+        MinimalDdah,
+        Ddah,
+        {
+            id: number;
+            assignments: Assignment[];
         }
     >;
 }
@@ -455,5 +478,50 @@ export const prepareFull: prepareFull = {
         ret.end_date = minAssignment.end_date || position.end_date;
 
         return ret;
+    },
+    ddah: function (minDdah: MinimalDdah, context?: any): any {
+        const { id, assignments }: { id?: number; assignments?: Assignment[] } =
+            context || {};
+        if (!Array.isArray(assignments)) {
+            throw new Error(
+                "You must pass an array of assignments to reconstruct a ddah"
+            );
+        }
+        const matchingAssignment = assignments.find(
+            (assignment) =>
+                assignment.applicant.utorid === minDdah.applicant &&
+                assignment.position.position_code === minDdah.position_code
+        );
+        if (!matchingAssignment) {
+            throw new Error(
+                `Cannot find assignment corresponding to '${minDdah.position_code}' and UTORid '${minDdah.applicant}'`
+            );
+        }
+        const duties = minDdah.duties.map((duty, i) => ({
+            ...duty,
+            order: i + 1,
+        }));
+
+        let total_hours = 0;
+        for (const duty of duties) {
+            total_hours += duty.hours;
+        }
+
+        if (id == null) {
+            return {
+                assignment: matchingAssignment,
+                duties,
+                total_hours,
+                status: null,
+            };
+        }
+        return {
+            id,
+            assignment: matchingAssignment,
+            duties,
+            total_hours,
+            // We cannot import "signed" DDAHs, so the `status` is always null
+            status: null,
+        };
     },
 };

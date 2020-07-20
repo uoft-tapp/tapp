@@ -5,5 +5,6 @@ export * from "./instructors";
 export * from "./applicants";
 export * from "./assignments";
 export * from "./applications";
+export * from "./ddahs";
 export * from "./contract_templates";
 export * from "./globals";

@@ -60,7 +60,7 @@ const DEFAULT_APPLICANT = {
 };
 
 /**
- * Edit information about an instructor.
+ * Edit information about an applicant.
  *
  * @export
  * @param {{instructor: object, setInstructor: function}} props

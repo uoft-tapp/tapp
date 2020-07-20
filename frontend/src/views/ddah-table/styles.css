@@ -1,0 +1,39 @@
+/* DDAH Styles */
+.accepted-ddah {
+    color: var(--success);
+}
+.rejected-ddah,
+.hours-mismatch-ddah {
+    color: var(--danger);
+}
+
+.missing-ddah {
+    color: var(--gray);
+    font-style: italic;
+}
+
+.ddah-preview-container h4 {
+    text-align: center;
+}
+.ddah-preview-container li {
+    list-style: none;
+}
+.ddah-duty-hours {
+    width: 3em;
+    display: inline-block;
+    text-align: right;
+    padding-right: .5em;
+    margin-right: .5em;
+}
+.ddah-preview-container li:last-child .ddah-duty-hours {
+    border-top: 1px solid black;
+    font-style: italic;
+}
+.ddah-preview-container li:last-child .ddah-duty-description {
+    font-style: italic;
+}
+
+.add-ddah-hours-mismatch {
+    color: var(--red);
+    font-weight: bold;
+}

@@ -11,6 +11,7 @@ import { AdminContractTemplatesView } from "../contract_template";
 import { Landing } from "../admin/landing.tsx";
 import { Landing as InstructorLanding } from "../instructor/landing.tsx";
 import { AdminApplicantsView } from "../applicants";
+import { AdminDdahsView } from "../ddahs";
 
 export function AdminRoutes() {
     return (
@@ -38,6 +39,9 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/tapp/applicants">
                 <AdminApplicantsView />
+            </Route>
+            <Route exact path="/tapp/ddahs">
+                <AdminDdahsView />
             </Route>
         </Switch>
     );
