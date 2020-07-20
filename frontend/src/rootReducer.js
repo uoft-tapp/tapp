@@ -12,8 +12,10 @@ import {
     assignmentsReducer,
     instructorsReducer,
     contractTemplatesReducer,
+    ddahsReducer,
 } from "./api/reducers";
 import { usersReducer } from "./api/reducers/users";
+import ddahsTableReducer from "./views/ddah-table/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -37,11 +39,13 @@ const reducer = combineReducers({
         instructors: instructorsReducer,
         contractTemplates: contractTemplatesReducer,
         users: usersReducer,
+        ddahs: ddahsReducer,
     }),
     ui: combineReducers({
         notifications: notificationReducer,
         form: formReducer,
         offerTable: offerTableReducer,
+        ddahsTable: ddahsTableReducer,
         globals: globalReducer,
     }),
 });

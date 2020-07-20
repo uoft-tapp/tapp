@@ -11,6 +11,7 @@ import { applicationsRoutes } from "./applications";
 import { wageChunkRoutes } from "./wage_chunks";
 import { debugRoutes } from "./debug";
 import { activeUserRoutes, User } from "./active_user";
+import { ddahsRoutes } from "./ddahs";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -31,6 +32,7 @@ export class MockAPI {
         applicantsRoutes.get,
         applicationsRoutes.get,
         wageChunkRoutes.get,
+        ddahsRoutes.get,
         debugRoutes.get,
         activeUserRoutes.get,
         {
@@ -50,6 +52,7 @@ export class MockAPI {
         applicantsRoutes.post,
         applicationsRoutes.post,
         wageChunkRoutes.post,
+        ddahsRoutes.post,
         debugRoutes.post,
         activeUserRoutes.post
     );
@@ -214,7 +217,7 @@ export class MockAPI {
                 `MockAPI ${init.method} Request.`,
                 url,
                 init,
-                "Reponding with",
+                "Responding with",
                 mockResponse
             );
             // Create a `Response` object to return so that we fully immitate

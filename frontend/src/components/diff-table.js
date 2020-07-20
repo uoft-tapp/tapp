@@ -32,7 +32,10 @@ export function createDiffCell({ accessor, Cell }) {
         const changed = get(original.changes);
         if (changed != null) {
             return (
-                <div className="diff-changed-cell bg-primary text-white">
+                <div
+                    className="diff-changed-cell bg-primary text-white"
+                    title={changed}
+                >
                     {changed}
                 </div>
             );

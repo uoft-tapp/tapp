@@ -74,6 +74,23 @@ export interface MinimalApplicant {
     phone: string;
 }
 
+export interface MinimalDdah {
+    position_code: string;
+    applicant: Utorid;
+    duties: { hours: number; description: string }[];
+}
+
+/**
+ * A duty that is part of a DDAH.
+ *
+ * @export
+ * @interface Duty
+ */
+export interface Duty {
+    order: number;
+    hours: number;
+    description: string;
+}
 export interface Session extends MinimalSession {
     id: number;
 }
@@ -111,4 +128,24 @@ export interface Assignment {
 
 export interface Applicant extends MinimalApplicant {
     id: number;
+}
+
+export interface Ddah {
+    id: number;
+    assignment: Assignment;
+    signature?: string;
+    approved_date?: string;
+    accepted_date?: string;
+    rejected_date?: string;
+    revised_date?: string;
+    emailed_date?: string;
+    url_token: string;
+    duties: Duty[];
+    total_hours: number;
+    status:
+        | "accepted_and_approved"
+        | "accepted"
+        | "rejected"
+        | "emailed"
+        | null;
 }

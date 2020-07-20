@@ -11,6 +11,9 @@
  * @returns
  */
 function stringToNativeType(s) {
+    if (typeof s === "string" && s !== "" && !Number.isNaN(+s)) {
+        return +s;
+    }
     try {
         return JSON.parse(s);
     } catch (e) {

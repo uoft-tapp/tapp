@@ -1401,6 +1401,59 @@ export const mockData = {
             ],
         },
     ],
+    ddahs: [
+        {
+            id: 700,
+            assignment_id: 100,
+            signature: null,
+            approved_date: null,
+            accepted_date: null,
+            rejected_date: null,
+            revised_date: null,
+            emailed_date: null,
+            url_token: "DJAKSLJLFD",
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "Marking the midterm",
+                },
+                {
+                    order: 1,
+                    hours: 4,
+                    description: "Initial training",
+                },
+                {
+                    order: 3,
+                    hours: 40,
+                    description: "Running tutorials",
+                },
+            ],
+        },
+        {
+            id: 701,
+            assignment_id: 101,
+            signature: "Brett Howey",
+            approved_date: null,
+            accepted_date: "2019-09-02T00:00:00.000Z",
+            rejected_date: null,
+            revised_date: null,
+            emailed_date: "2019-09-02T00:00:00.000Z",
+            url_token: "somerandomtoken",
+            duties: [
+                {
+                    order: 2,
+                    hours: 50,
+                    description: "Marking the midterm",
+                },
+                {
+                    order: 1,
+                    hours: 6,
+                    description: "Initial training",
+                },
+            ],
+        },
+    ],
     users: [
         {
             email: "hery.smith@utoronto.ca",

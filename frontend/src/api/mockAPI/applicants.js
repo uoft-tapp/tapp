@@ -104,7 +104,7 @@ export const applicantsRoutes = {
             func: (data, params) =>
                 new Applicant(data).find(params.applicant_id),
             summary: "Get an applicant",
-            returns: wrappedPropTypes.arrayOf(docApiPropTypes.applicant),
+            returns: docApiPropTypes.applicant,
         }),
     },
     post: {
