@@ -88,6 +88,10 @@ Rails.application.routes.draw do
                                 post :nag
                             end
                         end
+                        member do
+                            get :ddah, to: 'ddahs#show_by_assignment'
+                            post :ddah, to: 'ddahs#upsert_by_assignment'
+                        end
                     end
 
                     # Contract Templates
@@ -119,10 +123,19 @@ Rails.application.routes.draw do
                         resources :applicants, only: %i[index create]
                         resources :applications, only: %i[index]
                         resources :assignments, only: %i[index]
+                        resources :ddahs, only: %i[index]
                         resources :contract_templates, only: %i[index create]
                         resources :positions,
                                   controller: :session_positions,
                                   only: %i[index create]
+                    end
+
+                    # DDAHs
+                    resources :ddahs, only: %i[show create] do
+                        member do
+                            post :approve
+                            post :email
+                        end
                     end
 
                     # Users

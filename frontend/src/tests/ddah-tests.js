@@ -64,7 +64,7 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = apiPOST(`/admin/ddahs`, newDdah);
+        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.duties.length).toEqual(newDdah.duties.length);
         expect(computeTotalHoursForDdah(resp1.payload)).toEqual(
@@ -76,13 +76,13 @@ export function ddahTests(api) {
     });
 
     it("get a ddah", async () => {
-        resp1 = apiGET(`/admin/ddahs/${ddah.id}`);
+        resp1 = await apiGET(`/admin/ddahs/${ddah.id}`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(ddah);
     });
 
     it("get all ddahs associated with a session", async () => {
-        resp1 = apiGET(`/admin/sessions/${session.id}/ddahs`);
+        resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toContainObject(ddah);
     });
@@ -103,7 +103,7 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = apiPOST(`/admin/ddahs`, newDdah);
+        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.id).toEqual(ddah.id);
         expect(computeTotalHoursForDdah(resp1.payload)).toEqual(100);
@@ -137,7 +137,7 @@ export function ddahTests(api) {
     });
 
     it("get ddah from assignment route", async () => {
-        resp1 = apiGET(`/admin/assignments/${ddah.assignment_id}/ddah`);
+        resp1 = await apiGET(`/admin/assignments/${ddah.assignment_id}/ddah`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(ddah);
     });
@@ -154,8 +154,8 @@ export function ddahTests(api) {
                 },
             ],
         };
-        resp1 = apiPOST(
-            `/admin/assignments/${newAssignment.id}/ddah/create`,
+        resp1 = await apiPOST(
+            `/admin/assignments/${newAssignment.id}/ddah`,
             newDdah
         );
         expect(resp1).toHaveStatus("success");
@@ -165,5 +165,7 @@ export function ddahTests(api) {
         });
     });
 
-    it.todo("create a ddah via the assignments route");
+    it.todo(
+        "modifying a signed ddah removes the signature and adds a `revised_date`"
+    );
 }

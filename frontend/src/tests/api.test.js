@@ -58,7 +58,7 @@ describe("API tests", () => {
     describe.skip("`/admin/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
     });
-    describe.skip("unknown api route tests", () => {
+    describe("unknown api route tests", () => {
         unknownRouteTests({ apiGET, apiPOST });
     });
     describe("`/admin/users` tests", () => {
@@ -73,7 +73,7 @@ describe("API tests", () => {
     describe("Instructor permissions tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
     });
-    describe.skip("DDAH tests", () => {
+    describe("DDAH tests", () => {
         ddahTests({ apiGET, apiPOST });
     });
 });

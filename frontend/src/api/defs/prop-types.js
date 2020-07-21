@@ -155,7 +155,6 @@ function generatePropTypes(PropTypes) {
             signature: PropTypes.string,
             approved_date: PropTypes.string,
             accepted_date: PropTypes.string,
-            rejected_date: PropTypes.string,
             revised_date: PropTypes.string,
             emailed_date: PropTypes.string,
             url_token: PropTypes.string,
@@ -163,7 +162,6 @@ function generatePropTypes(PropTypes) {
                 PropTypes.shape({
                     description: PropTypes.string,
                     hours: PropTypes.number,
-                    revised_hours: PropTypes.number,
                     order: PropTypes.number,
                 })
             ),

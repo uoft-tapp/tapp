@@ -136,7 +136,6 @@ export interface Ddah {
     signature?: string;
     approved_date?: string;
     accepted_date?: string;
-    rejected_date?: string;
     revised_date?: string;
     emailed_date?: string;
     url_token: string;
