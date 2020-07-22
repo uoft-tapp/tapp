@@ -90,6 +90,7 @@ function generatePropTypes(PropTypes) {
                 "no_offer",
                 null,
             ]),
+            active_offer_url_token: PropTypes.string,
         }),
         applicant: PropTypes.shape({
             utorid: PropTypes.string.isRequired,

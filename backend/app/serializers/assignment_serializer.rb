@@ -9,5 +9,6 @@ class AssignmentSerializer < ActiveModel::Serializer
                :note,
                :contract_override_pdf,
                :active_offer_status,
+               :active_offer_url_token,
                :hours
 end
