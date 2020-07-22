@@ -28,6 +28,10 @@ class Ddah < ApplicationRecord
         self.emailed_date = Time.zone.now
     end
 
+    def can_accept?
+        self.accepted_date == nil
+    end
+
     private
 
     def set_status_date

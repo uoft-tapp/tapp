@@ -182,6 +182,10 @@ Rails.application.routes.draw do
             post :accept, to: 'contracts#accept'
             post :reject, to: 'contracts#reject'
         end
+        resources :ddahs, only: %i[show] do
+            get :view, to: 'ddahs#view'
+            post :accept, to: 'ddahs#accept'
+        end
     end
 
     # Catch all other route requests and deliver a standard error payload.

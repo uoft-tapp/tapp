@@ -1,0 +1,226 @@
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    font-family: sans-serif;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.header,
+.content,
+.footer {
+    position: relative;
+}
+.header {
+    padding: 5px;
+    background-color: #313131;
+    color: white;
+    z-index: 100;
+}
+.header h1 {
+    margin: 0;
+    text-align: center;
+    font-size: larger;
+}
+#logout {
+    float: right;
+}
+.content {
+    flex-grow: 1;
+    background-color: #f2f5f5;
+    display: flex;
+    flex-direction: row;
+}
+.footer {
+    background-color: #bcbcbc;
+}
+.footer p {
+    padding: 8px;
+    margin: 0px;
+}
+
+.accept,
+.accepted {
+    color: #008e00;
+}
+.reject,
+.rejected {
+    color: #e23400;
+}
+.pending,
+.withdrawn {
+    color: #fda400;
+}
+.capitalize {
+    text-transform: capitalize;
+}
+
+input[type="radio"] + label {
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    padding: 4px;
+    margin-left: 25px;
+    transition: color 0.2s;
+    user-select: none;
+}
+input[type="radio"]:focus + label {
+    outline: thin dotted;
+    outline-offset: -3px;
+}
+input[type="radio"] + label::before {
+    content: "";
+    display: block;
+    text-align: center;
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 2px;
+}
+input[type="radio"]:checked + label::before {
+    color: inherit;
+    content: "✓";
+}
+input[type="radio"]:checked + label {
+    color: #008e00;
+}
+input[type="radio"]:checked + label[for="radio-reject"] {
+    color: #e23400;
+}
+input[type="radio"] + label:hover {
+    text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.57);
+}
+input[type="radio"] + label:hover::before {
+    background-color: #ffffff;
+    text-shadow: none;
+    box-shadow: 0px 0px 3px 0px rgba(95, 95, 95, 0.55);
+}
+input[type="radio"] {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    /* display: none; */
+    -moz-appearance: unset;
+}
+#radio-accept:checked ~ .signature {
+    opacity: 1;
+}
+#radio-accept:checked ~ .signature input {
+    display: inline-block;
+}
+#radio-accept:checked ~ .signature .input-placeholder {
+    display: none;
+}
+.signature input {
+    display: none;
+    width: 20em;
+}
+.signature {
+    opacity: 0;
+    flex-basis: 100%;
+    transition: opacity 0.3s;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+}
+.decision-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.button {
+    text-decoration: none;
+    border: 1px solid transparent;
+    user-select: none;
+    vertical-align: middle;
+    border-radius: 3px;
+    background-color: #08b9ef;
+    color: #ffffff;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+}
+.button:hover {
+    background-color: #00c3ff;
+}
+.button:active {
+    background-color: #05a0d0;
+}
+.button:focus {
+    outline: thin dotted;
+    outline-offset: -3px;
+}
+
+input[type="text"] {
+    background-color: white;
+    line-height: 1.5;
+    padding: 0em 0.3em;
+    font-size: 1em;
+    color: black;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    width: 20em;
+}
+input[type="text"]:focus {
+    border: 1px solid #08b9ef;
+}
+.input-placeholder {
+    display: inline-block;
+    width: 20em;
+    background-color: white;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+}
+.decision {
+    position: relative;
+    flex-grow: 0;
+    flex-basis: 400px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.44);
+    z-index: 50;
+}
+.decision h3 {
+    font-weight: normal;
+    font-size: 1em;
+}
+.contract-view {
+    background-color: white;
+    flex-grow: 1;
+    overflow: hidden;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+}
+
+@media only screen and (max-width: 1000px) {
+    .content {
+        flex-direction: column-reverse;
+    }
+    .decision {
+        flex-basis: auto;
+        border: none;
+    }
+}

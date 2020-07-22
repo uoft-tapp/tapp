@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>DDAH</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                width: 8.5in;
+                margin: 0;
+                padding-left: 0.75in;
+                padding-right: 0.75in;
+                hyphens: auto;
+                text-align: justify;
+                box-sizing: border-box;
+                font-family: Helvetica, sans-serif;
+                font-size: 12pt;
+            }
+            .i {
+                font-style: italic;
+            }
+            .emphcolor {
+                color: red;
+            }
+            table.appointment-summary {
+                margin-left: 1in;
+                font-size: 0.9em;
+            }
+            .appointment-summary th {
+                padding-right: 0.5em;
+                text-align: right;
+                font-weight: normal;
+            }
+            .letter-head p {
+                margin-bottom: 0.5in;
+            }
+            .letter-foot {
+                margin-top: 1in;
+            }
+            .signature {
+                font-family: alex_brushregular, cursive;
+                font-size: 30pt;
+                margin-left: 0.5in;
+                margin-bottom: 0.1in;
+            }
+            .applicant .signature {
+                border-bottom: 1px solid black;
+                min-width: 2.5in;
+                display: inline-block;
+                margin-left: 0;
+            }
+            .checkbox {
+                font-size: 18pt;
+            }
+
+            @media only screen and (max-width: 9in) {
+                /* when printed, these styles won't show
+				because the "screen" is 8.5in */
+                body {
+                    width: unset;
+                    padding-bottom: 0.5in;
+                    padding-left: 2em;
+                    padding-right: 2em;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="font.css" />
+        <link rel="stylesheet" href="header.css" />
+        <!-- for rendering with wkhtmltopdf styles need to be inlined; when rendered directly in a browser,
+	this will just be invalid CSS -->
+        <style>
+            {{ style_font }}
+        </style>
+        <style>
+            {{ style_header }}
+        </style>
+    </head>
+    <body>
+        <div class="letter-body">
+            <h2>Description of Duties and Allocation of Hours</h2>
+            <h3 class="i">Position Summary</h3>
+            <table class="appointment-summary">
+                <tr>
+                    <th>TA:</th>
+                    <td class="emphcolor">
+                        {{ first_name }} {{ last_name }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Position:</th>
+                    <td>
+                        {{ position_code }} {{ position_title }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Supervisor(s):</th>
+                    <td>{{ instructor_desc }}</td>
+                </tr>
+            </table>
+            <h3 class="i">Duties</h3>
+            <table class="appointment-summary">
+                {% for duty in duties %}
+                <tr>
+                    <th>{{ duty.hours }} <span class="i">hours</span></th>
+                    <td>
+                        {{ duty.description }}
+                    </td>
+                </tr>
+                {% else %} No Duties Listed {% endfor %}
+            </table>
+            <p>
+                Total hours: <span class="emphcolor">{{ total_hours }}</span>.
+            </p>
+        </div>
+        <div class="letter-foot applicant">
+            <p>Please sign below to acknowledge receipt of this DDAH.</p>
+            <div class="signature">{{ signature }}</div>
+            <div class="details">
+                TA Signature
+            </div>
+        </div>
+    </body>
+</html>
