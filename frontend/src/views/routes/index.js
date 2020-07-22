@@ -34,16 +34,16 @@ export function AdminRoutes() {
             <Route exact path="/session_setup/instructors">
                 <AdminInstructorsView />
             </Route>
-            <Route exact path="/tapp/positions">
+            <Route exact path="/assignment/positions">
                 <AdminPositionsView />
             </Route>
-            <Route exact path="/tapp/assignments">
+            <Route exact path="/assignment/assignments">
                 <AdminAssignmentsView />
             </Route>
             <Route exact path="/tapp/applicants">
                 <AdminApplicantsView />
             </Route>
-            <Route exact path="/tapp/ddahs">
+            <Route exact path="/assignment/ddahs">
                 <AdminDdahsView />
             </Route>
         </Switch>

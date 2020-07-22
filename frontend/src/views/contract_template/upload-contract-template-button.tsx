@@ -3,7 +3,6 @@ import { ActionButton } from "../../components/action-buttons";
 import { FaUpload } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { uploadContractTemplate } from "../../api/actions";
-import { ImportDialog } from "../../components/import-button";
 import {
     Modal,
     Row,
@@ -21,26 +20,7 @@ export function ConnectedUploadContractTemplateAction() {
         "Select an HTML template file."
     );
     const [dialogOpen, setDialogOpen] = React.useState<Boolean>(false);
-    const [diffed, setDiffed] = React.useState(null);
-    const [processingError, setProcessingError] = React.useState(null);
     const [inProgress, setInProgress] = React.useState(false);
-
-    // Make sure we aren't showing any diff if there's no file loaded.
-    React.useEffect(() => {
-        if (!file) {
-        }
-        console.log("THe content", file);
-    }, [file]);
-
-    // Recompute the diff every time the file changes
-    React.useEffect(() => {
-        // If we have no file or we are currently in the middle of processing another file,
-        // do nothing.
-        if (!file || inProgress) {
-            return;
-        }
-        console.log("got file", file);
-    }, [file, inProgress]);
 
     async function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (event?.target?.files) {
