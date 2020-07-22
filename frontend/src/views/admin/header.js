@@ -7,9 +7,9 @@ import {
 
 export const routes = [
     {
-        route: "/tapp",
-        name: "Admin",
-        description: "Admin View",
+        route: "/session_setup",
+        name: "Session Setup",
+        description: "Setup a new session or manage an existing session.",
         subroutes: [
             {
                 route: "/sessions",
@@ -26,6 +26,13 @@ export const routes = [
                 name: "Instructors",
                 description: "Manage Instructors",
             },
+        ],
+    },
+    {
+        route: "/tapp",
+        name: "Admin",
+        description: "Admin View",
+        subroutes: [
             {
                 route: "/positions",
                 name: "Positions",

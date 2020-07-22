@@ -100,7 +100,7 @@ Rails.application.routes.draw do
 
                     # Contract Templates
                     resources :contract_templates, only: %i[index create] do
-                        collection { post :delete }
+                        collection { post :delete, :upload }
                         member do
                             get :view
                             get :download
@@ -192,5 +192,5 @@ Rails.application.routes.draw do
     # Routes that are inaccessible due to lacking permission also end up here.
     #
     # This must be the last route declared as it matches everything.
-    match '*path', to: 'missing_routes#error', via: :all
+    #    match '*path', to: 'missing_routes#error', via: :all
 end

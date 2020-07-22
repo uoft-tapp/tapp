@@ -52,7 +52,30 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
         )
     end
 
+    # POST /contract_templates/upload
+    def upload
+        file_name =
+            sanitize_filename(contract_template_upload_params[:file_name])
+        full_path = template_file_full_path(file_name: file_name)
+
+        if File.exist?(full_path)
+            render_error(
+                message: "Template with filename '#{file_name}' already exists"
+            )
+        end
+
+        decode_base64_content =
+            Base64.decode64(contract_template_upload_params[:content])
+        File.open(full_path, 'wb') { |f| f.write(decode_base64_content) }
+
+        available
+    end
+
     private
+
+    def contract_template_upload_params
+        params.permit(:file_name, :content)
+    end
 
     def contract_template_params
         params.permit(:template_file, :template_name, :session_id, :id)
@@ -66,9 +89,9 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
         )
     end
 
-    def template_file_full_path
+    def template_file_full_path(file_name: @contract_template.template_file)
         contract_dir = Rails.application.config.contract_template_dir
-        template_file = "#{contract_dir}/#{@contract_template.template_file}"
+        template_file = "#{contract_dir}/#{file_name}"
         # Verify that the template file is actually contained in the template directory
         unless Pathname.new(template_file).realdirpath.to_s.starts_with?(
                    contract_dir
@@ -124,5 +147,22 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
             rejected_date: nil,
             status: 'pending'
         }.stringify_keys.merge(styles)
+    end
+
+    # from https://stackoverflow.com/questions/1939333/how-to-make-a-ruby-string-safe-for-a-filesystem
+    def sanitize_filename(filename)
+        # Split the name when finding a period which is preceded by some
+        # character, and is followed by some character other than a period,
+        # if there is no following period that is followed by something
+        # other than a period (yeah, confusing, I know)
+        fn = filename.split(/(?<=.)\.(?=[^.])(?!.*\.[^.])/m)
+
+        # We now have one or two parts (depending on whether we could find
+        # a suitable period). For each of these parts, replace any unwanted
+        # sequence of characters with an underscore
+        fn.map! { |s| s.gsub(/[^a-z0-9\-]+/i, '_') }
+
+        # Finally, join the parts with a period and return the result
+        fn.join '.'
     end
 end

@@ -22,13 +22,16 @@ export function AdminRoutes() {
             <Route exact path="/tapp">
                 <Landing />
             </Route>
-            <Route exact path="/tapp/sessions">
+            <Route exact path="/session_setup">
+                <Redirect to="/session_setup/sessions" />
+            </Route>
+            <Route exact path="/session_setup/sessions">
                 <AdminSessionsView />
             </Route>
-            <Route exact path="/tapp/contract_templates">
+            <Route exact path="/session_setup/contract_templates">
                 <AdminContractTemplatesView />
             </Route>
-            <Route exact path="/tapp/instructors">
+            <Route exact path="/session_setup/instructors">
                 <AdminInstructorsView />
             </Route>
             <Route exact path="/tapp/positions">

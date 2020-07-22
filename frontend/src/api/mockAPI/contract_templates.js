@@ -3,6 +3,8 @@ import {
     findAllById,
     MockAPIController,
     bytesToBase64,
+    errorUnlessRole,
+    base64decode,
 } from "./utils";
 import {
     documentCallback,
@@ -38,6 +40,12 @@ export class ContractTemplate extends MockAPIController {
                 throw new Error(message);
             }
         }
+    }
+    upload({ file_contents, file_name }) {
+        this.data.contract_templates_by_filename[file_name] = file_contents;
+        this.data.available_contract_templates.push({
+            template_file: file_name,
+        });
     }
     getTemplateHtml(template) {
         template = new ContractTemplate(this.data).find(template);
@@ -139,6 +147,24 @@ export const templatesRoutes = {
                 "Associate a position template with a session; this method upserts",
             posts: docApiPropTypes.contractTemplate,
             returns: docApiPropTypes.contractTemplate,
+        }),
+        "/contract_templates/upload": documentCallback({
+            func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
+                const { file_name, content } = body;
+                const file_contents = base64decode(content);
+                new ContractTemplate(data).upload({ file_contents, file_name });
+                return [...data.available_contract_templates];
+            },
+            summary:
+                "Upload a base64-encoded contract template. (The contract template should be utf-8 encoded HTML).",
+            posts: wrappedPropTypes.shape({
+                file_name: wrappedPropTypes.string,
+                content: wrappedPropTypes.string,
+            }),
+            returns: wrappedPropTypes.arrayOf(
+                docApiPropTypes.contractTemplateMinimal
+            ),
         }),
     },
 };

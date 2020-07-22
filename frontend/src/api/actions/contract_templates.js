@@ -11,6 +11,7 @@ import { apiGET, apiPOST } from "../../libs/apiUtils";
 import { contractTemplatesReducer } from "../reducers/contract_templates";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
+import { bytesToBase64 } from "../mockAPI/utils";
 
 // actions
 const fetchContractTemplatesSuccess = actionFactory(
@@ -121,6 +122,29 @@ export const downloadContractTemplate = validatedApiDispatcher({
         return new File([content], data.file_name, {
             type: data.mime_type,
         });
+    },
+});
+
+export const uploadContractTemplate = validatedApiDispatcher({
+    name: "uploadContractTemplate",
+    description: "Upload the `File` object as a contract template",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (file) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+
+        // We are expected to upload data in base64, so convert the file
+        // object to base64.
+        const file_name = file.name;
+        const rawContent = new Uint8Array(await file.arrayBuffer());
+        const content = bytesToBase64(rawContent);
+
+        const data = await apiPOST(`/${role}/contract_templates/upload`, {
+            file_name,
+            content,
+        });
+
+        dispatch(fetchAllContractTemplatesSuccess(data));
+        return data;
     },
 });
 
