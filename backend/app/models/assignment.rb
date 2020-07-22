@@ -5,6 +5,7 @@
 class Assignment < ApplicationRecord
     has_many :offers, dependent: :destroy
     has_many :wage_chunks, dependent: :destroy
+    has_one :ddah, dependent: :destroy
     belongs_to :active_offer, class_name: 'Offer', optional: true
     belongs_to :applicant
     belongs_to :position

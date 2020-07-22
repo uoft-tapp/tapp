@@ -310,7 +310,7 @@ function getFirstInstructorsName(instructors: Instructor[]): string {
  * @returns
  */
 export function ConnectedDdahsTable() {
-    const ddahs = useSelector(ddahsSelector) as Ddah[];
+    let ddahs = useSelector(ddahsSelector) as Ddah[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const selected = useSelector(ddahTableSelector).selectedDdahIds;
     const dispatch = useDispatch();
@@ -318,6 +318,21 @@ export function ConnectedDdahsTable() {
     const [previewVisible, setPreviewVisible] = React.useState<Boolean>(false);
     const [editVisible, setEditVisible] = React.useState<Boolean>(false);
     const [previewDdah, setPreviewDdah] = React.useState<Ddah | null>(null);
+
+    // It is possible that things needed to construct the DDAH are loaded out of order.
+    // E.g., the position or assignment data hasn't come back from the API
+    // even though the DDAH data has. In this case, we want to fail gracefully until
+    // the data arrives (by showing an empty list of DDAHs).
+    if (
+        ddahs.some(
+            (ddah) =>
+                ddah.assignment == null ||
+                ddah.assignment.applicant == null ||
+                ddah.assignment.position == null
+        )
+    ) {
+        ddahs = [];
+    }
 
     function setSelected(ids: number[]) {
         // If a row is missing an id, `null` will be used in place of that id.
