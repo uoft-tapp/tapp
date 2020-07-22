@@ -87,7 +87,6 @@ class Api::V1::Admin::DdahsController < ApplicationController
             object: @ddah,
             condition:
                 proc do
-                    puts 'XXXXXXXXXXXXXX'
                     @ddah.update!(ddah_params)
                     if duty_params[:duties] && @ddah.duties
                         # if we specified duties, delete the old ones and add the new ones
