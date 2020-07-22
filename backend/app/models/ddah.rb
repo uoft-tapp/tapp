@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class Ddah < ApplicationRecord
-    DDAH_STATUS = %i[preliminary pending accepted approved].freeze
     belongs_to :assignment
     has_many :duties, dependent: :destroy
     accepts_nested_attributes_for :duties
 
     has_secure_token :url_token
-    enum status: DDAH_STATUS
 
     scope :by_session,
           lambda { |session_id|
@@ -29,22 +27,7 @@ class Ddah < ApplicationRecord
     end
 
     def can_accept?
-        self.accepted_date == nil
-    end
-
-    private
-
-    def set_status_date
-        if status_changed?
-            case status.to_sym
-            when :accepted
-                self.accepted_date = Time.zone.now
-            when :approved
-                self.approved_date = Time.zone.now
-            when :pending
-                self.emailed_date = Time.zone.now
-            end
-        end
+        accepted_date.nil?
     end
 end
 # == Schema Information

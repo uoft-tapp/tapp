@@ -14,7 +14,10 @@ class Public::DdahsController < ActionController::Base
         rendered = get_contract_html(@ddah)
         if !show_params[:format].blank? &&
                show_params[:format].downcase == 'pdf'
-            pdf_name = "#{@ddah.assignment.position.position_code}-ddah-#{@ddah.assignment.applicant.last_name}"
+            pdf_name =
+                "#{@ddah.assignment.position.position_code}-ddah-#{
+                    @ddah.assignment.applicant.last_name
+                }"
             render pdf: pdf_name, inline: rendered
             return
         end
@@ -28,8 +31,7 @@ class Public::DdahsController < ActionController::Base
 
         unless @ddah.can_accept?
             render_error(
-                message:
-                    'Cannot accept an ddah that is already accepted'
+                message: 'Cannot accept an ddah that is already accepted'
             ) && return
         end
 
@@ -95,7 +97,7 @@ class Public::DdahsController < ActionController::Base
     # template based on the ddah
     def ddah_substitutions(ddah: @ddah)
         duties = ddah.duties.order(:order)
-        json_duties = duties.as_json.map { |duty| duty.stringify_keys }
+        json_duties = duties.as_json.map(&:stringify_keys)
         total_hours = duties.sum(:hours)
 
         assignment = ddah.assignment
