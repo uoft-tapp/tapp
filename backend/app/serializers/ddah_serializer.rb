@@ -12,6 +12,8 @@ class DdahSerializer < ActiveModel::Serializer
                :duties
 
     def duties
-        object.duties.map { |duty| duty.slice(:order, :hours, :description) }
+        object.duties.order(:order).map do |duty|
+            duty.slice(:order, :hours, :description)
+        end
     end
 end
