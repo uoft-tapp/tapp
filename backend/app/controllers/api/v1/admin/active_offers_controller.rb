@@ -47,7 +47,10 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
 
     # POST /active_offers/email
     # Emails the active offer for the specified Assignment
-    def email; end
+    def email
+        OfferMailer.contract_email(@assignment.active_offer, "a url").deliver_now!
+        render_success @assignment.active_offer
+    end
 
     # POST /active_offers/nag
     # Sends a nag email for the active_offer for the specified Assignment
