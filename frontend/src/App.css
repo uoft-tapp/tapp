@@ -91,3 +91,11 @@ body,
 .assignment-details-table th {
     padding-right: 1em;
 }
+
+.filterable-table-filter {
+    padding: .4em;
+    padding-left: 1.1em;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+
+}
