@@ -1,7 +1,7 @@
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
-import { sessionsSelector, activeSessionSelector } from "../../api/actions";
+import { activeSessionSelector } from "../../api/actions";
 import { SessionsList } from "../../components/sessions";
 import {
     ActionsList,
@@ -11,10 +11,6 @@ import {
 import { ContentArea } from "../../components/layout";
 import { FaPlus } from "react-icons/fa";
 import { Session } from "../../api/defs/types";
-
-const ConnectedSessionList = connect((state) => ({
-    sessions: sessionsSelector(state),
-}))(SessionsList as any);
 
 export function AdminSessionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -68,7 +64,7 @@ export function AdminSessionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedSessionList />
+                <SessionsList />
             </ContentArea>
         </div>
     );
