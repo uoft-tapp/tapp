@@ -1,13 +1,12 @@
 class OfferMailer < ApplicationMailer
-  default from: ENV['EMAIL_USER']
+  # default from comes from config environment
   layout 'mailer'
 
-  def contract_email(offer, link)
-    puts("HERE")
-    @offer = offer
+  def contract_email(assignment, link)
+    @offer = assignment.active_offer
     @url = link
     puts("In contract_email")
-    mail(to: ENV['RECIPIENT'], subject: 'hi there')
+    mail(to: assignment.applicant.email, subject: 'hi there')
     
   end
 
