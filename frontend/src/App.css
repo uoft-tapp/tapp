@@ -74,3 +74,20 @@ body,
     display: flex;
     flex-direction: column;
 }
+
+.wagechunk-details-table th,
+.wagechunk-details-table td {
+    padding-left: 1em;
+}
+.wagechunk-details-table th:first-child,
+.wagechunk-details-table td:first-child {
+    padding-left: 0em;
+}
+.wagechunk-details-table th {
+    font-size: smaller;
+    color: var(--gray);
+}
+
+.assignment-details-table th {
+    padding-right: 1em;
+}

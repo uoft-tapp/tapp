@@ -78,7 +78,7 @@ export const upsertAssignment = validatedApiDispatcher({
         dispatch(upsertOneAssignmentSuccess(data));
         if (payload.wage_chunks) {
             await dispatch(
-                upsertWageChunksForAssignment(payload, payload.wage_chunks)
+                upsertWageChunksForAssignment(data, payload.wage_chunks)
             );
             // The wage chunks could have changed the number of "hours" for the assignment.
             // Refetch it to make sure the data isn't stale.
@@ -157,6 +157,25 @@ export const upsertAssignments = validatedApiDispatcher({
 
 // selectors
 
+/**
+ * Returns whether the number of hours for the `assignment` and the sum
+ * total hours of `wageChunks` match.
+ *
+ * @param {*} assignment
+ * @param {*} wageChunks
+ * @returns
+ */
+function wageChunksMatchAssignment(assignment, wageChunks) {
+    if (!wageChunks) {
+        return true;
+    }
+    let totalHours = 0;
+    for (const chunk of wageChunks) {
+        totalHours += chunk.hours;
+    }
+    return totalHours === assignment.hours;
+}
+
 // Each reducer is given an isolated state; instead of needing to remember to
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
@@ -172,20 +191,35 @@ const _assignmentsSelector = createSelector(
 );
 /**
  * Get the current assignments. This selector is memoized and will only
- * be recomputed when assignments, applicants, or positions change.
+ * be recomputed when assignments, applicants, or positions change. If wageChunks
+ * have been loaded for the assignment, they are included, otherwise they are null.
  */
 export const assignmentsSelector = createSelector(
-    [_assignmentsSelector, applicantsSelector, positionsSelector],
-    (assignments, applicants, positions) => {
+    [
+        _assignmentsSelector,
+        applicantsSelector,
+        positionsSelector,
+        wageChunksByAssignmentSelector,
+    ],
+    (assignments, applicants, positions, getWageChunksForAssignment) => {
         if (assignments.length === 0) {
             return [];
         }
         applicants = arrayToHash(applicants);
         positions = arrayToHash(positions);
-        return assignments.map(({ position_id, applicant_id, ...rest }) => ({
-            ...rest,
-            position: positions[position_id] || {},
-            applicant: applicants[applicant_id] || {},
-        }));
+        return assignments.map((assignment) => {
+            const { position_id, applicant_id, ...rest } = assignment;
+            const wage_chunks = getWageChunksForAssignment(assignment);
+            return {
+                ...rest,
+                position: positions[position_id] || {},
+                applicant: applicants[applicant_id] || {},
+                // Only return wage chunks if they match the current assignment. This
+                // ensures stale (previously-loaded) wage chunks don't get served.
+                wage_chunks: wageChunksMatchAssignment(assignment, wage_chunks)
+                    ? wage_chunks
+                    : null,
+            };
+        });
     }
 );

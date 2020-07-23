@@ -29,6 +29,28 @@ export const routes = [
         ],
     },
     {
+        route: "/assignments_and_positions",
+        name: "Assignment & Positions",
+        description: "Manage Assignments & Positions",
+        subroutes: [
+            {
+                route: "/positions",
+                name: "Positions",
+                description: "Manage Positions",
+            },
+            {
+                route: "/assignments",
+                name: "Assignments",
+                description: "Manage Assignments",
+            },
+            {
+                route: "/ddahs",
+                name: "DDAHs",
+                description: "Manage DDAHs",
+            },
+        ],
+    },
+    {
         route: "/tapp",
         name: "Admin",
         description: "Admin View",
@@ -66,11 +88,6 @@ export const routes = [
                 description: "See statistics about accepted/rejected contracts",
             },
         ],
-    },
-    {
-        route: "/appointments_and_positions",
-        name: "Appointments & Positions",
-        description: "Appointments & Positions",
     },
 ];
 
