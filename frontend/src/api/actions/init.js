@@ -94,6 +94,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 "toggleMockAPI",
                 "setActiveUser",
                 "setActiveUserRole",
+                "fetchInstructors",
                 "fetchSessions",
                 "setActiveSession",
                 "updateGlobals",
@@ -187,6 +188,10 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             );
         }
 
+        if (shouldRunStage("fetchInstructors")) {
+            await dispatch(fetchInstructors());
+        }
+
         if (shouldRunStage("updateGlobals")) {
             await dispatch(setGlobals(prepareGlobals(parsedGlobals)));
         }
@@ -199,7 +204,6 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 fetchApplications,
                 fetchAssignments,
                 fetchContractTemplates,
-                fetchInstructors,
                 fetchPositions,
                 fetchDdahs,
             ];
