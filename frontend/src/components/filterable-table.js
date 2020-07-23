@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
 import "react-table/react-table.css";
+import { FaSearch } from "react-icons/fa";
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
 
@@ -184,13 +185,16 @@ function FilterableTable(props) {
         tableComponent = <ReactTable columns={columns} data={filteredData} />;
     }
     return (
-        <div>
-            Filter:{" "}
-            <input
-                type="text"
-                onChange={(e) => setFilterString(e.target.value)}
-            />
-            {tableComponent}
+        <div className="filterable-table-container">
+            <div className="filterable-table-filter">
+                <FaSearch className="mr-3" />
+                <input
+                    type="text"
+                    placeholder="Filter by..."
+                    onChange={(e) => setFilterString(e.target.value)}
+                />
+            </div>
+            <div className="filterable-table-table">{tableComponent}</div>
         </div>
     );
 }

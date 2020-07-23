@@ -5,6 +5,7 @@ import { Dropdown } from "react-bootstrap";
 import "./action-buttons.css";
 
 interface PropsWithChildren {
+    [attr: string]: any;
     children: React.ReactNode;
 }
 interface ActionButtonProps extends PropsWithChildren {

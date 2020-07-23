@@ -1,7 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
-import { sessionsSelector } from "../../api/actions";
+import { sessionsSelector, activeSessionSelector } from "../../api/actions";
 import { SessionsList } from "../../components/sessions";
 import {
     ActionsList,
@@ -10,13 +10,36 @@ import {
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
 import { FaPlus } from "react-icons/fa";
+import { Session } from "../../api/defs/types";
 
 const ConnectedSessionList = connect((state) => ({
     sessions: sessionsSelector(state),
-}))(SessionsList);
+}))(SessionsList as any);
 
 export function AdminSessionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+
+    const activeSession = useSelector(activeSessionSelector) as Session | null;
+
+    let activeSessionInfo = (
+        <>
+            There is currently <b className="text-primary">no active session</b>{" "}
+            selected. In order to setup contract templates or create positions
+            and offers, you must select an active session.
+        </>
+    );
+    if (activeSession) {
+        activeSessionInfo = (
+            <>
+                The current active session is{" "}
+                <b className="text-primary">{activeSession.name}</b>. When
+                setting up contract templates or creating positions and offers,
+                they will be attached to the <i>{activeSession.name}</i>{" "}
+                session.
+            </>
+        );
+    }
+
     return (
         <div className="page-body">
             <ActionsList>
@@ -31,6 +54,14 @@ export function AdminSessionsView() {
                 </ActionButton>
             </ActionsList>
             <ContentArea>
+                <h3>Session Management and Creation</h3>
+                <p>
+                    From this page, you can manage an existing session or create
+                    a new session.
+                </p>
+                <p>{activeSessionInfo}</p>
+
+                <h5>Existing Sessions</h5>
                 <ConnectedAddSessionDialog
                     show={addDialogVisible}
                     onHide={() => {

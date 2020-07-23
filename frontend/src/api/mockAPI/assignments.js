@@ -93,7 +93,10 @@ export class Assignment extends MockAPIController {
         // compute offer_status
         const activeOffer = this.getActiveOffer(matchingAssignment);
         if (activeOffer) {
-            Object.assign(ret, { active_offer_status: activeOffer.status });
+            Object.assign(ret, {
+                active_offer_status: activeOffer.status,
+                active_offer_url_token: activeOffer.url_token,
+            });
         }
         return ret;
     }
@@ -274,6 +277,7 @@ class ActiveOffer extends MockAPIController {
             hours,
             ta_coordinator_name: "Dr. Coordinator",
             ta_coordinator_email: "coordinator@utoronto.ca",
+            url_token: "mock_api_offer_url_token",
         };
 
         return offer;

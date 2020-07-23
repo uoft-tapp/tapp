@@ -8,9 +8,14 @@ import {
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
 import { FaPlus } from "react-icons/fa";
+import { ConnectedUploadContractTemplateAction } from "./upload-contract-template-button";
+import { useSelector } from "react-redux";
+import { activeSessionSelector } from "../../api/actions";
+import { MissingActiveSessionWarning } from "../../components/sessions";
 
 export function AdminContractTemplatesView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const activeSession = useSelector(activeSessionSelector);
     return (
         <div className="page-body">
             <ActionsList>
@@ -23,8 +28,12 @@ export function AdminContractTemplatesView() {
                 >
                     Add Contract Template
                 </ActionButton>
+                <ConnectedUploadContractTemplateAction />
             </ActionsList>
             <ContentArea>
+                {activeSession ? null : (
+                    <MissingActiveSessionWarning extraText="To view or modify contract templates, you must select a session." />
+                )}
                 <ConnectedContractTemplateList />
                 <ConnectedAddContractTemplateDialog
                     show={addDialogVisible}

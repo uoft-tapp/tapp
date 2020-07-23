@@ -19,6 +19,7 @@ import {
     upsertDdahs,
 } from "../../api/actions/ddahs";
 import { DdahsList, DdahsDiffList } from "../../components/ddahs";
+import { ddahTableSelector } from "../ddah-table/actions";
 
 /**
  * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
@@ -52,6 +53,10 @@ export function ConnectedExportDdahsAction() {
         "spreadsheet" | "json" | null
     >(null);
 
+    const { selectedDdahIds } = useSelector<any, { selectedDdahIds: Number[] }>(
+        ddahTableSelector
+    );
+
     React.useEffect(() => {
         if (!exportType) {
             return;
@@ -68,6 +73,11 @@ export function ConnectedExportDdahsAction() {
                 ddahs: Ddah[],
                 dataFormat: "csv" | "json" | "xlsx"
             ) {
+                // If we have selected specific DDAHs, filter so we only export them.
+                if (selectedDdahIds && selectedDdahIds.length > 0) {
+                    ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
+                }
+
                 // Compute the maximum number of duties, because each duty gets a column.
                 const maxDuties = Math.max(
                     ...ddahs.map((ddah) => ddah.duties.length || 0),

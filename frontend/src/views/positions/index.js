@@ -16,9 +16,12 @@ import { formatDate } from "../../libs/utils";
 import { Badge } from "react-bootstrap";
 import { activeSessionSelector } from "../../api/actions";
 import { useSelector } from "react-redux";
+import { MissingActiveSessionWarning } from "../../components/sessions";
 
 export function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const activeSession = useSelector(activeSessionSelector);
+
     return (
         <div className="page-body">
             <ActionsList>
@@ -36,6 +39,9 @@ export function AdminPositionsView() {
                 <ConnectedExportPositionsAction />
             </ActionsList>
             <ContentArea>
+                {activeSession ? null : (
+                    <MissingActiveSessionWarning extraText="To view or modify positions, you must select a session." />
+                )}
                 <ConnectedAddPositionDialog
                     show={addDialogVisible}
                     onHide={() => {

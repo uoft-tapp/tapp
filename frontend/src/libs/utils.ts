@@ -5,7 +5,7 @@
  * @param {string} x
  * @returns
  */
-export function strip(x) {
+export function strip(x: string | null | undefined): string {
     if (x == null) {
         return "";
     }
@@ -18,7 +18,7 @@ export function strip(x) {
  * Output string is of the form January 1, 2019
  * @param {string} dateString
  */
-export function formatDate(dateString) {
+export function formatDate(dateString: string): string {
     if (!dateString) {
         return dateString;
     }
@@ -34,3 +34,21 @@ export function formatDate(dateString) {
         day: "numeric",
     })}`;
 }
+
+/**
+ * Format a url for downloading. In production, this is the
+ * identity function. In development mode, this function replaces
+ * port `8000` with `3000` so that non-json data can be downloaded from the
+ * backend.
+ *
+ * @param {string} url
+ */
+let formatDownloadUrl = (url: string) => url;
+if (process.env.REACT_APP_DEV_FEATURES) {
+    formatDownloadUrl = (url: string) => {
+        url = new URL(url, window.location.href).href;
+        return url.replace("localhost:8000", "localhost:3000");
+    };
+}
+
+export { formatDownloadUrl };

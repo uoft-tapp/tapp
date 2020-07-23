@@ -29,7 +29,7 @@ const DEFAULT_LABEL = "Select a spreadsheet, CSV, or JSON file.";
  * } - `onCancel` means the cancel button was clicked. `onClose` means the `x` was clicked or there was a click outside of the dialog window.
  * @returns
  */
-function ImportDialog({
+export function ImportDialog({
     dialogOpen,
     onCancel,
     onClose,
@@ -37,8 +37,9 @@ function ImportDialog({
     dialogContent,
     onFileChange,
     setInProgress: parentSetInProgress,
+    label = DEFAULT_LABEL,
 }) {
-    const [fileInputLabel, setFileInputLabel] = React.useState(DEFAULT_LABEL);
+    const [fileInputLabel, setFileInputLabel] = React.useState(label);
     const [fileArrayBuffer, setFileArrayBuffer] = React.useState(null);
     const [fileContents, setFileContents] = React.useState(null);
     const [inProgress, _setInProgress] = React.useState(false);
@@ -128,7 +129,7 @@ function ImportDialog({
                 setInProgress(false);
                 setFileArrayBuffer(null);
                 setFileContents(null);
-                setFileInputLabel(DEFAULT_LABEL);
+                setFileInputLabel(label);
             });
     }
 

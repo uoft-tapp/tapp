@@ -12,9 +12,14 @@ import {
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
 import { ConnectedDdahsTable } from "../ddah-table";
+import { MissingActiveSessionWarning } from "../../components/sessions";
+import { useSelector } from "react-redux";
+import { activeSessionSelector } from "../../api/actions";
 
 export function AdminDdahsView(): React.ReactNode {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const activeSession = useSelector(activeSessionSelector);
+
     return (
         <div className="page-body">
             <ActionsList>
@@ -33,6 +38,9 @@ export function AdminDdahsView(): React.ReactNode {
                 <ConnectedExportDdahsAction />
             </ActionsList>
             <ContentArea>
+                {activeSession ? null : (
+                    <MissingActiveSessionWarning extraText="To view or modify DDAHs, you must select a session." />
+                )}
                 <ConnectedAddDdahDialog
                     show={addDialogVisible}
                     onHide={() => {

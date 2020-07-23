@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
 import { formatDate } from "../libs/utils";
+import { Alert } from "react-bootstrap";
 const DEFAULT_COLUMNS = [
     { Header: "Name", accessor: "name" },
     {
@@ -45,3 +46,11 @@ SessionsList.propTypes = {
         PropTypes.shape({ Header: PropTypes.any.isRequired })
     ),
 };
+
+export function MissingActiveSessionWarning({ extraText = "" }) {
+    return (
+        <Alert variant="info">
+            There is no active session selected. {extraText}
+        </Alert>
+    );
+}
