@@ -130,7 +130,7 @@ export const ddahsRoutes = {
             summary: "Email a DDAH",
             returns: docApiPropTypes.ddah,
         }),
-        "/assignments/:assignment_id/ddah/create": documentCallback({
+        "/assignments/:assignment_id/ddah": documentCallback({
             func: (data, params, body) => {
                 if (params.role === "admin" || params.role === "instructor") {
                     const assignment = new Assignment(data).find(

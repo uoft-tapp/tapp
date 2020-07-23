@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_081814) do
+ActiveRecord::Schema.define(version: 2020_07_20_000001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,30 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["session_id"], name: "index_contract_templates_on_session_id"
+  end
+
+  create_table "ddahs", force: :cascade do |t|
+    t.bigint "assignment_id", null: false
+    t.datetime "approved_date"
+    t.datetime "accepted_date"
+    t.datetime "revised_date"
+    t.datetime "emailed_date"
+    t.string "signature"
+    t.string "url_token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assignment_id"], name: "index_ddahs_on_assignment_id"
+    t.index ["url_token"], name: "index_ddahs_on_url_token"
+  end
+
+  create_table "duties", force: :cascade do |t|
+    t.bigint "ddah_id"
+    t.string "description"
+    t.float "hours"
+    t.integer "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ddah_id"], name: "index_duties_on_ddah_id"
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -232,6 +256,8 @@ ActiveRecord::Schema.define(version: 2019_11_15_081814) do
   add_foreign_key "assignments", "offers", column: "active_offer_id"
   add_foreign_key "assignments", "positions"
   add_foreign_key "contract_templates", "sessions"
+  add_foreign_key "ddahs", "assignments"
+  add_foreign_key "duties", "ddahs"
   add_foreign_key "offers", "assignments"
   add_foreign_key "position_data_for_ads", "positions"
   add_foreign_key "position_data_for_matchings", "positions"

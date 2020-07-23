@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=yes"
+        />
+        <meta charset="utf-8" />
+        <%= csrf_meta_tags %>
+
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=fetch,Promise,Object.entries"></script>
+        <title>DDAH</title>
+
+        <!-- When not run through the liquid templating engine, the { % ... % } characters appear in the page.
+        By wrapping everything in a div with `display: none` we hide it; the JS and CSS will still load correctly -->
+
+        <div style="display: none;">
+            {% if styles %}
+            <style>
+                {{ styles }}
+            </style>
+            {% else %}
+            <link rel="stylesheet" type="text/css" href="view-ddah.css" />
+            {% endif %}
+
+            <script>
+                window.URL_TOKEN = "{{ url_token }}";
+            </script>
+            {% if scripts %}
+            <script>
+                try {
+                    // prettier-ignore
+                    {{ scripts }}
+                } catch (e) {
+                    console.log("Encountered error", e);
+                }
+            </script>
+            {% else %}
+            <script type="text/javascript" src="./view-ddah.js"></script>
+            {% endif %}
+        </div>
+    </head>
+    <body>
+        <div class="header">
+            <form id="logout" action="/logout" method="post">
+                <span>User: <b>{{ utorid }}</b></span>
+                <button id="logout-button" type="submit" class="button">
+                    Logout
+                </button>
+            </form>
+            <h1>Description of Duties and Allocation of Hours for {{ position_code }}</h1>
+        </div>
+        <div class="content">
+            <div class="decision">
+                <h3>
+                    <a
+                        href="/public/ddahs/{{ url_token }}.pdf"
+                        role="button"
+                        class="button"
+                        >Download PDF</a
+                    >
+                </h3>
+                <h1>
+                    Status:
+                    <span class="{{ status }} capitalize">{{ status }}</span>
+                </h1>
+                <form id="decision">
+                    <h3>
+                        Please acknowledge receipt of this Description of Duties
+                        and Allocation of Hours form below. If there are any
+                        issues with your described duties or you need further
+                        clarification, please contact your course supervisor(s).
+                    </h3>
+                    <div class="decision-container">
+                        <input
+                            type="radio"
+                            value="accept"
+                            id="radio-accept"
+                            name="decision"
+                        />
+                        <label for="radio-accept">
+                            Acknowledge
+                        </label>
+                        <div class="signature">
+                            <div class="">
+                                <label for="signature_name">
+                                    <p>
+                                        To confirm your acknowledgement, please
+                                        type your name below.
+                                    </p>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="signature_name"
+                                    id="signature_name"
+                                    maxlength="10"
+                                />
+                                <div class="input-placeholder">.</div>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            class="button"
+                            onclick="submitDecision()"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+                <div class="admonishment">
+                    <p>
+                        <b>Important:</b> In order to arrange payroll, if this
+                        is your first TAship or your SIN number has been changed
+                        since your last TAship, {{ to_coordinator_email }}
+                    </p>
+                </div>
+            </div>
+            <div class="contract-view">
+                <iframe src="/public/ddahs/{{ url_token }}"></iframe>
+            </div>
+        </div>
+    </body>
+</html>

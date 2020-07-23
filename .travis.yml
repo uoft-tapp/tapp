@@ -45,6 +45,7 @@ matrix:
         - docker ps -a
         - docker-compose run backend rake db:create
         - docker-compose run backend rake db:migrate
+        - sleep 30
       script:
         - ./tests/run-unit-tests.sh
       after_failure:
