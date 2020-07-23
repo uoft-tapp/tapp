@@ -149,7 +149,7 @@ export function ConnectedViewAssignmentDetailsAction() {
             <ActionButton
                 icon={FaSearchDollar}
                 onClick={() => setDialogVisible(true)}
-                title="View details fo selected assignment(s)"
+                title="View details of selected assignment(s)"
             >
                 Assignment Details
             </ActionButton>
