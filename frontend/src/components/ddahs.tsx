@@ -245,7 +245,7 @@ export function DdahEditor(props: {
                         })
                     }
                 >
-                    <FaPlus className="mr-2" />
+                    <FaPlus className="add-duty-btn-icon" />
                     Add Duty
                 </Button>
             </DialogRow>
