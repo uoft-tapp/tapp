@@ -19,6 +19,7 @@ import {
 } from "../../components/assignments-list";
 import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
+import { offerTableSelector } from "../offertable/actions";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -31,6 +32,7 @@ export function ConnectedExportAssignmentsAction() {
     const dispatch = useDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
+    const { selectedAssignmentIds } = useSelector(offerTableSelector);
 
     React.useEffect(() => {
         if (!exportType) {
@@ -45,6 +47,13 @@ export function ConnectedExportAssignmentsAction() {
 
             // Make a function that converts a list of instructors into a `File` object.
             function prepareData(assignments, dataFormat) {
+                // If we have selected specific assignments, we only want to export those.
+                if (selectedAssignmentIds && selectedAssignmentIds.length > 0) {
+                    assignments = assignments.filter((a) =>
+                        selectedAssignmentIds.includes(a.id)
+                    );
+                }
+
                 // We want to flatten a lot of the data in `assignments` and only include the information
                 // we need.
                 const assignmentsForSpreadsheet = assignments.map(

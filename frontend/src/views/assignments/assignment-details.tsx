@@ -5,7 +5,7 @@ import {
     assignmentsSelector,
     fetchWageChunksForAssignment,
 } from "../../api/actions";
-import { Button, Modal, Alert } from "react-bootstrap";
+import { Button, Modal, Alert, Spinner } from "react-bootstrap";
 import { Assignment, WageChunk } from "../../api/defs/types";
 import { formatDate } from "../../libs/utils";
 import { ActionButton } from "../../components/action-buttons";
@@ -83,16 +83,22 @@ export function ConnectedAssignmentDetails({
                     <th>Offer Status</th>
                     <td>{assignment.active_offer_status || "No Offer"}</td>
                 </tr>
-                {assignment.wage_chunks && (
-                    <tr>
-                        <th>Pay Description</th>
-                        <td>
+                <tr>
+                    <th>Pay Description</th>
+                    <td>
+                        {assignment.wage_chunks ? (
                             <WagechunkDetails
                                 wageChunks={assignment.wage_chunks}
                             />
-                        </td>
-                    </tr>
-                )}
+                        ) : (
+                            <Spinner
+                                animation="border"
+                                size="sm"
+                                className="mr-1"
+                            />
+                        )}
+                    </td>
+                </tr>
             </tbody>
         </table>
     );
