@@ -61,6 +61,8 @@ class Offer < ApplicationRecord
                 self.rejected_date = Time.zone.now
             when :withdrawn
                 self.withdrawn_date = Time.zone.now
+            when :pending
+                self.emailed_date = Time.zone.now
             end
         end
     end

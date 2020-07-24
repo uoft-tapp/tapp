@@ -63,7 +63,6 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
         url = Rails.application.config.base_url
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
         link = "#{url}/public/contracts/#{@assignment.active_offer.url_token}/view"
-
         OfferMailer.contract_email(@assignment, link).deliver_now!
         # If the assignment has not been sent before, set status to pending
         if offer.provisional?
