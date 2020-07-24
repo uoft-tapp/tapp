@@ -1,5 +1,7 @@
 import React from "react";
 import FileSaver from "file-saver";
+import JSZip from "jszip";
+import XLSX from "xlsx";
 import { applicantsSelector, assignmentsSelector } from "../../api/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
@@ -20,6 +22,8 @@ import {
 } from "../../api/actions/ddahs";
 import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
+import { ActionButton } from "../../components/action-buttons";
+import { FaDownload } from "react-icons/fa";
 
 /**
  * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
@@ -38,6 +42,45 @@ function flattenDuties(ddah: Ddah): (string | number)[] {
     }
 
     return ret;
+}
+
+/**
+ * Turns an array of Ddah objects into an Array of Arrays suitable
+ * for converting into a spreadsheet.
+ *
+ * @export
+ * @param {Ddah[]} ddahs
+ * @returns {((string | number)[][])}
+ */
+export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
+    // Compute the maximum number of duties, because each duty gets a column.
+    const maxDuties = Math.max(
+        ...ddahs.map((ddah) => ddah.duties.length || 0),
+        0
+    );
+    // Create headers for the duty columns
+    const dutyHeaders = Array.from({ length: maxDuties * 2 }, (_, i) => {
+        if (i % 2 === 0) {
+            return `Hours ${i / 2 + 1}`;
+        }
+        return `Duty ${(i - 1) / 2 + 1}`;
+    });
+
+    return [
+        ["Position", "Last Name", "First Name", "Assignment Hours", ""].concat(
+            dutyHeaders
+        ),
+    ].concat(
+        ddahs.map((ddah) =>
+            [
+                ddah.assignment.position.position_code,
+                ddah.assignment.applicant.last_name,
+                ddah.assignment.applicant.first_name,
+                ddah.assignment.hours,
+                "",
+            ].concat(flattenDuties(ddah))
+        ) as any[][]
+    );
 }
 
 /**
@@ -78,42 +121,9 @@ export function ConnectedExportDdahsAction() {
                     ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
                 }
 
-                // Compute the maximum number of duties, because each duty gets a column.
-                const maxDuties = Math.max(
-                    ...ddahs.map((ddah) => ddah.duties.length || 0),
-                    0
-                );
-                // Create headers for the duty columns
-                const dutyHeaders = Array.from(
-                    { length: maxDuties * 2 },
-                    (_, i) => {
-                        if (i % 2 === 0) {
-                            return `Hours ${i / 2 + 1}`;
-                        }
-                        return `Duty ${(i - 1) / 2 + 1}`;
-                    }
-                );
-
                 return dataToFile(
                     {
-                        toSpreadsheet: () =>
-                            [
-                                ["Position", "Last Name", "First Name"].concat(
-                                    dutyHeaders
-                                ),
-                            ].concat(
-                                ddahs.map((ddah) =>
-                                    [
-                                        ddah.assignment.position.position_code,
-                                        ddah.assignment.applicant.last_name,
-                                        ddah.assignment.applicant.first_name,
-                                    ].concat(
-                                        // For some reason type script doesn't like concatenating numbers
-                                        // to arrays of strings. We just lie to typescript here, because it'll be okay.
-                                        flattenDuties(ddah) as string[]
-                                    )
-                                )
-                            ),
+                        toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
                         toJson: () => ({
                             ddahs: ddahs.map((ddah) =>
                                 prepareMinimal.ddah(ddah)
@@ -129,7 +139,7 @@ export function ConnectedExportDdahsAction() {
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch]);
+    }, [exportType, dispatch, selectedDdahIds]);
 
     function onClick(option: "spreadsheet" | "json") {
         setExportType(option);
@@ -351,5 +361,120 @@ export function ConnectedImportDdahsAction() {
             dialogContent={dialogContent}
             setInProgress={setInProgress}
         />
+    );
+}
+
+const DEFAULT_DDAH = {
+    duties: [
+        {
+            order: 1,
+            hours: 0,
+            description: "",
+        },
+        {
+            order: 2,
+            hours: 0,
+            description: "",
+        },
+        {
+            order: 3,
+            hours: 0,
+            description: "",
+        },
+        {
+            order: 4,
+            hours: 0,
+            description: "",
+        },
+    ],
+};
+
+/**
+ * Turn a list of ddahs and assignments into an object
+ * with Arrays of Arrays (suitable for turning into spreadsheets) of DDAHs
+ * split by position codes.
+ *
+ * @param {Ddah[]} ddahs
+ * @param {Assignment[]} assignments
+ * @returns
+ */
+function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
+    const ddahsByAssignmentId: { [key: string]: Ddah } = {};
+    for (const ddah of ddahs) {
+        ddahsByAssignmentId[ddah.assignment.id] = ddah;
+    }
+
+    // Create DDAHs for all assignments, but use the real DDAH if
+    // it exists.
+    const allDdahs = assignments.map((assignment) => {
+        if (ddahsByAssignmentId[assignment.id]) {
+            return ddahsByAssignmentId[assignment.id];
+        }
+        return { ...DEFAULT_DDAH, assignment: assignment };
+    }) as Ddah[];
+    allDdahs.sort(({ assignment: a }, { assignment: b }) => {
+        const aHash = `${a.position.position_code} ${a.applicant.last_name} ${a.applicant.first_name}`;
+        const bHash = `${b.position.position_code} ${b.applicant.last_name} ${b.applicant.first_name}`;
+        return aHash === bHash ? 0 : aHash > bHash ? 1 : -1;
+    });
+
+    // Get a list of all the positions
+    const posSet = new Set<string>();
+    for (const ddah of allDdahs) {
+        posSet.add(ddah.assignment.position.position_code);
+    }
+
+    // Create an object with arrays of DDAHs for every position
+    const ddahsByPosition: { [key: string]: any[][] } = {};
+    for (const position_code of Array.from(posSet)) {
+        ddahsByPosition[position_code] = prepareDdahsSpreadsheet(
+            allDdahs.filter(
+                (ddah) =>
+                    ddah.assignment.position.position_code === position_code
+            )
+        );
+    }
+
+    return ddahsByPosition;
+}
+
+async function arraysByKeyToZip(arrays: { [key: string]: any[][] }) {
+    const zip = new JSZip();
+
+    for (const [position_code, array] of Object.entries(arrays)) {
+        const workbook = XLSX.utils.book_new();
+        const sheet = XLSX.utils.aoa_to_sheet(array);
+        XLSX.utils.book_append_sheet(workbook, sheet, `${position_code} DDAHs`);
+        const rawSpreadsheet = XLSX.write(workbook, {
+            type: "binary",
+            bookType: "xlsx",
+        });
+        zip.file(`${position_code}-DDAHs.xlsx`, rawSpreadsheet, {
+            binary: true,
+        });
+    }
+
+    const blob = await zip.generateAsync({ type: "blob" });
+    return blob;
+}
+
+export function ConnectedDownloadPositionDdahTemplatesAction() {
+    const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
+    const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
+
+    async function download() {
+        const spreadsheets = createDdahSpreadsheets(ddahs, assignments);
+        const blob = await arraysByKeyToZip(spreadsheets);
+        FileSaver.saveAs(blob, "DDAHs-by-position.zip");
+    }
+
+    return (
+        <ActionButton
+            icon={FaDownload}
+            title="Download by-position spreadsheets appropriate for filling in and uploading to create DDAHs"
+            onClick={() => download()}
+        >
+            By-Position Templates
+        </ActionButton>
     );
 }

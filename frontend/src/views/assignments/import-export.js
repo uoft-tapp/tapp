@@ -133,7 +133,7 @@ export function ConnectedExportAssignmentsAction() {
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch, session]);
+    }, [exportType, dispatch, session, selectedAssignmentIds]);
 
     function onClick(option) {
         setExportType(option);

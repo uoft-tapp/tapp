@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
+    ConnectedDownloadPositionDdahTemplatesAction,
 } from "./import-export";
 import {
     ActionsList,
@@ -32,6 +33,7 @@ export function AdminDdahsView(): React.ReactNode {
                 >
                     Add DDAH
                 </ActionButton>
+                <ConnectedDownloadPositionDdahTemplatesAction />
 
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportDdahsAction />
