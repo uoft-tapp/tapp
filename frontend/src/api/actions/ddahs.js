@@ -5,6 +5,7 @@ import {
     UPSERT_ONE_DDAH_SUCCESS,
     DELETE_ONE_DDAH_SUCCESS,
     DDAH_APPROVE_SUCCESS,
+    DDAH_EMAIL_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
@@ -25,6 +26,7 @@ const fetchOneDdahSuccess = actionFactory(FETCH_ONE_DDAH_SUCCESS);
 const upsertOneDdahSuccess = actionFactory(UPSERT_ONE_DDAH_SUCCESS);
 const deleteOneDdahSuccess = actionFactory(DELETE_ONE_DDAH_SUCCESS);
 const approveOneDdahSuccess = actionFactory(DDAH_APPROVE_SUCCESS);
+const emailOneDdahSuccess = actionFactory(DDAH_EMAIL_SUCCESS);
 
 // dispatchers
 export const fetchDdahs = validatedApiDispatcher({
@@ -74,6 +76,27 @@ export const approveDdah = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         let data = await apiPOST(`/${role}/ddahs/${payload.id}/approve`);
         dispatch(approveOneDdahSuccess(data));
+        // The previous action doesn't actually update the redux store,
+        // so we dispatch a fake upsert action to make sure the store gets updated
+        // with the new data.
+        dispatch(upsertOneDdahSuccess(data));
+        return data;
+    },
+});
+
+export const emailDdah = validatedApiDispatcher({
+    name: "emailDdah",
+    description: "Email a DDAH",
+    propTypes: {},
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        let data = await apiPOST(`/${role}/ddahs/${payload.id}/email`);
+        dispatch(emailOneDdahSuccess(data));
+        // The previous action doesn't actually update the redux store,
+        // so we dispatch a fake upsert action to make sure the store gets updated
+        // with the new data.
+        dispatch(upsertOneDdahSuccess(data));
         return data;
     },
 });
