@@ -408,7 +408,7 @@ export function ConnectedDdahsTable() {
             Header: "Preview",
             accessor: "id",
             Cell: WrappedPreviewCell,
-            maxWidth: 50,
+            maxWidth: 52,
         },
         { Header: "Position", accessor: "position_code" },
         { Header: "Last Name", accessor: "last_name" },
