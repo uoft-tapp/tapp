@@ -7,6 +7,6 @@ class OfferMailer < ApplicationMailer
     def contract_email(assignment, link)
         @offer = assignment.active_offer
         @url = link
-        mail(to: assignment.applicant.email, subject: 'hi there')
+        mail(to: assignment.applicant.email, subject: 'TA Position Offer')
     end
 end

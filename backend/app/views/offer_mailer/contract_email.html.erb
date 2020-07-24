@@ -6,9 +6,17 @@
     </style>
   </head>
   <body>
+  <p>Dear <%= @offer.first_name %> <%= @offer.last_name %></p>
   <p>
-    Hello 
+    We would like to offer you a position as a TA for <%= @offer.position_code %> <%= @offer.position_title %>.
+  </p>
+  <p>
+    Please click the link below to view your offer and accept or reject it:<br/>
+    <a href="http://<%= @url %>"><%= @url %></a>
   </p>
 
+  <p>
+    Thanks!
+  </p>
   </body>
 </html>
