@@ -7,9 +7,9 @@ import {
 
 export const routes = [
     {
-        route: "/tapp",
-        name: "Admin",
-        description: "Admin View",
+        route: "/session_setup",
+        name: "Session Setup",
+        description: "Setup a new session or manage an existing session.",
         subroutes: [
             {
                 route: "/sessions",
@@ -26,6 +26,35 @@ export const routes = [
                 name: "Instructors",
                 description: "Manage Instructors",
             },
+        ],
+    },
+    {
+        route: "/assignments_and_positions",
+        name: "Assignment & Positions",
+        description: "Manage Assignments & Positions",
+        subroutes: [
+            {
+                route: "/positions",
+                name: "Positions",
+                description: "Manage Positions",
+            },
+            {
+                route: "/assignments",
+                name: "Assignments",
+                description: "Manage Assignments",
+            },
+            {
+                route: "/ddahs",
+                name: "DDAHs",
+                description: "Manage DDAHs",
+            },
+        ],
+    },
+    {
+        route: "/tapp",
+        name: "Admin",
+        description: "Admin View",
+        subroutes: [
             {
                 route: "/positions",
                 name: "Positions",
@@ -59,11 +88,6 @@ export const routes = [
                 description: "See statistics about accepted/rejected contracts",
             },
         ],
-    },
-    {
-        route: "/appointments_and_positions",
-        name: "Appointments & Positions",
-        description: "Appointments & Positions",
     },
 ];
 

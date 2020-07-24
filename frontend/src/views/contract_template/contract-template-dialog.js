@@ -22,7 +22,7 @@ const BLANK_CONTRACT_TEMPLATE = {
  * @param {object} contractTemplate
  * @param {object[]} contractTemplates
  */
-function getConficts(contractTemplate, contractTemplates) {
+function getConflicts(contractTemplate, contractTemplates) {
     const ret = { delayShow: "", immediateShow: "" };
     if (
         !strip(contractTemplate.template_name) ||
@@ -76,7 +76,7 @@ function AddContractTemplateDialog(props) {
         onHide();
     }
 
-    const conflicts = getConficts(newContractTemplate, contractTemplates);
+    const conflicts = getConflicts(newContractTemplate, contractTemplates);
 
     return (
         <Modal show={show} onHide={onHide}>

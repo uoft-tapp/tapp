@@ -8,6 +8,9 @@ import {
 import { OfferTable } from "../../components/offer-table";
 import { EditableField } from "../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
+import { Button } from "react-bootstrap";
+import { FaSearch } from "react-icons/fa";
+import { formatDownloadUrl } from "../../libs/utils";
 
 function capitalize(word = "") {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -34,6 +37,41 @@ function ApplicantCell(props) {
         >
             {props.value}
         </EditableField>
+    );
+}
+
+/**
+ * Cell to show the status of a contract and offer a download button if a contract has been created.
+ * I.e., a
+ *
+ * @param {*} { original }
+ * @returns
+ */
+function StatusCell({ original }) {
+    const formattedStatus = capitalize(original.active_offer_status || "");
+    const activeOfferUrlToken = original.active_offer_url_token;
+
+    let download = null;
+    if (activeOfferUrlToken) {
+        const url = `/public/contracts/${activeOfferUrlToken}.pdf`;
+        download = (
+            <Button
+                href={formatDownloadUrl(url)}
+                variant="light"
+                size="sm"
+                className="mr-2 py-0"
+                title="Download offer PDF"
+            >
+                <FaSearch />
+            </Button>
+        );
+    }
+
+    return (
+        <>
+            {download}
+            {formattedStatus}
+        </>
     );
 }
 
@@ -117,6 +155,7 @@ function EditableOfferTable(props) {
             Header: "Status",
             id: "status",
             accessor: (data) => capitalize(data.active_offer_status || ""),
+            Cell: StatusCell,
         },
     ];
 

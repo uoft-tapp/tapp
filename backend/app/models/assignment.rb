@@ -51,6 +51,10 @@ class Assignment < ApplicationRecord
         active_offer.blank? ? nil : active_offer.status
     end
 
+    def active_offer_url_token
+        active_offer.blank? ? nil : active_offer.url_token
+    end
+
     def start_date
         self[:start_date].blank? ? position.start_date : self[:start_date]
     end

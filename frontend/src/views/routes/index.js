@@ -17,30 +17,36 @@ export function AdminRoutes() {
     return (
         <Switch>
             <Route exact path="/">
-                <Redirect to="/tapp" />
+                <Redirect to="/assignments_and_positions/assignments" />
             </Route>
             <Route exact path="/tapp">
                 <Landing />
             </Route>
-            <Route exact path="/tapp/sessions">
+            <Route exact path="/session_setup">
+                <Redirect to="/session_setup/sessions" />
+            </Route>
+            <Route exact path="/session_setup/sessions">
                 <AdminSessionsView />
             </Route>
-            <Route exact path="/tapp/contract_templates">
+            <Route exact path="/session_setup/contract_templates">
                 <AdminContractTemplatesView />
             </Route>
-            <Route exact path="/tapp/instructors">
+            <Route exact path="/session_setup/instructors">
                 <AdminInstructorsView />
             </Route>
-            <Route exact path="/tapp/positions">
+            <Route exact path="/assignments_and_positions">
+                <Redirect to="/assignments_and_positions/positions" />
+            </Route>
+            <Route exact path="/assignments_and_positions/positions">
                 <AdminPositionsView />
             </Route>
-            <Route exact path="/tapp/assignments">
+            <Route exact path="/assignments_and_positions/assignments">
                 <AdminAssignmentsView />
             </Route>
             <Route exact path="/tapp/applicants">
                 <AdminApplicantsView />
             </Route>
-            <Route exact path="/tapp/ddahs">
+            <Route exact path="/assignments_and_positions/ddahs">
                 <AdminDdahsView />
             </Route>
         </Switch>

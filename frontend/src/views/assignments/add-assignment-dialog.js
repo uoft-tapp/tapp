@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Alert, Button } from "react-bootstrap";
+import { Modal, Alert, Button, Spinner } from "react-bootstrap";
 import { strip } from "../../libs/utils";
 import {
     positionsSelector,
@@ -10,7 +10,7 @@ import {
 } from "../../api/actions";
 import { AssignmentEditor } from "../../components/forms/assignment-editor";
 
-function getConficts(assignment, assignments = []) {
+function getConflicts(assignment, assignments = []) {
     const ret = { delayShow: "", immediateShow: "" };
     if (!strip(assignment.position_id) || !strip(assignment.applicant_id)) {
         ret.delayShow = "A position and applicant is required";
@@ -54,6 +54,7 @@ export function AddAssignmentDialog(props) {
         upsertAssignment,
     } = props;
     const [newAssignment, setNewAssignment] = React.useState(BLANK_ASSIGNMENT);
+    const [inProgress, setInProgress] = React.useState(false);
 
     React.useEffect(() => {
         if (!show) {
@@ -62,12 +63,23 @@ export function AddAssignmentDialog(props) {
         }
     }, [show]);
 
-    function createAssignment() {
-        upsertAssignment(newAssignment);
+    async function createAssignment() {
+        setInProgress(true);
+        try {
+            await upsertAssignment(newAssignment);
+        } finally {
+            setInProgress(false);
+        }
         onHide();
     }
 
-    const conflicts = getConficts(newAssignment, assignments);
+    const conflicts = getConflicts(newAssignment, assignments);
+
+    // When a confirm operation is in progress, a spinner is displayed; otherwise
+    // it's hidden
+    const spinner = inProgress ? (
+        <Spinner animation="border" size="sm" className="mr-1" />
+    ) : null;
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -96,6 +108,7 @@ export function AddAssignmentDialog(props) {
                         !!conflicts.delayShow || !!conflicts.immediateShow
                     }
                 >
+                    {spinner}
                     Create Assignment
                 </Button>
             </Modal.Footer>

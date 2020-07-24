@@ -123,6 +123,7 @@ export interface Assignment {
     end_date: string;
     contract_override_pdf: string;
     active_offer_status?: string;
+    active_offer_url_token?: string;
     wage_chunks?: WageChunk[];
 }
 

@@ -206,5 +206,9 @@ export function templatesTests(api) {
         );
     });
 
+    // An error will be thrown if a template with the same file name already exists.
+    // Since we don't want to pollute the filesystem by creating random names, when
+    // you implement this test, use node.js commands to detect and delete an existing
+    // file
     it.todo("upload a template");
 }

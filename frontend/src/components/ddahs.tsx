@@ -130,7 +130,7 @@ export function DdahEditor(props: {
     // If the assignment is editable, we have a selector for the assignments,
     // otherwise it is rendered as fixed text.
     let assignmentNode: React.ReactNode = ddah.assignment
-        ? `${ddah.assignment.position.position_code} for ${ddah.assignment.applicant.last_name}, ${ddah.assignment.applicant.first_name}`
+        ? ` ${ddah.assignment.position.position_code} for ${ddah.assignment.applicant.last_name}, ${ddah.assignment.applicant.first_name}`
         : "No Assignment";
     if (editableAssignment) {
         assignmentNode = (
@@ -245,7 +245,7 @@ export function DdahEditor(props: {
                         })
                     }
                 >
-                    <FaPlus className="mr-2" />
+                    <FaPlus className="add-duty-btn-icon" />
                     Add Duty
                 </Button>
             </DialogRow>

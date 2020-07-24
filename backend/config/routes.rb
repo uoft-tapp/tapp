@@ -100,7 +100,7 @@ Rails.application.routes.draw do
 
                     # Contract Templates
                     resources :contract_templates, only: %i[index create] do
-                        collection { post :delete }
+                        collection { post :delete, :upload }
                         member do
                             get :view
                             get :download
