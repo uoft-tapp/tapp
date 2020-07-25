@@ -10,6 +10,8 @@ export function offersTests(api) {
     let assignment;
     let position;
     let newOffer;
+    let newOffer2 = {};
+    let resp;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -101,19 +103,202 @@ export function offersTests(api) {
         expect(resp1.payload).toEqual({ ...newOffer, nag_count: nagCount });
     });
 
-    // can only create when the active offer is null or with a status of withdrawn
-    // if there's an active offer is not withdrawn/provisional, can't change anything of that assignment. (assignment is locked == having active offer)
-    // if assignment gets changed (withdrawn/provisional), there's no longer an active offer.
-    // two routes: admin public
-    // admin: accept / reject / withdraw any time
-    // public: accept / reject on status: pending, can't do no action when it is not pending
-    it.todo("modify position/assignment and existing offers should not change");
-    it.todo("accept/reject/withdraw offer");
+    // See https://github.com/uoft-tapp/tapp/wiki/Workflow-Diagram-for-offers for detailed
+    // diagram of the offer create/withdraw/email/etc. logic
+    it("accept/reject/withdraw offer", async () => {
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/accept`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "accepted" });
+        // The assignment's active offer status should match
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ active_offer_status: "accepted" });
 
-    it.todo(
-        "error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected/pending"
-    );
-    it.todo(
-        "create an offer for an assignment that has an active offer that is withdrawn/preliminary"
-    );
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/reject`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "rejected" });
+        // The assignment's active offer status should match
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ active_offer_status: "rejected" });
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "withdrawn" });
+        // The assignment's active offer status should match
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({
+            active_offer_status: "withdrawn",
+        });
+
+        // Make sure we can set the offer back to `"accepted"` from a withdrawn state.
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/accept`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "accepted" });
+        Object.assign(newOffer, resp.payload);
+    });
+
+    it("error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected", async () => {
+        // Since `newOffer.status` is `"accepted"`, this should fail
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("error");
+
+        // Rejected offers also cannot be created anew
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/reject`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "rejected" });
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("error");
+    });
+
+    it("create an offer for an assignment whose active offer is withdrawn", async () => {
+        // Withdraw the offer first
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "withdrawn" });
+        Object.assign(newOffer, resp.payload);
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.id).not.toBeNull();
+        expect(resp.payload.id).not.toEqual(newOffer.id);
+        Object.assign(newOffer2, resp.payload);
+    });
+
+    it("fails to create new offer when active_offer is provisional/pending", async () => {
+        // newOffer2 should be a "provisional" offer. We need that to run this test
+        expect(newOffer2).toMatchObject({ status: "provisional" });
+
+        // Fail to create a new offer again
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("error");
+
+        // Email the offer and try to create again; this should fail
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "pending" });
+        Object.assign(newOffer2, resp.payload);
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("error");
+    });
+
+    it("cannot change assignment if there is an active offer that isn't withdrawn/pending", async () => {
+        // This tests starts off assuming `newOffer2` is pending
+        expect(newOffer2).toMatchObject({ status: "pending" });
+
+        // Error when updating the offer
+        resp = await apiPOST(`/admin/assignments`, {
+            ...assignment,
+            hours: 98.6,
+        });
+        expect(resp).toHaveStatus("error");
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.hours).not.toEqual(98.6);
+
+        // Accept the offer and try again.
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/accept`
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiPOST(`/admin/assignments`, {
+            ...assignment,
+            hours: 98.6,
+        });
+        expect(resp).toHaveStatus("error");
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.hours).not.toEqual(98.6);
+
+        // Reject the offer and try again.
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/reject`
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiPOST(`/admin/assignments`, {
+            ...assignment,
+            hours: 98.6,
+        });
+        expect(resp).toHaveStatus("error");
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.hours).not.toEqual(98.6);
+    });
+
+    it("changing an assignment with a withdrawn/pending active offer should succeed and remove the offer", async () => {
+        // Withdraw the current offer
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "withdrawn" });
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({
+            active_offer_status: "withdrawn",
+        });
+        const assignmentWithWithdrawnOffer = resp.payload;
+
+        // We should now be able to change the assignment
+        resp = await apiPOST(`/admin/assignments`, {
+            ...assignment,
+            hours: 98.6,
+        });
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.id).toEqual(assignmentWithWithdrawnOffer.id);
+        expect(resp.payload.hours).toEqual(98.6);
+        expect(resp.payload.active_offer_status).toBeNull();
+        expect(resp.payload.active_offer_status).toBeNull();
+        expect(resp.payload.active_offer_url_token).toBeNull();
+
+        // The same should work for a provisional offer
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({ status: "provisional" });
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({
+            active_offer_status: "provisional",
+        });
+        const assignmentWithProvisionalOffer = resp.payload;
+
+        // We should now be able to change the assignment
+        resp = await apiPOST(`/admin/assignments`, {
+            ...assignment,
+            hours: 99.6,
+        });
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.id).toEqual(assignmentWithProvisionalOffer.id);
+        expect(resp.payload.hours).toEqual(99.6);
+        expect(resp.payload.active_offer_status).toBeNull();
+        expect(resp.payload.active_offer_status).toBeNull();
+        expect(resp.payload.active_offer_url_token).toBeNull();
+    });
 }

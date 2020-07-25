@@ -12,7 +12,8 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
     # POST /active_offers/create
     # Create an active_offer for an Assignment
     def create
-        if @assignment.active_offer.present?
+        if @assignment.active_offer.present? &&
+               @assignment.active_offer.status != 'withdrawn'
             render_error(message: I18n.t('active_offers.already_exists'))
             return
         end
