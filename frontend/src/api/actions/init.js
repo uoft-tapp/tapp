@@ -80,7 +80,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };
 
-        // These actions do not need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
+        // These actions don't need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
         const asyncActions = [fetchInstructors];
 
         /**
