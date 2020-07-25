@@ -29,7 +29,9 @@ class OfferMailer < ApplicationMailer
 
     def generate_vars(offer)
         @offer = offer
-        @email = offer.email
+        # It is possible that the email from when the offer was created is stale,
+        # so send the offer to the applicant's current email.
+        @email = offer.assignment.applicant.email
         @first_name = offer.first_name
         @last_name = offer.last_name
         @position_code = offer.position_code
