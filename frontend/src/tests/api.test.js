@@ -54,6 +54,10 @@ describe("API tests", () => {
         wageChunksTests({ apiGET, apiPOST });
     });
     describe("offers tests", () => {
+        // These need to be in separate `describe`.
+        // Each one independently defines a `beforeAll` action,
+        // and those actions will clobber each other unless they are isolated
+        // in different `describe`s.
         describe("basic", () => {
             offersTests({ apiGET, apiPOST });
         });
