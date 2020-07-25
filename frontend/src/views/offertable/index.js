@@ -168,7 +168,12 @@ function EditableOfferTable(props) {
  */
 export const ConnectedOfferTable = connect(
     (state) => ({
-        data: assignmentsSelector(state),
+        data: assignmentsSelector(state).map((offer) => {
+            const { active_offer_status, ...rest } = offer;
+            return !active_offer_status
+                ? { active_offer_status: "No Contract", ...rest }
+                : offer;
+        }),
         selected: offerTableSelector(state).selectedAssignmentIds,
     }),
     { upsertApplicant, upsertAssignment, setSelected: setSelectedRows }
