@@ -49,7 +49,7 @@ describe("API tests", () => {
     describe("wage_chunk tests", () => {
         wageChunksTests({ apiGET, apiPOST });
     });
-    describe.skip("offers tests", () => {
+    describe("offers tests", () => {
         offersTests({ apiGET, apiPOST });
     });
     describe.skip("reporting_tag tests", () => {

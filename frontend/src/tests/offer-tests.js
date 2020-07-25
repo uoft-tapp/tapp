@@ -29,29 +29,23 @@ export function offersTests(api) {
         const resp1 = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/create`
         );
-
+        expect(resp1).toHaveStatus("success");
         // store the response for later use
         newOffer = resp1.payload;
 
-        // general checking
-        expect(resp1).toHaveStatus("success");
         expect(newOffer.id).not.toBeNull();
-        expect(newOffer.status).toEqual("provisional");
-
-        // check if the offer detail matches its assignment
-        expect(newOffer.assignment_id).toEqual(assignment.id);
-        expect(newOffer.hours).toEqual(assignment.hours);
-
-        // check if the offer detail matches its applicant
-        expect(newOffer.first_name).toEqual(applicant.first_name);
-        expect(newOffer.last_name).toEqual(applicant.last_name);
-        expect(newOffer.email).toEqual(applicant.email);
-
-        // check if the offer detail matches its position
-        expect(newOffer.position_code).toEqual(position.position_code);
-        expect(newOffer.position_title).toEqual(position.position_title);
-        expect(newOffer.position_start_date).toEqual(position.start_date);
-        expect(newOffer.position_end_date).toEqual(position.end_date);
+        expect(newOffer).toMatchObject({
+            status: "provisional",
+            assignment_id: assignment.id,
+            hours: assignment.hours,
+            first_name: applicant.first_name,
+            last_name: applicant.last_name,
+            email: applicant.email,
+            position_code: position.position_code,
+            position_title: position.position_title,
+            position_start_date: position.start_date,
+            position_end_date: position.end_date,
+        });
     });
 
     it("get newly created active offer for assignment", async () => {
@@ -70,16 +64,14 @@ export function offersTests(api) {
         const resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/email`
         );
-
-        // check status
         expect(resp).toHaveStatus("success");
-        // check the respond
-        expect(resp.payload).toMatchObject({
-            ...newOffer,
-            status: "pending",
-        });
 
         newOffer = resp.payload;
+        // Offers that have been emailed switch from `status: "provisional"` to `status: "pending"`
+        expect(newOffer).toMatchObject({
+            status: "pending",
+        });
+        expect(newOffer.emailed_date).not.toBeNull();
     });
 
     it("increment nag count correctly", async () => {
@@ -87,11 +79,10 @@ export function offersTests(api) {
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
-
         expect(resp.payload).toEqual(newOffer);
 
         // set the number of time of nagging
-        const nagCount = 5;
+        const nagCount = 3;
         // nag and check after each nagging
         for (let i = 0; i < nagCount; i++) {
             const resp = await apiPOST(
