@@ -50,6 +50,10 @@ const DEFAULT_COLUMNS = [
         Header: "Contract Template",
         accessor: "contract_template.template_name",
     },
+    {
+        Header: "Desired Number of Assignments",
+        accessor: "desired_num_assignments",
+    },
 ];
 
 /**
