@@ -1,8 +1,7 @@
 import { it, expect, beforeAll } from "./utils";
 import { databaseSeeder } from "./setup";
+import axios from "axios";
 
-// TODO: Remove eslint disable
-// eslint-disable-next-line
 export function offersTests(api) {
     const { apiGET, apiPOST } = api;
 
@@ -299,5 +298,145 @@ export function offersTests(api) {
         expect(resp.payload.active_offer_status).toBeNull();
         expect(resp.payload.active_offer_status).toBeNull();
         expect(resp.payload.active_offer_url_token).toBeNull();
+    });
+}
+
+/**
+ * Email tests actually send emails and expect `mailcatcher` to catch
+ * the sent emails. These tests cannot be run with the mock API.
+ *
+ * @export
+ * @param {*} api
+ */
+export function offerEmailTests(api) {
+    const { apiPOST } = api;
+    const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
+
+    let applicant;
+    let assignment;
+    let position;
+    let newOffer;
+
+    beforeAll(async () => {
+        await databaseSeeder.seed(api);
+        assignment = databaseSeeder.seededData.assignment;
+        applicant = databaseSeeder.seededData.applicant;
+        position = databaseSeeder.seededData.position;
+    }, 30000);
+
+    it("can fetch messages from mailcatcher", async () => {
+        let resp = await axios.get(`${MAILCATCHER_BASE_URL}/messages`);
+        expect(resp.data.length >= 0).toEqual(true);
+        // Clear all the messages from mailcatcher
+        await axios.delete(`${MAILCATCHER_BASE_URL}/messages`);
+        resp = await axios.get(`${MAILCATCHER_BASE_URL}/messages`);
+        expect(resp.data.length).toEqual(0);
+    });
+
+    it("email makes a round trip", async () => {
+        const beforeEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        let resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+        newOffer = resp.payload;
+
+        // Wait for mailcatcher to get the email and then search for it.
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const afterEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        expect(afterEmails.length).toBeGreaterThan(beforeEmails.length);
+        // Assume the email we just sent is at the end of the list
+        const newEmail = afterEmails[afterEmails.length - 1];
+
+        // The subject should contain the position code
+        expect(newEmail.subject).toMatch(new RegExp(position.position_code));
+
+        // The body should contain the position code as well as a link to the contract.
+        // We check this by looking for the URL token.
+        const emailBody = (
+            await axios.get(
+                `${MAILCATCHER_BASE_URL}/messages/${newEmail.id}.source`
+            )
+        ).data;
+        expect(emailBody).toMatch(new RegExp(position.position_code));
+        expect(emailBody).toMatch(new RegExp(newOffer.url_token));
+    });
+
+    it("nag email makes a round trip", async () => {
+        const beforeEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        let resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/nag`
+        );
+        expect(resp).toHaveStatus("success");
+        newOffer = resp.payload;
+
+        // Wait for mailcatcher to get the email and then search for it.
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const afterEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        expect(afterEmails.length).toBeGreaterThan(beforeEmails.length);
+        // Assume the email we just sent is at the end of the list
+        const newEmail = afterEmails[afterEmails.length - 1];
+
+        // The subject should contain the position code
+        expect(newEmail.subject).toMatch(new RegExp(position.position_code));
+        expect(newEmail.subject).toMatch(/Reminder/i);
+
+        // The body should contain the position code as well as a link to the contract.
+        // We check this by looking for the URL token.
+        const emailBody = (
+            await axios.get(
+                `${MAILCATCHER_BASE_URL}/messages/${newEmail.id}.source`
+            )
+        ).data;
+        expect(emailBody).toMatch(new RegExp(position.position_code));
+        expect(emailBody).toMatch(new RegExp(newOffer.url_token));
+    });
+
+    it("if applicants email is changed, offer is sent to the new email", async () => {
+        const beforeEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        let resp = await apiPOST(`/admin/applicants`, {
+            ...applicant,
+            email: "goofy-duck@donald.com",
+        });
+        expect(resp).toHaveStatus("success");
+        Object.assign(applicant, resp.payload);
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+        newOffer = resp.payload;
+
+        // Wait for mailcatcher to get the email and then search for it.
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const afterEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+
+        expect(afterEmails.length).toBeGreaterThan(beforeEmails.length);
+        // Assume the email we just sent is at the end of the list
+        const newEmail = afterEmails[afterEmails.length - 1];
+
+        // The subject should contain the position code
+        expect(newEmail.recipients[0]).toMatch(new RegExp(applicant.email));
     });
 }

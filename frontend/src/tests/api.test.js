@@ -10,7 +10,7 @@ import { templatesTests } from "./template-tests";
 import { instructorsTests } from "./instructor-tests";
 import { assignmentsTests } from "./assignment-tests";
 import { wageChunksTests } from "./wage-chunk-tests";
-import { offersTests } from "./offer-tests";
+import { offersTests, offerEmailTests } from "./offer-tests";
 import { reportingTagsTests } from "./reporting-tag-tests";
 import { applicationsTests } from "./application-tests";
 import { unknownRouteTests } from "./unknown-route-tests";
@@ -51,6 +51,7 @@ describe("API tests", () => {
     });
     describe("offers tests", () => {
         offersTests({ apiGET, apiPOST });
+        offerEmailTests({ apiGET, apiPOST });
     });
     describe.skip("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
