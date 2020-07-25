@@ -81,7 +81,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
         const parsedGlobals = { mockAPI: null, activeSession: null };
 
         // These actions do not need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
-        const asyncActions = [fetchActiveUser, fetchSessions, fetchInstructors];
+        const asyncActions = [fetchInstructors];
 
         /**
          * A helper function to determine if the `currentStage`
@@ -97,6 +97,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 "toggleMockAPI",
                 "setActiveUser",
                 "setActiveUserRole",
+                "fetchSessions",
                 "setActiveSession",
                 "updateGlobals",
                 "fetchSessionDependentData",
@@ -117,22 +118,16 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 const activeSession = activeSessionSelector(state) || {
                     id: parsedGlobals.activeSession,
                 };
-                if (
-                    sessions.find((session) => session.id === activeSession.id)
-                ) {
-                    return true;
-                }
-                return false;
+                return sessions.find(
+                    (session) => session.id === activeSession.id
+                );
             }
 
             // All session dependent data depends on an active session being set
             if (stageDependent && queryStage === "fetchSessionDependentData") {
                 const state = getState();
                 const activeSession = activeSessionSelector(state);
-                if (activeSession && activeSession.id != null) {
-                    return true;
-                }
-                return false;
+                return activeSession?.id != null;
             }
 
             return stageDependent;
@@ -156,9 +151,17 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             toggleMockApi(globals.mockAPI);
         }
 
+        if (shouldRunStage("setActiveUser")) {
+            await dispatch(fetchActiveUser());
+        }
+
         if (shouldRunStage("setActiveUserRole")) {
             const activeRole = activeRoleSelector(getState());
             await dispatch(setActiveUserRole(activeRole, { skipInit: true }));
+        }
+
+        if (shouldRunStage("fetchSessions")) {
+            await dispatch(fetchSessions());
         }
 
         if (shouldRunStage("setActiveSession")) {
