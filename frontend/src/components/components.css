@@ -97,3 +97,12 @@
 .input-row-icon {
     align-self: center;
 }
+
+.form-row .input-row-icon {
+    margin-top: 16px;
+}
+
+.add-duty-btn-icon {
+    margin-right: 0.8em;
+    margin-bottom: 0.3em;
+}

@@ -19,6 +19,8 @@ export function SessionEditor(props) {
         <Form>
             <DialogRow>
                 {createFieldEditor("Session Name (e.g. 2019 Fall)", "name")}
+            </DialogRow>
+            <DialogRow>
                 {createFieldEditor("Start Date", "start_date", "date")}
                 {createFieldEditor("End Date", "end_date", "date")}
             </DialogRow>
