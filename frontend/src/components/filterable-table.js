@@ -4,7 +4,10 @@ import ReactTable from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
 import "react-table/react-table.css";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { Badge } from "react-bootstrap";
+import { strip, capitalize } from "../libs/utils";
+
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
 
@@ -49,18 +52,21 @@ function FilterableTable(props) {
         setSelected([..._selected]);
     };
 
-    const [filterString, setFilterString] = React.useState("");
+    const [filterStrings, setFilterStrings] = React.useState([]);
     const [lastSelected, setLastSelected] = React.useState(null);
     const [allSelected, setAllSelected] = React.useState(false);
     function isSelected(id) {
         return _selected.has(id);
     }
 
-    const filteredData = filterString
-        ? data.filter((row) =>
-              rowToStr(row).includes(filterString.toLowerCase())
-          )
-        : data;
+    const filteredData =
+        filterStrings.length === 0
+            ? data
+            : filterStrings.reduce((filteredData, filterString) => {
+                  return filteredData.filter((row) =>
+                      rowToStr(row).includes(filterString.toLowerCase())
+                  );
+              }, data);
 
     // we need a reference to the internal table so that we can get the "visible data"
     // if it happens to be filtered or sorted
@@ -103,7 +109,7 @@ function FilterableTable(props) {
             allSelected = true;
         }
         setAllSelected(allSelected);
-    }, [_selected, filterString]);
+    }, [_selected, filterStrings]);
 
     function onToggleRow(ref, shiftOn, row) {
         // The shift key isn't held. Only select a single item
@@ -184,6 +190,23 @@ function FilterableTable(props) {
     if (selected == null) {
         tableComponent = <ReactTable columns={columns} data={filteredData} />;
     }
+
+    function removeFilterString(filterString) {
+        const updatedFilterStrings = filterStrings.filter(
+            (oldString) => oldString !== filterString
+        );
+        setFilterStrings(updatedFilterStrings);
+    }
+
+    function addFilterString(filterString) {
+        const formattedFilterString = filterString.toLowerCase();
+        if (!filterStrings.includes(formattedFilterString)) {
+            const newFilterStrings = Array.from(filterStrings); // so we don't mutate the filterStrings object
+            newFilterStrings.push(formattedFilterString);
+            setFilterStrings(newFilterStrings);
+        }
+    }
+
     return (
         <div className="filterable-table-container">
             <div className="filterable-table-filter">
@@ -191,8 +214,28 @@ function FilterableTable(props) {
                 <input
                     type="text"
                     placeholder="Filter by..."
-                    onChange={(e) => setFilterString(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.keyCode === 13) {
+                            // 13 == Enter
+                            addFilterString(strip(e.target.value));
+                            e.target.value = ""; // clear the filter box
+                        }
+                    }}
                 />
+                {filterStrings.map((filterString) => (
+                    <Badge
+                        className="filter-chip"
+                        pill
+                        variant="info"
+                        key={filterString}
+                    >
+                        <FaTimes
+                            className="filter-chip-icon"
+                            onClick={() => removeFilterString(filterString)}
+                        />
+                        {capitalize(filterString)}{" "}
+                    </Badge>
+                ))}
             </div>
             <div className="filterable-table-table">{tableComponent}</div>
         </div>

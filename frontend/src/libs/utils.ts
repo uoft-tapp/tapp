@@ -1,4 +1,17 @@
 /**
+ * Capitalizes the input string. The function only capitalizes the first word if there are multiple words in the input string.
+ * If `word` isn't a srting, it is coerced.
+ * @param word a single word.
+ * @returns
+ */
+export function capitalize(word: string | null | undefined): string {
+    if (!word) {
+        return "";
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+/**
  * Trims the input string. If the `x` is not a string, it is
  * coerced
  *

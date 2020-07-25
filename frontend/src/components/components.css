@@ -106,3 +106,20 @@
     margin-right: 0.8em;
     margin-bottom: 0.3em;
 }
+
+.filter-chip {
+    padding-left: 1em;
+    padding-right: 2em;
+    margin-left: 1em;
+}
+
+.filter-chip-icon {
+    margin-right: 0.5em;
+    margin-bottom: 1px;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.filter-chip-icon:hover {
+    color: var(--danger);
+}
