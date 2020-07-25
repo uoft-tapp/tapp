@@ -9,11 +9,11 @@ import {
 } from "../../api/actions/ddahs";
 import { FilterableTable } from "../../components/filterable-table";
 import { assignmentsSelector } from "../../api/actions";
-import { FaCheck, FaTimes, FaSearch, FaEdit } from "react-icons/fa";
+import { FaCheck, FaTimes, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import { formatDate } from "../../libs/utils";
+import { formatDate, formatDownloadUrl } from "../../libs/utils";
 import { DdahEditor } from "../../components/ddahs";
 
 interface RowData {
@@ -153,8 +153,10 @@ function DdahPreviewModal({
     onEdit?: Function;
 }): React.ReactElement {
     let ddahPreview: React.ReactElement | string = "No DDAH to preview";
+    let url: string | null = null;
     if (ddah != null) {
         ddahPreview = <DdahPreview ddah={ddah} />;
+        url = `/public/ddahs/${ddah.url_token}.pdf`;
     }
     return (
         <Modal show={show} onHide={onHide} dialogClassName="wide-modal">
@@ -170,6 +172,16 @@ function DdahPreviewModal({
                     <FaEdit className="mr-2" />
                     Edit
                 </Button>
+                {url && (
+                    <Button
+                        title="Download DDAH."
+                        variant="link"
+                        href={formatDownloadUrl(url)}
+                    >
+                        <FaDownload className="mr-2" />
+                        Download DDAH
+                    </Button>
+                )}
                 <Button onClick={() => onApprove(ddah)}>
                     <FaCheck className="mr-2" />
                     Approve
