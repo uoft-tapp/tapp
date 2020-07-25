@@ -21,11 +21,13 @@ const DEFAULT_COLUMNS = [
  */
 export function ContractTemplatesList(props) {
     const { contractTemplates, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = contractTemplates?.length || 20;
     return (
         <ReactTable
             data={contractTemplates}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
             minRows={1}
         />
     );

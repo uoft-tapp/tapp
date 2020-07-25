@@ -202,8 +202,9 @@ export function ConnectedImportInstructorAction() {
                     {newItems.length > 0 && (
                         <Alert variant="primary">
                             <span className="mb-1">
-                                The following applicants will be{" "}
-                                <strong>added</strong>
+                                The following <strong>{newItems.length}</strong>{" "}
+                                applicant{newItems.length > 1 ? "s" : ""} will
+                                be <strong>added</strong>
                             </span>
                             <ApplicantsList applicants={newItems} />
                         </Alert>

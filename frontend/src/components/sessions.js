@@ -31,11 +31,13 @@ const DEFAULT_COLUMNS = [
  */
 export function SessionsList(props) {
     const { sessions, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = sessions?.length || 20;
     return (
         <ReactTable
             data={sessions}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
             minRows={1}
         />
     );
