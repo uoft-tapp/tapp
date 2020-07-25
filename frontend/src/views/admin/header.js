@@ -51,41 +51,14 @@ export const routes = [
         ],
     },
     {
-        route: "/tapp",
-        name: "Admin",
-        description: "Admin View",
+        route: "/applicants_and_matching",
+        name: "Applicants & Matching",
+        description: "Manage applicants and match applicants to positions",
         subroutes: [
-            {
-                route: "/positions",
-                name: "Positions",
-                description: "Manage Positions",
-            },
-            {
-                route: "/assignments",
-                name: "Assignments",
-                description: "Manage Assignments",
-            },
             {
                 route: "/applicants",
                 name: "Applicants",
                 description: "Manage Applicants",
-            },
-            {
-                route: "/ddahs",
-                name: "DDAHs",
-                description: "Manage DDAHs",
-            },
-        ],
-    },
-    {
-        route: "/matching",
-        name: "Matching",
-        description: "Matching",
-        subroutes: [
-            {
-                route: "/statistics",
-                name: "Statistics",
-                description: "See statistics about accepted/rejected contracts",
             },
         ],
     },
