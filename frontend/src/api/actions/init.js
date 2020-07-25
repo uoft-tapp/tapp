@@ -80,6 +80,9 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };
 
+        // These actions do not need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
+        const asyncActions = [fetchActiveUser, fetchSessions, fetchInstructors];
+
         /**
          * A helper function to determine if the `currentStage`
          * should be run
@@ -94,8 +97,6 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 "toggleMockAPI",
                 "setActiveUser",
                 "setActiveUserRole",
-                "fetchInstructors",
-                "fetchSessions",
                 "setActiveSession",
                 "updateGlobals",
                 "fetchSessionDependentData",
@@ -155,17 +156,9 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             toggleMockApi(globals.mockAPI);
         }
 
-        if (shouldRunStage("setActiveUser")) {
-            await dispatch(fetchActiveUser());
-        }
-
         if (shouldRunStage("setActiveUserRole")) {
             const activeRole = activeRoleSelector(getState());
             await dispatch(setActiveUserRole(activeRole, { skipInit: true }));
-        }
-
-        if (shouldRunStage("fetchSessions")) {
-            await dispatch(fetchSessions());
         }
 
         if (shouldRunStage("setActiveSession")) {
@@ -188,10 +181,6 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             );
         }
 
-        if (shouldRunStage("fetchInstructors")) {
-            await dispatch(fetchInstructors());
-        }
-
         if (shouldRunStage("updateGlobals")) {
             await dispatch(setGlobals(prepareGlobals(parsedGlobals)));
         }
@@ -211,5 +200,10 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             // The order of fetching here doesn't matter, so dispatch all at once
             await Promise.all(fetchActions.map((action) => dispatch(action())));
         }
+
+        // The order of fetching doesn't matter here, so we dispatch all at once.
+        await Promise.all(
+            asyncActions.map((asyncAction) => dispatch(asyncAction()))
+        );
     };
 }
