@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ConnectedAddSessionDialog } from "./add-session-dialog";
 import { activeSessionSelector } from "../../api/actions";
-import { SessionsList } from "../../components/sessions";
+import { SessionsList as ConnectedSessionsList } from "../../components/sessions";
 import {
     ActionsList,
     ActionButton,
@@ -64,7 +64,7 @@ export function AdminSessionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <SessionsList />
+                <ConnectedSessionsList />
             </ContentArea>
         </div>
     );
