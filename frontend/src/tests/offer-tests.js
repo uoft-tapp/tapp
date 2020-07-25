@@ -11,7 +11,6 @@ export function offersTests(api) {
     let position;
     let newOffer;
     let newOffer2 = {};
-    let resp;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -106,7 +105,7 @@ export function offersTests(api) {
     // See https://github.com/uoft-tapp/tapp/wiki/Workflow-Diagram-for-offers for detailed
     // diagram of the offer create/withdraw/email/etc. logic
     it("accept/reject/withdraw offer", async () => {
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/accept`
         );
         expect(resp).toHaveStatus("success");
@@ -149,7 +148,7 @@ export function offersTests(api) {
 
     it("error when attempting to create an offer for an assignment that has an active offer that is accepted/rejected", async () => {
         // Since `newOffer.status` is `"accepted"`, this should fail
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/create`
         );
         expect(resp).toHaveStatus("error");
@@ -168,7 +167,7 @@ export function offersTests(api) {
 
     it("create an offer for an assignment whose active offer is withdrawn", async () => {
         // Withdraw the offer first
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/withdraw`
         );
         expect(resp).toHaveStatus("success");
@@ -189,7 +188,7 @@ export function offersTests(api) {
         expect(newOffer2).toMatchObject({ status: "provisional" });
 
         // Fail to create a new offer again
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/create`
         );
         expect(resp).toHaveStatus("error");
@@ -212,7 +211,7 @@ export function offersTests(api) {
         expect(newOffer2).toMatchObject({ status: "pending" });
 
         // Error when updating the offer
-        resp = await apiPOST(`/admin/assignments`, {
+        let resp = await apiPOST(`/admin/assignments`, {
             ...assignment,
             hours: 98.6,
         });
@@ -252,7 +251,7 @@ export function offersTests(api) {
 
     it("changing an assignment with a withdrawn/pending active offer should succeed and remove the offer", async () => {
         // Withdraw the current offer
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/withdraw`
         );
         expect(resp).toHaveStatus("success");
