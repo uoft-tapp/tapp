@@ -86,11 +86,14 @@ export function DdahsList(props: {
         return { ...ddah, duties: ddahDutiesToString(ddah.duties) };
     });
 
+    const pageSize = flattenedDdahs?.length || 20;
+
     return (
         <ReactTable
             data={flattenedDdahs}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
             minRows={1}
         />
     );

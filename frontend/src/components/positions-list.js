@@ -78,11 +78,13 @@ export function PositionsDiffList({ modifiedPositions }) {
  */
 export function PositionsList(props) {
     const { positions, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = positions?.length || 20;
     return (
         <ReactTable
             data={positions}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
             minRows={1}
         />
     );
