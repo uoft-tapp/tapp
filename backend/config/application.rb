@@ -47,7 +47,7 @@ module Tapp
                 'TA Coordinator'
         config.ta_coordinator_email =
             ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com')
-                .precedence || 'tacoord@unknown.com'
+                .presence || 'tacoord@unknown.com'
 
         # email configuration
         email_server =
