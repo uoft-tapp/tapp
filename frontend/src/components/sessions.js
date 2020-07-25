@@ -36,7 +36,7 @@ function EditableCell(props) {
  * @param {{columns?: object[]}} props
  * @returns
  */
-export function SessionsList(props) {
+export function ConnectedSessionsList(props) {
     const sessions = useSelector(sessionsSelector);
     const dispatch = useDispatch();
 
