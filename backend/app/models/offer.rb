@@ -49,6 +49,9 @@ class Offer < ApplicationRecord
         self.pay_period_desc = formatting_service.pay_period_description
         self.position_start_date = position.start_date
         self.position_end_date = position.end_date
+        self.ta_coordinator_email =
+            Rails.application.config.ta_coordinator_email
+        self.ta_coordinator_name = Rails.application.config.ta_coordinator_name
         self
     end
 

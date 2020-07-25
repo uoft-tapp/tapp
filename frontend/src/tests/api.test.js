@@ -10,7 +10,11 @@ import { templatesTests } from "./template-tests";
 import { instructorsTests } from "./instructor-tests";
 import { assignmentsTests } from "./assignment-tests";
 import { wageChunksTests } from "./wage-chunk-tests";
-import { offersTests } from "./offer-tests";
+import {
+    offersTests,
+    offerEmailTests,
+    offerDownloadTests,
+} from "./offer-tests";
 import { reportingTagsTests } from "./reporting-tag-tests";
 import { applicationsTests } from "./application-tests";
 import { unknownRouteTests } from "./unknown-route-tests";
@@ -49,8 +53,20 @@ describe("API tests", () => {
     describe("wage_chunk tests", () => {
         wageChunksTests({ apiGET, apiPOST });
     });
-    describe.skip("offers tests", () => {
-        offersTests({ apiGET, apiPOST });
+    describe("offers tests", () => {
+        // These need to be in separate `describe`.
+        // Each one independently defines a `beforeAll` action,
+        // and those actions will clobber each other unless they are isolated
+        // in different `describe`s.
+        describe("basic", () => {
+            offersTests({ apiGET, apiPOST });
+        });
+        describe("email", () => {
+            offerEmailTests({ apiGET, apiPOST });
+        });
+        describe("download", () => {
+            offerDownloadTests({ apiGET, apiPOST });
+        });
     });
     describe.skip("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
