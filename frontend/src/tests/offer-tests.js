@@ -440,3 +440,55 @@ export function offerEmailTests(api) {
         expect(newEmail.recipients[0]).toMatch(new RegExp(applicant.email));
     });
 }
+
+/**
+ * Tests for downloading pdfs/html versions of an offer. These can only be run
+ * with the real API.
+ *
+ * @export
+ * @param {*} api
+ */
+export function offerDownloadTests(api) {
+    const { apiPOST } = api;
+    const BACKEND_BASE_URL = "http://backend:3000";
+
+    let applicant;
+    let assignment;
+    let position;
+    let newOffer;
+
+    beforeAll(async () => {
+        await databaseSeeder.seed(api);
+        assignment = databaseSeeder.seededData.assignment;
+        applicant = databaseSeeder.seededData.applicant;
+        position = databaseSeeder.seededData.position;
+    }, 30000);
+
+    it("can download html and pdf versions of an offer", async () => {
+        let resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+        newOffer = resp.payload;
+
+        const offerHtml = (
+            await axios.get(
+                `${BACKEND_BASE_URL}/public/contracts/${newOffer.url_token}`
+            )
+        ).data;
+
+        expect(offerHtml).toMatch(new RegExp(applicant.first_name));
+        expect(offerHtml).toMatch(new RegExp(applicant.last_name));
+        expect(offerHtml).toMatch(new RegExp(position.position_code));
+        expect(offerHtml).toMatch(new RegExp("" + newOffer.hours));
+
+        // Get the PDF version
+        const offerPdf = (
+            await axios.get(
+                `${BACKEND_BASE_URL}/public/contracts/${newOffer.url_token}.pdf`
+            )
+        ).data;
+        // All PDF files start with the text "%PDF"
+        expect(offerPdf.slice(0, 4)).toEqual("%PDF");
+    });
+}
