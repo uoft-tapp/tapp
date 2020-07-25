@@ -38,8 +38,12 @@ module Tapp
         config.contract_template_dir =
             ENV.fetch('CONTRACT_TEMPLATE_DIR', '/storage/contract_templates')
                 .presence || '/storage/contract_templates'
-        
+
         # This was added to use in the emails that send contract links.
         config.base_url = ENV.fetch('BASE_URL', 'localhost:3000')
+        config.ta_coordinator_name =
+            ENV.fetch('TA_COORDINATOR_NAME', 'TA Coordinator')
+        config.ta_coordinator_email =
+            ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com')
     end
 end

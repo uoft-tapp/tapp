@@ -8,6 +8,7 @@ class OfferMailer < ApplicationMailer
         generate_vars(offer)
         mail(
             to: @email,
+            from: @ta_coordinator_email,
             subject: "TA Position Offer for #{@position_code}"
         )
     end
@@ -16,7 +17,11 @@ class OfferMailer < ApplicationMailer
         generate_vars(offer)
         mail(
             to: @email,
-            subject: "Reminder #{@nag_count}: TA Position Offer for #{@position_code}"
+            from: @ta_coordinator_email,
+            subject:
+                "Reminder #{@nag_count}: TA Position Offer for #{
+                    @position_code
+                }"
         )
     end
 
@@ -29,6 +34,7 @@ class OfferMailer < ApplicationMailer
         @last_name = offer.last_name
         @position_code = offer.position_code
         @position_title = offer.position_title
+        @ta_coordinator_email = offer.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
         @url =
             "#{Rails.application.config.base_url}/public/contracts/#{
