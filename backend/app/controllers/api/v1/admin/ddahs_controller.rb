@@ -54,6 +54,9 @@ class Api::V1::Admin::DdahsController < ApplicationController
     # POST /ddahs/:ddah_id/email
     def email
         find_ddah
+
+        DdahMailer.email_ddah(@ddah).deliver_now!
+
         unless @ddah.emailed_date
             @ddah.email
             @ddah.save!

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class OfferMailer < ApplicationMailer
-    # default from comes from config environment
-    layout 'mailer'
-
     def email_contract(offer)
         generate_vars(offer)
         mail(
