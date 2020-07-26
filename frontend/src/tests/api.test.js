@@ -22,7 +22,7 @@ import { usersTests } from "./user-tests";
 import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
-import { ddahTests } from "./ddah-tests";
+import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -90,7 +90,16 @@ describe("API tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
     });
     describe("DDAH tests", () => {
-        ddahTests({ apiGET, apiPOST });
+        // These need to be in separate `describe`.
+        // Each one independently defines a `beforeAll` action,
+        // and those actions will clobber each other unless they are isolated
+        // in different `describe`s.
+        describe("basic", () => {
+            ddahTests({ apiGET, apiPOST });
+        });
+        describe("email and download", () => {
+            ddahsEmailAndDownloadTests({ apiGET, apiPOST });
+        });
     });
 });
 

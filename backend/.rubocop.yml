@@ -67,3 +67,6 @@ Layout/IndentFirstArgument:
 
 Layout/MultilineMethodCallIndentation:
     Enabled: false
+
+Style/MultilineBlockChain:
+    Enabled: false
