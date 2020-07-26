@@ -179,17 +179,19 @@ export function ddahTests(api) {
  * @param {*} api
  */
 export function ddahsEmailAndDownloadTests(api) {
-    const { apiPOST } = api;
+    const { apiGET, apiPOST } = api;
     const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
     const BACKEND_BASE_URL = "http://backend:3000";
     let resp;
     let assignments = null;
     let ddah = {};
+    let session = null;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         await databaseSeeder.seedForInstructors(api);
         assignments = databaseSeeder.seededData.assignments;
+        session = databaseSeeder.seededData.session;
     }, 30000);
 
     it("can fetch messages from mailcatcher", async () => {
@@ -231,7 +233,7 @@ export function ddahsEmailAndDownloadTests(api) {
         expect(resp).toHaveStatus("success");
         Object.assign(ddah, resp.payload);
 
-        resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
+        await apiPOST(`/admin/ddahs/${ddah.id}/email`);
 
         // Wait for mailcatcher to get the email and then search for it.
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -259,5 +261,12 @@ export function ddahsEmailAndDownloadTests(api) {
         ).data;
         // All PDF files start with the text "%PDF"
         expect(ddahPdf.slice(0, 4)).toEqual("%PDF");
+    });
+
+    it("can download pdf versions ddah signature list", async () => {
+        resp = await apiGET(
+            `/admin/sessions/${session.id}/ddahs/accepted_list.pdf`
+        );
+        expect(resp).toHaveStatus("success");
     });
 }

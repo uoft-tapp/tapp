@@ -5,6 +5,7 @@ import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
     ConnectedDownloadPositionDdahTemplatesAction,
+    ConnectedDownloadDdahsAcceptedListAction,
 } from "./import-export";
 import {
     ActionsList,
@@ -43,6 +44,7 @@ export function AdminDdahsView(): React.ReactNode {
                     Add DDAH
                 </ActionButton>
                 <ConnectedDownloadPositionDdahTemplatesAction />
+                <ConnectedDownloadDdahsAcceptedListAction />
 
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportDdahsAction />

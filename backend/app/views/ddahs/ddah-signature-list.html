@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>DDAH</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                width: 8.5in;
+                margin: 0;
+                padding-left: 0.75in;
+                padding-right: 0.75in;
+                hyphens: auto;
+                text-align: justify;
+                box-sizing: border-box;
+                font-family: Helvetica, sans-serif;
+                font-size: 10pt;
+            }
+            .i {
+                font-style: italic;
+            }
+            .emphcolor {
+                color: red;
+            }
+            table.appointment-summary {
+                margin-left: 0.1in;
+                font-size: 0.9em;
+            }
+            .appointment-summary th {
+                padding-right: 0.5em;
+                text-align: center;
+                font-weight: bold;
+            }
+            .letter-head p {
+                margin-bottom: 0.5in;
+            }
+            .letter-foot {
+                margin-top: 1in;
+            }
+            .signature {
+                font-family: alex_brushregular, cursive;
+                border-bottom: 1px solid black;
+                font-size: 20pt;
+                margin-left: 0.5in;
+                margin-bottom: 0.1in;
+            }
+            .applicant .signature {
+                min-width: 2.5in;
+                display: inline-block;
+                margin-left: 0;
+            }
+            .checkbox {
+                font-size: 18pt;
+            }
+
+            @media only screen and (max-width: 9in) {
+                /* when printed, these styles won't show
+				because the "screen" is 8.5in */
+                body {
+                    width: unset;
+                    padding-bottom: 0.5in;
+                    padding-left: 2em;
+                    padding-right: 2em;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="font.css" />
+        <link rel="stylesheet" href="header.css" />
+        <!-- for rendering with wkhtmltopdf styles need to be inlined; when rendered directly in a browser,
+	this will just be invalid CSS -->
+        <style>
+            {{ style_font }}
+        </style>
+        <style>
+            {{ style_header }}
+        </style>
+    </head>
+    <body>
+        <div class="letter-body">
+            <h2>Description of Duties and Allocation of Hours</h2>
+            <h3>Signature list of TAs</h3>
+
+            <table class="appointment-summary">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>TA</th>
+                        <th>Signature</th>
+                        <th>Date Signed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ddah in ddahs %}
+                    <tr>
+                        <td>
+                            {{ ddah.position_code }}
+                        </td>
+                        <td>
+                            {{ ddah.first_name }} {{ ddah.last_name }}
+                        </td>
+                        <td>
+                            <div class="signature">{{ ddah.signature }}</div>
+                        </td>
+                        <td>
+                            {{ ddah.signed_date | date: "%b %d, %Y" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

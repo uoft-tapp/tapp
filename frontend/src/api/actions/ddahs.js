@@ -165,6 +165,29 @@ export const upsertDdahs = validatedApiDispatcher({
     },
 });
 
+export const downloadDdahAcceptedList = validatedApiDispatcher({
+    name: "downloadDdahAcceptedList",
+    description: "Download a pdf list of accepted DDAHs for the active session",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: () => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const data = await apiGET(
+            `/${role}/sessions/${activeSessionId}/ddahs/accepted_list.pdf`
+        );
+
+        // The data comes in encoded as base64, so we decode it as binary data.
+        const content = new Uint8Array(
+            atob(data.content)
+                .split("")
+                .map((x) => x.charCodeAt(0))
+        );
+        return new File([content], data.file_name, {
+            type: data.mime_type,
+        });
+    },
+});
+
 // selectors
 
 /**

@@ -123,7 +123,11 @@ Rails.application.routes.draw do
                         resources :applicants, only: %i[index create]
                         resources :applications, only: %i[index]
                         resources :assignments, only: %i[index]
-                        resources :ddahs, only: %i[index]
+                        resources :ddahs, only: %i[index] do
+                            collection do
+                                get :accepted_list, to: 'ddahs#accepted_list'
+                            end
+                        end
                         resources :contract_templates, only: %i[index create]
                         resources :positions,
                                   controller: :session_positions,

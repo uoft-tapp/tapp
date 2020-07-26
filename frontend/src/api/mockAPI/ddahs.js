@@ -56,6 +56,36 @@ export const ddahsRoutes = {
                 "Get all ddah forms associated with assignments for the given session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.ddah),
         }),
+        "/sessions/:session_id/ddahs/accepted_list": documentCallback({
+            func: (data, params) => {
+                if (params.role === "admin") {
+                    throw new Error("Not implemented in mock API");
+                }
+                errorUnlessRole(params, "");
+            },
+            summary:
+                "Get a signature list of all TAs who have acknowledged their DDAH form for this session. Returns a base64 encoded html file.",
+            returns: wrappedPropTypes.shape({
+                file_name: wrappedPropTypes.string,
+                mime_type: wrappedPropTypes.string,
+                content: wrappedPropTypes.string,
+            }),
+        }),
+        "/sessions/:session_id/ddahs/accepted_list.pdf": documentCallback({
+            func: (data, params) => {
+                if (params.role === "admin") {
+                    throw new Error("Not implemented in mock API");
+                }
+                errorUnlessRole(params, "");
+            },
+            summary:
+                "Get a signature list of all TAs who have acknowledged their DDAH form for this session. Returns a base64 encoded html file.",
+            returns: wrappedPropTypes.shape({
+                file_name: wrappedPropTypes.string,
+                mime_type: wrappedPropTypes.string,
+                content: wrappedPropTypes.string,
+            }),
+        }),
         "/ddahs/:ddah_id": documentCallback({
             func: (data, params) => new Ddah(data).find(params.ddah_id),
             summary: "Get a ddah",
