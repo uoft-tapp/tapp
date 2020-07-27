@@ -43,11 +43,10 @@ module Response
                         bc.clean(error.backtrace).join("\n\t" + yellow_start) +
                         color_end
                 end
-                # rubocop:disable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
+                # rubocop:disable Lint/SuppressedException
             rescue StandardError
-
             end
-            # rubocop:enable Lint/HandleExceptions, Layout/EmptyLinesAroundExceptionHandlingKeywords, Layout/EmptyLinesAroundBeginBody
+            # rubocop:enable Lint/SuppressedException
         end
         render json: { status: 'error', message: message, payload: payload }
     end

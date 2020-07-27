@@ -62,7 +62,7 @@ Layout/MultilineOperationIndentation:
 Style/IfUnlessModifier:
     Enabled: false
 
-Layout/IndentFirstArgument:
+Layout/FirstArgumentIndentation:
     Enabled: false
 
 Layout/MultilineMethodCallIndentation:
