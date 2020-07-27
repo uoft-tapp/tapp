@@ -2,7 +2,7 @@
 
 class Api::V1::Admin::UsersController < ApplicationController
     def active_user
-        render_success ActiveUserService.active_user
+        render_success ActiveUserService.active_user request
     end
 
     # GET /users

@@ -19,14 +19,18 @@ export default function ConnectedApp() {
         dispatch(initFromStage("pageLoad"));
     }, [dispatch]);
 
-    let body = (
-        <>
-            <AdminHeader />
-            <div className="view-container">
-                <AdminRoutes />
-            </div>
-        </>
-    );
+    let body = <div>Loading...</div>;
+
+    if (activeRole === "admin") {
+        body = (
+            <>
+                <AdminHeader />
+                <div className="view-container">
+                    <AdminRoutes />
+                </div>
+            </>
+        );
+    }
 
     if (activeRole === "instructor") {
         body = (

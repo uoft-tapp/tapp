@@ -46,8 +46,8 @@ module Tapp
             ENV.fetch('TA_COORDINATOR_NAME', 'TA Coordinator').presence ||
                 'TA Coordinator'
         config.ta_coordinator_email =
-            ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com')
-                .presence || 'tacoord@unknown.com'
+            ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com').presence ||
+                'tacoord@unknown.com'
 
         # email configuration
         email_server =
@@ -62,5 +62,11 @@ module Tapp
         config.action_mailer.smtp_settings = {
             address: email_server, port: email_port
         }
+
+        # Authorization
+        config.allow_basic_auth =
+            %w[true 1].include?(ENV.fetch('ALLOW_BASIC_AUTH', '').downcase)
+        config.always_admin =
+            ENV.fetch('TAPP_ADMINS', '').split(',').map(&:strip)
     end
 end

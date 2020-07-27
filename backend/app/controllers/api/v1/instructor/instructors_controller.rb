@@ -3,7 +3,7 @@
 class Api::V1::Instructor::InstructorsController < ApplicationController
     # GET /instructors
     def index
-        active_user = ActiveUserService.active_user
+        active_user = ActiveUserService.active_user request
 
         # If we're here, we have `instructor` permissions, but that doesn't mean
         # we actually *are* an instructor. If we aren't an instructor, return an empty

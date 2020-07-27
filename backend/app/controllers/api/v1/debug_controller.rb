@@ -21,7 +21,7 @@ class Api::V1::DebugController < ApplicationController
 
     # GET /active_user
     def active_user
-        render_success ActiveUserService.active_user
+        render_success ActiveUserService.active_user request
     end
 
     # POST /active_user
