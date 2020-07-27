@@ -19,6 +19,7 @@ import {
     exportDdahs,
     ddahsSelector,
     upsertDdahs,
+    downloadDdahAcceptedList,
 } from "../../api/actions/ddahs";
 import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
@@ -475,6 +476,25 @@ export function ConnectedDownloadPositionDdahTemplatesAction() {
             onClick={() => download()}
         >
             By-Position Templates
+        </ActionButton>
+    );
+}
+
+export function ConnectedDownloadDdahsAcceptedListAction() {
+    const dispatch = useDispatch();
+
+    async function downloadClicked() {
+        const file = await dispatch(downloadDdahAcceptedList());
+        FileSaver.saveAs(file);
+    }
+
+    return (
+        <ActionButton
+            icon={FaDownload}
+            title="Download a list of DDAHs that have been signed by TAs this session"
+            onClick={() => downloadClicked()}
+        >
+            Signature List
         </ActionButton>
     );
 }

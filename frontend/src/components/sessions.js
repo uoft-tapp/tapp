@@ -39,6 +39,7 @@ function EditableCell(props) {
 export function ConnectedSessionsList(props) {
     const sessions = useSelector(sessionsSelector);
     const dispatch = useDispatch();
+    const pageSize = sessions?.length || 20;
 
     function _upsertSession(session) {
         return dispatch(upsertSession(session));
@@ -80,12 +81,12 @@ export function ConnectedSessionsList(props) {
     ];
 
     const { columns = DEFAULT_COLUMNS } = props;
-
     return (
         <ReactTable
             data={sessions}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
             minRows={1}
         />
     );

@@ -13,6 +13,7 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
     def create
         @application = Application.find_by(id: params[:application_id])
         update && return if @application.present?
+
         start_transaction_and_rollback_on_exception do
             application = Application.create!(application_params)
             application.create_applicant_data_for_matching!(

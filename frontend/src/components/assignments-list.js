@@ -39,6 +39,7 @@ export function AssignmentsDiffList({ modifiedAssignments }) {
 
 function AssignmentsList(props) {
     const { assignments, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = assignments?.length || 20;
     return (
         <React.Fragment>
             <h3>Assignments</h3>
@@ -46,6 +47,7 @@ function AssignmentsList(props) {
                 data={assignments}
                 columns={columns}
                 showPagination={false}
+                defaultPageSize={pageSize}
                 minRows={1}
             />
         </React.Fragment>

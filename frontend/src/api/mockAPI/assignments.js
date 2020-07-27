@@ -145,7 +145,7 @@ export class Assignment extends MockAPIController {
             }
         }
 
-        // Now we are gauranteed to have wage chunks, so set them to the correct number
+        // Now we are guaranteed to have wage chunks, so set them to the correct number
         // of hours
         wageChunks = new WageChunk(this.data).findAllByAssignment(
             upsertedAssignment
@@ -195,6 +195,12 @@ class ActiveOffer extends MockAPIController {
     findByAssignment(assignment) {
         const matchingAssignment = this._ensureAssignment(assignment);
 
+        // As a hack, a `_noActiveOffer` flag is added to an assignment
+        // if the active offer should be ignore.
+        if (matchingAssignment && matchingAssignment._noActiveOffer) {
+            return null;
+        }
+
         // offers are never deleted, only added to the table, so
         // picking the last one is the same as picking the "newest"
         const offers = findAllById(
@@ -203,19 +209,7 @@ class ActiveOffer extends MockAPIController {
             "assignment_id"
         );
         const activeOffer = offers[offers.length - 1];
-        if (!activeOffer) {
-            return null;
-        }
-        // an offer is only active if it has been accepted, rejected, or is pending
-        if (
-            activeOffer.status === "accepted" ||
-            activeOffer.status === "rejected" ||
-            activeOffer.status === "pending" ||
-            activeOffer.status === "provisional"
-        ) {
-            return activeOffer;
-        }
-        return null;
+        return activeOffer || null;
     }
     _ensureAssignment(assignment) {
         const matchingAssignment = new Assignment(this.data).rawFind(
@@ -339,7 +333,12 @@ class ActiveOffer extends MockAPIController {
     createByAssignment(assignment) {
         const matchingAssignment = this._ensureAssignment(assignment);
         const offer = this.findByAssignment(matchingAssignment);
-        if (offer) {
+        if (
+            offer &&
+            ["pending", "accepted", "rejected", "provisional"].includes(
+                offer.status
+            )
+        ) {
             throw new Error(
                 `An offer already exists for assignment=${JSON.stringify(
                     assignment
@@ -347,6 +346,12 @@ class ActiveOffer extends MockAPIController {
             );
         }
 
+        // As a hack, sometimes a `_noActiveOffer` flag is set. Make sure to unset this flag
+        // before creating an offer.
+        new Assignment(this.data).upsert({
+            ...matchingAssignment,
+            _noActiveOffer: false,
+        });
         return this.upsert(
             this.find(
                 this.create({
@@ -408,6 +413,30 @@ export const assignmentsRoutes = {
         "/assignments": documentCallback({
             func: (data, params, body) => {
                 errorUnlessRole(params, "admin");
+                const existingAssignment = new Assignment(data).find(body);
+                if (existingAssignment) {
+                    const activeOffer = new Assignment(data).getActiveOffer(
+                        existingAssignment
+                    );
+                    if (!activeOffer) {
+                        return new Assignment(data).upsert(body);
+                    }
+                    if (
+                        ["withdrawn", "provisional"].includes(
+                            activeOffer.status
+                        )
+                    ) {
+                        // In this case, we can upsert the assignment, but we remove any active offer
+                        // in the process
+                        return new Assignment(data).upsert({
+                            ...body,
+                            _noActiveOffer: true,
+                        });
+                    }
+                    throw new Error(
+                        `Cannot update an assignment that has an active offer with status '${activeOffer.status}'`
+                    );
+                }
                 return new Assignment(data).upsert(body);
             },
             posts: docApiPropTypes.assignment,

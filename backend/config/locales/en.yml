@@ -33,6 +33,7 @@ en:
   active_offers:
     already_exists: "An active offer already exists for this assignment."
     does_not_exist: "This assignment does not have an active offer."
+    not_pending_so_dont_nag: "Reminder emails may only be sent to offers whose state is 'Pending'."
     invalid_offer: "Cannot send a withdrawn or rejected offer."
   assignment_wage_chunk_service:
     wage_chunk_missing:

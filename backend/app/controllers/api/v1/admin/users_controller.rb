@@ -15,6 +15,7 @@ class Api::V1::Admin::UsersController < ApplicationController
         # We can update a user by id or utorid
         @user = User.find_by(id: params[:id])
         update && return if @user
+
         @user = User.find_by(utorid: params[:utorid])
         update && return if @user
 
