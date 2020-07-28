@@ -1,10 +1,11 @@
 import React from "react";
 import ReactTable from "react-table";
 import { useSelector, useDispatch } from "react-redux";
-import { sessionsSelector, upsertSession } from "../api/actions";
+import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
 import { EditableField } from "./edit-field-widgets";
 import { formatDate } from "../libs/utils";
-import { Alert } from "react-bootstrap";
+import { Alert, Modal, Button } from "react-bootstrap";
+import { FaTimes, FaTrash } from "react-icons/fa";
 
 function EditableCell(props) {
     const title = `Edit ${props.column.Header}`;
@@ -19,12 +20,34 @@ function EditableCell(props) {
     return (
         <EditableField
             title={title}
-            value={value || ""}
+            value={type === "date" ? (value || "").slice(0, 10) : value || ""}
             onChange={onChange}
             type={type}
         >
             {isDate ? formatDate(value) : value}
         </EditableField>
+    );
+}
+function ConfirmDeleteDialog(props) {
+    const { show, onHide, onDelete, session } = props;
+    return (
+        <Modal show={show} onHide={onHide}>
+            <Modal.Header closeButton>
+                <Modal.Title>Delete Session</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                Are you sure you want to delete the session{" "}
+                {(session || {}).name}? This action cannot be undone.
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={onHide} variant="light">
+                    Cancel
+                </Button>
+                <Button onClick={onDelete} title="Delete Session">
+                    Delete
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 }
 
@@ -33,10 +56,12 @@ function EditableCell(props) {
  * in to customize columns/cell renderers.
  *
  * @export
- * @param {{columns?: object[]}} props
+ * @param {{columns?: object[], inDeleteMode?: Boolean}} props
  * @returns
  */
 export function ConnectedSessionsList(props) {
+    const { inDeleteMode = false } = props;
+    const [sessionToDelete, setSessionToDelete] = React.useState(null);
     const sessions = useSelector(sessionsSelector);
     const dispatch = useDispatch();
     const pageSize = sessions?.length || 20;
@@ -56,7 +81,31 @@ export function ConnectedSessionsList(props) {
         );
     }
 
+    // props.original contains the row data for this particular instructor
+    function CellDeleteButton({ original: session }) {
+        return (
+            <div className="delete-button-container">
+                <FaTimes
+                    className="delete-instructor-button"
+                    title={`Delete ${session.name}`}
+                    onClick={() => {
+                        setSessionToDelete(session);
+                    }}
+                />
+            </div>
+        );
+    }
+
     const DEFAULT_COLUMNS = [
+        {
+            Header: (
+                <FaTrash className="delete-instructor-column-header-icon" />
+            ),
+            Cell: CellDeleteButton,
+            show: inDeleteMode,
+            maxWidth: 32,
+            resizable: false,
+        },
         { Header: "Name", accessor: "name", Cell: generateCell("name") },
         {
             Header: "Start",
@@ -82,13 +131,24 @@ export function ConnectedSessionsList(props) {
 
     const { columns = DEFAULT_COLUMNS } = props;
     return (
-        <ReactTable
-            data={sessions}
-            columns={columns}
-            showPagination={false}
-            defaultPageSize={pageSize}
-            minRows={1}
-        />
+        <React.Fragment>
+            <ReactTable
+                data={sessions}
+                columns={columns}
+                showPagination={false}
+                defaultPageSize={pageSize}
+                minRows={1}
+            />
+            <ConfirmDeleteDialog
+                session={sessionToDelete}
+                show={!!sessionToDelete}
+                onHide={() => setSessionToDelete(null)}
+                onDelete={async () => {
+                    await dispatch(deleteSession(sessionToDelete));
+                    setSessionToDelete(null);
+                }}
+            />
+        </React.Fragment>
     );
 }
 

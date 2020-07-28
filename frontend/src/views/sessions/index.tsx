@@ -9,11 +9,12 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { Session } from "../../api/defs/types";
 
 export function AdminSessionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [inDeleteMode, setInDeleteMode] = React.useState(false);
 
     const activeSession = useSelector(activeSessionSelector) as Session | null;
 
@@ -48,6 +49,13 @@ export function AdminSessionsView() {
                 >
                     Add Session
                 </ActionButton>
+                <ActionButton
+                    icon={<FaTrash />}
+                    onClick={() => setInDeleteMode(!inDeleteMode)}
+                    active={inDeleteMode}
+                >
+                    Delete Session
+                </ActionButton>
             </ActionsList>
             <ContentArea>
                 <h3>Session Management and Creation</h3>
@@ -64,7 +72,7 @@ export function AdminSessionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedSessionsList />
+                <ConnectedSessionsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );

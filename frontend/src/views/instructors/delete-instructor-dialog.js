@@ -15,8 +15,8 @@ export function DeleteInstructorDialog(props) {
                 </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to delete instructor{" "}
-                    {`${instructor.last_name}, ${instructor.first_name}`}? This
-                    action cannot be undone.
+                    {instructor.last_name}, {instructor.first_name}? This action
+                    cannot be undone.
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={onHide} variant="light">
