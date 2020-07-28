@@ -60,18 +60,17 @@ export const upsertSession = validatedApiDispatcher({
     },
 });
 
-export const deleteSession = (payload) =>
-    validatedApiDispatcher({
-        name: "deleteSession",
-        description: "Delete session",
-        propTypes: { id: PropTypes.any.isRequired },
-        onErrorDispatch: (e) => deleteError(e.toString()),
-        dispatcher: async (dispatch, getState) => {
-            const role = activeRoleSelector(getState());
-            const data = await apiPOST(`/${role}/sessions/delete`, payload);
-            dispatch(deleteOneSessionSuccess(data));
-        },
-    });
+export const deleteSession = validatedApiDispatcher({
+    name: "deleteSession",
+    description: "Delete session",
+    propTypes: { id: PropTypes.any.isRequired },
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = await apiPOST(`/${role}/sessions/delete`, payload);
+        dispatch(deleteOneSessionSuccess(data));
+    },
+});
 
 /**
  * Sets the `activeSession`. `activeSession` is used

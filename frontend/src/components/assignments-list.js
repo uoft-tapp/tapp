@@ -48,6 +48,7 @@ function AssignmentsList(props) {
                 columns={columns}
                 showPagination={false}
                 defaultPageSize={pageSize}
+                pageSize={pageSize}
                 minRows={1}
             />
         </React.Fragment>

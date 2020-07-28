@@ -11,7 +11,7 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { formatDate } from "../../libs/utils";
 import { Badge } from "react-bootstrap";
 import { activeSessionSelector } from "../../api/actions";
@@ -20,6 +20,7 @@ import { MissingActiveSessionWarning } from "../../components/sessions";
 
 export function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [inDeleteMode, setInDeleteMode] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
 
     return (
@@ -33,6 +34,13 @@ export function AdminPositionsView() {
                     }}
                 >
                     Add Position
+                </ActionButton>
+                <ActionButton
+                    icon={<FaTrash />}
+                    onClick={() => setInDeleteMode(!inDeleteMode)}
+                    active={inDeleteMode}
+                >
+                    Delete Position
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportPositionsAction />
@@ -48,7 +56,7 @@ export function AdminPositionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedPositionsList />
+                <ConnectedPositionsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );
