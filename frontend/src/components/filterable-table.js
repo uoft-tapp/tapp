@@ -179,6 +179,7 @@ function FilterableTable(props) {
             keyField="id"
             showPagination={false}
             defaultPageSize={pageSize}
+            pageSize={pageSize}
             minRows={1}
         />
     );

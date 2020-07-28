@@ -28,6 +28,7 @@ function EditableCell(props) {
         </EditableField>
     );
 }
+
 function ConfirmDeleteDialog(props) {
     const { show, onHide, onDelete, session } = props;
     return (
@@ -137,6 +138,7 @@ export function ConnectedSessionsList(props) {
                 columns={columns}
                 showPagination={false}
                 defaultPageSize={pageSize}
+                pageSize={pageSize}
                 minRows={1}
             />
             <ConfirmDeleteDialog
