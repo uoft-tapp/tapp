@@ -6,7 +6,7 @@ import selectTableHOC from "react-table/lib/hoc/selectTable";
 import "react-table/react-table.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Badge } from "react-bootstrap";
-import { strip, capitalize } from "../libs/utils";
+import { strip } from "../libs/utils";
 
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
@@ -16,7 +16,6 @@ const COLUMNS = [
     { Header: "First Name", accessor: "first_name" },
     { Header: "Email", accessor: "applicant.email", width: 250 },
 ];
-
 /**
  * Converts a row of the offer table into a string for omni-searching
  *
@@ -53,20 +52,25 @@ function FilterableTable(props) {
     };
 
     const [filterStrings, setFilterStrings] = React.useState([]);
+    const [currentFilterString, setCurrentFilterString] = React.useState("");
     const [lastSelected, setLastSelected] = React.useState(null);
     const [allSelected, setAllSelected] = React.useState(false);
     function isSelected(id) {
         return _selected.has(id);
     }
 
-    const filteredData =
-        filterStrings.length === 0
-            ? data
-            : filterStrings.reduce((filteredData, filterString) => {
-                  return filteredData.filter((row) =>
-                      rowToStr(row).includes(filterString.toLowerCase())
-                  );
-              }, data);
+    const filteredData = data
+        .filter((row) =>
+            filterStrings.every((string) =>
+                rowToStr(row).match(string.toLowerCase())
+            )
+        )
+        .filter(
+            (row) =>
+                currentFilterString
+                    ? rowToStr(row).includes(currentFilterString.toLowerCase())
+                    : true // if there is no typed query, don't filter the typed query
+        );
 
     // we need a reference to the internal table so that we can get the "visible data"
     // if it happens to be filtered or sorted
@@ -199,11 +203,16 @@ function FilterableTable(props) {
     }
 
     function addFilterString(filterString) {
-        const formattedFilterString = filterString.toLowerCase();
-        if (!filterStrings.includes(formattedFilterString)) {
-            const newFilterStrings = Array.from(filterStrings); // so we don't mutate the filterStrings object
-            newFilterStrings.push(formattedFilterString);
-            setFilterStrings(newFilterStrings);
+        // string.localeCompare(, , { sensitivity: 'accent'}) == case insensitive string comparison
+        if (
+            filterStrings.every(
+                (filteredString) =>
+                    filteredString.localeCompare(filterString, undefined, {
+                        sensitivity: "accent",
+                    }) !== 0
+            )
+        ) {
+            setFilterStrings([...filterStrings, filterString]);
         }
     }
 
@@ -214,7 +223,12 @@ function FilterableTable(props) {
                 <input
                     type="text"
                     placeholder="Filter by..."
+                    onChange={(e) => {
+                        // "live filter" the table as you type a query
+                        setCurrentFilterString(strip(e.target.value));
+                    }}
                     onKeyDown={(e) => {
+                        // press enter to add the typed query to the filter list
                         if (e.keyCode === 13) {
                             // 13 == Enter
                             addFilterString(strip(e.target.value));
@@ -226,14 +240,14 @@ function FilterableTable(props) {
                     <Badge
                         className="filter-chip"
                         pill
-                        variant="info"
+                        variant="light"
                         key={filterString}
                     >
+                        {filterString}
                         <FaTimes
                             className="filter-chip-icon"
                             onClick={() => removeFilterString(filterString)}
                         />
-                        {capitalize(filterString)}{" "}
                     </Badge>
                 ))}
             </div>

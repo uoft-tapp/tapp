@@ -108,13 +108,11 @@
 }
 
 .filter-chip {
-    padding-left: 1em;
-    padding-right: 2em;
     margin-left: 1em;
 }
 
 .filter-chip-icon {
-    margin-right: 0.5em;
+    margin-left: 0.5em;
     margin-bottom: 1px;
     transition: color 0.2s;
     cursor: pointer;
