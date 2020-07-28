@@ -81,7 +81,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
         const parsedGlobals = { mockAPI: null, activeSession: null };
 
         // These actions don't need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
-        const asyncActions = [fetchInstructors];
+        const asyncActions = [dispatch(fetchInstructors())];
 
         /**
          * A helper function to determine if the `currentStage`
@@ -204,9 +204,7 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             await Promise.all(fetchActions.map((action) => dispatch(action())));
         }
 
-        // The order of fetching doesn't matter here, so we dispatch all at once.
-        await Promise.all(
-            asyncActions.map((asyncAction) => dispatch(asyncAction()))
-        );
+        // Wait for async actions dispatched earlier to complete.
+        await Promise.all(asyncActions);
     };
 }
