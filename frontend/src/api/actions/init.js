@@ -80,6 +80,9 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };
 
+        // These actions don't need to finish in a specific order, so we can wait for them to finish at the end of this function to speed up startup.
+        const asyncActions = [dispatch(fetchInstructors())];
+
         /**
          * A helper function to determine if the `currentStage`
          * should be run
@@ -115,22 +118,16 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 const activeSession = activeSessionSelector(state) || {
                     id: parsedGlobals.activeSession,
                 };
-                if (
-                    sessions.find((session) => session.id === activeSession.id)
-                ) {
-                    return true;
-                }
-                return false;
+                return sessions.find(
+                    (session) => session.id === activeSession.id
+                );
             }
 
             // All session dependent data depends on an active session being set
             if (stageDependent && queryStage === "fetchSessionDependentData") {
                 const state = getState();
                 const activeSession = activeSessionSelector(state);
-                if (activeSession && activeSession.id != null) {
-                    return true;
-                }
-                return false;
+                return activeSession?.id != null;
             }
 
             return stageDependent;
@@ -199,7 +196,6 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
                 fetchApplications,
                 fetchAssignments,
                 fetchContractTemplates,
-                fetchInstructors,
                 fetchPositions,
                 fetchDdahs,
             ];
@@ -207,5 +203,8 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             // The order of fetching here doesn't matter, so dispatch all at once
             await Promise.all(fetchActions.map((action) => dispatch(action())));
         }
+
+        // Wait for async actions dispatched earlier to complete.
+        await Promise.all(asyncActions);
     };
 }
