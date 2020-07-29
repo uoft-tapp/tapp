@@ -75,7 +75,8 @@ export function FilterableMenu(props) {
             {items.map((s, index) => (
                 <Dropdown.Item
                     key={s.id}
-                    eventKey={index}
+                    // `eventKey` must be a string. If it is a number, 0 is coerced to null
+                    eventKey={"" + index}
                     active={activeItemId === s.id}
                 >
                     {s.name}
