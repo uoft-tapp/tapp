@@ -55,7 +55,7 @@ function ActiveUserButton({
                     {(users || []).map((user, i) => (
                         <Dropdown.Item
                             key={i}
-                            eventKey={i}
+                            eventKey={"" + i}
                             active={activeUser.utorid === user.utorid}
                         >
                             {user.utorid} ({(user.roles || []).join(", ")})
