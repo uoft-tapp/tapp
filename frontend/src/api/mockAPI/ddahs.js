@@ -117,6 +117,40 @@ export const ddahsRoutes = {
         "/ddahs": documentCallback({
             func: (data, params, body) => {
                 errorUnlessRole(params, "admin");
+                const existingDdah = new Ddah(data).find({ id: body.id });
+                if (!existingDdah || !body.duties) {
+                    // Create a new DDAH if there isn't one already
+                    return new Ddah(data).upsert(body);
+                }
+                // If there is a DDAH already and we change the duties at all, we must
+                // remove the accepted date, the signature, and the approved date.
+                const overwriteFields = {
+                    accepted_date: null,
+                    approved_date: null,
+                    signature: null,
+                };
+                // Since we only care about a change to the duties, a quick-and-dirty way is to
+                // compare the JSONified duties
+                function sortByOrder(a, b) {
+                    return a.order - b.order;
+                }
+                if (
+                    JSON.stringify([...body.duties].sort(sortByOrder)) !==
+                    JSON.stringify([...existingDdah.duties].sort(sortByOrder))
+                ) {
+                    // If the DDAH has been accepted, its new (signatureless)
+                    // state will be "revised"
+                    if (
+                        existingDdah.accepted_date ||
+                        existingDdah.emailed_date
+                    ) {
+                        overwriteFields.revised_date = new Date();
+                    }
+                    return new Ddah(data).upsert({
+                        ...body,
+                        ...overwriteFields,
+                    });
+                }
                 return new Ddah(data).upsert(body);
             },
             summary: "Upsert a ddah",
