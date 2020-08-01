@@ -240,7 +240,7 @@ ImportButton.propTypes = {
  * When clicked, a dialog is opened where a user can select a file to import.
  *
  * @param onFileChange - function called when a file is selected. Do any processing or validation in response to this callback.
- * @param dialgoContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
+ * @param dialogContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
  * @param onConfirm - Called when the "Confirm" button is pressed. Can be an async function. If so, a spinner will be displayed between the time "Confirm" is pressed and the time `onConfirm` finishes executing.
  */
 export function ImportActionButton({
@@ -248,6 +248,7 @@ export function ImportActionButton({
     dialogContent,
     onConfirm,
     setInProgress,
+    disabled = false,
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -270,7 +271,11 @@ export function ImportActionButton({
 
     return (
         <>
-            <ActionButton icon={FaUpload} onClick={() => setDialogOpen(true)}>
+            <ActionButton
+                icon={FaUpload}
+                onClick={() => setDialogOpen(true)}
+                disabled={disabled}
+            >
                 Import
             </ActionButton>
             <ImportDialog

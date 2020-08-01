@@ -48,7 +48,7 @@ ExportButton.propTypes = {
  * @returns
  */
 export function ExportActionButton(props) {
-    const { onClick: clickCallback } = props;
+    const { onClick: clickCallback, disabled = false } = props;
 
     function onClick(option) {
         if (clickCallback) {
@@ -73,6 +73,7 @@ export function ExportActionButton(props) {
                     </ActionButton>
                 </>
             }
+            disabled={disabled}
         >
             Export
         </ActionMenuButton>

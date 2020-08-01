@@ -41,7 +41,7 @@ const DEFAULT_COLUMNS = [
         maxWidth: 80,
     },
     {
-        Header: "Waitlisted",
+        Header: "Waitlist",
         accessor: "current_waitlisted",
         maxWidth: 90,
     },
