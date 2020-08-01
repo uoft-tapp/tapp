@@ -25,6 +25,20 @@
     color: white;
     background-color: #0069d9;
 }
+.page-actions .dropdown-item.disabled {
+    /* Normally this is set to pointer-events: none, however
+    in that case, we will not get the alt text when we hover over the button.
+    Because the alt text is important, we will allow pointer events and leave
+    it up to the button to stop responding to clicks. */
+    pointer-events: unset;
+    cursor: unset;
+    border-top-color: rgb(214, 214, 214);
+    border-bottom-color: rgb(214, 214, 214);
+}
+.page-actions .dropdown-item.disabled:hover,
+.page-actions .dropdown-item.disabled:active {
+    background-color: inherit;
+}
 
 .page-actions .dropdown-item:hover {
     background-color: var(--actions-background-hover);

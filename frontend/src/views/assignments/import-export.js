@@ -28,7 +28,7 @@ import { offerTableSelector } from "../offertable/actions";
  * @export
  * @returns
  */
-export function ConnectedExportAssignmentsAction() {
+export function ConnectedExportAssignmentsAction({ disabled = false }) {
     const dispatch = useDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
@@ -139,7 +139,7 @@ export function ConnectedExportAssignmentsAction() {
         setExportType(option);
     }
 
-    return <ExportActionButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
 const assignmentSchema = {
@@ -171,7 +171,7 @@ const assignmentSchema = {
     baseName: "assignments",
 };
 
-export function ConnectedImportAssignmentsAction() {
+export function ConnectedImportAssignmentsAction({ disabled = false }) {
     const dispatch = useDispatch();
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
@@ -284,6 +284,7 @@ export function ConnectedImportAssignmentsAction() {
             onFileChange={setFileContent}
             dialogContent={dialogContent}
             setInProgress={setInProgress}
+            disabled={disabled}
         />
     );
 }

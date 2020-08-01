@@ -25,10 +25,13 @@ export function AdminContractTemplatesView() {
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
+                    disabled={!activeSession}
                 >
                     Add Contract Template
                 </ActionButton>
-                <ConnectedUploadContractTemplateAction />
+                <ConnectedUploadContractTemplateAction
+                    disabled={!activeSession}
+                />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
