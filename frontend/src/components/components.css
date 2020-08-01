@@ -106,3 +106,7 @@
     margin-right: 0.8em;
     margin-bottom: 0.3em;
 }
+
+.number-cell {
+    text-align: right;
+}

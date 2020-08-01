@@ -218,13 +218,20 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
         return dispatch(upsertPosition(position));
     }
 
-    const positionsCurrentlyAssigned = new Set(
-        assignments.map((a) => a.position.id)
+    const numAssignmentsByPositionCode = assignments.reduce(
+        (acc, assignment) => {
+            const position_code = assignment.position.position_code;
+            acc[position_code] = acc[position_code] || 0;
+            acc[position_code] += 1;
+            return acc;
+        },
+        {}
     );
 
     // props.original contains the row data for this particular instructor
     function CellDeleteButton({ original: position }) {
-        const disabled = positionsCurrentlyAssigned.has(position.id);
+        // If there are any assignments for this position, we should be disabled
+        const disabled = numAssignmentsByPositionCode[position.position_code];
         if (disabled) {
             return (
                 <div className="delete-button-container">
@@ -298,19 +305,37 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
             Header: "Hours/Assignment",
             accessor: "hours_per_assignment",
             maxWidth: 64,
+            className: "number-cell",
             Cell: generateCell("hours_per_assignment"),
         },
         {
             Header: "Enrolled",
             accessor: "current_enrollment",
+            className: "number-cell",
             maxWidth: 80,
             Cell: generateCell("current_enrollment"),
         },
         {
             Header: "Waitlist",
             accessor: "current_waitlisted",
-            maxWidth: 90,
-            Cell: generateCell("current_waitlisted"),
+            className: "number-cell",
+            maxWidth: 50,
+            Cell: generateCell("current_waitlisted", "number"),
+        },
+        {
+            Header: "Desired Num Assignments",
+            accessor: "desired_num_assignments",
+            className: "number-cell",
+            maxWidth: 50,
+            Cell: generateCell("desired_num_assignments"),
+        },
+        {
+            Header: "Current Num Assignments",
+            id: "current_num_assignments",
+            className: "number-cell",
+            accessor: (position) =>
+                numAssignmentsByPositionCode[position.position_code] || "",
+            maxWidth: 50,
         },
         {
             Header: "Contract Template",

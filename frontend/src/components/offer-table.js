@@ -20,7 +20,8 @@ const COLUMNS = [
     {
         Header: "Hours",
         accessor: "hours",
-        width: 100,
+        className: "number-cell",
+        width: 50,
     },
     {
         Header: "Contract",

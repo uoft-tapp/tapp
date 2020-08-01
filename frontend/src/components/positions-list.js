@@ -8,7 +8,12 @@ import { createDiffColumnsFromColumns } from "./diff-table";
 const DEFAULT_COLUMNS = [
     { Header: "Position Code", accessor: "position_code" },
     { Header: "Position Title", accessor: "position_title" },
-    { Header: "Hours", accessor: "hours_per_assignment", maxWidth: 64 },
+    {
+        Header: "Hours",
+        accessor: "hours_per_assignment",
+        maxWidth: 64,
+        className: "number-cell",
+    },
     {
         Header: "Start",
         accessor: "start_date",
