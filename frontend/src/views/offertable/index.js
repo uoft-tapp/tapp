@@ -10,11 +10,7 @@ import { EditableField } from "../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
 import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
-import { formatDownloadUrl } from "../../libs/utils";
-
-function capitalize(word = "") {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-}
+import { formatDownloadUrl, capitalize } from "../../libs/utils";
 
 /**
  * A cell that renders editable applicant information
@@ -173,7 +169,12 @@ function EditableOfferTable(props) {
  */
 export const ConnectedOfferTable = connect(
     (state) => ({
-        data: assignmentsSelector(state),
+        data: assignmentsSelector(state).map((offer) => {
+            const { active_offer_status, ...rest } = offer;
+            return !active_offer_status
+                ? { active_offer_status: "No Contract", ...rest }
+                : offer;
+        }),
         selected: offerTableSelector(state).selectedAssignmentIds,
     }),
     { upsertApplicant, upsertAssignment, setSelected: setSelectedRows }

@@ -107,6 +107,21 @@
     margin-bottom: 0.3em;
 }
 
+.filter-chip {
+    margin-left: 1em;
+}
+
+.filter-chip-icon {
+    margin-left: 0.5em;
+    margin-bottom: 1px;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.filter-chip-icon:hover {
+    color: var(--danger);
+}
+
 .number-cell {
     text-align: right;
 }

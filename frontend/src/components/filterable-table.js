@@ -4,7 +4,10 @@ import ReactTable from "react-table";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
 import "react-table/react-table.css";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { Badge } from "react-bootstrap";
+import { strip } from "../libs/utils";
+
 // This HOC adds a checkbox to every row of a ReactTable
 const SelectTable = selectTableHOC(ReactTable);
 
@@ -13,7 +16,6 @@ const COLUMNS = [
     { Header: "First Name", accessor: "first_name" },
     { Header: "Email", accessor: "applicant.email", width: 250 },
 ];
-
 /**
  * Converts a row of the offer table into a string for omni-searching
  *
@@ -49,18 +51,26 @@ function FilterableTable(props) {
         setSelected([..._selected]);
     };
 
-    const [filterString, setFilterString] = React.useState("");
+    const [filterStrings, setFilterStrings] = React.useState([]);
+    const [currentFilterString, setCurrentFilterString] = React.useState("");
     const [lastSelected, setLastSelected] = React.useState(null);
     const [allSelected, setAllSelected] = React.useState(false);
     function isSelected(id) {
         return _selected.has(id);
     }
 
-    const filteredData = filterString
-        ? data.filter((row) =>
-              rowToStr(row).includes(filterString.toLowerCase())
-          )
-        : data;
+    const filteredData = data
+        .filter((row) =>
+            filterStrings.every((string) =>
+                rowToStr(row).match(string.toLowerCase())
+            )
+        )
+        .filter(
+            (row) =>
+                currentFilterString
+                    ? rowToStr(row).includes(currentFilterString.toLowerCase())
+                    : true // if there is no typed query, don't filter the typed query
+        );
 
     // we need a reference to the internal table so that we can get the "visible data"
     // if it happens to be filtered or sorted
@@ -103,7 +113,7 @@ function FilterableTable(props) {
             allSelected = true;
         }
         setAllSelected(allSelected);
-    }, [_selected, filterString]);
+    }, [_selected, filterStrings]);
 
     function onToggleRow(ref, shiftOn, row) {
         // The shift key isn't held. Only select a single item
@@ -187,6 +197,28 @@ function FilterableTable(props) {
     if (selected == null) {
         tableComponent = <ReactTable columns={columns} data={filteredData} />;
     }
+
+    function removeFilterString(filterString) {
+        const updatedFilterStrings = filterStrings.filter(
+            (oldString) => oldString !== filterString
+        );
+        setFilterStrings(updatedFilterStrings);
+    }
+
+    function addFilterString(filterString) {
+        // string.localeCompare(, , { sensitivity: 'accent'}) == case insensitive string comparison
+        if (
+            filterStrings.every(
+                (filteredString) =>
+                    filteredString.localeCompare(filterString, undefined, {
+                        sensitivity: "accent",
+                    }) !== 0
+            )
+        ) {
+            setFilterStrings([...filterStrings, filterString]);
+        }
+    }
+
     return (
         <div className="filterable-table-container">
             <div className="filterable-table-filter">
@@ -194,8 +226,33 @@ function FilterableTable(props) {
                 <input
                     type="text"
                     placeholder="Filter by..."
-                    onChange={(e) => setFilterString(e.target.value)}
+                    onChange={(e) => {
+                        // "live filter" the table as you type a query
+                        setCurrentFilterString(strip(e.target.value));
+                    }}
+                    onKeyDown={(e) => {
+                        // press enter to add the typed query to the filter list
+                        if (e.keyCode === 13) {
+                            // 13 == Enter
+                            addFilterString(strip(e.target.value));
+                            e.target.value = ""; // clear the filter box
+                        }
+                    }}
                 />
+                {filterStrings.map((filterString) => (
+                    <Badge
+                        className="filter-chip"
+                        pill
+                        variant="light"
+                        key={filterString}
+                    >
+                        {filterString}
+                        <FaTimes
+                            className="filter-chip-icon"
+                            onClick={() => removeFilterString(filterString)}
+                        />
+                    </Badge>
+                ))}
             </div>
             <div className="filterable-table-table">{tableComponent}</div>
         </div>
