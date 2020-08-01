@@ -23,5 +23,6 @@ class OfferSerializer < ActiveModel::Serializer
                :withdrawn_date,
                :url_token,
                :nag_count,
-               :status
+               :status,
+               :hours
 end

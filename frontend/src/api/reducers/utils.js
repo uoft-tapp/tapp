@@ -17,7 +17,7 @@ export function upsertItem(modelData, newItem) {
     let didUpdate = false;
     const newModelData = modelData.map((item) => {
         if (item.id === newItem.id) {
-            didUpdate = 1;
+            didUpdate = true;
             return newItem;
         }
         return item;

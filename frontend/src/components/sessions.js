@@ -1,51 +1,158 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ReactTable from "react-table";
-import { docApiPropTypes } from "../api/defs/doc-generation";
-
+import { useSelector, useDispatch } from "react-redux";
+import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
+import { EditableField } from "./edit-field-widgets";
 import { formatDate } from "../libs/utils";
-import { Alert } from "react-bootstrap";
-const DEFAULT_COLUMNS = [
-    { Header: "Name", accessor: "name" },
-    {
-        Header: "Start",
-        accessor: "start_date",
-        Cell: (row) => formatDate(row.value),
-    },
-    {
-        Header: "End",
-        accessor: "end_date",
-        Cell: (row) => formatDate(row.value),
-    },
-    { Header: "Rate (Pre-January)", accessor: "rate1" },
-    { Header: "Rate (Post-January)", accessor: "rate2" },
-];
+import { Alert, Modal, Button } from "react-bootstrap";
+import { FaTimes, FaTrash } from "react-icons/fa";
+
+function EditableCell(props) {
+    const title = `Edit ${props.column.Header}`;
+    const { upsertSession, field, type, value } = props;
+    const isDate = type === "date";
+
+    function onChange(newVal) {
+        const sessionId = props.original.id;
+        upsertSession({ id: sessionId, [field]: newVal });
+    }
+
+    return (
+        <EditableField
+            title={title}
+            value={type === "date" ? (value || "").slice(0, 10) : value || ""}
+            onChange={onChange}
+            type={type}
+        >
+            {isDate ? formatDate(value) : value}
+        </EditableField>
+    );
+}
+
+function ConfirmDeleteDialog(props) {
+    const { show, onHide, onDelete, session } = props;
+    return (
+        <Modal show={show} onHide={onHide}>
+            <Modal.Header closeButton>
+                <Modal.Title>Delete Session</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                Are you sure you want to delete the session{" "}
+                {(session || {}).name}? This action cannot be undone.
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={onHide} variant="light">
+                    Cancel
+                </Button>
+                <Button onClick={onDelete} title="Delete Session">
+                    Delete
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
 /**
  * List the sessions using a ReactTable. `columns` can be passed
  * in to customize columns/cell renderers.
  *
  * @export
- * @param {{sessions: object[], columns: object[]}} props
+ * @param {{columns?: object[], inDeleteMode?: Boolean}} props
  * @returns
  */
-export function SessionsList(props) {
-    const { sessions, columns = DEFAULT_COLUMNS } = props;
+export function ConnectedSessionsList(props) {
+    const { inDeleteMode = false } = props;
+    const [sessionToDelete, setSessionToDelete] = React.useState(null);
+    const sessions = useSelector(sessionsSelector);
+    const dispatch = useDispatch();
+    const pageSize = sessions?.length || 20;
+
+    function _upsertSession(session) {
+        return dispatch(upsertSession(session));
+    }
+
+    function generateCell(field, type) {
+        return (props) => (
+            <EditableCell
+                field={field}
+                upsertSession={_upsertSession}
+                type={type}
+                {...props}
+            />
+        );
+    }
+
+    // props.original contains the row data for this particular instructor
+    function CellDeleteButton({ original: session }) {
+        return (
+            <div className="delete-button-container">
+                <FaTimes
+                    className="delete-instructor-button"
+                    title={`Delete ${session.name}`}
+                    onClick={() => {
+                        setSessionToDelete(session);
+                    }}
+                />
+            </div>
+        );
+    }
+
+    const DEFAULT_COLUMNS = [
+        {
+            Header: (
+                <FaTrash className="delete-instructor-column-header-icon" />
+            ),
+            Cell: CellDeleteButton,
+            show: inDeleteMode,
+            maxWidth: 32,
+            resizable: false,
+        },
+        { Header: "Name", accessor: "name", Cell: generateCell("name") },
+        {
+            Header: "Start",
+            accessor: "start_date",
+            Cell: generateCell("start_date", "date"),
+        },
+        {
+            Header: "End",
+            accessor: "end_date",
+            Cell: generateCell("end_date", "date"),
+        },
+        {
+            Header: "Rate (Pre-January)",
+            accessor: "rate1",
+            Cell: generateCell("rate1"),
+        },
+        {
+            Header: "Rate (Post-January)",
+            accessor: "rate2",
+            Cell: generateCell("rate2"),
+        },
+    ];
+
+    const { columns = DEFAULT_COLUMNS } = props;
     return (
-        <ReactTable
-            data={sessions}
-            columns={columns}
-            showPagination={false}
-            minRows={1}
-        />
+        <React.Fragment>
+            <ReactTable
+                data={sessions}
+                columns={columns}
+                showPagination={false}
+                defaultPageSize={pageSize}
+                pageSize={pageSize}
+                minRows={1}
+            />
+            <ConfirmDeleteDialog
+                session={sessionToDelete}
+                show={!!sessionToDelete}
+                onHide={() => setSessionToDelete(null)}
+                onDelete={async () => {
+                    await dispatch(deleteSession(sessionToDelete));
+                    setSessionToDelete(null);
+                }}
+            />
+        </React.Fragment>
     );
 }
-SessionsList.propTypes = {
-    sessions: PropTypes.arrayOf(docApiPropTypes.session).isRequired,
-    columns: PropTypes.arrayOf(
-        PropTypes.shape({ Header: PropTypes.any.isRequired })
-    ),
-};
 
 export function MissingActiveSessionWarning({ extraText = "" }) {
     return (

@@ -114,10 +114,9 @@ export const deletePosition = validatedApiDispatcher({
     propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
     dispatcher: (payload) => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
-            `/${role}/sessions/${activeSessionId}/positions/delete`,
+            `/${role}/positions/delete`,
             prepForApi(payload)
         );
         dispatch(deleteOnePositionSuccess(data));

@@ -43,11 +43,14 @@ export function AdminRoutes() {
             <Route exact path="/assignments_and_positions/assignments">
                 <AdminAssignmentsView />
             </Route>
-            <Route exact path="/tapp/applicants">
-                <AdminApplicantsView />
-            </Route>
             <Route exact path="/assignments_and_positions/ddahs">
                 <AdminDdahsView />
+            </Route>
+            <Route exact path="/applicants_and_matching">
+                <Redirect to="/applicants_and_matching/applicants" />
+            </Route>
+            <Route exact path="/applicants_and_matching/applicants">
+                <AdminApplicantsView />
             </Route>
         </Switch>
     );

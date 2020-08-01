@@ -42,7 +42,7 @@ export function ActiveUserDisplay(props) {
                     {(roles || []).map((role, index) => (
                         <Dropdown.Item
                             key={index}
-                            eventKey={index}
+                            eventKey={"" + index}
                             active={isActiveRole(role)}
                         >
                             {role}

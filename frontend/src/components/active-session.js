@@ -11,11 +11,10 @@ export function ActiveSessionDisplay(props) {
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
     const activeSessionId = activeSession ? activeSession.id : null;
 
-    const label = !activeSessionId ? (
-        <span className="text-secondary mr-2">Select a Session</span>
-    ) : (
-        <span className="text-primary mr-2">{activeSession.name}</span>
-    );
+    let label = <span className="text-secondary mr-2">Select a Session</span>;
+    if (activeSessionId != null) {
+        label = <span className="text-primary mr-2">{activeSession.name}</span>;
+    }
 
     return (
         <Badge>

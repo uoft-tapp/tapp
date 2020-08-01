@@ -22,9 +22,14 @@ export const fetchActiveUser = validatedApiDispatcher({
     description: "Fetch the active user",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/active_user`);
+        const data = await apiGET(`/active_user`);
         dispatch(fetchActiveUserSuccess(data));
+        // If our currently-set role is one that we don't have,
+        // set our role to one we do have.
+        const currentRole = activeRoleSelector(getState());
+        if (data.roles && !data.roles.includes(currentRole)) {
+            dispatch(setActiveUserRole(data.roles[0]));
+        }
         return data;
     },
 });

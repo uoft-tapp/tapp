@@ -8,7 +8,7 @@ import { createReducer } from "./utils";
 const initialState = {
     users: [],
     active_user: {},
-    active_role: "admin",
+    active_role: null,
 };
 
 export const usersReducer = createReducer(initialState, {

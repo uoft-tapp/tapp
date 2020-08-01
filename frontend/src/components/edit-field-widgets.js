@@ -2,20 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import { FaEdit } from "react-icons/fa";
 import { Modal, Button, Spinner } from "react-bootstrap";
-
+import { formatDate } from "../libs/utils";
 import "./edit-field-widgets.css";
 
 /**
- * A dialog allowing one to edit `props.value`. `onChagne` is called
+ * A dialog allowing one to edit `props.value`. `onChange` is called
  * when "save" is clicked while editing this value.
  *
  * @param {*} props
  * @returns
  */
 function EditFieldDialog(props) {
-    const { title, value, show, onHide, onChange } = props;
+    const { title, value, show, onHide, onChange, type } = props;
     const [fieldVal, setFieldVal] = React.useState(value);
     const [inProgress, setInProgress] = React.useState(false);
+    const isDate = type === "date";
 
     function cancelClick() {
         setFieldVal(value);
@@ -47,8 +48,13 @@ function EditFieldDialog(props) {
         fieldVal == value ? null : (
             <span>
                 Change from{" "}
-                <span className="field-dialog-formatted-name">{value}</span> to{" "}
-                <span className="field-dialog-formatted-name">{fieldVal}</span>
+                <span className="field-dialog-formatted-name">
+                    {isDate ? formatDate(value) : value}
+                </span>{" "}
+                to{" "}
+                <span className="field-dialog-formatted-name">
+                    {isDate ? formatDate(fieldVal) : fieldVal}
+                </span>
             </span>
         );
 
@@ -59,7 +65,7 @@ function EditFieldDialog(props) {
             </Modal.Header>
             <Modal.Body>
                 <input
-                    type="text"
+                    type={type}
                     value={fieldVal}
                     onChange={(e) => setFieldVal(e.currentTarget.value)}
                 />{" "}
@@ -81,7 +87,7 @@ function EditFieldDialog(props) {
  * @param {*} props
  * @returns
  */
-function EditFieldIcon(props) {
+export function EditFieldIcon(props) {
     const { title, hidden, onClick } = props;
     if (hidden) {
         return null;
@@ -107,7 +113,14 @@ function EditFieldIcon(props) {
  * @returns
  */
 export function EditableField(props) {
-    const { children, title, value, onChange, editable = true } = props;
+    const {
+        children,
+        title,
+        value,
+        onChange,
+        editable = true,
+        type = "text",
+    } = props;
     const [dialogShow, setDialogShow] = React.useState(false);
     return (
         <div className="show-on-hover-wrapper">
@@ -123,6 +136,7 @@ export function EditableField(props) {
                 onChange={onChange}
                 show={dialogShow}
                 onHide={() => setDialogShow(false)}
+                type={type}
             />
         </div>
     );

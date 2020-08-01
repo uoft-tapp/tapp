@@ -25,7 +25,12 @@ const DEFAULT_COLUMNS = [
         accessor: "assignment.applicant.first_name",
         maxWidth: 120,
     },
-    { Header: "Total Hours", accessor: "total_hours", maxWidth: 100 },
+    {
+        Header: "Total Hours",
+        accessor: "total_hours",
+        maxWidth: 100,
+        className: "number-cell",
+    },
     { Header: "Duties", accessor: "duties" },
 ];
 
@@ -86,11 +91,15 @@ export function DdahsList(props: {
         return { ...ddah, duties: ddahDutiesToString(ddah.duties) };
     });
 
+    const pageSize = flattenedDdahs?.length || 20;
+
     return (
         <ReactTable
             data={flattenedDdahs}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
+            pageSize={pageSize}
             minRows={1}
         />
     );

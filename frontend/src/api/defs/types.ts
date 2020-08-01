@@ -142,10 +142,5 @@ export interface Ddah {
     url_token: string;
     duties: Duty[];
     total_hours: number;
-    status:
-        | "accepted_and_approved"
-        | "accepted"
-        | "rejected"
-        | "emailed"
-        | null;
+    status: "accepted" | "emailed" | null;
 }

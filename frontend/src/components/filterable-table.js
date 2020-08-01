@@ -175,6 +175,7 @@ function FilterableTable(props) {
         }
     }
 
+    const pageSize = filteredData?.length || 20;
     let tableComponent = (
         <SelectTable
             ref={(r) => (reactTableRef = r)}
@@ -186,8 +187,10 @@ function FilterableTable(props) {
             isSelected={isSelected}
             selectType="checkbox"
             keyField="id"
-            minRows={1}
             showPagination={false}
+            defaultPageSize={pageSize}
+            pageSize={pageSize}
+            minRows={1}
         />
     );
     // if `selected` was not passed in, the table rows should not be selectable

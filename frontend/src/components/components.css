@@ -121,3 +121,7 @@
 .filter-chip-icon:hover {
     color: var(--danger);
 }
+
+.number-cell {
+    text-align: right;
+}

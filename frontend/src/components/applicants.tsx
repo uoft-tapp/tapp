@@ -40,11 +40,14 @@ export function ApplicantsList(props: {
     columns?: any[];
 }) {
     const { applicants, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = applicants?.length || 20;
     return (
         <ReactTable
             data={applicants}
             columns={columns}
             showPagination={false}
+            defaultPageSize={pageSize}
+            pageSize={pageSize}
             minRows={1}
         />
     );

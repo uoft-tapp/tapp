@@ -90,7 +90,10 @@ function AssignmentCell(props) {
             title={title}
             value={props.value || ""}
             onChange={onChange}
-            editable={!active_offer_status}
+            editable={
+                !active_offer_status ||
+                ["provisional", "withdrawn"].includes(active_offer_status)
+            }
         >
             {props.value}
         </EditableField>
@@ -145,6 +148,8 @@ function EditableOfferTable(props) {
         {
             Header: "Hours",
             accessor: "hours",
+            className: "number-cell",
+            maxWidth: 70,
             Cell: generateAssignmentCell("hours"),
         },
         {

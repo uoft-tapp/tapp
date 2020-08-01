@@ -6,6 +6,25 @@ class Api::V1::Admin::DdahsController < ApplicationController
         render_success Ddah.by_session(params[:session_id])
     end
 
+    # GET /session/:session_id/ddahs/accepted_list
+    def accepted_list
+        ddahs = Ddah.by_session(params[:session_id]) || []
+
+        # for PDF and HTML rendering, we start by rendering the ddah as an html document
+        rendered = get_signature_list_html(ddahs)
+        file_name = 'ddah-acknowledgement-signature-list.html'
+        mime_type = 'text/html'
+        if !params[:format].blank? && params[:format].downcase == 'pdf'
+            file_name = 'ddah-acknowledgement-signature-list.pdf'
+            mime_type = 'application/pdf'
+            rendered = WickedPdf.new.pdf_from_string(rendered)
+        end
+
+        render_success file_name: file_name,
+                       mime_type: mime_type,
+                       content: Base64.strict_encode64(rendered)
+    end
+
     # GET /ddahs/:ddah_id
     def show
         find_ddah
@@ -34,8 +53,22 @@ class Api::V1::Admin::DdahsController < ApplicationController
     def create
         # look up the DDAH first by assignment ID, otherwise, create a new DDAH
         @ddah =
-            Assignment.find_by(id: params[:assignment_id]).ddah ||
-                Ddah.new(ddah_params)
+            if params[:assignment_id]
+                Assignment.find_by(id: params[:assignment_id]).ddah ||
+                    Ddah.new(ddah_params)
+            else
+                Ddah.find(params[:id])
+            end
+
+        # It is possible that `Ddah.find(...)` didn't find a DDAH, which means we passed
+        # an invalid id field and we didn't pass an `assignment_id` field. We cannot continue
+        # in this case.
+        unless @ddah
+            render_error(
+                message: 'Cannot create a DDAH without an assignment_id'
+            ) && return
+        end
+
         # Since `update` referrs to `@ddah`, and we either have an existing or a new (unsaved)
         # `@ddah`, it is safe to just call `update` here.
         update
@@ -54,6 +87,9 @@ class Api::V1::Admin::DdahsController < ApplicationController
     # POST /ddahs/:ddah_id/email
     def email
         find_ddah
+
+        DdahMailer.email_ddah(@ddah).deliver_now!
+
         unless @ddah.emailed_date
             @ddah.email
             @ddah.save!
@@ -89,12 +125,72 @@ class Api::V1::Admin::DdahsController < ApplicationController
                 proc do
                     @ddah.update!(ddah_params)
                     if duty_params[:duties] && @ddah.duties
+                        # Save the old duties to detect if they get changed
+                        old_duties =
+                            @ddah.duties.as_json(only: %i[description hours])
+
                         # if we specified duties, delete the old ones and add the new ones
                         @ddah.duties.destroy_all
                     end
-                    @ddah.duties_attributes = duty_params[:duties]
+                    if duty_params[:duties]
+                        @ddah.duties_attributes = duty_params[:duties]
+                    end
+
+                    # If the duties changed, we need to modify some attributes
+
+                    if @ddah.duties.as_json(only: %i[description hours]) !=
+                           old_duties
+                        if @ddah.emailed_date || @ddah.accepted_date
+                            @ddah.revised_date = Time.zone.now
+                        end
+                        @ddah.approved_date = nil
+                        @ddah.accepted_date = nil
+                        @ddah.signature = nil
+                    end
+
                     @ddah.save!
                 end
         )
+    end
+
+    def get_signature_list_html(ddahs)
+        contract_dir = Rails.root.join('app/views/ddahs/')
+        template_file = "#{contract_dir}/ddah-signature-list.html"
+        # Verify that the template file is actually contained in the template directory
+        unless Pathname.new(template_file).realdirpath.to_s.starts_with?(
+                   contract_dir.to_s
+               )
+            raise StandardError, "Invalid contract path #{template_file}"
+        end
+
+        # load the ddah as a Liquid template
+        template = Liquid::Template.parse(File.read(template_file))
+        # font.css and header.css contain base64-encoded data since we need all
+        # data to be embedded in the HTML document
+        styles = {
+            'style_font' => File.read("#{contract_dir}/font.css"),
+            'style_header' => File.read("#{contract_dir}/header.css")
+        }
+
+        subs =
+            { ddahs: ddah_signature_list_substitutions(ddahs) }.merge(styles)
+                .stringify_keys
+        template.render(subs)
+    end
+
+    # Prepare a hash to be used by a Liquid
+    # template based on the ddahs list
+    def ddah_signature_list_substitutions(ddahs)
+        ddahs.map do |x|
+            {
+                position_code: x.assignment.position.position_code,
+                first_name: x.assignment.applicant.first_name,
+                last_name: x.assignment.applicant.last_name,
+                signature: x.signature,
+                signed_date: x.accepted_date
+            }
+        end.sort_by do |x|
+            [x[:position_code], x[:last_name], x[:first_name]]
+        end.as_json.map(&:stringify_keys)
     end
 end

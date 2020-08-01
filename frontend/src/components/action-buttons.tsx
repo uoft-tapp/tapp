@@ -12,6 +12,7 @@ interface ActionButtonProps extends PropsWithChildren {
     icon?: React.ReactNode | Function;
     onClick?: () => any;
     active?: boolean;
+    disabled?: any;
 }
 
 interface ActionMenuButtonProps extends ActionButtonProps {
@@ -80,11 +81,19 @@ export function ActionButton({
     icon = null,
     children,
     active,
+    disabled,
     ...rest
 }: ActionButtonProps) {
     const iconNode = wrapIcon(icon);
+    if (disabled) {
+        rest = { ...rest, onClick: () => {} };
+    }
     return (
-        <Dropdown.Item as="button" className={classNames({ active })} {...rest}>
+        <Dropdown.Item
+            as="button"
+            className={classNames({ active, disabled })}
+            {...rest}
+        >
             {iconNode}
             {children}
         </Dropdown.Item>
@@ -112,6 +121,7 @@ export function ActionMenuButton({
     children,
     menu = null,
     active,
+    disabled = false,
     ...rest
 }: ActionMenuButtonProps) {
     const [menuOpen, setMenuOpen] = React.useState(false);
@@ -135,16 +145,21 @@ export function ActionMenuButton({
                 })}
             >
                 <button
-                    className={classNames("dropdown-item", { active })}
+                    className={classNames("dropdown-item", {
+                        active,
+                        disabled,
+                    })}
                     {...rest}
                 >
                     {iconNode}
                     {children}
                 </button>
-                <button
-                    className="dropdown-item dropdown-toggle"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                ></button>
+                {!disabled && (
+                    <button
+                        className="dropdown-item dropdown-toggle"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                    ></button>
+                )}
             </div>
             <div
                 className={classNames("action-accordion-item-container", {

@@ -10,14 +10,10 @@ import {
 import { Modal, Button, Alert } from "react-bootstrap";
 import { PositionEditor } from "../../components/forms/position-editor";
 
-function getConficts(position, positions = []) {
+function getConflicts(position, positions = []) {
     const ret = { delayShow: "", immediateShow: "" };
-    if (
-        !strip(position.position_code) ||
-        !strip(position.start_date) ||
-        !strip(position.end_date)
-    ) {
-        ret.delayShow = "A position code, start date, and end date is required";
+    if (!strip(position.position_code)) {
+        ret.delayShow = "A position code is required";
     }
     const matchingSession = positions.find(
         (x) => strip(x.position_code) === strip(position.position_code)
@@ -88,7 +84,7 @@ export function AddPositionDialog(props) {
         onHide();
     }
 
-    const conflicts = getConficts(newPosition, positions);
+    const conflicts = getConflicts(newPosition, positions);
 
     return (
         <Modal show={show} onHide={onHide}>

@@ -11,6 +11,7 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
     def create
         @contract_template = ContractTemplate.find_by(id: params[:id])
         update && return if @contract_template
+
         # if we aren't updating, we need to create a contract_template
         # for the specified session.
         @session = Session.find(params[:session_id])

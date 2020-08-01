@@ -11,7 +11,7 @@ import {
     ActionHeader,
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { formatDate } from "../../libs/utils";
 import { Badge } from "react-bootstrap";
 import { activeSessionSelector } from "../../api/actions";
@@ -20,6 +20,7 @@ import { MissingActiveSessionWarning } from "../../components/sessions";
 
 export function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [inDeleteMode, setInDeleteMode] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
 
     return (
@@ -31,12 +32,21 @@ export function AdminPositionsView() {
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
+                    disabled={!activeSession}
                 >
                     Add Position
                 </ActionButton>
+                <ActionButton
+                    icon={<FaTrash />}
+                    onClick={() => setInDeleteMode(!inDeleteMode)}
+                    active={inDeleteMode}
+                    disabled={!activeSession}
+                >
+                    Delete Position
+                </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportPositionsAction />
-                <ConnectedExportPositionsAction />
+                <ConnectedImportPositionsAction disabled={!activeSession} />
+                <ConnectedExportPositionsAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -48,7 +58,7 @@ export function AdminPositionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedPositionsList />
+                <ConnectedPositionsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );
@@ -89,7 +99,7 @@ const POSITION_COLUMNS_FOR_INSTRUCTOR_VIEW = [
         maxWidth: 80,
     },
     {
-        Header: "Waitlisted",
+        Header: "Waitlist",
         accessor: "current_waitlisted",
         maxWidth: 90,
     },

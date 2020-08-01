@@ -5,6 +5,7 @@ import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
     ConnectedDownloadPositionDdahTemplatesAction,
+    ConnectedDownloadDdahsAcceptedListAction,
 } from "./import-export";
 import {
     ActionsList,
@@ -39,14 +40,20 @@ export function AdminDdahsView(): React.ReactNode {
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
+                    disabled={!activeSession}
                 >
                     Add DDAH
                 </ActionButton>
-                <ConnectedDownloadPositionDdahTemplatesAction />
+                <ConnectedDownloadPositionDdahTemplatesAction
+                    disabled={!activeSession}
+                />
+                <ConnectedDownloadDdahsAcceptedListAction
+                    disabled={!activeSession}
+                />
 
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportDdahsAction />
-                <ConnectedExportDdahsAction />
+                <ConnectedImportDdahsAction disabled={!activeSession} />
+                <ConnectedExportDdahsAction disabled={!activeSession} />
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
                 <ActionButton
                     icon={FaMailBulk}
@@ -55,6 +62,7 @@ export function AdminDdahsView(): React.ReactNode {
                             dispatch(emailDdah(ddah));
                         }
                     }}
+                    disabled={selectedDdahIds.length === 0}
                 >
                     Email DDAH
                 </ActionButton>
@@ -65,6 +73,7 @@ export function AdminDdahsView(): React.ReactNode {
                             dispatch(approveDdah(ddah));
                         }
                     }}
+                    disabled={selectedDdahIds.length === 0}
                 >
                     Approve DDAH
                 </ActionButton>

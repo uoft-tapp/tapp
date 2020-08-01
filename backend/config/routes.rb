@@ -8,7 +8,7 @@
 module Constraint
     class AuthenticatedAdmin
         def matches?(request)
-            active_user = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user request
             return true if active_user.is_admin?
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
@@ -19,7 +19,7 @@ module Constraint
 
     class AuthenticatedInstructor
         def matches?(request)
-            active_user = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user request
             return true if active_user.is_instructor?
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
@@ -30,7 +30,7 @@ module Constraint
 
     class AuthenticatedTA
         def matches?(request)
-            active_user = ActiveUserService.active_user
+            active_user = ActiveUserService.active_user request
             return true if active_user.is_ta?
             Rails.logger.warn "Permission Denied: User '#{
                                   active_user.utorid
@@ -123,7 +123,11 @@ Rails.application.routes.draw do
                         resources :applicants, only: %i[index create]
                         resources :applications, only: %i[index]
                         resources :assignments, only: %i[index]
-                        resources :ddahs, only: %i[index]
+                        resources :ddahs, only: %i[index] do
+                            collection do
+                                get :accepted_list, to: 'ddahs#accepted_list'
+                            end
+                        end
                         resources :contract_templates, only: %i[index create]
                         resources :positions,
                                   controller: :session_positions,
@@ -173,6 +177,9 @@ Rails.application.routes.draw do
                     get :active_user, to: 'users#active_user'
                 end
             end
+
+            # We can get the active user without passing any authentication check
+            get :active_user, to: 'users#active_user'
         end
     end
 

@@ -8,7 +8,7 @@ const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "applicant.last_name" },
     { Header: "First Name", accessor: "applicant.first_name" },
     { Header: "Position Code", accessor: "position.position_code" },
-    { Header: "Hours", accessor: "hours" },
+    { Header: "Hours", accessor: "hours", className: "number-cell" },
     {
         Header: "Start",
         accessor: "start_date",
@@ -39,6 +39,7 @@ export function AssignmentsDiffList({ modifiedAssignments }) {
 
 function AssignmentsList(props) {
     const { assignments, columns = DEFAULT_COLUMNS } = props;
+    const pageSize = assignments?.length || 20;
     return (
         <React.Fragment>
             <h3>Assignments</h3>
@@ -46,6 +47,8 @@ function AssignmentsList(props) {
                 data={assignments}
                 columns={columns}
                 showPagination={false}
+                defaultPageSize={pageSize}
+                pageSize={pageSize}
                 minRows={1}
             />
         </React.Fragment>

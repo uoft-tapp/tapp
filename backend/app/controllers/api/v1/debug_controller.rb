@@ -11,6 +11,7 @@ class Api::V1::DebugController < ApplicationController
         # We can update a user by id or utorid
         @user = User.find_by(id: params[:id])
         update_user && return if @user
+
         @user = User.find_by(utorid: params[:utorid])
         update_user && return if @user
 
@@ -20,7 +21,7 @@ class Api::V1::DebugController < ApplicationController
 
     # GET /active_user
     def active_user
-        render_success ActiveUserService.active_user
+        render_success ActiveUserService.active_user request
     end
 
     # POST /active_user

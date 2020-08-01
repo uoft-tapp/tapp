@@ -13,7 +13,7 @@ import {
     Spinner,
 } from "react-bootstrap";
 
-export function ConnectedUploadContractTemplateAction() {
+export function ConnectedUploadContractTemplateAction({ disabled = false }) {
     const dispatch = useDispatch();
     const [file, setFile] = React.useState<File | null>(null);
     const [fileInputLabel, setFileInputLabel] = React.useState(
@@ -58,7 +58,11 @@ export function ConnectedUploadContractTemplateAction() {
 
     return (
         <>
-            <ActionButton icon={FaUpload} onClick={() => setDialogOpen(true)}>
+            <ActionButton
+                icon={FaUpload}
+                onClick={() => setDialogOpen(true)}
+                disabled={disabled}
+            >
                 Upload Contract Template
             </ActionButton>
             <Modal
