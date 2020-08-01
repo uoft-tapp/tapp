@@ -91,7 +91,7 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
  * @export
  * @returns
  */
-export function ConnectedExportDdahsAction() {
+export function ConnectedExportDdahsAction({ disabled = false }) {
     const dispatch = useDispatch();
     const [exportType, setExportType] = React.useState<
         "spreadsheet" | "json" | null
@@ -146,7 +146,7 @@ export function ConnectedExportDdahsAction() {
         setExportType(option);
     }
 
-    return <ExportActionButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
 /**
@@ -255,7 +255,7 @@ function normalizeDdahImports(
     return ret;
 }
 
-export function ConnectedImportDdahsAction() {
+export function ConnectedImportDdahsAction({ disabled = false }) {
     const dispatch = useDispatch();
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
@@ -361,6 +361,7 @@ export function ConnectedImportDdahsAction() {
             onFileChange={setFileContent}
             dialogContent={dialogContent}
             setInProgress={setInProgress}
+            disabled={disabled}
         />
     );
 }
@@ -459,7 +460,9 @@ async function arraysByKeyToZip(arrays: { [key: string]: any[][] }) {
     return blob;
 }
 
-export function ConnectedDownloadPositionDdahTemplatesAction() {
+export function ConnectedDownloadPositionDdahTemplatesAction({
+    disabled = false,
+}) {
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
 
@@ -474,13 +477,14 @@ export function ConnectedDownloadPositionDdahTemplatesAction() {
             icon={FaDownload}
             title="Download by-position spreadsheets appropriate for filling in and uploading to create DDAHs"
             onClick={() => download()}
+            disabled={disabled}
         >
             By-Position Templates
         </ActionButton>
     );
 }
 
-export function ConnectedDownloadDdahsAcceptedListAction() {
+export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
     const dispatch = useDispatch();
 
     async function downloadClicked() {
@@ -493,6 +497,7 @@ export function ConnectedDownloadDdahsAcceptedListAction() {
             icon={FaDownload}
             title="Download a list of DDAHs that have been signed by TAs this session"
             onClick={() => downloadClicked()}
+            disabled={disabled}
         >
             Signature List
         </ActionButton>

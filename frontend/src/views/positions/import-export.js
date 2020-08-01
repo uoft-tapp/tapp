@@ -26,7 +26,7 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
  * @export
  * @returns
  */
-export function ConnectedExportPositionsAction() {
+export function ConnectedExportPositionsAction({ disabled }) {
     const dispatch = useDispatch();
     const [exportType, setExportType] = React.useState(null);
 
@@ -59,7 +59,7 @@ export function ConnectedExportPositionsAction() {
                                     "Duties",
                                     "Qualifications",
                                     "Current Enrollment",
-                                    "Current Waitlisted",
+                                    "Current Waitlist",
                                 ],
                             ].concat(
                                 positions.map((position) => [
@@ -112,7 +112,7 @@ export function ConnectedExportPositionsAction() {
         setExportType(option);
     }
 
-    return <ExportActionButton onClick={onClick} />;
+    return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
 const positionSchema = {
@@ -147,7 +147,7 @@ const positionSchema = {
         "Number of Assignments": "desired_num_assignments",
         "Contract Template": "contract_template",
         "Current Enrollment": "current_enrollment",
-        "Current Waitlisted": "current_waitlisted",
+        "Current Waitlist": "current_waitlisted",
     },
     dateColumns: ["start_date", "end_date"],
     requiredKeys: ["position_code", "contract_template"],
@@ -155,7 +155,7 @@ const positionSchema = {
     baseName: "positions",
 };
 
-export function ConnectedImportPositionsAction() {
+export function ConnectedImportPositionsAction({ disabled }) {
     const dispatch = useDispatch();
     const positions = useSelector(positionsSelector);
     const instructors = useSelector(instructorsSelector);
@@ -268,6 +268,7 @@ export function ConnectedImportPositionsAction() {
             onFileChange={setFileContent}
             dialogContent={dialogContent}
             setInProgress={setInProgress}
+            disabled={disabled}
         />
     );
 }

@@ -62,14 +62,19 @@ export function PositionEditor(props) {
         <Form>
             <DialogRow>
                 {createFieldEditor(
-                    "Course Code (e.g. MAT135H1F)",
+                    "Position Code (e.g. MAT135H1F)",
                     "position_code"
                 )}
                 {createFieldEditor("Course Title", "position_title")}
             </DialogRow>
             <DialogRow>
-                {createFieldEditor("Start Date", "start_date", "date")}
-                {createFieldEditor("End Date", "end_date", "date")}
+                {createFieldEditor("Start Date*", "start_date", "date")}
+                {createFieldEditor("End Date*", "end_date", "date")}
+                <p>
+                    If blank, the session start date and end date will be used.
+                </p>
+            </DialogRow>
+            <DialogRow>
                 {createFieldEditor(
                     "Hours per Assignment",
                     "hours_per_assignment",
@@ -118,11 +123,7 @@ export function PositionEditor(props) {
                     "current_enrollment",
                     "number"
                 )}
-                {createFieldEditor(
-                    "Waitlisted",
-                    "current_waitlisted",
-                    "number"
-                )}
+                {createFieldEditor("Waitlist", "current_waitlisted", "number")}
                 {createFieldEditor(
                     "Desired Number of Assignments",
                     "desired_num_assignments",

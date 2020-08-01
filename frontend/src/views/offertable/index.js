@@ -152,6 +152,8 @@ function EditableOfferTable(props) {
         {
             Header: "Hours",
             accessor: "hours",
+            className: "number-cell",
+            maxWidth: 70,
             Cell: generateAssignmentCell("hours"),
         },
         {

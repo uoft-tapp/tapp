@@ -25,7 +25,12 @@ const DEFAULT_COLUMNS = [
         accessor: "assignment.applicant.first_name",
         maxWidth: 120,
     },
-    { Header: "Total Hours", accessor: "total_hours", maxWidth: 100 },
+    {
+        Header: "Total Hours",
+        accessor: "total_hours",
+        maxWidth: 100,
+        className: "number-cell",
+    },
     { Header: "Duties", accessor: "duties" },
 ];
 

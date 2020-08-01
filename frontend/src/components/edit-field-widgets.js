@@ -6,7 +6,7 @@ import { formatDate } from "../libs/utils";
 import "./edit-field-widgets.css";
 
 /**
- * A dialog allowing one to edit `props.value`. `onChagne` is called
+ * A dialog allowing one to edit `props.value`. `onChange` is called
  * when "save" is clicked while editing this value.
  *
  * @param {*} props
@@ -87,7 +87,7 @@ function EditFieldDialog(props) {
  * @param {*} props
  * @returns
  */
-function EditFieldIcon(props) {
+export function EditFieldIcon(props) {
     const { title, hidden, onClick } = props;
     if (hidden) {
         return null;

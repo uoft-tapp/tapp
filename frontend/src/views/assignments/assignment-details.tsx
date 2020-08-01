@@ -144,12 +144,19 @@ export function ConnectedViewAssignmentDetailsAction() {
         });
     }
 
+    const disabled = selectedAssignmentIds.length === 0;
+
     return (
         <React.Fragment>
             <ActionButton
                 icon={FaSearchDollar}
                 onClick={() => setDialogVisible(true)}
-                title="View details of selected assignment(s)"
+                title={
+                    disabled
+                        ? "You must select an assignment to view its details"
+                        : "View details of selected assignment(s)"
+                }
+                disabled={disabled}
             >
                 Assignment Details
             </ActionButton>

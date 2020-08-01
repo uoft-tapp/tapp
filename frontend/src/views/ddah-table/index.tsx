@@ -264,7 +264,6 @@ function ConnectedDdahEditorModal({
 
     async function onSave(newDdah: Ddah | null) {
         try {
-            console.log("SAVING", ddah, newDdah);
             if (newDdah) {
                 setInProgress(true);
                 await dispatch(upsertDdah(newDdah));

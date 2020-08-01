@@ -31,12 +31,13 @@ export function AdminAssignmentsView() {
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
+                    disabled={!activeSession}
                 >
                     Add Assignment
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportAssignmentsAction />
-                <ConnectedExportAssignmentsAction />
+                <ConnectedImportAssignmentsAction disabled={!activeSession} />
+                <ConnectedExportAssignmentsAction disabled={!activeSession} />
                 <ActionHeader>Selected Assignment Actions</ActionHeader>
                 <ConnectedViewAssignmentDetailsAction />
                 <ConnectedOfferActionButtons />

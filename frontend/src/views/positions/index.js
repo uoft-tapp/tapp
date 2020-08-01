@@ -32,6 +32,7 @@ export function AdminPositionsView() {
                     onClick={() => {
                         setAddDialogVisible(true);
                     }}
+                    disabled={!activeSession}
                 >
                     Add Position
                 </ActionButton>
@@ -39,12 +40,13 @@ export function AdminPositionsView() {
                     icon={<FaTrash />}
                     onClick={() => setInDeleteMode(!inDeleteMode)}
                     active={inDeleteMode}
+                    disabled={!activeSession}
                 >
                     Delete Position
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportPositionsAction />
-                <ConnectedExportPositionsAction />
+                <ConnectedImportPositionsAction disabled={!activeSession} />
+                <ConnectedExportPositionsAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -97,7 +99,7 @@ const POSITION_COLUMNS_FOR_INSTRUCTOR_VIEW = [
         maxWidth: 80,
     },
     {
-        Header: "Waitlisted",
+        Header: "Waitlist",
         accessor: "current_waitlisted",
         maxWidth: 90,
     },
