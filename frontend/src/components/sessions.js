@@ -6,9 +6,10 @@ import { EditableField } from "./edit-field-widgets";
 import { formatDate } from "../libs/utils";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
+import { generateHeaderCell } from "./table-utils";
 
 function EditableCell(props) {
-    const title = `Edit ${props.column.Header}`;
+    const title = `Edit ${"" + props.column.Header}`;
     const { upsertSession, field, type, value } = props;
     const isDate = type === "date";
 
@@ -107,25 +108,31 @@ export function ConnectedSessionsList(props) {
             maxWidth: 32,
             resizable: false,
         },
-        { Header: "Name", accessor: "name", Cell: generateCell("name") },
         {
-            Header: "Start",
+            Header: generateHeaderCell("Name"),
+            accessor: "name",
+            Cell: generateCell("name"),
+        },
+        {
+            Header: generateHeaderCell("Start Date"),
             accessor: "start_date",
             Cell: generateCell("start_date", "date"),
         },
         {
-            Header: "End",
+            Header: generateHeaderCell("End Date"),
             accessor: "end_date",
             Cell: generateCell("end_date", "date"),
         },
         {
-            Header: "Rate (Pre-January)",
+            Header: generateHeaderCell("Rate (Pre-January)"),
             accessor: "rate1",
+            className: "number-cell",
             Cell: generateCell("rate1"),
         },
         {
-            Header: "Rate (Post-January)",
+            Header: generateHeaderCell("Rate (Post-January)"),
             accessor: "rate2",
+            className: "number-cell",
             Cell: generateCell("rate2"),
         },
     ];

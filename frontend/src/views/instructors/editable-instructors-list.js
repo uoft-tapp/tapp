@@ -18,7 +18,7 @@ import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
  * @returns
  */
 function EditableCell(props) {
-    const title = `Edit ${props.column.Header}`;
+    const title = `Edit ${"" + props.column.Header}`;
     const { upsertInstructor, field } = props;
     function onChange(newVal) {
         const applicantId = props.original.id;

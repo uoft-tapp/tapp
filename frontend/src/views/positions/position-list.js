@@ -16,6 +16,7 @@ import {
     EditFieldIcon,
 } from "../../components/edit-field-widgets";
 import { Typeahead } from "react-bootstrap-typeahead";
+import { generateHeaderCell } from "../../components/table-utils";
 
 /**
  * Turn a list of instructor objects into a hash string for comparison as to whether
@@ -277,60 +278,60 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
             resizable: false,
         },
         {
-            Header: "Position Code",
+            Header: generateHeaderCell("Position Code"),
             accessor: "position_code",
             Cell: generateCell("position_code"),
         },
         {
-            Header: "Position Title",
+            Header: generateHeaderCell("Position Title"),
             accessor: "position_title",
             Cell: generateCell("position_title"),
         },
         {
-            Header: "Start",
+            Header: generateHeaderCell("Start"),
             accessor: "start_date",
             Cell: generateCell("start_date", "date"),
         },
         {
-            Header: "End",
+            Header: generateHeaderCell("End"),
             accessor: "end_date",
             Cell: generateCell("end_date", "date"),
         },
         {
-            Header: "Instructor(s)",
+            Header: generateHeaderCell("Instructor(s)"),
             accessor: "instructors",
             Cell: EditInstructorsCell,
         },
         {
-            Header: "Hours/Assignment",
+            Header: generateHeaderCell("Hours/Assignment"),
             accessor: "hours_per_assignment",
             maxWidth: 64,
             className: "number-cell",
             Cell: generateCell("hours_per_assignment"),
         },
         {
-            Header: "Enrolled",
+            Header: generateHeaderCell("Enrolled"),
             accessor: "current_enrollment",
             className: "number-cell",
             maxWidth: 80,
             Cell: generateCell("current_enrollment"),
         },
         {
-            Header: "Waitlist",
+            Header: generateHeaderCell("Waitlist"),
             accessor: "current_waitlisted",
             className: "number-cell",
             maxWidth: 50,
             Cell: generateCell("current_waitlisted", "number"),
         },
         {
-            Header: "Desired Num Assignments",
+            Header: generateHeaderCell("Desired Num Assignments"),
             accessor: "desired_num_assignments",
             className: "number-cell",
             maxWidth: 50,
             Cell: generateCell("desired_num_assignments"),
         },
         {
-            Header: "Current Num Assignments",
+            Header: generateHeaderCell("Current Num Assignments"),
             id: "current_num_assignments",
             className: "number-cell",
             accessor: (position) =>
@@ -338,7 +339,7 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
             maxWidth: 50,
         },
         {
-            Header: "Contract Template",
+            Header: generateHeaderCell("Contract Template"),
             accessor: "contract_template.template_name",
         },
     ];

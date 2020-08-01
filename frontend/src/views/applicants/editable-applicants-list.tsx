@@ -18,7 +18,7 @@ function EditableCell(props: {
     field: string;
     value: string;
 }): React.ReactElement {
-    const title = `Edit ${props.column.Header}`;
+    const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field } = props;
 
     async function onChange(newVal: string | number | null) {

@@ -15,6 +15,7 @@ import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { formatDate, formatDownloadUrl } from "../../libs/utils";
 import { DdahEditor } from "../../components/ddahs";
+import { generateHeaderCell } from "../../components/table-utils";
 
 interface RowData {
     id?: number;
@@ -418,22 +419,25 @@ export function ConnectedDdahsTable() {
     });
 
     const columns = [
-        { Header: "Position", accessor: "position_code" },
-        { Header: "Last Name", accessor: "last_name" },
-        { Header: "First Name", accessor: "first_name" },
         {
-            Header: "DDAH Hours",
+            Header: generateHeaderCell("Position"),
+            accessor: "position_code",
+        },
+        { Header: generateHeaderCell("Last Name"), accessor: "last_name" },
+        { Header: generateHeaderCell("First Name"), accessor: "first_name" },
+        {
+            Header: generateHeaderCell("DDAH Hours"),
             accessor: "total_hours",
             maxWidth: 120,
             style: { textAlign: "right" },
         },
         {
-            Header: "Status",
+            Header: generateHeaderCell("Status"),
             accessor: "status",
             Cell: WrappedStatusCell,
         },
         {
-            Header: "Approved",
+            Header: generateHeaderCell("Approved"),
             accessor: "approved",
             maxWidth: 50,
             Cell: ({ value }: any) =>
@@ -443,7 +447,11 @@ export function ConnectedDdahsTable() {
                     </div>
                 ) : null,
         },
-        { Header: "Issues", accessor: "issues", Cell: IssuesCell },
+        {
+            Header: generateHeaderCell("Issues"),
+            accessor: "issues",
+            Cell: IssuesCell,
+        },
     ];
 
     return (
@@ -469,7 +477,9 @@ export function ConnectedDdahsTable() {
                 }}
             />
             <FilterableTable
-                columns={columns}
+                // The ReactTable types are not smart enough to know that you can use a function
+                // for Header, so we will opt out of the type system here.
+                columns={columns as any}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}

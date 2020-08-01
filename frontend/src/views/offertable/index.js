@@ -19,7 +19,7 @@ import { formatDownloadUrl, capitalize } from "../../libs/utils";
  * @returns
  */
 function ApplicantCell(props) {
-    const title = `Edit ${props.column.Header}`;
+    const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field } = props;
     function onChange(newVal) {
         const applicantId = props.original.applicant.id;
@@ -78,7 +78,7 @@ function StatusCell({ original }) {
  * @returns
  */
 function AssignmentCell(props) {
-    const title = `Edit ${props.column.Header}`;
+    const title = `Edit ${"" + props.column.Header}`;
     const { upsertAssignment, field } = props;
     const active_offer_status = props.original.active_offer_status;
     function onChange(newVal) {

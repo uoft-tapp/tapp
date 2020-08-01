@@ -4,28 +4,32 @@ import ReactTable from "react-table";
 import { Badge } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
+import { generateHeaderCell } from "./table-utils";
 
 const DEFAULT_COLUMNS = [
-    { Header: "Position Code", accessor: "position_code" },
-    { Header: "Position Title", accessor: "position_title" },
+    { Header: generateHeaderCell("Position Code"), accessor: "position_code" },
     {
-        Header: "Hours",
+        Header: generateHeaderCell("Position Title"),
+        accessor: "position_title",
+    },
+    {
+        Header: generateHeaderCell("Hours"),
         accessor: "hours_per_assignment",
         maxWidth: 64,
         className: "number-cell",
     },
     {
-        Header: "Start",
+        Header: generateHeaderCell("Start"),
         accessor: "start_date",
         Cell: (row) => formatDate(row.value),
     },
     {
-        Header: "End",
+        Header: generateHeaderCell("End"),
         accessor: "end_date",
         Cell: (row) => formatDate(row.value),
     },
     {
-        Header: "Instructors",
+        Header: generateHeaderCell("Instructors"),
         accessor: "instructors",
         Cell: (props) => (
             <React.Fragment>
@@ -41,18 +45,18 @@ const DEFAULT_COLUMNS = [
         ),
     },
     {
-        Header: "Enrolled",
+        Header: generateHeaderCell("Enrolled"),
         accessor: "current_enrollment",
         maxWidth: 80,
     },
     {
-        Header: "Waitlist",
+        Header: generateHeaderCell("Waitlist"),
         accessor: "current_waitlisted",
         maxWidth: 90,
     },
 
     {
-        Header: "Contract Template",
+        Header: generateHeaderCell("Contract Template"),
         accessor: "contract_template.template_name",
     },
 ];
