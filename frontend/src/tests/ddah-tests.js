@@ -166,9 +166,68 @@ export function ddahTests(api) {
         });
     });
 
-    it.todo(
-        "modifying a signed ddah removes the signature and adds a `revised_date`"
-    );
+    it("modifying a signed or approved ddah removes the signature and adds a `revised_date`", async () => {
+        const newAssignment = assignments[1];
+        let resp = await apiGET(`/admin/assignments/${newAssignment.id}/ddah`);
+        expect(resp).toHaveStatus("success");
+
+        let ddah = resp.payload;
+        expect(ddah.signature).toBeFalsy();
+        expect(ddah.signed_date).toBeFalsy();
+        expect(ddah.accepted_date).toBeFalsy();
+        expect(ddah.revised_date).toBeFalsy();
+
+        resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
+        expect(resp).toHaveStatus("success");
+        ddah = resp.payload;
+        expect(ddah.approved_date).toBeTruthy();
+
+        // Updating an "approved" DDAH removes the approval
+        resp = await apiPOST(`/admin/ddahs`, {
+            ...ddah,
+            duties: [
+                ...ddah.duties,
+                {
+                    order: 10,
+                    description: "Hot-pocket eating contest",
+                    hours: 6,
+                },
+            ],
+        });
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.approved_date).toBeFalsy();
+
+        // Updating a signed DDAH should remove the signature
+        resp = await apiPOST(`/admin/ddahs`, ddah);
+        expect(resp).toHaveStatus("success");
+        ddah = resp.payload;
+        resp = await apiPOST(`/admin/ddahs`, {
+            ...ddah,
+            signature: "My Sig",
+            accepted_date: new Date(),
+        });
+        expect(resp).toHaveStatus("success");
+        let signedDdah = resp.payload;
+        expect(signedDdah.signature).toEqual("My Sig");
+        expect(signedDdah.accepted_date).toBeTruthy();
+        // Update the list of duties
+        resp = await apiPOST(`/admin/ddahs`, {
+            id: signedDdah.id,
+            duties: [
+                ...ddah.duties,
+                {
+                    order: 10,
+                    description: "Hot-pocket eating contest",
+                    hours: 6,
+                },
+            ],
+        });
+        expect(resp).toHaveStatus("success");
+        signedDdah = resp.payload;
+        expect(signedDdah.signature).toBeFalsy();
+        expect(signedDdah.accepted_date).toBeFalsy();
+        expect(signedDdah.revised_date).toBeTruthy();
+    });
 }
 
 /**

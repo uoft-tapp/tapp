@@ -53,8 +53,22 @@ class Api::V1::Admin::DdahsController < ApplicationController
     def create
         # look up the DDAH first by assignment ID, otherwise, create a new DDAH
         @ddah =
-            Assignment.find_by(id: params[:assignment_id]).ddah ||
-                Ddah.new(ddah_params)
+            if params[:assignment_id]
+                Assignment.find_by(id: params[:assignment_id]).ddah ||
+                    Ddah.new(ddah_params)
+            else
+                Ddah.find(params[:id])
+            end
+
+        # It is possible that `Ddah.find(...)` didn't find a DDAH, which means we passed
+        # an invalid id field and we didn't pass an `assignment_id` field. We cannot continue
+        # in this case.
+        unless @ddah
+            render_error(
+                message: 'Cannot create a DDAH without an assignment_id'
+            ) && return
+        end
+
         # Since `update` referrs to `@ddah`, and we either have an existing or a new (unsaved)
         # `@ddah`, it is safe to just call `update` here.
         update
@@ -111,10 +125,29 @@ class Api::V1::Admin::DdahsController < ApplicationController
                 proc do
                     @ddah.update!(ddah_params)
                     if duty_params[:duties] && @ddah.duties
+                        # Save the old duties to detect if they get changed
+                        old_duties =
+                            @ddah.duties.as_json(only: %i[description hours])
+
                         # if we specified duties, delete the old ones and add the new ones
                         @ddah.duties.destroy_all
                     end
-                    @ddah.duties_attributes = duty_params[:duties]
+                    if duty_params[:duties]
+                        @ddah.duties_attributes = duty_params[:duties]
+                    end
+
+                    # If the duties changed, we need to modify some attributes
+
+                    if @ddah.duties.as_json(only: %i[description hours]) !=
+                           old_duties
+                        if @ddah.emailed_date || @ddah.accepted_date
+                            @ddah.revised_date = Time.zone.now
+                        end
+                        @ddah.approved_date = nil
+                        @ddah.accepted_date = nil
+                        @ddah.signature = nil
+                    end
+
                     @ddah.save!
                 end
         )

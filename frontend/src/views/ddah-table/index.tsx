@@ -9,7 +9,7 @@ import {
 } from "../../api/actions/ddahs";
 import { FilterableTable } from "../../components/filterable-table";
 import { assignmentsSelector } from "../../api/actions";
-import { FaCheck, FaTimes, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
+import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
@@ -45,12 +45,8 @@ function getReadableStatus(ddah: Pick<Ddah, "status">) {
     switch (ddah.status) {
         case "accepted":
             return "Accepted";
-        case "accepted_and_approved":
-            return "Approved";
         case "emailed":
             return "Pending";
-        case "rejected":
-            return "Rejected";
         default:
             return "Unsent";
     }
@@ -64,32 +60,32 @@ function getReadableStatus(ddah: Pick<Ddah, "status">) {
  */
 function StatusCell({
     original,
+    children = null,
 }: {
     original: RowData;
-}): JSX.Element | string | null {
+    children?: React.ReactNode;
+}): JSX.Element {
     // If we have a blank ID, we aren't actually a DDAH (we're an assignment
     // without a DDAH), so don't render anything.
     if (original.id == null) {
-        return null;
+        return null as any;
     }
     const readableStatus = getReadableStatus(original as Pick<Ddah, "status">);
     switch ((original as Pick<Ddah, "status">).status) {
         case "accepted":
             return (
-                <div className="accepted-ddah">
-                    <FaCheck className="mr-2" />
-                    {readableStatus}
-                </div>
-            );
-        case "rejected":
-            return (
-                <div className="rejected-ddah">
-                    <FaTimes className="mr-2" />
-                    {readableStatus}
-                </div>
+                <React.Fragment>
+                    {children}
+                    <span className="accepted-ddah">{readableStatus}</span>
+                </React.Fragment>
             );
         default:
-            return readableStatus;
+            return (
+                <React.Fragment>
+                    {children}
+                    {readableStatus}
+                </React.Fragment>
+            );
     }
 }
 
@@ -358,8 +354,13 @@ export function ConnectedDdahsTable() {
         setPreviewVisible(true);
     }
 
-    function WrappedPreviewCell(props: any): React.ReactNode {
-        return <PreviewCell {...props} onClick={onPreviewClick} />;
+    function WrappedStatusCell(props: any): React.ReactNode {
+        const { original, ...rest } = props;
+        return (
+            <StatusCell original={original as RowData} {...rest}>
+                <PreviewCell {...props} onClick={onPreviewClick} />
+            </StatusCell>
+        );
     }
 
     // The omni-search doesn't work on nested properties, so we need to flatten
@@ -373,6 +374,8 @@ export function ConnectedDdahsTable() {
                 first_name: ddah.assignment.applicant.first_name,
                 total_hours: ddah.total_hours,
                 status: ddah.status || "unsent",
+                approved: ddah.approved_date ? "Approved" : "",
+                readable_status: getReadableStatus(ddah),
                 issues: ddahIssues(ddah),
                 issue_code: ddahIssues(ddah) ? "hours_mismatch" : null,
             } as RowData)
@@ -416,12 +419,6 @@ export function ConnectedDdahsTable() {
     });
 
     const columns = [
-        {
-            Header: "Preview",
-            accessor: "id",
-            Cell: WrappedPreviewCell,
-            maxWidth: 52,
-        },
         { Header: "Position", accessor: "position_code" },
         { Header: "Last Name", accessor: "last_name" },
         { Header: "First Name", accessor: "first_name" },
@@ -434,7 +431,18 @@ export function ConnectedDdahsTable() {
         {
             Header: "Status",
             accessor: "status",
-            Cell: StatusCell,
+            Cell: WrappedStatusCell,
+        },
+        {
+            Header: "Approved",
+            accessor: "approved",
+            maxWidth: 50,
+            Cell: ({ value }: any) =>
+                value ? (
+                    <div className="accepted-ddah">
+                        <FaCheck />
+                    </div>
+                ) : null,
         },
         { Header: "Issues", accessor: "issues", Cell: IssuesCell },
     ];

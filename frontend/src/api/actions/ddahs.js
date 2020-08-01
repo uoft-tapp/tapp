@@ -197,14 +197,8 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
  * @returns
  */
 function computeDdahStatus(ddah) {
-    if (ddah.accepted_date && ddah.approved_date) {
-        return "accepted_and_approved";
-    }
     if (ddah.accepted_date) {
         return "accepted";
-    }
-    if (ddah.rejected_date) {
-        return "rejected";
     }
     if (ddah.emailed_date) {
         return "emailed";
