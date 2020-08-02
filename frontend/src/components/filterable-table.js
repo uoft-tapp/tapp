@@ -51,33 +51,29 @@ function FilterableTable(props) {
         setSelected([..._selected]);
     };
 
+    // `filterStrings` is the list of strings that we are filtering by. We
+    // filter for rows that contain every string.
     const [filterStrings, setFilterStrings] = React.useState([]);
-    const [currentFilterString, setCurrentFilterString] = React.useState("");
     const [lastSelected, setLastSelected] = React.useState(null);
     const [allSelected, setAllSelected] = React.useState(false);
     function isSelected(id) {
         return _selected.has(id);
     }
 
-    const filteredData = data
-        .filter((row) =>
-            filterStrings.every((string) =>
-                rowToStr(row).match(string.toLowerCase())
-            )
-        )
-        .filter(
-            (row) =>
-                currentFilterString
-                    ? rowToStr(row).includes(currentFilterString.toLowerCase())
-                    : true // if there is no typed query, don't filter the typed query
-        );
+    const normalizedFilterStrings = filterStrings.map((s) =>
+        strip(s.toLowerCase())
+    );
+    const filteredData = data.filter((row) =>
+        normalizedFilterStrings.every((s) => rowToStr(row).match(s))
+    );
 
     // we need a reference to the internal table so that we can get the "visible data"
     // if it happens to be filtered or sorted
     let reactTableRef = React.useRef(null);
+
     /**
      * Gets the data that is actually displayed in the ReactTable. This is useful
-     * for range selecting (shift-cliking should select in the range that is displayed)
+     * for range selecting (shift-clicking should select in the range that is displayed)
      *
      * @returns {[object]}
      */
@@ -199,25 +195,43 @@ function FilterableTable(props) {
     }
 
     function removeFilterString(filterString) {
+        // The first string in the list is the one in the search box.
+        // We don't actually want to delete that string. Instead we want to make it an
+        // empty string so that the search box doesn't suddenly become filled
+        // with the previous search string.
+        if (filterString === filterStrings[0]) {
+            setFilterStrings(["", ...filterStrings.slice(1)]);
+            return;
+        }
         const updatedFilterStrings = filterStrings.filter(
             (oldString) => oldString !== filterString
         );
         setFilterStrings(updatedFilterStrings);
     }
 
-    function addFilterString(filterString) {
-        // string.localeCompare(, , { sensitivity: 'accent'}) == case insensitive string comparison
-        if (
-            filterStrings.every(
-                (filteredString) =>
-                    filteredString.localeCompare(filterString, undefined, {
-                        sensitivity: "accent",
-                    }) !== 0
-            )
-        ) {
-            setFilterStrings([...filterStrings, filterString]);
+    /**
+     * Insert a blank string to the front of the filterString list
+     * if the first string is indeed unique compared to the others.
+     */
+    function saveFirstFilterString() {
+        const firstString = strip((filterStrings[0] || "").toLowerCase());
+        if (firstString === "") {
+            return;
+        }
+        // If the string is not in the list of current strings,
+        // insert a blank before it.
+        if (!normalizedFilterStrings.slice(1).some((s) => s === firstString)) {
+            // We are "pushing" a new filter string on the list. Make sure to strip
+            // away any whitespace it may have.
+            setFilterStrings(["", ...filterStrings.map((s) => strip(s))]);
+        } else {
+            // If the string is already on the list, we "blank"
+            // it out.
+            setFilterStrings(["", ...filterStrings.slice(1)]);
         }
     }
+
+    const displayFilterStrings = filterStrings.filter((s) => strip(s));
 
     return (
         <div className="filterable-table-container">
@@ -227,19 +241,26 @@ function FilterableTable(props) {
                     type="text"
                     placeholder="Filter by..."
                     onChange={(e) => {
-                        // "live filter" the table as you type a query
-                        setCurrentFilterString(strip(e.target.value));
+                        setFilterStrings([
+                            e.target.value,
+                            ...filterStrings.slice(1),
+                        ]);
                     }}
+                    value={filterStrings[0] || ""}
                     onKeyDown={(e) => {
                         // press enter to add the typed query to the filter list
+                        // 13 == Enter
                         if (e.keyCode === 13) {
-                            // 13 == Enter
-                            addFilterString(strip(e.target.value));
-                            e.target.value = ""; // clear the filter box
+                            saveFirstFilterString();
                         }
                     }}
                 />
-                {filterStrings.map((filterString) => (
+                {displayFilterStrings.length > 0 && (
+                    <span className="filter-table-filtering-by">
+                        Filtering by:
+                    </span>
+                )}
+                {displayFilterStrings.map((filterString) => (
                     <Badge
                         className="filter-chip"
                         pill
@@ -249,6 +270,7 @@ function FilterableTable(props) {
                         {filterString}
                         <FaTimes
                             className="filter-chip-icon"
+                            title="Remove filter"
                             onClick={() => removeFilterString(filterString)}
                         />
                     </Badge>
@@ -264,7 +286,7 @@ FilterableTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({
-            Header: PropTypes.string,
+            Header: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
             accessor: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         })
     ),

@@ -93,7 +93,7 @@ export function AddAssignmentDialog(props) {
                     assignment={newAssignment}
                     setAssignment={setNewAssignment}
                 />
-                {conflicts.immediateShow ? (
+                {!inProgress && conflicts.immediateShow ? (
                     <Alert variant="danger">{conflicts.immediateShow}</Alert>
                 ) : null}
             </Modal.Body>

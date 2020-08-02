@@ -107,8 +107,9 @@
     margin-bottom: 0.3em;
 }
 
-.filter-chip {
-    margin-left: 1em;
+.filter-chip.badge {
+    margin-left: .5em;
+    font-size: 90%;
 }
 
 .filter-chip-icon {
@@ -117,11 +118,19 @@
     transition: color 0.2s;
     cursor: pointer;
 }
-
 .filter-chip-icon:hover {
     color: var(--danger);
+}
+.filter-table-filtering-by {
+    margin-left: 1em;
+    color: var(--secondary)
 }
 
 .number-cell {
     text-align: right;
+}
+
+.table-header {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

@@ -14,11 +14,13 @@ class Api::V1::Admin::AssignmentWageChunksController < ApplicationController
     def create
         start_transaction_and_rollback_on_exception do
             # Upsert the list of wage chunks
-            result = wage_chunks_create_params.map do |wage_chunk_params|
-                service = AssignmentWageChunkCreateService.new(wage_chunk_params)
-                service.upsert
-                service.wage_chunk
-            end
+            result =
+                wage_chunks_create_params.map do |wage_chunk_params|
+                    service =
+                        AssignmentWageChunkCreateService.new(wage_chunk_params)
+                    service.upsert
+                    service.wage_chunk
+                end
 
             # Find all the extra wage chunks (i.e. the ones that is not included in the
             # new wage chunk list) and remove them
@@ -38,6 +40,16 @@ class Api::V1::Admin::AssignmentWageChunksController < ApplicationController
     end
 
     def wage_chunks_create_params
-        params.permit(_json: %i[id assignment_id start_date end_date hours rate]).dig(:_json)
+        ret_params =
+            params.permit(
+                _json: %i[id assignment_id start_date end_date hours rate]
+            ).dig(:_json)
+        if params[:assignment_id]
+            ret_params =
+                ret_params.map do |obj|
+                    obj.merge(assignment_id: params[:assignment_id])
+                end
+        end
+        ret_params
     end
 end
