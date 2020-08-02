@@ -286,7 +286,7 @@ FilterableTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.arrayOf(
         PropTypes.shape({
-            Header: PropTypes.string,
+            Header: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
             accessor: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         })
     ),

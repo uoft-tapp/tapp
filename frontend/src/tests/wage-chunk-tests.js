@@ -81,63 +81,63 @@ export function wageChunksTests(api) {
     });
 
     it("create wage_chunk for assignment using `/admin/assignments/${assignment.id}/wage_chunks` route", async () => {
-        const newWageChunkData = {
-            assignment_id: assignment.id,
+        // Clear the wage chunks for the assignment so that we can create new ones
+        let resp1 = await apiPOST(
+            `/admin/assignments/${assignment.id}/wage_chunks`,
+            []
+        );
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.length).toEqual(0);
+
+        const newWageChunk1 = {
             hours: 30,
             start_date: new Date("2018/05/09").toISOString(),
             end_date: new Date("2018/09/09").toISOString(),
             rate: 15,
         };
 
-        const updateOriginalWageChunkData = {
-            ...originalWageChunk,
-            rate: 20,
-        };
-
-        const newListOfWageChunks = [
-            newWageChunkData,
-            updateOriginalWageChunkData,
-        ];
-
-        const resp = await apiPOST(
+        resp1 = await apiPOST(
             `/admin/assignments/${assignment.id}/wage_chunks`,
-            newListOfWageChunks
+            [newWageChunk1]
+        );
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.length).toEqual(1);
+        expect(resp1.payload).toContainObject(newWageChunk1);
+
+        // The wage chunk should have the `assignment_id` field
+        // added by the backend
+        expect(resp1.payload[0].assignment_id).toEqual(assignment.id);
+        Object.assign(newWageChunk1, resp1.payload[0]);
+
+        // If we insert a second wage chunk but pass in the same first wage chunk
+        // (with its `id` field), then the first wage chunk should remain identical
+        // but the second wage chunk should be added.
+        const newWageChunk2 = {
+            hours: 60,
+            start_date: new Date("2018/12/01").toISOString(),
+            end_date: new Date("2019/04/04").toISOString(),
+            rate: 16,
+        };
+        resp1 = await apiPOST(
+            `/admin/assignments/${assignment.id}/wage_chunks`,
+            [newWageChunk1, newWageChunk2]
+        );
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.length).toEqual(2);
+        expect(resp1.payload).toContainObject(newWageChunk1);
+        expect(resp1.payload).toContainObject(newWageChunk2);
+
+        // Fetch the assignment and make sure the hours are recomputed
+        resp1 = await apiGET(`/admin/assignments/${assignment.id}`);
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.hours).toEqual(
+            newWageChunk1.hours + newWageChunk2.hours
         );
 
-        expect(resp).toHaveStatus("success");
-        const newAndUpdatedWageChunks = resp.payload;
-
-        // make sure the payload contains all wage chunks
-        newListOfWageChunks.map((x) =>
-            expect(newAndUpdatedWageChunks).toContainObject(x)
-        );
-
-        // make sure each returned wage chunks has id
-        newAndUpdatedWageChunks.map((x) => expect(x.id).not.toBeNull());
-
-        // make sure the non-listed wage chunk is no longer returned
-        newAndUpdatedWageChunks.map((x) =>
-            expect(x.id).not.toEqual(newWageChunk.id)
-        );
-
-        // get the wage chunk list and make sure we're updated there as well
-        const { payload: withNewAndUpdatedWageChunks } = await apiGET(
-            `/admin/assignments/${assignment.id}/wage_chunks`
-        );
-
-        expect(withNewAndUpdatedWageChunks).toMatchObject(
-            withNewAndUpdatedWageChunks
-        );
-        expect(withNewAndUpdatedWageChunks.length).toEqual(2);
-
-        // ensure that the hours attribute of assignment is updated
-        const { payload: withUpdatedAssignmentHours } = await apiGET(
-            `/admin/assignments/${assignment.id}`
-        );
-
-        expect(withUpdatedAssignmentHours.hours).toEqual(
-            updateOriginalWageChunkData.hours + newWageChunkData.hours
-        );
+        // Later tests assume that `originalWageChunk` is a wage chunk that is currently
+        // set on `assignment`. Since we removed it earlier in this test,
+        // re-save it.
+        originalWageChunk = newWageChunk1;
     });
 
     it("update wage_chunk", async () => {
