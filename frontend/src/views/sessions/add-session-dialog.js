@@ -5,7 +5,7 @@ import { SessionEditor } from "../../components/forms/session-editor";
 import { upsertSession, sessionsSelector } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 
-function getConficts(session, sessions = []) {
+function getConflicts(session, sessions = []) {
     const ret = { delayShow: "", immediateShow: "" };
     if (
         !strip(session.name) ||
@@ -49,7 +49,7 @@ export function AddSessionDialog(props) {
         onHide();
     }
 
-    const conflicts = getConficts(newSession, sessions);
+    const conflicts = getConflicts(newSession, sessions);
 
     return (
         <Modal show={show} onHide={onHide}>
