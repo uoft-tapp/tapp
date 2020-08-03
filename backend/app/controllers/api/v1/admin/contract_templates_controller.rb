@@ -140,6 +140,8 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
             first_time_ta: false,
             instructor_contact_desc: 'Professor X <x@utoronto.ca>',
             pay_period_desc: '$54.25 from Januar 1, 2020 to April 1, 2020',
+            ta_coordinator_name: Rails.application.config.ta_coordinator_name,
+            ta_coordinator_email: Rails.application.config.ta_coordinator_email,
             hours: '50',
             installments: '4',
             signature: '',

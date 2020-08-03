@@ -25,7 +25,10 @@ import { ActionButton } from "../../components/action-buttons";
  */
 const OfferTest = {
     canCreate(assignment) {
-        return assignment.active_offer_status == null;
+        return (
+            assignment.active_offer_status == null ||
+            assignment.active_offer_status === "withdrawn"
+        );
     },
     canEmail(assignment) {
         return assignment.active_offer_status != null;
