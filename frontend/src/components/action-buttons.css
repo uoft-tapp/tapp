@@ -32,6 +32,8 @@
     it up to the button to stop responding to clicks. */
     pointer-events: unset;
     cursor: unset;
+    color: #6c757d;
+    background-color: initial;
     border-top-color: rgb(214, 214, 214);
     border-bottom-color: rgb(214, 214, 214);
 }

@@ -30,7 +30,7 @@ export const routes = [
     },
     {
         route: "/assignments_and_positions",
-        name: "Assignment & Positions",
+        name: "Assignments & Positions",
         description: "Manage Assignments & Positions",
         subroutes: [
             {
