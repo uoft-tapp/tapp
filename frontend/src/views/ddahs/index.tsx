@@ -23,6 +23,9 @@ import { Ddah } from "../../api/defs/types";
 
 export function AdminDdahsView(): React.ReactNode {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    // While data is being imported, updating the react table takes a long time,
+    // so we use this variable to hide the react table during import.
+    const [importInProgress, setImportInProgress] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
     const { selectedDdahIds } = useSelector(ddahTableSelector);
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
@@ -52,7 +55,10 @@ export function AdminDdahsView(): React.ReactNode {
                 />
 
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportDdahsAction disabled={!activeSession} />
+                <ConnectedImportDdahsAction
+                    disabled={!activeSession}
+                    setImportInProgress={setImportInProgress}
+                />
                 <ConnectedExportDdahsAction disabled={!activeSession} />
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
                 <ActionButton
@@ -88,7 +94,7 @@ export function AdminDdahsView(): React.ReactNode {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedDdahsTable />
+                {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
         </div>
     );

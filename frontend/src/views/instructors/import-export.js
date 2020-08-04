@@ -98,13 +98,22 @@ const instructorSchema = {
     baseName: "instructors",
 };
 
-export function ConnectedImportInstructorAction() {
+export function ConnectedImportInstructorAction({
+    setImportInProgress = null,
+}) {
     const dispatch = useDispatch();
     const instructors = useSelector(instructorsSelector);
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);
     const [processingError, setProcessingError] = React.useState(null);
-    const [inProgress, setInProgress] = React.useState(false);
+    const [inProgress, _setInProgress] = React.useState(false);
+
+    function setInProgress(state) {
+        _setInProgress(state);
+        if (typeof setImportInProgress === "function") {
+            setImportInProgress(state);
+        }
+    }
 
     // Make sure we aren't showing any diff if there's no file loaded.
     React.useEffect(() => {
@@ -128,7 +137,6 @@ export function ConnectedImportInstructorAction() {
             const data = normalizeImport(fileContent, instructorSchema);
             // Compute which instructors have been added/modified
             const newDiff = diffImport.instructors(data, { instructors });
-
             setDiffed(newDiff);
         } catch (e) {
             console.warn(e);
@@ -144,10 +152,30 @@ export function ConnectedImportInstructorAction() {
         setFileContent(null);
     }
 
+    return (
+        <ImportActionButton
+            onConfirm={onConfirm}
+            onFileChange={setFileContent}
+            dialogContent={
+                <DialogContent
+                    diffed={diffed}
+                    processingError={processingError}
+                />
+            }
+            setInProgress={setInProgress}
+        />
+    );
+}
+
+const DialogContent = React.memo(function DialogContent({
+    diffed,
+    processingError,
+}) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
         dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
     } else if (diffed) {
+        // Separate out the modified and new instructors
         const newItems = diffed
             .filter((item) => item.status === "new")
             .map((item) => item.obj);
@@ -189,13 +217,5 @@ export function ConnectedImportInstructorAction() {
             );
         }
     }
-
-    return (
-        <ImportActionButton
-            onConfirm={onConfirm}
-            onFileChange={setFileContent}
-            dialogContent={dialogContent}
-            setInProgress={setInProgress}
-        />
-    );
-}
+    return dialogContent;
+});

@@ -92,7 +92,9 @@ function AssignmentCell(props) {
             onChange={onChange}
             editable={
                 !active_offer_status ||
-                ["provisional", "withdrawn"].includes(active_offer_status)
+                ["provisional", "withdrawn", "No Contract"].includes(
+                    active_offer_status
+                )
             }
         >
             {props.value}

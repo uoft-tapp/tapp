@@ -123,6 +123,8 @@ class Public::ContractsController < ActionController::Base
             first_time_ta: offer.first_time_ta,
             instructor_contact_desc: offer.instructor_contact_desc,
             pay_period_desc: offer.pay_period_desc,
+            ta_coordinator_name: offer.ta_coordinator_name,
+            ta_coordinator_email: offer.ta_coordinator_email,
             hours: offer.hours,
             installments: offer.installments,
             signature: offer.signature,
