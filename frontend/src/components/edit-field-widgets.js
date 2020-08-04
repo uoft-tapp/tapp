@@ -87,7 +87,7 @@ function EditFieldDialog(props) {
  * @param {*} props
  * @returns
  */
-export function EditFieldIcon(props) {
+export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
     const { title, hidden, onClick } = props;
     if (hidden) {
         return null;
@@ -101,7 +101,7 @@ export function EditFieldIcon(props) {
             <FaEdit />
         </div>
     );
-}
+});
 
 /**
  * Adds an "edit" icon which shows up when hovering on the wrapped widget.
@@ -122,22 +122,37 @@ export function EditableField(props) {
         type = "text",
     } = props;
     const [dialogShow, setDialogShow] = React.useState(false);
+
+    // This is rendered in every cell of a react table, so performance is important.
+    // It takes a long time to render the `EditFieldIcon`, but we only need this icon
+    // when we hover on a field. Therefore, we start by now showing the icon. When
+    // we move our mouse over the icon for the first time, we render the icon (no need to
+    // hide it again, since it's the initial render multiplied across all the cells that causes
+    // the slowdown). This causes a slight rendering glitch, but the performance is worth it.
+    const [renderEditIcon, setRenderEditIcon] = React.useState(false);
     return (
-        <div className="show-on-hover-wrapper">
+        <div
+            className="show-on-hover-wrapper"
+            onMouseEnter={() => setRenderEditIcon(true)}
+        >
             {children}
-            <EditFieldIcon
-                title={title}
-                hidden={!editable}
-                onClick={() => setDialogShow(true)}
-            />
-            <EditFieldDialog
-                title={title}
-                value={value}
-                onChange={onChange}
-                show={dialogShow}
-                onHide={() => setDialogShow(false)}
-                type={type}
-            />
+            {renderEditIcon && (
+                <EditFieldIcon
+                    title={title}
+                    hidden={!editable}
+                    onClick={() => setDialogShow(true)}
+                />
+            )}
+            {editable && dialogShow && (
+                <EditFieldDialog
+                    title={title}
+                    value={value}
+                    onChange={onChange}
+                    show={dialogShow}
+                    onHide={() => setDialogShow(false)}
+                    type={type}
+                />
+            )}
         </div>
     );
 }

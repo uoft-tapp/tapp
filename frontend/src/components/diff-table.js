@@ -41,7 +41,13 @@ export function createDiffCell({ accessor, Cell }) {
             );
         }
         // If there is a custom cell renderer, use that. Otherwise, pass the value directly.
-        return Cell ? Cell({ value, original: original.obj }) : value;
+        // However, we return `null` instead instead of an undefined value
+        // (if there happens to be one) to prevent the ReactTable from crashing.
+        return Cell
+            ? Cell({ value, original: original.obj })
+            : value == null
+            ? null
+            : value;
     }
     return DiffCell;
 }

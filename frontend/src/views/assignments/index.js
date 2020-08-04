@@ -21,6 +21,9 @@ import { activeSessionSelector } from "../../api/actions";
 export function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
+    // While data is being imported, updating the react table takes a long time,
+    // so we use this variable to hide the react table during import.
+    const [importInProgress, setImportInProgress] = React.useState(false);
 
     return (
         <div className="page-body">
@@ -36,7 +39,10 @@ export function AdminAssignmentsView() {
                     Add Assignment
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportAssignmentsAction disabled={!activeSession} />
+                <ConnectedImportAssignmentsAction
+                    disabled={!activeSession}
+                    setImportInProgress={setImportInProgress}
+                />
                 <ConnectedExportAssignmentsAction disabled={!activeSession} />
                 <ActionHeader>Selected Assignment Actions</ActionHeader>
                 <ConnectedViewAssignmentDetailsAction />
@@ -47,7 +53,7 @@ export function AdminAssignmentsView() {
                     <MissingActiveSessionWarning extraText="To view or modify assignments, you must select a session." />
                 )}
 
-                <ConnectedOfferTable />
+                {!importInProgress && <ConnectedOfferTable />}
                 <ConnectedAddAssignmentDialog
                     show={addDialogVisible}
                     onHide={() => {

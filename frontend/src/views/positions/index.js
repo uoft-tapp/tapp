@@ -22,6 +22,9 @@ export function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
+    // While data is being imported, updating the react table takes a long time,
+    // so we use this variable to hide the react table during import.
+    const [importInProgress, setImportInProgress] = React.useState(false);
 
     return (
         <div className="page-body">
@@ -45,7 +48,10 @@ export function AdminPositionsView() {
                     Delete Position
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportPositionsAction disabled={!activeSession} />
+                <ConnectedImportPositionsAction
+                    disabled={!activeSession}
+                    setImportInProgress={setImportInProgress}
+                />
                 <ConnectedExportPositionsAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
@@ -58,7 +64,9 @@ export function AdminPositionsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedPositionsList inDeleteMode={inDeleteMode} />
+                {!importInProgress && (
+                    <ConnectedPositionsList inDeleteMode={inDeleteMode} />
+                )}
             </ContentArea>
         </div>
     );

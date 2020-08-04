@@ -255,7 +255,13 @@ function normalizeDdahImports(
     return ret;
 }
 
-export function ConnectedImportDdahsAction({ disabled = false }) {
+export function ConnectedImportDdahsAction({
+    disabled = false,
+    setImportInProgress = null,
+}: {
+    disabled: boolean;
+    setImportInProgress?: Function | null;
+}) {
     const dispatch = useDispatch();
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
@@ -268,7 +274,14 @@ export function ConnectedImportDdahsAction({ disabled = false }) {
         DiffSpec<MinimalDdah, Ddah>[] | null
     >(null);
     const [processingError, setProcessingError] = React.useState(null);
-    const [inProgress, setInProgress] = React.useState(false);
+    const [inProgress, _setInProgress] = React.useState(false);
+
+    function setInProgress(state: boolean) {
+        _setInProgress(state);
+        if (typeof setImportInProgress === "function") {
+            setImportInProgress(state);
+        }
+    }
 
     // Make sure we aren't showing any diff if there's no file loaded.
     React.useEffect(() => {
@@ -311,55 +324,16 @@ export function ConnectedImportDdahsAction({ disabled = false }) {
         setFileContent(null);
     }
 
-    let dialogContent = <p>No data loaded...</p>;
-    if (processingError) {
-        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
-    } else if (diffed) {
-        const newItems = diffed
-            .filter((item) => item.status === "new")
-            .map((item) => item.obj);
-        const modifiedDiffSpec = diffed.filter(
-            (item) => item.status === "modified"
-        );
-
-        if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
-            dialogContent = (
-                <Alert variant="warning">
-                    No difference between imported applicants and those already
-                    on the system.
-                </Alert>
-            );
-        } else {
-            dialogContent = (
-                <>
-                    {newItems.length > 0 && (
-                        <Alert variant="primary">
-                            <span className="mb-1">
-                                The following applicants will be{" "}
-                                <strong>added</strong>
-                            </span>
-                            <DdahsList ddahs={newItems} />
-                        </Alert>
-                    )}
-                    {modifiedDiffSpec.length > 0 && (
-                        <Alert variant="info">
-                            <span className="mb-1">
-                                The following instructors will be{" "}
-                                <strong>modified</strong>
-                            </span>
-                            <DdahsDiffList modifiedDdahs={modifiedDiffSpec} />
-                        </Alert>
-                    )}
-                </>
-            );
-        }
-    }
-
     return (
         <ImportActionButton
             onConfirm={onConfirm}
             onFileChange={setFileContent}
-            dialogContent={dialogContent}
+            dialogContent={
+                <DialogContent
+                    diffed={diffed}
+                    processingError={processingError}
+                />
+            }
             setInProgress={setInProgress}
             disabled={disabled}
         />
@@ -503,3 +477,57 @@ export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
         </ActionButton>
     );
 }
+
+const DialogContent = React.memo(function DialogContent({
+    diffed,
+    processingError,
+}: {
+    diffed: DiffSpec<MinimalDdah, Ddah>[] | null;
+    processingError: string | null;
+}) {
+    let dialogContent = <p>No data loaded...</p>;
+    if (processingError) {
+        dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
+    } else if (diffed) {
+        const newItems = diffed
+            .filter((item) => item.status === "new")
+            .map((item) => item.obj);
+        const modifiedDiffSpec = diffed.filter(
+            (item) => item.status === "modified"
+        );
+
+        if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
+            dialogContent = (
+                <Alert variant="warning">
+                    No difference between imported applicants and those already
+                    on the system.
+                </Alert>
+            );
+        } else {
+            dialogContent = (
+                <>
+                    {newItems.length > 0 && (
+                        <Alert variant="primary">
+                            <span className="mb-1">
+                                The following applicants will be{" "}
+                                <strong>added</strong>
+                            </span>
+                            <DdahsList ddahs={newItems} />
+                        </Alert>
+                    )}
+                    {modifiedDiffSpec.length > 0 && (
+                        <Alert variant="info">
+                            <span className="mb-1">
+                                The following instructors will be{" "}
+                                <strong>modified</strong>
+                            </span>
+                            <DdahsDiffList modifiedDdahs={modifiedDiffSpec} />
+                        </Alert>
+                    )}
+                </>
+            );
+        }
+    }
+
+    return dialogContent;
+});

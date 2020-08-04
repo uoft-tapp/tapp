@@ -16,6 +16,9 @@ import { ContentArea } from "../../components/layout";
 export function AdminInstructorsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
+    // While data is being imported, updating the react table takes a long time,
+    // so we use this variable to hide the react table during import.
+    const [importInProgress, setImportInProgress] = React.useState(false);
 
     return (
         <div className="page-body">
@@ -38,7 +41,9 @@ export function AdminInstructorsView() {
                 </ActionButton>
 
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportInstructorAction />
+                <ConnectedImportInstructorAction
+                    setImportInProgress={setImportInProgress}
+                />
                 <ConnectedExportInstructorsAction />
             </ActionsList>
             <ContentArea>
@@ -48,7 +53,9 @@ export function AdminInstructorsView() {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedInstructorsList inDeleteMode={inDeleteMode} />
+                {!importInProgress && (
+                    <ConnectedInstructorsList inDeleteMode={inDeleteMode} />
+                )}
             </ContentArea>
         </div>
     );

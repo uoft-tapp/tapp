@@ -171,7 +171,10 @@ const assignmentSchema = {
     baseName: "assignments",
 };
 
-export function ConnectedImportAssignmentsAction({ disabled = false }) {
+export function ConnectedImportAssignmentsAction({
+    disabled = false,
+    setImportInProgress = null,
+}) {
     const dispatch = useDispatch();
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
@@ -180,7 +183,14 @@ export function ConnectedImportAssignmentsAction({ disabled = false }) {
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);
     const [processingError, setProcessingError] = React.useState(null);
-    const [inProgress, setInProgress] = React.useState(false);
+    const [inProgress, _setInProgress] = React.useState(false);
+
+    function setInProgress(state) {
+        _setInProgress(state);
+        if (typeof setImportInProgress === "function") {
+            setImportInProgress(state);
+        }
+    }
 
     // Make sure we aren't showing any diff if there's no file loaded.
     React.useEffect(() => {
@@ -232,6 +242,26 @@ export function ConnectedImportAssignmentsAction({ disabled = false }) {
         setFileContent(null);
     }
 
+    return (
+        <ImportActionButton
+            onConfirm={onConfirm}
+            onFileChange={setFileContent}
+            dialogContent={
+                <DialogContent
+                    diffed={diffed}
+                    processingError={processingError}
+                />
+            }
+            setInProgress={setInProgress}
+            disabled={disabled}
+        />
+    );
+}
+
+const DialogContent = React.memo(function DialogContent({
+    diffed,
+    processingError,
+}) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {
         dialogContent = <Alert variant="danger">{"" + processingError}</Alert>;
@@ -278,13 +308,5 @@ export function ConnectedImportAssignmentsAction({ disabled = false }) {
         }
     }
 
-    return (
-        <ImportActionButton
-            onConfirm={onConfirm}
-            onFileChange={setFileContent}
-            dialogContent={dialogContent}
-            setInProgress={setInProgress}
-            disabled={disabled}
-        />
-    );
-}
+    return dialogContent;
+});
