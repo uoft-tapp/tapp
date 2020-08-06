@@ -124,6 +124,7 @@ export interface Assignment {
     contract_override_pdf: string;
     active_offer_status?: string;
     active_offer_url_token?: string;
+    active_offer_recent_activity_date?: string;
     wage_chunks?: WageChunk[];
 }
 

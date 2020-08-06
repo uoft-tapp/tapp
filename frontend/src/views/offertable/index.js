@@ -10,7 +10,7 @@ import { EditableField } from "../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
 import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
-import { formatDownloadUrl, capitalize } from "../../libs/utils";
+import { formatDownloadUrl, capitalize, formatDate } from "../../libs/utils";
 
 /**
  * A cell that renders editable applicant information
@@ -157,8 +157,20 @@ function EditableOfferTable(props) {
         {
             Header: "Status",
             id: "status",
-            accessor: (data) => capitalize(data.active_offer_status || ""),
+            // We want items with no active offer to appear at the end of the list
+            // when sorted, so we set their accessor to null (the accessor is used by react table
+            // when sorting items).
+            accessor: (data) =>
+                data.active_offer_status === "No Contract"
+                    ? null
+                    : data.active_offer_status,
             Cell: StatusCell,
+        },
+        {
+            Header: "Date",
+            accessor: "active_offer_recent_activity_date",
+            Cell: ({ value }) => (value ? formatDate(value) : null),
+            maxWidth: 120,
         },
     ];
 

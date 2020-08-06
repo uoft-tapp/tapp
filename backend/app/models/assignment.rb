@@ -55,6 +55,21 @@ class Assignment < ApplicationRecord
         active_offer.blank? ? nil : active_offer.url_token
     end
 
+    # return the date of the most recent activity concerning the
+    # active offer.
+    def active_offer_recent_activity_date
+        if active_offer.blank?
+            nil
+        else
+            [
+                active_offer.emailed_date,
+                active_offer.withdrawn_date,
+                active_offer.accepted_date,
+                active_offer.rejected_date
+            ].compact.max
+        end
+    end
+
     def start_date
         self[:start_date].blank? ? position.start_date : self[:start_date]
     end
