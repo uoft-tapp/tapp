@@ -10,5 +10,6 @@ class AssignmentSerializer < ActiveModel::Serializer
                :contract_override_pdf,
                :active_offer_status,
                :active_offer_url_token,
+               :active_offer_recent_activity_date,
                :hours
 end
