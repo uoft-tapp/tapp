@@ -14,22 +14,24 @@ import { strip, useDebounce } from "../libs/utils";
 // However, the change in those callbacks should only matter if the contents of the rows
 // has actually changed.
 const SelectTable = React.memo(
-// This HOC adds a checkbox to every row of a ReactTable
-    selectTableHOC(ReactTable), (left, right) => {
-    if (left === right) {
-        return true;
-    }
-    // Non-object primitives can always be compared with === (except for NaN, which
-    // we don't care about...)
-    if (typeof left !== "object" || typeof right !== "object") {
-        return false;
-    }
-    if (left == null || right == null) {
-        return false;
-    }
+    // This HOC adds a checkbox to every row of a ReactTable
+    selectTableHOC(ReactTable),
+    (left, right) => {
+        if (left === right) {
+            return true;
+        }
+        // Non-object primitives can always be compared with === (except for NaN, which
+        // we don't care about...)
+        if (typeof left !== "object" || typeof right !== "object") {
+            return false;
+        }
+        if (left == null || right == null) {
+            return false;
+        }
 
-    return left.data === right.data && left.columns === right.columns;
-});
+        return left.data === right.data && left.columns === right.columns;
+    }
+);
 
 const COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
