@@ -28,11 +28,23 @@ import { offerTableSelector } from "../offertable/actions";
  * @export
  * @returns
  */
-export function ConnectedExportAssignmentsAction({ disabled = false }) {
+export function ConnectedExportAssignmentsAction({
+    disabled = false,
+    setExportInProgress = null,
+}) {
     const dispatch = useDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
+
+    const setInProgress = React.useCallback(
+        function setInProgress(val) {
+            if (typeof setExportInProgress === "function") {
+                setExportInProgress(val);
+            }
+        },
+        [setExportInProgress]
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -126,14 +138,16 @@ export function ConnectedExportAssignmentsAction({ disabled = false }) {
                 );
             }
 
+            setInProgress(true);
             const file = await dispatch(
                 exportAssignments(prepareData, exportType)
             );
+            setInProgress(false);
 
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
-    }, [exportType, dispatch, session, selectedAssignmentIds]);
+    }, [exportType, dispatch, session, selectedAssignmentIds, setInProgress]);
 
     function onClick(option) {
         setExportType(option);

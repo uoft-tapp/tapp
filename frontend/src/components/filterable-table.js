@@ -6,10 +6,30 @@ import selectTableHOC from "react-table/lib/hoc/selectTable";
 import "react-table/react-table.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Badge } from "react-bootstrap";
-import { strip } from "../libs/utils";
+import { strip, useDebounce } from "../libs/utils";
 
+// React table is SLOW, so we memoize the component.
+// We only re-render if the rows or columns have changed. We don't
+// check all the props because there are several dynamically generated callbacks.
+// However, the change in those callbacks should only matter if the contents of the rows
+// has actually changed.
+const SelectTable = React.memo(
 // This HOC adds a checkbox to every row of a ReactTable
-const SelectTable = selectTableHOC(ReactTable);
+    selectTableHOC(ReactTable), (left, right) => {
+    if (left === right) {
+        return true;
+    }
+    // Non-object primitives can always be compared with === (except for NaN, which
+    // we don't care about...)
+    if (typeof left !== "object" || typeof right !== "object") {
+        return false;
+    }
+    if (left == null || right == null) {
+        return false;
+    }
+
+    return left.data === right.data && left.columns === right.columns;
+});
 
 const COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
@@ -67,6 +87,11 @@ function FilterableTable(props) {
         normalizedFilterStrings.every((s) => rowToStr(row).match(s))
     );
 
+    // React table can take a really long time to render. If the data is changing
+    // rapidly, this can slow down the app. So, we debounce the data so it doesn't get
+    // rendered too often.
+    const displayData = useDebounce(filteredData, 500);
+
     // we need a reference to the internal table so that we can get the "visible data"
     // if it happens to be filtered or sorted
     let reactTableRef = React.useRef(null);
@@ -78,7 +103,7 @@ function FilterableTable(props) {
      * @returns {[object]}
      */
     function getDisplayedData() {
-        if (!reactTableRef) {
+        if (!reactTableRef.current) {
             // eslint-disable-next-line
             console.warn(
                 "Trying to get data displayed in a ReactTable, but no ref has been created"
@@ -86,7 +111,7 @@ function FilterableTable(props) {
             return [];
         }
         try {
-            return reactTableRef
+            return reactTableRef.current
                 .getWrappedInstance()
                 .getResolvedState()
                 .sortedData.map((x) => x._original);
@@ -171,11 +196,11 @@ function FilterableTable(props) {
         }
     }
 
-    const pageSize = filteredData?.length || 20;
+    const pageSize = displayData?.length || 20;
     let tableComponent = (
         <SelectTable
-            ref={(r) => (reactTableRef = r)}
-            data={filteredData}
+            ref={reactTableRef}
+            data={displayData}
             columns={columns}
             toggleSelection={onToggleRow}
             selectAll={allSelected}
@@ -191,7 +216,7 @@ function FilterableTable(props) {
     );
     // if `selected` was not passed in, the table rows should not be selectable
     if (selected == null) {
-        tableComponent = <ReactTable columns={columns} data={filteredData} />;
+        tableComponent = <ReactTable columns={columns} data={displayData} />;
     }
 
     function removeFilterString(filterString) {

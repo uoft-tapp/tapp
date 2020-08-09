@@ -17,13 +17,14 @@ import { FaPlus } from "react-icons/fa";
 import { MissingActiveSessionWarning } from "../../components/sessions";
 import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../api/actions";
+import { Spinner } from "react-bootstrap";
 
 export function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector);
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
-    const [importInProgress, setImportInProgress] = React.useState(false);
+    const [inProgress, setInProgress] = React.useState(false);
 
     return (
         <div className="page-body">
@@ -41,9 +42,12 @@ export function AdminAssignmentsView() {
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportAssignmentsAction
                     disabled={!activeSession}
-                    setImportInProgress={setImportInProgress}
+                    setImportInProgress={setInProgress}
                 />
-                <ConnectedExportAssignmentsAction disabled={!activeSession} />
+                <ConnectedExportAssignmentsAction
+                    disabled={!activeSession}
+                    setExportInProgress={setInProgress}
+                />
                 <ActionHeader>Selected Assignment Actions</ActionHeader>
                 <ConnectedViewAssignmentDetailsAction />
                 <ConnectedOfferActionButtons />
@@ -53,7 +57,14 @@ export function AdminAssignmentsView() {
                     <MissingActiveSessionWarning extraText="To view or modify assignments, you must select a session." />
                 )}
 
-                {!importInProgress && <ConnectedOfferTable />}
+                {inProgress ? (
+                    <React.Fragment>
+                        <Spinner animation="border" className="mr-2" />
+                        In Progress
+                    </React.Fragment>
+                ) : (
+                    <ConnectedOfferTable />
+                )}
                 <ConnectedAddAssignmentDialog
                     show={addDialogVisible}
                     onHide={() => {
