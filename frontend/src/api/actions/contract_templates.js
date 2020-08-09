@@ -14,7 +14,7 @@ import { activeRoleSelector } from "./users";
 import { bytesToBase64 } from "../mockAPI/utils";
 
 // actions
-const fetchContractTemplatesSuccess = actionFactory(
+export const fetchContractTemplatesSuccess = actionFactory(
     FETCH_CONTRACT_TEMPLATES_SUCCESS
 );
 const fetchAllContractTemplatesSuccess = actionFactory(

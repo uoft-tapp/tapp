@@ -9,12 +9,15 @@ import {
     setActiveUserRole,
     activeRoleSelector,
 } from "./users";
-import { fetchApplicants } from "./applicants";
-import { fetchApplications } from "./applications";
-import { fetchAssignments } from "./assignments";
-import { fetchContractTemplates } from "./contract_templates";
-import { fetchInstructors } from "./instructors";
-import { fetchPositions } from "./positions";
+import { fetchApplicants, fetchApplicantsSuccess } from "./applicants";
+import { fetchApplications, fetchApplicationsSuccess } from "./applications";
+import { fetchAssignments, fetchAssignmentsSuccess } from "./assignments";
+import {
+    fetchContractTemplates,
+    fetchContractTemplatesSuccess,
+} from "./contract_templates";
+import { fetchInstructors, fetchInstructorsSuccess } from "./instructors";
+import { fetchPositions, fetchPositionsSuccess } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
 import { parseURLSearchString } from "../../libs/urlUtils";
 import { fetchDdahs } from "./ddahs";
@@ -158,6 +161,15 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
         }
 
         if (shouldRunStage("setActiveUserRole")) {
+            // When the role is changed, data should be cleared immediately.
+            // It will be re-fetched via the appropriate routes.
+            dispatch(fetchApplicantsSuccess([]));
+            dispatch(fetchAssignmentsSuccess([]));
+            dispatch(fetchContractTemplatesSuccess([]));
+            dispatch(fetchApplicationsSuccess([]));
+            dispatch(fetchInstructorsSuccess([]));
+            dispatch(fetchPositionsSuccess([]));
+
             const activeRole = activeRoleSelector(getState());
             await dispatch(setActiveUserRole(activeRole, { skipInit: true }));
         }
@@ -195,6 +207,15 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
         }
 
         if (shouldRunStage("fetchSessionDependentData")) {
+            // Before fetching session-related data, the existing data
+            // should be cleared. It will be re-fetched via the appropriate routes,
+            // but clearing now will prevent excess re-renders as data streams in.
+            dispatch(fetchApplicantsSuccess([]));
+            dispatch(fetchAssignmentsSuccess([]));
+            dispatch(fetchContractTemplatesSuccess([]));
+            dispatch(fetchApplicationsSuccess([]));
+            dispatch(fetchPositionsSuccess([]));
+
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
             const fetchActions = [

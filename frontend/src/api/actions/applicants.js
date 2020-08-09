@@ -14,7 +14,7 @@ import { activeRoleSelector } from "./users";
 import { activeSessionSelector } from "./sessions";
 
 // actions
-const fetchApplicantsSuccess = actionFactory(FETCH_APPLICANTS_SUCCESS);
+export const fetchApplicantsSuccess = actionFactory(FETCH_APPLICANTS_SUCCESS);
 const fetchOneApplicantSuccess = actionFactory(FETCH_ONE_APPLICANT_SUCCESS);
 const upsertOneApplicantSuccess = actionFactory(UPSERT_ONE_APPLICANT_SUCCESS);
 const deleteOneApplicantSuccess = actionFactory(DELETE_ONE_APPLICANT_SUCCESS);
