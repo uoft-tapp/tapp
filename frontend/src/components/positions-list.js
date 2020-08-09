@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table";
+import ReactTable from "react-table-6";
 import { Badge } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";

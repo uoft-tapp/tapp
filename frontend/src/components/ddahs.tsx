@@ -1,5 +1,5 @@
 import React from "react";
-import ReactTable from "react-table";
+import ReactTable from "react-table-6";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
 import { DiffSpec, ddahDutiesToString } from "../libs/diffUtils";

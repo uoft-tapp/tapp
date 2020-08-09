@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { formatDate } from "../libs/utils";
-import ReactTable from "react-table";
+import ReactTable from "react-table-6";
 import { createDiffColumnsFromColumns } from "./diff-table";
 
 const DEFAULT_COLUMNS = [

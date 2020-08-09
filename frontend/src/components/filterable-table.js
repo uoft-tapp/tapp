@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table";
+import ReactTable from "react-table-6";
 import selectTableHOC from "react-table/lib/hoc/selectTable";
 
 import "react-table/react-table.css";

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table";
+import ReactTable from "react-table-6";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";

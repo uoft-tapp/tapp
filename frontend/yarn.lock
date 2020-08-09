@@ -1660,13 +1660,6 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react-table@^6.8.5":
-  version "6.8.7"
-  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-6.8.7.tgz#210ffa2862dd3711350676c0bdbbfbff45f14b84"
-  integrity sha512-1U0xl47jk0BzE+HNHgxZYSLvtybSvnlLhOpW9Mfqf9iuRm/fGqgRab3TKivPCY6Tl7WPFM2hWEJ1GnsuSFc9AQ==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-transition-group@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.0.tgz#882839db465df1320e4753e6e9f70ca7e9b4d46d"
@@ -9230,7 +9223,7 @@ react-dev-utils@^10.2.0:
     strip-ansi "6.0.0"
     text-table "0.2.0"
 
-react-dom@^16.12.0:
+react-dom@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
   integrity sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag==
@@ -9460,14 +9453,17 @@ react-scripts@3.4.0:
   optionalDependencies:
     fsevents "2.1.2"
 
-react-table@^6.8.6:
-  version "6.11.5"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.11.5.tgz#84e52885db426a07a6c4ce2c7e942f2cd4e2aa58"
-  integrity sha512-LM+AS9v//7Y7lAlgTWW/cW6Sn5VOb3EsSkKQfQTzOW8FngB1FUskLLNEVkAYsTX9LjOWR3QlGjykJqCE6eXT/g==
+react-table-6@^6.11.0:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/react-table-6/-/react-table-6-6.11.0.tgz#727de5d9f0357a35816a1bbc2e9c9868f8c5b2c4"
+  integrity sha512-zO24J+1Qg2AHxtSNMfHeGW1dxFcmLJQrAeLJyCAENdNdwJt+YolDDtJEBdZlukon7rZeAdB3d5gUH6eb9Dn5Ug==
   dependencies:
-    "@types/react-table" "^6.8.5"
     classnames "^2.2.5"
-    react-is "^16.8.1"
+
+react-table@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.5.0.tgz#87326d92cdffbbf970f49b395bcafc3f84989ddf"
+  integrity sha512-hLsbNqLJkkYiATVteM8mthP8y5vnLPB2qdi9FeGZjsvb2m5vxj6cavIgk35oulvBmYD6Kox0HFfI332HPZpC7w==
 
 react-transition-group@^2.2.0:
   version "2.9.0"
@@ -9489,7 +9485,7 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@^16.12.0:
+react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
