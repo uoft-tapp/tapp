@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table-6";
-import selectTableHOC from "react-table/lib/hoc/selectTable";
+import selectTableHOC from "react-table-6/lib/hoc/selectTable";
 
-import "react-table/react-table.css";
+import "react-table-6/react-table.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Badge } from "react-bootstrap";
 import { strip, useDebounce } from "../libs/utils";
