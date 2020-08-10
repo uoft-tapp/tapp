@@ -61,6 +61,8 @@ body,
 
 .page-content {
     height: 100%;
+    display: flex;
+    flex-direction: column;
     overflow: auto;
     flex-grow: 1;
     background-color: white;

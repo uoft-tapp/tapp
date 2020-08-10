@@ -58,6 +58,7 @@ export function AdminSessionsView() {
                 </ActionButton>
             </ActionsList>
             <ContentArea>
+                {/*<TestTable columns={COLUMNS} data={DATA} />*/}
                 <h3>Session Management and Creation</h3>
                 <p>
                     From this page, you can manage an existing session or create

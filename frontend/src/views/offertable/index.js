@@ -5,12 +5,12 @@ import {
     upsertApplicant,
     upsertAssignment,
 } from "../../api/actions";
-import { OfferTable } from "../../components/offer-table";
 import { EditableField } from "../../components/edit-field-widgets";
 import { offerTableSelector, setSelectedRows } from "./actions";
 import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../libs/utils";
+import { AdvancedFilterTable } from "../../components/advanced-filter-table";
 
 /**
  * A cell that renders editable applicant information
@@ -21,8 +21,9 @@ import { formatDownloadUrl, capitalize, formatDate } from "../../libs/utils";
 function ApplicantCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field } = props;
+    const applicant = props.row.original || props.row._original;
     function onChange(newVal) {
-        const applicantId = props.original.applicant.id;
+        const applicantId = applicant.applicant.id;
         upsertApplicant({ id: applicantId, [field]: newVal });
     }
     return (
@@ -43,7 +44,8 @@ function ApplicantCell(props) {
  * @param {*} { original }
  * @returns
  */
-function StatusCell({ original }) {
+function StatusCell({ row }) {
+    const original = row.original || row._original;
     const formattedStatus = capitalize(original.active_offer_status || "");
     const activeOfferUrlToken = original.active_offer_url_token;
 
@@ -80,10 +82,11 @@ function StatusCell({ original }) {
 function AssignmentCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertAssignment, field } = props;
-    const active_offer_status = props.original.active_offer_status;
+    const assignment = props.row.original || props.row._original;
+    const active_offer_status = assignment.active_offer_status;
     function onChange(newVal) {
-        const applicationId = props.original.id;
-        upsertAssignment({ id: applicationId, [field]: newVal });
+        const assignmentId = assignment.id;
+        upsertAssignment({ id: assignmentId, [field]: newVal });
     }
     return (
         <EditableField
@@ -103,7 +106,16 @@ function AssignmentCell(props) {
 }
 
 function EditableOfferTable(props) {
-    const { upsertApplicant, upsertAssignment, ...rest } = props;
+    const {
+        upsertApplicant,
+        upsertAssignment,
+        data,
+        selected,
+        setSelected,
+        ...rest
+    } = props;
+
+    const _setSelected = React.useCallback(setSelected, []);
 
     // Bind an `ApplicantCell` to a particular field
     function generateApplicantCell(field) {
@@ -174,7 +186,16 @@ function EditableOfferTable(props) {
         },
     ];
 
-    return <OfferTable columns={columns} {...rest} />;
+    return (
+        <AdvancedFilterTable
+            filterable={true}
+            columns={columns}
+            data={data}
+            selected={selected}
+            setSelected={_setSelected}
+            {...rest}
+        />
+    );
 }
 
 /**

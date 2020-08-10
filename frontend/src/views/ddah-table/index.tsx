@@ -7,7 +7,6 @@ import {
     upsertDdah,
     approveDdah,
 } from "../../api/actions/ddahs";
-import { FilterableTable } from "../../components/filterable-table";
 import { assignmentsSelector } from "../../api/actions";
 import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
@@ -16,6 +15,7 @@ import { Button, Modal, Spinner } from "react-bootstrap";
 import { formatDate, formatDownloadUrl } from "../../libs/utils";
 import { DdahEditor } from "../../components/ddahs";
 import { generateHeaderCell } from "../../components/table-utils";
+import { AdvancedFilterTable } from "../../components/advanced-filter-table";
 
 interface RowData {
     id?: number;
@@ -60,12 +60,13 @@ function getReadableStatus(ddah: Pick<Ddah, "status">) {
  * @returns {React.ReactNode}
  */
 function StatusCell({
-    original,
+    row,
     children = null,
 }: {
-    original: RowData;
+    row: { original: RowData };
     children?: React.ReactNode;
 }): JSX.Element {
+    const original = row.original;
     // If we have a blank ID, we aren't actually a DDAH (we're an assignment
     // without a DDAH), so don't render anything.
     if (original.id == null) {
@@ -96,7 +97,12 @@ function StatusCell({
  * @param {{ original: RowData }} { original }
  * @returns {React.ReactNode}
  */
-function IssuesCell({ original }: { original: RowData }): JSX.Element | null {
+function IssuesCell({
+    row,
+}: {
+    row: { original: RowData };
+}): JSX.Element | null {
+    const original = row.original;
     switch (original.issue_code) {
         case "hours_mismatch":
             return <div className="hours-mismatch-ddah">{original.issues}</div>;
@@ -114,12 +120,13 @@ function IssuesCell({ original }: { original: RowData }): JSX.Element | null {
  * @returns {React.ReactNode}
  */
 function PreviewCell({
-    original,
+    row,
     onClick = () => {},
 }: {
-    original: RowData;
+    row: { original: RowData };
     onClick: Function;
 }): JSX.Element | null {
+    const original = row.original;
     if (original.id == null) {
         return null;
     }
@@ -355,9 +362,9 @@ export function ConnectedDdahsTable() {
     }
 
     function WrappedStatusCell(props: any): React.ReactNode {
-        const { original, ...rest } = props;
+        const { row, ...rest } = props;
         return (
-            <StatusCell original={original as RowData} {...rest}>
+            <StatusCell row={row} {...rest}>
                 <PreviewCell {...props} onClick={onPreviewClick} />
             </StatusCell>
         );
@@ -476,13 +483,14 @@ export function ConnectedDdahsTable() {
                     setPreviewVisible(false);
                 }}
             />
-            <FilterableTable
+            <AdvancedFilterTable
                 // The ReactTable types are not smart enough to know that you can use a function
                 // for Header, so we will opt out of the type system here.
                 columns={columns as any}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}
+                filterable={true}
             />
         </>
     );

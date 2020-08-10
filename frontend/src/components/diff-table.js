@@ -27,7 +27,8 @@ export function createDiffCell({ accessor, Cell }) {
      * @param {*} {original}
      * @returns
      */
-    function DiffCell({ original }) {
+    function DiffCell({ row }) {
+        const original = row.original || row._original;
         const value = get(original.obj);
         const changed = get(original.changes);
         if (changed != null) {
@@ -60,7 +61,14 @@ export function createDiffCell({ accessor, Cell }) {
  */
 export function createDiffColumnsFromColumns(columns) {
     return columns.map((column) => {
-        const ret = { ...column, Cell: createDiffCell(column) };
+        const ret = {
+            // ReactTable really wants columns to have ids. If a column
+            // doesn't have an id, it uses the accessor as an id. However, we
+            // delete the accessor, so put an id in manually.
+            id: column.accessor,
+            ...column,
+            Cell: createDiffCell(column),
+        };
         delete ret.accessor;
         return ret;
     });

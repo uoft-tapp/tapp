@@ -1,5 +1,4 @@
 import React from "react";
-import ReactTable from "react-table-6";
 import { useSelector, useDispatch } from "react-redux";
 import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
 import { EditableField } from "./edit-field-widgets";
@@ -7,6 +6,7 @@ import { formatDate } from "../libs/utils";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 function EditableCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
@@ -14,7 +14,7 @@ function EditableCell(props) {
     const isDate = type === "date";
 
     function onChange(newVal) {
-        const sessionId = props.original.id;
+        const sessionId = (props.row.original || props.row._original).id;
         upsertSession({ id: sessionId, [field]: newVal });
     }
 
@@ -66,7 +66,6 @@ export function ConnectedSessionsList(props) {
     const [sessionToDelete, setSessionToDelete] = React.useState(null);
     const sessions = useSelector(sessionsSelector);
     const dispatch = useDispatch();
-    const pageSize = sessions?.length || 20;
 
     function _upsertSession(session) {
         return dispatch(upsertSession(session));
@@ -84,7 +83,8 @@ export function ConnectedSessionsList(props) {
     }
 
     // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ original: session }) {
+    function CellDeleteButton({ row }) {
+        const session = row?.original || {};
         return (
             <div className="delete-button-container">
                 <FaTimes
@@ -104,6 +104,7 @@ export function ConnectedSessionsList(props) {
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
             Cell: CellDeleteButton,
+            id: "delete_col",
             show: inDeleteMode,
             maxWidth: 32,
             resizable: false,
@@ -140,13 +141,10 @@ export function ConnectedSessionsList(props) {
     const { columns = DEFAULT_COLUMNS } = props;
     return (
         <React.Fragment>
-            <ReactTable
-                data={sessions}
+            <AdvancedFilterTable
                 columns={columns}
-                showPagination={false}
-                defaultPageSize={pageSize}
-                pageSize={pageSize}
-                minRows={1}
+                filterable={true}
+                data={sessions}
             />
             <ConfirmDeleteDialog
                 session={sessionToDelete}

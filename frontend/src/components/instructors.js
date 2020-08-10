@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table-6";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { createDiffColumnsFromColumns } from "./diff-table";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
     { Header: "First Name", accessor: "first_name" },
-    { Header: "Email", accessor: "email" },
+    { Header: "Email", accessor: "email", minWidth: 120 },
     { Header: "UTORid", accessor: "utorid" },
 ];
 
@@ -23,18 +23,12 @@ const DEFAULT_COLUMNS = [
  */
 export function InstructorsList(props) {
     const { instructors, columns = DEFAULT_COLUMNS } = props;
-    const pageSize = instructors?.length || 20;
     return (
-        <React.Fragment>
-            <ReactTable
-                data={instructors}
-                columns={columns}
-                showPagination={false}
-                defaultPageSize={pageSize}
-                pageSize={pageSize}
-                minRows={1}
-            />
-        </React.Fragment>
+        <AdvancedFilterTable
+            data={instructors}
+            columns={columns}
+            filterable={true}
+        />
     );
 }
 InstructorsList.propTypes = {
