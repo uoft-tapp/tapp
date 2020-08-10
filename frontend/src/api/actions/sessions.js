@@ -15,7 +15,7 @@ import { activeRoleSelector } from "./users";
 import { initFromStage } from "./init";
 
 // actions
-const fetchSessionsSuccess = actionFactory(FETCH_SESSIONS_SUCCESS);
+export const fetchSessionsSuccess = actionFactory(FETCH_SESSIONS_SUCCESS);
 const fetchOneSessionSuccess = actionFactory(FETCH_ONE_SESSION_SUCCESS);
 const upsertOneSessionSuccess = actionFactory(UPSERT_ONE_SESSION_SUCCESS);
 const deleteOneSessionSuccess = actionFactory(DELETE_ONE_SESSION_SUCCESS);

@@ -21,7 +21,9 @@ import { activeRoleSelector } from "./users";
 import { positionsSelector } from "./positions";
 
 // actions
-const fetchApplicationsSuccess = actionFactory(FETCH_APPLICATIONS_SUCCESS);
+export const fetchApplicationsSuccess = actionFactory(
+    FETCH_APPLICATIONS_SUCCESS
+);
 const fetchOneApplicationSuccess = actionFactory(FETCH_ONE_APPLICATION_SUCCESS);
 const upsertOneApplicationSuccess = actionFactory(
     UPSERT_ONE_APPLICATION_SUCCESS

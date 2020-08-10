@@ -68,15 +68,21 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
     });
 
     return [
-        ["Position", "Last Name", "First Name", "Assignment Hours", ""].concat(
-            dutyHeaders
-        ),
+        [
+            "Position",
+            "Last Name",
+            "First Name",
+            "email",
+            "Assignment Hours",
+            "",
+        ].concat(dutyHeaders),
     ].concat(
         ddahs.map((ddah) =>
             [
                 ddah.assignment.position.position_code,
                 ddah.assignment.applicant.last_name,
                 ddah.assignment.applicant.first_name,
+                ddah.assignment.applicant.email,
                 ddah.assignment.hours,
                 "",
             ].concat(flattenDuties(ddah))
@@ -418,14 +424,24 @@ async function arraysByKeyToZip(arrays: { [key: string]: any[][] }) {
     const zip = new JSZip();
 
     for (const [position_code, array] of Object.entries(arrays)) {
+        // workbook sheets and file names can't have `/` or other special characters in them
+        // So we replace them with `_` before we start.
+        const sanitized_position_code = position_code.replace(
+            /[^A-z0-9 ]/g,
+            "_"
+        );
         const workbook = XLSX.utils.book_new();
         const sheet = XLSX.utils.aoa_to_sheet(array);
-        XLSX.utils.book_append_sheet(workbook, sheet, `${position_code} DDAHs`);
+        XLSX.utils.book_append_sheet(
+            workbook,
+            sheet,
+            `${sanitized_position_code} DDAHs`
+        );
         const rawSpreadsheet = XLSX.write(workbook, {
             type: "binary",
             bookType: "xlsx",
         });
-        zip.file(`${position_code}-DDAHs.xlsx`, rawSpreadsheet, {
+        zip.file(`${sanitized_position_code}-DDAHs.xlsx`, rawSpreadsheet, {
             binary: true,
         });
     }

@@ -21,7 +21,7 @@ function EditableCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertInstructor, field } = props;
     function onChange(newVal) {
-        const applicantId = props.original.id;
+        const applicantId = (props.row.original || props.row._original).id;
         upsertInstructor({ id: applicantId, [field]: newVal });
     }
     return (
@@ -66,7 +66,8 @@ function EditableInstructorsList(props) {
     }
 
     // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ original: instructor }) {
+    function CellDeleteButton({ row }) {
+        const instructor = row.original;
         const disabled = instructorCurrentlyAssignedHash[instructor.id];
         if (disabled) {
             return (
@@ -97,6 +98,8 @@ function EditableInstructorsList(props) {
             Header: (
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
+            id: "delete_col",
+            className: "delete-col",
             Cell: CellDeleteButton,
             show: inDeleteMode,
             maxWidth: 32,
@@ -116,6 +119,7 @@ function EditableInstructorsList(props) {
             Header: "Email",
             accessor: "email",
             Cell: generateCell("email"),
+            minWidth: 150,
         },
         {
             Header: "UTORid",

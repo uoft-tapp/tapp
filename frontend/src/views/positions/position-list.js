@@ -132,7 +132,7 @@ function EditableCell(props) {
     const isDate = type === "date";
 
     function onChange(newVal) {
-        const positionId = props.original.id;
+        const positionId = (props.row.original || props.row._original).id;
         upsertPosition({ id: positionId, [field]: newVal });
     }
 
@@ -148,13 +148,15 @@ function EditableCell(props) {
     );
 }
 
-function EditInstructorsCell({ original, value }) {
+function EditInstructorsCell({ row }) {
+    // row._original is from ReactTable v6; We can get rid of it when we drop the dependency
+    const position = row.original || row._original;
     const [dialogShow, setDialogShow] = React.useState(false);
     const dispatch = useDispatch();
 
     return (
         <div className="show-on-hover-wrapper">
-            {value.map((instructor = {}) => {
+            {position.instructors.map((instructor = {}) => {
                 const name = `${instructor.first_name} ${instructor.last_name}`;
                 return (
                     <Badge variant="secondary" className="mr-1" key={name}>
@@ -168,13 +170,13 @@ function EditInstructorsCell({ original, value }) {
                 onClick={() => setDialogShow(true)}
             />
             <EditInstructorsDialog
-                position={original}
+                position={position}
                 show={dialogShow}
                 onHide={() => setDialogShow(false)}
                 onChange={async (newInstructors) => {
                     await dispatch(
                         upsertPosition({
-                            id: original.id,
+                            id: position.id,
                             instructors: newInstructors,
                         })
                     );
@@ -230,7 +232,8 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
     );
 
     // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ original: position }) {
+    function CellDeleteButton({ row }) {
+        const position = row.original || row._original;
         // If there are any assignments for this position, we should be disabled
         const disabled = numAssignmentsByPositionCode[position.position_code];
         if (disabled) {
@@ -273,6 +276,8 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
                 <FaTrash className="delete-instructor-column-header-icon" />
             ),
             Cell: CellDeleteButton,
+            id: "delete_col",
+            className: "delete-col",
             show: inDeleteMode,
             maxWidth: 32,
             resizable: false,
@@ -299,7 +304,8 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
         },
         {
             Header: generateHeaderCell("Instructor(s)"),
-            accessor: "instructors",
+            id: "instructors",
+            accessor: (row) => hashInstructorList(row.instructors),
             Cell: EditInstructorsCell,
         },
         {

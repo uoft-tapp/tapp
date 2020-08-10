@@ -1,5 +1,4 @@
 import React from "react";
-import ReactTable from "react-table";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
 import { DiffSpec, ddahDutiesToString } from "../libs/diffUtils";
@@ -8,6 +7,7 @@ import { DialogRow } from "./forms/common-controls";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { stringToNativeType } from "../libs/urlUtils";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     {
@@ -91,18 +91,7 @@ export function DdahsList(props: {
         return { ...ddah, duties: ddahDutiesToString(ddah.duties) };
     });
 
-    const pageSize = flattenedDdahs?.length || 20;
-
-    return (
-        <ReactTable
-            data={flattenedDdahs}
-            columns={columns}
-            showPagination={false}
-            defaultPageSize={pageSize}
-            pageSize={pageSize}
-            minRows={1}
-        />
-    );
+    return <AdvancedFilterTable data={flattenedDdahs} columns={columns} />;
 }
 
 const DEFAULT_DDAH = {

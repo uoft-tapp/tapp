@@ -13,7 +13,7 @@ import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 
 // actions
-const fetchInstructorsSuccess = actionFactory(FETCH_INSTRUCTORS_SUCCESS);
+export const fetchInstructorsSuccess = actionFactory(FETCH_INSTRUCTORS_SUCCESS);
 const fetchOneInstructorSuccess = actionFactory(FETCH_ONE_INSTRUCTOR_SUCCESS);
 const upsertOneInstructorSuccess = actionFactory(UPSERT_ONE_INSTRUCTOR_SUCCESS);
 const deleteOneInstructorSuccess = actionFactory(DELETE_ONE_INSTRUCTOR_SUCCESS);

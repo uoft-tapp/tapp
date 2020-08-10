@@ -22,7 +22,7 @@ import { activeRoleSelector } from "./users";
 import { applicantsSelector } from "./applicants";
 
 // actions
-const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
+export const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
 const fetchOnePositionSuccess = actionFactory(FETCH_ONE_POSITION_SUCCESS);
 const upsertOnePositionSuccess = actionFactory(UPSERT_ONE_POSITION_SUCCESS);
 const deleteOnePositionSuccess = actionFactory(DELETE_ONE_POSITION_SUCCESS);

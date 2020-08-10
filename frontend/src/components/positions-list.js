@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table";
 import { Badge } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { generateHeaderCell } from "./table-utils";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: generateHeaderCell("Position Code"), accessor: "position_code" },
@@ -87,15 +87,11 @@ export function PositionsDiffList({ modifiedPositions }) {
  */
 export function PositionsList(props) {
     const { positions, columns = DEFAULT_COLUMNS } = props;
-    const pageSize = positions?.length || 20;
     return (
-        <ReactTable
-            data={positions}
+        <AdvancedFilterTable
             columns={columns}
-            showPagination={false}
-            defaultPageSize={pageSize}
-            pageSize={pageSize}
-            minRows={1}
+            data={positions}
+            filterable={true}
         />
     );
 }

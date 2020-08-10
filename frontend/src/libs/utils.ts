@@ -1,6 +1,9 @@
+import React from "react";
+import { shallowEqual } from "react-redux";
+
 /**
  * Capitalizes the input string. The function only capitalizes the first word if there are multiple words in the input string.
- * If `word` isn't a srting, it is coerced.
+ * If `word` isn't a string, it is coerced.
  * @param word a single word.
  * @returns
  */
@@ -65,3 +68,51 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 }
 
 export { formatDownloadUrl };
+
+// Debounce hook from https://dev.to/gabe_ragland/debouncing-with-react-hooks-jci
+/**
+ * Debounce a value. This hook will continue returning the initially passed in `value`
+ * until `delay` milliseconds have passed. After the delay, the most recently-passed-in
+ * value is returned.
+ *
+ * @export
+ * @param {*} value
+ * @param {number} delay
+ * @returns
+ */
+export function useDebounce(value: any, delay: number) {
+    // State and setters for debounced value
+    const [debouncedValue, setDebouncedValue] = React.useState<any>(value);
+
+    React.useEffect(
+        () => {
+            if (shallowEqual(value, debouncedValue)) {
+                return;
+            }
+            // Set debouncedValue to value (passed in) after the specified delay
+            const handler = setTimeout(() => {
+                setDebouncedValue(value);
+            }, delay);
+
+            // Return a cleanup function that will be called every time ...
+            // ... useEffect is re-called. useEffect will only be re-called ...
+            // ... if value changes (see the inputs array below).
+            // This is how we prevent debouncedValue from changing if value is ...
+            // ... changed within the delay period. Timeout gets cleared and restarted.
+            // To put it in context, if the user is typing within our app's ...
+            // ... search box, we don't want the debouncedValue to update until ...
+            // ... they've stopped typing for more than 500ms.
+            return () => {
+                clearTimeout(handler);
+            };
+        },
+        // Only re-call effect if value changes
+        // We purposely don't pass in `debounceValue` so that we don't get
+        // stuck in a loop. However, eslint complains about not passing in
+        // `debounceValue`.
+        // eslint-disable-next-line
+        [value, delay]
+    );
+
+    return debouncedValue;
+}
