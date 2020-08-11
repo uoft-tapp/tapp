@@ -350,7 +350,7 @@ export function AdvancedFilterTable({
                 if (!isSelected) {
                     continue;
                 }
-                const id = data[+index].id;
+                const id = data[+index]?.id;
                 if (!ret.includes(id)) {
                     ret.push(id);
                 }

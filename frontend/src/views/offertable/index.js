@@ -184,6 +184,14 @@ function EditableOfferTable(props) {
             Cell: ({ value }) => (value ? formatDate(value) : null),
             maxWidth: 120,
         },
+        {
+            Header: "Nag Count",
+            accessor: "active_offer_nag_count",
+            // If the nag-count is 0, we don't want to show it,
+            // so we return null in that case, which displays nothing.
+            Cell: ({ value }) => (value ? value : null),
+            maxWidth: 30,
+        },
     ];
 
     return (

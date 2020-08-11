@@ -55,6 +55,10 @@ class Assignment < ApplicationRecord
         active_offer.blank? ? nil : active_offer.url_token
     end
 
+    def active_offer_nag_count
+        active_offer.blank? ? nil : active_offer.nag_count
+    end
+
     # return the date of the most recent activity concerning the
     # active offer.
     def active_offer_recent_activity_date

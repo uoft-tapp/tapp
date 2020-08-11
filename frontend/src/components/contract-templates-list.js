@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import ReactTable from "react-table-6";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
+import "react-table-6/react-table.css";
+
 const DEFAULT_COLUMNS = [
     { Header: "Template Name", accessor: "template_name" },
     {
