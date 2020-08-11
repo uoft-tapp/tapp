@@ -11,5 +11,6 @@ class AssignmentSerializer < ActiveModel::Serializer
                :active_offer_status,
                :active_offer_url_token,
                :active_offer_recent_activity_date,
+               :active_offer_nag_count,
                :hours
 end

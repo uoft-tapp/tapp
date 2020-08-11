@@ -92,6 +92,7 @@ function generatePropTypes(PropTypes) {
             ]),
             active_offer_url_token: PropTypes.string,
             active_offer_recent_activity_date: PropTypes.string,
+            active_offer_nag_count: PropTypes.number,
         }),
         applicant: PropTypes.shape({
             utorid: PropTypes.string.isRequired,

@@ -22,6 +22,71 @@ import { diffImport, getChanged } from "../../libs/diffUtils";
 import { offerTableSelector } from "../offertable/actions";
 
 /**
+ * Format a date as YYYY-MM-DD for inserting into a spreadsheet
+ *
+ * @param {*} date
+ * @returns
+ */
+function formatDateForSpreadsheet(date) {
+    try {
+        return date && new Date(date).toJSON().slice(0, 10);
+    } catch (e) {
+        return "";
+    }
+}
+
+/**
+ * Create header columns for a spreadsheet containing information about every pay period.
+ *
+ * @param {*} assignments
+ * @returns
+ */
+function createPayPeriodHeaders(assignments) {
+    const ret = [];
+    if (!assignments) {
+        return ret;
+    }
+    const maxNumPeriods = Math.max(
+        ...assignments.map((assignment) => assignment.wage_chunks?.length || 0),
+        0
+    );
+
+    for (let i = 0; i < maxNumPeriods; i++) {
+        ret.push(
+            `Period ${i + 1} Rate`,
+            `Period ${i + 1} Hours`,
+            `Period ${i + 1} Start Date`,
+            `Period ${i + 1} End Date`
+        );
+    }
+    return ret;
+}
+
+/**
+ * Create formatted rows providing information about each wage chunk.
+ *
+ * @param {*} wageChunks
+ * @returns
+ */
+function formatWageChunksToList(wageChunks) {
+    const ret = [];
+    if (!wageChunks) {
+        return ret;
+    }
+
+    ret.push(wageChunks.length);
+    for (const chunk of wageChunks) {
+        ret.push(
+            chunk.rate,
+            chunk.hours,
+            formatDateForSpreadsheet(chunk.start_date),
+            formatDateForSpreadsheet(chunk.end_date)
+        );
+    }
+    return ret;
+}
+
+/**
  * Allows for the download of a file blob containing the exported instructors.
  * Instructors are synchronized from the server before being downloaded.
  *
@@ -83,6 +148,8 @@ export function ConnectedExportAssignmentsAction({
                         contract_override_pdf: assignment.contract_override_pdf,
                         hours: assignment.hours,
                         active_offer_status: assignment.active_offer_status,
+                        active_offer_recent_activity_date:
+                            assignment.active_offer_recent_activity_date,
                         wage_chunks: assignment.wage_chunks.map((chunk) => ({
                             hours: chunk.hours,
                             rate: chunk.rate,
@@ -106,6 +173,12 @@ export function ConnectedExportAssignmentsAction({
                                     "Contract Template",
                                     "Contract Override PDF",
                                     "Offer Status",
+                                    "Recent Activity Date",
+                                    "",
+                                    "Number of Pay Periods",
+                                    ...createPayPeriodHeaders(
+                                        assignmentsForSpreadsheet
+                                    ),
                                 ],
                             ].concat(
                                 assignmentsForSpreadsheet.map((assignment) => [
@@ -113,18 +186,21 @@ export function ConnectedExportAssignmentsAction({
                                     assignment.last_name,
                                     assignment.utorid,
                                     assignment.position_code,
-                                    assignment.start_date &&
-                                        new Date(assignment.start_date)
-                                            .toJSON()
-                                            .slice(0, 10),
-                                    assignment.end_date &&
-                                        new Date(assignment.end_date)
-                                            .toJSON()
-                                            .slice(0, 10),
+                                    formatDateForSpreadsheet(
+                                        assignment.start_date
+                                    ),
+                                    formatDateForSpreadsheet(
+                                        assignment.end_date
+                                    ),
                                     assignment.hours,
                                     assignment.contract_template,
                                     assignment.contract_override_pdf,
                                     assignment.active_offer_status,
+                                    undefined,
+                                    assignment.active_offer_recent_activity_date,
+                                    ...formatWageChunksToList(
+                                        assignment.wage_chunks
+                                    ),
                                 ])
                             ),
                         toJson: () => ({

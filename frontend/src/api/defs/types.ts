@@ -125,6 +125,7 @@ export interface Assignment {
     active_offer_status?: string;
     active_offer_url_token?: string;
     active_offer_recent_activity_date?: string;
+    active_offer_nag_count?: number;
     wage_chunks?: WageChunk[];
 }
 
