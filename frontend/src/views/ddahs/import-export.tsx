@@ -388,12 +388,23 @@ function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
 
     // Create DDAHs for all assignments, but use the real DDAH if
     // it exists.
-    const allDdahs = assignments.map((assignment) => {
-        if (ddahsByAssignmentId[assignment.id]) {
-            return ddahsByAssignmentId[assignment.id];
-        }
-        return { ...DEFAULT_DDAH, assignment: assignment };
-    }) as Ddah[];
+    const allDdahs = assignments
+        .map((assignment) => {
+            // Rejected or withdrawn assignments shouldn't show up on the DDAH list
+            if (
+                assignment.active_offer_status === "rejected" ||
+                assignment.active_offer_status === "withdrawn"
+            ) {
+                // We return null in this case; we will filter out
+                // the null results later.
+                return null;
+            }
+            if (ddahsByAssignmentId[assignment.id]) {
+                return ddahsByAssignmentId[assignment.id];
+            }
+            return { ...DEFAULT_DDAH, assignment: assignment };
+        })
+        .filter((x) => x) as Ddah[];
     allDdahs.sort(({ assignment: a }, { assignment: b }) => {
         const aHash = `${a.position.position_code} ${a.applicant.last_name} ${a.applicant.first_name}`;
         const bHash = `${b.position.position_code} ${b.applicant.last_name} ${b.applicant.first_name}`;

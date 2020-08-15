@@ -395,6 +395,16 @@ export function ConnectedDdahsTable() {
         ddahAssignmentIdsHash[ddah.assignment.id] = true;
     }
     for (const assignment of assignments) {
+        // If an offer is rejected or withdrawn, we will never make a DDAH for it.
+        // It is important that this is the first check in the loop, since a
+        // DDAH might have been created for an offer that becomes withdrawn.
+        // In that case, we still don't want it showing up.
+        if (
+            assignment.active_offer_status === "rejected" ||
+            assignment.active_offer_status === "withdrawn"
+        ) {
+            continue;
+        }
         if (ddahAssignmentIdsHash[assignment.id]) {
             // We have an associated DDAH
             continue;
