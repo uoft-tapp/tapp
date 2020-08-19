@@ -74,6 +74,10 @@ export function offersTests(api) {
         expect(newOffer.emailed_date).not.toBeNull();
     });
 
+    it.todo(
+        "when an offer is emailed a second time, the emailed date is updated to the most recent emailed date"
+    );
+
     it("increment nag count correctly", async () => {
         // before nagging, make sure the status of the offer is pending
         const resp = await apiGET(

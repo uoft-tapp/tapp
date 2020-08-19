@@ -53,8 +53,14 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
 
         OfferMailer.email_contract(@offer).deliver_now!
 
-        # If the assignment has not been sent before, set status to pending
-        @offer.pending! if @offer.provisional?
+        if @offer.provisional?
+            # If the assignment has not been sent before, set status to pending
+            @offer.pending!
+        else
+            # If the assignment has been sent before, make sure the emailed date gets updated.
+            @offer.emailed_date = Time.zone.now
+            @offer.save!
+        end
         render_success @offer
     end
 

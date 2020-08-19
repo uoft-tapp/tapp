@@ -98,6 +98,9 @@ class Assignment < ApplicationRecord
         return unless assignment_hours
         return unless start_date && end_date
 
+        # make sure assignment_hours is not a string...
+        assignment_hours = assignment_hours.to_f
+
         # Compute the number of wage chunks needed. If January 1st
         # falls between the start_date and the end_date, then two are needed.
         # otherwise one is needed.
