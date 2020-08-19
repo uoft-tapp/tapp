@@ -97,6 +97,7 @@ class Assignment < ApplicationRecord
         assignment_hours = hours
         return unless assignment_hours
         return unless start_date && end_date
+
         # make sure assignment_hours is not a string...
         assignment_hours = assignment_hours.to_f
 
