@@ -3,23 +3,37 @@
 class OfferMailer < ApplicationMailer
     def email_contract(offer)
         generate_vars(offer)
-        mail(
-            to: @email,
-            from: @ta_coordinator_email,
-            subject: "TA Position Offer for #{@position_code}"
-        )
+        debug_message = "Emailing #{@position_code} Offer to \"#{@email}\""
+        logger.warn debug_message
+
+        begin
+            mail(
+                to: @email,
+                from: @ta_coordinator_email,
+                subject: "TA Position Offer for #{@position_code}"
+            )
+        rescue Net::SMTPFatalError => e
+            raise StandardError, "Error when #{debug_message} (#{e})"
+        end
     end
 
     def email_nag(offer)
         generate_vars(offer)
-        mail(
-            to: @email,
-            from: @ta_coordinator_email,
-            subject:
-                "Reminder #{@nag_count}: TA Position Offer for #{
-                    @position_code
-                }"
-        )
+
+        debug_message = "Emailing #{@position_code} Offer Nag to \"#{@email}\""
+        logger.warn debug_message
+        begin
+            mail(
+                to: @email,
+                from: @ta_coordinator_email,
+                subject:
+                    "Reminder #{@nag_count}: TA Position Offer for #{
+                        @position_code
+                    }"
+            )
+        rescue Net::SMTPFatalError => e
+            raise StandardError, "Error when #{debug_message} (#{e})"
+        end
     end
 
     private

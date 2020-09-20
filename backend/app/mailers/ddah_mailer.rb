@@ -3,12 +3,23 @@
 class DdahMailer < ApplicationMailer
     def email_ddah(ddah)
         generate_vars(ddah)
-        mail(
-            to: @email,
-            cc: @instructor_emails,
-            from: @ta_coordinator_email,
-            subject: "DDAH for #{@position_code} (#{@first_name} #{@last_name})"
-        )
+        debug_message =
+            "Emailing #{@position_code} DDAH to \"#{@email}\" and CCing #{
+                @instructor_emails
+            }"
+        logger.warn debug_message
+
+        begin
+            mail(
+                to: @email,
+                cc: @instructor_emails,
+                from: @ta_coordinator_email,
+                subject:
+                    "DDAH for #{@position_code} (#{@first_name} #{@last_name})"
+            )
+        rescue Net::SMTPFatalError => e
+            raise StandardError, "Error when #{debug_message} (#{e})"
+        end
     end
 
     private
