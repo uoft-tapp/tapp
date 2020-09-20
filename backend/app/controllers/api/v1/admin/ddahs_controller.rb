@@ -184,6 +184,7 @@ class Api::V1::Admin::DdahsController < ApplicationController
         ddahs.map do |x|
             {
                 position_code: x.assignment.position.position_code,
+                hours: x.hours,
                 first_name: x.assignment.applicant.first_name,
                 last_name: x.assignment.applicant.last_name,
                 signature: x.signature,

@@ -29,6 +29,11 @@ class Ddah < ApplicationRecord
     def can_accept?
         accepted_date.nil?
     end
+
+    def hours
+        total_hours = duties.sum(:hours)
+        total_hours if total_hours.positive?
+    end
 end
 # == Schema Information
 #
