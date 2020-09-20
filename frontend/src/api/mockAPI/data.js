@@ -729,8 +729,8 @@ export const mockData = {
         },
     ],
     contract_templates_by_session: {
-        "1": [1, 2],
-        "2": [3, 4],
+        1: [1, 2],
+        2: [3, 4],
     },
     contract_templates_by_filename: contract_templates_by_filename,
     instructors: [
@@ -764,8 +764,8 @@ export const mockData = {
         },
     ],
     positions_by_session: {
-        "1": [10, 11, 14, 15, 16],
-        "2": [12, 13],
+        1: [10, 11, 14, 15, 16],
+        2: [12, 13],
     },
     positions: [
         {
@@ -975,8 +975,8 @@ export const mockData = {
         },
     ],
     assignments_by_session: {
-        "1": [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
-        "2": [],
+        1: [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
+        2: [],
     },
     assignments: [
         {

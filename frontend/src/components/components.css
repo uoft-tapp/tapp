@@ -139,6 +139,16 @@
 .filter-table-container .table .tbody {
     flex-grow: 1;
 }
+.filter-item-count {
+    float: right;
+    margin-top: 8px;
+    color: var(--gray);
+    font-style: italic;
+}
+.filter-item-count::after {
+    content: " rows showing";
+}
+
 .selection-checkbox {
     text-align: center;
     margin-top: 3px;
@@ -204,11 +214,12 @@
 .td {
     border-right: 1px solid rgba(167, 182, 194, 0.4);
     padding: 2px;
-    padding-left: .7em;
+    padding-left: 0.7em;
     white-space: nowrap;
     overflow: hidden;
 }
-.delete-col, .selection-checkbox {
+.delete-col,
+.selection-checkbox {
     padding-left: 0px;
     padding-right: 0px;
 }

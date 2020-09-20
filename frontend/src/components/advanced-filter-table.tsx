@@ -91,7 +91,13 @@ function SortableHeader<T extends object>({
     );
 }
 
-function FilterBar({ onChange }: { onChange?: Function }) {
+function FilterBar({
+    onChange,
+    count = null,
+}: {
+    onChange?: Function;
+    count?: number | null;
+}) {
     // `filterStrings` is the list of strings that we are filtering by. We
     // filter for rows that contain every string.
     const [filterStrings, setFilterStrings] = React.useState<string[]>([]);
@@ -183,6 +189,7 @@ function FilterBar({ onChange }: { onChange?: Function }) {
                     />
                 </Badge>
             ))}
+            {count != null && <div className="filter-item-count">{count}</div>}
         </div>
     );
 }
@@ -412,7 +419,12 @@ export function AdvancedFilterTable({
 
     return (
         <div className="filter-table-container">
-            {filterable && <FilterBar onChange={onFilterChange} />}
+            {filterable && (
+                <FilterBar
+                    onChange={onFilterChange}
+                    count={table.rows.length}
+                />
+            )}
             <div
                 {...table.getTableProps()}
                 className="table table-bordered table-sm"

@@ -136,8 +136,9 @@ export function ConnectedExportAssignmentsAction({
                 const assignmentsForSpreadsheet = assignments.map(
                     (assignment) => ({
                         first_name: assignment.applicant.first_name,
-                        last_name: assignment.applicant.first_name,
+                        last_name: assignment.applicant.last_name,
                         utorid: assignment.applicant.utorid,
+                        email: assignment.applicant.email,
                         position_code: assignment.position.position_code,
                         start_date: assignment.start_date,
                         end_date: assignment.end_date,
@@ -166,6 +167,7 @@ export function ConnectedExportAssignmentsAction({
                                     "Last Name",
                                     "First Name",
                                     "UTORid",
+                                    "Email",
                                     "Position Code",
                                     "Start Date",
                                     "End Date",
@@ -182,9 +184,10 @@ export function ConnectedExportAssignmentsAction({
                                 ],
                             ].concat(
                                 assignmentsForSpreadsheet.map((assignment) => [
-                                    assignment.first_name,
                                     assignment.last_name,
+                                    assignment.first_name,
                                     assignment.utorid,
+                                    assignment.email,
                                     assignment.position_code,
                                     formatDateForSpreadsheet(
                                         assignment.start_date
