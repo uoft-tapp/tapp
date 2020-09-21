@@ -74,6 +74,7 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
             "First Name",
             "email",
             "Assignment Hours",
+            "Offer Status",
             "",
         ].concat(dutyHeaders),
     ].concat(
@@ -84,6 +85,7 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
                 ddah.assignment.applicant.first_name,
                 ddah.assignment.applicant.email,
                 ddah.assignment.hours,
+                ddah.assignment.active_offer_status,
                 "",
             ].concat(flattenDuties(ddah))
         ) as any[][]
@@ -446,7 +448,8 @@ async function arraysByKeyToZip(arrays: { [key: string]: any[][] }) {
         XLSX.utils.book_append_sheet(
             workbook,
             sheet,
-            `${sanitized_position_code} DDAHs`
+            // Sheet names are limited to 31 characters in length
+            `${sanitized_position_code} DDAHs`.slice(0, 30)
         );
         const rawSpreadsheet = XLSX.write(workbook, {
             type: "binary",
