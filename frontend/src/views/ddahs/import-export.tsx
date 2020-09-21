@@ -448,7 +448,8 @@ async function arraysByKeyToZip(arrays: { [key: string]: any[][] }) {
         XLSX.utils.book_append_sheet(
             workbook,
             sheet,
-            `${sanitized_position_code} DDAHs`
+            // Sheet names are limited to 31 characters in length
+            `${sanitized_position_code} DDAHs`.slice(0, 30)
         );
         const rawSpreadsheet = XLSX.write(workbook, {
             type: "binary",
