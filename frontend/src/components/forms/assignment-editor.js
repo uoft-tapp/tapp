@@ -4,7 +4,6 @@ import { Form } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 import "react-bootstrap-typeahead/css/Typeahead.css";
-import "react-bootstrap-typeahead/css/Typeahead-bs4.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { splitDateRangeAtNewYear } from "../../api/mockAPI/utils";

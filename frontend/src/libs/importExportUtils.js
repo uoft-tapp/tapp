@@ -198,7 +198,7 @@ export function matchByUtoridOrName(name, people) {
 function parseDate(str) {
     // Dates parsed from excel will come in as a number. Convert those to an appropriate string first.
     if (typeof str === "number") {
-        // Convert to seconds since epoc
+        // Convert to seconds since epoch
         const sec = Math.round((str - 25569) * 86400 * 1000);
         // Excel ignores timezone information, so we need to parse this and
         // remove the timezone tag.
