@@ -10,13 +10,13 @@ import {
 } from "../../components/action-buttons";
 import { ContentArea } from "../../components/layout";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import type { Session } from "../../api/defs/types";
+import { Session } from "../../api/defs/types";
 
 export function AdminSessionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const [inDeleteMode, setInDeleteMode] = React.useState(false);
 
-    const activeSession: Session | null = useSelector(activeSessionSelector);
+    const activeSession = useSelector(activeSessionSelector) as Session | null;
 
     let activeSessionInfo = (
         <>

@@ -3,10 +3,10 @@ import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../api/actions";
 import { ConnectedActiveSessionDisplay } from "../header";
 import { ContentArea } from "../../components/layout";
-import type { Session } from "../../api/defs/types";
+import { Session } from "../../api/defs/types";
 
 function ConnectedLandingView() {
-    const activeSession: Session | null = useSelector(activeSessionSelector);
+    const activeSession = useSelector(activeSessionSelector) as Session | null;
 
     let activeSessionInfo = (
         <>

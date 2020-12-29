@@ -390,7 +390,7 @@ function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
 
     // Create DDAHs for all assignments, but use the real DDAH if
     // it exists.
-    const allDdahs: Ddah[] = assignments
+    const allDdahs = assignments
         .map((assignment) => {
             // Rejected or withdrawn assignments shouldn't show up on the DDAH list
             if (
