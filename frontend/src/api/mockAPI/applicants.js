@@ -154,5 +154,14 @@ export const applicantsRoutes = {
             posts: docApiPropTypes.applicant,
             returns: docApiPropTypes.applicant,
         }),
+        "/applicants/delete": documentCallback({
+            func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
+                return new Applicant(data).delete(body);
+            },
+            summary: "Delete an applicant",
+            posts: docApiPropTypes.idOnly,
+            returns: docApiPropTypes.applicant,
+        }),
     },
 };

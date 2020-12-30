@@ -125,4 +125,8 @@ export function applicantTests(api) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toContainObject(newApplicant);
     });
+
+    it.todo("delete an applicant with no associated assignments");
+
+    it.todo("fail to delete an applicant with an associated assignment");
 }

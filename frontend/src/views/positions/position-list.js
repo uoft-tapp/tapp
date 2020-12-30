@@ -240,7 +240,7 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
             return (
                 <div className="delete-button-container">
                     <FaLock
-                        className="delete-instructor-button disabled"
+                        className="delete-row-button disabled"
                         title="This position has an associated assignment and so cannot be deleted."
                     />
                 </div>
@@ -249,7 +249,7 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
         return (
             <div className="delete-button-container">
                 <FaTimes
-                    className="delete-instructor-button"
+                    className="delete-row-button"
                     title={`Delete ${position.last_name}, ${position.first_name}`}
                     onClick={() => {
                         setPositionToDelete(position);
@@ -272,9 +272,7 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
 
     const DEFAULT_COLUMNS = [
         {
-            Header: (
-                <FaTrash className="delete-instructor-column-header-icon" />
-            ),
+            Header: <FaTrash className="delete-row-column-header-icon" />,
             Cell: CellDeleteButton,
             id: "delete_col",
             className: "delete-col",

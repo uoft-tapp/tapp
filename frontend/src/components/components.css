@@ -76,21 +76,21 @@
     text-align: center;
 }
 
-.delete-instructor-button.disabled,
-.delete-instructor-button.disabled:hover {
+.delete-row-button.disabled,
+.delete-row-button.disabled:hover {
     color: rgb(180, 180, 180);
     cursor: default;
 }
 
-.delete-instructor-button {
+.delete-row-button {
     transition: color 0.2s;
     cursor: pointer;
 }
-.delete-instructor-button:hover {
+.delete-row-button:hover {
     color: var(--danger);
 }
 
-.delete-instructor-column-header-icon {
+.delete-row-column-header-icon {
     color: var(--danger);
 }
 

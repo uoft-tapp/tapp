@@ -112,7 +112,7 @@ export class Position extends MockAPIController {
     }
     upsertBySession(obj, session) {
         const matchingSession = new Session(this.data).rawFind(session);
-        // If this is not an upsert, validate the paramters. Otherwise, don't validate.
+        // If this is not an upsert, validate the parameters. Otherwise, don't validate.
         if (!this.rawFind(obj)) {
             this.validateNew(obj, matchingSession);
 
@@ -220,7 +220,7 @@ export const positionsRoutes = {
             },
             summary: "Delete a position",
             posts: docApiPropTypes.idOnly,
-            returns: docApiPropTypes.session,
+            returns: docApiPropTypes.position,
         }),
     },
 };

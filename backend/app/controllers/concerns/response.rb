@@ -38,8 +38,10 @@ module Response
                         yellow_start = "\e[33m"
                         color_end = "\e[0m"
                     end
-                    red_start + "ERROR: #{message}\n" + red_start +
-                        "Traceback:\n\t" + yellow_start +
+                    red_start +
+                        "ERROR: #{message}\n#{
+                            red_start + error.message + "\n" if error
+                        }" + red_start + "Traceback:\n\t" + yellow_start +
                         bc.clean(error.backtrace).join("\n\t" + yellow_start) +
                         color_end
                 end
@@ -51,14 +53,23 @@ module Response
         render json: { status: 'error', message: message, payload: payload }
     end
 
-    def render_on_condition(object:, condition:)
+    def render_on_condition(object:, condition:, error_message: nil)
         if condition.call
             render_success object
         else
             render_error(
-                message: object.errors.full_messages.join('; '),
+                message:
+                    if error_message?
+                        "#{error_message}\nDetails: #{
+                            object.errors.full_messages.join('; ')
+                        }"
+                    else
+                        object.errors.full_messages.join('; ')
+                    end,
                 error: object.errors
             )
         end
+    rescue StandardError => e
+        render_error message: error_message || e.message, error: e
     end
 end

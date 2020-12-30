@@ -65,7 +65,9 @@ Rails.application.routes.draw do
                     # resource :active_user, only: [:index]
 
                     # Applicants
-                    resources :applicants, only: %i[index show create]
+                    resources :applicants, only: %i[index show create] do
+                        collection { post :delete }
+                    end
 
                     # Application
                     resources :applications, only: :create

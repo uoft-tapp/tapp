@@ -78,11 +78,7 @@ export const deleteApplicant = validatedApiDispatcher({
     onErrorDispatch: (e) => deleteError(e.toString()),
     dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
-            `/${role}/sessions/${activeSessionId}/applicants/delete`,
-            payload
-        );
+        const data = await apiPOST(`/${role}/applicants/delete`, payload);
         dispatch(deleteOneApplicantSuccess(data));
     },
 });

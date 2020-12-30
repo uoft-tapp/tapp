@@ -1,10 +1,11 @@
 import React from "react";
-import ReactTable from "react-table-6";
+import PropTypes from "prop-types";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { Applicant, MinimalApplicant } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffUtils";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
@@ -35,23 +36,33 @@ export function ApplicantsDiffList({
     );
 }
 
+/**
+ * List the applicants using a ReactTable. `columns` can be passed
+ * in to customize columns/cell renderers.
+ *
+ * @export
+ * @param {{applicants: object[], columns: object[]}} props
+ * @returns
+ */
 export function ApplicantsList(props: {
     applicants: (Omit<Applicant, "id"> | Applicant)[];
     columns?: any[];
 }) {
     const { applicants, columns = DEFAULT_COLUMNS } = props;
-    const pageSize = applicants?.length || 20;
     return (
-        <ReactTable
-            data={applicants}
+        <AdvancedFilterTable
             columns={columns}
-            showPagination={false}
-            defaultPageSize={pageSize}
-            pageSize={pageSize}
-            minRows={1}
+            data={applicants}
+            filterable={true}
         />
     );
 }
+ApplicantsList.propTypes = {
+    applicants: PropTypes.array.isRequired,
+    columns: PropTypes.arrayOf(
+        PropTypes.shape({ Header: PropTypes.any.isRequired })
+    ),
+};
 
 const DEFAULT_APPLICANT = {
     first_name: "",
