@@ -11,7 +11,7 @@ import type { Applicant, Assignment } from "../../api/defs/types";
 import { ApplicantsList } from "../../components/applicants";
 import { FaLock, FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "../../components/table-utils";
-import { Alert, Button, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 /**
  * A cell that renders editable applicant information

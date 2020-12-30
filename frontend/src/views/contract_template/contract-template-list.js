@@ -102,16 +102,17 @@ export function ConnectedContractTemplateList() {
     const [previewingTemplate, setPreviewingTemplate] = React.useState(null);
     const contractTemplates = useSelector(contractTemplatesSelector);
     const columns = [
-        { Header: "Template Name", accessor: "template_name" },
+        { Header: "Template Name", accessor: "template_name", width: 200 },
         {
             Header: "Template File",
             accessor: "template_file",
             Cell: TemplateFileCell,
+            width: 400,
         },
     ];
 
     function TemplateFileCell({ row }) {
-        const rowData = row._original;
+        const rowData = row.original || row._original;
         const template_id = rowData.id;
         const template_file = rowData.template_file;
 

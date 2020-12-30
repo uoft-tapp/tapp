@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ReactTable from "react-table-6";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
-import "react-table-6/react-table.css";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Template Name", accessor: "template_name" },
@@ -14,24 +13,20 @@ const DEFAULT_COLUMNS = [
 ];
 
 /**
- * List the instructors using a ReactTable. `columns` can be passed
+ * List the contract templates using a ReactTable. `columns` can be passed
  * in to customize columns/cell renderers.
  *
  * @export
- * @param {{instructors: object[], columns: object[]}} props
+ * @param {{contractTemplates: object[], columns: object[]}} props
  * @returns
  */
 export function ContractTemplatesList(props) {
     const { contractTemplates, columns = DEFAULT_COLUMNS } = props;
-    const pageSize = contractTemplates?.length || 20;
     return (
-        <ReactTable
+        <AdvancedFilterTable
             data={contractTemplates}
             columns={columns}
-            showPagination={false}
-            defaultPageSize={pageSize}
-            pageSize={pageSize}
-            minRows={1}
+            filterable={true}
         />
     );
 }
