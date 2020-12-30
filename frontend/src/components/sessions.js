@@ -82,13 +82,13 @@ export function ConnectedSessionsList(props) {
         );
     }
 
-    // props.original contains the row data for this particular instructor
+    // props.original contains the row data for this particular session
     function CellDeleteButton({ row }) {
         const session = row?.original || {};
         return (
             <div className="delete-button-container">
                 <FaTimes
-                    className="delete-instructor-button"
+                    className="delete-row-button"
                     title={`Delete ${session.name}`}
                     onClick={() => {
                         setSessionToDelete(session);
@@ -100,11 +100,10 @@ export function ConnectedSessionsList(props) {
 
     const DEFAULT_COLUMNS = [
         {
-            Header: (
-                <FaTrash className="delete-instructor-column-header-icon" />
-            ),
+            Header: <FaTrash className="delete-row-column-header-icon" />,
             Cell: CellDeleteButton,
             id: "delete_col",
+            className: "delete-col",
             show: inDeleteMode,
             maxWidth: 32,
             resizable: false,

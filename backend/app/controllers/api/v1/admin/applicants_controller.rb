@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::ApplicantsController < ApplicationController
-    before_action :find_applicant, only: :show
+    before_action :find_applicant, only: %i[show delete]
 
     # GET /applicants
     def index
@@ -14,6 +14,18 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
 
     def show
         render_success @applicant
+    end
+
+    # POST /applicants/delete
+    def delete
+        render_on_condition(
+            object: @applicant,
+            condition: proc { @applicant.destroy! },
+            error_message:
+                "Could not delete applicant '#{@applicant.first_name} #{
+                    @applicant.last_name
+                }'. The applicant may have an associated assignment, which means they cannot be deleted."
+        )
     end
 
     # POST /applicants
@@ -29,6 +41,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
                 params[:id],
                 params[:utorid]
             )
+
         # An Applicant can be upserted two ways. Either directly, or though `/session/:session_id/applicants`.
         # in the second case, we automatically create an application associated with
         # the applicant (if no such application exists). So, check for a valid session first.
@@ -49,6 +62,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
                     @applicant = Applicant.new(applicant_params)
                     @applicant.save!
                 end
+
                 # Now, there must be an applicant; create an application if needed
                 create_application_if_missing
                 render_success @applicant
@@ -58,7 +72,8 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
         else
             @applicant = Applicant.new(applicant_params)
             render_on_condition(
-                object: @applicant, condition: proc { @applicant.save! }
+                object: @applicant,
+                condition: proc { @applicant.save! }
             )
         end
     end

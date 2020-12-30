@@ -47,7 +47,7 @@ export function AdminApplicantsView(): React.ReactNode {
                         setAddDialogVisible(false);
                     }}
                 />
-                <ConnectedApplicantsList />
+                <ConnectedApplicantsList inDeleteMode={inDeleteMode} />
             </ContentArea>
         </div>
     );

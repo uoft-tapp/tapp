@@ -73,7 +73,7 @@ function EditableInstructorsList(props) {
             return (
                 <div className="delete-button-container">
                     <FaLock
-                        className="delete-instructor-button disabled"
+                        className="delete-row-button disabled"
                         title="This instructor is assigned to a position and so cannot be deleted. Unassign the instructor from all positions to delete."
                     />
                 </div>
@@ -82,7 +82,7 @@ function EditableInstructorsList(props) {
         return (
             <div className="delete-button-container">
                 <FaTimes
-                    className="delete-instructor-button"
+                    className="delete-row-button"
                     title={`Delete ${instructor.last_name}, ${instructor.first_name}`}
                     onClick={() => {
                         setInstructorToDelete(instructor);
@@ -95,9 +95,7 @@ function EditableInstructorsList(props) {
 
     const columns = [
         {
-            Header: (
-                <FaTrash className="delete-instructor-column-header-icon" />
-            ),
+            Header: <FaTrash className="delete-row-column-header-icon" />,
             id: "delete_col",
             className: "delete-col",
             Cell: CellDeleteButton,
