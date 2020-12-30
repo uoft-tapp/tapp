@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { formatDate } from "../libs/utils";
-import ReactTable from "react-table-6";
 import { createDiffColumnsFromColumns } from "./diff-table";
+import { AdvancedFilterTable } from "./advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "applicant.last_name" },
@@ -22,7 +22,7 @@ const DEFAULT_COLUMNS = [
 ];
 
 /**
- * Display a DiffSpec array of positions and highlight the changes.
+ * Display a DiffSpec array of assignments and highlight the changes.
  *
  * @export
  * @param {*} { modifiedInstructors }
@@ -39,20 +39,7 @@ export function AssignmentsDiffList({ modifiedAssignments }) {
 
 function AssignmentsList(props) {
     const { assignments, columns = DEFAULT_COLUMNS } = props;
-    const pageSize = assignments?.length || 20;
-    return (
-        <React.Fragment>
-            <h3>Assignments</h3>
-            <ReactTable
-                data={assignments}
-                columns={columns}
-                showPagination={false}
-                defaultPageSize={pageSize}
-                pageSize={pageSize}
-                minRows={1}
-            />
-        </React.Fragment>
-    );
+    return <AdvancedFilterTable data={assignments} columns={columns} />;
 }
 AssignmentsList.propTypes = {
     assignments: PropTypes.arrayOf(
