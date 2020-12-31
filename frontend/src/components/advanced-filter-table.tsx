@@ -7,7 +7,6 @@ import {
     useGlobalFilter,
     useBlockLayout,
     useResizeColumns,
-    useRowSelect,
 } from "react-table";
 import {
     FaSortAlphaDown,
@@ -22,38 +21,80 @@ import { FixedSizeList } from "react-window";
 import Scrollbars from "react-custom-scrollbars";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-export const COLUMNS = [
-    {
-        Header: "Last Name",
-        accessor: "last_name",
-    },
-    {
-        Header: "First Name",
-        accessor: "first_name",
-    },
-];
+/**
+ * Add or remove `elm` from `arr`. If `insert` is `true`,
+ * the element is added. If `insert` is `false`, it is deleted.
+ * *This function mutates the array*.
+ *
+ * @param {unknown[]} arr
+ * @param {unknown} elm
+ * @param {boolean} insert
+ * @returns
+ */
+function insertOrDelete(arr: unknown[], elm: unknown, insert: boolean) {
+    if (insert && !arr.includes(elm)) {
+        arr.push(elm);
+    }
+    if (!insert && arr.includes(elm)) {
+        arr.splice(arr.indexOf(elm), 1);
+    }
+    return arr;
+}
 
-export const DATA = Array.from({ length: 10 }).map((r, i) => ({
-    last_name: ("" + Math.random()).slice(0, 4),
-    first_name: "" + Math.round(Math.random() * 10),
-}));
+/**
+ * Compute, based on the visible and selected rows, whether the UI should
+ * consider all the rows to be selected, or whether it should consider some
+ * row to be selected. This is subtle because, for example, if no
+ * rows are visible, we shouldn't consider "all rows selected".
+ *
+ * @param {any[]} selected
+ * @param {any[]} visible
+ * @returns {{
+ *     isAllRowsSelected: boolean;
+ *     isSomeRowsSelected: boolean;
+ * }}
+ */
+function computeSelectionState(
+    selected: any[],
+    visible: any[]
+): {
+    isAllRowsSelected: boolean;
+    isSomeRowsSelected: boolean;
+} {
+    return {
+        isAllRowsSelected:
+            visible.every((x) => selected.includes(x)) && visible.length > 0,
+        isSomeRowsSelected: selected.length > 0,
+    };
+}
 
-const IndeterminateCheckbox = React.forwardRef(function IndeterminateCheckbox(
-    { indeterminate, ...rest }: { indeterminate: boolean; [key: string]: any },
-    ref?: any
-) {
-    React.useEffect(() => {
-        if (ref && ref.current) {
-            ref.current.indeterminate = indeterminate;
-        }
-    }, [ref, indeterminate]);
-
+/**
+ * Checkbox that can be checked or in an intermediate state.
+ *
+ * @param {{
+ *     indeterminate: boolean;
+ *     [key: string]: any;
+ * }} {
+ *     indeterminate,
+ *     ...rest
+ * }
+ * @returns
+ */
+function IndeterminateCheckbox({
+    indeterminate,
+    ...rest
+}: {
+    indeterminate: boolean;
+    [key: string]: any;
+}) {
     return (
-        <>
-            <input type="checkbox" ref={ref ? ref : null} {...rest} />
-        </>
+        <input
+            type="checkbox"
+            ref={(el) => el && (el.indeterminate = indeterminate)}
+            {...rest}
+        />
     );
-});
+}
 
 function SortableHeader<T extends object>({
     column,
@@ -164,9 +205,7 @@ function FilterBar({
                 }}
                 value={filterStrings[0] || ""}
                 onKeyDown={(e) => {
-                    // press enter to add the typed query to the filter list
-                    // 13 == Enter
-                    if (e.keyCode === 13) {
+                    if (e.key === "Enter") {
                         saveFirstFilterString();
                     }
                 }}
@@ -194,30 +233,19 @@ function FilterBar({
     );
 }
 
-const EMPTY_OBJECT = {};
-
-function idsToIndicesObject(
-    ids: any[] | null | undefined,
-    data: { id: any }[]
-): { [key: string]: boolean } {
-    if (!ids) {
-        return EMPTY_OBJECT;
-    }
-
-    const ret: { [key: string]: boolean } = {};
-    for (let i = 0; i < data.length; i++) {
-        const item = data[i];
-        if (ids.includes(item.id)) {
-            ret[i] = true;
-        }
-    }
-    return ret;
-}
-
-function generateSelectionHook(enabled: boolean) {
+function generateSelectionHook({
+    enabled,
+    selected,
+    setSelected,
+}: {
+    enabled: boolean;
+    selected?: number[];
+    setSelected?: Function;
+}) {
     if (!enabled) {
         return () => {};
     }
+    const _selected = selected || [];
     // Code taken from useRowSelect example https://react-table.tanstack.com/docs/api/useRowSelect
     return (hooks: any) => {
         hooks.visibleColumns.push((columns: any[]) => [
@@ -226,26 +254,109 @@ function generateSelectionHook(enabled: boolean) {
                 id: "selection",
                 // The header can use the table's getToggleAllRowsSelectedProps method
                 // to render a checkbox
-                Header: ({ getToggleAllRowsSelectedProps }: any) => (
-                    <IndeterminateCheckbox
-                        {...getToggleAllRowsSelectedProps()}
-                    />
-                ),
+                Header: ({
+                    isAllRowsSelected,
+                    isSomeRowsSelected,
+                    selected,
+                    visible,
+                }: any) => {
+                    return (
+                        <IndeterminateCheckbox
+                            checked={isAllRowsSelected}
+                            indeterminate={
+                                isSomeRowsSelected &&
+                                selected.length !== visible.length
+                            }
+                            onChange={() => {
+                                if (!selected || !setSelected) {
+                                    return;
+                                }
+                                if (isAllRowsSelected) {
+                                    setSelected([]);
+                                } else {
+                                    setSelected(visible);
+                                }
+                            }}
+                        />
+                    );
+                },
                 // The cell can use the individual row's getToggleRowSelectedProps method
                 // to the render a checkbox
-                Cell: ({ row }: any) =>
+                Cell: ({ row, selected }: any) => {
                     // We are only allowed to "check" rows that have a valid id (that is,
                     // a valid id from the actual data-structure. This is different from the
                     // internal react-table id).
-                    row.original?.id != null ? (
+                    if (row.original?.id == null) {
+                        return null;
+                    }
+                    const id = row.original.id as number;
+                    return (
                         <IndeterminateCheckbox
-                            {...row.getToggleRowSelectedProps()}
+                            indeterminate={false}
+                            checked={selected?.includes(id)}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                if (selected && setSelected) {
+                                    let newSelected = insertOrDelete(
+                                        [...selected],
+                                        id,
+                                        e.target.checked
+                                    );
+                                    if (
+                                        newSelected.length !== selected.length
+                                    ) {
+                                        setSelected(newSelected);
+                                    }
+                                }
+                            }}
                         />
-                    ) : null,
+                    );
+                },
                 maxWidth: 45,
             },
             ...columns,
         ]);
+
+        // Dynamically computed values are available on the `instance`
+        // object, so we should append the selection-state information we need.
+        hooks.useInstance.push((instance: any) => {
+            const {
+                rows,
+            }: {
+                rows: any[];
+            } = instance;
+            const selected = _selected;
+
+            // Make sure each row is tagged with the `isSelected` attribute.
+            const selectedSet = new Set(selected);
+            for (const row of rows) {
+                const id = row.original?.id;
+                if (id != null) {
+                    row.isSelected = selectedSet.has(id);
+                }
+            }
+
+            const visible: number[] = React.useMemo(
+                () =>
+                    instance.sortedRows
+                        .map((row: any) => row.original?.id)
+                        .filter((x: any) => x != null),
+                [instance.sortedRows]
+            );
+
+            const {
+                isAllRowsSelected,
+                isSomeRowsSelected,
+            } = computeSelectionState(selected, visible);
+
+            Object.assign(instance, {
+                isAllRowsSelected,
+                isSomeRowsSelected,
+                selected,
+                visible,
+            });
+        });
     };
 }
 
@@ -314,7 +425,6 @@ export function AdvancedFilterTable({
         {
             columns,
             data,
-            //initialState: { globalFilter: "" },
             filterTypes: { custom: filterMethod },
             globalFilter: "custom",
             autoResetGlobalFilter: false,
@@ -324,18 +434,14 @@ export function AdvancedFilterTable({
                 hiddenColumns: columns
                     .filter((col) => col.show === false)
                     .map((col) => col.id),
-                selectedRowIds: idsToIndicesObject(selected, data),
             },
         },
         useBlockLayout,
         useResizeColumns,
         useGlobalFilter,
         useSortBy,
-        useRowSelect,
-        generateSelectionHook(!!setSelected)
+        generateSelectionHook({ enabled: !!setSelected, selected, setSelected })
     );
-
-    const { selectedRowIds } = table.state;
 
     const scrollRef = React.useRef<FixedSizeList>(null);
 
@@ -349,29 +455,6 @@ export function AdvancedFilterTable({
             setFilterStrings(newFilter);
         }
     }
-
-    React.useEffect(() => {
-        if (typeof setSelected === "function") {
-            let ret: number[] = [];
-            for (const [index, isSelected] of Object.entries(selectedRowIds)) {
-                if (!isSelected) {
-                    continue;
-                }
-                const id = data[+index]?.id;
-                if (!ret.includes(id)) {
-                    ret.push(id);
-                }
-            }
-            ret.sort();
-            // An id is never null, however if there is a row in our table that lacks an id
-            // a null value may end up in the list. (This is the id of the original data,
-            // not the internal ReactTable id).
-            ret = ret.filter((id) => id != null);
-            if (!shallowEqual(ret, [...(selected || [])].sort())) {
-                setSelected(ret);
-            }
-        }
-    }, [selectedRowIds, selected, setSelected, data]);
 
     const renderRow = React.useCallback(
         ({ index, style }) => {

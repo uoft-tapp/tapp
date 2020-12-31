@@ -107,7 +107,10 @@ function AssignmentCell(props) {
 
 export function ConnectedOfferTable(props) {
     const dispatch = useDispatch();
-    const setSelected = (...args) => dispatch(setSelectedRows(...args));
+    const setSelected = React.useCallback(
+        (...args) => dispatch(setSelectedRows(...args)),
+        [dispatch]
+    );
     const selected = useSelector(offerTableSelector).selectedAssignmentIds;
     const assignments = useSelector(assignmentsSelector);
     const data = React.useMemo(
@@ -121,36 +124,36 @@ export function ConnectedOfferTable(props) {
         [assignments]
     );
 
-    const _setSelected = React.useCallback(setSelected, []);
+    // We want to minimize the re-render of the table. Since some bindings for columns
+    // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
+    const columns = React.useMemo(() => {
+        // Bind an `ApplicantCell` to a particular field
+        function generateApplicantCell(field) {
+            return (props) => (
+                <ApplicantCell
+                    field={field}
+                    upsertApplicant={(...args) =>
+                        dispatch(upsertApplicant(...args))
+                    }
+                    {...props}
+                />
+            );
+        }
 
-    // Bind an `ApplicantCell` to a particular field
-    function generateApplicantCell(field) {
-        return (props) => (
-            <ApplicantCell
-                field={field}
-                upsertApplicant={(...args) =>
-                    dispatch(upsertApplicant(...args))
-                }
-                {...props}
-            />
-        );
-    }
+        // Bind an `AssignmentCell` to a particular field
+        function generateAssignmentCell(field) {
+            return (props) => (
+                <AssignmentCell
+                    field={field}
+                    upsertAssignment={(...args) =>
+                        dispatch(upsertAssignment(...args))
+                    }
+                    {...props}
+                />
+            );
+        }
 
-    // Bind an `AssignmentCell` to a particular field
-    function generateAssignmentCell(field) {
-        return (props) => (
-            <AssignmentCell
-                field={field}
-                upsertAssignment={(...args) =>
-                    dispatch(upsertAssignment(...args))
-                }
-                {...props}
-            />
-        );
-    }
-
-    const columns = React.useMemo(
-        () => [
+        return [
             {
                 Header: "Last Name",
                 accessor: "applicant.last_name",
@@ -203,9 +206,8 @@ export function ConnectedOfferTable(props) {
                 Cell: ({ value }) => (value ? value : null),
                 maxWidth: 30,
             },
-        ],
-        []
-    );
+        ];
+    }, [dispatch]);
 
     return (
         <AdvancedFilterTable
@@ -213,7 +215,7 @@ export function ConnectedOfferTable(props) {
             columns={columns}
             data={data}
             selected={selected}
-            setSelected={_setSelected}
+            setSelected={setSelected}
             {...props}
         />
     );
