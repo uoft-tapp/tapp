@@ -33,8 +33,8 @@ function EditFieldDialog(props) {
             }
         }
         doSave().finally(() => {
-            //onHide();
             setInProgress(false);
+            onHide();
         });
     }
     // When a confirm operation is in progress, a spinner is displayed; otherwise
@@ -125,7 +125,7 @@ export function EditableField(props) {
 
     // This is rendered in every cell of a react table, so performance is important.
     // It takes a long time to render the `EditFieldIcon`, but we only need this icon
-    // when we hover on a field. Therefore, we start by now showing the icon. When
+    // when we hover on a field. Therefore, we start by not showing the icon. When
     // we move our mouse over the icon for the first time, we render the icon (no need to
     // hide it again, since it's the initial render multiplied across all the cells that causes
     // the slowdown). This causes a slight rendering glitch, but the performance is worth it.
