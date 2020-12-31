@@ -233,6 +233,21 @@ function FilterBar({
     );
 }
 
+/**
+ * Generate a "hook" for ReactTable that adds a column of checkboxes to the table
+ * where rows can be selected.
+ *
+ * @param {{
+ *     enabled: boolean;
+ *     selected?: number[];
+ *     setSelected?: Function;
+ * }} {
+ *     enabled,
+ *     selected,
+ *     setSelected,
+ * }
+ * @returns
+ */
 function generateSelectionHook({
     enabled,
     selected,
@@ -413,7 +428,7 @@ export function AdvancedFilterTable({
                 return filterStrings.every((str) =>
                     columns.some((colName) => {
                         const cellVal = row.values[colName];
-                        return ("" + (cellVal || "")).toLowerCase().match(str);
+                        return ("" + (cellVal || "")).toLowerCase().indexOf(str) >= 0;
                     })
                 );
             });
