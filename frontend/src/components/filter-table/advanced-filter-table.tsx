@@ -183,7 +183,7 @@ export function AdvancedFilterTable({
                         </div>
                     ))}
                 </div>
-                    <HiddenRowWarning visible={isHiddenRowsSelected} />
+                <HiddenRowWarning visible={isHiddenRowsSelected} />
                 <div {...table.getTableBodyProps()} className="tbody">
                     <AutoSizer>
                         {({ width, height }) => {
