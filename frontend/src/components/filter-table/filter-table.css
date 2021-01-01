@@ -42,7 +42,7 @@
 
 .selection-checkbox {
     text-align: center;
-    margin-top: 3px;
+    padding-top: 4px !important;
 }
 
 .number-cell {
