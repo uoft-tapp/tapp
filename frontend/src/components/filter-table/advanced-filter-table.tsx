@@ -14,6 +14,8 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
 
+import "./filter-table.css";
+
 /**
  * A ReactTable that can be filtered and sorted. If a `setSelected`
  * function is passed in, checkboxes will be shown next to each row
@@ -99,7 +101,7 @@ export function AdvancedFilterTable({
         useSortBy,
         generateSelectionHook({ enabled: !!setSelected, selected, setSelected })
     );
-
+    const { isHiddenRowsSelected } = table;
     const scrollRef = React.useRef<FixedSizeList>(null);
 
     // If we do not set the `"custom"` filter method, it won't be called.
@@ -181,11 +183,12 @@ export function AdvancedFilterTable({
                         </div>
                     ))}
                 </div>
+                    <HiddenRowWarning visible={isHiddenRowsSelected} />
                 <div {...table.getTableBodyProps()} className="tbody">
                     <AutoSizer>
                         {({ width, height }) => {
                             // Don't let the table get too short no matter what
-                            height = Math.max(height, 300);
+                            //height = Math.max(height, 300);
                             return (
                                 <Scrollbars
                                     style={{ width, height }}
@@ -209,6 +212,17 @@ export function AdvancedFilterTable({
                     </AutoSizer>
                 </div>
             </div>
+        </div>
+    );
+}
+
+function HiddenRowWarning({ visible }: { visible: boolean }) {
+    if (!visible) {
+        return null;
+    }
+    return (
+        <div className="hidden-row-warning">
+            There are rows selected that are not visible…
         </div>
     );
 }

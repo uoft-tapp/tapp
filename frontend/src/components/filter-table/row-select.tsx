@@ -56,11 +56,13 @@ function computeSelectionState(
     visible: any[]
 ): {
     isAllRowsSelected: boolean;
+    isHiddenRowsSelected: boolean;
     isSomeRowsSelected: boolean;
 } {
     return {
         isAllRowsSelected:
             visible.every((x) => selected.includes(x)) && visible.length > 0,
+        isHiddenRowsSelected: selected.some((x) => !visible.includes(x)),
         isSomeRowsSelected: selected.length > 0,
     };
 }
@@ -142,12 +144,14 @@ function IndeterminateCheckbox({
 function CheckboxHeader({
     isAllRowsSelected,
     isSomeRowsSelected,
+    isHiddenRowsSelected,
     selected,
     visible,
     setSelected,
 }: {
     isAllRowsSelected: boolean;
     isSomeRowsSelected: boolean;
+    isHiddenRowsSelected: boolean;
     selected?: number[];
     visible?: number[];
     setSelected: Function;
@@ -156,7 +160,8 @@ function CheckboxHeader({
         <IndeterminateCheckbox
             checked={isAllRowsSelected}
             indeterminate={
-                isSomeRowsSelected && !listsEqual(selected || [], visible || [])
+                isSomeRowsSelected &&
+                (!isAllRowsSelected || isHiddenRowsSelected)
             }
             onChange={() => {
                 if (!selected || !setSelected) {
@@ -337,11 +342,13 @@ function useInstanceFactory({
             const {
                 isAllRowsSelected,
                 isSomeRowsSelected,
+                isHiddenRowsSelected,
             } = computeSelectionState(selected, visible);
 
             Object.assign(instance, {
                 isAllRowsSelected,
                 isSomeRowsSelected,
+                isHiddenRowsSelected,
                 selected,
                 visible,
                 setSelected,

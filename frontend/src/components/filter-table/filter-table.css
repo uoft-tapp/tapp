@@ -1,0 +1,130 @@
+.filter-chip.badge {
+    margin-left: 0.5em;
+    font-size: 90%;
+}
+
+.filter-chip-icon {
+    margin-left: 0.5em;
+    margin-bottom: 1px;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+.filter-chip-icon:hover {
+    color: var(--danger);
+}
+.filter-table-filtering-by {
+    margin-left: 1em;
+    color: var(--secondary);
+}
+.filter-table-container {
+    flex-grow: 1;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.filter-table-container .table {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.filter-table-container .table .tbody {
+    flex-grow: 1;
+}
+.filter-item-count {
+    float: right;
+    margin-top: 8px;
+    color: var(--gray);
+    font-style: italic;
+}
+.filter-item-count::after {
+    content: " rows showing";
+}
+
+.selection-checkbox {
+    text-align: center;
+    margin-top: 3px;
+}
+
+.number-cell {
+    text-align: right;
+}
+
+.table {
+    overflow: hidden;
+}
+
+.table-header {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.table-header > input[type="checkbox"] {
+    margin-top: 4px;
+}
+
+.table .resizer {
+    display: inline-block;
+    width: 11px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(6px);
+    z-index: 1;
+}
+.table .resizer.isResizing {
+    background: rgba(167, 182, 194, 0.1);
+}
+
+.thead,
+.hidden-row-warning {
+    border-bottom: 1px solid rgba(167, 182, 194, 0.4);
+    box-shadow: 0px 3px 8px -3px rgba(167, 182, 194, 0.5);
+    user-select: none;
+}
+.th {
+    display: flex !important;
+    text-align: center;
+    font-size: 105%;
+    border-right: 1px solid rgba(167, 182, 194, 0.4);
+    align-items: center;
+}
+.th > * {
+    flex-grow: 1;
+    text-align: center;
+}
+.column-sort-icon {
+    position: absolute;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.tr {
+    border-bottom: 1px solid rgba(167, 182, 194, 0.2);
+}
+.td {
+    border-right: 1px solid rgba(167, 182, 194, 0.4);
+    padding: 2px;
+    padding-left: 0.7em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.delete-col,
+.selection-checkbox {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.hidden-row-warning {
+    box-shadow: inset 0px -3px 8px -6px rgba(167, 182, 194, 0.5);
+    text-align: center;
+    font-size: smaller;
+    font-style: italic;
+    color: var(--gray);
+}
+.hidden-row-warning::before {
+    content: "⋮";
+    float: left;
+    font-weight: bold;
+    width: 45px;
+}
