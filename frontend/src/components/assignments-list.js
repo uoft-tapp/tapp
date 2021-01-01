@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "applicant.last_name" },

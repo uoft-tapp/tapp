@@ -4,7 +4,7 @@ import { Badge } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { generateHeaderCell } from "./table-utils";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: generateHeaderCell("Position Code"), accessor: "position_code" },

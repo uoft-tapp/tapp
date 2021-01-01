@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Template Name", accessor: "template_name" },

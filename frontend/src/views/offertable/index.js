@@ -10,7 +10,7 @@ import { offerTableSelector, setSelectedRows } from "./actions";
 import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../libs/utils";
-import { AdvancedFilterTable } from "../../components/advanced-filter-table";
+import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 
 /**
  * A cell that renders editable applicant information

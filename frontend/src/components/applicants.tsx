@@ -5,7 +5,7 @@ import { Applicant, MinimalApplicant } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffUtils";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
