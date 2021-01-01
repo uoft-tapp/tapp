@@ -7,7 +7,7 @@ import { DialogRow } from "./forms/common-controls";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { stringToNativeType } from "../libs/urlUtils";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     {

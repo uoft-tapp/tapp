@@ -6,7 +6,7 @@ import { formatDate } from "../libs/utils";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 function EditableCell(props) {
     const title = `Edit ${"" + props.column.Header}`;

@@ -15,7 +15,7 @@ import { Button, Modal, Spinner } from "react-bootstrap";
 import { formatDate, formatDownloadUrl } from "../../libs/utils";
 import { DdahEditor } from "../../components/ddahs";
 import { generateHeaderCell } from "../../components/table-utils";
-import { AdvancedFilterTable } from "../../components/advanced-filter-table";
+import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 
 interface RowData {
     id?: number;

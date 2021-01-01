@@ -4,7 +4,7 @@ import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { createDiffColumnsFromColumns } from "./diff-table";
-import { AdvancedFilterTable } from "./advanced-filter-table";
+import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
