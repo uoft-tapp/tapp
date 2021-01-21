@@ -76,7 +76,35 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it.todo("can't update contract template");
+    it("can't update contract template", async () => {
+        const invalidTemplateData = {
+            "file_name": "invalid file name",
+            "content": "invalid content"
+        };
+
+        let resp = await apiPOST(
+            `/instructor/sessions/${session.id}/contract_templates`,
+            invalidTemplateData
+        );
+
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
+
+    it("can't upload contract template", async () => {
+        const invalidTemplateData = {
+            "file_name": "invalid file name",
+            "content": "invalid content"
+        };
+
+        let resp = await apiPOST(
+            `/instructor/contract_templates/upload`,
+            invalidTemplateData
+        );
+
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 
     it("fetch applicants", async () => {
         let resp = await apiGET(
@@ -96,7 +124,7 @@ export function instructorsPermissionTests(api) {
         };
 
         let resp = await apiPOST(
-            `instructor/sessions/${session.id}/applicants`,
+            `/instructor/sessions/${session.id}/applicants`,
             invalidApplicantData
         );
 
@@ -127,7 +155,7 @@ export function instructorsPermissionTests(api) {
         };
 
         let resp = await apiPOST(
-            `instructor/applications`,
+            `/instructor/applications`,
             invalidApplicationData
         );
 
