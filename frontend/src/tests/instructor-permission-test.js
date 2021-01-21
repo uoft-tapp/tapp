@@ -60,7 +60,21 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it.todo("can't update session");
+    it("can't update session", async () => {
+        const testSessionData = {
+            "start_date": "2020-02-10T00:00:00.000Z",
+            "end_date": "2020-02-10T00:00:00.000Z",
+            "name": "test name"
+        };
+
+        let resp = await apiPOST(
+            `/instructor/sessions`,
+            testSessionData
+        );
+
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 
     it("fetch positions", async () => {
         let resp = await apiGET(`/instructor/sessions/${session.id}/positions`);
@@ -72,8 +86,8 @@ export function instructorsPermissionTests(api) {
             "position_code": "CSC494",
             "position_title": "Capstone Project",
             "hours_per_assignment": 0,
-            "start_date": "test start date",
-            "end_date": "test end date",
+            "start_date": "2020-02-10T00:00:00.000Z",
+            "end_date": "2020-02-10T00:00:00.000Z",
             "duties": "test duty",
             "qualifications": "test qualification",
             "ad_hours_per_assignment": 0,
