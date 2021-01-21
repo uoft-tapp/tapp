@@ -1,4 +1,4 @@
-import { it, expect, beforeAll } from "./utils";
+import {it, expect, beforeAll, checkPropTypes, errorPropTypes} from "./utils";
 import { databaseSeeder } from "./setup";
 
 /**
@@ -85,7 +85,24 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it.todo("can't update applicants");
+    it("can't update applicants", async () => {
+        const invalidApplicantData = {
+            "utorid": "invalid utorid",
+            "student_number": "invalid student num",
+            "first_name": "invalid first name",
+            "last_name": "invalid last name",
+            "email": "invalid email",
+            "phone": "invalid phone num"
+        };
+
+        let resp = await apiPOST(
+            `instructor/sessions/${session.id}/applicants`,
+            invalidApplicantData
+        );
+
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 
     it("fetch assignments", async () => {
         let resp = await apiGET(
@@ -115,6 +132,7 @@ export function instructorsPermissionTests(api) {
         );
 
         expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
     });
 
     it("fetch applications", async () => {
