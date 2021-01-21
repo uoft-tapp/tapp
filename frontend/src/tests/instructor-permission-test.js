@@ -67,7 +67,41 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it.todo("can't update position");
+    it("can't update position", async () => {
+        const testPositionData = {
+            "position_code": "CSC494",
+            "position_title": "Capstone Project",
+            "hours_per_assignment": 0,
+            "start_date": "test start date",
+            "end_date": "test end date",
+            "duties": "test duty",
+            "qualifications": "test qualification",
+            "ad_hours_per_assignment": 0,
+            "ad_num_assignments": 0,
+            "ad_open_date": "test date",
+            "ad_close_date": "test date",
+            "desired_num_assignments": 0,
+            "current_enrollment": 0,
+            "current_waitlisted": 0,
+            "instructor_ids": [
+                0,
+                "test id"
+            ],
+            "instructor_preference": [
+                {
+                    "preference_level": 0
+                }
+            ]
+        };
+
+        let resp = await apiPOST(
+            `/instructor/positions`,
+            testPositionData
+        );
+
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+    });
 
     it("fetch contract templates", async () => {
         let resp = await apiGET(
@@ -77,14 +111,14 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update contract template", async () => {
-        const invalidTemplateData = {
-            "file_name": "invalid file name",
-            "content": "invalid content"
+        const testTemplateData = {
+            "file_name": "test file name",
+            "content": "test content"
         };
 
         let resp = await apiPOST(
             `/instructor/sessions/${session.id}/contract_templates`,
-            invalidTemplateData
+            testTemplateData
         );
 
         expect(resp).toHaveStatus("error");
@@ -92,14 +126,14 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't upload contract template", async () => {
-        const invalidTemplateData = {
-            "file_name": "invalid file name",
-            "content": "invalid content"
+        const testTemplateData = {
+            "file_name": "test file name",
+            "content": "test content"
         };
 
         let resp = await apiPOST(
             `/instructor/contract_templates/upload`,
-            invalidTemplateData
+            testTemplateData
         );
 
         expect(resp).toHaveStatus("error");
@@ -114,18 +148,18 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applicants", async () => {
-        const invalidApplicantData = {
-            "utorid": "invalid utorid",
-            "student_number": "invalid student num",
-            "first_name": "invalid first name",
-            "last_name": "invalid last name",
-            "email": "invalid email",
-            "phone": "invalid phone num"
+        const testApplicantData = {
+            "utorid": "test utorid",
+            "student_number": "test student num",
+            "first_name": "test first name",
+            "last_name": "test last name",
+            "email": "test email",
+            "phone": "test phone num"
         };
 
         let resp = await apiPOST(
             `/instructor/sessions/${session.id}/applicants`,
-            invalidApplicantData
+            testApplicantData
         );
 
         expect(resp).toHaveStatus("error");
@@ -140,13 +174,13 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applications", async () => {
-        const invalidApplicationData = {
-            "comments": "invalid app",
-            "program": "invalid prog",
-            "department": "invalid dept",
-            "previous_uoft_experience": "invalid exp",
+        const testApplicationData = {
+            "comments": "test app",
+            "program": "test prog",
+            "department": "test dept",
+            "previous_uoft_experience": "test exp",
             "yip": 0,
-            "annotation": "invalid ann",
+            "annotation": "test ann",
             "position_preference": [
                 {
                     "preference_level": 0
@@ -156,7 +190,7 @@ export function instructorsPermissionTests(api) {
 
         let resp = await apiPOST(
             `/instructor/applications`,
-            invalidApplicationData
+            testApplicationData
         );
 
         expect(resp).toHaveStatus("error");
