@@ -94,7 +94,28 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it.todo("can't update applications");
+    it("can't update applications", async () => {
+        const invalidApplicationData = {
+            "comments": "invalid app",
+            "program": "invalid prog",
+            "department": "invalid dept",
+            "previous_uoft_experience": "invalid exp",
+            "yip": 0,
+            "annotation": "invalid ann",
+            "position_preference": [
+                {
+                    "preference_level": 0
+                }
+            ]
+        };
+
+        let resp = await apiPOST(
+            `instructor/applications`,
+            invalidApplicationData
+        );
+
+        expect(resp).toHaveStatus("error");
+    });
 
     it("fetch applications", async () => {
         let resp = await apiGET(
