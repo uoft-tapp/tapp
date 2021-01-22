@@ -129,7 +129,6 @@ export function applicantTests(api) {
     });
 
     it("delete an applicant with no associated assignments", async () => {
-        // Create a new session to upsert the applicant into
         const newApplicant = {
             first_name: "Tommy3",
             last_name: "Smith3",
@@ -140,7 +139,6 @@ export function applicantTests(api) {
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(newApplicant, resp.payload);
 
-        // not sure if need to verify upsert successfully
         const resp2 = await apiGET(`/admin/applicants`);
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(newApplicant);
