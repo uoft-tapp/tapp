@@ -143,20 +143,21 @@ export function applicantTests(api) {
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(newApplicant);
 
-        const resp3 = await apiPOST(`/admin/applicants/delete`, {id:newApplicant.id});
+        const resp3 = await apiPOST(`/admin/applicants/delete`, {
+            id: newApplicant.id,
+        });
         expect(resp3).toHaveStatus("success");
 
         const resp4 = await apiGET(`/admin/applicants`);
         expect(resp4).toHaveStatus("success");
         expect(resp4.payload.map((x) => x.id)).not.toContain(newApplicant.id);
-
     });
 
     it("fail to delete an applicant with an associated assignment", async () => {
         const newApplicant = {
             first_name: "Tommy4",
             last_name: "Smith4",
-            utorid: "smith4", 
+            utorid: "smith4",
         };
         const resp = await apiPOST(`/admin/applicants`, newApplicant);
         expect(resp).toHaveStatus("success");
@@ -172,8 +173,10 @@ export function applicantTests(api) {
             contract_template_id: contractTemplate.id,
         };
 
-        const { payload: position } = await apiPOST(`/admin/sessions/${session.id}/positions`, newPosition);
-    
+        const { payload: position } = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPosition
+        );
 
         const newAssignment = {
             note: "",
@@ -185,11 +188,12 @@ export function applicantTests(api) {
         const resp2 = await apiPOST("/admin/assignments", newAssignment);
         expect(resp2).toHaveStatus("success");
 
-        const resp3 = await apiPOST(`/admin/applicants/delete`, {id:newApplicant.id});
+        const resp3 = await apiPOST(`/admin/applicants/delete`, {
+            id: newApplicant.id,
+        });
         expect(resp3).toHaveStatus("error");
 
         const resp4 = await apiGET(`/admin/applicants`);
         expect(resp4.payload).toContainObject(newApplicant);
-
     });
 }
