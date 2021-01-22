@@ -79,33 +79,66 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update position", async () => {
-        const testPositionData = {
-            position_code: "CSC494",
-            position_title: "Capstone Project",
-            hours_per_assignment: 0,
-            start_date: "2020-02-10T00:00:00.000Z",
-            end_date: "2020-02-10T00:00:00.000Z",
-            duties: "test duty",
-            qualifications: "test qualification",
-            ad_hours_per_assignment: 0,
-            ad_num_assignments: 0,
-            ad_open_date: "test date",
-            ad_close_date: "test date",
-            desired_num_assignments: 0,
-            current_enrollment: 0,
-            current_waitlisted: 0,
-            instructor_ids: [0, "test id"],
-            instructor_preference: [
-                {
-                    preference_level: 0,
-                },
-            ],
+        let respFetchPos = await apiGET(
+            `/instructor/sessions/${session.id}/positions`
+        );
+        expect(respFetchPos).toHaveStatus("success");
+        const prevExistingPosition = respFetchPos.payload[0];
+        let updatedPosition = { ...prevExistingPosition };
+        updatedPosition.position_title = "changed title - test";
+
+        // test case for instructor should not have route to change position
+        let respInvalidRoute = await apiPOST(
+            `/instructor/positions`,
+            updatedPosition
+        );
+        expect(respInvalidRoute).toHaveStatus("error");
+        //checkPropTypes(errorPropTypes, respInvalidRoute);
+
+        let respReFetchPos = await apiGET(
+            `/instructor/sessions/${session.id}/positions`
+        );
+        expect(respReFetchPos).toHaveStatus("success");
+        expect(respReFetchPos.payload).toEqual(respFetchPos.payload);
+
+        // test case for instructor account can not access admin position API
+        const newInstOnlyUser = {
+            utorid: "test",
+            roles: ["instructor"],
+        };
+        let respAddInstOnlyUser = await apiPOST(
+            `/debug/users`,
+            newInstOnlyUser
+        );
+        expect(respAddInstOnlyUser).toHaveStatus("success");
+
+        const respOriginalUser = await apiGET(`/debug/active_user`);
+        expect(respOriginalUser).toHaveStatus("success");
+        const originalUser = {
+            utorid: respOriginalUser.payload.utorid,
+            roles: respOriginalUser.payload.roles,
         };
 
-        let resp = await apiPOST(`/instructor/positions`, testPositionData);
+        let respInstOnly = await apiPOST(`/debug/active_user`, newInstOnlyUser);
+        expect(respInstOnly).toHaveStatus("success");
 
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
+        let respInvalidAccess = await apiPOST(
+            `/admin/positions`,
+            updatedPosition
+        );
+        expect(respInvalidAccess).toHaveStatus("error");
+
+        let respSwitchBackUser = await apiPOST(
+            `/debug/active_user`,
+            originalUser
+        );
+        expect(respSwitchBackUser).toHaveStatus("success");
+
+        let respReFetchPos1 = await apiGET(
+            `/instructor/sessions/${session.id}/positions`
+        );
+        expect(respReFetchPos1).toHaveStatus("success");
+        expect(respReFetchPos1.payload).toEqual(respFetchPos.payload);
     });
 
     it("fetch contract templates", async () => {
