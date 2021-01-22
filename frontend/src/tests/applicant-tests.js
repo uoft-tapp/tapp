@@ -12,11 +12,13 @@ export function applicantTests(api) {
     let session;
     let applicant;
     let newApplicant;
+    let contractTemplate;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         session = databaseSeeder.seededData.session;
         applicant = databaseSeeder.seededData.applicant;
+        contractTemplate = databaseSeeder.seededData.contractTemplate;
     }, 30000);
 
     it("applicants associated with a session", async () => {
@@ -126,7 +128,70 @@ export function applicantTests(api) {
         expect(resp.payload).toContainObject(newApplicant);
     });
 
-    it.todo("delete an applicant with no associated assignments");
+    it("delete an applicant with no associated assignments", async () => {
+        // Create a new session to upsert the applicant into
+        const newApplicant = {
+            first_name: "Tommy3",
+            last_name: "Smith3",
+            utorid: "smith3",
+        };
+        const resp = await apiPOST(`/admin/applicants`, newApplicant);
+        expect(resp).toHaveStatus("success");
+        checkPropTypes(applicantPropTypes, resp.payload);
+        Object.assign(newApplicant, resp.payload);
 
-    it.todo("fail to delete an applicant with an associated assignment");
+        // not sure if need to verify upsert successfully
+        const resp2 = await apiGET(`/admin/applicants`);
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(newApplicant);
+
+        const resp3 = await apiPOST(`/admin/applicants/delete`, {id:newApplicant.id});
+        expect(resp3).toHaveStatus("success");
+
+        const resp4 = await apiGET(`/admin/applicants`);
+        expect(resp4).toHaveStatus("success");
+        expect(resp4.payload.map((x) => x.id)).not.toContain(newApplicant.id);
+
+    });
+
+    it("fail to delete an applicant with an associated assignment", async () => {
+        const newApplicant = {
+            first_name: "Tommy4",
+            last_name: "Smith4",
+            utorid: "smith4", 
+        };
+        const resp = await apiPOST(`/admin/applicants`, newApplicant);
+        expect(resp).toHaveStatus("success");
+        checkPropTypes(applicantPropTypes, resp.payload);
+        Object.assign(newApplicant, resp.payload);
+
+        const newPosition = {
+            position_code: "CSC100F",
+            position_title: "Basic Computer Science",
+            hours_per_assignment: 70,
+            start_date: "2019/09/09",
+            end_date: "2019/12/31",
+            contract_template_id: contractTemplate.id,
+        };
+
+        const { payload: position } = await apiPOST(`/admin/sessions/${session.id}/positions`, newPosition);
+    
+
+        const newAssignment = {
+            note: "",
+            position_id: position.id,
+            applicant_id: newApplicant.id,
+            start_date: "2019-09-09T00:00:00.000Z",
+            end_date: "2019-12-31T00:00:00.000Z",
+        };
+        const resp2 = await apiPOST("/admin/assignments", newAssignment);
+        expect(resp2).toHaveStatus("success");
+
+        const resp3 = await apiPOST(`/admin/applicants/delete`, {id:newApplicant.id});
+        expect(resp3).toHaveStatus("error");
+
+        const resp4 = await apiGET(`/admin/applicants`);
+        expect(resp4.payload).toContainObject(newApplicant);
+
+    });
 }
