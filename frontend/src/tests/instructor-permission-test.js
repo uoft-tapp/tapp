@@ -16,6 +16,86 @@ export function instructorsPermissionTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null;
 
+    const executeWithInstOnlyUser = async (action) => {
+        const newInstOnlyUser = {
+            utorid: "test",
+            roles: ["instructor"],
+        };
+        let respAddInstOnlyUser = await apiPOST(
+            `/debug/users`,
+            newInstOnlyUser
+        );
+        expect(respAddInstOnlyUser).toHaveStatus("success");
+
+        const respOriginalUser = await apiGET(`/debug/active_user`);
+        expect(respOriginalUser).toHaveStatus("success");
+        const originalUser = {
+            utorid: respOriginalUser.payload.utorid,
+            roles: respOriginalUser.payload.roles,
+        };
+
+        let respSwitchToInstOnlyUser = await apiPOST(
+            `/debug/active_user`,
+            newInstOnlyUser
+        );
+        expect(respSwitchToInstOnlyUser).toHaveStatus("success");
+
+        await action();
+
+        let respSwitchBackUser = await apiPOST(
+            `/debug/active_user`,
+            originalUser
+        );
+        expect(respSwitchBackUser).toHaveStatus("success");
+    };
+
+    const cantUpdateTestFrame = async (
+        fetchRoute,
+        withSessionModRoute,
+        withoutSessionModRoute,
+        adminModRoute,
+        modFunc
+    ) => {
+        let respFetch = await apiGET(fetchRoute);
+        expect(respFetch).toHaveStatus("success");
+        const prevExistingApplicant = respFetch.payload[0];
+        let updatedApplicant = { ...prevExistingApplicant };
+        modFunc(updatedApplicant);
+
+        // instructor should not have route to modify directly
+        if (withSessionModRoute !== null) {
+            let respInvalidRouteWithSession = await apiPOST(
+                withSessionModRoute,
+                updatedApplicant
+            );
+            expect(respInvalidRouteWithSession).toHaveStatus("error");
+            checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
+        }
+
+        if (withoutSessionModRoute !== null) {
+            let respInvalidRouteWithoutSession = await apiPOST(
+                withoutSessionModRoute,
+                updatedApplicant
+            );
+            expect(respInvalidRouteWithoutSession).toHaveStatus("error");
+            checkPropTypes(errorPropTypes, respInvalidRouteWithoutSession);
+        }
+
+        // instructor only account can not access admin mod API
+        await executeWithInstOnlyUser(async () => {
+            let respInvalidAccess = await apiPOST(
+                adminModRoute,
+                updatedApplicant
+            );
+            expect(respInvalidAccess).toHaveStatus("error");
+            checkPropTypes(errorPropTypes, respInvalidAccess);
+        });
+
+        let respReFetchApplicant = await apiGET(fetchRoute);
+        expect(respReFetchApplicant).toHaveStatus("success");
+        expect(respReFetchApplicant.payload).toEqual(respFetch.payload);
+    };
+
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         await databaseSeeder.seedForInstructors(api);
@@ -53,7 +133,55 @@ export function instructorsPermissionTests(api) {
         });
     });
 
-    it.todo("can't update instructors except for self (i.e. active user)");
+    it("can't update instructors except for self (i.e. active user)", async () => {
+        let respFetchSelf = await apiGET(`/instructor/active_user`);
+        expect(respFetchSelf).toHaveStatus("success");
+        const self = respFetchSelf.payload;
+
+        let respFetchInst = await apiGET(`/instructor/instructors`);
+        expect(respFetchInst).toHaveStatus("success");
+        let otherInst = null;
+        respFetchInst.payload.forEach((inst) => {
+            if (self.id !== inst.id) {
+                otherInst = inst.id;
+            }
+        });
+
+        if (otherInst === null) {
+            throw Error("There is no other instructor other than self!");
+        }
+
+        let modifiedOtherInst = { ...otherInst };
+        modifiedOtherInst.email = "test@test.com";
+
+        // instructor should not have route to modify other instructors
+        let respInvalidRouteWithSession = await apiPOST(
+            `/instructor/instructors`,
+            modifiedOtherInst
+        );
+        expect(respInvalidRouteWithSession).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
+
+        // instructor only account can not access admin mod API
+        await executeWithInstOnlyUser(async () => {
+            let respInvalidAccess = await apiPOST(
+                `/admin/instructors`,
+                modifiedOtherInst
+            );
+            expect(respInvalidAccess).toHaveStatus("error");
+            checkPropTypes(errorPropTypes, respInvalidAccess);
+        });
+
+        let respReFetchInst = await apiGET(`/instructor/instructors`);
+        expect(respReFetchInst).toHaveStatus("success");
+        expect(respReFetchInst.payload).toEqual(respFetchInst.payload);
+
+        // TODO: instructor should be able to modify himself
+        // let newSelf = { ...self };
+        // newSelf.email = "test@test.net";
+        // let respModSelf = await apiPOST(`/instructor/instructors`, newSelf);
+        // expect(respModSelf).toHaveStatus("success");
+    });
 
     it("fetch sessions", async () => {
         let resp = await apiGET("/instructor/instructors");
@@ -61,16 +189,15 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update session", async () => {
-        const testSessionData = {
-            start_date: "2020-02-10T00:00:00.000Z",
-            end_date: "2020-02-10T00:00:00.000Z",
-            name: "test name",
-        };
-
-        let resp = await apiPOST(`/instructor/sessions`, testSessionData);
-
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
+        await cantUpdateTestFrame(
+            `/instructor/sessions`,
+            null,
+            `/instructor/sessions`,
+            `/admin/sessions`,
+            (session) => {
+                session.name = "test session";
+            }
+        );
     });
 
     it("fetch positions", async () => {
@@ -79,66 +206,15 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update position", async () => {
-        let respFetchPos = await apiGET(
-            `/instructor/sessions/${session.id}/positions`
-        );
-        expect(respFetchPos).toHaveStatus("success");
-        const prevExistingPosition = respFetchPos.payload[0];
-        let updatedPosition = { ...prevExistingPosition };
-        updatedPosition.position_title = "changed title - test";
-
-        // test case for instructor should not have route to change position
-        let respInvalidRoute = await apiPOST(
+        await cantUpdateTestFrame(
+            `/instructor/sessions/${session.id}/positions`,
+            `/instructor/sessions/${session.id}/positions`,
             `/instructor/positions`,
-            updatedPosition
-        );
-        expect(respInvalidRoute).toHaveStatus("error");
-        //checkPropTypes(errorPropTypes, respInvalidRoute);
-
-        let respReFetchPos = await apiGET(
-            `/instructor/sessions/${session.id}/positions`
-        );
-        expect(respReFetchPos).toHaveStatus("success");
-        expect(respReFetchPos.payload).toEqual(respFetchPos.payload);
-
-        // test case for instructor account can not access admin position API
-        const newInstOnlyUser = {
-            utorid: "test",
-            roles: ["instructor"],
-        };
-        let respAddInstOnlyUser = await apiPOST(
-            `/debug/users`,
-            newInstOnlyUser
-        );
-        expect(respAddInstOnlyUser).toHaveStatus("success");
-
-        const respOriginalUser = await apiGET(`/debug/active_user`);
-        expect(respOriginalUser).toHaveStatus("success");
-        const originalUser = {
-            utorid: respOriginalUser.payload.utorid,
-            roles: respOriginalUser.payload.roles,
-        };
-
-        let respInstOnly = await apiPOST(`/debug/active_user`, newInstOnlyUser);
-        expect(respInstOnly).toHaveStatus("success");
-
-        let respInvalidAccess = await apiPOST(
             `/admin/positions`,
-            updatedPosition
+            (pos) => {
+                pos.position_title = "test title";
+            }
         );
-        expect(respInvalidAccess).toHaveStatus("error");
-
-        let respSwitchBackUser = await apiPOST(
-            `/debug/active_user`,
-            originalUser
-        );
-        expect(respSwitchBackUser).toHaveStatus("success");
-
-        let respReFetchPos1 = await apiGET(
-            `/instructor/sessions/${session.id}/positions`
-        );
-        expect(respReFetchPos1).toHaveStatus("success");
-        expect(respReFetchPos1.payload).toEqual(respFetchPos.payload);
     });
 
     it("fetch contract templates", async () => {
@@ -149,33 +225,15 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update contract template", async () => {
-        const testTemplateData = {
-            file_name: "test file name",
-            content: "test content",
-        };
-
-        let resp = await apiPOST(
+        await cantUpdateTestFrame(
             `/instructor/sessions/${session.id}/contract_templates`,
-            testTemplateData
+            `/instructor/sessions/${session.id}/contract_templates`,
+            null,
+            `/admin/sessions/${session.id}/contract_templates`,
+            (template) => {
+                template.template_name = "test template";
+            }
         );
-
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
-    });
-
-    it("can't upload contract template", async () => {
-        const testTemplateData = {
-            file_name: "test file name",
-            content: "test content",
-        };
-
-        let resp = await apiPOST(
-            `/instructor/contract_templates/upload`,
-            testTemplateData
-        );
-
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
     });
 
     it("fetch applicants", async () => {
@@ -186,22 +244,15 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applicants", async () => {
-        const testApplicantData = {
-            utorid: "test utorid",
-            student_number: "test student num",
-            first_name: "test first name",
-            last_name: "test last name",
-            email: "test email",
-            phone: "test phone num",
-        };
-
-        let resp = await apiPOST(
+        await cantUpdateTestFrame(
             `/instructor/sessions/${session.id}/applicants`,
-            testApplicantData
+            `/instructor/sessions/${session.id}/applicants`,
+            `/instructor/applicants`,
+            `/admin/applicants`,
+            (applicant) => {
+                applicant.email = "test@test.com";
+            }
         );
-
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
     });
 
     it("fetch assignments", async () => {
@@ -212,27 +263,15 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applications", async () => {
-        const testApplicationData = {
-            comments: "test app",
-            program: "test prog",
-            department: "test dept",
-            previous_uoft_experience: "test exp",
-            yip: 0,
-            annotation: "test ann",
-            position_preference: [
-                {
-                    preference_level: 0,
-                },
-            ],
-        };
-
-        let resp = await apiPOST(
+        await cantUpdateTestFrame(
+            `/instructor/sessions/${session.id}/applications`,
+            null,
             `/instructor/applications`,
-            testApplicationData
+            `/admin/applications`,
+            (application) => {
+                application.program = "test program";
+            }
         );
-
-        expect(resp).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, resp);
     });
 
     it("fetch applications", async () => {
