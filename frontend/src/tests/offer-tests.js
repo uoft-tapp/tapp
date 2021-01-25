@@ -78,7 +78,7 @@ export function offersTests(api) {
         let previousDate = newOffer.emailed_date;
 
         // sleep for 1s to create time diff
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 2000));
         const resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/email`
         );
