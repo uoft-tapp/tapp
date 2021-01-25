@@ -75,26 +75,28 @@ export function offersTests(api) {
     });
 
     it("email the active offer again", async () => {
-        let previousDate = newOffer.emailed_date;
-
-        // sleep for 1s to create time diff
-        await new Promise((r) => setTimeout(r, 2000));
-        const resp = await apiPOST(
-            `/admin/assignments/${assignment.id}/active_offer/email`
+        // record previoud emailed_date
+        const resp = await apiGET(
+            `/admin/assignments/${assignment.id}/active_offer`
         );
         expect(resp).toHaveStatus("success");
+        let previousDate = resp.payload.emailed_date;
 
+        // send the email again
+        const resp1 = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp1).toHaveStatus("success");
         // check if date is updated
-        // eslint-disable-next-line require-atomic-updates
-        newOffer = resp.payload;
+        newOffer = resp1.payload;
         expect(newOffer.emailed_date).not.toEqual(previousDate);
 
         // check if date is updated correctly
-        const resp1 = await apiGET(
+        const resp2 = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.emailed_date).toEqual(newOffer.emailed_date);
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload.emailed_date).toEqual(newOffer.emailed_date);
     });
 
     it("increment nag count correctly", async () => {
