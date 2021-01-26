@@ -16,7 +16,7 @@ export function instructorsPermissionTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null;
 
-    const executeWithInstOnlyUser = async (action) => {
+    async function executeWithInstOnlyUser(action) {
         const newInstOnlyUser = {
             utorid: "test",
             roles: ["instructor"],
@@ -47,15 +47,15 @@ export function instructorsPermissionTests(api) {
             originalUser
         );
         expect(respSwitchBackUser).toHaveStatus("success");
-    };
+    }
 
-    const cantUpdateTestFrame = async (
+    async function cantUpdateTestFrame(
         fetchRoute,
         withSessionModRoute,
         withoutSessionModRoute,
         adminModRoute,
         modFunc
-    ) => {
+    ) {
         let respFetch = await apiGET(fetchRoute);
         expect(respFetch).toHaveStatus("success");
         const prevExistingApplicant = respFetch.payload[0];
@@ -94,7 +94,7 @@ export function instructorsPermissionTests(api) {
         let respReFetchApplicant = await apiGET(fetchRoute);
         expect(respReFetchApplicant).toHaveStatus("success");
         expect(respReFetchApplicant.payload).toEqual(respFetch.payload);
-    };
+    }
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
