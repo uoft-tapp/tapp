@@ -36,6 +36,7 @@ export function userPermissionsTests(api) {
 
         // Set the active user to the newly-created user
         resp = await apiPOST("/debug/active_user", { id: newUserData.id });
+        expect(resp).toHaveStatus("success");
 
         // Try to fetch an admin route
         resp = await apiGET("/admin/active_user");
@@ -45,6 +46,7 @@ export function userPermissionsTests(api) {
         resp = await apiPOST("/debug/active_user", {
             id: databaseSeeder.seededData.active_user.id,
         });
+        expect(resp).toHaveStatus("success");
     });
 
     it.todo("An instructor can access instructor routes");
