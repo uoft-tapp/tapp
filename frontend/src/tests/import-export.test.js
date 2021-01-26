@@ -2,7 +2,13 @@
  * @jest-environment node
  */
 import { describe, it, expect } from "./utils";
-import { validate, SpreadsheetRowMapper } from "../libs/importExportUtils";
+import {
+    validate,
+    SpreadsheetRowMapper,
+    dataToFile,
+} from "../libs/importExportUtils";
+import { prepareMinimal } from "../libs/exportUtils";
+import { getExtension } from "../libs/fileManager";
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -43,6 +49,29 @@ describe("Import/export library functionality", () => {
             utorid: "fooc",
         },
     ];
+
+    function getInstructorsDataFile(dataFormat) {
+        return dataToFile(
+            {
+                toSpreadsheet: () =>
+                    [["Last Name", "First Name", "UTORid", "email"]].concat(
+                        instructorData.map((instructor) => [
+                            instructor.last_name,
+                            instructor.first_name,
+                            instructor.utorid,
+                            instructor.email,
+                        ])
+                    ),
+                toJson: () => ({
+                    instructors: instructorData.map((instructor) =>
+                        prepareMinimal.instructor(instructor)
+                    ),
+                }),
+            },
+            dataFormat,
+            "instructors"
+        );
+    }
 
     it("Validate data according to a schema", () => {
         // Should not throw
@@ -107,6 +136,12 @@ describe("Import/export library functionality", () => {
         ).not.toEqual(targetData);
     });
 
-    it.todo("Export data to a JSON/CSV/XLSX");
+    it("Export data to a JSON/CSV/XLSX", () => {
+        // export instructor data to JSON
+        expect(getExtension(getInstructorsDataFile("csv"))).toEqual("csv");
+        // Should throw
+        expect(() => getInstructorsDataFile("nonsense")).toThrow(Error);
+    });
+
     it.todo("Import data from a JSON/CSV/XLSX");
 });
