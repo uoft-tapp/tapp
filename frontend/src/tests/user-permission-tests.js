@@ -19,20 +19,32 @@ export function userPermissionsTests(api) {
         roles: ["instructor"],
     };
 
+    const newTAData = {
+        utorid: "tauser",
+        roles: ["ta"],
+    };
+
+    const newTAInstructorData = {
+        utorid: "tainstuser",
+        roles: ["ta", "instructor"],
+    };
+
     async function runTestWithUser(userData, testBody) {
+        let respPrevUser = await apiGET("/active_user");
+        expect(respPrevUser).toHaveStatus("success");
+        const prevUserId = respPrevUser.payload.id;
+
         let resp = await apiPOST("/admin/users", userData);
-        // Save any extra attributes we got, such as an `id`
-        Object.assign(userData, resp.payload);
 
         // Set the active user to the newly-created user
-        resp = await apiPOST("/debug/active_user", { id: userData.id });
+        resp = await apiPOST("/debug/active_user", { id: resp.payload.id });
         expect(resp).toHaveStatus("success");
 
         await testBody();
 
         // Set the active_user back to the default.
         resp = await apiPOST("/debug/active_user", {
-            id: databaseSeeder.seededData.active_user.id,
+            id: prevUserId,
         });
         expect(resp).toHaveStatus("success");
     }
@@ -56,6 +68,10 @@ export function userPermissionsTests(api) {
     });
 
     it("An instructor can access instructor routes", async () => {
+        // the default user has all roles, including the instructor role
+        let resp = await apiGET("/instructor/instructors");
+        expect(resp).toHaveStatus("success");
+
         // test instructor route with a user with only the instructor role
         await runTestWithUser(newInstructorData, async () => {
             // Try to fetch an instructor route
@@ -64,8 +80,33 @@ export function userPermissionsTests(api) {
         });
     });
 
-    it.todo("A TA can access TA routes");
-    it.todo(
-        "An instructor who is also a TA can access instructor and TA routes"
-    );
+    it("A TA can access TA routes", async () => {
+        // the default user has all roles, including the TA role
+        let resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+
+        // test instructor route with a user with only the instructor role
+        await runTestWithUser(newTAData, async () => {
+            // Try to fetch an instructor route
+            let resp = await apiGET("/ta/active_user");
+            expect(resp).toHaveStatus("success");
+        });
+    });
+
+    it("An instructor who is also a TA can access instructor and TA routes", async () => {
+        // the default user has all roles, including both the instructor role and the TA role
+        let resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET("/instructor/instructors");
+        expect(resp).toHaveStatus("success");
+
+        // test instructor route with an instructor & TA user
+        await runTestWithUser(newTAInstructorData, async () => {
+            // Try to fetch an instructor route
+            let resp = await apiGET("/ta/active_user");
+            expect(resp).toHaveStatus("success");
+            resp = await apiGET("/instructor/instructors");
+            expect(resp).toHaveStatus("success");
+        });
+    });
 }
