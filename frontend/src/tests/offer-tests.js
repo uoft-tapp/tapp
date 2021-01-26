@@ -75,7 +75,7 @@ export function offersTests(api) {
     });
 
     it("email the active offer again", async () => {
-        // record previoud emailed_date
+        // record previous emailed_date
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
