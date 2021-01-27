@@ -6,6 +6,10 @@ import FuzzySet from "fuzzyset";
 import XLSX from "xlsx";
 import * as chrono from "chrono-node";
 
+/* eslint-env node */
+var FileAPI = require("file-api"),
+    File = FileAPI.File;
+
 /**
  * Validates `data` based on the specified `schema`. At the moment this
  * function only checks that every key specified by `schema.requiredKeys` is
@@ -302,25 +306,21 @@ export function dataToFile(formatters, dataFormat, filePrefix = "") {
 
         // We convert the data into a blob and return it so that it can be downloaded
         // by the user's browser
-        const file = new File(
-            [XLSX.write(workbook, { type: "array", bookType })],
-            `${fileName}.${bookType}`,
-            {
-                type:
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            }
-        );
+        const file = new File({
+            buffer: [XLSX.write(workbook, { type: "array", bookType })],
+            name: `${fileName}.${bookType}`,
+            type:
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
         return file;
     }
 
     if (dataFormat === "json") {
-        const file = new File(
-            [JSON.stringify(formatters.toJson(), null, 4)],
-            `${fileName}.json`,
-            {
-                type: "application/json",
-            }
-        );
+        const file = new File({
+            buffer: [JSON.stringify(formatters.toJson(), null, 4)],
+            name: `${fileName}.json`,
+            type: "application/json",
+        });
         return file;
     }
 
