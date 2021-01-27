@@ -8,7 +8,6 @@ import {
     dataToFile,
 } from "../libs/importExportUtils";
 import { prepareMinimal } from "../libs/exportUtils";
-import { getExtension } from "../libs/fileManager";
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -137,9 +136,34 @@ describe("Import/export library functionality", () => {
     });
 
     it("Export data to a JSON/CSV/XLSX", () => {
-        // export instructor data to JSON
-        expect(getExtension(getInstructorsDataFile("csv"))).toEqual("csv");
-        // Should throw
+        // export instructor data to a CSV
+        expect(getInstructorsDataFile("csv").name).toEqual(
+            `instructors_export_${new Date().toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            })}.csv`
+        );
+
+        // export instructor data to a JSON
+        expect(getInstructorsDataFile("json").name).toEqual(
+            `instructors_export_${new Date().toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            })}.json`
+        );
+
+        // export instructor data to a XLSX
+        expect(getInstructorsDataFile("spreadsheet").name).toEqual(
+            `instructors_export_${new Date().toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            })}.xlsx`
+        );
+
+        // invalid file type, should throw error
         expect(() => getInstructorsDataFile("nonsense")).toThrow(Error);
     });
 
