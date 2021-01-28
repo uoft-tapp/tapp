@@ -74,7 +74,7 @@ export function offersTests(api) {
         expect(newOffer.emailed_date).not.toBeNull();
     });
 
-    it("email the active offer again", async () => {
+    it("when an offer is emailed a second time, the emailed date is updated to the most recent emailed date", async () => {
         // record previous emailed_date
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
