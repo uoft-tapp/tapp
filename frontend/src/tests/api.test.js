@@ -47,7 +47,7 @@ describe("API tests", () => {
     describe("`/admin/instructors` tests", () => {
         instructorsTests({ apiGET, apiPOST });
     });
-    describe.only("`/admin/assignments` tests", () => {
+    describe("`/admin/assignments` tests", () => {
         assignmentsTests({ apiGET, apiPOST });
     });
     describe("wage_chunk tests", () => {
