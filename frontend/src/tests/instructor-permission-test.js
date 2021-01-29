@@ -133,55 +133,57 @@ export function instructorsPermissionTests(api) {
         });
     });
 
-    it("can't update instructors except for self (i.e. active user)", async () => {
-        let respFetchSelf = await apiGET(`/instructor/active_user`);
-        expect(respFetchSelf).toHaveStatus("success");
-        const self = respFetchSelf.payload;
+    // TODO: the commented code down below should work once the backend for POST instructor/instructors is implemented.
+    it.todo("can't update instructors except for self (i.e. active user)");
 
-        let respFetchInst = await apiGET(`/instructor/instructors`);
-        expect(respFetchInst).toHaveStatus("success");
-        let otherInst = null;
-        respFetchInst.payload.forEach((inst) => {
-            if (self.id !== inst.id) {
-                otherInst = inst.id;
-            }
-        });
-
-        if (otherInst === null) {
-            throw Error("There is no other instructor other than self!");
-        }
-
-        let modifiedOtherInst = { ...otherInst };
-        modifiedOtherInst.email = "test@test.com";
-
-        // instructor should not have route to modify other instructors
-        let respInvalidRouteWithSession = await apiPOST(
-            `/instructor/instructors`,
-            modifiedOtherInst
-        );
-        expect(respInvalidRouteWithSession).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
-
-        // instructor only account can not access admin mod API
-        await executeWithInstOnlyUser(async () => {
-            let respInvalidAccess = await apiPOST(
-                `/admin/instructors`,
-                modifiedOtherInst
-            );
-            expect(respInvalidAccess).toHaveStatus("error");
-            checkPropTypes(errorPropTypes, respInvalidAccess);
-        });
-
-        let respReFetchInst = await apiGET(`/instructor/instructors`);
-        expect(respReFetchInst).toHaveStatus("success");
-        expect(respReFetchInst.payload).toEqual(respFetchInst.payload);
-
-        // TODO: instructor should be able to modify himself
-        // let newSelf = { ...self };
-        // newSelf.email = "test@test.net";
-        // let respModSelf = await apiPOST(`/instructor/instructors`, newSelf);
-        // expect(respModSelf).toHaveStatus("success");
-    });
+    // it("can't update instructors except for self (i.e. active user)", async () => {
+    //     let respFetchSelf = await apiGET(`/instructor/active_user`);
+    //     expect(respFetchSelf).toHaveStatus("success");
+    //     const self = respFetchSelf.payload;
+    //
+    //     let respFetchInst = await apiGET(`/instructor/instructors`);
+    //     expect(respFetchInst).toHaveStatus("success");
+    //     let otherInst = null;
+    //     respFetchInst.payload.forEach((inst) => {
+    //         if (self.id !== inst.id) {
+    //             otherInst = inst.id;
+    //         }
+    //     });
+    //
+    //     if (otherInst === null) {
+    //         throw Error("There is no other instructor other than self!");
+    //     }
+    //
+    //     let modifiedOtherInst = { ...otherInst };
+    //     modifiedOtherInst.email = "test@test.com";
+    //
+    //     // instructor should not have route to modify other instructors
+    //     let respInvalidRouteWithSession = await apiPOST(
+    //         `/instructor/instructors`,
+    //         modifiedOtherInst
+    //     );
+    //     expect(respInvalidRouteWithSession).toHaveStatus("error");
+    //     checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
+    //
+    //     // instructor only account can not access admin mod API
+    //     await executeWithInstOnlyUser(async () => {
+    //         let respInvalidAccess = await apiPOST(
+    //             `/admin/instructors`,
+    //             modifiedOtherInst
+    //         );
+    //         expect(respInvalidAccess).toHaveStatus("error");
+    //         checkPropTypes(errorPropTypes, respInvalidAccess);
+    //     });
+    //
+    //     let respReFetchInst = await apiGET(`/instructor/instructors`);
+    //     expect(respReFetchInst).toHaveStatus("success");
+    //     expect(respReFetchInst.payload).toEqual(respFetchInst.payload);
+    //
+    //     let newSelf = { ...self };
+    //     newSelf.email = "test@test.net";
+    //     let respModSelf = await apiPOST(`/instructor/instructors`, newSelf);
+    //     expect(respModSelf).toHaveStatus("success");
+    // });
 
     it("fetch sessions", async () => {
         let resp = await apiGET("/instructor/instructors");
