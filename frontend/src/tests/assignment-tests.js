@@ -137,7 +137,7 @@ export function assignmentsTests(api) {
             position_id: resp.payload.id,
             applicant_id: applicant.id
         };
-        var resp = await apiPOST("/admin/assignments", newAssignmentData);
+        resp = await apiPOST("/admin/assignments", newAssignmentData);
 
         expect(resp).toHaveStatus("success");
         const { payload: createdAssignment } = resp;
