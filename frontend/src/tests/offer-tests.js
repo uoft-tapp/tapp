@@ -80,23 +80,26 @@ export function offersTests(api) {
             `/admin/assignments/${assignment.id}/active_offer`
         );
         expect(resp).toHaveStatus("success");
-        let previousDate = resp.payload.emailed_date;
+        const previousDate = resp.payload.emailed_date;
 
         // send the email again
         const resp1 = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/email`
         );
         expect(resp1).toHaveStatus("success");
-        // check if date is updated
+        // update newOffer
         newOffer = resp1.payload;
-        expect(newOffer.emailed_date).not.toEqual(previousDate);
+        // check if date is updated
+        const newDate = resp1.payload.emailed_date;
+        expect(Date.parse(newDate)).toBeGreaterThan(Date.parse(previousDate));
 
         // check if date is updated correctly
         const resp2 = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer`
         );
         expect(resp2).toHaveStatus("success");
-        expect(resp2.payload.emailed_date).toEqual(newOffer.emailed_date);
+        const updatedDate = resp2.payload.emailed_date;
+        expect(updatedDate).toEqual(newDate);
     });
 
     it("increment nag count correctly", async () => {
