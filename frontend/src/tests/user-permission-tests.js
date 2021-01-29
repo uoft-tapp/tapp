@@ -29,7 +29,7 @@ export function userPermissionsTests(api) {
         roles: ["ta", "instructor"],
     };
 
-    async function runTestWithUser(userData, testBody) {
+    async function setupUserPerm(userData) {
         let respPrevUser = await apiGET("/active_user");
         expect(respPrevUser).toHaveStatus("success");
         const prevUserId = respPrevUser.payload.id;
@@ -40,11 +40,13 @@ export function userPermissionsTests(api) {
         resp = await apiPOST("/debug/active_user", { id: resp.payload.id });
         expect(resp).toHaveStatus("success");
 
-        await testBody();
+        return prevUserId;
+    }
 
+    async function restoreOriginalUserPerm(orgUserId) {
         // Set the active_user back to the default.
-        resp = await apiPOST("/debug/active_user", {
-            id: prevUserId,
+        const resp = await apiPOST("/debug/active_user", {
+            id: orgUserId,
         });
         expect(resp).toHaveStatus("success");
     }
@@ -60,24 +62,23 @@ export function userPermissionsTests(api) {
     });
 
     it("A non-admin cannot access the admin route", async () => {
-        await runTestWithUser(newInstructorData, async () => {
-            // Try to fetch an admin route
-            let resp = await apiGET("/admin/active_user");
-            expect(resp).toHaveStatus("error");
-        });
+        const prevUserId = await setupUserPerm(newInstructorData);
+
+        // Try to fetch an admin route
+        let resp = await apiGET("/admin/active_user");
+        expect(resp).toHaveStatus("error");
+
+        await restoreOriginalUserPerm(prevUserId);
     });
 
     it("An instructor can access instructor routes", async () => {
+        const prevUserId = await setupUserPerm(newInstructorData);
+
         // the default user has all roles, including the instructor role
         let resp = await apiGET("/instructor/instructors");
         expect(resp).toHaveStatus("success");
 
-        // test instructor route with a user with only the instructor role
-        await runTestWithUser(newInstructorData, async () => {
-            // Try to fetch an instructor route
-            let resp = await apiGET("/instructor/instructors");
-            expect(resp).toHaveStatus("success");
-        });
+        await restoreOriginalUserPerm(prevUserId);
     });
 
     it("A TA can access TA routes", async () => {
@@ -85,12 +86,13 @@ export function userPermissionsTests(api) {
         let resp = await apiGET("/ta/active_user");
         expect(resp).toHaveStatus("success");
 
-        // test instructor route with a user with only the instructor role
-        await runTestWithUser(newTAData, async () => {
-            // Try to fetch an instructor route
-            let resp = await apiGET("/ta/active_user");
-            expect(resp).toHaveStatus("success");
-        });
+        const prevUserId = await setupUserPerm(newTAData);
+
+        // Try to fetch an instructor route
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+
+        await restoreOriginalUserPerm(prevUserId);
     });
 
     it("An instructor who is also a TA can access instructor and TA routes", async () => {
@@ -100,13 +102,14 @@ export function userPermissionsTests(api) {
         resp = await apiGET("/instructor/instructors");
         expect(resp).toHaveStatus("success");
 
-        // test instructor route with an instructor & TA user
-        await runTestWithUser(newTAInstructorData, async () => {
-            // Try to fetch an instructor route
-            let resp = await apiGET("/ta/active_user");
-            expect(resp).toHaveStatus("success");
-            resp = await apiGET("/instructor/instructors");
-            expect(resp).toHaveStatus("success");
-        });
+        const prevUserId = await setupUserPerm(newTAInstructorData);
+
+        // Try to fetch an instructor route
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET("/instructor/instructors");
+        expect(resp).toHaveStatus("success");
+
+        await restoreOriginalUserPerm(prevUserId);
     });
 }
