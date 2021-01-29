@@ -49,6 +49,12 @@ describe("Import/export library functionality", () => {
         },
     ];
 
+    /**
+     * Construct a `File` object based on pre-defined instructor data and input file type
+     *
+     * @param {"xlsx" | "csv" | "json"} dataFormat
+     * @returns {File}
+     */
     function getInstructorsDataFile(dataFormat) {
         return dataToFile(
             {
