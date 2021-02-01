@@ -38,9 +38,14 @@ class Api::V1::Admin::PositionReportingTagsController < ApplicationController
                     }' associated with position_id=#{@position.id}"
             )
         end
-        @position.reporting_tags.delete(reporting_tag)
-        @position.save!
-        render_success reporting_tag
+        render_on_condition(
+            object: reporting_tag,
+            condition:
+                proc do
+                    @position.reporting_tags.delete(reporting_tag)
+                    @position.save!
+                end
+        )
     end
 
     private

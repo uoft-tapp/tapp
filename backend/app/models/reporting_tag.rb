@@ -11,6 +11,7 @@ class ReportingTag < ApplicationRecord
               joins(:positions)
                   .where(positions: { session_id: session_id })
                   .distinct
+                  .order(:name)
           }
 
     scope :wage_chunk_reporting_tags_by_session,
@@ -18,6 +19,7 @@ class ReportingTag < ApplicationRecord
               joins(wage_chunks: { assignment: :position })
                   .where(positions: { session_id: session_id })
                   .distinct
+                  .order(:name)
           }
 end
 

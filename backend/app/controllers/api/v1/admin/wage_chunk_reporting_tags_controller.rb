@@ -38,9 +38,14 @@ class Api::V1::Admin::WageChunkReportingTagsController < ApplicationController
                     }' associated with wage_chunk_id=#{@wage_chunk.id}"
             )
         end
-        @wage_chunk.reporting_tags.delete(reporting_tag)
-        @wage_chunk.save!
-        render_success reporting_tag
+        render_on_condition(
+            object: reporting_tag,
+            condition:
+                proc do
+                    @wage_chunk.reporting_tags.delete(reporting_tag)
+                    @wage_chunk.save!
+                end
+        )
     end
 
     private
