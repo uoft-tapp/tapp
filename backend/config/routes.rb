@@ -199,7 +199,7 @@ Rails
                         end
 
                         # Instructors
-                        resources :instructors, only: %i[index]
+                        resources :instructors, only: %i[index create]
 
                         # DDAHs
                         resources :ddahs, only: %i[show create]
