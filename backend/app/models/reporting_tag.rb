@@ -5,6 +5,20 @@
 class ReportingTag < ApplicationRecord
     has_and_belongs_to_many :wage_chunks
     has_and_belongs_to_many :positions
+
+    scope :position_reporting_tags_by_session,
+          lambda { |session_id|
+              joins(:positions)
+                  .where(positions: { session_id: session_id })
+                  .distinct
+          }
+
+    scope :wage_chunk_reporting_tags_by_session,
+          lambda { |session_id|
+              joins(wage_chunks: { assignment: :position })
+                  .where(positions: { session_id: session_id })
+                  .distinct
+          }
 end
 
 # == Schema Information

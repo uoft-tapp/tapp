@@ -121,6 +121,11 @@ Rails
                         # Positions
                         resources :positions, only: %i[create] do
                             collection { post :delete }
+                            resource :reporting_tags,
+                                     controller: :position_reporting_tags,
+                                     only: %i[show create] do
+                                collection { post :delete }
+                            end
                         end
 
                         # Sessions
@@ -139,7 +144,20 @@ Rails
                                       only: %i[index create]
                             resources :positions,
                                       controller: :session_positions,
-                                      only: %i[index create]
+                                      only: %i[index create] do
+                                collection do
+                                    get :reporting_tags,
+                                        to:
+                                            'session_reporting_tags#index_by_position'
+                                end
+                            end
+                            resources :wage_chunks, only: %i[] do
+                                collection do
+                                    get :reporting_tags,
+                                        to:
+                                            'session_reporting_tags#index_by_wage_chunk'
+                                end
+                            end
                         end
 
                         # DDAHs
@@ -156,6 +174,11 @@ Rails
                         # Wage Chunks
                         resources :wage_chunks, only: %i[create] do
                             collection { post :delete }
+                            resource :reporting_tags,
+                                     controller: :wage_chunk_reporting_tags,
+                                     only: %i[show create] do
+                                collection { post :delete }
+                            end
                         end
                     end
                 end

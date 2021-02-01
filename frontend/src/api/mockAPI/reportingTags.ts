@@ -6,21 +6,28 @@ import {
 
 export const reportingTagRoutes = {
     get: {
-        "/sessions/{session_id}/reporting_tags": documentCallback({
+        "/sessions/:session_id/positions/reporting_tags": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
             summary: "Get all reporting tags associated with a session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.reportingTag),
         }),
-        "/wage_chunks/{wage_chunk_id}/reporting_tags": documentCallback({
+        "/sessions/:session_id/wage_chunks/reporting_tags": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in mock API");
+            },
+            summary: "Get all reporting tags associated with a session",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.reportingTag),
+        }),
+        "/wage_chunks/:wage_chunk_id/reporting_tags": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
             summary: "Get all reporting tags associated with a wage chunk",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.reportingTag),
         }),
-        "/positions/{position_id}/reporting_tags": documentCallback({
+        "/positions/:position_id/reporting_tags": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
@@ -29,7 +36,7 @@ export const reportingTagRoutes = {
         }),
     },
     post: {
-        "/wage_chunks/{wage_chunk_id}/reporting_tags": documentCallback({
+        "/wage_chunks/:wage_chunk_id/reporting_tags": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
@@ -37,7 +44,7 @@ export const reportingTagRoutes = {
             returns: docApiPropTypes.reportingTag,
             posts: docApiPropTypes.reportingTag,
         }),
-        "/wage_chunks/{wage_chunk_id}/reporting_tags/delete": documentCallback({
+        "/wage_chunks/:wage_chunk_id/reporting_tags/delete": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
@@ -46,7 +53,7 @@ export const reportingTagRoutes = {
             returns: docApiPropTypes.reportingTag,
             posts: docApiPropTypes.reportingTag,
         }),
-        "/positions/{position_id}/reporting_tags": documentCallback({
+        "/positions/:position_id/reporting_tags": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
@@ -54,7 +61,7 @@ export const reportingTagRoutes = {
             returns: docApiPropTypes.reportingTag,
             posts: docApiPropTypes.reportingTag,
         }),
-        "/positions/{position_id}/reporting_tags/delete": documentCallback({
+        "/positions/:position_id/reporting_tags/delete": documentCallback({
             func: () => {
                 throw new Error("Not implemented in mock API");
             },
