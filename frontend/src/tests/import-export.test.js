@@ -5,11 +5,14 @@ import { describe, it, expect } from "./utils";
 import {
     validate,
     SpreadsheetRowMapper,
-    dataToFile,
     normalizeImport,
 } from "../libs/importExportUtils";
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
+
+/* eslint-env node */
+var FileAPI = require("file-api"),
+    File = FileAPI.File;
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -52,13 +55,67 @@ describe("Import/export library functionality", () => {
     ];
 
     /**
-     * Construct a `File` object based on pre-defined instructor data and input file type
+     *  Create a `File` object containing of the specified format.
+     * This function is a copy of function dataToFile in ../libs/importExportUtils.
+     * The only difference is this function returns a FileAPI File object but not a File object.
+     * The reason is Jest is running on NodeJS which does not support File object.
+     * By calling this function only for testing, the app's export functionality will not be affected,
+     * while the test can still test the export functionality.
+     *
+     * @param {{toSpreadsheet: func, toJson: func}} formatters - Formatters return an array of objects (usable as spreadsheet rows) or a javascript object to be passed to JSON.stringify
+     * @param {"xlsx" | "csv" | "json"} dataFormat
+     * @param {string} filePrefix
+     * @returns {FileAPI.File}
+     */
+    function dataToFileForTest(formatters, dataFormat, filePrefix = "") {
+        const fileName = `${filePrefix}${
+            filePrefix ? "_" : ""
+        }export_${new Date().toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+        })}`;
+
+        if (dataFormat === "spreadsheet" || dataFormat === "csv") {
+            const workbook = XLSX.utils.book_new();
+            const sheet = XLSX.utils.aoa_to_sheet(formatters.toSpreadsheet());
+            XLSX.utils.book_append_sheet(workbook, sheet, "Instructors");
+
+            const bookType = dataFormat === "csv" ? "csv" : "xlsx";
+
+            // We convert the data into a blob and return it so that it can be downloaded
+            // by the user's browser
+            const file = new File({
+                buffer: [XLSX.write(workbook, { type: "array", bookType })],
+                name: `${fileName}.${bookType}`,
+                type:
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            return file;
+        }
+
+        if (dataFormat === "json") {
+            const file = new File({
+                buffer: [JSON.stringify(formatters.toJson(), null, 4)],
+                name: `${fileName}.json`,
+                type: "application/json",
+            });
+            return file;
+        }
+
+        throw new Error(
+            `Cannot process data to format "${dataFormat}"; try "spreadsheet" or "json".`
+        );
+    }
+
+    /**
+     * Construct a FileAPI `File` object based on pre-defined instructor data and input file type
      *
      * @param {"xlsx" | "csv" | "json"} dataFormat
-     * @returns {File}
+     * @returns {FileAPI.File}
      */
     function getInstructorsDataFile(dataFormat) {
-        return dataToFile(
+        return dataToFileForTest(
             {
                 toSpreadsheet: () =>
                     [["Last Name", "First Name", "UTORid", "email"]].concat(
