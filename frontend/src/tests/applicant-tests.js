@@ -188,7 +188,7 @@ export function applicantTests(api) {
         expect(resp).toHaveStatus("success");
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(newApplicant1, resp.payload);
-        
+
         // create and insert a new position
         const newPosition = {
             position_code: "CSC100F",
