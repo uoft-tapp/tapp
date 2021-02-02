@@ -140,11 +140,13 @@ export function applicantTests(api) {
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(newApplicant1, resp.payload);
 
+        // try deleting the applicant
         const resp2 = await apiPOST(`/admin/applicants/delete`, {
             id: newApplicant1.id,
         });
         expect(resp2).toHaveStatus("success");
 
+        // verify the applicant is deleted
         const resp3 = await apiGET(`/admin/applicants`);
         expect(resp3).toHaveStatus("success");
         expect(resp3.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
@@ -163,17 +165,20 @@ export function applicantTests(api) {
         checkPropTypes(applicantPropTypes, resp4.payload);
         Object.assign(newApplicant2, resp4.payload);
 
+        // try deleting the applicant
         const resp5 = await apiPOST(`/admin/applicants/delete`, {
             id: newApplicant2.id,
         });
         expect(resp5).toHaveStatus("success");
 
+        // verify the applicant is deleted
         const resp6 = await apiGET(`/admin/sessions/${session.id}/applicants`);
         expect(resp6).toHaveStatus("success");
         expect(resp6.payload.map((x) => x.id)).not.toContain(newApplicant2.id);
     });
 
     it("fail to delete an applicant with an associated assignment", async () => {
+        // create and insert a new applicant
         const newApplicant1 = {
             first_name: "Tommy4",
             last_name: "Smith4",
@@ -184,6 +189,7 @@ export function applicantTests(api) {
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(newApplicant1, resp.payload);
 
+        // create and insert a new position
         const newPosition = {
             position_code: "CSC100F",
             position_title: "Basic Computer Science",
@@ -198,6 +204,7 @@ export function applicantTests(api) {
             newPosition
         );
 
+        // create and insert a new assignment associating the position and the applicant
         const newAssignment = {
             note: "",
             position_id: position.id,
@@ -208,11 +215,13 @@ export function applicantTests(api) {
         const resp2 = await apiPOST("/admin/assignments", newAssignment);
         expect(resp2).toHaveStatus("success");
 
+        // try deleting the applicant
         const resp3 = await apiPOST(`/admin/applicants/delete`, {
             id: newApplicant1.id,
         });
         expect(resp3).toHaveStatus("error");
 
+        // confirm the applicant is not deleted
         const resp4 = await apiGET(`/admin/applicants`);
         expect(resp4.payload).toContainObject(newApplicant1);
     });
