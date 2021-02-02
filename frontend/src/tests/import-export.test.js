@@ -9,6 +9,7 @@ import {
 } from "../libs/importExportUtils";
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
+import instructorsJSON from "./samples/instructors.json";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
@@ -292,7 +293,54 @@ describe("Import/export library functionality", () => {
         expect(resultCSV).toEqual(resultCorrect);
     });
 
-    // it("Import data from a JSON/CSV/XLSX", () => {
+    it("Import data from a JSON/CSV/XLSX", () => {
+        const resultCorrect = instructorData.map((instructor) =>
+            prepareMinimal.instructor(instructor)
+        );
 
-    // });
+        // import instructor data from a JSON file
+        expect(instructorsJSON.instructors).toEqual(resultCorrect);
+
+        // import instructor data from a XLSX File
+        const workbook = XLSX.readFile(__dirname + "/samples/instructors.xlsx");
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        let dataXLSX = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        // transform to array of objects
+        const keys = dataXLSX.shift();
+        dataXLSX = dataXLSX.map(function (row) {
+            return keys.reduce(function (obj, key, i) {
+                obj[key] = row[i];
+                return obj;
+            }, {});
+        });
+        const resultXLSX = normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: dataXLSX,
+            },
+            instructorSchema
+        );
+        expect(resultXLSX).toEqual(resultCorrect);
+
+        // import instructor data from a CSV File
+        const workbook1 = XLSX.readFile(__dirname + "/samples/instructors.csv");
+        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
+        let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
+        // transform to array of objects
+        const keys1 = dataCSV.shift();
+        dataCSV = dataCSV.map(function (row) {
+            return keys1.reduce(function (obj, key, i) {
+                obj[key] = row[i];
+                return obj;
+            }, {});
+        });
+        const resultCSV = normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: dataCSV,
+            },
+            instructorSchema
+        );
+        expect(resultCSV).toEqual(resultCorrect);
+    });
 });
