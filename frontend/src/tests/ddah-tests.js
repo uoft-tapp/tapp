@@ -91,12 +91,12 @@ export function ddahTests(api) {
     it("getting ddahs for one session will not return ddahs for another session", async () => {
         resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
-        const allDDAH = resp1.payload;
+        const allDdah = resp1.payload;
 
         const resp2 = await apiGET(`/admin/sessions/${session.id}/assignments`);
         expect(resp2).toHaveStatus("success");
         const allAssignmentId = resp2.payload.map((y) => y.id);
-        allDDAH.forEach((d) => {
+        allDdah.forEach((d) => {
             expect(allAssignmentId).toContain(d.assignment_id);
         });
     });
