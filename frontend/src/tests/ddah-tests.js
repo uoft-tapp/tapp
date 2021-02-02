@@ -89,13 +89,17 @@ export function ddahTests(api) {
     });
 
     it("getting ddahs for one session will not return ddahs for another session", async () => {
+        // retrieve all ddahs for the session
         resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
         const allDdah = resp1.payload;
 
+        // retrieve all the assignments for the seesion
         const resp2 = await apiGET(`/admin/sessions/${session.id}/assignments`);
         expect(resp2).toHaveStatus("success");
         const allAssignmentId = resp2.payload.map((y) => y.id);
+
+        // make sure all the ddahs are associated with an assignment from the session
         allDdah.forEach((d) => {
             expect(allAssignmentId).toContain(d.assignment_id);
         });
