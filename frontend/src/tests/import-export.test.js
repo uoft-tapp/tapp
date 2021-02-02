@@ -51,11 +51,6 @@ describe("Import/export library functionality", () => {
         },
     ];
 
-    // variables to store File objects
-    let fileCSV;
-    let fileJSON;
-    let fileXLSX;
-
     /**
      * Construct a `File` object based on pre-defined instructor data and input file type
      *
@@ -149,8 +144,8 @@ describe("Import/export library functionality", () => {
     });
 
     it("Export data to a JSON/CSV/XLSX", () => {
-        // export instructor data to a CSV
-        fileCSV = getInstructorsDataFile("csv");
+        // export instructor data a CSV File object
+        const fileCSV = getInstructorsDataFile("csv");
         expect(fileCSV.name).toEqual(
             `instructors_export_${new Date().toLocaleDateString("en-CA", {
                 year: "numeric",
@@ -159,8 +154,8 @@ describe("Import/export library functionality", () => {
             })}.csv`
         );
 
-        // export instructor data to a JSON
-        fileJSON = getInstructorsDataFile("json");
+        // export instructor data to a JSON File object
+        const fileJSON = getInstructorsDataFile("json");
         expect(fileJSON.name).toEqual(
             `instructors_export_${new Date().toLocaleDateString("en-CA", {
                 year: "numeric",
@@ -169,8 +164,8 @@ describe("Import/export library functionality", () => {
             })}.json`
         );
 
-        // export instructor data to a XLSX
-        fileXLSX = getInstructorsDataFile("spreadsheet");
+        // export instructor data to a XLSX File object
+        const fileXLSX = getInstructorsDataFile("spreadsheet");
         expect(fileXLSX.name).toEqual(
             `instructors_export_${new Date().toLocaleDateString("en-CA", {
                 year: "numeric",
@@ -181,16 +176,14 @@ describe("Import/export library functionality", () => {
 
         // invalid file type, should throw error
         expect(() => getInstructorsDataFile("nonsense")).toThrow(Error);
-    });
 
-    it("Import data from a JSON/CSV/XLSX", () => {
-        let resultCorrect = instructorData.map((instructor) =>
+        const resultCorrect = instructorData.map((instructor) =>
             prepareMinimal.instructor(instructor)
         );
 
-        // import instructor data from a JSON
-        let dataJSON = JSON.parse(fileJSON.buffer.toString()).instructors;
-        let resultJSON = normalizeImport(
+        // import instructor data from a JSON File object
+        const dataJSON = JSON.parse(fileJSON.buffer.toString()).instructors;
+        const resultJSON = normalizeImport(
             {
                 fileType: "json",
                 data: dataJSON,
@@ -199,19 +192,19 @@ describe("Import/export library functionality", () => {
         );
         expect(resultJSON).toEqual(resultCorrect);
 
-        // import instructor data from a XLSX
-        let workbook = XLSX.read(fileXLSX.buffer[0], { type: "array" });
-        let sheet = workbook.Sheets[workbook.SheetNames[0]];
+        // import instructor data from a XLSX File object
+        const workbook = XLSX.read(fileXLSX.buffer[0], { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
         let dataXLSX = XLSX.utils.sheet_to_json(sheet, { header: 1 });
         // transform to array of objects
-        var keys = dataXLSX.shift();
+        const keys = dataXLSX.shift();
         dataXLSX = dataXLSX.map(function (row) {
             return keys.reduce(function (obj, key, i) {
                 obj[key] = row[i];
                 return obj;
             }, {});
         });
-        let resultXLSX = normalizeImport(
+        const resultXLSX = normalizeImport(
             {
                 fileType: "spreadsheet",
                 data: dataXLSX,
@@ -220,19 +213,19 @@ describe("Import/export library functionality", () => {
         );
         expect(resultXLSX).toEqual(resultCorrect);
 
-        // import instructor data from a CSV
-        let workbook1 = XLSX.read(fileCSV.buffer[0], { type: "array" });
-        let sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
+        // import instructor data from a CSV File object
+        const workbook1 = XLSX.read(fileCSV.buffer[0], { type: "array" });
+        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
         let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
         // transform to array of objects
-        var keys1 = dataCSV.shift();
+        const keys1 = dataCSV.shift();
         dataCSV = dataCSV.map(function (row) {
             return keys1.reduce(function (obj, key, i) {
                 obj[key] = row[i];
                 return obj;
             }, {});
         });
-        let resultCSV = normalizeImport(
+        const resultCSV = normalizeImport(
             {
                 fileType: "spreadsheet",
                 data: dataCSV,
@@ -241,4 +234,8 @@ describe("Import/export library functionality", () => {
         );
         expect(resultCSV).toEqual(resultCorrect);
     });
+
+    // it("Import data from a JSON/CSV/XLSX", () => {
+
+    // });
 });
