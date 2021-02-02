@@ -1,0 +1,22 @@
+{
+    "instructors": [
+        {
+            "first_name": "Gordon",
+            "last_name": "Smith",
+            "email": "a@a.com",
+            "utorid": "booger"
+        },
+        {
+            "first_name": "Tommy",
+            "last_name": "Smith",
+            "email": "a@b.com",
+            "utorid": "food"
+        },
+        {
+            "first_name": "Grandpa",
+            "last_name": "Boobie",
+            "email": "a@d.com",
+            "utorid": "fooc"
+        }
+    ]
+}
