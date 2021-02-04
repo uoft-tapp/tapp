@@ -99,7 +99,7 @@ export function ddahTests(api) {
         expect(resp2).toHaveStatus("success");
         const allAssignmentId = resp2.payload.map((y) => y.id);
 
-        // make sure all the ddahs are associated with an assignment from the session
+        // check that all the ddahs are associated with an assignment from the session
         allDdah.forEach((d) => {
             expect(allAssignmentId).toContain(d.assignment_id);
         });
