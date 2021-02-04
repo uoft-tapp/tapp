@@ -12,6 +12,7 @@ import { wageChunkRoutes } from "./wage_chunks";
 import { debugRoutes } from "./debug";
 import { activeUserRoutes, User } from "./active_user";
 import { ddahsRoutes } from "./ddahs";
+import { reportingTagRoutes } from "./reportingTags";
 
 /**
  * Mock API server that runs locally; useuful for demo purposes.
@@ -33,6 +34,7 @@ export class MockAPI {
         applicationsRoutes.get,
         wageChunkRoutes.get,
         ddahsRoutes.get,
+        reportingTagRoutes.get,
         debugRoutes.get,
         activeUserRoutes.get,
         {
@@ -53,6 +55,7 @@ export class MockAPI {
         applicationsRoutes.post,
         wageChunkRoutes.post,
         ddahsRoutes.post,
+        reportingTagRoutes.post,
         debugRoutes.post,
         activeUserRoutes.post
     );

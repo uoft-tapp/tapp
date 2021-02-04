@@ -8,7 +8,7 @@ class ActiveUserService
         # The config variable `active_user_override` is only set in debug/test mode,
         # so we can rely on it; if it exists, we're in debug mode.
 
-        # If we're configured to use Apache's Basic Auth, use that. The alternative is Shibboleth (not yet implimented)
+        # If we're configured to use Apache's Basic Auth, use that. The alternative is Shibboleth (not yet implemented)
         if Rails.application.config.allow_basic_auth &&
                ActionController::HttpAuthentication::Basic
                    .has_basic_credentials?(request)
@@ -47,7 +47,7 @@ class ActiveUserService
         end
 
         # rubocop:disable Style/RaiseArgs
-        raise NotImplementedError.new 'active_user Route is not implimented yet for production mode'
+        raise NotImplementedError.new 'active_user Route is not implemented yet for production mode'
         # rubocop:enable Style/RaiseArgs
     end
 end

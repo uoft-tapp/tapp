@@ -90,6 +90,10 @@ class Assignment < ApplicationRecord
         self[:end_date] = value.blank? ? position.end_date : value
     end
 
+    def accessible_by_instructor(instructor_id)
+        position.instructors.exists?(instructor_id)
+    end
+
     private
 
     def create_wage_chunks(hours: @initial_hours)
