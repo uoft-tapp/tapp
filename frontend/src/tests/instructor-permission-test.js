@@ -16,39 +16,6 @@ export function instructorsPermissionTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null;
 
-    async function executeWithInstOnlyUser(action) {
-        const newInstOnlyUser = {
-            utorid: "test",
-            roles: ["instructor"],
-        };
-        let respAddInstOnlyUser = await apiPOST(
-            `/debug/users`,
-            newInstOnlyUser
-        );
-        expect(respAddInstOnlyUser).toHaveStatus("success");
-
-        const respOriginalUser = await apiGET(`/debug/active_user`);
-        expect(respOriginalUser).toHaveStatus("success");
-        const originalUser = {
-            utorid: respOriginalUser.payload.utorid,
-            roles: respOriginalUser.payload.roles,
-        };
-
-        let respSwitchToInstOnlyUser = await apiPOST(
-            `/debug/active_user`,
-            newInstOnlyUser
-        );
-        expect(respSwitchToInstOnlyUser).toHaveStatus("success");
-
-        await action();
-
-        let respSwitchBackUser = await apiPOST(
-            `/debug/active_user`,
-            originalUser
-        );
-        expect(respSwitchBackUser).toHaveStatus("success");
-    }
-
     async function cantUpdateTestFrame(
         fetchRoute,
         withSessionModRoute,
@@ -82,14 +49,38 @@ export function instructorsPermissionTests(api) {
         }
 
         // instructor only account can not access admin mod API
-        await executeWithInstOnlyUser(async () => {
-            let respInvalidAccess = await apiPOST(
-                adminModRoute,
-                updatedApplicant
-            );
-            expect(respInvalidAccess).toHaveStatus("error");
-            checkPropTypes(errorPropTypes, respInvalidAccess);
-        });
+        const newInstOnlyUser = {
+            utorid: "test",
+            roles: ["instructor"],
+        };
+        let respAddInstOnlyUser = await apiPOST(
+            `/debug/users`,
+            newInstOnlyUser
+        );
+        expect(respAddInstOnlyUser).toHaveStatus("success");
+
+        const respOriginalUser = await apiGET(`/debug/active_user`);
+        expect(respOriginalUser).toHaveStatus("success");
+        const originalUser = {
+            utorid: respOriginalUser.payload.utorid,
+            roles: respOriginalUser.payload.roles,
+        };
+
+        let respSwitchToInstOnlyUser = await apiPOST(
+            `/debug/active_user`,
+            newInstOnlyUser
+        );
+        expect(respSwitchToInstOnlyUser).toHaveStatus("success");
+
+        let respInvalidAccess = await apiPOST(adminModRoute, updatedApplicant);
+        expect(respInvalidAccess).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, respInvalidAccess);
+
+        let respSwitchBackUser = await apiPOST(
+            `/debug/active_user`,
+            originalUser
+        );
+        expect(respSwitchBackUser).toHaveStatus("success");
 
         let respReFetchApplicant = await apiGET(fetchRoute);
         expect(respReFetchApplicant).toHaveStatus("success");
