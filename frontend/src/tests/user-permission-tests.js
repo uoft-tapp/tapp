@@ -30,7 +30,7 @@ export function userPermissionsTests(api) {
     };
 
     async function setupUserPerm(userData) {
-        let respPrevUser = await apiGET("/active_user");
+        const respPrevUser = await apiGET("/active_user");
         expect(respPrevUser).toHaveStatus("success");
         const prevUserId = respPrevUser.payload.id;
 
