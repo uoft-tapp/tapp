@@ -129,9 +129,9 @@ export function applicantTests(api) {
     it("delete an applicant with no associated assignments", async () => {
         // upsert and delete an applicant without a session
         const newApplicant1 = {
-            first_name: "Tommy3",
-            last_name: "Smith3",
-            utorid: "smith3",
+            first_name: "June",
+            last_name: "Kim",
+            utorid: "kim",
         };
         const resp = await apiPOST(`/admin/applicants`, newApplicant1);
         expect(resp).toHaveStatus("success");
@@ -148,30 +148,25 @@ export function applicantTests(api) {
         expect(resp3).toHaveStatus("success");
         expect(resp3.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
 
-        // upsert and delete an applicant with a session
-        const newApplicant2 = {
-            first_name: "June",
-            last_name: "Kim",
-            utorid: "kim",
-        };
+        // upsert and delete an applicant via session route
         const resp4 = await apiPOST(
             `/admin/sessions/${session.id}/applicants`,
-            newApplicant2
+            newApplicant1
         );
         expect(resp4).toHaveStatus("success");
         checkPropTypes(applicantPropTypes, resp4.payload);
-        Object.assign(newApplicant2, resp4.payload);
+        Object.assign(newApplicant1, resp4.payload);
 
         // try deleting the applicant
         const resp5 = await apiPOST(`/admin/applicants/delete`, {
-            id: newApplicant2.id,
+            id: newApplicant1.id,
         });
         expect(resp5).toHaveStatus("success");
 
         // verify the applicant is deleted
         const resp6 = await apiGET(`/admin/sessions/${session.id}/applicants`);
         expect(resp6).toHaveStatus("success");
-        expect(resp6.payload.map((x) => x.id)).not.toContain(newApplicant2.id);
+        expect(resp6.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
     });
 
     it("fail to delete an applicant with an associated assignment", async () => {
