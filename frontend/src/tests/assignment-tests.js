@@ -14,7 +14,6 @@ export function assignmentsTests(api) {
     let applicant;
     let assignment;
     let contractTemplate;
-    // let position;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -22,7 +21,6 @@ export function assignmentsTests(api) {
         applicant = databaseSeeder.seededData.applicant;
         assignment = databaseSeeder.seededData.assignment;
         contractTemplate = databaseSeeder.seededData.contractTemplate;
-        // position = databaseSeeder.seededData.position;
     }, 30000);
 
     it("get assignments for session", async () => {
@@ -131,16 +129,19 @@ export function assignmentsTests(api) {
             `/admin/sessions/${session.id}/positions`,
             newPositionData
         );
-        
+        expect(resp).toHaveStatus("success");
+
+
         const newAssignmentData = {
             note: "",
             position_id: resp.payload.id,
-            applicant_id: applicant.id
+            applicant_id: applicant.id,
         };
         resp = await apiPOST("/admin/assignments", newAssignmentData);
 
         expect(resp).toHaveStatus("success");
         const { payload: createdAssignment } = resp;
+        console.log(createdAssignment)
         checkPropTypes(assignmentPropTypes, createdAssignment);
         expect(createdAssignment.start_date).toEqual(newPositionData.start_date);
         expect(createdAssignment.end_date).toEqual(newPositionData.end_date);
