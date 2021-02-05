@@ -210,5 +210,25 @@ export function templatesTests(api) {
     // Since we don't want to pollute the filesystem by creating random names, when
     // you implement this test, use node.js commands to detect and delete an existing
     // file
-    it.todo("upload a template");
+    it("upload a template", async () => {
+        // Use the same id for the template.
+        var resp = await apiPOST(
+            `/admin/contract_templates/upload`,
+            newTemplateData2
+        );
+        expect(resp).toHaveStatus("success");
+
+        // This is a test for uploading a file with the same name
+        const newTemplateData3 = {
+            template_file: "this_is_a_test_template.html",
+            template_name: "Invigilate",
+        };
+
+        var resp = await apiPOST(
+            `/admin/contract_templates/upload`,
+            newTemplateData3
+        );
+        expect(resp).toHaveStatus("error");
+
+    });
 }
