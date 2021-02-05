@@ -98,6 +98,19 @@ export class Assignment extends MockAPIController {
                 active_offer_url_token: activeOffer.url_token,
             });
         }
+        // Add position start and end dates if they are not defined
+        const position = this.getPosition(matchingAssignment)
+        if (!matchingAssignment.start_date) {
+            Object.assign(ret, {
+                start_date: position.start_date
+            });
+        } 
+        if (!matchingAssignment.end_date) {
+            Object.assign(ret, {
+                end_date: position.end_date
+            });
+        }
+
         return ret;
     }
     upsert(assignment) {
