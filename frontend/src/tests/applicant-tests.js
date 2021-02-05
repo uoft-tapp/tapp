@@ -12,13 +12,11 @@ export function applicantTests(api) {
     let session;
     let applicant;
     let newApplicant;
-    let contractTemplate;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         session = databaseSeeder.seededData.session;
         applicant = databaseSeeder.seededData.applicant;
-        contractTemplate = databaseSeeder.seededData.contractTemplate;
     }, 30000);
 
     it("applicants associated with a session", async () => {
@@ -137,7 +135,6 @@ export function applicantTests(api) {
         };
         const resp = await apiPOST(`/admin/applicants`, newApplicant1);
         expect(resp).toHaveStatus("success");
-        checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(newApplicant1, resp.payload);
 
         // try deleting the applicant
@@ -153,9 +150,9 @@ export function applicantTests(api) {
 
         // upsert and delete an applicant with a session
         const newApplicant2 = {
-            first_name: "Tommy4",
-            last_name: "Smith4",
-            utorid: "smith4",
+            first_name: "June",
+            last_name: "Kim",
+            utorid: "kim",
         };
         const resp4 = await apiPOST(
             `/admin/sessions/${session.id}/applicants`,
@@ -178,51 +175,23 @@ export function applicantTests(api) {
     });
 
     it("fail to delete an applicant with an associated assignment", async () => {
-        // create and insert a new applicant
-        const newApplicant1 = {
-            first_name: "Tommy4",
-            last_name: "Smith4",
-            utorid: "smith4",
-        };
-        const resp = await apiPOST(`/admin/applicants`, newApplicant1);
-        expect(resp).toHaveStatus("success");
-        checkPropTypes(applicantPropTypes, resp.payload);
-        Object.assign(newApplicant1, resp.payload);
+        // Retrieve all assignments from the current session
+        const resp0 = await apiGET(`/admin/sessions/${session.id}/assignments`);
+        expect(resp0).toHaveStatus("success");
 
-        // create and insert a new position
-        const newPosition = {
-            position_code: "CSC100F",
-            position_title: "Basic Computer Science",
-            hours_per_assignment: 70,
-            start_date: "2019/09/09",
-            end_date: "2019/12/31",
-            contract_template_id: contractTemplate.id,
-        };
+        // pick an associated applicant id
+        const idToDelete = resp0.payload.filter(
+            (assign) => assign.applicant_id != null
+        )[0].applicant_id;
 
-        const { payload: position } = await apiPOST(
-            `/admin/sessions/${session.id}/positions`,
-            newPosition
-        );
-
-        // create and insert a new assignment associating the position and the applicant
-        const newAssignment = {
-            note: "",
-            position_id: position.id,
-            applicant_id: newApplicant1.id,
-            start_date: "2019-09-09T00:00:00.000Z",
-            end_date: "2019-12-31T00:00:00.000Z",
-        };
-        const resp2 = await apiPOST("/admin/assignments", newAssignment);
-        expect(resp2).toHaveStatus("success");
-
-        // try deleting the applicant
-        const resp3 = await apiPOST(`/admin/applicants/delete`, {
-            id: newApplicant1.id,
+        // try deleting the applicant not via session route
+        const resp1 = await apiPOST(`/admin/applicants/delete`, {
+            id: idToDelete,
         });
-        expect(resp3).toHaveStatus("error");
+        expect(resp1).toHaveStatus("error");
 
         // confirm the applicant is not deleted
-        const resp4 = await apiGET(`/admin/applicants`);
-        expect(resp4.payload).toContainObject(newApplicant1);
+        const resp2 = await apiGET(`/admin/applicants`);
+        expect(resp2.payload.map((app) => app.id)).toContain(idToDelete);
     });
 }
