@@ -131,7 +131,6 @@ export function assignmentsTests(api) {
         );
         expect(resp).toHaveStatus("success");
 
-
         const newAssignmentData = {
             note: "",
             position_id: resp.payload.id,
