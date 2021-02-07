@@ -1,6 +1,5 @@
 import { it, expect, beforeAll, checkPropTypes, errorPropTypes } from "./utils";
 import { databaseSeeder } from "./setup";
-import { de } from "chrono-node";
 
 /**
  * Tests for the API. These are encapsulated in a function so that
@@ -19,6 +18,12 @@ export function instructorsPermissionTests(api) {
     let instructorOnlyUser;
     let defaultUser;
 
+    /**
+     * Switches the current active user to a user with only the instructor role.
+     * This function uses debug route to achieve user switching.
+     *
+     * @returns {Promise<void>}
+     */
     async function switchToInstructorOnlyUser() {
         let respSwitchToInstOnlyUser = await apiPOST(
             `/debug/active_user`,
@@ -27,6 +32,11 @@ export function instructorsPermissionTests(api) {
         expect(respSwitchToInstOnlyUser).toHaveStatus("success");
     }
 
+    /**
+     * Restores the active user to the default user (the user logged during test setup in beforeAll).
+     *
+     * @returns {Promise<void>}
+     */
     async function restoreDefaultUser() {
         let respSwitchBackUser = await apiPOST(
             `/debug/active_user`,
