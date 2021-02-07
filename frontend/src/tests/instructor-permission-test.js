@@ -1,5 +1,6 @@
 import { it, expect, beforeAll, checkPropTypes, errorPropTypes } from "./utils";
 import { databaseSeeder } from "./setup";
+import { de } from "chrono-node";
 
 /**
  * Tests for the API. These are encapsulated in a function so that
@@ -15,82 +16,46 @@ export function instructorsPermissionTests(api) {
     // eslint-disable-next-line
     const { apiGET, apiPOST } = api;
     let session = null;
+    let instructorOnlyUser;
+    let defaultUser;
 
-    async function cantUpdateTestFrame(
-        fetchRoute,
-        withSessionModRoute,
-        withoutSessionModRoute,
-        adminModRoute,
-        modFunc
-    ) {
-        let respFetch = await apiGET(fetchRoute);
-        expect(respFetch).toHaveStatus("success");
-        const prevExistingApplicant = respFetch.payload[0];
-        let updatedApplicant = { ...prevExistingApplicant };
-        modFunc(updatedApplicant);
-
-        // instructor should not have route to modify directly
-        if (withSessionModRoute !== null) {
-            let respInvalidRouteWithSession = await apiPOST(
-                withSessionModRoute,
-                updatedApplicant
-            );
-            expect(respInvalidRouteWithSession).toHaveStatus("error");
-            checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
-        }
-
-        if (withoutSessionModRoute !== null) {
-            let respInvalidRouteWithoutSession = await apiPOST(
-                withoutSessionModRoute,
-                updatedApplicant
-            );
-            expect(respInvalidRouteWithoutSession).toHaveStatus("error");
-            checkPropTypes(errorPropTypes, respInvalidRouteWithoutSession);
-        }
-
-        // instructor only account can not access admin mod API
-        const newInstOnlyUser = {
-            utorid: "test",
-            roles: ["instructor"],
-        };
-        let respAddInstOnlyUser = await apiPOST(
-            `/debug/users`,
-            newInstOnlyUser
-        );
-        expect(respAddInstOnlyUser).toHaveStatus("success");
-
-        const respOriginalUser = await apiGET(`/debug/active_user`);
-        expect(respOriginalUser).toHaveStatus("success");
-        const originalUser = {
-            utorid: respOriginalUser.payload.utorid,
-            roles: respOriginalUser.payload.roles,
-        };
-
+    async function switchToInstructorOnlyUser() {
         let respSwitchToInstOnlyUser = await apiPOST(
             `/debug/active_user`,
-            newInstOnlyUser
+            instructorOnlyUser
         );
         expect(respSwitchToInstOnlyUser).toHaveStatus("success");
+    }
 
-        let respInvalidAccess = await apiPOST(adminModRoute, updatedApplicant);
-        expect(respInvalidAccess).toHaveStatus("error");
-        checkPropTypes(errorPropTypes, respInvalidAccess);
-
+    async function restoreDefaultUser() {
         let respSwitchBackUser = await apiPOST(
             `/debug/active_user`,
-            originalUser
+            defaultUser
         );
         expect(respSwitchBackUser).toHaveStatus("success");
-
-        let respReFetchApplicant = await apiGET(fetchRoute);
-        expect(respReFetchApplicant).toHaveStatus("success");
-        expect(respReFetchApplicant.payload).toEqual(respFetch.payload);
     }
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         await databaseSeeder.seedForInstructors(api);
         session = databaseSeeder.seededData.session;
+        instructorOnlyUser = {
+            utorid: "test",
+            roles: ["instructor"],
+        };
+
+        let respAddInstOnlyUser = await apiPOST(
+            `/debug/users`,
+            instructorOnlyUser
+        );
+        expect(respAddInstOnlyUser).toHaveStatus("success");
+
+        const respOriginalUser = await apiGET(`/debug/active_user`);
+        expect(respOriginalUser).toHaveStatus("success");
+        defaultUser = {
+            utorid: respOriginalUser.payload.utorid,
+            roles: respOriginalUser.payload.roles,
+        };
     }, 30000);
 
     it("fetch instructors", async () => {
@@ -125,61 +90,60 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update instructors except for self (i.e. active user)", async () => {
-        let respFetchSelf = await apiGET(`/instructor/active_user`);
-        expect(respFetchSelf).toHaveStatus("success");
-        const self = respFetchSelf.payload;
-
+        // we use the default user's admin privilege here to fetch an unrelated instructor
         let respFetchInst = await apiGET(`/instructor/instructors`);
         expect(respFetchInst).toHaveStatus("success");
-        let otherInst = null;
-        respFetchInst.payload.forEach((inst) => {
-            if (self.id !== inst.id) {
-                otherInst = inst.id;
-            }
-        });
 
-        if (otherInst === null) {
-            throw Error("There is no other instructor other than self!");
-        }
+        let respFetchDefaultUser = await apiGET(`/instructor/active_user`);
+        expect(respFetchDefaultUser).toHaveStatus("success");
+        const defaultUser = respFetchDefaultUser.payload;
 
-        let modifiedOtherInst = { ...otherInst };
-        modifiedOtherInst.email = "test@test.com";
+        const newDefaultUser = { ...defaultUser };
+        newDefaultUser.email = "test@test.com";
 
-        // instructor should not have route to modify other instructors
+        // instructor can not modify other instructors
+        await switchToInstructorOnlyUser();
         let respInvalidRouteWithSession = await apiPOST(
             `/instructor/instructors`,
-            modifiedOtherInst
+            newDefaultUser
         );
         expect(respInvalidRouteWithSession).toHaveStatus("error");
         checkPropTypes(errorPropTypes, respInvalidRouteWithSession);
 
-        // can modify self
-        let respReFetchInst = await apiGET(`/instructor/instructors`);
-        expect(respReFetchInst).toHaveStatus("success");
-        expect(respReFetchInst.payload).toEqual(respFetchInst.payload);
+        await restoreDefaultUser();
 
-        let newSelf = { ...self };
-        newSelf.email = "test@test.net";
-        let respModSelf = await apiPOST(`/instructor/instructors`, newSelf);
-        expect(respModSelf).toHaveStatus("success");
-        expect(respModSelf.payload.email).toEqual("test@test.net");
+        // instructors can modify themselves
+        let respModDefaultUser = await apiPOST(
+            `/instructor/instructors`,
+            newDefaultUser
+        );
+        expect(respModDefaultUser).toHaveStatus("success");
+        expect(respModDefaultUser.payload.email).toEqual("test@test.com");
     });
 
     it("fetch sessions", async () => {
-        let resp = await apiGET("/instructor/instructors");
+        let resp = await apiGET("/instructor/sessions");
         expect(resp).toHaveStatus("success");
     });
 
     it("can't update session", async () => {
-        await cantUpdateTestFrame(
-            `/instructor/sessions`,
-            null,
-            `/instructor/sessions`,
-            `/admin/sessions`,
-            (session) => {
-                session.name = "test session";
-            }
-        );
+        await switchToInstructorOnlyUser();
+
+        const newSession = {
+            start_date: "2020-01-01",
+            end_date: "2020-01-02",
+            name: "test",
+        };
+
+        let resp = await apiPOST("/instructor/sessions", newSession);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST("/admin/sessions", newSession);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        await restoreDefaultUser();
     });
 
     it("fetch positions", async () => {
@@ -188,15 +152,50 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update position", async () => {
-        await cantUpdateTestFrame(
+        await switchToInstructorOnlyUser();
+
+        const newPosition = {
+            position_code: "test code",
+            position_title: "Test Position",
+            start_date: "2020-01-01",
+            end_date: "2020-01-02",
+            hours_per_assignment: 1.0,
+            contract_template_id: 190,
+            qualifications: null,
+            duties: "Tutorials",
+            ad_hours_per_assignment: null,
+            ad_num_assignments: null,
+            ad_open_date: null,
+            ad_close_date: null,
+            desired_num_assignments: null,
+            current_enrollment: null,
+            current_waitlisted: null,
+            instructor_ids: [89],
+        };
+
+        let resp = await apiPOST(
             `/instructor/sessions/${session.id}/positions`,
-            `/instructor/sessions/${session.id}/positions`,
-            `/instructor/positions`,
-            `/admin/positions`,
-            (pos) => {
-                pos.position_title = "test title";
-            }
+            newPosition
         );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPosition
+        );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(`/admin/positions`, newPosition);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(`/instructor/positions`, newPosition);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        await restoreDefaultUser();
     });
 
     it("fetch contract templates", async () => {
@@ -207,15 +206,28 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update contract template", async () => {
-        await cantUpdateTestFrame(
+        await switchToInstructorOnlyUser();
+
+        const newTemplate = {
+            template_file: "default-template.html",
+            template_name: "Test",
+        };
+
+        let resp = await apiPOST(
             `/instructor/sessions/${session.id}/contract_templates`,
-            `/instructor/sessions/${session.id}/contract_templates`,
-            null,
-            `/admin/sessions/${session.id}/contract_templates`,
-            (template) => {
-                template.template_name = "test template";
-            }
+            newTemplate
         );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/contract_templates`,
+            newTemplate
+        );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        await restoreDefaultUser();
     });
 
     it("fetch applicants", async () => {
@@ -226,15 +238,40 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applicants", async () => {
-        await cantUpdateTestFrame(
+        await switchToInstructorOnlyUser();
+
+        const newApplicant = {
+            first_name: "Test",
+            last_name: "Test",
+            email: "test@test.com",
+            phone: "1111111111",
+            utorid: "test",
+            student_number: "1111111",
+        };
+
+        let resp = await apiPOST(
             `/instructor/sessions/${session.id}/applicants`,
-            `/instructor/sessions/${session.id}/applicants`,
-            `/instructor/applicants`,
-            `/admin/applicants`,
-            (applicant) => {
-                applicant.email = "test@test.com";
-            }
+            newApplicant
         );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/applicants`,
+            newApplicant
+        );
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(`/admin/applicants`, newApplicant);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(`/instructor/applicants`, newApplicant);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        await restoreDefaultUser();
     });
 
     it("fetch assignments", async () => {
@@ -245,15 +282,26 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update applications", async () => {
-        await cantUpdateTestFrame(
-            `/instructor/sessions/${session.id}/applications`,
-            null,
-            `/instructor/applications`,
-            `/admin/applications`,
-            (application) => {
-                application.program = "test program";
-            }
-        );
+        await switchToInstructorOnlyUser();
+
+        const newApplication = {
+            comments: "Test comment",
+            program: null,
+            department: null,
+            previous_uoft_experience: null,
+            yip: null,
+            annotation: null,
+        };
+
+        let resp = await apiPOST(`/instructor/applications`, newApplication);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        resp = await apiPOST(`/admin/applications`, newApplication);
+        expect(resp).toHaveStatus("error");
+        checkPropTypes(errorPropTypes, resp);
+
+        await restoreDefaultUser();
     });
 
     it("fetch applications", async () => {

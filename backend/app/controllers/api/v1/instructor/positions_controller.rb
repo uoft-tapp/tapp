@@ -8,7 +8,7 @@ class Api::V1::Instructor::PositionsController < ApplicationController
         # we actually *are* an instructor. If we aren't an instructor, return an empty
         # array.
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
-        render_success [] && return unless active_instructor
+        render_success([]) && return unless active_instructor
 
         render_success active_instructor.positions.where(
                            session_id: params[:session_id]
