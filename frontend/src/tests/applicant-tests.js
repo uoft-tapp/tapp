@@ -176,9 +176,9 @@ export function applicantTests(api) {
         expect(resp).toHaveStatus("success");
 
         // pick an associated applicant id
-        const idToDelete = resp.payload.filter(
+        const idToDelete = resp.payload.find(
             (assign) => assign.applicant_id != null
-        )[0].applicant_id;
+        ).applicant_id;
 
         // try deleting the applicant not via session route
         resp = await apiPOST(`/admin/applicants/delete`, {
