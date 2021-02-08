@@ -33,8 +33,7 @@ class Offer < ApplicationRecord
         position = assignment.position
 
         # inherit attributes defined from the applicant and the position
-        self.attributes =
-            attributes.merge!(
+        attributes.merge!(
                 applicant.as_json(only: applicant_attrs),
                 position.as_json(only: position_attrs)
             )
