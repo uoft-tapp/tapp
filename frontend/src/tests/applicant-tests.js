@@ -12,6 +12,7 @@ export function applicantTests(api) {
     let session;
     let applicant;
     let newApplicant;
+    let resp;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -20,7 +21,7 @@ export function applicantTests(api) {
     }, 30000);
 
     it("applicants associated with a session", async () => {
-        const resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
+        resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toContainObject(applicant);
     });
@@ -32,14 +33,14 @@ export function applicantTests(api) {
             utorid: "smith1",
         };
 
-        const resp = await apiPOST(`/admin/applicants`, applicantData);
+        resp = await apiPOST(`/admin/applicants`, applicantData);
         expect(resp).toHaveStatus("success");
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(applicantData, resp.payload);
 
-        const resp2 = await apiGET(`/admin/applicants`);
-        expect(resp2).toHaveStatus("success");
-        expect(resp2.payload).toContainObject(applicantData);
+        resp = await apiGET(`/admin/applicants`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toContainObject(applicantData);
     });
 
     it("add an applicant to a session", async () => {
@@ -49,7 +50,7 @@ export function applicantTests(api) {
             utorid: "smith2",
         };
 
-        const resp = await apiPOST(
+        resp = await apiPOST(
             `/admin/sessions/${session.id}/applicants`,
             newApplicant
         );
@@ -57,9 +58,9 @@ export function applicantTests(api) {
         Object.assign(newApplicant, resp.payload);
 
         // When we ask for the applicants by session, the new applicant should show up
-        const resp2 = await apiGET(`/admin/sessions/${session.id}/applicants`);
-        expect(resp2).toHaveStatus("success");
-        expect(resp2.payload).toContainObject(newApplicant);
+        resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toContainObject(newApplicant);
     });
 
     it("updating an existing applicant via a session route will make that applicant appear in the applicant list for that session", async () => {
@@ -72,7 +73,7 @@ export function applicantTests(api) {
             name: "Newly Created Sessions 1",
             rate1: 56.54,
         };
-        let resp = await apiPOST("/admin/sessions", newSession);
+        resp = await apiPOST("/admin/sessions", newSession);
         expect(resp).toHaveStatus("success");
         Object.assign(newSession, resp.payload);
 
@@ -104,7 +105,7 @@ export function applicantTests(api) {
             name: "Newly Created Sessions 2",
             rate1: 59.54,
         };
-        let resp = await apiPOST("/admin/sessions", newSession);
+        resp = await apiPOST("/admin/sessions", newSession);
         expect(resp).toHaveStatus("success");
         Object.assign(newSession, resp.payload);
 
@@ -133,60 +134,60 @@ export function applicantTests(api) {
             last_name: "Kim",
             utorid: "kim",
         };
-        const resp = await apiPOST(`/admin/applicants`, newApplicant1);
+        resp = await apiPOST(`/admin/applicants`, newApplicant1);
         expect(resp).toHaveStatus("success");
         Object.assign(newApplicant1, resp.payload);
 
         // try deleting the applicant
-        const resp2 = await apiPOST(`/admin/applicants/delete`, {
+        resp = await apiPOST(`/admin/applicants/delete`, {
             id: newApplicant1.id,
         });
-        expect(resp2).toHaveStatus("success");
+        expect(resp).toHaveStatus("success");
 
         // verify the applicant is deleted
-        const resp3 = await apiGET(`/admin/applicants`);
-        expect(resp3).toHaveStatus("success");
-        expect(resp3.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
+        resp = await apiGET(`/admin/applicants`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
 
         // upsert and delete an applicant via session route
-        const resp4 = await apiPOST(
+        resp = await apiPOST(
             `/admin/sessions/${session.id}/applicants`,
             newApplicant1
         );
-        expect(resp4).toHaveStatus("success");
-        checkPropTypes(applicantPropTypes, resp4.payload);
-        Object.assign(newApplicant1, resp4.payload);
+        expect(resp).toHaveStatus("success");
+        checkPropTypes(applicantPropTypes, resp.payload);
+        Object.assign(newApplicant1, resp.payload);
 
         // try deleting the applicant
-        const resp5 = await apiPOST(`/admin/applicants/delete`, {
+        resp = await apiPOST(`/admin/applicants/delete`, {
             id: newApplicant1.id,
         });
-        expect(resp5).toHaveStatus("success");
+        expect(resp).toHaveStatus("success");
 
         // verify the applicant is deleted
-        const resp6 = await apiGET(`/admin/sessions/${session.id}/applicants`);
-        expect(resp6).toHaveStatus("success");
-        expect(resp6.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
+        resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.map((x) => x.id)).not.toContain(newApplicant1.id);
     });
 
     it("fail to delete an applicant with an associated assignment", async () => {
         // Retrieve all assignments from the current session
-        const resp0 = await apiGET(`/admin/sessions/${session.id}/assignments`);
-        expect(resp0).toHaveStatus("success");
+        resp = await apiGET(`/admin/sessions/${session.id}/assignments`);
+        expect(resp).toHaveStatus("success");
 
         // pick an associated applicant id
-        const idToDelete = resp0.payload.filter(
+        const idToDelete = resp.payload.filter(
             (assign) => assign.applicant_id != null
         )[0].applicant_id;
 
         // try deleting the applicant not via session route
-        const resp1 = await apiPOST(`/admin/applicants/delete`, {
+        resp = await apiPOST(`/admin/applicants/delete`, {
             id: idToDelete,
         });
-        expect(resp1).toHaveStatus("error");
+        expect(resp).toHaveStatus("error");
 
         // confirm the applicant is not deleted
-        const resp2 = await apiGET(`/admin/applicants`);
-        expect(resp2.payload.map((app) => app.id)).toContain(idToDelete);
+        resp = await apiGET(`/admin/applicants`);
+        expect(resp.payload.map((app) => app.id)).toContain(idToDelete);
     });
 }
