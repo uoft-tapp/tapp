@@ -1,22 +1,22 @@
 {
     "instructors": [
         {
-            "first_name": "Gordon",
+            "first_name": "Henry",
             "last_name": "Smith",
-            "email": "a@a.com",
-            "utorid": "booger"
+            "utorid": "smithh",
+            "email": "hery.smith@utoronto.ca"
         },
         {
-            "first_name": "Tommy",
-            "last_name": "Smith",
-            "email": "a@b.com",
-            "utorid": "food"
+            "first_name": "Emily",
+            "last_name": "Garcia",
+            "utorid": "garciae",
+            "email": "emily.garcia@utoronto.ca"
         },
         {
-            "first_name": "Grandpa",
-            "last_name": "Boobie",
-            "email": "a@d.com",
-            "utorid": "fooc"
+            "first_name": "Megan",
+            "last_name": "Miller",
+            "utorid": "millerm",
+            "email": "megan.miller@utoronto.ca"
         }
     ]
 }
