@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { it, expect, beforeAll } from "./utils";
+import { it, expect, beforeAll, addSession} from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
 
@@ -34,6 +34,7 @@ export function ddahTests(api) {
     let resp1;
     let session = null;
     let assignments = null;
+    let appliants = null;
     let ddah = {};
 
     beforeAll(async () => {
@@ -41,6 +42,7 @@ export function ddahTests(api) {
         await databaseSeeder.seedForInstructors(api);
         session = databaseSeeder.seededData.session;
         assignments = databaseSeeder.seededData.assignments;
+        appliants = databaseSeeder.seededData.applicants;
     }, 30000);
 
     it("create a ddah", async () => {
@@ -85,23 +87,81 @@ export function ddahTests(api) {
     it("get all ddahs associated with a session", async () => {
         resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.length).toEqual(1);
         expect(resp1.payload).toContainObject(ddah);
     });
 
     it("getting ddahs for one session will not return ddahs for another session", async () => {
-        // retrieve all ddahs for the session
+        // first create a new session filled with new position, assignment, and contract.
+        const newSession = await addSession(
+            { apiGET: apiGET, apiPOST: apiPOST },
+            { contract_templates: true }
+        );
+        resp1 = await api.apiGET(
+            `/admin/sessions/${newSession.id}/contract_templates`
+        );
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload.length).not.toEqual(0);
+        const newContract = resp1.payload[0];
+
+        const newPosition = {
+            position_code: "MAT135F",
+            position_title: "Calculus I",
+            hours_per_assignment: 70,
+            start_date: newSession.start_date,
+            end_date: newSession.end_date,
+            contract_template_id: newContract.id,
+        };
+        resp1 = await api.apiPOST(
+            `/admin/sessions/${newSession.id}/positions`,
+            newPosition
+        );
+        expect(resp1).toHaveStatus("success");
+        Object.assign(newPosition, resp1.payload);
+
+        const newAssignment = {
+            position_id: newPosition.id,
+            applicant_id: appliants[0].id,
+            hours: 70,
+            start_date: newPosition.start_date,
+            end_date: newPosition.end_date,
+        };
+
+        resp1 = await apiPOST(`/admin/assignments`, newAssignment);
+        expect(resp1).toHaveStatus("success");
+        Object.assign(newAssignment, resp1.payload);
+
+        // create a new DDAH
+        const newDdah = {
+            assignment_id: newAssignment.id,
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "Marking the midterm",
+                },
+            ],
+        };
+
+        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp1).toHaveStatus("success");
+
+        // retrieve all ddahs for both sessions
         resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
-        const allDdah = resp1.payload;
+        const ddahs = resp1.payload;
 
-        // retrieve all the assignments for the seesion
-        const resp2 = await apiGET(`/admin/sessions/${session.id}/assignments`);
-        expect(resp2).toHaveStatus("success");
-        const allAssignmentId = resp2.payload.map((y) => y.id);
+        resp1 = await apiGET(`/admin/sessions/${newSession.id}/ddahs`);
+        expect(resp1).toHaveStatus("success");
+        const newDdahs = resp1.payload;
 
-        // check that all the ddahs are associated with an assignment from the session
-        allDdah.forEach((d) => {
-            expect(allAssignmentId).toContain(d.assignment_id);
+        // compare two arrays of ddahs do not contain the same ddahs.
+        ddahs.forEach((d) => {
+            expect(newDdahs).not.toContainObject(d);
+        });
+
+        newDdahs.forEach((d) => {
+            expect(ddahs).not.toContainObject(d);
         });
     });
 
