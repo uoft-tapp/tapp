@@ -93,8 +93,8 @@ export class Assignment extends MockAPIController {
         // compute offer_status
         const activeOffer = this.getActiveOffer(matchingAssignment);
         if (activeOffer) {
-            ret.active_offer_status = activeOffer.status
-            ret.active_offer_url_token = activeOffer.url_token
+            ret.active_offer_status = activeOffer.status;
+            ret.active_offer_url_token = activeOffer.url_token;
         }
         // Add position start and end dates if they are not defined
         const position = this.getPosition(matchingAssignment);
