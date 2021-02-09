@@ -116,7 +116,7 @@ export const assignmentSchema = {
 export const ddahSchema = {
     keys: ["position_code", "email", "hours", "first_name", "last_name"],
     keyMap: {
-        "Position": "position_code",
+        Position: "position_code",
         "Assignment Hours": "hours",
         "First Name": "first_name",
         "Given Name": "first_name",
