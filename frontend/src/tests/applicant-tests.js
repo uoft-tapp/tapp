@@ -12,7 +12,6 @@ export function applicantTests(api) {
     let session;
     let applicant;
     let newApplicant;
-    let resp;
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
@@ -21,7 +20,7 @@ export function applicantTests(api) {
     }, 30000);
 
     it("applicants associated with a session", async () => {
-        resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
+        let resp = await apiGET(`/admin/sessions/${session.id}/applicants`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toContainObject(applicant);
     });
@@ -33,7 +32,7 @@ export function applicantTests(api) {
             utorid: "smith1",
         };
 
-        resp = await apiPOST(`/admin/applicants`, applicantData);
+        let resp = await apiPOST(`/admin/applicants`, applicantData);
         expect(resp).toHaveStatus("success");
         checkPropTypes(applicantPropTypes, resp.payload);
         Object.assign(applicantData, resp.payload);
@@ -50,7 +49,7 @@ export function applicantTests(api) {
             utorid: "smith2",
         };
 
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/sessions/${session.id}/applicants`,
             newApplicant
         );
@@ -73,7 +72,7 @@ export function applicantTests(api) {
             name: "Newly Created Sessions 1",
             rate1: 56.54,
         };
-        resp = await apiPOST("/admin/sessions", newSession);
+        let resp = await apiPOST("/admin/sessions", newSession);
         expect(resp).toHaveStatus("success");
         Object.assign(newSession, resp.payload);
 
@@ -105,7 +104,7 @@ export function applicantTests(api) {
             name: "Newly Created Sessions 2",
             rate1: 59.54,
         };
-        resp = await apiPOST("/admin/sessions", newSession);
+        let resp = await apiPOST("/admin/sessions", newSession);
         expect(resp).toHaveStatus("success");
         Object.assign(newSession, resp.payload);
 
@@ -134,7 +133,7 @@ export function applicantTests(api) {
             last_name: "Kim",
             utorid: "kim",
         };
-        resp = await apiPOST(`/admin/applicants`, newApplicant1);
+        let resp = await apiPOST(`/admin/applicants`, newApplicant1);
         expect(resp).toHaveStatus("success");
         Object.assign(newApplicant1, resp.payload);
 
@@ -172,7 +171,7 @@ export function applicantTests(api) {
 
     it("fail to delete an applicant with an associated assignment", async () => {
         // Retrieve all assignments from the current session
-        resp = await apiGET(`/admin/sessions/${session.id}/assignments`);
+        let resp = await apiGET(`/admin/sessions/${session.id}/assignments`);
         expect(resp).toHaveStatus("success");
 
         // pick an associated applicant id
