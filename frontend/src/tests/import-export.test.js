@@ -10,10 +10,17 @@ import {
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import instructorsJSON from "./samples/instructors.json";
+import applicantsJSON from "./samples/applicants.json";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
     File = FileAPI.File;
+
+// object JSON collections
+const objectJSON = {
+    instructor: instructorsJSON,
+    applicant: applicantsJSON,
+};
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -27,6 +34,29 @@ describe("Import/export library functionality", () => {
             Surname: "last_name",
             "Family Name": "last_name",
             Last: "last_name",
+        },
+        requiredKeys: ["utorid"],
+        primaryKey: "utorid",
+    };
+
+    const applicantSchema = {
+        keys: [
+            "first_name",
+            "last_name",
+            "utorid",
+            "email",
+            "student_number",
+            "phone",
+        ],
+        keyMap: {
+            "First Name": "first_name",
+            "Given Name": "first_name",
+            First: "first_name",
+            "Last Name": "last_name",
+            Surname: "last_name",
+            "Family Name": "last_name",
+            Last: "last_name",
+            "Student Number": "student_number",
         },
         requiredKeys: ["utorid"],
         primaryKey: "utorid",
@@ -55,13 +85,40 @@ describe("Import/export library functionality", () => {
         },
     ];
 
+    const applicantData = [
+        {
+            first_name: "Celinda",
+            last_name: "Najara",
+            utorid: "cnajara0",
+            email: "cnajara0@ycombinator.com",
+            student_number: 5876,
+            phone: "236-361-6762",
+        },
+        {
+            first_name: "Sumner",
+            last_name: "Silbersak",
+            utorid: "ssilbersak1",
+            email: "ssilbersak1@goo.gl",
+            student_number: 7066,
+            phone: "124-215-0134",
+        },
+        {
+            first_name: "Creight",
+            last_name: "Willingale",
+            utorid: "cwillingale2",
+            email: "cwillingale2@google.de",
+            student_number: 263,
+            phone: "835-889-7339",
+        },
+    ];
+
     /*
      *  Create a `File` object containing of the specified format.
      * This function is a copy of function dataToFile in ../libs/importExportUtils.
      * The only difference is this function returns a FileAPI File object but not a File object.
      * The reason is Jest is running on NodeJS which does not support File object, and the file-apis File object has a different constructor with File.
      * By calling this function only for testing, the app's export functionality will not be affected,
-     * while the test can still test the export functionality. 
+     * while the test can still test the export functionality.
      *
      * @param {{toSpreadsheet: func, toJson: func}} formatters - Formatters return an array of objects (usable as spreadsheet rows) or a javascript object to be passed to JSON.stringify
      * @param {"xlsx" | "csv" | "json"} dataFormat
@@ -110,7 +167,7 @@ describe("Import/export library functionality", () => {
     }
 
     /*
-     * Construct a FileAPI `File` object based on pre-defined instructor data and input file type
+     * Construct a FileAPI `File` object based on pre-defined object data and input file type
      *
      * @param {"xlsx" | "csv" | "json"} dataFormat
      * @returns {FileAPI.File}
@@ -136,6 +193,38 @@ describe("Import/export library functionality", () => {
             dataFormat,
             "instructors"
         );
+    }
+
+    function testImportFromFile(objectData, objectType, objectSchema) {
+        const correctData = objectData.map((object) =>
+            prepareMinimal[objectType](object)
+        );
+
+        // import object data from a JSON file
+        expect(objectJSON[objectType][`${objectType}s`]).toEqual(correctData);
+
+        // import object data from a CSV File
+        const workbook1 = XLSX.readFile(
+            __dirname + `/samples/${objectType}s.csv`
+        );
+        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
+        let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
+        // transform to array of objects
+        const keys1 = dataCSV.shift();
+        dataCSV = dataCSV.map(function (row) {
+            return keys1.reduce(function (obj, key, i) {
+                obj[key] = row[i];
+                return obj;
+            }, {});
+        });
+        const resultCSV = normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: dataCSV,
+            },
+            objectSchema
+        );
+        expect(resultCSV).toEqual(correctData);
     }
 
     it("Validate data according to a schema", () => {
@@ -293,54 +382,11 @@ describe("Import/export library functionality", () => {
         expect(resultCSV).toEqual(resultCorrect);
     });
 
-    it("Import data from a JSON/CSV/XLSX", () => {
-        const resultCorrect = instructorData.map((instructor) =>
-            prepareMinimal.instructor(instructor)
-        );
+    it("Import instructor data from a JSON/CSV/XLSX", () => {
+        testImportFromFile(instructorData, "instructor", instructorSchema);
+    });
 
-        // import instructor data from a JSON file
-        expect(instructorsJSON.instructors).toEqual(resultCorrect);
-
-        // import instructor data from a XLSX File
-        const workbook = XLSX.readFile(__dirname + "/samples/instructors.xlsx");
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        let dataXLSX = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        // transform to array of objects
-        const keys = dataXLSX.shift();
-        dataXLSX = dataXLSX.map(function (row) {
-            return keys.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
-        });
-        const resultXLSX = normalizeImport(
-            {
-                fileType: "spreadsheet",
-                data: dataXLSX,
-            },
-            instructorSchema
-        );
-        expect(resultXLSX).toEqual(resultCorrect);
-
-        // import instructor data from a CSV File
-        const workbook1 = XLSX.readFile(__dirname + "/samples/instructors.csv");
-        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
-        let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
-        // transform to array of objects
-        const keys1 = dataCSV.shift();
-        dataCSV = dataCSV.map(function (row) {
-            return keys1.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
-        });
-        const resultCSV = normalizeImport(
-            {
-                fileType: "spreadsheet",
-                data: dataCSV,
-            },
-            instructorSchema
-        );
-        expect(resultCSV).toEqual(resultCorrect);
+    it("Import applicant data from a JSON/CSV/XLSX", () => {
+        testImportFromFile(applicantData, "applicant", applicantSchema);
     });
 });

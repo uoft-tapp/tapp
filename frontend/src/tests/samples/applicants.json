@@ -1,0 +1,28 @@
+{
+    "applicants": [
+        {
+            "first_name": "Celinda",
+            "last_name": "Najara",
+            "utorid": "cnajara0",
+            "email": "cnajara0@ycombinator.com",
+            "student_number": 5876,
+            "phone": "236-361-6762"
+        },
+        {
+            "first_name": "Sumner",
+            "last_name": "Silbersak",
+            "utorid": "ssilbersak1",
+            "email": "ssilbersak1@goo.gl",
+            "student_number": 7066,
+            "phone": "124-215-0134"
+        },
+        {
+            "first_name": "Creight",
+            "last_name": "Willingale",
+            "utorid": "cwillingale2",
+            "email": "cwillingale2@google.de",
+            "student_number": 263,
+            "phone": "835-889-7339"
+        }
+    ]
+}
