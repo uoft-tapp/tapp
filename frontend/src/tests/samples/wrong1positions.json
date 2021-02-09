@@ -1,0 +1,24 @@
+{
+    "positions": [
+        {
+            "position_title": "Calculus II",
+            "hours_per_assignment": 70,
+            "contract_template": "template1",
+            "start_date": "2020-01-01T00:00:00.000Z",
+            "end_date": "2020-05-01T00:00:00.000Z"
+        },
+        {
+            "position_code": "CSC135H1F",
+            "position_title": "Computer Fun",
+            "hours_per_assignment": 75,
+            "duties": "Tutorials",
+            "contract_template": "template2"
+        },
+        {
+            "position_code": "MAT235H1F",
+            "position_title": "Calculus III",
+            "hours_per_assignment": 140,
+            "contract_template": "template2"
+        }
+    ]
+}

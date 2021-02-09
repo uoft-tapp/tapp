@@ -11,6 +11,9 @@ import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import instructorsJSON from "./samples/instructors.json";
 import applicantsJSON from "./samples/applicants.json";
+import positionJSON from "./samples/positions.json";
+import wrong1positionsJSON from "./samples/wrong1positions.json";
+import wrong3positionsJSON from "./samples/wrong3positions.json";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
@@ -20,6 +23,9 @@ var FileAPI = require("file-api"),
 const objectJSON = {
     instructor: instructorsJSON,
     applicant: applicantsJSON,
+    position: positionJSON,
+    wrong1position: wrong1positionsJSON,
+    wrong3position: wrong3positionsJSON,
 };
 
 // Run the actual tests for both the API and the Mock API
@@ -37,6 +43,8 @@ describe("Import/export library functionality", () => {
         },
         requiredKeys: ["utorid"],
         primaryKey: "utorid",
+        dateColumns: [],
+        baseName: "instructors",
     };
 
     const applicantSchema = {
@@ -60,18 +68,46 @@ describe("Import/export library functionality", () => {
         },
         requiredKeys: ["utorid"],
         primaryKey: "utorid",
+        dateColumns: [],
+        baseName: "applicants",
+    };
+
+    const positionSchema = {
+        keys: [
+            "position_code",
+            "position_title",
+            "start_date",
+            "end_date",
+            "hours_per_assignment",
+            "contract_template",
+            "duties",
+        ],
+        keyMap: {
+            "Position Code": "position_code",
+            "Course Code": "position_code",
+            "Course Name": "position_code",
+            "Position Title": "position_title",
+            "Start Date": "start_date",
+            Start: "start_date",
+            "End Date": "end_date",
+            End: "end_date",
+            "Hours Per Assignment": "hours_per_assignment",
+            "Contract Template": "contract_template",
+        },
+        dateColumns: ["start_date", "end_date"],
+        requiredKeys: ["position_code", "contract_template"],
+        primaryKey: "position_code",
+        baseName: "positions",
     };
 
     const instructorData = [
         {
-            id: 2,
             first_name: "Henry",
             last_name: "Smith",
             email: "hery.smith@utoronto.ca",
             utorid: "smithh",
         },
         {
-            id: 3,
             first_name: "Emily",
             last_name: "Garcia",
             email: "emily.garcia@utoronto.ca",
@@ -112,7 +148,37 @@ describe("Import/export library functionality", () => {
         },
     ];
 
-    /*
+    const positionData = [
+        {
+            position_code: "MAT136H1F",
+            position_title: "Calculus II",
+            hours_per_assignment: 70,
+            contract_template: "template1",
+            start_date: new Date("2020-01-01").toISOString(),
+            end_date: new Date("2020-05-01").toISOString(),
+            duties: undefined,
+        },
+        {
+            position_code: "CSC135H1F",
+            position_title: "Computer Fun",
+            hours_per_assignment: 75,
+            duties: "Tutorials",
+            contract_template: "template2",
+            start_date: undefined,
+            end_date: undefined,
+        },
+        {
+            position_code: "MAT235H1F",
+            position_title: "Calculus III",
+            hours_per_assignment: 140,
+            contract_template: "template2",
+            start_date: undefined,
+            end_date: undefined,
+            duties: undefined,
+        },
+    ];
+
+    /**
      *  Create a `File` object containing of the specified format.
      * This function is a copy of function dataToFile in ../libs/importExportUtils.
      * The only difference is this function returns a FileAPI File object but not a File object.
@@ -166,7 +232,7 @@ describe("Import/export library functionality", () => {
         );
     }
 
-    /*
+    /**
      * Construct a FileAPI `File` object based on pre-defined object data and input file type
      *
      * @param {"xlsx" | "csv" | "json"} dataFormat
@@ -195,36 +261,60 @@ describe("Import/export library functionality", () => {
         );
     }
 
-    function testImportFromFile(objectData, objectType, objectSchema) {
-        const correctData = objectData.map((object) =>
-            prepareMinimal[objectType](object)
-        );
-
-        // import object data from a JSON file
-        expect(objectJSON[objectType][`${objectType}s`]).toEqual(correctData);
-
-        // import object data from a CSV File
-        const workbook1 = XLSX.readFile(
-            __dirname + `/samples/${objectType}s.csv`
-        );
-        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
-        let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
-        // transform to array of objects
-        const keys1 = dataCSV.shift();
-        dataCSV = dataCSV.map(function (row) {
-            return keys1.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
-        });
-        const resultCSV = normalizeImport(
-            {
-                fileType: "spreadsheet",
-                data: dataCSV,
-            },
-            objectSchema
-        );
-        expect(resultCSV).toEqual(correctData);
+    /**
+     * Tests on importing data from files
+     *
+     * @param {[object]} objectData
+     * @param {string} objectType
+     * @param {object} objectSchema
+     * @param {string} fileType
+     * @param {string} correctness
+     * @returns
+     */
+    function testImportFromFile(
+        objectData,
+        objectType,
+        objectSchema,
+        fileType,
+        correctness = ""
+    ) {
+        if (fileType == "json") {
+            // import object data from a JSON file
+            const resultJSON = normalizeImport(
+                {
+                    fileType: "json",
+                    data:
+                        objectJSON[`${correctness}${objectType}`][
+                            `${objectType}s`
+                        ],
+                },
+                objectSchema
+            );
+            expect(resultJSON).toEqual(objectData);
+        } else if (fileType == "spreadsheet") {
+            // import object data from a CSV File
+            const workbook1 = XLSX.readFile(
+                __dirname + `/samples/${correctness}${objectType}s.csv`
+            );
+            const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
+            let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
+            // transform to array of objects
+            const keys1 = dataCSV.shift();
+            dataCSV = dataCSV.map(function (row) {
+                return keys1.reduce(function (obj, key, i) {
+                    obj[key] = row[i];
+                    return obj;
+                }, {});
+            });
+            const resultCSV = normalizeImport(
+                {
+                    fileType: "spreadsheet",
+                    data: dataCSV,
+                },
+                objectSchema
+            );
+            expect(resultCSV).toEqual(objectData);
+        }
     }
 
     it("Validate data according to a schema", () => {
@@ -382,11 +472,65 @@ describe("Import/export library functionality", () => {
         expect(resultCSV).toEqual(resultCorrect);
     });
 
-    it("Import instructor data from a JSON/CSV/XLSX", () => {
-        testImportFromFile(instructorData, "instructor", instructorSchema);
-    });
-
-    it("Import applicant data from a JSON/CSV/XLSX", () => {
-        testImportFromFile(applicantData, "applicant", applicantSchema);
+    it("Import data from a JSON/CSV/XLSX", () => {
+        // import from correct instructor files
+        testImportFromFile(
+            instructorData,
+            "instructor",
+            instructorSchema,
+            "json"
+        );
+        testImportFromFile(
+            instructorData,
+            "instructor",
+            instructorSchema,
+            "spreadsheet"
+        );
+        // import from correct applicant files
+        testImportFromFile(applicantData, "applicant", applicantSchema, "json");
+        testImportFromFile(
+            applicantData,
+            "applicant",
+            applicantSchema,
+            "spreadsheet"
+        );
+        // import from correct position files
+        testImportFromFile(positionData, "position", positionSchema, "json");
+        testImportFromFile(
+            positionData,
+            "position",
+            positionSchema,
+            "spreadsheet"
+        );
+        // import from files with missing required fields
+        expect(() => {
+            testImportFromFile(
+                positionData,
+                "position",
+                positionSchema,
+                "json",
+                "wrong1"
+            );
+        }).toThrow(Error);
+        // import from files with invalid date fields
+        expect(() => {
+            testImportFromFile(
+                positionData,
+                "position",
+                positionSchema,
+                "spreadsheet",
+                "wrong2"
+            );
+        }).toThrow(Error);
+        // import from files with unmatched keys
+        expect(() => {
+            testImportFromFile(
+                positionData,
+                "position",
+                positionSchema,
+                "json",
+                "wrong3"
+            );
+        }).toThrow(Error);
     });
 });

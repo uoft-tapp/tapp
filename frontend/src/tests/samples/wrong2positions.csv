@@ -1,0 +1,4 @@
+position_code,position_title,hours_per_assignment,contract_template,start_date,end_date,duties
+MAT136H1F,Calculus II,70,template1,INVALID_TIME,INVALID_TIME,
+CSC135H1F,Computer Fun,75,template2,,,Tutorials
+MAT235H1F,Calculus III,140,template2,,,
