@@ -1,0 +1,4 @@
+Last Name,First Name,UTORid,Email,Position Code,Start Date,End Date,Hours,Contract Template,Number of Pay Periods
+Potter,Harry,PotterH,harry.p@mail.utoronto.ca,MAGIC100,2020-01-01T00:00:00.000Z,2020-05-01T00:00:00.000Z,70,template1,10
+Weasley,Ron,WeasleyR,ron.w@mail.utoronto.ca,MAGIC200,,,80,template2,20
+Granger,Herminoe,GrangerH,herm.g@mail.utoronto.ca,MAGIC999,,,800,template3,200

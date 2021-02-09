@@ -9,175 +9,24 @@ import {
 } from "../libs/importExportUtils";
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
-import instructorsJSON from "./samples/instructors.json";
-import applicantsJSON from "./samples/applicants.json";
-import positionJSON from "./samples/positions.json";
-import wrong1positionsJSON from "./samples/wrong1positions.json";
-import wrong3positionsJSON from "./samples/wrong3positions.json";
+import {
+    objectJSON,
+    instructorSchema,
+    applicantSchema,
+    positionSchema,
+    assignmentSchema,
+    instructorData,
+    applicantData,
+    positionData,
+    assignmentData,
+} from "./test_data";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
     File = FileAPI.File;
 
-// object JSON collections
-const objectJSON = {
-    instructor: instructorsJSON,
-    applicant: applicantsJSON,
-    position: positionJSON,
-    wrong1position: wrong1positionsJSON,
-    wrong3position: wrong3positionsJSON,
-};
-
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
-    const instructorSchema = {
-        keys: ["first_name", "last_name", "utorid", "email"],
-        keyMap: {
-            "First Name": "first_name",
-            "Given Name": "first_name",
-            First: "first_name",
-            "Last Name": "last_name",
-            Surname: "last_name",
-            "Family Name": "last_name",
-            Last: "last_name",
-        },
-        requiredKeys: ["utorid"],
-        primaryKey: "utorid",
-        dateColumns: [],
-        baseName: "instructors",
-    };
-
-    const applicantSchema = {
-        keys: [
-            "first_name",
-            "last_name",
-            "utorid",
-            "email",
-            "student_number",
-            "phone",
-        ],
-        keyMap: {
-            "First Name": "first_name",
-            "Given Name": "first_name",
-            First: "first_name",
-            "Last Name": "last_name",
-            Surname: "last_name",
-            "Family Name": "last_name",
-            Last: "last_name",
-            "Student Number": "student_number",
-        },
-        requiredKeys: ["utorid"],
-        primaryKey: "utorid",
-        dateColumns: [],
-        baseName: "applicants",
-    };
-
-    const positionSchema = {
-        keys: [
-            "position_code",
-            "position_title",
-            "start_date",
-            "end_date",
-            "hours_per_assignment",
-            "contract_template",
-            "duties",
-        ],
-        keyMap: {
-            "Position Code": "position_code",
-            "Course Code": "position_code",
-            "Course Name": "position_code",
-            "Position Title": "position_title",
-            "Start Date": "start_date",
-            Start: "start_date",
-            "End Date": "end_date",
-            End: "end_date",
-            "Hours Per Assignment": "hours_per_assignment",
-            "Contract Template": "contract_template",
-        },
-        dateColumns: ["start_date", "end_date"],
-        requiredKeys: ["position_code", "contract_template"],
-        primaryKey: "position_code",
-        baseName: "positions",
-    };
-
-    const instructorData = [
-        {
-            first_name: "Henry",
-            last_name: "Smith",
-            email: "hery.smith@utoronto.ca",
-            utorid: "smithh",
-        },
-        {
-            first_name: "Emily",
-            last_name: "Garcia",
-            email: "emily.garcia@utoronto.ca",
-            utorid: "garciae",
-        },
-        {
-            first_name: "Megan",
-            last_name: "Miller",
-            email: "megan.miller@utoronto.ca",
-            utorid: "millerm",
-        },
-    ];
-
-    const applicantData = [
-        {
-            first_name: "Celinda",
-            last_name: "Najara",
-            utorid: "cnajara0",
-            email: "cnajara0@ycombinator.com",
-            student_number: 5876,
-            phone: "236-361-6762",
-        },
-        {
-            first_name: "Sumner",
-            last_name: "Silbersak",
-            utorid: "ssilbersak1",
-            email: "ssilbersak1@goo.gl",
-            student_number: 7066,
-            phone: "124-215-0134",
-        },
-        {
-            first_name: "Creight",
-            last_name: "Willingale",
-            utorid: "cwillingale2",
-            email: "cwillingale2@google.de",
-            student_number: 263,
-            phone: "835-889-7339",
-        },
-    ];
-
-    const positionData = [
-        {
-            position_code: "MAT136H1F",
-            position_title: "Calculus II",
-            hours_per_assignment: 70,
-            contract_template: "template1",
-            start_date: new Date("2020-01-01").toISOString(),
-            end_date: new Date("2020-05-01").toISOString(),
-            duties: undefined,
-        },
-        {
-            position_code: "CSC135H1F",
-            position_title: "Computer Fun",
-            hours_per_assignment: 75,
-            duties: "Tutorials",
-            contract_template: "template2",
-            start_date: undefined,
-            end_date: undefined,
-        },
-        {
-            position_code: "MAT235H1F",
-            position_title: "Calculus III",
-            hours_per_assignment: 140,
-            contract_template: "template2",
-            start_date: undefined,
-            end_date: undefined,
-            duties: undefined,
-        },
-    ];
-
     /**
      *  Create a `File` object containing of the specified format.
      * This function is a copy of function dataToFile in ../libs/importExportUtils.
@@ -502,6 +351,19 @@ describe("Import/export library functionality", () => {
             positionSchema,
             "spreadsheet"
         );
+        // import from correct assignment files
+        testImportFromFile(
+            assignmentData,
+            "assignment",
+            assignmentSchema,
+            "json"
+        );
+        // testImportFromFile(
+        //     assignmentData,
+        //     "assignment",
+        //     assignmentSchema,
+        //     "spreadsheet"
+        // );
         // import from files with missing required fields
         expect(() => {
             testImportFromFile(

@@ -1,0 +1,36 @@
+{
+    "assignments": [
+        {
+            "Last Name": "Potter",
+            "First Name": "Harry",
+            "utorid": "PotterH",
+            "Email": "harry.p@mail.utoronto.ca",
+            "position_code": "MAGIC100",
+            "start_date": "2020-01-01T00:00:00.000Z",
+            "end_date": "2020-05-01T00:00:00.000Z",
+            "hours": 70,
+            "contract_template": "template1",
+            "wage_chunks": 10
+        },
+        {
+            "Last Name": "Weasley",
+            "First Name": "Ron",
+            "utorid": "WeasleyR",
+            "Email": "ron.w@mail.utoronto.ca",
+            "position_code": "MAGIC200",
+            "hours": 80,
+            "contract_template": "template2",
+            "wage_chunks": 20
+        },
+        {
+            "Last Name": "Granger",
+            "First Name": "Herminoe",
+            "utorid": "GrangerH",
+            "Email": "herm.g@mail.utoronto.ca",
+            "position_code": "MAGIC999",
+            "hours": 800,
+            "contract_template": "template3",
+            "wage_chunks": 200
+        }
+    ]
+}
