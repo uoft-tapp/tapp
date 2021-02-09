@@ -89,14 +89,12 @@ export class Assignment extends MockAPIController {
         const ret = { ...matchingAssignment };
         // compute the hours from wage chunks
         const { hours } = this.getWageChunkInfo(matchingAssignment);
-        Object.assign(ret, { hours });
+        ret.hours = hours;
         // compute offer_status
         const activeOffer = this.getActiveOffer(matchingAssignment);
         if (activeOffer) {
-            Object.assign(ret, {
-                active_offer_status: activeOffer.status,
-                active_offer_url_token: activeOffer.url_token,
-            });
+            ret.active_offer_status = activeOffer.status
+            ret.active_offer_url_token = activeOffer.url_token
         }
         // Add position start and end dates if they are not defined
         const position = this.getPosition(matchingAssignment);
