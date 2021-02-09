@@ -123,7 +123,7 @@ export function assignmentsTests(api) {
             contract_template_id: contractTemplate.id,
         };
 
-        var resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/sessions/${session.id}/positions`,
             newPositionData
         );
