@@ -101,7 +101,7 @@ export function ddahTests(api) {
             `/admin/sessions/${newSession.id}/contract_templates`
         );
         expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.length).not.toEqual(0);
+        expect(resp1.payload.length).toBeGreaterThan(0);
         const newContract = resp1.payload[0];
 
         const newPosition = {
