@@ -1,0 +1,18 @@
+{
+    "ddahs": [
+        {
+            "position_code": "CSC494",
+            "last_name": "Potter",
+            "first_name": "A",
+            "email": "a@a.com",
+            "hours": 10
+        },
+        {
+            "position_code": "CSC498",
+            "last_name": "Ron",
+            "first_name": "B",
+            "email": "b@b.com",
+            "hours": 20
+        }
+    ]
+}

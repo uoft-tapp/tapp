@@ -15,10 +15,12 @@ import {
     applicantSchema,
     positionSchema,
     assignmentSchema,
+    ddahSchema,
     instructorData,
     applicantData,
     positionData,
     assignmentData,
+    ddahData,
 } from "./test_data";
 
 /* eslint-env node */
@@ -358,12 +360,15 @@ describe("Import/export library functionality", () => {
             assignmentSchema,
             "json"
         );
-        // testImportFromFile(
-        //     assignmentData,
-        //     "assignment",
-        //     assignmentSchema,
-        //     "spreadsheet"
-        // );
+        testImportFromFile(
+            assignmentData,
+            "assignment",
+            assignmentSchema,
+            "spreadsheet"
+        );
+        // import from correct ddah files
+        testImportFromFile(ddahData, "ddah", ddahSchema, "json");
+        testImportFromFile(ddahData, "ddah", ddahSchema, "spreadsheet");
         // import from files with missing required fields
         expect(() => {
             testImportFromFile(

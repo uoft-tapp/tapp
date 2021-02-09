@@ -4,6 +4,7 @@ import positionJSON from "./samples/positions.json";
 import wrong1positionsJSON from "./samples/wrong1positions.json";
 import wrong3positionsJSON from "./samples/wrong3positions.json";
 import assignmentsJSON from "./samples/assignments.json";
+import ddahsJSON from "./samples/ddahs.json";
 
 // object JSON collections
 export const objectJSON = {
@@ -13,6 +14,7 @@ export const objectJSON = {
     wrong1position: wrong1positionsJSON,
     wrong3position: wrong3positionsJSON,
     assignment: assignmentsJSON,
+    ddah: ddahsJSON,
 };
 
 export const instructorSchema = {
@@ -103,11 +105,31 @@ export const assignmentSchema = {
         "End Date": "end_date",
         End: "end_date",
         Hours: "hours",
+        "Number of Pay Periods": "wage_chunks",
     },
     dateColumns: ["start_date", "end_date"],
     requiredKeys: ["position_code", "utorid"],
     primaryKey: ["utorid", "position_code"],
     baseName: "assignments",
+};
+
+export const ddahSchema = {
+    keys: ["position_code", "email", "hours", "first_name", "last_name"],
+    keyMap: {
+        "Position": "position_code",
+        "Assignment Hours": "hours",
+        "First Name": "first_name",
+        "Given Name": "first_name",
+        First: "first_name",
+        "Last Name": "last_name",
+        Surname: "last_name",
+        "Family Name": "last_name",
+        Last: "last_name",
+    },
+    dateColumns: [],
+    requiredKeys: ["position_code"],
+    primaryKey: ["position_code"],
+    baseName: "ddahs",
 };
 
 export const instructorData = [
@@ -215,5 +237,22 @@ export const assignmentData = [
         hours: 800,
         contract_template: "template3",
         wage_chunks: 200,
+    },
+];
+
+export const ddahData = [
+    {
+        position_code: "CSC494",
+        last_name: "Potter",
+        first_name: "A",
+        email: "a@a.com",
+        hours: 10,
+    },
+    {
+        position_code: "CSC498",
+        last_name: "Ron",
+        first_name: "B",
+        email: "b@b.com",
+        hours: 20,
     },
 ];
