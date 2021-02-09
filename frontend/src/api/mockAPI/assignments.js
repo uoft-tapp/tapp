@@ -99,16 +99,12 @@ export class Assignment extends MockAPIController {
             });
         }
         // Add position start and end dates if they are not defined
-        const position = this.getPosition(matchingAssignment)
+        const position = this.getPosition(matchingAssignment);
         if (!matchingAssignment.start_date) {
-            Object.assign(ret, {
-                start_date: position.start_date
-            });
-        } 
+            ret.start_date = position.start_date;
+        }
         if (!matchingAssignment.end_date) {
-            Object.assign(ret, {
-                end_date: position.end_date
-            });
+            ret.end_date = position.end_date;
         }
 
         return ret;

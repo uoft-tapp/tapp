@@ -114,8 +114,6 @@ export function assignmentsTests(api) {
     });
 
     it("assignments created with null start/end_date inherit the start/end_date from the parent position", async () => {
-
-
         const newPositionData = {
             position_code: "CSC200F",
             position_title: "Basic Computer Science",
@@ -140,9 +138,10 @@ export function assignmentsTests(api) {
 
         expect(resp).toHaveStatus("success");
         const { payload: createdAssignment } = resp;
-        console.log(createdAssignment)
         checkPropTypes(assignmentPropTypes, createdAssignment);
-        expect(createdAssignment.start_date).toEqual(newPositionData.start_date);
+        expect(createdAssignment.start_date).toEqual(
+            newPositionData.start_date
+        );
         expect(createdAssignment.end_date).toEqual(newPositionData.end_date);
     });
 }
