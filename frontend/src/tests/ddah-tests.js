@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { it, expect, beforeAll, addSession} from "./utils";
+import { it, expect, beforeAll, addSession } from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
 
@@ -31,7 +31,7 @@ function computeTotalHoursForDdah(ddah) {
  */
 export function ddahTests(api) {
     const { apiGET, apiPOST } = api;
-    let resp1;
+
     let session = null;
     let assignments = null;
     let appliants = null;
@@ -67,7 +67,7 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp1 = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.duties.length).toEqual(newDdah.duties.length);
         expect(computeTotalHoursForDdah(resp1.payload)).toEqual(
@@ -79,13 +79,13 @@ export function ddahTests(api) {
     });
 
     it("get a ddah", async () => {
-        resp1 = await apiGET(`/admin/ddahs/${ddah.id}`);
+        let resp1 = await apiGET(`/admin/ddahs/${ddah.id}`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(ddah);
     });
 
     it("get all ddahs associated with a session", async () => {
-        resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
+        let resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.length).toEqual(1);
         expect(resp1.payload).toContainObject(ddah);
@@ -97,7 +97,7 @@ export function ddahTests(api) {
             { apiGET: apiGET, apiPOST: apiPOST },
             { contract_templates: true }
         );
-        resp1 = await api.apiGET(
+        let resp1 = await api.apiGET(
             `/admin/sessions/${newSession.id}/contract_templates`
         );
         expect(resp1).toHaveStatus("success");
@@ -177,7 +177,7 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp1 = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.id).toEqual(ddah.id);
         expect(computeTotalHoursForDdah(resp1.payload)).toEqual(100);
@@ -190,7 +190,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.approved_date).toBeFalsy();
 
-        resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
+        let resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.approved_date).toBeTruthy();
 
@@ -202,7 +202,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.emailed_date).toBeFalsy();
 
-        resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
+        let resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload.emailed_date).toBeTruthy();
 
@@ -211,7 +211,9 @@ export function ddahTests(api) {
     });
 
     it("get ddah from assignment route", async () => {
-        resp1 = await apiGET(`/admin/assignments/${ddah.assignment_id}/ddah`);
+        let resp1 = await apiGET(
+            `/admin/assignments/${ddah.assignment_id}/ddah`
+        );
         expect(resp1).toHaveStatus("success");
         expect(resp1.payload).toMatchObject(ddah);
     });
@@ -228,12 +230,12 @@ export function ddahTests(api) {
                 },
             ],
         };
-        resp1 = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${newAssignment.id}/ddah`,
             newDdah
         );
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toMatchObject({
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({
             ...newDdah,
             assignment_id: newAssignment.id,
         });
@@ -314,7 +316,6 @@ export function ddahsEmailAndDownloadTests(api) {
     const { apiGET, apiPOST } = api;
     const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
     const BACKEND_BASE_URL = "http://backend:3000";
-    let resp;
     let assignments = null;
     let ddah = {};
     let session = null;
@@ -361,7 +362,7 @@ export function ddahsEmailAndDownloadTests(api) {
             ],
         };
 
-        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         Object.assign(ddah, resp.payload);
 
@@ -396,7 +397,7 @@ export function ddahsEmailAndDownloadTests(api) {
     });
 
     it("can download pdf versions ddah signature list", async () => {
-        resp = await apiGET(
+        let resp = await apiGET(
             `/admin/sessions/${session.id}/ddahs/accepted_list.pdf`
         );
         expect(resp).toHaveStatus("success");
