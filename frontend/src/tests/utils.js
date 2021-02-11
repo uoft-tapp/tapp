@@ -2,7 +2,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line
-const { expect, test, it, describe, beforeAll, afterEach } = global;
+const { expect, test, it, describe, beforeAll } = global;
 
 // add a custom `.toContainObject` method to `expect()` to see if an array contains
 // an object with matching props. Taken from
@@ -62,7 +62,7 @@ expect.extend({
     },
 });
 
-export { expect, test, it, describe, beforeAll, afterEach };
+export { expect, test, it, describe, beforeAll };
 
 /** URL prefix for making API calls from inside a docker image */
 export const API_URL = "http://backend:3000/api/v1";

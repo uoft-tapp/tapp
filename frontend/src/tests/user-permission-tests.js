@@ -1,4 +1,4 @@
-import { expect, it, beforeAll, afterEach } from "./utils";
+import { expect, it, beforeAll } from "./utils";
 import { databaseSeeder } from "./setup";
 
 /**
