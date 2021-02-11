@@ -116,7 +116,7 @@ export function instructorsPermissionTests(api) {
             hours_per_assignment: 1.0,
             contract_template_id: existingContractTemplateId,
             duties: "Tutorials",
-            instructor_ids: emptyRoleUserId,
+            instructor_ids: [emptyRoleUserId],
         };
 
         // upon successfully making the following position upsert, the no-role user should be granted instructor role
