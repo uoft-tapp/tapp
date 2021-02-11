@@ -4,9 +4,8 @@ import { databaseSeeder } from "./setup";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
- * they may be functions that make actual requests via http or they may
- * be from the mock API.
- *
+ * they may be functions that make actual requests via http or they may be from 
+ * the mock API.
  * @param {object} api
  * @param {Function} api.apiGET A function that when passed a route will return the get response
  * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
