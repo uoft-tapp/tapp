@@ -116,30 +116,23 @@ export function userPermissionsTests(api) {
     });
 
     it("A TA can access TA routes", async () => {
-        // the default user has all roles, including the TA role
-        let resp = await apiGET("/ta/active_user");
-        expect(resp).toHaveStatus("success");
-
         await switchToUser(taOnlyUser);
 
         // Try to fetch a TA route
-        resp = await apiGET("/ta/active_user");
+        let resp = await apiGET("/ta/active_user");
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
+        // the default user has all roles, including the TA role
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
     });
 
     it("An instructor who is also a TA can access instructor and TA routes", async () => {
-        // the default user has all roles, including both the instructor role and the TA role
-        let resp = await apiGET("/ta/active_user");
-        expect(resp).toHaveStatus("success");
-        resp = await apiGET("/instructor/active_user");
-        expect(resp).toHaveStatus("success");
-
         await switchToUser(taInstructorUser);
 
         // Try to fetch a TA route
-        resp = await apiGET("/ta/active_user");
+        let resp = await apiGET("/ta/active_user");
         expect(resp).toHaveStatus("success");
 
         // try to fetch instructor routes
@@ -150,5 +143,10 @@ export function userPermissionsTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
+        // the default user has all roles, including both the instructor role and the TA role
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET("/instructor/active_user");
+        expect(resp).toHaveStatus("success");
     });
 }
