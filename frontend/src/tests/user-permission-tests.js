@@ -16,17 +16,17 @@ export function userPermissionsTests(api) {
 
     let defaultUser;
 
-    const instructorOnlyUserData = {
+    const instructorOnlyUser = {
         utorid: "user_permission_test_instructor_only_utorid",
         roles: ["instructor"],
     };
 
-    const TAOnlyUserData = {
+    const taOnlyUser = {
         utorid: "user_permission_test_ta_only_utorid",
         roles: ["ta"],
     };
 
-    const TAInstructorUserData = {
+    const taInstructorUser = {
         utorid: "user_permission_test_ta_and_instructor_utorid",
         roles: ["ta", "instructor"],
     };
@@ -37,7 +37,7 @@ export function userPermissionsTests(api) {
      * @param newActiveUser the user to be set to the active user
      * @returns {Promise<void>}
      */
-    async function switchToTargetUser(newActiveUser) {
+    async function switchToUser(newActiveUser) {
         // Set the active user to the target user
         let resp = await apiPOST("/debug/active_user", newActiveUser);
         expect(resp).toHaveStatus("success");
@@ -49,11 +49,8 @@ export function userPermissionsTests(api) {
      * @returns {Promise<void>}
      */
     async function restoreDefaultUser() {
-        let respSwitchBackUser = await apiPOST(
-            `/debug/active_user`,
-            defaultUser
-        );
-        expect(respSwitchBackUser).toHaveStatus("success");
+        let resp = await apiPOST(`/debug/active_user`, defaultUser);
+        expect(resp).toHaveStatus("success");
     }
 
     beforeAll(async () => {
@@ -65,13 +62,16 @@ export function userPermissionsTests(api) {
             roles: resp.payload.roles,
         };
 
-        resp = await apiPOST("/debug/users", instructorOnlyUserData);
+        // create in the database the user with only instructor role
+        resp = await apiPOST("/debug/users", instructorOnlyUser);
         expect(resp).toHaveStatus("success");
 
-        resp = await apiPOST("/debug/users", TAOnlyUserData);
+        // create in the database the user with only ta role
+        resp = await apiPOST("/debug/users", taOnlyUser);
         expect(resp).toHaveStatus("success");
 
-        resp = await apiPOST("/debug/users", TAInstructorUserData);
+        // create in the database the user with both the instructor role and the ta role
+        resp = await apiPOST("/debug/users", taInstructorUser);
         expect(resp).toHaveStatus("success");
     }, 30000);
 
@@ -82,7 +82,7 @@ export function userPermissionsTests(api) {
     });
 
     it("A non-admin cannot access the admin route", async () => {
-        await switchToTargetUser(instructorOnlyUserData);
+        await switchToUser(instructorOnlyUser);
 
         // Try to fetch admin routes
         let resp = await apiGET("/admin/active_user");
@@ -104,16 +104,15 @@ export function userPermissionsTests(api) {
     });
 
     it("An instructor can access instructor routes", async () => {
-        // the default user has all roles, including the instructor role
+        // switch to instructor only user
+        await switchToUser(instructorOnlyUser);
         let resp = await apiGET("/instructor/instructors");
         expect(resp).toHaveStatus("success");
 
-        // switch to instructor only user
-        await switchToTargetUser(instructorOnlyUserData);
+        await restoreDefaultUser();
+        // the default user has all roles, including the instructor role
         resp = await apiGET("/instructor/instructors");
         expect(resp).toHaveStatus("success");
-
-        await restoreDefaultUser();
     });
 
     it("A TA can access TA routes", async () => {
@@ -121,7 +120,7 @@ export function userPermissionsTests(api) {
         let resp = await apiGET("/ta/active_user");
         expect(resp).toHaveStatus("success");
 
-        await switchToTargetUser(TAOnlyUserData);
+        await switchToUser(taOnlyUser);
 
         // Try to fetch a TA route
         resp = await apiGET("/ta/active_user");
@@ -134,10 +133,10 @@ export function userPermissionsTests(api) {
         // the default user has all roles, including both the instructor role and the TA role
         let resp = await apiGET("/ta/active_user");
         expect(resp).toHaveStatus("success");
-        resp = await apiGET("/instructor/instructors");
+        resp = await apiGET("/instructor/active_user");
         expect(resp).toHaveStatus("success");
 
-        await switchToTargetUser(TAInstructorUserData);
+        await switchToUser(taInstructorUser);
 
         // Try to fetch a TA route
         resp = await apiGET("/ta/active_user");
