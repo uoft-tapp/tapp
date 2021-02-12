@@ -5,10 +5,10 @@ require 'rails_helper'
 describe Api::V1::Admin::SessionsController do
     let(:valid_attributes) do
         {
-            "start_date": Time.zone.now,
-            "end_date": Time.zone.now + 3.days,
-            "name": 'Fall 2019 Session',
-            "rate1": 20.00
+            start_date: Time.zone.now,
+            end_date: Time.zone.now + 3.days,
+            name: 'Fall 2019 Session',
+            rate1: 20.00
         }
     end
 

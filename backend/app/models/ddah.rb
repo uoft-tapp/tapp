@@ -14,6 +14,17 @@ class Ddah < ApplicationRecord
               )
           }
 
+    scope :by_instructor,
+          lambda { |instructor_id|
+              joins(assignment: { position: :instructors }).where(
+                  instructors: { id: instructor_id }
+              )
+          }
+
+    def accessible_by_instructor(instructor_id)
+        assignment.position.instructors.exists?(instructor_id)
+    end
+
     def accept
         self.accepted_date = Time.zone.now
     end
