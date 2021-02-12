@@ -92,7 +92,7 @@ export function ddahTests(api) {
     });
 
     it("getting ddahs for one session will not return ddahs for another session", async () => {
-        // first create a new session filled with new position, assignment, and contract.
+        // First create a new session with new position, assignment, and contract.
         const newSession = await addSession(api);
         let resp = await apiGET(
             `/admin/sessions/${newSession.id}/contract_templates`
