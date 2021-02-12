@@ -237,15 +237,15 @@ export function templatesTests(api) {
         
 
         // Testing to ensure that duplicate file names 
-        const resp2 = await apiPOST(
+        const resp3 = await apiPOST(
             `/admin/contract_templates/upload`,
             {
                 template_file,
                 template_name: "First Template",
             }
         );
-        expect(resp2).toHaveStatus("error");
-        const newTemplate = resp2.payload;
+        expect(resp3).toHaveStatus("error");
+        const newerTemplate = resp3.payload;    
 
         // const newTemplateData3 = {
         //     template_file: "/math/invigilate.html",
