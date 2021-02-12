@@ -1,18 +1,18 @@
-import instructorsJSON from "./samples/instructors.json";
-import applicantsJSON from "./samples/applicants.json";
-import positionJSON from "./samples/positions.json";
-import wrong1positionsJSON from "./samples/wrong1positions.json";
-import wrong3positionsJSON from "./samples/wrong3positions.json";
-import assignmentsJSON from "./samples/assignments.json";
-import ddahsJSON from "./samples/ddahs.json";
+import instructorsJSON from "./instructors.json";
+import applicantsJSON from "./applicants.json";
+import positionJSON from "./positions.json";
+import MissPrimaryKeypositionsJSON from "./MissPrimaryKeypositions.json";
+import InvalidKeypositionsJSON from "./InvalidKeypositions.json";
+import assignmentsJSON from "./assignments.json";
+import ddahsJSON from "./ddahs.json";
 
 // object JSON collections
 export const objectJSON = {
     instructor: instructorsJSON,
     applicant: applicantsJSON,
     position: positionJSON,
-    wrong1position: wrong1positionsJSON,
-    wrong3position: wrong3positionsJSON,
+    MissPrimaryKeyposition: MissPrimaryKeypositionsJSON,
+    InvalidKeyposition: InvalidKeypositionsJSON,
     assignment: assignmentsJSON,
     ddah: ddahsJSON,
 };

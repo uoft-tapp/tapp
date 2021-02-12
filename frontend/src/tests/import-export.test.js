@@ -21,7 +21,7 @@ import {
     positionData,
     assignmentData,
     ddahData,
-} from "./test_data";
+} from "./test-data-file/test_data";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
@@ -113,7 +113,9 @@ describe("Import/export library functionality", () => {
     }
 
     /**
-     * Tests on importing data from files
+     * Given correct object data, object type, correct object schema, and file type,
+     * carry out tests to check whether importing from corresponding file containing correct corresponding object data
+     * will produce correct object data.
      *
      * @param {[object]} objectData
      * @param {string} objectType
@@ -145,7 +147,7 @@ describe("Import/export library functionality", () => {
         } else if (fileType == "spreadsheet") {
             // import object data from a CSV File
             const workbook1 = XLSX.readFile(
-                __dirname + `/samples/${correctness}${objectType}s.csv`
+                __dirname + `/test-data-file/${correctness}${objectType}s.csv`
             );
             const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
             let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
@@ -376,7 +378,7 @@ describe("Import/export library functionality", () => {
                 "position",
                 positionSchema,
                 "json",
-                "wrong1"
+                "MissPrimaryKey"
             );
         }).toThrow(Error);
         // import from files with invalid date fields
@@ -386,7 +388,7 @@ describe("Import/export library functionality", () => {
                 "position",
                 positionSchema,
                 "spreadsheet",
-                "wrong2"
+                "InvalidDate"
             );
         }).toThrow(Error);
         // import from files with unmatched keys
@@ -396,7 +398,7 @@ describe("Import/export library functionality", () => {
                 "position",
                 positionSchema,
                 "json",
-                "wrong3"
+                "InvalidKey"
             );
         }).toThrow(Error);
     });
