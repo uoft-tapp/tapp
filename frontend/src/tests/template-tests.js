@@ -8,6 +8,7 @@ import {
     it,
     beforeAll,
 } from "./utils";
+import fs from "fs";
 import { databaseSeeder } from "./setup";
 import { base64ToBytes } from "../api/mockAPI/utils";
 /**
@@ -211,7 +212,7 @@ export function templatesTests(api) {
     // you implement this test, use node.js commands to detect and delete an existing
     // file
     it("upload a template", async () => {
-        // We are going to attempt to retrieve a valid file template first, before uploading
+        // We are going to attempt to retrieve all valid file templates before and after, to see whether adding will change the result
         const resp = await apiGET("/admin/available_contract_templates");
         expect(resp).toHaveStatus("success");
 
@@ -223,54 +224,24 @@ export function templatesTests(api) {
             return;
         }
 
-        const { template_file } = resp.payload[0];
-
+        let template = {
+            content: "A very short string to test.",
+            file_name: "Example Template",
+        };
+        checkPropTypes(offerTemplatePropTypes, template)
         const resp2 = await apiPOST(
             `/admin/contract_templates/upload`,
-            {
-                template_file,
-                template_name: "First Template",
-            }
+            template
         );
         expect(resp2).toHaveStatus("success");
-        const newTemplate = resp2.payload;
-        
+        const addedTemplate = resp2.payload;
 
-        // Testing to ensure that duplicate file names 
+        // Testing to ensure that duplicate file names
         const resp3 = await apiPOST(
             `/admin/contract_templates/upload`,
-            {
-                template_file,
-                template_name: "First Template",
-            }
+            template
         );
         expect(resp3).toHaveStatus("error");
-        const newerTemplate = resp3.payload;    
-
-        // const newTemplateData3 = {
-        //     template_file: "/math/invigilate.html",
-        //     template_name: "Invigilate",
-        // };
-        // // Use the same id for the template.
-        // checkPropTypes(offerTemplateMinimalPropTypes, newTemplateData3);
-        // // add the new offer template
-        // const resp1 = await apiPOST(
-        //     `/admin/contract_templates/upload`,
-        //     newTemplateData3
-        // );
-        // expect(resp1).toHaveStatus("success");
-
-        // // This is a test for uploading a file with the same name
-        // const newTemplateData4 = {
-        //     template_file: "this_is_a_test_template.html",
-        //     template_name: "Invigilate",
-        // };
-
-        // const resp2 = await apiPOST(
-        //     `/admin/contract_templates/upload`,
-        //     newTemplateData4
-        // );
-        // expect(resp2).toHaveStatus("error");
-
+        const newerTemplate = resp3.payload;
     });
 }
