@@ -19,6 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
+import { Button, Modal } from "react-bootstrap";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -58,10 +59,28 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
+    const [show, setShow] = React.useState(false);
+
+    const hideOfferWithdrawConfirmation = () => setShow(false);
+    const showOfferWithdrawConfirmation = () => setShow(true);
+
     function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
         }
+    }
+    function confirmOfferWithdraw() {
+        // if withdrawing multiple offers at once, show confirmation
+        if (selectedAssignments && selectedAssignments.length > 1) {
+            showOfferWithdrawConfirmation();
+        } else {
+            // does not need confirmation if only withdrawing one offer
+            executeConfirmedOfferWithdraw();
+        }
+    }
+    function executeConfirmedOfferWithdraw() {
+        withdrawOffers();
+        hideOfferWithdrawConfirmation();
     }
     function withdrawOffers() {
         for (const assignment of selectedAssignments) {
@@ -114,7 +133,7 @@ function OfferActionButtons(props) {
             </ActionButton>
             <ActionButton
                 icon={<FaUserTimes />}
-                onClick={withdrawOffers}
+                onClick={confirmOfferWithdraw}
                 disabled={!actionPermitted.canWithdraw}
             >
                 Withdraw Offer
@@ -147,6 +166,23 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
+            <Modal show={show} onHide={hideOfferWithdrawConfirmation}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Caution</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    You are withdrawing from multiple offers! Are you sure?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={hideOfferWithdrawConfirmation}
+                        variant="light"
+                    >
+                        No
+                    </Button>
+                    <Button onClick={executeConfirmedOfferWithdraw}>Yes</Button>
+                </Modal.Footer>
+            </Modal>
         </React.Fragment>
     );
 }
