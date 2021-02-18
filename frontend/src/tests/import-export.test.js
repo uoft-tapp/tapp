@@ -6,6 +6,7 @@ import {
     validate,
     SpreadsheetRowMapper,
     normalizeImport,
+    dataToFile,
 } from "../libs/importExportUtils";
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
@@ -24,65 +25,15 @@ import {
 } from "./test-data-collection/test_data";
 
 /* eslint-env node */
-var FileAPI = require("file-api"),
-    File = FileAPI.File;
+function File(fileBits, fileName, options) {
+    this.fileBits = fileBits;
+    this.fileName = fileName;
+    this.options = options;
+}
+global.File = File;
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
-    /**
-     *  Create a `File` object containing of the specified format.
-     * This function is a copy of function dataToFile in ../libs/importExportUtils.
-     * The only difference is this function returns a FileAPI File object but not a File object.
-     * The reason is Jest is running on NodeJS which does not support File object, and the file-apis File object has a different constructor with File.
-     * By calling this function only for testing, the app's export functionality will not be affected,
-     * while the test can still test the export functionality.
-     *
-     * @param {{toSpreadsheet: func, toJson: func}} formatters - Formatters return an array of objects (usable as spreadsheet rows) or a javascript object to be passed to JSON.stringify
-     * @param {"xlsx" | "csv" | "json"} dataFormat
-     * @param {string} filePrefix
-     * @returns {FileAPI.File}
-     */
-    function dataToFileForTest(formatters, dataFormat, filePrefix = "") {
-        const fileName = `${filePrefix}${
-            filePrefix ? "_" : ""
-        }export_${new Date().toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-        })}`;
-
-        if (dataFormat === "spreadsheet" || dataFormat === "csv") {
-            const workbook = XLSX.utils.book_new();
-            const sheet = XLSX.utils.aoa_to_sheet(formatters.toSpreadsheet());
-            XLSX.utils.book_append_sheet(workbook, sheet, "Instructors");
-
-            const bookType = dataFormat === "csv" ? "csv" : "xlsx";
-
-            // We convert the data into a blob and return it so that it can be downloaded
-            // by the user's browser
-            const file = new File({
-                buffer: [XLSX.write(workbook, { type: "array", bookType })],
-                name: `${fileName}.${bookType}`,
-                type:
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-            return file;
-        }
-
-        if (dataFormat === "json") {
-            const file = new File({
-                buffer: [JSON.stringify(formatters.toJson(), null, 4)],
-                name: `${fileName}.json`,
-                type: "application/json",
-            });
-            return file;
-        }
-
-        throw new Error(
-            `Cannot process data to format "${dataFormat}"; try "spreadsheet" or "json".`
-        );
-    }
-
     /**
      * Construct a FileAPI `File` object based on pre-defined object data and input file type
      *
@@ -90,7 +41,7 @@ describe("Import/export library functionality", () => {
      * @returns {FileAPI.File}
      */
     function getInstructorsDataFile(dataFormat) {
-        return dataToFileForTest(
+        return dataToFile(
             {
                 toSpreadsheet: () =>
                     [["Last Name", "First Name", "UTORid", "email"]].concat(
@@ -147,7 +98,8 @@ describe("Import/export library functionality", () => {
         } else if (fileType == "spreadsheet") {
             // import object data from a CSV File
             const workbook1 = XLSX.readFile(
-                __dirname + `/test-data-collection/${correctness}${objectType}s.csv`
+                __dirname +
+                    `/test-data-collection/${correctness}${objectType}s.csv`
             );
             const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
             let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
@@ -236,33 +188,9 @@ describe("Import/export library functionality", () => {
     it("Export data to a JSON/CSV/XLSX", () => {
         // export instructor data a CSV File object
         const fileCSV = getInstructorsDataFile("csv");
-        expect(fileCSV.name).toEqual(
-            `instructors_export_${new Date().toLocaleDateString("en-CA", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-            })}.csv`
-        );
 
         // export instructor data to a JSON File object
         const fileJSON = getInstructorsDataFile("json");
-        expect(fileJSON.name).toEqual(
-            `instructors_export_${new Date().toLocaleDateString("en-CA", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-            })}.json`
-        );
-
-        // export instructor data to a XLSX File object
-        const fileXLSX = getInstructorsDataFile("spreadsheet");
-        expect(fileXLSX.name).toEqual(
-            `instructors_export_${new Date().toLocaleDateString("en-CA", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-            })}.xlsx`
-        );
 
         // invalid file type, should throw error
         expect(() => getInstructorsDataFile("nonsense")).toThrow(Error);
@@ -272,7 +200,7 @@ describe("Import/export library functionality", () => {
         );
 
         // import instructor data from a JSON File object
-        const dataJSON = JSON.parse(fileJSON.buffer.toString()).instructors;
+        const dataJSON = JSON.parse(fileJSON.fileBits.toString()).instructors;
         const resultJSON = normalizeImport(
             {
                 fileType: "json",
@@ -282,29 +210,8 @@ describe("Import/export library functionality", () => {
         );
         expect(resultJSON).toEqual(resultCorrect);
 
-        // import instructor data from a XLSX File object
-        const workbook = XLSX.read(fileXLSX.buffer[0], { type: "array" });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        let dataXLSX = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-        // transform to array of objects
-        const keys = dataXLSX.shift();
-        dataXLSX = dataXLSX.map(function (row) {
-            return keys.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
-        });
-        const resultXLSX = normalizeImport(
-            {
-                fileType: "spreadsheet",
-                data: dataXLSX,
-            },
-            instructorSchema
-        );
-        expect(resultXLSX).toEqual(resultCorrect);
-
         // import instructor data from a CSV File object
-        const workbook1 = XLSX.read(fileCSV.buffer[0], { type: "array" });
+        const workbook1 = XLSX.read(fileCSV.fileBits[0], { type: "array" });
         const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
         let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
         // transform to array of objects
