@@ -37,29 +37,34 @@ describe("Import/export library functionality", () => {
     /**
      * Construct a FileAPI `File` object based on pre-defined object data and input file type
      *
-     * @param {"xlsx" | "csv" | "json"} dataFormat
-     * @returns {FileAPI.File}
+     * @param {string} fileType
+     * @param {[object]} objectData
+     * @param {string} objectType
+     * @param {object} objectSchema
+     * @returns {File}
      */
-    function getInstructorsDataFile(dataFormat) {
+    function getInstructorsDataFile(
+        objectType,
+        objectData,
+        objectSchema,
+        fileType
+    ) {
         return dataToFile(
             {
                 toSpreadsheet: () =>
-                    [["Last Name", "First Name", "UTORid", "email"]].concat(
-                        instructorData.map((instructor) => [
-                            instructor.last_name,
-                            instructor.first_name,
-                            instructor.utorid,
-                            instructor.email,
-                        ])
+                    [objectSchema.keys].concat(
+                        objectData.map((object) =>
+                            objectSchema.keys.map((key) => object[key])
+                        )
                     ),
                 toJson: () => ({
-                    instructors: instructorData.map((instructor) =>
-                        prepareMinimal.instructor(instructor)
+                    [`${objectType}s`]: objectData.map((object) =>
+                        prepareMinimal[`${objectType}`](object)
                     ),
                 }),
             },
-            dataFormat,
-            "instructors"
+            fileType,
+            `${objectType}s`
         );
     }
 
@@ -187,13 +192,20 @@ describe("Import/export library functionality", () => {
 
     it("Export data to a JSON/CSV/XLSX", () => {
         // export instructor data a CSV File object
-        const fileCSV = getInstructorsDataFile("csv");
+        const fileCSV = getInstructorsDataFile(
+            "instructor",
+            instructorData,
+            instructorSchema,
+            "csv"
+        );
 
         // export instructor data to a JSON File object
-        const fileJSON = getInstructorsDataFile("json");
-
-        // invalid file type, should throw error
-        expect(() => getInstructorsDataFile("nonsense")).toThrow(Error);
+        const fileJSON = getInstructorsDataFile(
+            "instructor",
+            instructorData,
+            instructorSchema,
+            "json"
+        );
 
         const resultCorrect = instructorData.map((instructor) =>
             prepareMinimal.instructor(instructor)
