@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedAddDdahDialog } from "./add-ddah-dialog";
-import { FaPlus, FaMailBulk, FaCheck } from "react-icons/fa";
+import { FaPlus, FaMailBulk, FaCheck, FaTrash } from "react-icons/fa";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
@@ -18,7 +18,12 @@ import { MissingActiveSessionWarning } from "../../components/sessions";
 import { useSelector, useDispatch } from "react-redux";
 import { activeSessionSelector } from "../../api/actions";
 import { ddahTableSelector } from "../ddah-table/actions";
-import { ddahsSelector, emailDdah, approveDdah } from "../../api/actions/ddahs";
+import {
+    ddahsSelector,
+    emailDdah,
+    approveDdah,
+    deleteDdah,
+} from "../../api/actions/ddahs";
 import { Ddah } from "../../api/defs/types";
 
 export function AdminDdahsView(): React.ReactNode {
@@ -82,6 +87,17 @@ export function AdminDdahsView(): React.ReactNode {
                     disabled={selectedDdahIds.length === 0}
                 >
                     Approve DDAH
+                </ActionButton>
+                <ActionButton
+                    icon={FaTrash}
+                    onClick={() => {
+                        for (const ddah of selectedDdahs) {
+                            dispatch(deleteDdah(ddah));
+                        }
+                    }}
+                    disabled={selectedDdahIds.length === 0}
+                >
+                    Delete DDAH
                 </ActionButton>
             </ActionsList>
             <ContentArea>

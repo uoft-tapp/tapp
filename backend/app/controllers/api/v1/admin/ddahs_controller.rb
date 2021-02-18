@@ -84,6 +84,17 @@ class Api::V1::Admin::DdahsController < ApplicationController
         render_success @ddah
     end
 
+    # POST /ddahs/:ddah_id/delete
+    def delete
+        find_ddah
+        render_on_condition(
+          object: @ddah,
+          condition: proc { @ddah.destroy! },
+          error_message:
+            "Could not delete ddah '#{@ddah.id}'."
+        )
+    end
+
     # POST /ddahs/:ddah_id/email
     def email
         find_ddah
@@ -123,32 +134,8 @@ class Api::V1::Admin::DdahsController < ApplicationController
             object: @ddah,
             condition:
                 proc do
-                    @ddah.update!(ddah_params)
-                    if duty_params[:duties] && @ddah.duties
-                        # Save the old duties to detect if they get changed
-                        old_duties =
-                            @ddah.duties.as_json(only: %i[description hours])
-
-                        # if we specified duties, delete the old ones and add the new ones
-                        @ddah.duties.destroy_all
-                    end
-                    if duty_params[:duties]
-                        @ddah.duties_attributes = duty_params[:duties]
-                    end
-
-                    # If the duties changed, we need to modify some attributes
-
-                    if @ddah.duties.as_json(only: %i[description hours]) !=
-                           old_duties
-                        if @ddah.emailed_date || @ddah.accepted_date
-                            @ddah.revised_date = Time.zone.now
-                        end
-                        @ddah.approved_date = nil
-                        @ddah.accepted_date = nil
-                        @ddah.signature = nil
-                    end
-
-                    @ddah.save!
+                    service = DdahService.new(params: params, ddah: @ddah)
+                    service.update!
                 end
         )
     end
@@ -156,15 +143,19 @@ class Api::V1::Admin::DdahsController < ApplicationController
     def get_signature_list_html(ddahs)
         contract_dir = Rails.root.join('app/views/ddahs/')
         template_file = "#{contract_dir}/ddah-signature-list.html"
+
         # Verify that the template file is actually contained in the template directory
-        unless Pathname.new(template_file).realdirpath.to_s.starts_with?(
-                   contract_dir.to_s
-               )
+        unless Pathname
+                   .new(template_file)
+                   .realdirpath
+                   .to_s
+                   .starts_with?(contract_dir.to_s)
             raise StandardError, "Invalid contract path #{template_file}"
         end
 
         # load the ddah as a Liquid template
         template = Liquid::Template.parse(File.read(template_file))
+
         # font.css and header.css contain base64-encoded data since we need all
         # data to be embedded in the HTML document
         styles = {
@@ -181,17 +172,19 @@ class Api::V1::Admin::DdahsController < ApplicationController
     # Prepare a hash to be used by a Liquid
     # template based on the ddahs list
     def ddah_signature_list_substitutions(ddahs)
-        ddahs.map do |x|
-            {
-                position_code: x.assignment.position.position_code,
-                hours: x.hours,
-                first_name: x.assignment.applicant.first_name,
-                last_name: x.assignment.applicant.last_name,
-                signature: x.signature,
-                signed_date: x.accepted_date
-            }
-        end.sort_by do |x|
-            [x[:position_code], x[:last_name], x[:first_name]]
-        end.as_json.map(&:stringify_keys)
+        ddahs
+            .map do |x|
+                {
+                    position_code: x.assignment.position.position_code,
+                    hours: x.hours,
+                    first_name: x.assignment.applicant.first_name,
+                    last_name: x.assignment.applicant.last_name,
+                    signature: x.signature,
+                    signed_date: x.accepted_date
+                }
+            end
+            .sort_by { |x| [x[:position_code], x[:last_name], x[:first_name]] }
+            .as_json
+            .map(&:stringify_keys)
     end
 end
