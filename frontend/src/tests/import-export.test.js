@@ -43,7 +43,7 @@ describe("Import/export library functionality", () => {
      * @param {object} objectSchema
      * @returns {File}
      */
-    function getInstructorsDataFile(
+    function getObjectDataFile(
         objectType,
         objectData,
         objectSchema,
@@ -192,7 +192,7 @@ describe("Import/export library functionality", () => {
 
     it("Export data to a JSON/CSV/XLSX", () => {
         // export instructor data a CSV File object
-        const fileCSV = getInstructorsDataFile(
+        const fileCSV = getObjectDataFile(
             "instructor",
             instructorData,
             instructorSchema,
@@ -200,14 +200,14 @@ describe("Import/export library functionality", () => {
         );
 
         // export instructor data to a JSON File object
-        const fileJSON = getInstructorsDataFile(
+        const fileJSON = getObjectDataFile(
             "instructor",
             instructorData,
             instructorSchema,
             "json"
         );
 
-        const resultCorrect = instructorData.map((instructor) =>
+        const correctData = instructorData.map((instructor) =>
             prepareMinimal.instructor(instructor)
         );
 
@@ -220,7 +220,7 @@ describe("Import/export library functionality", () => {
             },
             instructorSchema
         );
-        expect(resultJSON).toEqual(resultCorrect);
+        expect(resultJSON).toEqual(correctData);
 
         // import instructor data from a CSV File object
         const workbook1 = XLSX.read(fileCSV.fileBits[0], { type: "array" });
@@ -241,7 +241,7 @@ describe("Import/export library functionality", () => {
             },
             instructorSchema
         );
-        expect(resultCSV).toEqual(resultCorrect);
+        expect(resultCSV).toEqual(correctData);
     });
 
     it("Import data from a JSON/CSV/XLSX", () => {
