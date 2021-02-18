@@ -92,7 +92,7 @@ class Api::V1::Admin::DdahsController < ApplicationController
           condition: proc { @ddah.destroy! },
           error_message:
             "Could not delete ddah '#{@ddah.id}'."
-        )
+      )
     end
 
     # POST /ddahs/:ddah_id/email
