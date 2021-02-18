@@ -43,7 +43,7 @@ class Api::V1::Admin::AssignmentWageChunksController < ApplicationController
         ret_params =
             params.permit(
                 _json: %i[id assignment_id start_date end_date hours rate]
-            ).dig(:_json)
+            )[:_json]
         if params[:assignment_id]
             ret_params =
                 ret_params.map do |obj|

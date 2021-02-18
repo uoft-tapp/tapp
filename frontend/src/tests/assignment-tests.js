@@ -44,7 +44,7 @@ export function assignmentsTests(api) {
             contract_template_id: contractTemplate.id,
         };
 
-        const { payload: position } = await apiPOST(
+        const { payload: newPosition } = await apiPOST(
             `/admin/sessions/${session.id}/positions`,
             newPositionData
         );
@@ -52,7 +52,7 @@ export function assignmentsTests(api) {
         // create new assignment
         const newAssignmentData = {
             note: "",
-            position_id: position.id,
+            position_id: newPosition.id,
             applicant_id: applicant.id,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2019-12-31T00:00:00.000Z",
@@ -111,24 +111,37 @@ export function assignmentsTests(api) {
         checkPropTypes(assignmentPropTypes, updatedAssignment);
         expect(updatedAssignment.id).not.toBeNull();
         expect(updatedAssignment.id).toEqual(assignment.id);
-
-        // fetch all assignments and make sure the newly added
-        // assignment data is there
-        const { payload: withUpdatedAssignment } = await apiGET(
-            `/admin/sessions/${session.id}/assignments`
-        );
-
-        expect(withUpdatedAssignment.map((x) => x.id)).toContain(
-            updatedAssignment.id
-        );
-        expect(
-            withUpdatedAssignment.filter((s) => s.id === updatedAssignment.id)
-        ).toContainObject(updatedAssignment);
-
-        expect(withUpdatedAssignment.length).toEqual(2);
     });
 
-    it.todo(
-        "assignments created with null start/end_date inherit the start/end_date from the parent position"
-    );
+    it("assignments created with null start/end_date inherit the start/end_date from the parent position", async () => {
+        const newPositionData = {
+            position_code: "CSC200F",
+            position_title: "Basic Computer Science",
+            hours_per_assignment: 70,
+            start_date: "2019-09-05T00:00:00.000Z",
+            end_date: "2020-01-05T00:00:00.000Z",
+            contract_template_id: contractTemplate.id,
+        };
+
+        let resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPositionData
+        );
+        expect(resp).toHaveStatus("success");
+
+        const newAssignmentData = {
+            note: "",
+            position_id: resp.payload.id,
+            applicant_id: applicant.id,
+        };
+        resp = await apiPOST("/admin/assignments", newAssignmentData);
+
+        expect(resp).toHaveStatus("success");
+        const { payload: createdAssignment } = resp;
+        checkPropTypes(assignmentPropTypes, createdAssignment);
+        expect(createdAssignment.start_date).toEqual(
+            newPositionData.start_date
+        );
+        expect(createdAssignment.end_date).toEqual(newPositionData.end_date);
+    });
 }
