@@ -20,7 +20,7 @@ import { AdvancedFilterTable } from "../../components/filter-table/advanced-filt
  */
 function ApplicantCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
-    const { upsertApplicant, field } = props;
+    const { upsertApplicant, field, editable } = props;
     const applicant = props.row.original || props.row._original;
     async function onChange(newVal) {
         const applicantId = applicant.applicant.id;
@@ -31,6 +31,7 @@ function ApplicantCell(props) {
             title={title}
             value={props.value || ""}
             onChange={onChange}
+            editable={editable}
         >
             {props.value}
         </EditableField>
@@ -81,7 +82,7 @@ function StatusCell({ row }) {
  */
 function AssignmentCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
-    const { upsertAssignment, field } = props;
+    const { upsertAssignment, field, editable = true } = props;
     const assignment = props.row.original || props.row._original;
     const active_offer_status = assignment.active_offer_status;
     async function onChange(newVal) {
@@ -94,10 +95,11 @@ function AssignmentCell(props) {
             value={props.value || ""}
             onChange={onChange}
             editable={
-                !active_offer_status ||
-                ["provisional", "withdrawn", "No Contract"].includes(
-                    active_offer_status
-                )
+                editable &&
+                (!active_offer_status ||
+                    ["provisional", "withdrawn", "No Contract"].includes(
+                        active_offer_status
+                    ))
             }
         >
             {props.value}
@@ -106,6 +108,7 @@ function AssignmentCell(props) {
 }
 
 export function ConnectedOfferTable(props) {
+    const { editable = true } = props;
     const dispatch = useDispatch();
     const setSelected = React.useCallback(
         (...args) => dispatch(setSelectedRows(...args)),
@@ -135,6 +138,7 @@ export function ConnectedOfferTable(props) {
                     upsertApplicant={(...args) =>
                         dispatch(upsertApplicant(...args))
                     }
+                    editable={editable}
                     {...props}
                 />
             );
@@ -148,6 +152,7 @@ export function ConnectedOfferTable(props) {
                     upsertAssignment={(...args) =>
                         dispatch(upsertAssignment(...args))
                     }
+                    editable={editable}
                     {...props}
                 />
             );

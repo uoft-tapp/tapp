@@ -74,9 +74,33 @@ export function offersTests(api) {
         expect(newOffer.emailed_date).not.toBeNull();
     });
 
-    it.todo(
-        "when an offer is emailed a second time, the emailed date is updated to the most recent emailed date"
-    );
+    it("when an offer is emailed a second time, the emailed date is updated to the most recent emailed date", async () => {
+        // record previous emailed_date
+        const resp = await apiGET(
+            `/admin/assignments/${assignment.id}/active_offer`
+        );
+        expect(resp).toHaveStatus("success");
+        const previousDate = resp.payload.emailed_date;
+
+        // send the email again
+        const resp1 = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp1).toHaveStatus("success");
+        // update newOffer
+        newOffer = resp1.payload;
+        // check if date is updated
+        const newDate = resp1.payload.emailed_date;
+        expect(Date.parse(newDate)).toBeGreaterThan(Date.parse(previousDate));
+
+        // check if date is updated correctly
+        const resp2 = await apiGET(
+            `/admin/assignments/${assignment.id}/active_offer`
+        );
+        expect(resp2).toHaveStatus("success");
+        const updatedDate = resp2.payload.emailed_date;
+        expect(updatedDate).toEqual(newDate);
+    });
 
     it("increment nag count correctly", async () => {
         // before nagging, make sure the status of the offer is pending

@@ -84,7 +84,7 @@ export function InstructorAssignmentsView() {
                 <ConnectedExportAssignmentsAction />
             </ActionsList>
             <ContentArea>
-                <ConnectedOfferTable />
+                <ConnectedOfferTable editable={false} />
             </ContentArea>
         </div>
     );
