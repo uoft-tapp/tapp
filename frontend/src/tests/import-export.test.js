@@ -21,7 +21,7 @@ import {
     positionData,
     assignmentData,
     ddahData,
-} from "./test-data-file/test_data";
+} from "./test-data-collection/test_data";
 
 /* eslint-env node */
 var FileAPI = require("file-api"),
@@ -147,7 +147,7 @@ describe("Import/export library functionality", () => {
         } else if (fileType == "spreadsheet") {
             // import object data from a CSV File
             const workbook1 = XLSX.readFile(
-                __dirname + `/test-data-file/${correctness}${objectType}s.csv`
+                __dirname + `/test-data-collection/${correctness}${objectType}s.csv`
             );
             const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
             let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
