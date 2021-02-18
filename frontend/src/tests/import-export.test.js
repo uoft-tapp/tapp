@@ -43,12 +43,7 @@ describe("Import/export library functionality", () => {
      * @param {object} objectSchema
      * @returns {File}
      */
-    function getObjectDataFile(
-        objectType,
-        objectData,
-        objectSchema,
-        fileType
-    ) {
+    function getObjectDataFile(objectType, objectData, objectSchema, fileType) {
         return dataToFile(
             {
                 toSpreadsheet: () =>
