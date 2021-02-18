@@ -1,5 +1,5 @@
 FROM madnight/docker-alpine-wkhtmltopdf:latest as wkhtmltopdf_image
-FROM ruby:2.6.5-alpine3.10
+FROM ruby:2.6.6-alpine3.13
 
 # Add `tzdata` because the Gemfile doesn't successfully add the dependency via geminstall.
 # Add `less` because the ruby console attempts to call `less` and errors when it doesn't exist
