@@ -61,15 +61,13 @@ export function userPermissionsTests(api) {
             roles: resp.payload.roles,
         };
 
-        // create in the database the user with only instructor role
+        // create users with specific roles for permission testing (access to role-specific routes)
         resp = await apiPOST("/debug/users", instructorOnlyUser);
         expect(resp).toHaveStatus("success");
 
-        // create in the database the user with only ta role
         resp = await apiPOST("/debug/users", taOnlyUser);
         expect(resp).toHaveStatus("success");
 
-        // create in the database the user with both the instructor role and the ta role
         resp = await apiPOST("/debug/users", taInstructorUser);
         expect(resp).toHaveStatus("success");
     }, 30000);
@@ -105,12 +103,12 @@ export function userPermissionsTests(api) {
     it("An instructor can access instructor routes", async () => {
         // switch to instructor only user
         await switchToUser(instructorOnlyUser);
-        let resp = await apiGET("/instructor/instructors");
+        let resp = await apiGET("/instructor/active_user");
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
         // the default user has all roles, including the instructor role
-        resp = await apiGET("/instructor/instructors");
+        resp = await apiGET("/instructor/active_user");
         expect(resp).toHaveStatus("success");
     });
 
