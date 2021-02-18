@@ -128,7 +128,7 @@ function EditInstructorsDialog({ position, show, onHide, onChange }) {
 
 function EditableCell(props) {
     const title = `Edit ${props.column.Header}`;
-    const { upsertPosition, field, type, value } = props;
+    const { upsertPosition, field, type, value, editable = true } = props;
     const isDate = type === "date";
 
     function onChange(newVal) {
@@ -142,6 +142,7 @@ function EditableCell(props) {
             value={type === "date" ? (value || "").slice(0, 10) : value || ""}
             onChange={onChange}
             type={type}
+            editable={editable}
         >
             {isDate ? formatDate(value) : value}
         </EditableField>
@@ -211,7 +212,11 @@ function ConfirmDeleteDialog(props) {
     );
 }
 
-export function ConnectedPositionsList({ inDeleteMode = false }) {
+export function ConnectedPositionsList({
+    inDeleteMode = false,
+    editable = true,
+    columns = null,
+}) {
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
     const [positionToDelete, setPositionToDelete] = React.useState(null);
@@ -265,6 +270,7 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
                 field={field}
                 upsertPosition={_upsertPosition}
                 type={type}
+                editable={editable}
                 {...props}
             />
         );
@@ -350,7 +356,10 @@ export function ConnectedPositionsList({ inDeleteMode = false }) {
 
     return (
         <React.Fragment>
-            <PositionsList positions={positions} columns={DEFAULT_COLUMNS} />
+            <PositionsList
+                positions={positions}
+                columns={columns || DEFAULT_COLUMNS}
+            />
             <ConfirmDeleteDialog
                 position={positionToDelete}
                 show={!!positionToDelete}

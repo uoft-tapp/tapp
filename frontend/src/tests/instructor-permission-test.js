@@ -102,4 +102,16 @@ export function instructorsPermissionTests(api) {
         );
         expect(resp).toHaveStatus("success");
     });
+
+    it.todo("fetch Ddahs");
+    it.todo("fetch Ddahs a position associated with self");
+    it.todo("fetch Ddahs an assignment associated with self");
+    it.todo("cannot fetch Ddahs for assignment not associated with self");
+    it.todo("create a Ddah for an assignment associated with self");
+    it.todo("update a Ddah for an assignment associated with self");
+    it.todo(
+        "cannot set approved_date/accepted_date/revised_date/emailed_ate/signature for a Ddah associated with self"
+    );
+    it.todo("cannot create a Ddah for an assignment not associated with self");
+    it.todo("cannot update a Ddah for an assignment not associated with self");
 }
