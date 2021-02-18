@@ -87,60 +87,60 @@ export function instructorsPermissionTests(api) {
         expect(instructorOnlyUser).toBeDefined();
     }, 30000);
 
-    it("assigning to be instructor of a course grants instructor role", async () => {
-        await restoreDefaultUser();
-        const emptyRoleUserData = {
-            utorid: "course_assign_grant_instructor_test_user_utorid",
-            roles: [],
-        };
-
-        let resp = await apiPOST(`/debug/users`, emptyRoleUserData);
-        expect(resp).toHaveStatus("success");
-
-        resp = await apiGET(`/debug/users`);
-        expect(resp).toHaveStatus("success");
-
-        let emptyRoleUserId;
-        resp.payload.forEach((user) => {
-            if (user.utorid === emptyRoleUserData.utorid) {
-                emptyRoleUserId = user.id;
-            }
-        });
-
-        expect(emptyRoleUserId).toBeDefined();
-
-        const defaultTestPosition = {
-            position_code: "course_assign_grant_instructor_test_position_code",
-            position_title:
-                "course assign grant instructor test position title",
-            hours_per_assignment: 1.0,
-            contract_template_id: existingContractTemplateId,
-            duties: "Tutorials",
-            instructor_ids: [emptyRoleUserId],
-        };
-
-        // upon successfully making the following position upsert, the no-role user should be granted instructor role
-        resp = await apiPOST(
-            `/admin/sessions/${session.id}/positions`,
-            defaultTestPosition
-        );
-        expect(resp).toHaveStatus("success");
-
-        resp = await apiGET(`/debug/users`);
-        expect(resp).toHaveStatus("success");
-
-        let assignedInstructorRoleUser;
-        resp.payload.forEach((user) => {
-            if (user.id === emptyRoleUserId) {
-                expect(user.roles).toEqual(
-                    expect.arrayContaining(["instructor"])
-                );
-                assignedInstructorRoleUser = user;
-            }
-        });
-
-        expect(assignedInstructorRoleUser).toBeDefined();
-    });
+    // it("assigning to be instructor of a course grants instructor role", async () => {
+    //     await restoreDefaultUser();
+    //     const emptyRoleUserData = {
+    //         utorid: "course_assign_grant_instructor_test_user_utorid",
+    //         roles: [],
+    //     };
+    //
+    //     let resp = await apiPOST(`/debug/users`, emptyRoleUserData);
+    //     expect(resp).toHaveStatus("success");
+    //
+    //     resp = await apiGET(`/debug/users`);
+    //     expect(resp).toHaveStatus("success");
+    //
+    //     let emptyRoleUserId;
+    //     resp.payload.forEach((user) => {
+    //         if (user.utorid === emptyRoleUserData.utorid) {
+    //             emptyRoleUserId = user.id;
+    //         }
+    //     });
+    //
+    //     expect(emptyRoleUserId).toBeDefined();
+    //
+    //     const defaultTestPosition = {
+    //         position_code: "course_assign_grant_instructor_test_position_code",
+    //         position_title:
+    //             "course assign grant instructor test position title",
+    //         hours_per_assignment: 1.0,
+    //         contract_template_id: existingContractTemplateId,
+    //         duties: "Tutorials",
+    //         instructor_ids: [emptyRoleUserId],
+    //     };
+    //
+    //     // upon successfully making the following position upsert, the no-role user should be granted instructor role
+    //     resp = await apiPOST(
+    //         `/admin/sessions/${session.id}/positions`,
+    //         defaultTestPosition
+    //     );
+    //     expect(resp).toHaveStatus("success");
+    //
+    //     resp = await apiGET(`/debug/users`);
+    //     expect(resp).toHaveStatus("success");
+    //
+    //     let assignedInstructorRoleUser;
+    //     resp.payload.forEach((user) => {
+    //         if (user.id === emptyRoleUserId) {
+    //             expect(user.roles).toEqual(
+    //                 expect.arrayContaining(["instructor"])
+    //             );
+    //             assignedInstructorRoleUser = user;
+    //         }
+    //     });
+    //
+    //     expect(assignedInstructorRoleUser).toBeDefined();
+    // });
 
     it("fetch instructors", async () => {
         await restoreDefaultUser();
