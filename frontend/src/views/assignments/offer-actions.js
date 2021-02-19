@@ -59,6 +59,15 @@ function OfferActionButtons(props) {
     } = props;
 
     function createOffers() {
+        if (
+            selectedAssignments.some(
+                (assignment) => assignment.active_offer_status === "withdrawn"
+            )
+        ) {
+            window.confirm(
+                "Some of the selected assignments include withdrawn offers. Do you confirm to create new offers?"
+            );
+        }
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
         }
