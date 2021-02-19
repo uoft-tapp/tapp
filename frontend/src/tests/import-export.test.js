@@ -150,7 +150,7 @@ describe("Import/export library functionality", () => {
             objectSchema,
             "csv"
         );
-
+        // test csv content
         csvContainsData(fileCSV, objectData, objectSchema, objectType);
 
         // export object data to a JSON File object
@@ -160,7 +160,7 @@ describe("Import/export library functionality", () => {
             objectSchema,
             "json"
         );
-
+        // test json content
         jsonContainsData(fileJSON, objectData, objectSchema, objectType);
     }
 
@@ -289,6 +289,17 @@ describe("Import/export library functionality", () => {
     it("Export data to a JSON/CSV/XLSX", () => {
         // export instructor data to file
         testExportToFile(instructorData, "instructor", instructorSchema);
+        // export applicant data to file
+        testExportToFile(applicantData, "applicant", applicantSchema);
+        // export data to incorrect file type should throw error
+        expect(() => {
+            getObjectDataFile(
+                "instructor",
+                instructorData,
+                instructorSchema,
+                "invalidFileType"
+            );
+        }).toThrow(Error);
     });
 
     it("Import data from a JSON/CSV/XLSX", () => {
