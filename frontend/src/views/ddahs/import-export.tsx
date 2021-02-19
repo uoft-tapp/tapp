@@ -93,6 +93,36 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
 }
 
 /**
+ * Converts a list of ddahs into a File object
+ *
+ * @export
+ * @returns
+ */
+export function prepareData(
+    ddahs: Ddah[],
+    dataFormat: "csv" | "json" | "xlsx"
+) {
+    const { selectedDdahIds } = useSelector<any, { selectedDdahIds: Number[] }>(
+        ddahTableSelector
+    );
+    // If we have selected specific DDAHs, filter so we only export them.
+    if (selectedDdahIds && selectedDdahIds.length > 0) {
+        ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
+    }
+
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
+            toJson: () => ({
+                ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
+            }),
+        },
+        dataFormat,
+        "ddahs"
+    );
+}
+
+/**
  * Allows for the download of a file blob containing the exported instructors.
  * Instructors are synchronized from the server before being downloaded.
  *
@@ -119,30 +149,6 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
-
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(
-                ddahs: Ddah[],
-                dataFormat: "csv" | "json" | "xlsx"
-            ) {
-                // If we have selected specific DDAHs, filter so we only export them.
-                if (selectedDdahIds && selectedDdahIds.length > 0) {
-                    ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
-                }
-
-                return dataToFile(
-                    {
-                        toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
-                        toJson: () => ({
-                            ddahs: ddahs.map((ddah) =>
-                                prepareMinimal.ddah(ddah)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "ddahs"
-                );
-            }
 
             const file = await dispatch(exportDdahs(prepareData, exportType));
             FileSaver.saveAs(file);
