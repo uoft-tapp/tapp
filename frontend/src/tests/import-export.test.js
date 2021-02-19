@@ -291,7 +291,7 @@ describe("Import/export library functionality", () => {
         testExportToFile(instructorData, "instructor", instructorSchema);
         // export applicant data to file
         testExportToFile(applicantData, "applicant", applicantSchema);
-        // export data to incorrect file type should throw error
+        // export data to incorrect file type should throw an error
         expect(() => {
             getObjectDataFile(
                 "instructor",
