@@ -220,11 +220,13 @@ export function templatesTests(api) {
 
         let template = {
             content: "Contents of the file",
-            file_name: "ExampleTemplate.html",
+            file_name: "TestTemplate.html",
         };
+        // access using /storage_mounted_for_testing/...
+
         template.content = bytesToBase64(template.content);
         checkPropTypes(offerTemplatePropTypes, template);
-        
+
         const resp2 = await apiPOST(
             `/admin/contract_templates/upload`,
             template
