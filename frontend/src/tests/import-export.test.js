@@ -77,8 +77,8 @@ describe("Import/export library functionality", () => {
         const correctData = objectData.map((object) =>
             prepareMinimal[`${objectType}`](object)
         );
-        // check each object has correct list of keys
         const dataJSON = JSON.parse(file.fileBits.toString())[`${objectType}s`];
+        // check each object has correct list of keys
         dataJSON.forEach((object) =>
             expect(Object.keys(object)).toEqual(objectSchema.keys)
         );
@@ -92,6 +92,76 @@ describe("Import/export library functionality", () => {
             resultJSON.push(newObject);
         }
         expect(resultJSON).toEqual(correctData);
+    }
+
+    /**
+     * Given correct object data, object type, correct object schema, and CSV File object,
+     * carry out tests to check whether the File object contains correct data.
+     *
+     * @param {[object]} objectData
+     * @param {string} objectType
+     * @param {object} objectSchema
+     * @param {File} file
+     * @returns
+     */
+    function csvContainsData(file, objectData, objectSchema, objectType) {
+        const correctData = objectData.map((object) =>
+            prepareMinimal[`${objectType}`](object)
+        );
+        // check each object has correct value
+        const workbook = XLSX.read(file.fileBits[0], { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        const keys = dataCSV.shift();
+        // check the keys are correct
+        expect(keys).toEqual(objectSchema.keys);
+        // transform to array of objects
+        dataCSV = dataCSV.map(function (row) {
+            return keys.reduce(function (obj, key, i) {
+                obj[key] = row[i];
+                return obj;
+            }, {});
+        });
+        //check each row has correct value
+        let resultCSV = [];
+        const rowMapper = new SpreadsheetRowMapper(objectSchema);
+        for (const row of dataCSV) {
+            resultCSV.push(rowMapper.formatRow(row));
+        }
+        expect(resultCSV).toEqual(correctData);
+    }
+
+    /**
+     * Given correct object data, object type, and correct object schema,
+     * carry out tests to check whether exporting correct object data to file
+     * will produce correct object data file.
+     *
+     * @param {[object]} objectData
+     * @param {string} objectType
+     * @param {object} objectSchema
+     * @param {string} fileType
+     * @returns
+     */
+    function testExportToFile(objectData, objectType, objectSchema) {
+        // export object data a CSV File object
+        const fileCSV = getObjectDataFile(
+            objectType,
+            objectData,
+            objectSchema,
+            "csv"
+        );
+
+        csvContainsData(fileCSV, objectData, objectSchema, objectType);
+
+        // export object data to a JSON File object
+        const fileJSON = getObjectDataFile(
+            objectType,
+            objectData,
+            objectSchema,
+            "json"
+        );
+
+        jsonContainsData(fileJSON, objectData, objectSchema, objectType);
     }
 
     /**
@@ -217,53 +287,8 @@ describe("Import/export library functionality", () => {
     });
 
     it("Export data to a JSON/CSV/XLSX", () => {
-        // export instructor data a CSV File object
-        const fileCSV = getObjectDataFile(
-            "instructor",
-            instructorData,
-            instructorSchema,
-            "csv"
-        );
-
-        // export instructor data to a JSON File object
-        const fileJSON = getObjectDataFile(
-            "instructor",
-            instructorData,
-            instructorSchema,
-            "json"
-        );
-
-        const correctData = instructorData.map((instructor) =>
-            prepareMinimal.instructor(instructor)
-        );
-
-        jsonContainsData(
-            fileJSON,
-            instructorData,
-            instructorSchema,
-            "instructor"
-        );
-
-        // import instructor data from a CSV File object
-        const workbook1 = XLSX.read(fileCSV.fileBits[0], { type: "array" });
-        const sheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
-        let dataCSV = XLSX.utils.sheet_to_json(sheet1, { header: 1 });
-        // transform to array of objects
-        const keys1 = dataCSV.shift();
-        dataCSV = dataCSV.map(function (row) {
-            return keys1.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
-        });
-        const resultCSV = normalizeImport(
-            {
-                fileType: "spreadsheet",
-                data: dataCSV,
-            },
-            instructorSchema
-        );
-        expect(resultCSV).toEqual(correctData);
+        // export instructor data to file
+        testExportToFile(instructorData, "instructor", instructorSchema);
     });
 
     it("Import data from a JSON/CSV/XLSX", () => {
