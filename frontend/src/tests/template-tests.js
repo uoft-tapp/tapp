@@ -9,8 +9,11 @@ import {
     beforeAll,
 } from "./utils";
 import fs from "fs";
+import os from "os";
+import { exec } from "child_process";
+// import path from "path";
 import { databaseSeeder } from "./setup";
-import { base64ToBytes } from "../api/mockAPI/utils";
+import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
@@ -213,22 +216,15 @@ export function templatesTests(api) {
     // file
     it("upload a template", async () => {
         // We are going to attempt to retrieve all valid file templates before and after, to see whether adding will change the result
-        const resp = await apiGET("/admin/available_contract_templates");
-        expect(resp).toHaveStatus("success");
-
-        if (resp.payload.length === 0) {
-            // XXX Fix: We should always have a contract template available for testing
-            console.warn(
-                "No contract templates available, so cannot test preview/download of contract templates"
-            );
-            return;
-        }
+        // console.log(__dirname); <-- Directory is outside of the scope for the node process
 
         let template = {
-            content: "A very short string to test.",
-            file_name: "Example Template",
+            content: "Contents of the file",
+            file_name: "ExampleTemplate.html",
         };
-        checkPropTypes(offerTemplatePropTypes, template)
+        template.content = bytesToBase64(template.content);
+        checkPropTypes(offerTemplatePropTypes, template);
+        
         const resp2 = await apiPOST(
             `/admin/contract_templates/upload`,
             template
@@ -236,7 +232,7 @@ export function templatesTests(api) {
         expect(resp2).toHaveStatus("success");
         const addedTemplate = resp2.payload;
 
-        // Testing to ensure that duplicate file names
+        // Testing to ensure that duplicate file names are not added (need to fix mock API)
         const resp3 = await apiPOST(
             `/admin/contract_templates/upload`,
             template
