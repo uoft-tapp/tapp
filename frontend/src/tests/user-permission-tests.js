@@ -78,7 +78,7 @@ export function userPermissionsTests(api) {
         expect(resp).toHaveStatus("success");
     });
 
-    it("A non-admin cannot access the admin route", async () => {
+    it("A non-admin cannot access admin routes", async () => {
         await switchToUser(instructorOnlyUser);
 
         // Try to fetch admin routes
