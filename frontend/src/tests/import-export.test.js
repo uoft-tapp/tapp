@@ -64,6 +64,37 @@ describe("Import/export library functionality", () => {
     }
 
     /**
+     * Given correct object data, object type, correct object schema, and JSON File object,
+     * carry out tests to check whether the File object contains correct data.
+     *
+     * @param {[object]} objectData
+     * @param {string} objectType
+     * @param {object} objectSchema
+     * @param {File} file
+     * @returns
+     */
+    function jsonContainsData(file, objectData, objectSchema, objectType) {
+        const correctData = objectData.map((object) =>
+            prepareMinimal[`${objectType}`](object)
+        );
+        // check each object has correct list of keys
+        const dataJSON = JSON.parse(file.fileBits.toString())[`${objectType}s`];
+        dataJSON.forEach((object) =>
+            expect(Object.keys(object)).toEqual(objectSchema.keys)
+        );
+        // check each object has correct value
+        let resultJSON = [];
+        for (const object of dataJSON) {
+            const newObject = {};
+            for (const key of objectSchema.keys) {
+                newObject[key] = object[key];
+            }
+            resultJSON.push(newObject);
+        }
+        expect(resultJSON).toEqual(correctData);
+    }
+
+    /**
      * Given correct object data, object type, correct object schema, and file type,
      * carry out tests to check whether importing from corresponding file containing correct corresponding object data
      * will produce correct object data.
@@ -206,16 +237,12 @@ describe("Import/export library functionality", () => {
             prepareMinimal.instructor(instructor)
         );
 
-        // import instructor data from a JSON File object
-        const dataJSON = JSON.parse(fileJSON.fileBits.toString()).instructors;
-        const resultJSON = normalizeImport(
-            {
-                fileType: "json",
-                data: dataJSON,
-            },
-            instructorSchema
+        jsonContainsData(
+            fileJSON,
+            instructorData,
+            instructorSchema,
+            "instructor"
         );
-        expect(resultJSON).toEqual(correctData);
 
         // import instructor data from a CSV File object
         const workbook1 = XLSX.read(fileCSV.fileBits[0], { type: "array" });
