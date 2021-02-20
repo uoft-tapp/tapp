@@ -38,19 +38,12 @@ describe("API tests", () => {
         sessionsTests(api);
     }, 30000);
 
-    describe.only("template tests", () => {
-        fs.unlinkSync(
-            "/storage_mounted_for_testing/contract_templates/TestTemplate.html",
-            (err) => {
-                if (err) {
-                    console.log(err);
-                    console.error("File already removed.");
-                    return;
-                }
-            }
-        );
-
-        templatesTests(api);
+    describe("template tests", () => {
+        templatesTests(api, () => {
+            fs.unlinkSync(
+                "/storage_mounted_for_testing/contract_templates/TestTemplate.html"
+            );
+        });
     });
 
     describe("`/admin/positions` tests", () => {
@@ -125,8 +118,8 @@ describe("Mock API tests", () => {
     describe("`/admin/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
-    describe.only("`/admin/sessions/:session_id/contract_templates` tests", () => {
-        templatesTests(mockAPI);
+    describe("`/admin/sessions/:session_id/contract_templates` tests", () => {
+        templatesTests(mockAPI, () => {});
     });
     describe("`/admin/positions` tests", () => {
         positionsTests(mockAPI);

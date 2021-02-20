@@ -9,9 +9,6 @@ import {
     beforeAll,
 } from "./utils";
 import fs from "fs";
-import os from "os";
-import { exec } from "child_process";
-// import path from "path";
 import { databaseSeeder } from "./setup";
 import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
 /**
@@ -24,7 +21,7 @@ import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
  * @param {Function} api.apiGET A function that when passed a route will return the get response
  * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
  */
-export function templatesTests(api) {
+export function templatesTests(api, callback) {
     const { apiGET, apiPOST } = api;
     let session = null,
         testTemplates = null;
@@ -228,7 +225,6 @@ export function templatesTests(api) {
             template
         );
         expect(resp2).toHaveStatus("success");
-        const addedTemplate = resp2.payload;
 
         // Testing to ensure that duplicate file names are not added (need to fix mock API)
         const resp3 = await apiPOST(
@@ -236,6 +232,6 @@ export function templatesTests(api) {
             template
         );
         expect(resp3).toHaveStatus("error");
-        const newerTemplate = resp3.payload;
+        callback()
     });
 }
