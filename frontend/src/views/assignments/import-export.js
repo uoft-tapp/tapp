@@ -87,94 +87,109 @@ function formatWageChunksToList(wageChunks) {
 }
 
 /**
- * Converts a list of assignments into a File object
+ * Returns a function which converts a list of selected assignments into a File object
  *
  * @export
  * @returns
  */
-export function prepareData(assignments, dataFormat) {
-    const session = useSelector(activeSessionSelector);
-    const { selectedAssignmentIds } = useSelector(offerTableSelector);
-    // If we have selected specific assignments, we only want to export those.
-    if (selectedAssignmentIds && selectedAssignmentIds.length > 0) {
-        assignments = assignments.filter((a) =>
-            selectedAssignmentIds.includes(a.id)
+export function prepareData(
+    selectedAssignmentIds,
+    session,
+    createPayPeriodHeaders,
+    formatWageChunksToList,
+    formatDateForSpreadsheet
+) {
+    /**
+     * Converts a list of assignments into a File object
+     *
+     * @export
+     * @returns
+     */
+    function prepareSelectedData(assignments, dataFormat) {
+        // If we have selected specific assignments, we only want to export those.
+        if (selectedAssignmentIds && selectedAssignmentIds.length > 0) {
+            assignments = assignments.filter((a) =>
+                selectedAssignmentIds.includes(a.id)
+            );
+        }
+
+        // We want to flatten a lot of the data in `assignments` and only include the information
+        // we need.
+        const assignmentsForSpreadsheet = assignments.map((assignment) => ({
+            first_name: assignment.applicant.first_name,
+            last_name: assignment.applicant.last_name,
+            utorid: assignment.applicant.utorid,
+            email: assignment.applicant.email,
+            position_code: assignment.position.position_code,
+            start_date: assignment.start_date,
+            end_date: assignment.end_date,
+            contract_template: assignment.contract_override_pdf
+                ? null
+                : assignment.position.contract_template.template_name,
+            contract_override_pdf: assignment.contract_override_pdf,
+            hours: assignment.hours,
+            active_offer_status: assignment.active_offer_status,
+            active_offer_recent_activity_date:
+                assignment.active_offer_recent_activity_date,
+            wage_chunks: assignment.wage_chunks.map((chunk) => ({
+                hours: chunk.hours,
+                rate: chunk.rate,
+                start_date: chunk.start_date,
+                end_date: chunk.end_date,
+            })),
+        }));
+        return dataToFile(
+            {
+                toSpreadsheet: () =>
+                    [
+                        [
+                            "Last Name",
+                            "First Name",
+                            "UTORid",
+                            "Email",
+                            "Position Code",
+                            "Start Date",
+                            "End Date",
+                            "Hours",
+                            "Contract Template",
+                            "Contract Override PDF",
+                            "Offer Status",
+                            "Recent Activity Date",
+                            "",
+                            "Number of Pay Periods",
+                            ...createPayPeriodHeaders(
+                                assignmentsForSpreadsheet
+                            ),
+                        ],
+                    ].concat(
+                        assignmentsForSpreadsheet.map((assignment) => [
+                            assignment.last_name,
+                            assignment.first_name,
+                            assignment.utorid,
+                            assignment.email,
+                            assignment.position_code,
+                            formatDateForSpreadsheet(assignment.start_date),
+                            formatDateForSpreadsheet(assignment.end_date),
+                            assignment.hours,
+                            assignment.contract_template,
+                            assignment.contract_override_pdf,
+                            assignment.active_offer_status,
+                            undefined,
+                            assignment.active_offer_recent_activity_date,
+                            ...formatWageChunksToList(assignment.wage_chunks),
+                        ])
+                    ),
+                toJson: () => ({
+                    assignments: assignments.map((assignment) =>
+                        prepareMinimal.assignment(assignment, session)
+                    ),
+                }),
+            },
+            dataFormat,
+            "assignments"
         );
     }
-
-    // We want to flatten a lot of the data in `assignments` and only include the information
-    // we need.
-    const assignmentsForSpreadsheet = assignments.map((assignment) => ({
-        first_name: assignment.applicant.first_name,
-        last_name: assignment.applicant.last_name,
-        utorid: assignment.applicant.utorid,
-        email: assignment.applicant.email,
-        position_code: assignment.position.position_code,
-        start_date: assignment.start_date,
-        end_date: assignment.end_date,
-        contract_template: assignment.contract_override_pdf
-            ? null
-            : assignment.position.contract_template.template_name,
-        contract_override_pdf: assignment.contract_override_pdf,
-        hours: assignment.hours,
-        active_offer_status: assignment.active_offer_status,
-        active_offer_recent_activity_date:
-            assignment.active_offer_recent_activity_date,
-        wage_chunks: assignment.wage_chunks.map((chunk) => ({
-            hours: chunk.hours,
-            rate: chunk.rate,
-            start_date: chunk.start_date,
-            end_date: chunk.end_date,
-        })),
-    }));
-    return dataToFile(
-        {
-            toSpreadsheet: () =>
-                [
-                    [
-                        "Last Name",
-                        "First Name",
-                        "UTORid",
-                        "Email",
-                        "Position Code",
-                        "Start Date",
-                        "End Date",
-                        "Hours",
-                        "Contract Template",
-                        "Contract Override PDF",
-                        "Offer Status",
-                        "Recent Activity Date",
-                        "",
-                        "Number of Pay Periods",
-                        ...createPayPeriodHeaders(assignmentsForSpreadsheet),
-                    ],
-                ].concat(
-                    assignmentsForSpreadsheet.map((assignment) => [
-                        assignment.last_name,
-                        assignment.first_name,
-                        assignment.utorid,
-                        assignment.email,
-                        assignment.position_code,
-                        formatDateForSpreadsheet(assignment.start_date),
-                        formatDateForSpreadsheet(assignment.end_date),
-                        assignment.hours,
-                        assignment.contract_template,
-                        assignment.contract_override_pdf,
-                        assignment.active_offer_status,
-                        undefined,
-                        assignment.active_offer_recent_activity_date,
-                        ...formatWageChunksToList(assignment.wage_chunks),
-                    ])
-                ),
-            toJson: () => ({
-                assignments: assignments.map((assignment) =>
-                    prepareMinimal.assignment(assignment, session)
-                ),
-            }),
-        },
-        dataFormat,
-        "assignments"
-    );
+    return prepareSelectedData;
 }
 
 /**
@@ -215,7 +230,16 @@ export function ConnectedExportAssignmentsAction({
 
             setInProgress(true);
             const file = await dispatch(
-                exportAssignments(prepareData, exportType)
+                exportAssignments(
+                    prepareData(
+                        selectedAssignmentIds,
+                        session,
+                        createPayPeriodHeaders,
+                        formatWageChunksToList,
+                        formatDateForSpreadsheet
+                    ),
+                    exportType
+                )
             );
             setInProgress(false);
 

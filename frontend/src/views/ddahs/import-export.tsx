@@ -93,33 +93,41 @@ export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
 }
 
 /**
- * Converts a list of ddahs into a File object
+ * Returns a function which converts a list of selected ddahs into a File object
  *
  * @export
  * @returns
  */
 export function prepareData(
-    ddahs: Ddah[],
-    dataFormat: "csv" | "json" | "xlsx"
+    selectedDdahIds: Number[],
+    prepareDdahsSpreadsheet: Function
 ) {
-    const { selectedDdahIds } = useSelector<any, { selectedDdahIds: Number[] }>(
-        ddahTableSelector
-    );
-    // If we have selected specific DDAHs, filter so we only export them.
-    if (selectedDdahIds && selectedDdahIds.length > 0) {
-        ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
-    }
+    /**
+     * Converts a list of ddahs into a File object
+     *
+     * @returns
+     */
+    function prepareSelectedData(
+        ddahs: Ddah[],
+        dataFormat: "csv" | "json" | "xlsx"
+    ) {
+        // If we have selected specific DDAHs, filter so we only export them.
+        if (selectedDdahIds && selectedDdahIds.length > 0) {
+            ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
+        }
 
-    return dataToFile(
-        {
-            toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
-            toJson: () => ({
-                ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
-            }),
-        },
-        dataFormat,
-        "ddahs"
-    );
+        return dataToFile(
+            {
+                toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
+                toJson: () => ({
+                    ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
+                }),
+            },
+            dataFormat,
+            "ddahs"
+        );
+    }
+    return prepareSelectedData;
 }
 
 /**
@@ -150,7 +158,12 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
 
-            const file = await dispatch(exportDdahs(prepareData, exportType));
+            const file = await dispatch(
+                exportDdahs(
+                    prepareData(selectedDdahIds, prepareDdahsSpreadsheet),
+                    exportType
+                )
+            );
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
