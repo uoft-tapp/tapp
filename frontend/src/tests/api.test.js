@@ -23,6 +23,8 @@ import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
 import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
+// import fs from "fs";
+import { fetchSession } from "../api/actions";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -38,6 +40,16 @@ describe("API tests", () => {
     }, 30000);
 
     describe("template tests", () => {
+        fs.unlinkSync(
+            "/storage_mounted_for_testing/contract_templates/TestTemplate.html",
+            (err) => {
+                if (err) {
+                    console.log(err);
+                    console.error("File already removed.");
+                    return;
+                }
+            }
+        );
         templatesTests(api);
     });
 
