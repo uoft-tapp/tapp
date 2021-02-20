@@ -232,6 +232,6 @@ export function templatesTests(api, callback) {
             template
         );
         expect(resp3).toHaveStatus("error");
-        callback()
+        callback();
     });
 }
