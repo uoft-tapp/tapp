@@ -21,7 +21,7 @@ export class ContractTemplate extends MockAPIController {
     validateNew(template, session = null) {
         // The name and file are required
         const message = getAttributesCheckMessage(template, this.ownData, {
-            template_name: { required: true, unique: true },
+            template_name: { required: true },
             template_file: { required: true },
         });
         if (message) {
