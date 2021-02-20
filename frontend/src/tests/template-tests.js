@@ -8,7 +8,6 @@ import {
     it,
     beforeAll,
 } from "./utils";
-import fs from "fs";
 import { databaseSeeder } from "./setup";
 import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
 /**
