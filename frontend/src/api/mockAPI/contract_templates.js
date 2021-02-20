@@ -21,7 +21,7 @@ export class ContractTemplate extends MockAPIController {
     validateNew(template, session = null) {
         // The name and file are required
         const message = getAttributesCheckMessage(template, this.ownData, {
-            template_name: { required: true },
+            template_name: { required: true, unique: true },
             template_file: { required: true },
         });
         if (message) {
@@ -39,9 +39,16 @@ export class ContractTemplate extends MockAPIController {
             if (message) {
                 throw new Error(message);
             }
+            return;
         }
     }
     upload({ file_contents, file_name }) {
+        const file_names = Object.keys(
+            this.data.contract_templates_by_filename
+        );
+        if (file_names.includes(file_name)){
+            throw new Error(`Template with filename '${file_name}' already exists.`);
+        }
         this.data.contract_templates_by_filename[file_name] = file_contents;
         this.data.available_contract_templates.push({
             template_file: file_name,
