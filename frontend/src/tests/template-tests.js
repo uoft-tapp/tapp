@@ -215,14 +215,11 @@ export function templatesTests(api) {
     // you implement this test, use node.js commands to detect and delete an existing
     // file
     it("upload a template", async () => {
-        // We are going to attempt to retrieve all valid file templates before and after, to see whether adding will change the result
-        // console.log(__dirname); <-- Directory is outside of the scope for the node process
 
         let template = {
             content: "Contents of the file",
             file_name: "TestTemplate.html",
         };
-        // access using /storage_mounted_for_testing/...
 
         template.content = bytesToBase64(template.content);
         checkPropTypes(offerTemplatePropTypes, template);
