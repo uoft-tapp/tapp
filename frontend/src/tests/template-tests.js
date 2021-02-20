@@ -215,7 +215,6 @@ export function templatesTests(api) {
     // you implement this test, use node.js commands to detect and delete an existing
     // file
     it("upload a template", async () => {
-
         let template = {
             content: "Contents of the file",
             file_name: "TestTemplate.html",

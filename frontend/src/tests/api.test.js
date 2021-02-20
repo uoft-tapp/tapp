@@ -23,8 +23,7 @@ import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
 import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
-// import fs from "fs";
-import { fetchSession } from "../api/actions";
+import fs from "fs";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -39,7 +38,7 @@ describe("API tests", () => {
         sessionsTests(api);
     }, 30000);
 
-    describe("template tests", () => {
+    describe.only("template tests", () => {
         fs.unlinkSync(
             "/storage_mounted_for_testing/contract_templates/TestTemplate.html",
             (err) => {
@@ -50,6 +49,7 @@ describe("API tests", () => {
                 }
             }
         );
+
         templatesTests(api);
     });
 
@@ -125,7 +125,7 @@ describe("Mock API tests", () => {
     describe("`/admin/sessions` tests", () => {
         sessionsTests(mockAPI);
     });
-    describe("`/admin/sessions/:session_id/contract_templates` tests", () => {
+    describe.only("`/admin/sessions/:session_id/contract_templates` tests", () => {
         templatesTests(mockAPI);
     });
     describe("`/admin/positions` tests", () => {
