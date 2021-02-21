@@ -13,38 +13,11 @@ import {
     InstructorsDiffList,
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import {
+    normalizeImport,
+    prepareDataFactory,
+} from "../../libs/importExportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-
-/**
- * Converts a list of instructors into a File object
- *
- * @export
- * @returns
- */
-export function prepareData(instructors, dataFormat) {
-    return dataToFile(
-        {
-            toSpreadsheet: () =>
-                [["Last Name", "First Name", "UTORid", "email"]].concat(
-                    instructors.map((instructor) => [
-                        instructor.last_name,
-                        instructor.first_name,
-                        instructor.utorid,
-                        instructor.email,
-                    ])
-                ),
-            toJson: () => ({
-                instructors: instructors.map((instructor) =>
-                    prepareMinimal.instructor(instructor)
-                ),
-            }),
-        },
-        dataFormat,
-        "instructors"
-    );
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -69,7 +42,7 @@ export function ConnectedExportInstructorsAction() {
             setExportType(null);
 
             const file = await dispatch(
-                exportInstructors(prepareData, exportType)
+                exportInstructors(prepareDataFactory("instructor"), exportType)
             );
 
             FileSaver.saveAs(file);

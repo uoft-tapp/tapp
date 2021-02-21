@@ -9,8 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import {
+    normalizeImport,
+    prepareDataFactory,
+} from "../../libs/importExportUtils";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {
@@ -18,48 +20,6 @@ import {
     ApplicantsDiffList,
 } from "../../components/applicants";
 
-/**
- * Converts a list of applicants into a File object
- *
- * @export
- * @returns
- */
-export function prepareData(
-    applicants: Applicant[],
-    dataFormat: "csv" | "json" | "xlsx"
-) {
-    return dataToFile(
-        {
-            toSpreadsheet: () =>
-                [
-                    [
-                        "Last Name",
-                        "First Name",
-                        "UTORid",
-                        "Student Number",
-                        "email",
-                        "Phone",
-                    ],
-                ].concat(
-                    applicants.map((applicant) => [
-                        applicant.last_name,
-                        applicant.first_name,
-                        applicant.utorid,
-                        applicant.student_number,
-                        applicant.email,
-                        applicant.phone,
-                    ])
-                ),
-            toJson: () => ({
-                applicants: applicants.map((applicant) =>
-                    prepareMinimal.applicant(applicant)
-                ),
-            }),
-        },
-        dataFormat,
-        "applicants"
-    );
-}
 /**
  * Allows for the download of a file blob containing the exported instructors.
  * Instructors are synchronized from the server before being downloaded.
@@ -85,7 +45,7 @@ export function ConnectedExportApplicantsAction() {
             setExportType(null);
 
             const file = await dispatch(
-                exportApplicants(prepareData, exportType)
+                exportApplicants(prepareDataFactory("applicant"), exportType)
             );
 
             FileSaver.saveAs(file);

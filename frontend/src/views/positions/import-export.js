@@ -11,72 +11,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
+import {
+    normalizeImport,
+    prepareDataFactory,
+} from "../../libs/importExportUtils";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
-import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-
-/**
- * Converts a list of positions into a File object
- *
- * @export
- * @returns
- */
-export function prepareData(positions, dataFormat) {
-    return dataToFile(
-        {
-            toSpreadsheet: () =>
-                [
-                    [
-                        "Position Code",
-                        "Position Title",
-                        "Start Date",
-                        "End Date",
-                        "Hours Per Assignment",
-                        "Number of Assignments",
-                        "Contract Template",
-                        "Instructors",
-                        "Duties",
-                        "Qualifications",
-                        "Current Enrollment",
-                        "Current Waitlist",
-                    ],
-                ].concat(
-                    positions.map((position) => [
-                        position.position_code,
-                        position.position_title,
-                        position.start_date &&
-                            new Date(position.start_date).toJSON().slice(0, 10),
-                        position.end_date &&
-                            new Date(position.end_date).toJSON().slice(0, 10),
-                        position.hours_per_assignment,
-                        position.desired_num_assignments,
-                        position.contract_template.template_name,
-                        position.instructors
-                            .map(
-                                (instructor) =>
-                                    `${instructor.last_name}, ${instructor.first_name}`
-                            )
-                            .join("; "),
-                        position.duties || "",
-                        position.qualifications || "",
-                        position.current_enrollment,
-                        position.current_waitlisted,
-                    ])
-                ),
-            toJson: () => ({
-                positions: positions.map((position) =>
-                    prepareMinimal.position(position)
-                ),
-            }),
-        },
-        dataFormat,
-        "positions"
-    );
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -101,7 +44,7 @@ export function ConnectedExportPositionsAction({ disabled }) {
             setExportType(null);
 
             const file = await dispatch(
-                exportPositions(prepareData, exportType)
+                exportPositions(prepareDataFactory("position"), exportType)
             );
 
             FileSaver.saveAs(file);
