@@ -39,14 +39,14 @@ export class ContractTemplate extends MockAPIController {
             if (message) {
                 throw new Error(message);
             }
-            return;
         }
     }
     upload({ file_contents, file_name }) {
-        const file_names = Object.keys(
-            this.data.contract_templates_by_filename
-        );
-        if (file_names.includes(file_name)) {
+        // const file_names = Object.keys(
+        //     this.data.contract_templates_by_filename
+        // );
+        // if (file_names.includes(file_name)) {
+        if (file_name in this.data.contract_templates_by_filename) {
             throw new Error(
                 `Template with filename '${file_name}' already exists.`
             );
