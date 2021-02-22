@@ -40,7 +40,7 @@ export function prepareDataFactory(ddahFilter?: Function) {
         ddahs: Ddah[],
         dataFormat: "csv" | "json" | "xlsx"
     ) {
-        if (ddahFilter && ddahFilter instanceof Function) {
+        if (ddahFilter instanceof Function) {
             ddahs = ddahFilter(ddahs);
         }
         return dataToFile(

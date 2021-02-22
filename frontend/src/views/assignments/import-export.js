@@ -36,7 +36,7 @@ import { offerTableSelector } from "../offertable/actions";
 export function prepareDataFactory(session, assignmentFilter = null) {
     // Make a function that converts a list of assignments into a `File` object.
     return function prepareData(assignments, dataFormat) {
-        if (assignmentFilter && assignmentFilter instanceof Function) {
+        if (assignmentFilter instanceof Function) {
             assignments = assignmentFilter(assignments);
         }
         return dataToFile(
