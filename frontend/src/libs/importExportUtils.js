@@ -5,7 +5,6 @@
 import FuzzySet from "fuzzyset";
 import XLSX from "xlsx";
 import * as chrono from "chrono-node";
-import { prepareMinimal } from "./exportUtils";
 
 /**
  * Validates `data` based on the specified `schema`. At the moment this
@@ -333,11 +332,10 @@ export function dataToFile(formatters, dataFormat, filePrefix = "") {
 /**
  * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
  *
- * @export
  * @param {Ddah} ddah
  * @returns {((string | number)[])}
  */
-export function flattenDuties(ddah) {
+function flattenDuties(ddah) {
     const ret = [];
     const duties = [...ddah.duties];
     duties.sort((a, b) => a.order - b.order);
@@ -353,11 +351,10 @@ export function flattenDuties(ddah) {
 /**
  * Format a date as YYYY-MM-DD for inserting into a spreadsheet
  *
- * @export
  * @param {*} date
  * @returns
  */
-export function formatDateForSpreadsheet(date) {
+function formatDateForSpreadsheet(date) {
     try {
         return date && new Date(date).toJSON().slice(0, 10);
     } catch (e) {
@@ -368,11 +365,10 @@ export function formatDateForSpreadsheet(date) {
 /**
  * Create header columns for a spreadsheet containing information about every pay period.
  *
- * @export
  * @param {*} assignments
  * @returns
  */
-export function createPayPeriodHeaders(assignments) {
+function createPayPeriodHeaders(assignments) {
     const ret = [];
     if (!assignments) {
         return ret;
@@ -396,11 +392,10 @@ export function createPayPeriodHeaders(assignments) {
 /**
  * Create formatted rows providing information about each wage chunk.
  *
- * @export
  * @param {*} wageChunks
  * @returns
  */
-export function formatWageChunksToList(wageChunks) {
+function formatWageChunksToList(wageChunks) {
     const ret = [];
     if (!wageChunks) {
         return ret;
@@ -596,39 +591,3 @@ export const prepareSpreadsheet = {
         );
     },
 };
-
-/**
- * A factory function which produces corresponding prepareData function,
- *  for each type of object (possibly needs filtering or associated session).
- *
- * @param {string} objectType
- * @param {Function | null} objectFilter
- * @param {Session | null} session
- * @returns {Function}
- */
-export function prepareDataFactory(
-    objectType,
-    objectFilter = null,
-    session = null
-) {
-    // Make a function that converts a list of instructors into a `File` object.
-    return function prepareData(objects, dataFormat) {
-        if (objectFilter) {
-            objects = objectFilter(objects);
-        }
-        return dataToFile(
-            {
-                toSpreadsheet: () => prepareSpreadsheet[objectType],
-                toJson: () => ({
-                    [objectType + "s"]: objects.map((object) =>
-                        prepareMinimal[objectType](
-                            session ? (object, session) : object
-                        )
-                    ),
-                }),
-            },
-            dataFormat,
-            objectType + "s"
-        );
-    };
-}

@@ -11,14 +11,42 @@ import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
     normalizeImport,
-    prepareDataFactory,
+    dataToFile,
+    prepareSpreadsheet,
 } from "../../libs/importExportUtils";
+import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {
     ApplicantsList,
     ApplicantsDiffList,
 } from "../../components/applicants";
+
+/**
+ * Make a function that converts a list of applicants into a `File` object.
+ *
+ * @export
+ * @param {Applicant[]} applicants
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareData(
+    applicants: Applicant[],
+    dataFormat: "csv" | "json" | "xlsx"
+) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.applicant(applicants),
+            toJson: () => ({
+                applicants: applicants.map((applicant) =>
+                    prepareMinimal.applicant(applicant)
+                ),
+            }),
+        },
+        dataFormat,
+        "applicants"
+    );
+}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -45,7 +73,7 @@ export function ConnectedExportApplicantsAction() {
             setExportType(null);
 
             const file = await dispatch(
-                exportApplicants(prepareDataFactory("applicant"), exportType)
+                exportApplicants(prepareData, exportType)
             );
 
             FileSaver.saveAs(file);

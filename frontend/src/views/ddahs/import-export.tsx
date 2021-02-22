@@ -8,11 +8,12 @@ import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
-    prepareDataFactory,
     prepareSpreadsheet,
     SpreadsheetRowMapper,
     matchByUtoridOrName,
+    dataToFile,
 } from "../../libs/importExportUtils";
+import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {
@@ -25,6 +26,34 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
+
+/**
+ * A factory function which produces ddah prepareData function,
+ *
+ * @param {Function | null} ddahFilter
+ * @returns {Function}
+ */
+export function prepareDataFactory(ddahFilter?: Function) {
+    // Make a function that converts a list of ddahs into a `File` object.
+    return function prepareData(
+        ddahs: Ddah[],
+        dataFormat: "csv" | "json" | "xlsx"
+    ) {
+        if (ddahFilter && ddahFilter instanceof Function) {
+            ddahs = ddahFilter(ddahs);
+        }
+        return dataToFile(
+            {
+                toSpreadsheet: () => prepareSpreadsheet.ddah(ddahs),
+                toJson: () => ({
+                    ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
+                }),
+            },
+            dataFormat,
+            "ddahs"
+        );
+    };
+}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -57,7 +86,6 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
             const file = await dispatch(
                 exportDdahs(
                     prepareDataFactory(
-                        "ddah",
                         (ddahs: Ddah[], selectedIds = selectedDdahIds) => {
                             // If we have selected specific DDAHs, filter so we only export them.
                             if (selectedIds && selectedIds.length > 0) {
@@ -348,7 +376,7 @@ function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
     // Create an object with arrays of DDAHs for every position
     const ddahsByPosition: { [key: string]: any[][] } = {};
     for (const position_code of Array.from(posSet)) {
-        ddahsByPosition[position_code] = prepareSpreadsheet["ddah"](
+        ddahsByPosition[position_code] = prepareSpreadsheet.ddah(
             allDdahs.filter(
                 (ddah) =>
                     ddah.assignment.position.position_code === position_code

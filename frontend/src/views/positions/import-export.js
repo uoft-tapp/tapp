@@ -13,13 +13,38 @@ import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
     normalizeImport,
-    prepareDataFactory,
+    prepareSpreadsheet,
+    dataToFile,
 } from "../../libs/importExportUtils";
+import { prepareMinimal } from "../../libs/exportUtils";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
 import { diffImport, getChanged } from "../../libs/diffUtils";
+
+/**
+ * Make a function that converts a list of positions into a `File` object.
+ *
+ * @export
+ * @param {Position[]} positions
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareData(positions, dataFormat) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.position(positions),
+            toJson: () => ({
+                positions: positions.map((position) =>
+                    prepareMinimal.position(position)
+                ),
+            }),
+        },
+        dataFormat,
+        "positions"
+    );
+}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -44,7 +69,7 @@ export function ConnectedExportPositionsAction({ disabled }) {
             setExportType(null);
 
             const file = await dispatch(
-                exportPositions(prepareDataFactory("position"), exportType)
+                exportPositions(prepareData, exportType)
             );
 
             FileSaver.saveAs(file);
