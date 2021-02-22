@@ -225,12 +225,12 @@ export function templatesTests(api, callback) {
         );
         expect(resp2).toHaveStatus("success");
 
-        // Testing to ensure that duplicate file names are not added (need to fix mock API)
+        // Testing to ensure that duplicate file names are not added
         const resp3 = await apiPOST(
             `/admin/contract_templates/upload`,
             template
         );
         expect(resp3).toHaveStatus("error");
-        callback();
+        if (callback) callback();
     });
 }

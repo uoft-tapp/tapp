@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+import fs from "fs";
 import { apiGET, apiPOST, describe, it } from "./utils";
 import { mockAPI } from "../api/mockAPI";
 import { databaseSeeder } from "./setup";
@@ -23,7 +24,6 @@ import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
 import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
-import fs from "fs";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -119,7 +119,7 @@ describe("Mock API tests", () => {
         sessionsTests(mockAPI);
     });
     describe("`/admin/sessions/:session_id/contract_templates` tests", () => {
-        templatesTests(mockAPI, () => {});
+        templatesTests(mockAPI);
     });
     describe("`/admin/positions` tests", () => {
         positionsTests(mockAPI);
