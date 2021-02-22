@@ -28,6 +28,7 @@ import { offerTableSelector } from "../offertable/actions";
 /**
  * A factory function which produces assignment prepareData function,
  *
+ * @export
  * @param {Session} session
  * @param {Function | null} assignmentFilter
  * @returns {Function}

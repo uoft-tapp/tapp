@@ -30,6 +30,7 @@ import { FaDownload } from "react-icons/fa";
 /**
  * A factory function which produces ddah prepareData function,
  *
+ * @export
  * @param {Function | null} ddahFilter
  * @returns {Function}
  */
