@@ -20,7 +20,6 @@ import {
     MinimalDdah,
     Ddah,
 } from "../api/defs/types";
-import { dataToFile } from "./importExportUtils";
 
 /**
  * Determine whether `wageChunks` can be derived from `session`. E.g.,
