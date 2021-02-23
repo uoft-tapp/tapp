@@ -39,11 +39,16 @@ describe("API tests", () => {
     }, 30000);
 
     describe("template tests", () => {
-        templatesTests(api, () => {
+        if (
+            fs.existsSync(
+                "/storage_mounted_for_testing/contract_templates/TestTemplate.html"
+            )
+        ) {
             fs.unlinkSync(
                 "/storage_mounted_for_testing/contract_templates/TestTemplate.html"
             );
-        });
+        }
+        templatesTests(api);
     });
 
     describe("`/admin/positions` tests", () => {

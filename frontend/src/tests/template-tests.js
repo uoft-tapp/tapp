@@ -20,7 +20,7 @@ import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
  * @param {Function} api.apiGET A function that when passed a route will return the get response
  * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
  */
-export function templatesTests(api, callback) {
+export function templatesTests(api) {
     const { apiGET, apiPOST } = api;
     let session = null,
         testTemplates = null;
@@ -231,6 +231,5 @@ export function templatesTests(api, callback) {
             template
         );
         expect(resp3).toHaveStatus("error");
-        if (callback) callback();
     });
 }
