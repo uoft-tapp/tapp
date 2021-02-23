@@ -13,9 +13,36 @@ import {
     InstructorsDiffList,
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
+import {
+    normalizeImport,
+    prepareSpreadsheet,
+    dataToFile,
+} from "../../libs/importExportUtils";
 import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
+
+/**
+ * Make a function that converts a list of instructors into a `File` object.
+ *
+ * @export
+ * @param {Instructor[]} instructors
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareData(instructors, dataFormat) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.instructor(instructors),
+            toJson: () => ({
+                instructors: instructors.map((instructor) =>
+                    prepareMinimal.instructor(instructor)
+                ),
+            }),
+        },
+        dataFormat,
+        "instructors"
+    );
+}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -38,32 +65,6 @@ export function ConnectedExportInstructorsAction() {
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
-
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(instructors, dataFormat) {
-                return dataToFile(
-                    {
-                        toSpreadsheet: () =>
-                            [
-                                ["Last Name", "First Name", "UTORid", "email"],
-                            ].concat(
-                                instructors.map((instructor) => [
-                                    instructor.last_name,
-                                    instructor.first_name,
-                                    instructor.utorid,
-                                    instructor.email,
-                                ])
-                            ),
-                        toJson: () => ({
-                            instructors: instructors.map((instructor) =>
-                                prepareMinimal.instructor(instructor)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "instructors"
-                );
-            }
 
             const file = await dispatch(
                 exportInstructors(prepareData, exportType)

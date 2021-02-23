@@ -11,13 +11,40 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
+import {
+    normalizeImport,
+    prepareSpreadsheet,
+    dataToFile,
+} from "../../libs/importExportUtils";
+import { prepareMinimal } from "../../libs/exportUtils";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
-import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
+
+/**
+ * Make a function that converts a list of positions into a `File` object.
+ *
+ * @export
+ * @param {Position[]} positions
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareData(positions, dataFormat) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.position(positions),
+            toJson: () => ({
+                positions: positions.map((position) =>
+                    prepareMinimal.position(position)
+                ),
+            }),
+        },
+        dataFormat,
+        "positions"
+    );
+}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -40,64 +67,6 @@ export function ConnectedExportPositionsAction({ disabled }) {
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
-
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(positions, dataFormat) {
-                return dataToFile(
-                    {
-                        toSpreadsheet: () =>
-                            [
-                                [
-                                    "Position Code",
-                                    "Position Title",
-                                    "Start Date",
-                                    "End Date",
-                                    "Hours Per Assignment",
-                                    "Number of Assignments",
-                                    "Contract Template",
-                                    "Instructors",
-                                    "Duties",
-                                    "Qualifications",
-                                    "Current Enrollment",
-                                    "Current Waitlist",
-                                ],
-                            ].concat(
-                                positions.map((position) => [
-                                    position.position_code,
-                                    position.position_title,
-                                    position.start_date &&
-                                        new Date(position.start_date)
-                                            .toJSON()
-                                            .slice(0, 10),
-                                    position.end_date &&
-                                        new Date(position.end_date)
-                                            .toJSON()
-                                            .slice(0, 10),
-                                    position.hours_per_assignment,
-                                    position.desired_num_assignments,
-                                    position.contract_template.template_name,
-                                    position.instructors
-                                        .map(
-                                            (instructor) =>
-                                                `${instructor.last_name}, ${instructor.first_name}`
-                                        )
-                                        .join("; "),
-                                    position.duties || "",
-                                    position.qualifications || "",
-                                    position.current_enrollment,
-                                    position.current_waitlisted,
-                                ])
-                            ),
-                        toJson: () => ({
-                            positions: positions.map((position) =>
-                                prepareMinimal.position(position)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "positions"
-                );
-            }
 
             const file = await dispatch(
                 exportPositions(prepareData, exportType)
