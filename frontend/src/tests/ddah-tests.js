@@ -87,6 +87,7 @@ export function ddahTests(api) {
     it("get all ddahs associated with a session", async () => {
         let resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp).toHaveStatus("success");
+        // Originally only one ddah is seeded
         expect(resp.payload.length).toEqual(1);
         expect(resp.payload).toContainObject(ddah);
     });
