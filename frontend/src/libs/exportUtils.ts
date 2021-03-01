@@ -41,6 +41,7 @@ function wageChunksMatchPositionAndSession(
     if (wageChunks.length === 1) {
         const chunk: WageChunk = wageChunks[0];
         if (
+            // shouldn't we also check chunk.hours === assignment.hours? Also sum of hours === assignment.hours when there are multiple chunks?
             chunk.start_date === position.start_date &&
             chunk.end_date === position.end_date &&
             (chunk.rate === session.rate1 || chunk.rate === session.rate2)
