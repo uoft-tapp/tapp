@@ -1,8 +1,31 @@
 /**
  * @jest-environment node
  */
+/* eslint-env node */
 import { describe, it, expect } from "./utils";
-import { validate, SpreadsheetRowMapper } from "../libs/importExportUtils";
+import {
+    validate,
+    SpreadsheetRowMapper,
+    prepareSpreadsheet,
+} from "../libs/importExportUtils";
+import {
+    instructorData,
+    applicantData,
+    positionData,
+    assignmentData,
+    ddahData,
+} from "./import-export-data/export-data";
+import { prepareMinimal } from "../libs/exportUtils";
+// BELOW ARE USED FOR ROUND TRIP TEST FOR prepareData
+// import { prepareData } from "../views/instructors/import-export";
+// import XLSX from "xlsx";
+
+// function File(fileBits, fileName, options) {
+//     this.fileBits = fileBits;
+//     this.fileName = fileName;
+//     this.options = options;
+// }
+// global.File = File;
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -21,7 +44,7 @@ describe("Import/export library functionality", () => {
         primaryKey: "utorid",
     };
 
-    const instructorData = [
+    const instructorData1 = [
         {
             id: 2,
             first_name: "Gordon",
@@ -46,14 +69,14 @@ describe("Import/export library functionality", () => {
 
     it("Validate data according to a schema", () => {
         // Should not throw
-        expect(() => validate(instructorData, instructorSchema)).not.toThrow(
+        expect(() => validate(instructorData1, instructorSchema)).not.toThrow(
             Error
         );
         // Should throw
         expect(() =>
             validate(
                 [
-                    ...instructorData,
+                    ...instructorData1,
                     { first_name: "You", last_name: "Me", email: "t@b.com" },
                 ],
                 instructorSchema
@@ -107,6 +130,98 @@ describe("Import/export library functionality", () => {
         ).not.toEqual(targetData);
     });
 
-    it.todo("Export data to a JSON/CSV/XLSX");
-    it.todo("Import data from a JSON/CSV/XLSX");
+    it("Export Instructors to JSON/CSV/XLSX", () => {
+        // prepare instructor spreadsheet
+        const instructorSpreadsheet = prepareSpreadsheet.instructor(
+            instructorData
+        );
+        expect(instructorSpreadsheet).toMatchSnapshot();
+
+        // prepare instructor json
+        let instructorJson = [];
+        instructorData.forEach((instructor) => {
+            instructorJson.push(prepareMinimal.instructor(instructor));
+        });
+        expect(instructorJson).toMatchSnapshot();
+        // BELOW IS ROUND TRIP TEST FOR prepareData FUNCTION, NEEDS TO SOLVE JEST REDEFINE ISSUE TO WORK
+        // // create instructor CSV File object
+        // const instructorCSV = prepareData(instructorData, "csv");
+        // expect(instructorCSV).toMatchSnapshot();
+        // const workbook = XLSX.read(instructorCSV.fileBits[0], {
+        //     type: "array",
+        // });
+        // const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        // let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        // const keys = dataCSV.shift();
+        // // transform to array of objects
+        // dataCSV = dataCSV.map(function (row) {
+        //     return keys.reduce(function (obj, key, i) {
+        //         obj[key] = row[i];
+        //         return obj;
+        //     }, {});
+        // });
+        // expect(dataCSV).toMatchSnapshot();
+    });
+
+    it("Export Applicants to JSON/CSV/XLSX", () => {
+        // prepare applicant spreadsheet
+        const applicantSpreadsheet = prepareSpreadsheet.applicant(
+            applicantData
+        );
+        expect(applicantSpreadsheet).toMatchSnapshot();
+
+        // prepare applicant json
+        let applicantJson = [];
+        applicantData.forEach((applicant) => {
+            applicantJson.push(prepareMinimal.applicant(applicant));
+        });
+        expect(applicantJson).toMatchSnapshot();
+    });
+
+    it("Export Positions to JSON/CSV/XLSX", () => {
+        // prepare position spreadsheet
+        const positionSpreadsheet = prepareSpreadsheet.position(positionData);
+        expect(positionSpreadsheet).toMatchSnapshot();
+
+        // prepare position json
+        let positionJson = [];
+        positionData.forEach((position) => {
+            positionJson.push(prepareMinimal.position(position));
+        });
+        expect(positionJson).toMatchSnapshot();
+    });
+
+    it("Export Assignments to JSON/CSV/XLSX", () => {
+        // prepare assignment spreadsheet
+        const assignmentSpreadsheet = prepareSpreadsheet.assignment(
+            assignmentData
+        );
+        expect(assignmentSpreadsheet).toMatchSnapshot();
+
+        // prepare assignment json
+        let assignmentJson = [];
+        assignmentData.forEach((assignment) => {
+            assignmentJson.push(
+                prepareMinimal.assignment(assignment, {
+                    rate: 50,
+                    rate1: 50,
+                    rate2: 50,
+                })
+            );
+        });
+        expect(assignmentJson).toMatchSnapshot();
+    });
+
+    it("Export Ddahs to JSON/CSV/XLSX", () => {
+        // prepare ddah spreadsheet
+        const ddahSpreadsheet = prepareSpreadsheet.ddah(ddahData);
+        expect(ddahSpreadsheet).toMatchSnapshot();
+
+        // prepare ddah json
+        let ddahJson = [];
+        ddahData.forEach((ddah) => {
+            ddahJson.push(prepareMinimal.ddah(ddah));
+        });
+        expect(ddahJson).toMatchSnapshot();
+    });
 });
