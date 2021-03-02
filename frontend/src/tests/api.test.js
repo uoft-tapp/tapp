@@ -39,6 +39,7 @@ describe("API tests", () => {
     }, 30000);
 
     describe("template tests", () => {
+        // Remove the test template file if it already exists
         const testFile =
             "/storage_mounted_for_testing/contract_templates/TestTemplate.html";
         if (fs.existsSync(testFile)) {
