@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+import fs from "fs";
 import { apiGET, apiPOST, describe, it } from "./utils";
 import { mockAPI } from "../api/mockAPI";
 import { databaseSeeder } from "./setup";
@@ -38,6 +39,12 @@ describe("API tests", () => {
     }, 30000);
 
     describe("template tests", () => {
+        // Remove the test template file if it already exists
+        const testFile =
+            "/storage_mounted_for_testing/contract_templates/TestTemplate.html";
+        if (fs.existsSync(testFile)) {
+            fs.unlinkSync(testFile);
+        }
         templatesTests(api);
     });
 

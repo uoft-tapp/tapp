@@ -42,6 +42,11 @@ export class ContractTemplate extends MockAPIController {
         }
     }
     upload({ file_contents, file_name }) {
+        if (file_name in this.data.contract_templates_by_filename) {
+            throw new Error(
+                `Template with filename '${file_name}' already exists.`
+            );
+        }
         this.data.contract_templates_by_filename[file_name] = file_contents;
         this.data.available_contract_templates.push({
             template_file: file_name,
