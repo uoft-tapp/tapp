@@ -76,7 +76,7 @@ function OfferActionButtons(props) {
             let multipleOfferWithdrawBrief = "";
 
             selectedAssignments.forEach((selectedAssignment) => {
-                multipleOfferWithdrawBrief += `${selectedAssignment.applicant.first_name} ${selectedAssignment.applicant.last_name}: ${selectedAssignment.position.position_code} (${selectedAssignment.hours} hrs)\n`;
+                multipleOfferWithdrawBrief += `${selectedAssignment.applicant.first_name} ${selectedAssignment.applicant.last_name}:  ${selectedAssignment.position.position_code} ${selectedAssignment.position.position_title} (${selectedAssignment.hours} hrs)\n`;
             });
 
             setOfferBrief(multipleOfferWithdrawBrief);
