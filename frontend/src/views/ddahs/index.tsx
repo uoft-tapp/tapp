@@ -25,6 +25,7 @@ import {
     deleteDdah,
 } from "../../api/actions/ddahs";
 import { Ddah } from "../../api/defs/types";
+import { Button, Modal } from "react-bootstrap";
 
 export function AdminDdahsView(): React.ReactNode {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -38,6 +39,39 @@ export function AdminDdahsView(): React.ReactNode {
     const selectedDdahs = ddahs.filter((ddah) =>
         selectedDdahIds.includes(ddah.id)
     );
+
+    const [
+        ddahDeletionConfirmationVisible,
+        setDdahDeletionConfirmationVisible,
+    ] = React.useState(false);
+    const [ddahBrief, setDdahBrief] = React.useState("");
+
+    function confirmDDAHDeletion() {
+        if (selectedDdahs?.length > 1) {
+            let multipleOfferWithdrawBrief = "";
+
+            selectedDdahs.forEach((selectedDdah) => {
+                multipleOfferWithdrawBrief += `${
+                    selectedDdah.assignment.applicant.first_name
+                } ${selectedDdah.assignment.applicant.last_name}: ${
+                    selectedDdah.status ? selectedDdah.status : "unsent"
+                } (total hours: ${selectedDdah.total_hours})\n`;
+            });
+
+            setDdahBrief(multipleOfferWithdrawBrief);
+            setDdahDeletionConfirmationVisible(true);
+        } else {
+            deleteDDAHs();
+        }
+    }
+
+    function deleteDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(deleteDdah(ddah));
+        }
+
+        setDdahDeletionConfirmationVisible(false);
+    }
 
     return (
         <div className="page-body">
@@ -90,15 +124,43 @@ export function AdminDdahsView(): React.ReactNode {
                 </ActionButton>
                 <ActionButton
                     icon={FaTrash}
-                    onClick={() => {
-                        for (const ddah of selectedDdahs) {
-                            dispatch(deleteDdah(ddah));
-                        }
-                    }}
+                    onClick={confirmDDAHDeletion}
                     disabled={selectedDdahIds.length === 0}
                 >
                     Delete DDAH
                 </ActionButton>
+                <Modal
+                    show={ddahDeletionConfirmationVisible}
+                    onHide={() => {
+                        setDdahDeletionConfirmationVisible(false);
+                    }}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Deleting Multiple DDAHs</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        You are deleting all of the following{" "}
+                        {selectedDdahs?.length} DDAHs!
+                        <br />
+                        <br />
+                        <div style={{ whiteSpace: "pre-line" }}>
+                            {ddahBrief}
+                        </div>
+                        <br />
+                        Are you sure?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            onClick={() => {
+                                setDdahDeletionConfirmationVisible(false);
+                            }}
+                            variant="light"
+                        >
+                            Cancel
+                        </Button>
+                        <Button onClick={deleteDDAHs}>Delete All</Button>
+                    </Modal.Footer>
+                </Modal>
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
