@@ -81,7 +81,6 @@ function OfferActionButtons(props) {
                 multipleOfferWithdrawBrief += `${selectedAssignment.applicant.first_name} ${selectedAssignment.applicant.last_name}: ${selectedAssignment.position.position_code} (${selectedAssignment.hours} hrs)\n`;
             });
 
-            console.log(selectedAssignments);
             setMultipleOfferWithdrawBrief(multipleOfferWithdrawBrief);
             showOfferWithdrawConfirmation();
         } else {
