@@ -59,13 +59,11 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    const [show, setShow] = React.useState(false);
+    const [
+        ddahDeletionConfirmationVisible,
+        setDdahDeletionConfirmationVisible,
+    ] = React.useState(false);
     const [offerBrief, setOfferBrief] = React.useState("");
-
-    const hideOfferWithdrawConfirmation = () => setShow(false);
-    const showOfferWithdrawConfirmation = () => setShow(true);
-    const setMultipleOfferWithdrawBrief = (briefString) =>
-        setOfferBrief(briefString);
 
     function createOffers() {
         for (const assignment of selectedAssignments) {
@@ -81,8 +79,8 @@ function OfferActionButtons(props) {
                 multipleOfferWithdrawBrief += `${selectedAssignment.applicant.first_name} ${selectedAssignment.applicant.last_name}: ${selectedAssignment.position.position_code} (${selectedAssignment.hours} hrs)\n`;
             });
 
-            setMultipleOfferWithdrawBrief(multipleOfferWithdrawBrief);
-            showOfferWithdrawConfirmation();
+            setOfferBrief(multipleOfferWithdrawBrief);
+            setDdahDeletionConfirmationVisible(true);
         } else {
             // does not need confirmation if only withdrawing one offer
             withdrawOffers();
@@ -92,7 +90,7 @@ function OfferActionButtons(props) {
         for (const assignment of selectedAssignments) {
             offerForAssignmentWithdraw(assignment);
         }
-        hideOfferWithdrawConfirmation();
+        setDdahDeletionConfirmationVisible(false);
     }
     function emailOffers() {
         for (const assignment of selectedAssignments) {
@@ -173,7 +171,12 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <Modal show={show} onHide={hideOfferWithdrawConfirmation}>
+            <Modal
+                show={ddahDeletionConfirmationVisible}
+                onHide={() => {
+                    setDdahDeletionConfirmationVisible(false);
+                }}
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
                 </Modal.Header>
@@ -188,7 +191,9 @@ function OfferActionButtons(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={hideOfferWithdrawConfirmation}
+                        onClick={() => {
+                            setDdahDeletionConfirmationVisible(false);
+                        }}
                         variant="light"
                     >
                         Cancel
