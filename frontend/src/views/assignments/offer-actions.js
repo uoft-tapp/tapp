@@ -9,7 +9,7 @@ import {
     offerForAssignmentWithdraw,
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
-} from "../../api/actions/offers";
+} from "../../api/actions";
 import {
     FaEnvelope,
     FaBan,
@@ -19,7 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 /**
  * Functions to test what actions you can do with a particular assignment
