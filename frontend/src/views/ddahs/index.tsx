@@ -54,9 +54,13 @@ export function AdminDdahsView(): React.ReactNode {
                 multipleOfferWithdrawBrief += `${
                     selectedDdah.assignment.applicant.first_name
                 } ${selectedDdah.assignment.applicant.last_name}: ${
+                    selectedDdah.assignment.position.position_code
+                } ${selectedDdah.assignment.position.position_title} -- ${
                     selectedDdah.status ? selectedDdah.status : "unsent"
                 } (total hours: ${selectedDdah.total_hours})\n`;
             });
+
+            console.log(selectedDdahs);
 
             setDdahBrief(multipleOfferWithdrawBrief);
             setDdahDeletionConfirmationVisible(true);
