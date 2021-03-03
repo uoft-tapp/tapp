@@ -89,8 +89,10 @@ export function instructorsPermissionTests(api) {
 
     it("assigning to be instructor of a course grants instructor role", async () => {
         await restoreDefaultUser();
+        const emptyRoleUserUtorid =
+            "course_assign_grant_instructor_test_user_utorid";
         const emptyRoleUserData = {
-            utorid: "course_assign_grant_instructor_test_user_utorid",
+            utorid: emptyRoleUserUtorid,
             roles: [],
         };
 
@@ -109,6 +111,26 @@ export function instructorsPermissionTests(api) {
 
         expect(emptyRoleUserId).toBeDefined();
 
+        const instructorData = {
+            utorid: emptyRoleUserUtorid,
+            first_name: "course_assign_grant_instructor_test_first_name",
+            last_name: "course_assign_grant_instructor_test_last_name",
+            email: "course_assign_grant_instructor_test_email",
+        };
+        resp = await apiPOST(`/admin/instructors`, instructorData);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiGET(`/admin/instructors`);
+        expect(resp).toHaveStatus("success");
+        console.log(resp.payload);
+        let instructorId;
+        resp.payload.forEach((instructor) => {
+            if (instructor.utorid === emptyRoleUserUtorid) {
+                instructorId = instructor.id;
+            }
+        });
+        expect(instructorId).toBeDefined();
+
         const defaultTestPosition = {
             position_code: "course_assign_grant_instructor_test_position_code",
             position_title:
@@ -116,7 +138,7 @@ export function instructorsPermissionTests(api) {
             hours_per_assignment: 1.0,
             contract_template_id: existingContractTemplateId,
             duties: "Tutorials",
-            instructor_ids: [emptyRoleUserId],
+            instructor_ids: [instructorId],
         };
 
         // upon successfully making the following position upsert, the no-role user should be granted instructor role
@@ -128,7 +150,7 @@ export function instructorsPermissionTests(api) {
 
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
-
+        console.log(resp.payload);
         let assignedInstructorRoleUser;
         resp.payload.forEach((user) => {
             if (user.id === emptyRoleUserId) {
