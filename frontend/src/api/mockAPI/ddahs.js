@@ -174,6 +174,20 @@ export const ddahsRoutes = {
             summary: "Approve a DDAH",
             returns: docApiPropTypes.ddah,
         }),
+        "/ddahs/:ddah_id/delete": documentCallback({
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                const ddah = new Ddah(data).find({ id: params.ddah_id });
+                if (!ddah) {
+                    throw new Error(
+                        `Could not find DDAH with id '${params.ddah_id}'`
+                    );
+                }
+                return new Ddah(data).delete({ id: params.ddah_id });
+            },
+            summary: "Delete a DDAH",
+            returns: docApiPropTypes.ddah,
+        }),
         "/ddahs/:ddah_id/email": documentCallback({
             func: (data, params) => {
                 if (params.role === "admin" || params.role === "instructor") {
