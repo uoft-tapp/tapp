@@ -44,39 +44,16 @@ describe("Import/export library functionality", () => {
         primaryKey: "utorid",
     };
 
-    const instructorData1 = [
-        {
-            id: 2,
-            first_name: "Gordon",
-            last_name: "Smith",
-            email: "a@a.com",
-            utorid: "booger",
-        },
-        {
-            id: 3,
-            first_name: "Tommy",
-            last_name: "Smith",
-            email: "a@b.com",
-            utorid: "food",
-        },
-        {
-            first_name: "Grandpa",
-            last_name: "Boobie",
-            email: "a@d.com",
-            utorid: "fooc",
-        },
-    ];
-
     it("Validate data according to a schema", () => {
         // Should not throw
-        expect(() => validate(instructorData1, instructorSchema)).not.toThrow(
+        expect(() => validate(instructorData, instructorSchema)).not.toThrow(
             Error
         );
         // Should throw
         expect(() =>
             validate(
                 [
-                    ...instructorData1,
+                    ...instructorData,
                     { first_name: "You", last_name: "Me", email: "t@b.com" },
                 ],
                 instructorSchema
