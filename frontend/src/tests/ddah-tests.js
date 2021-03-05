@@ -99,7 +99,7 @@ export function ddahTests(api) {
             `/admin/sessions/${newSession.id}/contract_templates`
         );
         expect(resp).toHaveStatus("success");
-        console.log(resp.payload);
+        // console.log(resp.payload);
         expect(resp.payload.length).toBeGreaterThan(0);
         const newContract = resp.payload[0];
 
