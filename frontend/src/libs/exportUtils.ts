@@ -26,13 +26,16 @@ import {
  * the rates match the session rates.
  *
  * @param {*} wageChunks
+ * @param {*} position
  * @param {*} session
+ * @param {Number} assignmentHours
  * @returns {boolean}
  */
 function wageChunksMatchPositionAndSession(
     wageChunks: WageChunk[],
     position: Position,
-    session: Session
+    session: Session,
+    assignmentHours: Number
 ): boolean {
     if (!session || !Array.isArray(wageChunks)) {
         return true;
@@ -43,7 +46,8 @@ function wageChunksMatchPositionAndSession(
         if (
             chunk.start_date === position.start_date &&
             chunk.end_date === position.end_date &&
-            (chunk.rate === session.rate1 || chunk.rate === session.rate2)
+            (chunk.rate === session.rate1 || chunk.rate === session.rate2) &&
+            chunk.hours === assignmentHours
         ) {
             return true;
         }
@@ -73,6 +77,12 @@ function wageChunksMatchPositionAndSession(
             chunk1.start_date !== position.start_date ||
             chunk2.end_date !== position.end_date
         ) {
+            return false;
+        }
+
+        // If the sum of hours of wage chunks doesn't match the hours of assignment
+        // we're not derivable.
+        if (chunk1.hours + chunk2.hours !== assignmentHours) {
             return false;
         }
 
@@ -193,7 +203,8 @@ export const prepareMinimal = {
             wageChunksMatchPositionAndSession(
                 assignment.wage_chunks,
                 position,
-                session
+                session,
+                assignment.hours
             )
         ) {
             // The rate is the same as the session rate, so we don't need to store the
