@@ -105,10 +105,9 @@ describe("Import/export library functionality", () => {
         expect(instructorSpreadsheet).toMatchSnapshot();
 
         // prepare instructor json
-        let instructorJson = [];
-        instructorData.forEach((instructor) => {
-            instructorJson.push(prepareMinimal.instructor(instructor));
-        });
+        const instructorJson = instructorData.map((instructor) =>
+            prepareMinimal.instructor(instructor)
+        );
         expect(instructorJson).toMatchSnapshot();
     });
 
@@ -120,10 +119,9 @@ describe("Import/export library functionality", () => {
         expect(applicantSpreadsheet).toMatchSnapshot();
 
         // prepare applicant json
-        let applicantJson = [];
-        applicantData.forEach((applicant) => {
-            applicantJson.push(prepareMinimal.applicant(applicant));
-        });
+        const applicantJson = applicantData.map((applicant) =>
+            prepareMinimal.applicant(applicant)
+        );
         expect(applicantJson).toMatchSnapshot();
     });
 
@@ -133,10 +131,9 @@ describe("Import/export library functionality", () => {
         expect(positionSpreadsheet).toMatchSnapshot();
 
         // prepare position json
-        let positionJson = [];
-        positionData.forEach((position) => {
-            positionJson.push(prepareMinimal.position(position));
-        });
+        const positionJson = positionData.map((position) =>
+            prepareMinimal.position(position)
+        );
         expect(positionJson).toMatchSnapshot();
     });
 
@@ -148,16 +145,13 @@ describe("Import/export library functionality", () => {
         expect(assignmentSpreadsheet).toMatchSnapshot();
 
         // prepare assignment json
-        let assignmentJson = [];
-        assignmentData.forEach((assignment) => {
-            assignmentJson.push(
-                prepareMinimal.assignment(assignment, {
-                    rate: 50,
-                    rate1: 50,
-                    rate2: 50,
-                })
-            );
-        });
+        const assignmentJson = assignmentData.map((assignment) =>
+            prepareMinimal.assignment(assignment, {
+                rate: 50,
+                rate1: 50,
+                rate2: 50,
+            })
+        );
         expect(assignmentJson).toMatchSnapshot();
     });
 
@@ -167,10 +161,7 @@ describe("Import/export library functionality", () => {
         expect(ddahSpreadsheet).toMatchSnapshot();
 
         // prepare ddah json
-        let ddahJson = [];
-        ddahData.forEach((ddah) => {
-            ddahJson.push(prepareMinimal.ddah(ddah));
-        });
+        const ddahJson = ddahData.map((ddah) => prepareMinimal.ddah(ddah));
         expect(ddahJson).toMatchSnapshot();
     });
 });
