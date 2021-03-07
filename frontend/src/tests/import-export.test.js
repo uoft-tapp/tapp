@@ -105,9 +105,7 @@ describe("Import/export library functionality", () => {
         expect(instructorSpreadsheet).toMatchSnapshot();
 
         // prepare instructor json
-        const instructorJson = instructorData.map((instructor) =>
-            prepareMinimal.instructor(instructor)
-        );
+        const instructorJson = instructorData.map(prepareMinimal.instructor);
         expect(instructorJson).toMatchSnapshot();
     });
 
@@ -119,9 +117,7 @@ describe("Import/export library functionality", () => {
         expect(applicantSpreadsheet).toMatchSnapshot();
 
         // prepare applicant json
-        const applicantJson = applicantData.map((applicant) =>
-            prepareMinimal.applicant(applicant)
-        );
+        const applicantJson = applicantData.map(prepareMinimal.applicant);
         expect(applicantJson).toMatchSnapshot();
     });
 
@@ -131,9 +127,7 @@ describe("Import/export library functionality", () => {
         expect(positionSpreadsheet).toMatchSnapshot();
 
         // prepare position json
-        const positionJson = positionData.map((position) =>
-            prepareMinimal.position(position)
-        );
+        const positionJson = positionData.map(prepareMinimal.position);
         expect(positionJson).toMatchSnapshot();
     });
 
@@ -145,13 +139,13 @@ describe("Import/export library functionality", () => {
         expect(assignmentSpreadsheet).toMatchSnapshot();
 
         // prepare assignment json
-        const assignmentJson = assignmentData.map((assignment) =>
-            prepareMinimal.assignment(assignment, {
+        const assignmentJson = assignmentData.map(function (assignment) {
+            return prepareMinimal.assignment(assignment, {
                 rate: 50,
                 rate1: 50,
                 rate2: 50,
-            })
-        );
+            });
+        });
         expect(assignmentJson).toMatchSnapshot();
     });
 
@@ -161,7 +155,7 @@ describe("Import/export library functionality", () => {
         expect(ddahSpreadsheet).toMatchSnapshot();
 
         // prepare ddah json
-        const ddahJson = ddahData.map((ddah) => prepareMinimal.ddah(ddah));
+        const ddahJson = ddahData.map(prepareMinimal.ddah);
         expect(ddahJson).toMatchSnapshot();
     });
 });
