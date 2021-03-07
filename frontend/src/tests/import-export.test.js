@@ -1,8 +1,21 @@
 /**
  * @jest-environment node
  */
+/* eslint-env node */
 import { describe, it, expect } from "./utils";
-import { validate, SpreadsheetRowMapper } from "../libs/importExportUtils";
+import {
+    validate,
+    SpreadsheetRowMapper,
+    prepareSpreadsheet,
+} from "../libs/importExportUtils";
+import {
+    instructorData,
+    applicantData,
+    positionData,
+    assignmentData,
+    ddahData,
+} from "./import-export-data/export-data";
+import { prepareMinimal } from "../libs/exportUtils";
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -20,29 +33,6 @@ describe("Import/export library functionality", () => {
         requiredKeys: ["utorid"],
         primaryKey: "utorid",
     };
-
-    const instructorData = [
-        {
-            id: 2,
-            first_name: "Gordon",
-            last_name: "Smith",
-            email: "a@a.com",
-            utorid: "booger",
-        },
-        {
-            id: 3,
-            first_name: "Tommy",
-            last_name: "Smith",
-            email: "a@b.com",
-            utorid: "food",
-        },
-        {
-            first_name: "Grandpa",
-            last_name: "Boobie",
-            email: "a@d.com",
-            utorid: "fooc",
-        },
-    ];
 
     it("Validate data according to a schema", () => {
         // Should not throw
@@ -107,6 +97,65 @@ describe("Import/export library functionality", () => {
         ).not.toEqual(targetData);
     });
 
-    it.todo("Export data to a JSON/CSV/XLSX");
-    it.todo("Import data from a JSON/CSV/XLSX");
+    it("Export Instructors to JSON/CSV/XLSX", () => {
+        // prepare instructor spreadsheet
+        const instructorSpreadsheet = prepareSpreadsheet.instructor(
+            instructorData
+        );
+        expect(instructorSpreadsheet).toMatchSnapshot();
+
+        // prepare instructor json
+        const instructorJson = instructorData.map(prepareMinimal.instructor);
+        expect(instructorJson).toMatchSnapshot();
+    });
+
+    it("Export Applicants to JSON/CSV/XLSX", () => {
+        // prepare applicant spreadsheet
+        const applicantSpreadsheet = prepareSpreadsheet.applicant(
+            applicantData
+        );
+        expect(applicantSpreadsheet).toMatchSnapshot();
+
+        // prepare applicant json
+        const applicantJson = applicantData.map(prepareMinimal.applicant);
+        expect(applicantJson).toMatchSnapshot();
+    });
+
+    it("Export Positions to JSON/CSV/XLSX", () => {
+        // prepare position spreadsheet
+        const positionSpreadsheet = prepareSpreadsheet.position(positionData);
+        expect(positionSpreadsheet).toMatchSnapshot();
+
+        // prepare position json
+        const positionJson = positionData.map(prepareMinimal.position);
+        expect(positionJson).toMatchSnapshot();
+    });
+
+    it("Export Assignments to JSON/CSV/XLSX", () => {
+        // prepare assignment spreadsheet
+        const assignmentSpreadsheet = prepareSpreadsheet.assignment(
+            assignmentData
+        );
+        expect(assignmentSpreadsheet).toMatchSnapshot();
+
+        // prepare assignment json
+        const assignmentJson = assignmentData.map(function (assignment) {
+            return prepareMinimal.assignment(assignment, {
+                rate: 50,
+                rate1: 50,
+                rate2: 50,
+            });
+        });
+        expect(assignmentJson).toMatchSnapshot();
+    });
+
+    it("Export Ddahs to JSON/CSV/XLSX", () => {
+        // prepare ddah spreadsheet
+        const ddahSpreadsheet = prepareSpreadsheet.ddah(ddahData);
+        expect(ddahSpreadsheet).toMatchSnapshot();
+
+        // prepare ddah json
+        const ddahJson = ddahData.map(prepareMinimal.ddah);
+        expect(ddahJson).toMatchSnapshot();
+    });
 });
