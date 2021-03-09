@@ -190,23 +190,18 @@ export function AdvancedFilterTable({
                             // Don't let the table get too short no matter what
                             //height = Math.max(height, 300);
                             return (
-                                <Scrollbars
-                                    style={{ width, height }}
-                                    onScroll={handleScroll}
+                                <FixedSizeList
+                                    height={height}
+                                    itemCount={table.rows.length}
+                                    itemSize={30}
+                                    width={table.totalColumnsWidth}
+                                    ref={scrollRef}
+                                    style={{
+                                        overflow: "visible",
+                                    }}
                                 >
-                                    <FixedSizeList
-                                        height={height}
-                                        itemCount={table.rows.length}
-                                        itemSize={30}
-                                        width={table.totalColumnsWidth}
-                                        ref={scrollRef}
-                                        style={{
-                                            overflow: "visible",
-                                        }}
-                                    >
-                                        {renderRow}
-                                    </FixedSizeList>
-                                </Scrollbars>
+                                    {renderRow}
+                                </FixedSizeList>
                             );
                         }}
                     </AutoSizer>
