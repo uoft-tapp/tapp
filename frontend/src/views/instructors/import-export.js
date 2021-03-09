@@ -14,33 +14,8 @@ import {
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
 import { normalizeImport } from "../../libs/import-export/normalizeImport";
-import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
-import { dataToFile } from "../../libs/import-export/dataToFile";
-import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-
-/**
- * Make a function that converts a list of instructors into a `File` object.
- *
- * @export
- * @param {Instructor[]} instructors
- * @param {"csv" | "json" | "xlsx"} dataFormat
- * @returns
- */
-export function prepareData(instructors, dataFormat) {
-    return dataToFile(
-        {
-            toSpreadsheet: () => prepareSpreadsheet.instructor(instructors),
-            toJson: () => ({
-                instructors: instructors.map((instructor) =>
-                    prepareMinimal.instructor(instructor)
-                ),
-            }),
-        },
-        dataFormat,
-        "instructors"
-    );
-}
+import { prepareInstructorData } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -65,7 +40,7 @@ export function ConnectedExportInstructorsAction() {
             setExportType(null);
 
             const file = await dispatch(
-                exportInstructors(prepareData, exportType)
+                exportInstructors(prepareInstructorData, exportType)
             );
 
             FileSaver.saveAs(file);

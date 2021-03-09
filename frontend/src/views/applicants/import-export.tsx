@@ -9,42 +9,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
+import { prepareApplicantData } from "../../libs/import-export/prepareData";
 import { normalizeImport } from "../../libs/import-export/normalizeImport";
-import { dataToFile } from "../../libs/import-export/dataToFile";
-import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
-import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {
     ApplicantsList,
     ApplicantsDiffList,
 } from "../../components/applicants";
-
-/**
- * Make a function that converts a list of applicants into a `File` object.
- *
- * @export
- * @param {Applicant[]} applicants
- * @param {"csv" | "json" | "xlsx"} dataFormat
- * @returns
- */
-export function prepareData(
-    applicants: Applicant[],
-    dataFormat: "csv" | "json" | "xlsx"
-) {
-    return dataToFile(
-        {
-            toSpreadsheet: () => prepareSpreadsheet.applicant(applicants),
-            toJson: () => ({
-                applicants: applicants.map((applicant) =>
-                    prepareMinimal.applicant(applicant)
-                ),
-            }),
-        },
-        dataFormat,
-        "applicants"
-    );
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -71,7 +43,7 @@ export function ConnectedExportApplicantsAction() {
             setExportType(null);
 
             const file = await dispatch(
-                exportApplicants(prepareData, exportType)
+                exportApplicants(prepareApplicantData, exportType)
             );
 
             FileSaver.saveAs(file);

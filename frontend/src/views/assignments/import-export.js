@@ -11,46 +11,15 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
+import { prepareAssignmentDataFactory } from "../../libs/import-export/prepareData";
 import { Alert } from "react-bootstrap";
 import { normalizeImport } from "../../libs/import-export/normalizeImport";
-import { dataToFile } from "../../libs/import-export/dataToFile";
-import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
-import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import {
     AssignmentsList,
     AssignmentsDiffList,
 } from "../../components/assignments-list";
 import { diffImport, getChanged } from "../../libs/diffUtils";
 import { offerTableSelector } from "../offertable/actions";
-
-/**
- * A factory function which produces assignment prepareData function,
- *
- * @export
- * @param {Session} session
- * @param {Function | null} assignmentFilter
- * @returns {Function}
- */
-export function prepareDataFactory(session, assignmentFilter = null) {
-    // Make a function that converts a list of assignments into a `File` object.
-    return function prepareData(assignments, dataFormat) {
-        if (assignmentFilter instanceof Function) {
-            assignments = assignmentFilter(assignments);
-        }
-        return dataToFile(
-            {
-                toSpreadsheet: () => prepareSpreadsheet.assignment(assignments),
-                toJson: () => ({
-                    assignments: assignments.map((assignment) =>
-                        prepareMinimal.assignment(assignment, session)
-                    ),
-                }),
-            },
-            dataFormat,
-            "assignments"
-        );
-    };
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -91,7 +60,7 @@ export function ConnectedExportAssignmentsAction({
             setInProgress(true);
             const file = await dispatch(
                 exportAssignments(
-                    prepareDataFactory(
+                    prepareAssignmentDataFactory(
                         session,
                         (assignments, selectedIds = selectedAssignmentIds) => {
                             // If we have selected specific assignments, we only want to export those.
