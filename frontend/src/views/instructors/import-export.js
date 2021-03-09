@@ -13,12 +13,10 @@ import {
     InstructorsDiffList,
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
-import {
-    normalizeImport,
-    prepareSpreadsheet,
-    dataToFile,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
+import { dataToFile } from "../../libs/import-export/dataToFile";
+import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import { diffImport, getChanged } from "../../libs/diffUtils";
 
 /**

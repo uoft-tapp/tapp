@@ -9,12 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import {
-    normalizeImport,
-    dataToFile,
-    prepareSpreadsheet,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import { dataToFile } from "../../libs/import-export/dataToFile";
+import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
+import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {

@@ -7,13 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import {
-    prepareSpreadsheet,
-    SpreadsheetRowMapper,
-    matchByUtoridOrName,
-    dataToFile,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
+import { dataToFile } from "../../libs/import-export/dataToFile";
+import { matchByUtoridOrName } from "../../libs/import-export/matchByUtoridOrName";
+import { SpreadsheetRowMapper } from "../../libs/import-export/spreadsheetRowMapper";
+import { prepareMinimal } from "../../libs/import-export/prepareJson";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {

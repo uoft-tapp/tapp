@@ -3,11 +3,9 @@
  */
 /* eslint-env node */
 import { describe, it, expect } from "./utils";
-import {
-    validate,
-    SpreadsheetRowMapper,
-    prepareSpreadsheet,
-} from "../libs/importExportUtils";
+import { SpreadsheetRowMapper } from "../libs/import-export/spreadsheetRowMapper";
+import { prepareSpreadsheet } from "../libs/import-export/prepareSpreadsheet";
+import { validate } from "../libs/import-export/validate";
 import {
     instructorData,
     applicantData,
@@ -15,7 +13,7 @@ import {
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import { prepareMinimal } from "../libs/exportUtils";
+import { prepareMinimal } from "../libs/import-export/prepareJson";
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {

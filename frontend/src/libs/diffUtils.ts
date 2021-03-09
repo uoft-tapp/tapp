@@ -18,8 +18,8 @@ import {
     Ddah,
     Duty,
 } from "../api/defs/types";
-import { prepareMinimal, prepareFull } from "./exportUtils";
-import { matchByUtoridOrName } from "./importExportUtils";
+import { prepareMinimal, prepareFull } from "./import-export/prepareJson";
+import { matchByUtoridOrName } from "./import-export/matchByUtoridOrName";
 
 /**
  * Type of a diff between an object and existing objects
