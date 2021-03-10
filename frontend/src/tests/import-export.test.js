@@ -20,6 +20,7 @@ import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import { objectJSON } from "./import-export-data/import-data";
 import { applicantSchema, instructorSchema } from "../libs/schema";
+import { diffImport } from "../libs/diffUtils";
 
 function parseSpreadsheet(fileName) {
     const workbook = XLSX.readFile(
@@ -196,6 +197,28 @@ describe("Import/export library functionality", () => {
                 instructorSchema
             ).toThrow(Error)
         );
+        // compute the difference between existing instructors
+        const instructorsDiff = diffImport.instructors(
+            normalizedSpreadsheetInstructors,
+            {
+                instructors: [
+                    // instructor to be modified
+                    {
+                        first_name: "Henry",
+                        utorid: "smithh",
+                        email: "OLD@utoronto.ca",
+                    },
+                    // instructor to be duplicated
+                    {
+                        email: "gordon.smith@utoronto.ca",
+                        first_name: "戈登",
+                        last_name: "Smith",
+                        utorid: "smithhg",
+                    },
+                ],
+            }
+        );
+        expect(instructorsDiff).toMatchSnapshot();
     });
 
     it("Import Applicants from JSON/CSV/XLSX", () => {
@@ -229,5 +252,31 @@ describe("Import/export library functionality", () => {
                 applicantSchema
             ).toThrow(Error)
         );
+        // compute the difference between existing applicants
+        const applicantsDiff = diffImport.applicants(
+            normalizedSpreadsheetApplicants,
+            {
+                applicants: [
+                    // applicant to be modified
+                    {
+                        first_name: "John",
+                        last_name: "Doe",
+                        utorid: "johnd",
+                        email: "goofy-duck@donald.com",
+                        student_number: "OLD10000000",
+                    },
+                    // applicant to be duplicated
+                    {
+                        first_name: "哈利",
+                        last_name: "Potter",
+                        utorid: "potterh",
+                        email: "harry@potter.com",
+                        student_number: "999666999",
+                        phone: 41888888888,
+                    },
+                ],
+            }
+        );
+        expect(applicantsDiff).toMatchSnapshot();
     });
 });

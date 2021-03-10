@@ -309,7 +309,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching applicant in the existing list
         const matchingApplicant = existingApplicants.find(
             (x) => x.utorid === applicant.utorid
         );

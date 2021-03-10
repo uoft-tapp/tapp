@@ -763,3 +763,51 @@ Array [
   },
 ]
 `;
+
+exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "changes": Object {
+      "email": "\\"OLD@utoronto.ca\\" → \\"hery.smith@utoronto.ca\\"",
+      "last_name": "\\"undefined\\" → \\"Smith\\"",
+    },
+    "obj": Object {
+      "email": "hery.smith@utoronto.ca",
+      "first_name": "Henry",
+      "last_name": "Smith",
+      "utorid": "smithh",
+    },
+    "status": "modified",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "email": "gordon.smith@utoronto.ca",
+      "first_name": "戈登",
+      "last_name": "Smith",
+      "utorid": "smithhg",
+    },
+    "status": "duplicate",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "email": undefined,
+      "first_name": "Emily",
+      "last_name": "Garcia",
+      "utorid": "garciae",
+    },
+    "status": "new",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "email": "megan.miller@utoronto.ca",
+      "first_name": "Miller",
+      "last_name": "Miles",
+      "utorid": "millerm",
+    },
+    "status": "new",
+  },
+]
+`;
