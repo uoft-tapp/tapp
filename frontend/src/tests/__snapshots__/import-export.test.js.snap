@@ -631,3 +631,61 @@ Array [
   },
 ]
 `;
+
+exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "email": "hery.smith@utoronto.ca",
+    "first_name": "Henry",
+    "last_name": "Smith",
+    "utorid": "smithh",
+  },
+  Object {
+    "email": "gordon.smith@utoronto.ca",
+    "first_name": "戈登",
+    "last_name": "Smith",
+    "utorid": "smithhg",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Emily",
+    "last_name": "Garcia",
+    "utorid": "garciae",
+  },
+  Object {
+    "email": "megan.miller@utoronto.ca",
+    "first_name": "Miller",
+    "last_name": "Miles",
+    "utorid": "millerm",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "email": "hery.smith@utoronto.ca",
+    "first_name": "Henry",
+    "last_name": "Smith",
+    "utorid": "smithh",
+  },
+  Object {
+    "email": "gordon.smith@utoronto.ca",
+    "first_name": "戈登",
+    "last_name": "Smith",
+    "utorid": "smithg",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Emily",
+    "last_name": "Garcia",
+    "utorid": "garciae",
+  },
+  Object {
+    "email": "megan.miller@utoronto.ca",
+    "first_name": "Miller",
+    "last_name": "Miles",
+    "utorid": "millerm",
+  },
+]
+`;

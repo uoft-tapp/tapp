@@ -7,6 +7,7 @@ import {
     validate,
     SpreadsheetRowMapper,
     prepareSpreadsheet,
+    normalizeImport,
 } from "../libs/importExportUtils";
 import {
     instructorData,
@@ -16,6 +17,25 @@ import {
     ddahData,
 } from "./import-export-data/export-data";
 import { prepareMinimal } from "../libs/exportUtils";
+import XLSX from "xlsx";
+import { objectJSON } from "./import-export-data/import-data";
+
+function parseSpreadsheet(fileName) {
+    const workbook = XLSX.readFile(
+        __dirname + `/import-export-data/${fileName}`
+    );
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    // transform to array of objects
+    const keys = dataCSV.shift();
+    dataCSV = dataCSV.map(function (row) {
+        return keys.reduce(function (obj, key, i) {
+            obj[key] = row[i];
+            return obj;
+        }, {});
+    });
+    return dataCSV;
+}
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -157,5 +177,38 @@ describe("Import/export library functionality", () => {
         // prepare ddah json
         const ddahJson = ddahData.map(prepareMinimal.ddah);
         expect(ddahJson).toMatchSnapshot();
+    });
+
+    it("Import Instructors from JSON/CSV/XLSX", () => {
+        // import correct instructors from XLSX
+        const normalizedSpreadsheetInstructors = normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("instructors_correct.xlsx"),
+            },
+            instructorSchema
+        );
+        expect(normalizedSpreadsheetInstructors).toMatchSnapshot();
+        // import correct instructors from JSON
+        const normalizedJsonInstructors = normalizeImport(
+            {
+                fileType: "json",
+                data: objectJSON["instructors"],
+            },
+            instructorSchema
+        );
+        expect(normalizedJsonInstructors).toMatchSnapshot();
+        // import instructors data missing required key utorid
+        expect(() =>
+            normalizeImport(
+                {
+                    fileType: "spreadsheet",
+                    data: parseSpreadsheet(
+                        "instructors_missing_required_keys.xlsx"
+                    ),
+                },
+                instructorSchema
+            ).toThrow(Error)
+        );
     });
 });
