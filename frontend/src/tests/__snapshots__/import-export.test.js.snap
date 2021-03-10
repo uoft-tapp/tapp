@@ -1,5 +1,270 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Import Positions from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours_per_assignment": 20,
+    "instructors": "",
+    "position_code": "CSC494",
+    "position_title": "Capstone Project",
+    "qualifications": "",
+    "start_date": "2020-01-01T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 70,
+    "instructors": "Garcia, Emily; Smith, Henry",
+    "position_code": "MAT136H1F",
+    "position_title": "代数",
+    "qualifications": "",
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "Tutorials",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 75,
+    "instructors": "Smith, Henry",
+    "position_code": "CSC135H1F",
+    "position_title": "Computer Fun",
+    "qualifications": "",
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": undefined,
+    "hours_per_assignment": undefined,
+    "instructors": undefined,
+    "position_code": "MAT235H1F",
+    "position_title": undefined,
+    "qualifications": "",
+    "start_date": undefined,
+  },
+]
+`;
+
+exports[`Import Positions from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 140,
+    "instructors": Array [
+      "millerm",
+    ],
+    "position_code": "MAT235H1F",
+    "position_title": "Calculus III",
+    "qualifications": null,
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "ad_close_date": undefined,
+    "ad_hours_per_assignment": undefined,
+    "ad_num_assignments": undefined,
+    "ad_open_date": undefined,
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": undefined,
+    "end_date": undefined,
+    "hours_per_assignment": undefined,
+    "instructors": undefined,
+    "position_code": "CSC135H1F",
+    "position_title": undefined,
+    "qualifications": undefined,
+    "start_date": undefined,
+  },
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 70,
+    "instructors": Array [
+      "smithh",
+      "garciae",
+    ],
+    "position_code": "MAT136H1F",
+    "position_title": "代数",
+    "qualifications": null,
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours_per_assignment": 20,
+    "instructors": Array [],
+    "position_code": "CSC494",
+    "position_title": "Capstone Project",
+    "qualifications": null,
+    "start_date": "2020-01-01T00:00:00.000Z",
+  },
+]
+`;
+
+exports[`Import Positions from JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "changes": Object {
+      "end_date": "\\"2020-12-31\\" → \\"2020-05-01\\"",
+      "instructors": "Smith, Henry; Garcia, Emily → ",
+      "start_date": "\\"2020-02-10\\" → \\"2020-01-01\\"",
+    },
+    "obj": Object {
+      "ad_close_date": undefined,
+      "ad_hours_per_assignment": undefined,
+      "ad_num_assignments": undefined,
+      "ad_open_date": undefined,
+      "contract_template": Object {
+        "template_name": "Regular",
+      },
+      "current_enrollment": undefined,
+      "current_waitlisted": undefined,
+      "desired_num_assignments": undefined,
+      "duties": "",
+      "end_date": "2020-05-01T00:00:00.000Z",
+      "hours_per_assignment": 20,
+      "instructors": Array [],
+      "position_code": "CSC494",
+      "position_title": "Capstone Project",
+      "qualifications": "",
+      "start_date": "2020-01-01T00:00:00.000Z",
+    },
+    "status": "modified",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "ad_close_date": undefined,
+      "ad_hours_per_assignment": undefined,
+      "ad_num_assignments": undefined,
+      "ad_open_date": undefined,
+      "contract_template": Object {
+        "template_name": "Regular",
+      },
+      "current_enrollment": undefined,
+      "current_waitlisted": undefined,
+      "desired_num_assignments": undefined,
+      "duties": "",
+      "end_date": "2020-12-31T00:00:00.000Z",
+      "hours_per_assignment": 70,
+      "instructors": Array [
+        Object {
+          "first_name": "Emily",
+          "last_name": "Garcia",
+          "utorid": "garciae",
+        },
+        Object {
+          "first_name": "Henry",
+          "last_name": "Smith",
+          "utorid": "smithh",
+        },
+      ],
+      "position_code": "MAT136H1F",
+      "position_title": "代数",
+      "qualifications": "",
+      "start_date": "2020-02-10T00:00:00.000Z",
+    },
+    "status": "duplicate",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "ad_close_date": undefined,
+      "ad_hours_per_assignment": undefined,
+      "ad_num_assignments": undefined,
+      "ad_open_date": undefined,
+      "contract_template": Object {
+        "template_name": "Regular",
+      },
+      "current_enrollment": undefined,
+      "current_waitlisted": undefined,
+      "desired_num_assignments": undefined,
+      "duties": "Tutorials",
+      "end_date": "2020-12-31T00:00:00.000Z",
+      "hours_per_assignment": 75,
+      "instructors": Array [
+        Object {
+          "first_name": "Henry",
+          "last_name": "Smith",
+          "utorid": "smithh",
+        },
+      ],
+      "position_code": "CSC135H1F",
+      "position_title": "Computer Fun",
+      "qualifications": "",
+      "start_date": "2020-02-10T00:00:00.000Z",
+    },
+    "status": "new",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "ad_close_date": undefined,
+      "ad_hours_per_assignment": undefined,
+      "ad_num_assignments": undefined,
+      "ad_open_date": undefined,
+      "contract_template": Object {
+        "template_name": "Regular",
+      },
+      "current_enrollment": undefined,
+      "current_waitlisted": undefined,
+      "desired_num_assignments": undefined,
+      "duties": "",
+      "end_date": undefined,
+      "hours_per_assignment": undefined,
+      "instructors": Array [],
+      "position_code": "MAT235H1F",
+      "position_title": undefined,
+      "qualifications": "",
+      "start_date": undefined,
+    },
+    "status": "new",
+  },
+]
+`;
+
 exports[`Import/export library functionality Export Applicants to JSON/CSV/XLSX 1`] = `
 Array [
   Array [
@@ -702,6 +967,64 @@ Array [
     "phone": 41999999999,
     "student_number": "131382748",
     "utorid": "smithb",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Applicants from JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "changes": Object {
+      "phone": "\\"undefined\\" → \\"4166666666\\"",
+      "student_number": "\\"OLD10000000\\" → \\"10000000\\"",
+    },
+    "obj": Object {
+      "email": "goofy-duck@donald.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "phone": 4166666666,
+      "student_number": 10000000,
+      "utorid": "johnd",
+    },
+    "status": "modified",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "email": undefined,
+      "first_name": "Ron",
+      "last_name": "Weasley",
+      "phone": undefined,
+      "student_number": undefined,
+      "utorid": "weasleyr",
+    },
+    "status": "new",
+  },
+  Object {
+    "changes": Object {
+      "student_number": "\\"999666999\\" → \\"999666999\\"",
+    },
+    "obj": Object {
+      "email": "harry@potter.com",
+      "first_name": "哈利",
+      "last_name": "Potter",
+      "phone": 41888888888,
+      "student_number": 999666999,
+      "utorid": "potterh",
+    },
+    "status": "modified",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "email": "smithb@mail.utoronto.ca",
+      "first_name": "Bethany",
+      "last_name": "Smith",
+      "phone": 41999999999,
+      "student_number": 131382748,
+      "utorid": "smithb",
+    },
+    "status": "new",
   },
 ]
 `;

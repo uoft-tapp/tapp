@@ -19,7 +19,11 @@ import {
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import { objectJSON } from "./import-export-data/import-data";
-import { applicantSchema, instructorSchema } from "../libs/schema";
+import {
+    applicantSchema,
+    instructorSchema,
+    positionSchema,
+} from "../libs/schema";
 import { diffImport } from "../libs/diffUtils";
 
 function parseSpreadsheet(fileName) {
@@ -185,7 +189,7 @@ describe("Import/export library functionality", () => {
             instructorSchema
         );
         expect(normalizedJsonInstructors).toMatchSnapshot();
-        // import instructors data missing required key utorid
+        // import instructors data missing required key utorid should throw error
         expect(() =>
             normalizeImport(
                 {
@@ -240,7 +244,7 @@ describe("Import/export library functionality", () => {
             applicantSchema
         );
         expect(normalizedJsonApplicants).toMatchSnapshot();
-        // import applicants data missing required key utorid
+        // import applicants data missing required key utorid should throw error
         expect(() =>
             normalizeImport(
                 {
@@ -279,4 +283,152 @@ describe("Import/export library functionality", () => {
         );
         expect(applicantsDiff).toMatchSnapshot();
     });
+});
+
+it("Import Positions from JSON/CSV/XLSX", () => {
+    // import correct positions from XLSX
+    let normalizedSpreadsheetPositions = normalizeImport(
+        {
+            fileType: "spreadsheet",
+            data: parseSpreadsheet("positions_correct.xlsx"),
+        },
+        positionSchema
+    );
+    expect(normalizedSpreadsheetPositions).toMatchSnapshot();
+    // import correct positions from JSON
+    const normalizedJsonPositions = normalizeImport(
+        {
+            fileType: "json",
+            data: objectJSON["positions"],
+        },
+        positionSchema
+    );
+    expect(normalizedJsonPositions).toMatchSnapshot();
+    // import positions data missing required key utorid should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("positions_missing_required_keys.xlsx"),
+            },
+            positionSchema
+        ).toThrow(Error)
+    );
+    // import positions data with invalid start_date should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("positions_invalid_date_columns.xlsx"),
+            },
+            positionSchema
+        ).toThrow(Error)
+    );
+    for (const item of normalizedSpreadsheetPositions) {
+        item.instructors = diffImport
+            .instructorsListFromField(item.instructors || [], {
+                instructors: [
+                    {
+                        first_name: "Henry",
+                        last_name: "Smith",
+                        utorid: "smithh",
+                    },
+                    {
+                        first_name: "Emily",
+                        last_name: "Garcia",
+                        utorid: "garciae",
+                    },
+                ],
+            })
+            .map((x) => x.utorid);
+    }
+    // compute the difference with existing positions
+    const positionsDiff = diffImport.positions(normalizedSpreadsheetPositions, {
+        positions: [
+            {
+                position_code: "MAT136H1F",
+                position_title: "代数",
+                hours_per_assignment: 70,
+                start_date: "2020-02-10T00:00:00.000Z",
+                end_date: "2020-12-31T00:00:00.000Z",
+                instructors: [
+                    {
+                        first_name: "Henry",
+                        last_name: "Smith",
+                        utorid: "smithh",
+                    },
+                    {
+                        first_name: "Emily",
+                        last_name: "Garcia",
+                        utorid: "garciae",
+                    },
+                ],
+                contract_template: {
+                    template_name: "Regular",
+                },
+                duties: "",
+                qualifications: "",
+            },
+            {
+                position_code: "CSC494",
+                position_title: "Capstone Project",
+                hours_per_assignment: 20,
+                start_date: "2020-02-10T00:00:00.000Z",
+                end_date: "2020-12-31T00:00:00.000Z",
+                instructors: [
+                    {
+                        first_name: "Henry",
+                        last_name: "Smith",
+                        utorid: "smithh",
+                    },
+                    {
+                        first_name: "Emily",
+                        last_name: "Garcia",
+                        utorid: "garciae",
+                    },
+                ],
+                contract_template: {
+                    template_name: "Regular",
+                },
+                duties: "",
+                qualifications: "",
+            },
+        ],
+        instructors: [
+            {
+                first_name: "Henry",
+                last_name: "Smith",
+                utorid: "smithh",
+            },
+            {
+                first_name: "Emily",
+                last_name: "Garcia",
+                utorid: "garciae",
+            },
+        ],
+        contractTemplates: [
+            {
+                template_name: "Regular",
+            },
+        ],
+    });
+    expect(positionsDiff).toMatchSnapshot();
+    // import positions assigned to invalid instructors should throw error
+    expect(() =>
+        diffImport.positions(normalizedSpreadsheetPositions, {
+            positions: [],
+            instructors: [
+                {
+                    first_name: "Emily",
+                    last_name: "Garcia",
+                    utorid: "garciae",
+                },
+            ],
+            contractTemplates: [
+                {
+                    template_name: "Regular",
+                },
+            ],
+        })
+    ).toThrow(Error);
 });

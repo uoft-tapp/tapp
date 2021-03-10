@@ -120,7 +120,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching position in the existing list
         const matchingPosition = existingPositions.find(
             (x) => x.position_code === position.position_code
         );
