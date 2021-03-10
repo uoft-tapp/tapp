@@ -19,6 +19,7 @@ import {
 import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import { objectJSON } from "./import-export-data/import-data";
+import { applicantSchema, instructorSchema } from "../libs/schema";
 
 function parseSpreadsheet(fileName) {
     const workbook = XLSX.readFile(
@@ -39,21 +40,6 @@ function parseSpreadsheet(fileName) {
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
-    const instructorSchema = {
-        keys: ["first_name", "last_name", "utorid", "email"],
-        keyMap: {
-            "First Name": "first_name",
-            "Given Name": "first_name",
-            First: "first_name",
-            "Last Name": "last_name",
-            Surname: "last_name",
-            "Family Name": "last_name",
-            Last: "last_name",
-        },
-        requiredKeys: ["utorid"],
-        primaryKey: "utorid",
-    };
-
     it("Validate data according to a schema", () => {
         // Should not throw
         expect(() => validate(instructorData, instructorSchema)).not.toThrow(
@@ -208,6 +194,39 @@ describe("Import/export library functionality", () => {
                     ),
                 },
                 instructorSchema
+            ).toThrow(Error)
+        );
+    });
+
+    it("Import Applicants from JSON/CSV/XLSX", () => {
+        // import correct applicants from CSV
+        const normalizedSpreadsheetApplicants = normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("applicants_correct.csv"),
+            },
+            applicantSchema
+        );
+        expect(normalizedSpreadsheetApplicants).toMatchSnapshot();
+        // import correct applicants from JSON
+        const normalizedJsonApplicants = normalizeImport(
+            {
+                fileType: "json",
+                data: objectJSON["applicants"],
+            },
+            applicantSchema
+        );
+        expect(normalizedJsonApplicants).toMatchSnapshot();
+        // import applicants data missing required key utorid
+        expect(() =>
+            normalizeImport(
+                {
+                    fileType: "spreadsheet",
+                    data: parseSpreadsheet(
+                        "applicants_missing_required_keys.csv"
+                    ),
+                },
+                applicantSchema
             ).toThrow(Error)
         );
     });

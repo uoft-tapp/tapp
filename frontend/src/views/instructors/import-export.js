@@ -20,6 +20,7 @@ import {
 } from "../../libs/importExportUtils";
 import { prepareMinimal } from "../../libs/exportUtils";
 import { diffImport, getChanged } from "../../libs/diffUtils";
+import { instructorSchema } from "../../libs/schema";
 
 /**
  * Make a function that converts a list of instructors into a `File` object.
@@ -81,23 +82,6 @@ export function ConnectedExportInstructorsAction() {
 
     return <ExportActionButton onClick={onClick} />;
 }
-
-const instructorSchema = {
-    keys: ["first_name", "last_name", "utorid", "email"],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "instructors",
-};
 
 export function ConnectedImportInstructorAction({
     setImportInProgress = null,

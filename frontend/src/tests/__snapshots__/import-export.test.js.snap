@@ -632,6 +632,80 @@ Array [
 ]
 `;
 
+exports[`Import/export library functionality Import Applicants from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "email": "goofy-duck@donald.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": 4166666666,
+    "student_number": 10000000,
+    "utorid": "johnd",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Ron",
+    "last_name": "Weasley",
+    "phone": undefined,
+    "student_number": undefined,
+    "utorid": "weasleyr",
+  },
+  Object {
+    "email": "harry@potter.com",
+    "first_name": "哈利",
+    "last_name": "Potter",
+    "phone": 41888888888,
+    "student_number": 999666999,
+    "utorid": "potterh",
+  },
+  Object {
+    "email": "smithb@mail.utoronto.ca",
+    "first_name": "Bethany",
+    "last_name": "Smith",
+    "phone": 41999999999,
+    "student_number": 131382748,
+    "utorid": "smithb",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Applicants from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "email": "goofy-duck@donald.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "4166666666",
+    "student_number": "10000000",
+    "utorid": "johnd",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Ron",
+    "last_name": "Weasley",
+    "phone": undefined,
+    "student_number": undefined,
+    "utorid": "weasleyr",
+  },
+  Object {
+    "email": "harry@potter.com",
+    "first_name": "哈利",
+    "last_name": "Potter",
+    "phone": 41888888888,
+    "student_number": "999666999",
+    "utorid": "potterh",
+  },
+  Object {
+    "email": "smithb@mail.utoronto.ca",
+    "first_name": "Bethany",
+    "last_name": "Smith",
+    "phone": 41999999999,
+    "student_number": "131382748",
+    "utorid": "smithb",
+  },
+]
+`;
+
 exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 1`] = `
 Array [
   Object {
