@@ -44,25 +44,9 @@ export function AdminDdahsView(): React.ReactNode {
         ddahDeletionConfirmationVisible,
         setDdahDeletionConfirmationVisible,
     ] = React.useState(false);
-    const [ddahBrief, setDdahBrief] = React.useState("");
 
     function confirmDDAHDeletion() {
         if (selectedDdahs?.length > 1) {
-            let multipleOfferWithdrawBrief = "";
-
-            selectedDdahs.forEach((selectedDdah) => {
-                multipleOfferWithdrawBrief += `${
-                    selectedDdah.assignment.applicant.first_name
-                } ${selectedDdah.assignment.applicant.last_name}: ${
-                    selectedDdah.assignment.position.position_code
-                } ${selectedDdah.assignment.position.position_title} -- ${
-                    selectedDdah.status ? selectedDdah.status : "unsent"
-                } (total hours: ${selectedDdah.total_hours})\n`;
-            });
-
-            console.log(selectedDdahs);
-
-            setDdahBrief(multipleOfferWithdrawBrief);
             setDdahDeletionConfirmationVisible(true);
         } else {
             deleteDDAHs();
@@ -143,14 +127,30 @@ export function AdminDdahsView(): React.ReactNode {
                         <Modal.Title>Deleting Multiple DDAHs</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        You are deleting all of the following{" "}
-                        {selectedDdahs?.length} DDAHs!
-                        <br />
-                        <br />
-                        <div style={{ whiteSpace: "pre-line" }}>
-                            {ddahBrief}
+                        <div className="mb-3">
+                            You are deleting all of the following{" "}
+                            {selectedDdahs?.length} DDAHs!
                         </div>
-                        <br />
+                        <div className="mb-3">
+                            {selectedDdahs.map((selectedDdah) => {
+                                let ddahStatus;
+                                if (selectedDdah.status) {
+                                    ddahStatus = selectedDdah.status;
+                                } else {
+                                    ddahStatus = "unsent";
+                                }
+
+                                return (
+                                    <li>
+                                        {`${selectedDdah.assignment.applicant.first_name} 
+                                    ${selectedDdah.assignment.applicant.last_name}: 
+                                    ${selectedDdah.assignment.position.position_code} 
+                                    ${selectedDdah.assignment.position.position_title} 
+                                    (${selectedDdah.total_hours} hrs, ${ddahStatus})`}
+                                    </li>
+                                );
+                            })}
+                        </div>
                         Are you sure?
                     </Modal.Body>
                     <Modal.Footer>
