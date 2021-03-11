@@ -63,7 +63,6 @@ function OfferActionButtons(props) {
         ddahDeletionConfirmationVisible,
         setDdahDeletionConfirmationVisible,
     ] = React.useState(false);
-    const [offerBrief, setOfferBrief] = React.useState("");
 
     function createOffers() {
         for (const assignment of selectedAssignments) {
@@ -73,13 +72,6 @@ function OfferActionButtons(props) {
     function confirmOfferWithdraw() {
         // if withdrawing multiple offers at once, show confirmation
         if (selectedAssignments?.length > 1) {
-            let multipleOfferWithdrawBrief = "";
-
-            selectedAssignments.forEach((selectedAssignment) => {
-                multipleOfferWithdrawBrief += `${selectedAssignment.applicant.first_name} ${selectedAssignment.applicant.last_name}:  ${selectedAssignment.position.position_code} ${selectedAssignment.position.position_title} (${selectedAssignment.hours} hrs)\n`;
-            });
-
-            setOfferBrief(multipleOfferWithdrawBrief);
             setDdahDeletionConfirmationVisible(true);
         } else {
             // does not need confirmation if only withdrawing one offer
@@ -181,12 +173,23 @@ function OfferActionButtons(props) {
                     <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    You are withdrawing from the following{" "}
-                    {selectedAssignments?.length} offers!
-                    <br />
-                    <br />
-                    <div style={{ whiteSpace: "pre-line" }}>{offerBrief}</div>
-                    <br />
+                    <div className="mb-3">
+                        You are withdrawing from the following{" "}
+                        {selectedAssignments?.length} offers
+                    </div>
+                    <div className="mb-3">
+                        {selectedAssignments.map((selectedAssignment) => {
+                            return (
+                                <li>
+                                    {`${selectedAssignment.applicant.first_name} 
+                                    ${selectedAssignment.applicant.last_name}: 
+                                    ${selectedAssignment.position.position_code} -
+                                    ${selectedAssignment.position.position_title} 
+                                    (${selectedAssignment.hours} hrs)`}
+                                </li>
+                            );
+                        })}
+                    </div>
                     Are you sure?
                 </Modal.Body>
                 <Modal.Footer>
