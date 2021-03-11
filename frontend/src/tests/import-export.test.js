@@ -23,6 +23,7 @@ import {
     applicantSchema,
     instructorSchema,
     positionSchema,
+    assignmentSchema,
 } from "../libs/schema";
 import { diffImport } from "../libs/diffUtils";
 
@@ -429,6 +430,195 @@ it("Import Positions from JSON/CSV/XLSX", () => {
                     template_name: "Regular",
                 },
             ],
+        })
+    ).toThrow(Error);
+});
+
+it("Import Assignments from JSON/CSV/XLSX", () => {
+    // import correct assignments from XLSX
+    let normalizedSpreadsheetAssignments = normalizeImport(
+        {
+            fileType: "spreadsheet",
+            data: parseSpreadsheet("assignments_correct.xlsx"),
+        },
+        assignmentSchema
+    );
+    expect(normalizedSpreadsheetAssignments).toMatchSnapshot();
+    // import correct assignments from JSON
+    const normalizedJsonAssignments = normalizeImport(
+        {
+            fileType: "json",
+            data: objectJSON["assignments"],
+        },
+        assignmentSchema
+    );
+    expect(normalizedJsonAssignments).toMatchSnapshot();
+    // import assignments data missing required key utorid should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet(
+                    "assignments_missing_required_keys.xlsx"
+                ),
+            },
+            assignmentSchema
+        ).toThrow(Error)
+    );
+    // import assignments data with invalid start_date should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("assignments_invalid_date_columns.xlsx"),
+            },
+            assignmentSchema
+        ).toThrow(Error)
+    );
+    // Compute the difference with existing assignments
+    const assignmentsDiff = diffImport.assignments(normalizedJsonAssignments, {
+        assignments: [
+            {
+                applicant: {
+                    first_name: "Harry",
+                    last_name: "Potter",
+                    email: "a@a.com",
+                    utorid: "potterh",
+                    phone: "41666666666",
+                    student_number: "1000000000",
+                },
+                position: {
+                    position_code: "CSC494",
+                    position_title: "Capstone Project",
+                    hours_per_assignment: 70,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    duties: "mark assignments",
+                    qualifications: "3 300-lvl CSC courses",
+                    ad_hours_per_assignment: null,
+                    ad_num_assignments: null,
+                    ad_open_date: null,
+                    ad_close_date: null,
+                    desired_num_assignments: 20,
+                    current_enrollment: 400,
+                    current_waitlisted: 100,
+                    instructors: [],
+                    contract_template: {
+                        template_name: "Regular",
+                    },
+                },
+                start_date: "2020-12-10T00:00:00.000Z",
+                end_date: "2021-12-10T00:00:00.000Z",
+                contract_override_pdf: null,
+                hours: 80,
+                active_offer_status: null,
+                active_offer_recent_activity_date: null,
+                // more than 2 wage_chunks
+                wage_chunks: [
+                    {
+                        hours: 30,
+                        rate: 50,
+                        start_date: "2020-12-10T00:00:00.000Z",
+                        end_date: "2020-12-31T00:00:00.000Z",
+                    },
+                    {
+                        hours: 30,
+                        rate: 50,
+                        start_date: "2021-01-01T00:00:00.000Z",
+                        end_date: "2021-06-30T00:00:00.000Z",
+                    },
+                    {
+                        hours: 20,
+                        rate: 50,
+                        start_date: "2021-07-01T00:00:00.000Z",
+                        end_date: "2021-12-10T00:00:00.000Z",
+                    },
+                ],
+            },
+        ],
+        positions: [
+            {
+                position_code: "CSC494",
+                position_title: "Capstone Project",
+                hours_per_assignment: 70,
+                start_date: "2020-12-10T00:00:00.000Z",
+                end_date: "2021-12-10T00:00:00.000Z",
+                duties: "mark assignments",
+                qualifications: "3 300-lvl CSC courses",
+                ad_hours_per_assignment: null,
+                ad_num_assignments: null,
+                ad_open_date: null,
+                ad_close_date: null,
+                desired_num_assignments: 20,
+                current_enrollment: 400,
+                current_waitlisted: 100,
+                instructors: [],
+                contract_template: {
+                    template_name: "Regular",
+                },
+            },
+        ],
+        applicants: [
+            {
+                first_name: "Harry",
+                last_name: "Potter",
+                email: "a@a.com",
+                utorid: "potterh",
+                phone: "41666666666",
+                student_number: "1000000000",
+            },
+            { first_name: "Ron", last_name: "Weasley", utorid: "weasleyr" },
+        ],
+        session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
+    });
+    expect(assignmentsDiff).toMatchSnapshot();
+    // import assignments with invalid applicant should throw error
+    expect(() =>
+        diffImport.assignments(normalizedJsonAssignments, {
+            assignments: [],
+            positions: [
+                {
+                    position_code: "CSC494",
+                    position_title: "Capstone Project",
+                    hours_per_assignment: 70,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    duties: "mark assignments",
+                    qualifications: "3 300-lvl CSC courses",
+                    ad_hours_per_assignment: null,
+                    ad_num_assignments: null,
+                    ad_open_date: null,
+                    ad_close_date: null,
+                    desired_num_assignments: 20,
+                    current_enrollment: 400,
+                    current_waitlisted: 100,
+                    instructors: [],
+                    contract_template: {
+                        template_name: "Regular",
+                    },
+                },
+            ],
+            applicants: [],
+            session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
+        })
+    ).toThrow(Error);
+    // import assignments with invalid position should throw error
+    expect(() =>
+        diffImport.assignments(normalizedJsonAssignments, {
+            assignments: [],
+            positions: [],
+            applicants: [
+                {
+                    first_name: "Harry",
+                    last_name: "Potter",
+                    email: "a@a.com",
+                    utorid: "potterh",
+                    phone: "41666666666",
+                    student_number: "1000000000",
+                },
+                { first_name: "Ron", last_name: "Weasley", utorid: "weasleyr" },
+            ],
+            session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
         })
     ).toThrow(Error);
 });

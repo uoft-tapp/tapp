@@ -216,7 +216,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching assignment in the existing list
         const assignmentHash = hashAssignment(assignment);
         const matchingAssignment = existingAssignments.find(
             (x) => hashAssignment(x) === assignmentHash

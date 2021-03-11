@@ -1,5 +1,229 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Import Assignments from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "CSC494",
+    "start_date": "2020-01-01T00:00:00.000Z",
+    "utorid": "johnd",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": undefined,
+    "end_date": undefined,
+    "hours": undefined,
+    "position_code": "MAT136H1F",
+    "start_date": undefined,
+    "utorid": "potterh",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "MAT136H1F",
+    "start_date": "2020-02-10T00:00:00.000Z",
+    "utorid": "howeyb",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "MAT136H1F",
+    "start_date": "2020-02-10T00:00:00.000Z",
+    "utorid": "brownd",
+  },
+]
+`;
+
+exports[`Import Assignments from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "contract_override_pdf": null,
+    "contract_template": "regular",
+    "end_date": "2021-12-10T00:00:00.000Z",
+    "hours": 50,
+    "position_code": "CSC494",
+    "start_date": "2020-12-10T00:00:00.000Z",
+    "utorid": "potterh",
+    "wage_chunks": Array [
+      Object {
+        "end_date": "2020-12-31T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-06-30T00:00:00.000Z",
+        "hours": 10,
+        "rate": 50,
+        "start_date": "2021-01-01T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2021-07-01T00:00:00.000Z",
+      },
+    ],
+  },
+  Object {
+    "contract_override_pdf": null,
+    "contract_template": "regular",
+    "end_date": "2021-12-10T00:00:00.000Z",
+    "hours": 100,
+    "position_code": "CSC494",
+    "start_date": "2020-12-10T00:00:00.000Z",
+    "utorid": "weasleyr",
+    "wage_chunks": Array [
+      Object {
+        "end_date": "2020-12-31T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-06-30T00:00:00.000Z",
+        "hours": 10,
+        "rate": 50,
+        "start_date": "2021-01-01T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2021-07-01T00:00:00.000Z",
+      },
+    ],
+  },
+]
+`;
+
+exports[`Import Assignments from JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "changes": Object {
+      "wage_chunks": "\\"[{\\"start_date\\":\\"2020-12-10T00:00:00.000Z\\",\\"end_date\\":\\"2020-12-31T00:00:00.000Z\\",\\"rate\\":50,\\"hours\\":30},{\\"start_date\\":\\"2021-01-01T00:00:00.000Z\\",\\"end_date\\":\\"2021-06-30T00:00:00.000Z\\",\\"rate\\":50,\\"hours\\":30},{\\"start_date\\":\\"2021-07-01T00:00:00.000Z\\",\\"end_date\\":\\"2021-12-10T00:00:00.000Z\\",\\"rate\\":50,\\"hours\\":20}]\\" → \\"[{\\"hours\\":30,\\"rate\\":50,\\"start_date\\":\\"2020-12-10T00:00:00.000Z\\",\\"end_date\\":\\"2020-12-31T00:00:00.000Z\\"},{\\"hours\\":10,\\"rate\\":50,\\"start_date\\":\\"2021-01-01T00:00:00.000Z\\",\\"end_date\\":\\"2021-06-30T00:00:00.000Z\\"},{\\"hours\\":30,\\"rate\\":50,\\"start_date\\":\\"2021-07-01T00:00:00.000Z\\",\\"end_date\\":\\"2021-12-10T00:00:00.000Z\\"}]\\"",
+    },
+    "obj": Object {
+      "applicant": Object {
+        "email": "a@a.com",
+        "first_name": "Harry",
+        "last_name": "Potter",
+        "phone": "41666666666",
+        "student_number": "1000000000",
+        "utorid": "potterh",
+      },
+      "contract_override_pdf": null,
+      "end_date": "2021-12-10T00:00:00.000Z",
+      "hours": 70,
+      "position": Object {
+        "ad_close_date": null,
+        "ad_hours_per_assignment": null,
+        "ad_num_assignments": null,
+        "ad_open_date": null,
+        "contract_template": Object {
+          "template_name": "Regular",
+        },
+        "current_enrollment": 400,
+        "current_waitlisted": 100,
+        "desired_num_assignments": 20,
+        "duties": "mark assignments",
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours_per_assignment": 70,
+        "instructors": Array [],
+        "position_code": "CSC494",
+        "position_title": "Capstone Project",
+        "qualifications": "3 300-lvl CSC courses",
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      "start_date": "2020-12-10T00:00:00.000Z",
+      "wage_chunks": Array [
+        Object {
+          "end_date": "2020-12-31T00:00:00.000Z",
+          "hours": 30,
+          "rate": 50,
+          "start_date": "2020-12-10T00:00:00.000Z",
+        },
+        Object {
+          "end_date": "2021-06-30T00:00:00.000Z",
+          "hours": 10,
+          "rate": 50,
+          "start_date": "2021-01-01T00:00:00.000Z",
+        },
+        Object {
+          "end_date": "2021-12-10T00:00:00.000Z",
+          "hours": 30,
+          "rate": 50,
+          "start_date": "2021-07-01T00:00:00.000Z",
+        },
+      ],
+    },
+    "status": "modified",
+  },
+  Object {
+    "changes": Object {},
+    "obj": Object {
+      "applicant": Object {
+        "first_name": "Ron",
+        "last_name": "Weasley",
+        "utorid": "weasleyr",
+      },
+      "contract_override_pdf": null,
+      "end_date": "2021-12-10T00:00:00.000Z",
+      "hours": 70,
+      "position": Object {
+        "ad_close_date": null,
+        "ad_hours_per_assignment": null,
+        "ad_num_assignments": null,
+        "ad_open_date": null,
+        "contract_template": Object {
+          "template_name": "Regular",
+        },
+        "current_enrollment": 400,
+        "current_waitlisted": 100,
+        "desired_num_assignments": 20,
+        "duties": "mark assignments",
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours_per_assignment": 70,
+        "instructors": Array [],
+        "position_code": "CSC494",
+        "position_title": "Capstone Project",
+        "qualifications": "3 300-lvl CSC courses",
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      "start_date": "2020-12-10T00:00:00.000Z",
+      "wage_chunks": Array [
+        Object {
+          "end_date": "2020-12-31T00:00:00.000Z",
+          "hours": 30,
+          "rate": 50,
+          "start_date": "2020-12-10T00:00:00.000Z",
+        },
+        Object {
+          "end_date": "2021-06-30T00:00:00.000Z",
+          "hours": 10,
+          "rate": 50,
+          "start_date": "2021-01-01T00:00:00.000Z",
+        },
+        Object {
+          "end_date": "2021-12-10T00:00:00.000Z",
+          "hours": 30,
+          "rate": 50,
+          "start_date": "2021-07-01T00:00:00.000Z",
+        },
+      ],
+    },
+    "status": "new",
+  },
+]
+`;
+
 exports[`Import Positions from JSON/CSV/XLSX 1`] = `
 Array [
   Object {
