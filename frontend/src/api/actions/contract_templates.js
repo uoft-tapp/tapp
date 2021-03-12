@@ -7,7 +7,7 @@ import {
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/apis";
 import { contractTemplatesReducer } from "../reducers/contract_templates";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";

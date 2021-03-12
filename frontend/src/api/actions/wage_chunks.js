@@ -7,7 +7,7 @@ import {
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/apis";
 import { createSelector } from "reselect";
 import { assignmentsReducer } from "../reducers/assignments";
 import { fetchAssignment } from "./assignments";

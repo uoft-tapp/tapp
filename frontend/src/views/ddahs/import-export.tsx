@@ -13,7 +13,7 @@ import {
     matchByUtoridOrName,
     SpreadsheetRowMapper,
 } from "../../libs/import-export";
-import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
+import { diffImport, getChanged, DiffSpec } from "../../libs/diffs";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {
     exportDdahs,

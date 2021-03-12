@@ -20,7 +20,7 @@ import {
     AssignmentsList,
     AssignmentsDiffList,
 } from "../../components/assignments-list";
-import { diffImport, getChanged } from "../../libs/diffUtils";
+import { diffImport, getChanged } from "../../libs/diffs";
 import { offerTableSelector } from "../offertable/actions";
 
 /**

@@ -13,7 +13,7 @@ import {
     prepareApplicantData,
     normalizeImport,
 } from "../../libs/import-export";
-import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
+import { diffImport, getChanged, DiffSpec } from "../../libs/diffs";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {
     ApplicantsList,

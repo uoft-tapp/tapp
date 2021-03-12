@@ -17,7 +17,7 @@ import {
     normalizeImport,
     prepareInstructorData,
 } from "../../libs/import-export";
-import { diffImport, getChanged } from "../../libs/diffUtils";
+import { diffImport, getChanged } from "../../libs/diffs";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
