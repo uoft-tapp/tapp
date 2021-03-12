@@ -37,7 +37,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("create reporting_tags for position", async () => {
         const reporting_tag = {
-            name: "The Big Cheese",
+            name: "Test reporting tag for position creation",
         };
 
         const resp1 = await apiPOST(
@@ -77,7 +77,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("get reporting_tags for position", async () => {
         let reporting_tag = {
-            name: "The Bigger Cheese",
+            name: "Test reporting tag for position fetch",
         };
 
         const resp = await apiGET(
@@ -102,7 +102,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("create reporting_tags for wage_chunk", async () => {
         let reporting_tag = {
-            name: "Test Reporting Tag Wage Chunk Creation",
+            name: "Test reporting tag wage chunk creation",
         };
 
         const resp1 = await apiPOST(
@@ -116,7 +116,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("delete reporting_tags for wage_chunk", async () => {
         const reporting_tag = {
-            name: "Test Reporting Wage Chunk Deletion",
+            name: "Test reporting wage chunk deletion",
         };
 
         const resp1 = await apiPOST(
@@ -142,7 +142,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("get reporting_tags for wage_chunk", async () => {
         let reporting_tag = {
-            name: "The Wage for the Bigger Cheese",
+            name: "Test reporting tag for wage_chunk fetch",
         };
 
         const resp = await apiGET(
@@ -167,7 +167,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("get all reporting_tags associated to position for session", async () => {
         let reporting_tag = {
-            name: "The Bigger Cheese in the session",
+            name: "Test reporting tag for position fetch in session",
         };
 
         const resp = await apiGET(
@@ -192,7 +192,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("get all reporting_tags associated to wage_chunks for session", async () => {
         let reporting_tag = {
-            name: "The wage of the Bigger Cheese in the session",
+            name: "Test reporting tag for wage_chunk fetch in session",
         };
 
         const resp = await apiGET(
