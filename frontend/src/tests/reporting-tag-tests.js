@@ -146,7 +146,32 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         };
 
         const resp = await apiGET(
-            `/admin/positions/${position.id}/reporting_tags`
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`
+        );
+
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).not.toContainObject(reporting_tag);
+
+        const resp1 = await apiPOST(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
+            reporting_tag
+        );
+
+        const resp2 = await apiGET(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`
+        );
+
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(reporting_tag);
+    });
+
+    it("get all reporting_tags associated to position for session", async () => {
+        let reporting_tag = {
+            name: "The Bigger Cheese in the session",
+        };
+
+        const resp = await apiGET(
+            `/admin/sessions/${session.id}/positions/reporting_tags`
         );
 
         expect(resp).toHaveStatus("success");
@@ -158,13 +183,35 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         );
 
         const resp2 = await apiGET(
-            `/admin/positions/${position.id}/reporting_tags`
+            `/admin/sessions/${session.id}/positions/reporting_tags`
         );
 
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(reporting_tag);
     });
 
-    it.todo("get all reporting_tags associated to positions for session");
-    it.todo("get all reporting_tags associated to wage_chunks for session");
+    it("get all reporting_tags associated to wage_chunks for session", async () => {
+        let reporting_tag = {
+            name: "The wage of the Bigger Cheese in the session",
+        };
+
+        const resp = await apiGET(
+            `/admin/sessions/${session.id}/wage_chunks/reporting_tags`
+        );
+
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).not.toContainObject(reporting_tag);
+
+        const resp1 = await apiPOST(
+            `/admin/wage_chunk/${wage_chunk.id}/reporting_tags`,
+            reporting_tag
+        );
+
+        const resp2 = await apiGET(
+            `/admin/sessions/${session.id}/wage_chunks/reporting_tags`
+        );
+
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(reporting_tag);
+    });
 }
