@@ -277,7 +277,7 @@ describe("Import/export library functionality", () => {
                         utorid: "potterh",
                         email: "harry@potter.com",
                         student_number: "999666999",
-                        phone: 41888888888,
+                        phone: "41888888888",
                     },
                 ],
             }
