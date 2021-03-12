@@ -68,7 +68,7 @@ describe("API tests", () => {
             offerDownloadTests({ apiGET, apiPOST });
         });
     });
-    describe.skip("reporting_tag tests", () => {
+    describe("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
     });
     describe.skip("`/admin/applications` tests", () => {
