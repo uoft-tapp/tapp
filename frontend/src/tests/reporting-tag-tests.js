@@ -1,16 +1,4 @@
-import PropTypes from "prop-types";
-import {
-    checkPropTypes,
-    positionPropTypes,
-    errorPropTypes,
-    expect,
-    it,
-    beforeAll,
-    apiGET,
-    apiPOST,
-    reportingTagsPropTypes,
-} from "./utils";
-
+import { expect, it, beforeAll, apiGET, apiPOST } from "./utils";
 import { databaseSeeder } from "./setup";
 
 // TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
@@ -86,7 +74,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload).not.toContainObject(reporting_tag);
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/admin/positions/${position.id}/reporting_tags`,
             reporting_tag
         );
@@ -118,11 +106,10 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
             name: "Test reporting wage chunk deletion",
         };
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
             reporting_tag
         );
-        expect(resp1).toHaveStatus("success");
 
         const resp2 = await apiPOST(
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags/delete`,
@@ -151,7 +138,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload).not.toContainObject(reporting_tag);
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
             reporting_tag
         );
@@ -176,7 +163,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload).not.toContainObject(reporting_tag);
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/admin/positions/${position.id}/reporting_tags`,
             reporting_tag
         );
@@ -199,9 +186,8 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         );
 
         expect(resp).toHaveStatus("success");
-        expect(resp.payload).not.toContainObject(reporting_tag);
 
-        const resp1 = await apiPOST(
+        await apiPOST(
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
             reporting_tag
         );
