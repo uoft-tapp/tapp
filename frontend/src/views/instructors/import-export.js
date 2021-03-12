@@ -13,9 +13,11 @@ import {
     InstructorsDiffList,
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
-import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import {
+    normalizeImport,
+    prepareInstructorData,
+} from "../../libs/import-export";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-import { prepareInstructorData } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.

@@ -11,13 +11,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import { normalizeImport, preparePositionData } from "../../libs/import-export";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-import { preparePositionData } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.

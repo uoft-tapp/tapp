@@ -9,8 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { prepareApplicantData } from "../../libs/import-export/prepareData";
-import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import {
+    prepareApplicantData,
+    normalizeImport,
+} from "../../libs/import-export";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, MinimalApplicant } from "../../api/defs/types";
 import {

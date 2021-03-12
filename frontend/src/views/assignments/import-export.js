@@ -11,9 +11,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
-import { prepareAssignmentDataFactory } from "../../libs/import-export/prepareData";
 import { Alert } from "react-bootstrap";
-import { normalizeImport } from "../../libs/import-export/normalizeImport";
+import {
+    normalizeImport,
+    prepareAssignmentDataFactory,
+} from "../../libs/import-export";
 import {
     AssignmentsList,
     AssignmentsDiffList,

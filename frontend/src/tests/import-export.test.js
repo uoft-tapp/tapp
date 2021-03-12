@@ -3,9 +3,6 @@
  */
 /* eslint-env node */
 import { describe, it, expect } from "./utils";
-import { SpreadsheetRowMapper } from "../libs/import-export/spreadsheetRowMapper";
-import { prepareSpreadsheet } from "../libs/import-export/prepareSpreadsheet";
-import { validate } from "../libs/import-export/validate";
 import {
     instructorData,
     applicantData,
@@ -13,8 +10,13 @@ import {
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import { prepareMinimal } from "../libs/import-export/prepareJson";
-import { prepareInstructorData } from "../libs/import-export/prepareData";
+import {
+    prepareInstructorData,
+    prepareMinimal,
+    validate,
+    prepareSpreadsheet,
+    SpreadsheetRowMapper,
+} from "../libs/import-export";
 import XLSX from "xlsx";
 
 // create a shim for native File object
