@@ -119,6 +119,7 @@ describe("Import/export library functionality", () => {
         // ROUND TRIP TEST for prepareData function
         // create instructor CSV File object
         const instructorCSV = prepareInstructorData(instructorData, "csv");
+        // fileBits[0] stores the ArrayBuffer object of exported instructors data
         const workbook = XLSX.read(instructorCSV.fileBits[0], {
             type: "array",
         });
