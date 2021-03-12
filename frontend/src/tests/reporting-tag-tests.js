@@ -46,12 +46,12 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         );
 
         expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toContainObject(reporting_tag);
+        expect(resp1.payload).toMatchObject(reporting_tag);
     });
 
     it("delete reporting_tags for position", async () => {
         const reporting_tag = {
-            name: "The Big Bad Cheese",
+            name: "Test reporting tag position delete",
         };
 
         const resp1 = await apiPOST(
@@ -65,14 +65,14 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
             reporting_tag
         );
         expect(resp2).toHaveStatus("success");
-        expect(resp2.payload).toContainObject(reporting_tag);
+        expect(resp2.payload).toMatchObject(reporting_tag);
 
         const resp3 = await apiGET(
             `/admin/positions/${position.id}/reporting_tags`
         );
 
         expect(resp3).toHaveStatus("success");
-        expect(resp3.payload).not.toContainObject(reporting_tag);
+        expect(resp3.payload).not.toMatchObject(reporting_tag);
     });
 
     it("get reporting_tags for position", async () => {
@@ -102,7 +102,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
 
     it("create reporting_tags for wage_chunk", async () => {
         let reporting_tag = {
-            name: "The wage for the Big Cheese",
+            name: "Test Reporting Tag Wage Chunk Creation",
         };
 
         const resp1 = await apiPOST(
@@ -111,12 +111,12 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         );
 
         expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toContain(reporting_tag);
+        expect(resp1.payload).toMatchObject(reporting_tag);
     });
 
     it("delete reporting_tags for wage_chunk", async () => {
         const reporting_tag = {
-            name: "The Wage for the Big Bad Cheese",
+            name: "Test Reporting Wage Chunk Deletion",
         };
 
         const resp1 = await apiPOST(
@@ -130,14 +130,14 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
             reporting_tag
         );
         expect(resp2).toHaveStatus("success");
-        expect(resp2.payload).toContainObject(reporting_tag);
+        expect(resp2.payload).toMatchObject(reporting_tag);
 
         const resp3 = await apiGET(
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`
         );
 
         expect(resp3).toHaveStatus("success");
-        expect(resp3.payload).not.toContainObject(reporting_tag);
+        expect(resp3.payload).not.toMatchObject(reporting_tag);
     });
 
     it("get reporting_tags for wage_chunk", async () => {
@@ -203,10 +203,10 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         expect(resp.payload).not.toContainObject(reporting_tag);
 
         const resp1 = await apiPOST(
-            `/admin/wage_chunk/${wage_chunk.id}/reporting_tags`,
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
             reporting_tag
         );
-
+        
         const resp2 = await apiGET(
             `/admin/sessions/${session.id}/wage_chunks/reporting_tags`
         );
