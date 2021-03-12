@@ -7,13 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import {
-    prepareSpreadsheet,
-    SpreadsheetRowMapper,
-    matchByUtoridOrName,
-    dataToFile,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
+import { matchByUtoridOrName } from "../../libs/import-export/matchByUtoridOrName";
+import { SpreadsheetRowMapper } from "../../libs/import-export/spreadsheetRowMapper";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {
@@ -26,35 +22,7 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
-
-/**
- * A factory function which produces ddah prepareData function,
- *
- * @export
- * @param {Function | null} ddahFilter
- * @returns {Function}
- */
-export function prepareDataFactory(ddahFilter?: Function) {
-    // Make a function that converts a list of ddahs into a `File` object.
-    return function prepareData(
-        ddahs: Ddah[],
-        dataFormat: "csv" | "json" | "xlsx"
-    ) {
-        if (ddahFilter instanceof Function) {
-            ddahs = ddahFilter(ddahs);
-        }
-        return dataToFile(
-            {
-                toSpreadsheet: () => prepareSpreadsheet.ddah(ddahs),
-                toJson: () => ({
-                    ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
-                }),
-            },
-            dataFormat,
-            "ddahs"
-        );
-    };
-}
+import { prepareDdahDataFactory } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -86,7 +54,7 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
 
             const file = await dispatch(
                 exportDdahs(
-                    prepareDataFactory(
+                    prepareDdahDataFactory(
                         (ddahs: Ddah[], selectedIds = selectedDdahIds) => {
                             // If we have selected specific DDAHs, filter so we only export them.
                             if (selectedIds && selectedIds.length > 0) {

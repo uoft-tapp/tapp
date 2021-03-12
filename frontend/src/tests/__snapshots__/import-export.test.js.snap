@@ -480,6 +480,35 @@ Array [
 ]
 `;
 
+exports[`Import/export library functionality Export Instructors to JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "First Name": "Gordon",
+    "Last Name": "Smith",
+    "UTORid": "smithg",
+    "email": "a@a.com",
+  },
+  Object {
+    "First Name": "Anna",
+    "Last Name": "Smith",
+    "UTORid": "smitha",
+    "email": "a@b.com",
+  },
+  Object {
+    "First Name": "Bob",
+    "Last Name": "Smith",
+    "UTORid": "smithb",
+    "email": undefined,
+  },
+  Object {
+    "First Name": "史密斯",
+    "Last Name": "Smith",
+    "UTORid": "smith史密斯",
+    "email": "a@c.com",
+  },
+]
+`;
+
 exports[`Import/export library functionality Export Positions to JSON/CSV/XLSX 1`] = `
 Array [
   Array [

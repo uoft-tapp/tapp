@@ -11,40 +11,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import {
-    normalizeImport,
-    prepareSpreadsheet,
-    dataToFile,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+import { normalizeImport } from "../../libs/import-export/normalizeImport";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
 import { diffImport, getChanged } from "../../libs/diffUtils";
-
-/**
- * Make a function that converts a list of positions into a `File` object.
- *
- * @export
- * @param {Position[]} positions
- * @param {"csv" | "json" | "xlsx"} dataFormat
- * @returns
- */
-export function prepareData(positions, dataFormat) {
-    return dataToFile(
-        {
-            toSpreadsheet: () => prepareSpreadsheet.position(positions),
-            toJson: () => ({
-                positions: positions.map((position) =>
-                    prepareMinimal.position(position)
-                ),
-            }),
-        },
-        dataFormat,
-        "positions"
-    );
-}
+import { preparePositionData } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -69,7 +42,7 @@ export function ConnectedExportPositionsAction({ disabled }) {
             setExportType(null);
 
             const file = await dispatch(
-                exportPositions(prepareData, exportType)
+                exportPositions(preparePositionData, exportType)
             );
 
             FileSaver.saveAs(file);

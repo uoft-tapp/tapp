@@ -3,11 +3,9 @@
  */
 /* eslint-env node */
 import { describe, it, expect } from "./utils";
-import {
-    validate,
-    SpreadsheetRowMapper,
-    prepareSpreadsheet,
-} from "../libs/importExportUtils";
+import { SpreadsheetRowMapper } from "../libs/import-export/spreadsheetRowMapper";
+import { prepareSpreadsheet } from "../libs/import-export/prepareSpreadsheet";
+import { validate } from "../libs/import-export/validate";
 import {
     instructorData,
     applicantData,
@@ -15,7 +13,17 @@ import {
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import { prepareMinimal } from "../libs/exportUtils";
+import { prepareMinimal } from "../libs/import-export/prepareJson";
+import { prepareInstructorData } from "../libs/import-export/prepareData";
+import XLSX from "xlsx";
+
+// create a shim for native File object
+function File(fileBits, fileName, options) {
+    this.fileBits = fileBits;
+    this.fileName = fileName;
+    this.options = options;
+}
+global.File = File;
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -107,6 +115,25 @@ describe("Import/export library functionality", () => {
         // prepare instructor json
         const instructorJson = instructorData.map(prepareMinimal.instructor);
         expect(instructorJson).toMatchSnapshot();
+
+        // ROUND TRIP TEST for prepareData function
+        // create instructor CSV File object
+        const instructorCSV = prepareInstructorData(instructorData, "csv");
+        const workbook = XLSX.read(instructorCSV.fileBits[0], {
+            type: "array",
+        });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        const keys = dataCSV.shift();
+        // transform to array of objects
+        dataCSV = dataCSV.map(function (row) {
+            return keys.reduce(function (obj, key, i) {
+                obj[key] = row[i];
+                return obj;
+            }, {});
+        });
+        // check with original instructor data
+        expect(dataCSV).toMatchSnapshot();
     });
 
     it("Export Applicants to JSON/CSV/XLSX", () => {

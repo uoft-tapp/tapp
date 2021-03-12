@@ -19,7 +19,7 @@ import {
     MinimalApplicant,
     MinimalDdah,
     Ddah,
-} from "../api/defs/types";
+} from "../../api/defs/types";
 
 /**
  * Determine whether `wageChunks` can be derived from `session`. E.g.,
