@@ -31,7 +31,8 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         const resp = await apiGET(
             `/admin/assignments/${assignment.id}/wage_chunks`
         );
-        expect(resp).toHaveStatus("success");
+
+        wage_chunk = resp.payload[0];
     });
 
     it("create reporting_tags for position", async () => {
@@ -60,14 +61,14 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         expect(resp1).toHaveStatus("success");
 
         const resp2 = await apiPOST(
-            `/admin//positions/${position.id}/reporting_tags/delete`,
+            `/admin/positions/${position.id}/reporting_tags/delete`,
             reporting_tag
         );
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(reporting_tag);
 
         const resp3 = await apiGET(
-            `/admin//positions/${position.id}/reporting_tags`
+            `/admin/positions/${position.id}/reporting_tags`
         );
 
         expect(resp3).toHaveStatus("success");
@@ -80,7 +81,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         };
 
         const resp = await apiGET(
-            `/admin//positions/${position.id}/reporting_tags`
+            `/admin/positions/${position.id}/reporting_tags`
         );
 
         expect(resp).toHaveStatus("success");
@@ -92,43 +93,78 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
         );
 
         const resp2 = await apiGET(
-            `/admin//positions/${position.id}/reporting_tags`
+            `/admin/positions/${position.id}/reporting_tags`
         );
 
         expect(resp2).toHaveStatus("success");
         expect(resp2.payload).toContainObject(reporting_tag);
     });
 
-    // it("create and delete reporting_tags for wage_chunk", async () => {
-    //     let reporting_tag = {
-    //         name: "The Big Cheese",
-    //     };
+    it("create reporting_tags for wage_chunk", async () => {
+        let reporting_tag = {
+            name: "The wage for the Big Cheese",
+        };
 
-    //     const resp1 = await apiPOST(
-    //         `/admin/positions/${position.id}/reporting_tags`,
-    //         reporting_tag
-    //     );
+        const resp1 = await apiPOST(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
+            reporting_tag
+        );
 
-    //     expect(resp1).toHaveStatus("success");
+        expect(resp1).toHaveStatus("success");
+        expect(resp1.payload).toContain(reporting_tag);
+    });
 
-    //     // make sure the reporting tag we created is in that list and has the correct props
-    //     expect(resp1.payload).toContain(reporting_tag);
+    it("delete reporting_tags for wage_chunk", async () => {
+        const reporting_tag = {
+            name: "The Wage for the Big Bad Cheese",
+        };
 
-    //     const resp2 = await apiPOST(
-    //         `/admin//positions/${position.id}/reporting_tags/delete`
-    //     );
+        const resp1 = await apiPOST(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
+            reporting_tag
+        );
+        expect(resp1).toHaveStatus("success");
 
-    //     expect(resp2).toHaveStatus("success");
+        const resp2 = await apiPOST(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags/delete`,
+            reporting_tag
+        );
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(reporting_tag);
 
-    //     const resp3 = await apiGET(
-    //         `/admin//positions/${position.id}/reporting_tags`
-    //     );
+        const resp3 = await apiGET(
+            `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`
+        );
 
-    //     expect(resp3).toHaveStatus("success");
-    //     expect(resp3.payload).toContainObject([]);
-    // });
+        expect(resp3).toHaveStatus("success");
+        expect(resp3.payload).not.toContainObject(reporting_tag);
+    });
+
+    it("get reporting_tags for wage_chunk", async () => {
+        let reporting_tag = {
+            name: "The Wage for the Bigger Cheese",
+        };
+
+        const resp = await apiGET(
+            `/admin/positions/${position.id}/reporting_tags`
+        );
+
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).not.toContainObject(reporting_tag);
+
+        const resp1 = await apiPOST(
+            `/admin/positions/${position.id}/reporting_tags`,
+            reporting_tag
+        );
+
+        const resp2 = await apiGET(
+            `/admin/positions/${position.id}/reporting_tags`
+        );
+
+        expect(resp2).toHaveStatus("success");
+        expect(resp2.payload).toContainObject(reporting_tag);
+    });
 
     it.todo("get all reporting_tags associated to positions for session");
     it.todo("get all reporting_tags associated to wage_chunks for session");
-    it.todo("get reporting_tags for wage_chunk");
 }
