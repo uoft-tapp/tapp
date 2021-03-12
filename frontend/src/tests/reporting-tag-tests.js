@@ -18,7 +18,6 @@ import { databaseSeeder } from "./setup";
 export function reportingTagsTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
     const session = databaseSeeder.seededData.session,
-        contractTemplate = databaseSeeder.seededData.contractTemplate,
         assignment = databaseSeeder.seededData.assignment,
         position = databaseSeeder.seededData.position;
 
