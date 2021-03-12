@@ -154,6 +154,5 @@ export function assignmentsTests(api) {
         expect(resp).toHaveStatus("success");
         const { payload: updatedAssignment } = resp;
         expect(updatedAssignment.hours).toEqual(100);
-        console.log(updatedAssignment);
     });
 }
