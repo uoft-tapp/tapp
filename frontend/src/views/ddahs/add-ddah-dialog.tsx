@@ -70,7 +70,13 @@ export function ConnectedAddDdahDialog(props: {
     }
     const assignmentsWithoutDdah = useSelector<any, Assignment[]>(
         assignmentsSelector
-    ).filter((x) => !assignmentsWithDdahHash[x.id]);
+    ).filter((x) => {
+        return (
+            !assignmentsWithDdahHash[x.id] &&
+            (x.active_offer_status === "pending" ||
+                x.active_offer_status === "accepted")
+        );
+    });
 
     function _upsertDdah(ddah: PartialDdah) {
         if (ddah.assignment == null) {
