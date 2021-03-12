@@ -128,10 +128,9 @@ describe("Import/export library functionality", () => {
         const keys = dataCSV.shift();
         // transform to array of objects
         dataCSV = dataCSV.map(function (row) {
-            return keys.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
+            let instructor = {};
+            keys.forEach((key, i) => (instructor[key] = row[i]));
+            return instructor;
         });
         // check with original instructor data
         expect(dataCSV).toMatchSnapshot();
