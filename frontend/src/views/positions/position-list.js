@@ -337,7 +337,7 @@ export function ConnectedPositionsList({
             Header: generateHeaderCell("Desired Num Assignments"),
             accessor: "desired_num_assignments",
             className: "number-cell",
-            maxWidth: 230,
+            width: 60,
             Cell: generateCell("desired_num_assignments"),
         },
         {
@@ -346,7 +346,7 @@ export function ConnectedPositionsList({
             className: "number-cell",
             accessor: (position) =>
                 numAssignmentsByPositionCode[position.position_code] || "",
-            maxWidth: 230,
+            width: 60,
         },
         {
             Header: generateHeaderCell("Contract Template"),
