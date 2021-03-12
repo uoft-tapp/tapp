@@ -206,7 +206,7 @@ export function reportingTagsTests(api = { apiGET, apiPOST }) {
             `/admin/wage_chunks/${wage_chunk.id}/reporting_tags`,
             reporting_tag
         );
-        
+
         const resp2 = await apiGET(
             `/admin/sessions/${session.id}/wage_chunks/reporting_tags`
         );
