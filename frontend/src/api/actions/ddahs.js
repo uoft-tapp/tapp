@@ -14,7 +14,7 @@ import {
     arrayToHash,
     flattenIdFactory,
 } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apis";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 import { ddahsReducer } from "../reducers";

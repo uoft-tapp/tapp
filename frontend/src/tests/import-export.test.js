@@ -121,7 +121,10 @@ describe("Import/export library functionality", () => {
         // ROUND TRIP TEST for prepareData function
         // create instructor CSV File object
         const instructorCSV = prepareInstructorData(instructorData, "csv");
-        // fileBits[0] stores the ArrayBuffer object of exported instructors data
+        console.log(instructorCSV);
+        // according to File API docs, File object constructor takes an array of ArrayBuffer, etc as the file content.
+        // since Node does not recognize File object, we created a shim for File
+        // thus we take fileBits[0] to retrieve the ArrayBuffer
         const workbook = XLSX.read(instructorCSV.fileBits[0], {
             type: "array",
         });
