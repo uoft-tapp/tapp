@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { sessionsReducer } from "../reducers/sessions";
 import { activeRoleSelector } from "./users";
 import { initFromStage } from "./init";

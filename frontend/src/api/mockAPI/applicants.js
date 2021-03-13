@@ -13,7 +13,7 @@ import {
 import { Session } from "./sessions";
 import { Application } from "./applications";
 import { Assignment } from "./assignments";
-import { stringToNativeType } from "../../libs/urlUtils";
+import { stringToNativeType } from "../../libs/urls";
 import { Instructor } from "./instructors";
 
 export class Applicant extends MockAPIController {

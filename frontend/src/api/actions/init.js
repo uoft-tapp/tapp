@@ -19,7 +19,7 @@ import {
 import { fetchInstructors, fetchInstructorsSuccess } from "./instructors";
 import { fetchPositions, fetchPositionsSuccess } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
-import { parseURLSearchString } from "../../libs/urlUtils";
+import { parseURLSearchString } from "../../libs/urls";
 import { fetchDdahs } from "./ddahs";
 
 /**

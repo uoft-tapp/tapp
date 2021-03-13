@@ -6,7 +6,7 @@ import {
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { usersReducer } from "../reducers/users";
 import { initFromStage } from "./init";
 

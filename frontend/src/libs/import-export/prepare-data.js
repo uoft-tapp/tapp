@@ -1,6 +1,6 @@
-import { dataToFile } from "./dataToFile";
-import { prepareSpreadsheet } from "./prepareSpreadsheet";
-import { prepareMinimal } from "./prepareJson";
+import { dataToFile } from "./data-to-file";
+import { prepareSpreadsheet } from "./prepare-spreadsheet";
+import { prepareMinimal } from "./prepare-json";
 
 /**
  * Make a function that converts a list of applicants into a `File` object.

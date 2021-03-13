@@ -3,9 +3,6 @@
  */
 /* eslint-env node */
 import { describe, it, expect } from "./utils";
-import { SpreadsheetRowMapper } from "../libs/import-export/spreadsheetRowMapper";
-import { prepareSpreadsheet } from "../libs/import-export/prepareSpreadsheet";
-import { validate } from "../libs/import-export/validate";
 import {
     instructorData,
     applicantData,
@@ -13,8 +10,13 @@ import {
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import { prepareMinimal } from "../libs/import-export/prepareJson";
-import { prepareInstructorData } from "../libs/import-export/prepareData";
+import {
+    prepareInstructorData,
+    prepareMinimal,
+    validate,
+    prepareSpreadsheet,
+    SpreadsheetRowMapper,
+} from "../libs/import-export";
 import XLSX from "xlsx";
 
 // create a shim for native File object
@@ -119,6 +121,10 @@ describe("Import/export library functionality", () => {
         // ROUND TRIP TEST for prepareData function
         // create instructor CSV File object
         const instructorCSV = prepareInstructorData(instructorData, "csv");
+        console.log(instructorCSV);
+        // according to File API docs, File object constructor takes an array of ArrayBuffer, etc as the file content.
+        // since Node does not recognize File object, we created a shim for File
+        // thus we take fileBits[0] to retrieve the ArrayBuffer
         const workbook = XLSX.read(instructorCSV.fileBits[0], {
             type: "array",
         });
@@ -127,10 +133,9 @@ describe("Import/export library functionality", () => {
         const keys = dataCSV.shift();
         // transform to array of objects
         dataCSV = dataCSV.map(function (row) {
-            return keys.reduce(function (obj, key, i) {
-                obj[key] = row[i];
-                return obj;
-            }, {});
+            let instructor = {};
+            keys.forEach((key, i) => (instructor[key] = row[i]));
+            return instructor;
         });
         // check with original instructor data
         expect(dataCSV).toMatchSnapshot();

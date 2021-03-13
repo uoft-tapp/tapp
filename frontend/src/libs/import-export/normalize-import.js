@@ -1,5 +1,5 @@
 import * as chrono from "chrono-node";
-import { SpreadsheetRowMapper } from "./spreadsheetRowMapper";
+import { SpreadsheetRowMapper } from "./spreadsheet-row-mapper";
 import { validate } from "./validate";
 
 /**

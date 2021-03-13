@@ -7,10 +7,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { prepareSpreadsheet } from "../../libs/import-export/prepareSpreadsheet";
-import { matchByUtoridOrName } from "../../libs/import-export/matchByUtoridOrName";
-import { SpreadsheetRowMapper } from "../../libs/import-export/spreadsheetRowMapper";
-import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
+import {
+    prepareSpreadsheet,
+    prepareDdahDataFactory,
+    matchByUtoridOrName,
+    SpreadsheetRowMapper,
+} from "../../libs/import-export";
+import { diffImport, getChanged, DiffSpec } from "../../libs/diffs";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {
     exportDdahs,
@@ -22,7 +25,6 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
-import { prepareDdahDataFactory } from "../../libs/import-export/prepareData";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
