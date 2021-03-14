@@ -587,10 +587,6 @@ Array [
 exports[`Import/export library functionality Export Positions to JSON/CSV/XLSX 2`] = `
 Array [
   Object {
-    "ad_close_date": null,
-    "ad_hours_per_assignment": null,
-    "ad_num_assignments": null,
-    "ad_open_date": null,
     "contract_template": "Regular",
     "current_enrollment": 400,
     "current_waitlisted": 100,
@@ -605,10 +601,6 @@ Array [
     "start_date": "2020-02-10T00:00:00.000Z",
   },
   Object {
-    "ad_close_date": null,
-    "ad_hours_per_assignment": null,
-    "ad_num_assignments": null,
-    "ad_open_date": null,
     "contract_template": "Regular",
     "current_enrollment": 400,
     "current_waitlisted": 100,
@@ -623,10 +615,6 @@ Array [
     "start_date": "2020-02-10T00:00:00.000Z",
   },
   Object {
-    "ad_close_date": undefined,
-    "ad_hours_per_assignment": undefined,
-    "ad_num_assignments": undefined,
-    "ad_open_date": undefined,
     "contract_template": "Regular",
     "current_enrollment": undefined,
     "current_waitlisted": undefined,
@@ -641,10 +629,6 @@ Array [
     "start_date": "2020-02-10T00:00:00.000Z",
   },
   Object {
-    "ad_close_date": null,
-    "ad_hours_per_assignment": null,
-    "ad_num_assignments": null,
-    "ad_open_date": null,
     "contract_template": "Regular",
     "current_enrollment": 400,
     "current_waitlisted": 100,

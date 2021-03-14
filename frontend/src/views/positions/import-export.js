@@ -70,10 +70,6 @@ const positionSchema = {
         "qualifications",
         "current_enrollment",
         "current_waitlisted",
-        "ad_open_date",
-        "ad_close_date",
-        "ad_hours_per_assignment",
-        "ad_num_assignments",
     ],
     keyMap: {
         "Position Code": "position_code",

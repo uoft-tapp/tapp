@@ -37,10 +37,6 @@ export interface MinimalPosition {
     end_date: string;
     duties?: string;
     qualifications?: string;
-    ad_hours_per_assignment?: number;
-    ad_num_assignments?: number;
-    ad_open_date?: string;
-    ad_close_date?: string;
     desired_num_assignments?: number;
     current_enrollment?: number;
     current_waitlisted?: number;

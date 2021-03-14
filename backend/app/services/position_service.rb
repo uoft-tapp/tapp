@@ -73,10 +73,6 @@ class PositionService
         @params.slice(
             :duties,
             :qualifications,
-            :ad_hours_per_assignment,
-            :ad_num_assignments,
-            :ad_open_date,
-            :ad_close_date
         )
     end
 
