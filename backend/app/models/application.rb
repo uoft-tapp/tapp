@@ -6,6 +6,7 @@ class Application < ApplicationRecord
     has_many :positions, through: :position_preferences
     belongs_to :applicant
     belongs_to :session
+    belongs_to :posting, optional: true
 
     scope :all_applications,
           lambda {

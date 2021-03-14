@@ -6,7 +6,6 @@ class Position < ApplicationRecord
     has_many :assignments, dependent: :destroy
     has_many :position_preferences, dependent: :destroy
     has_many :applications, through: :position_preferences
-    has_one :position_data_for_ad, dependent: :destroy
     has_one :position_data_for_matching, dependent: :destroy
     belongs_to :session
     belongs_to :contract_template

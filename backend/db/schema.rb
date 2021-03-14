@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_000000) do
+ActiveRecord::Schema.define(version: 2021_03_14_202440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,7 +45,9 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
     t.text "comments"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "posting_id"
     t.index ["applicant_id"], name: "index_applications_on_applicant_id"
+    t.index ["posting_id"], name: "index_applications_on_posting_id"
     t.index ["session_id"], name: "index_applications_on_session_id"
   end
 
@@ -147,15 +149,6 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
     t.index ["url_token"], name: "index_offers_on_url_token"
   end
 
-  create_table "position_data_for_ads", force: :cascade do |t|
-    t.bigint "position_id", null: false
-    t.text "duties"
-    t.text "qualifications"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["position_id"], name: "index_position_data_for_ads_on_position_id"
-  end
-
   create_table "position_data_for_matchings", force: :cascade do |t|
     t.bigint "position_id", null: false
     t.integer "desired_num_assignments"
@@ -187,6 +180,8 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "contract_template_id", null: false
+    t.text "duties"
+    t.text "qualifications"
     t.index ["contract_template_id"], name: "index_positions_on_contract_template_id"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
@@ -196,6 +191,30 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
     t.bigint "position_id"
     t.index ["position_id"], name: "index_positions_reporting_tags_on_position_id"
     t.index ["reporting_tag_id"], name: "index_positions_reporting_tags_on_reporting_tag_id"
+  end
+
+  create_table "posting_positions", force: :cascade do |t|
+    t.bigint "position_id", null: false
+    t.bigint "posting_id", null: false
+    t.integer "num_positions"
+    t.float "hours"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["position_id"], name: "index_posting_positions_on_position_id"
+    t.index ["posting_id"], name: "index_posting_positions_on_posting_id"
+  end
+
+  create_table "postings", force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.datetime "open_date"
+    t.datetime "close_date"
+    t.integer "status"
+    t.text "intro_text"
+    t.text "custom_questions"
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_id"], name: "index_postings_on_session_id"
   end
 
   create_table "reporting_tags", force: :cascade do |t|
@@ -247,6 +266,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
 
   add_foreign_key "applicant_data_for_matchings", "applicants"
   add_foreign_key "applications", "applicants"
+  add_foreign_key "applications", "postings"
   add_foreign_key "applications", "sessions"
   add_foreign_key "assignments", "applicants"
   add_foreign_key "assignments", "offers", column: "active_offer_id"
@@ -255,12 +275,14 @@ ActiveRecord::Schema.define(version: 2021_03_13_000000) do
   add_foreign_key "ddahs", "assignments"
   add_foreign_key "duties", "ddahs"
   add_foreign_key "offers", "assignments"
-  add_foreign_key "position_data_for_ads", "positions"
   add_foreign_key "position_data_for_matchings", "positions"
   add_foreign_key "position_preferences", "applications"
   add_foreign_key "position_preferences", "positions"
   add_foreign_key "positions", "contract_templates"
   add_foreign_key "positions", "sessions"
+  add_foreign_key "posting_positions", "positions"
+  add_foreign_key "posting_positions", "postings"
+  add_foreign_key "postings", "sessions"
   add_foreign_key "reporting_tags", "positions"
   add_foreign_key "reporting_tags", "wage_chunks"
   add_foreign_key "wage_chunks", "assignments", on_delete: :cascade
