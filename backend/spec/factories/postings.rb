@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :ad do
+  factory :posting do
     open_date { "2021-03-14 18:33:53" }
     close_date { "2021-03-14 18:33:53" }
     status { 1 }

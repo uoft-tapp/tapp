@@ -158,6 +158,7 @@ Rails
                                             'session_reporting_tags#index_by_wage_chunk'
                                 end
                             end
+                            resources :postings, only: %i[index create]
                         end
 
                         # DDAHs
@@ -179,6 +180,12 @@ Rails
                                      only: %i[show create] do
                                 collection { post :delete }
                             end
+                        end
+
+                        # Postings
+                        resources :postings, only: %i[index create show] do
+                            collection { post :delete }
+                            resource :posting_positions, only: %i[show create]
                         end
                     end
                 end

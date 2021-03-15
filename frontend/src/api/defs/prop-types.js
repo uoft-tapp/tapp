@@ -131,6 +131,7 @@ function generatePropTypes(PropTypes) {
         }),
         application: PropTypes.shape({
             session_id: id,
+            posting_id: id,
             comments: PropTypes.string,
             program: PropTypes.string,
             department: PropTypes.string,
@@ -164,6 +165,22 @@ function generatePropTypes(PropTypes) {
                     order: PropTypes.number,
                 })
             ),
+        }),
+        posting: PropTypes.shape({
+            name: PropTypes.string,
+            intro_text: PropTypes.string,
+            open_date: PropTypes.string,
+            close_date: PropTypes.string,
+            status: PropTypes.oneOf(["active", "inactive"]),
+            custom_questions: PropTypes.any,
+            posting_positions: PropTypes.arrayOf(id),
+            applications: PropTypes.arrayOf(id),
+        }),
+        posting_position: PropTypes.shape({
+            hours: PropTypes.number,
+            num_positions: PropTypes.number,
+            position_id: id,
+            posting_id: id,
         }),
     };
 }

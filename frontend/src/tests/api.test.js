@@ -24,6 +24,7 @@ import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
 import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
+import { postingTests } from "./posting-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -107,6 +108,9 @@ describe("API tests", () => {
         describe("email and download", () => {
             ddahsEmailAndDownloadTests({ apiGET, apiPOST });
         });
+    });
+    describe("Posting tests", () => {
+        postingTests({ apiGET, apiPOST });
     });
 });
 
