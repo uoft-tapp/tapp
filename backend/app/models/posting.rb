@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Posting < ApplicationRecord
-    POSTING_STATUS = %i[inactive active]
+    POSTING_STATUS = %i[inactive active].freeze
     belongs_to :session
     has_many :posting_positions
     has_many :applications

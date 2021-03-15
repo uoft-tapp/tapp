@@ -97,6 +97,9 @@ describe("API tests", () => {
     describe("Instructor permissions tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
     });
+    describe("Posting tests", () => {
+        postingTests({ apiGET, apiPOST });
+    });
     describe("DDAH tests", () => {
         // These need to be in separate `describe`.
         // Each one independently defines a `beforeAll` action,
@@ -108,9 +111,6 @@ describe("API tests", () => {
         describe("email and download", () => {
             ddahsEmailAndDownloadTests({ apiGET, apiPOST });
         });
-    });
-    describe("Posting tests", () => {
-        postingTests({ apiGET, apiPOST });
     });
 });
 

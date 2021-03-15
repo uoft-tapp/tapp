@@ -1,18 +1,35 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::PostingPositionsController < ApplicationController
-    before_action :find_posting
-
     # GET /postings/:posting_id/posting_positions
     def show
-        render_success @posting.posting_positions
+        # `show` is called for both `index` and `show`. To differentiate between
+        # the two, we look for the precense of an `id` field. If it's there, we
+        # want to see that single posting_position; otherwise, we wan tall posting_positions
+        # for the specified posting.
+        if params[:id].blank?
+            find_posting
+            render_success @posting.posting_positions
+        else
+            render_success PostingPosition.find(params[:id])
+        end
     end
 
     # POST /postings/:posting_id/posting_positions
     def create
+        find_posting
         find_posting_position
         upsert
         render_success @posting_position
+    end
+
+    # POST /posting_positions/delete
+    def delete
+        @posting_position = PostingPosition.find(params[:id])
+        render_on_condition(
+            object: @posting_position,
+            condition: proc { @posting_position.destroy! }
+        )
     end
 
     private
@@ -47,6 +64,7 @@ class Api::V1::Admin::PostingPositionsController < ApplicationController
     def update_params
         params.slice(:hours, :num_positions).permit!
     end
+
     def create_params
         params.slice(:hours, :num_positions, :position_id, :posting_id).permit!
     end

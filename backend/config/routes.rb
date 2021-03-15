@@ -185,7 +185,14 @@ Rails
                         # Postings
                         resources :postings, only: %i[index create show] do
                             collection { post :delete }
+                            # XXX For some reasong `index` doesn't work for a `posting_position`, only
+                            # `show`. I don't know why...
                             resource :posting_positions, only: %i[show create]
+                        end
+
+                        # PostingPositions
+                        resources :posting_positions, only: %i[create show] do
+                            collection { post :delete }
                         end
                     end
                 end

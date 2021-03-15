@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostingPosition < ApplicationRecord
     belongs_to :position
     belongs_to :posting

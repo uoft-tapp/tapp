@@ -27,6 +27,13 @@ export const postingRoutes = {
             summary: "Get a single posting",
             returns: docApiPropTypes.posting,
         }),
+        "/posting_positions/:posting_position_id": documentCallback({
+            func: () => {
+                throw new Error("Not implemented");
+            },
+            summary: "Get a single posting_position",
+            returns: docApiPropTypes.posting_position,
+        }),
     },
     post: {
         "/sessions/:session_id/postings": documentCallback({
