@@ -18,7 +18,7 @@ import {
     positionSchema,
     assignmentSchema,
 } from "../libs/schema";
-import { diffImport } from "../libs/diffUtils";
+import { diffImport } from "../libs/diffs";
 import {
     prepareInstructorData,
     prepareMinimal,
@@ -116,7 +116,6 @@ describe("Import/export library functionality", () => {
         // ROUND TRIP TEST for prepareData function
         // create instructor CSV File object
         const instructorCSV = prepareInstructorData(instructorData, "csv");
-        console.log(instructorCSV);
         // according to File API docs, File object constructor takes an array of ArrayBuffer, etc as the file content.
         // since Node does not recognize File object, we created a shim for File
         // thus we take fileBits[0] to retrieve the ArrayBuffer

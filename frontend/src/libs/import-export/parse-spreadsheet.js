@@ -3,7 +3,7 @@ import XLSX from "xlsx";
 
 export function parseSpreadsheet(fileName) {
     const workbook = XLSX.readFile(
-        __dirname + `../../tests/import-export-data/${fileName}`
+        __dirname + `/../../tests/import-export-data/${fileName}`
     );
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
