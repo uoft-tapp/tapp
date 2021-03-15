@@ -29,7 +29,7 @@ import {
     parseSpreadsheet,
 } from "../libs/import-export";
 
-// create a shim for native File object
+// create a shim for native File object for export round trip test
 function File(fileBits, fileName, options) {
     this.fileBits = fileBits;
     this.fileName = fileName;
