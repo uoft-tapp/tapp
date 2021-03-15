@@ -356,7 +356,7 @@ export const diffImport = {
         };
         const assignments = context.assignments;
 
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching ddah in the existing list
         const matchingDdah = existingDdahs.find(
             (x) =>
                 x.assignment.position.position_code === ddah.position_code &&

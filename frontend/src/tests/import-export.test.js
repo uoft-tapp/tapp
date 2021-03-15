@@ -27,6 +27,7 @@ import {
     SpreadsheetRowMapper,
     normalizeImport,
     parseSpreadsheet,
+    normalizeDdahImports,
 } from "../libs/import-export";
 
 // create a shim for native File object for export round trip test
@@ -635,4 +636,171 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
         })
     ).toThrow(Error);
+});
+
+it("Import Ddahs from JSON/CSV/XLSX", () => {
+    // import correct ddahs from XLSX
+    let normalizedSpreadsheetDdahs = normalizeDdahImports(
+        {
+            fileType: "spreadsheet",
+            data: parseSpreadsheet("ddahs_correct.xlsx"),
+        },
+        [
+            {
+                first_name: "Hanna",
+                last_name: "Wilson",
+                email: "wilsonh@mail.utoronto.ca",
+                utorid: "wilsonh",
+                phone: "41666666666",
+                student_number: "1000000000",
+            },
+        ]
+    );
+    expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
+    // import ddahs with invalid applicant should throw error
+    expect(() =>
+        normalizeDdahImports(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("ddahs_invalid_applicant.xlsx"),
+            },
+            [
+                {
+                    first_name: "Hanna",
+                    last_name: "Wilson",
+                    email: "wilsonh@mail.utoronto.ca",
+                    utorid: "wilsonh",
+                    phone: "41666666666",
+                    student_number: "1000000000",
+                },
+            ]
+        )
+    ).toThrow(Error);
+    // import correct ddahs from JSON
+    const normalizedJsonDdahs = normalizeDdahImports(
+        {
+            fileType: "json",
+            data: objectJSON["ddahs"],
+        },
+        []
+    );
+    expect(normalizedJsonDdahs).toMatchSnapshot();
+    // Compute the difference with existing ddahs
+    const ddahsDiff = diffImport.ddahs(normalizedJsonDdahs, {
+        ddahs: [
+            {
+                assignment: {
+                    applicant: {
+                        first_name: "Harry",
+                        last_name: "Potter",
+                        email: "a@a.com",
+                        utorid: "potterh",
+                        phone: "41666666666",
+                        student_number: "1000000000",
+                    },
+                    position: {
+                        position_code: "CSC135H1F",
+                        hours_per_assignment: 70,
+                        start_date: "2020-12-10T00:00:00.000Z",
+                        end_date: "2021-12-10T00:00:00.000Z",
+                        duties: "mark assignments",
+                        qualifications: "3 300-lvl CSC courses",
+                        instructors: [],
+                        contract_template: {
+                            template_name: "Regular",
+                        },
+                    },
+                    start_date: "2020-12-10T00:00:00.000Z",
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    contract_override_pdf: null,
+                    hours: 80,
+                    active_offer_status: null,
+                    active_offer_recent_activity_date: null,
+                    // more than 2 wage_chunks
+                    wage_chunks: [
+                        {
+                            hours: 30,
+                            rate: 50,
+                            start_date: "2020-12-10T00:00:00.000Z",
+                            end_date: "2020-12-31T00:00:00.000Z",
+                        },
+                        {
+                            hours: 30,
+                            rate: 50,
+                            start_date: "2021-01-01T00:00:00.000Z",
+                            end_date: "2021-06-30T00:00:00.000Z",
+                        },
+                        {
+                            hours: 20,
+                            rate: 50,
+                            start_date: "2021-07-01T00:00:00.000Z",
+                            end_date: "2021-12-10T00:00:00.000Z",
+                        },
+                    ],
+                },
+                duties: [
+                    {
+                        description: "Initial training",
+                        hours: 80,
+                    },
+                    {
+                        description: "Marking the midterm",
+                        hours: 50,
+                    },
+                ],
+            },
+        ],
+        assignments: [
+            {
+                applicant: {
+                    first_name: "Harry",
+                    last_name: "Potter",
+                    email: "a@a.com",
+                    utorid: "potterh",
+                    phone: "41666666666",
+                    student_number: "1000000000",
+                },
+                position: {
+                    position_code: "CSC135H1F",
+                    hours_per_assignment: 70,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    duties: "mark assignments",
+                    qualifications: "3 300-lvl CSC courses",
+                    instructors: [],
+                    contract_template: {
+                        template_name: "Regular",
+                    },
+                },
+                start_date: "2020-12-10T00:00:00.000Z",
+                end_date: "2021-12-10T00:00:00.000Z",
+                contract_override_pdf: null,
+                hours: 80,
+                active_offer_status: null,
+                active_offer_recent_activity_date: null,
+                // more than 2 wage_chunks
+                wage_chunks: [
+                    {
+                        hours: 30,
+                        rate: 50,
+                        start_date: "2020-12-10T00:00:00.000Z",
+                        end_date: "2020-12-31T00:00:00.000Z",
+                    },
+                    {
+                        hours: 30,
+                        rate: 50,
+                        start_date: "2021-01-01T00:00:00.000Z",
+                        end_date: "2021-06-30T00:00:00.000Z",
+                    },
+                    {
+                        hours: 20,
+                        rate: 50,
+                        start_date: "2021-07-01T00:00:00.000Z",
+                        end_date: "2021-12-10T00:00:00.000Z",
+                    },
+                ],
+            },
+        ],
+    });
+    expect(ddahsDiff).toMatchSnapshot();
 });

@@ -7,3 +7,4 @@ export * from "./validate";
 export * from "./prepare-spreadsheet";
 export * from "./prepare-json";
 export * from "./parse-spreadsheet";
+export * from "./normalize-ddah-import";

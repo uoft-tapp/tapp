@@ -224,6 +224,132 @@ Array [
 ]
 `;
 
+exports[`Import Ddahs from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "applicant": "wilsonh",
+    "duties": Array [
+      Object {
+        "description": "Initial training",
+        "hours": 4,
+      },
+      Object {
+        "description": "Marking the midterm",
+        "hours": 25,
+      },
+      Object {
+        "description": "Running tutorials",
+        "hours": 40,
+      },
+    ],
+    "position_code": "CSC135H1F",
+  },
+]
+`;
+
+exports[`Import Ddahs from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "applicant": "potterh",
+    "duties": Array [
+      Object {
+        "description": "Initial training",
+        "hours": 80,
+      },
+      Object {
+        "description": "Marking the midterm",
+        "hours": 10,
+      },
+      Object {
+        "description": "Running tutorials",
+        "hours": 20,
+      },
+    ],
+    "position_code": "CSC135H1F",
+  },
+]
+`;
+
+exports[`Import Ddahs from JSON/CSV/XLSX 3`] = `
+Array [
+  Object {
+    "changes": Object {
+      "duties": "\\"80h - Initial training; 50h - Marking the midterm\\" → \\"80h - Initial training; 10h - Marking the midterm; 20h - Running tutorials\\"",
+    },
+    "obj": Object {
+      "assignment": Object {
+        "active_offer_recent_activity_date": null,
+        "active_offer_status": null,
+        "applicant": Object {
+          "email": "a@a.com",
+          "first_name": "Harry",
+          "last_name": "Potter",
+          "phone": "41666666666",
+          "student_number": "1000000000",
+          "utorid": "potterh",
+        },
+        "contract_override_pdf": null,
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours": 80,
+        "position": Object {
+          "contract_template": Object {
+            "template_name": "Regular",
+          },
+          "duties": "mark assignments",
+          "end_date": "2021-12-10T00:00:00.000Z",
+          "hours_per_assignment": 70,
+          "instructors": Array [],
+          "position_code": "CSC135H1F",
+          "qualifications": "3 300-lvl CSC courses",
+          "start_date": "2020-12-10T00:00:00.000Z",
+        },
+        "start_date": "2020-12-10T00:00:00.000Z",
+        "wage_chunks": Array [
+          Object {
+            "end_date": "2020-12-31T00:00:00.000Z",
+            "hours": 30,
+            "rate": 50,
+            "start_date": "2020-12-10T00:00:00.000Z",
+          },
+          Object {
+            "end_date": "2021-06-30T00:00:00.000Z",
+            "hours": 30,
+            "rate": 50,
+            "start_date": "2021-01-01T00:00:00.000Z",
+          },
+          Object {
+            "end_date": "2021-12-10T00:00:00.000Z",
+            "hours": 20,
+            "rate": 50,
+            "start_date": "2021-07-01T00:00:00.000Z",
+          },
+        ],
+      },
+      "duties": Array [
+        Object {
+          "description": "Initial training",
+          "hours": 80,
+          "order": 1,
+        },
+        Object {
+          "description": "Marking the midterm",
+          "hours": 10,
+          "order": 2,
+        },
+        Object {
+          "description": "Running tutorials",
+          "hours": 20,
+          "order": 3,
+        },
+      ],
+      "status": null,
+      "total_hours": 110,
+    },
+    "status": "modified",
+  },
+]
+`;
+
 exports[`Import Positions from JSON/CSV/XLSX 1`] = `
 Array [
   Object {
