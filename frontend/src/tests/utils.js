@@ -204,7 +204,7 @@ export async function addSession(api, include = { contract_templates: true }) {
     resp = await api.apiPOST(`/admin/sessions`, newSessionData);
     const session = resp.payload;
     if (include.contract_templates) {
-        addContractTemplateToSession(api, session);
+        await addContractTemplateToSession(api, session);
     }
     return session;
 }

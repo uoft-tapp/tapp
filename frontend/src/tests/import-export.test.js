@@ -4,19 +4,12 @@
 /* eslint-env node */
 import { describe, it, expect } from "./utils";
 import {
-    validate,
-    SpreadsheetRowMapper,
-    prepareSpreadsheet,
-    normalizeImport,
-} from "../libs/importExportUtils";
-import {
     instructorData,
     applicantData,
     positionData,
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import { prepareMinimal } from "../libs/exportUtils";
 import XLSX from "xlsx";
 import { objectJSON } from "./import-export-data/import-data";
 import {
@@ -26,23 +19,23 @@ import {
     assignmentSchema,
 } from "../libs/schema";
 import { diffImport } from "../libs/diffUtils";
+import {
+    prepareInstructorData,
+    prepareMinimal,
+    validate,
+    prepareSpreadsheet,
+    SpreadsheetRowMapper,
+    normalizeImport,
+    parseSpreadsheet,
+} from "../libs/import-export";
 
-function parseSpreadsheet(fileName) {
-    const workbook = XLSX.readFile(
-        __dirname + `/import-export-data/${fileName}`
-    );
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-    // transform to array of objects
-    const keys = dataCSV.shift();
-    dataCSV = dataCSV.map(function (row) {
-        return keys.reduce(function (obj, key, i) {
-            obj[key] = row[i];
-            return obj;
-        }, {});
-    });
-    return dataCSV;
+// create a shim for native File object
+function File(fileBits, fileName, options) {
+    this.fileBits = fileBits;
+    this.fileName = fileName;
+    this.options = options;
 }
+global.File = File;
 
 // Run the actual tests for both the API and the Mock API
 describe("Import/export library functionality", () => {
@@ -119,6 +112,28 @@ describe("Import/export library functionality", () => {
         // prepare instructor json
         const instructorJson = instructorData.map(prepareMinimal.instructor);
         expect(instructorJson).toMatchSnapshot();
+
+        // ROUND TRIP TEST for prepareData function
+        // create instructor CSV File object
+        const instructorCSV = prepareInstructorData(instructorData, "csv");
+        console.log(instructorCSV);
+        // according to File API docs, File object constructor takes an array of ArrayBuffer, etc as the file content.
+        // since Node does not recognize File object, we created a shim for File
+        // thus we take fileBits[0] to retrieve the ArrayBuffer
+        const workbook = XLSX.read(instructorCSV.fileBits[0], {
+            type: "array",
+        });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        const keys = dataCSV.shift();
+        // transform to array of objects
+        dataCSV = dataCSV.map(function (row) {
+            let instructor = {};
+            keys.forEach((key, i) => (instructor[key] = row[i]));
+            return instructor;
+        });
+        // check with original instructor data
+        expect(dataCSV).toMatchSnapshot();
     });
 
     it("Export Applicants to JSON/CSV/XLSX", () => {

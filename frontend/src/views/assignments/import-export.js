@@ -14,46 +14,15 @@ import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
     normalizeImport,
-    prepareSpreadsheet,
-    dataToFile,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
+    prepareAssignmentDataFactory,
+} from "../../libs/import-export";
 import {
     AssignmentsList,
     AssignmentsDiffList,
 } from "../../components/assignments-list";
-import { diffImport, getChanged } from "../../libs/diffUtils";
+import { diffImport, getChanged } from "../../libs/diffs";
 import { offerTableSelector } from "../offertable/actions";
 import { assignmentSchema } from "../../libs/schema";
-
-/**
- * A factory function which produces assignment prepareData function,
- *
- * @export
- * @param {Session} session
- * @param {Function | null} assignmentFilter
- * @returns {Function}
- */
-export function prepareDataFactory(session, assignmentFilter = null) {
-    // Make a function that converts a list of assignments into a `File` object.
-    return function prepareData(assignments, dataFormat) {
-        if (assignmentFilter instanceof Function) {
-            assignments = assignmentFilter(assignments);
-        }
-        return dataToFile(
-            {
-                toSpreadsheet: () => prepareSpreadsheet.assignment(assignments),
-                toJson: () => ({
-                    assignments: assignments.map((assignment) =>
-                        prepareMinimal.assignment(assignment, session)
-                    ),
-                }),
-            },
-            dataFormat,
-            "assignments"
-        );
-    };
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -94,7 +63,7 @@ export function ConnectedExportAssignmentsAction({
             setInProgress(true);
             const file = await dispatch(
                 exportAssignments(
-                    prepareDataFactory(
+                    prepareAssignmentDataFactory(
                         session,
                         (assignments, selectedIds = selectedAssignmentIds) => {
                             // If we have selected specific assignments, we only want to export those.
