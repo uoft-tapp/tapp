@@ -1,13 +1,9 @@
-import { expect, it, beforeAll, apiGET, apiPOST } from "./utils";
+import { it, beforeAll, apiGET, apiPOST } from "./utils";
 import { databaseSeeder } from "./setup";
 
 // TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
 // eslint-disable-next-line
 export function postingTests(api = { apiGET, apiPOST }) {
-    const { apiGET, apiPOST } = api;
-    const session = databaseSeeder.seededData.session,
-        position = databaseSeeder.seededData.position;
-
     beforeAll(async () => {
         await databaseSeeder.seed(api);
     });
