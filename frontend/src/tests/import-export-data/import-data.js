@@ -5,9 +5,9 @@ import assignmentsJson from "./assignments.json";
 import ddahsJson from "./ddahs.json";
 
 export const objectJSON = {
-    instructors: instructorsJSON["instructors"],
-    applicants: applicantsJson["applicants"],
-    positions: positionsJson["positions"],
-    assignments: assignmentsJson["assignments"],
-    ddahs: ddahsJson["ddahs"],
+    instructors: instructorsJSON.instructors,
+    applicants: applicantsJson.applicants,
+    positions: positionsJson.positions,
+    assignments: assignmentsJson.assignments,
+    ddahs: ddahsJson.ddahs,
 };
