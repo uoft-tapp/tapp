@@ -1,17 +1,15 @@
 /*
- * A collection of context (existing objects)
+ * A collection of existing objects
  * used for computing difference when importing objects.
  */
 
-export const importInstructorContext = {
+export const existingObjectsForInstructorImport = {
     instructors: [
-        // instructor to be modified
         {
             first_name: "Henry",
             utorid: "smithh",
             email: "OLD@utoronto.ca",
         },
-        // instructor to be duplicated
         {
             email: "gordon.smith@utoronto.ca",
             first_name: "戈登",
@@ -21,9 +19,8 @@ export const importInstructorContext = {
     ],
 };
 
-export const importApplicantContext = {
+export const existingObjectsForApplicantImport = {
     applicants: [
-        // applicant to be modified
         {
             first_name: "John",
             last_name: "Doe",
@@ -31,7 +28,6 @@ export const importApplicantContext = {
             email: "goofy-duck@donald.com",
             student_number: "OLD10000000",
         },
-        // applicant to be duplicated
         {
             first_name: "哈利",
             last_name: "Potter",
@@ -43,7 +39,7 @@ export const importApplicantContext = {
     ],
 };
 
-export const importPositionContext = {
+export const existingObjectsForPositionImport = {
     positions: [
         {
             position_code: "MAT136H1F",
@@ -113,15 +109,9 @@ export const importPositionContext = {
     ],
 };
 
-export const importPositionContextNoSmithHenry = {
+export const existingObjectsNoInstructorForPositionImport = {
     positions: [],
-    instructors: [
-        {
-            first_name: "Emily",
-            last_name: "Garcia",
-            utorid: "garciae",
-        },
-    ],
+    instructors: [],
     contractTemplates: [
         {
             template_name: "Regular",
@@ -129,7 +119,7 @@ export const importPositionContextNoSmithHenry = {
     ],
 };
 
-export const importAssignmentContext = {
+export const existingObjectsForAssignmentImport = {
     assignments: [
         {
             applicant: {
@@ -166,7 +156,6 @@ export const importAssignmentContext = {
             hours: 80,
             active_offer_status: null,
             active_offer_recent_activity_date: null,
-            // more than 2 wage_chunks
             wage_chunks: [
                 {
                     hours: 30,
@@ -225,7 +214,7 @@ export const importAssignmentContext = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const importAssignmentContextNoApplicant = {
+export const existingObjectsNoApplicantForAssignmentImport = {
     assignments: [],
     positions: [
         {
@@ -253,7 +242,7 @@ export const importAssignmentContextNoApplicant = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const importAssignmentContextNoPosition = {
+export const existingObjectsNoPositionForAssignmentImport = {
     assignments: [],
     positions: [],
     applicants: [
@@ -270,7 +259,7 @@ export const importAssignmentContextNoPosition = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const importDdahApplicantContext = [
+export const existingApplicantsForDdahImport = [
     {
         first_name: "Hanna",
         last_name: "Wilson",
@@ -281,7 +270,7 @@ export const importDdahApplicantContext = [
     },
 ];
 
-export const importDdahContext = {
+export const existingObjectsForDdahImport = {
     ddahs: [
         {
             assignment: {
@@ -311,7 +300,6 @@ export const importDdahContext = {
                 hours: 80,
                 active_offer_status: null,
                 active_offer_recent_activity_date: null,
-                // more than 2 wage_chunks
                 wage_chunks: [
                     {
                         hours: 30,
@@ -373,7 +361,6 @@ export const importDdahContext = {
             hours: 80,
             active_offer_status: null,
             active_offer_recent_activity_date: null,
-            // more than 2 wage_chunks
             wage_chunks: [
                 {
                     hours: 30,
@@ -398,7 +385,7 @@ export const importDdahContext = {
     ],
 };
 
-export const importDdahContextNoAssignment = {
+export const existingObjectsNoAssignmentForDdahImport = {
     ddahs: [],
     assignments: [],
 };

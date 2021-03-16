@@ -4,7 +4,7 @@ import positionsJson from "./positions.json";
 import assignmentsJson from "./assignments.json";
 import ddahsJson from "./ddahs.json";
 
-export const objectJSON = {
+export const importObjectJSONs = {
     instructors: instructorsJSON.instructors,
     applicants: applicantsJson.applicants,
     positions: positionsJson.positions,
