@@ -144,9 +144,6 @@ describe("Mock API tests", () => {
     describe("User permissions tests", () => {
         userPermissionsTests(mockAPI);
     });
-    describe("`/admin/applicants` tests", () => {
-        applicantTests(mockAPI);
-    });
     describe("DDAH tests", () => {
         ddahTests({ apiGET, apiPOST });
     });
