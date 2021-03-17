@@ -98,6 +98,7 @@ export interface MinimalPosting {
 
 export interface Posting extends MinimalPosting {
     id: number;
+    url_token: string;
 }
 
 /**
