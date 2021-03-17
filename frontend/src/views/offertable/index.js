@@ -212,7 +212,7 @@ export function ConnectedOfferTable(props) {
                 maxWidth: 30,
             },
         ];
-    }, [dispatch]);
+    }, [dispatch, editable]);
 
     return (
         <AdvancedFilterTable

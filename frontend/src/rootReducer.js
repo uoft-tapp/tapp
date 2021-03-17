@@ -13,6 +13,8 @@ import {
     instructorsReducer,
     contractTemplatesReducer,
     ddahsReducer,
+    postingsReducer,
+    postingPositionsReducer,
 } from "./api/reducers";
 import { usersReducer } from "./api/reducers/users";
 import ddahsTableReducer from "./views/ddah-table/reducers";
@@ -38,6 +40,8 @@ const reducer = combineReducers({
         assignments: assignmentsReducer,
         instructors: instructorsReducer,
         contractTemplates: contractTemplatesReducer,
+        postings: postingsReducer,
+        postingPositions: postingPositionsReducer,
         users: usersReducer,
         ddahs: ddahsReducer,
     }),

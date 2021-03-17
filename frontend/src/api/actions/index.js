@@ -9,5 +9,6 @@ export * from "./wage_chunks";
 export * from "./status";
 export * from "./offers";
 export * from "./users";
+export * from "./postings";
 export * from "./init";
 export * from "./globals";
