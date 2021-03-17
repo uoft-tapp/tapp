@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { Applicant, MinimalApplicant } from "../api/defs/types";
-import { DiffSpec } from "../libs/diffUtils";
+import { DiffSpec } from "../libs/diffs";
 import { Form } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";

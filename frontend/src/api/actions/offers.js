@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import { fetchError } from "./errors";
 import { actionFactory, validatedApiDispatcher } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { fetchAssignment } from "./assignments";
 import { activeRoleSelector } from "./users";
 

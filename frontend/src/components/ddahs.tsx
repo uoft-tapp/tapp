@@ -1,12 +1,12 @@
 import React from "react";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
-import { DiffSpec, ddahDutiesToString } from "../libs/diffUtils";
+import { DiffSpec, ddahDutiesToString } from "../libs/diffs";
 import { Form, Button } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import { stringToNativeType } from "../libs/urlUtils";
+import { stringToNativeType } from "../libs/urls";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
 const DEFAULT_COLUMNS = [

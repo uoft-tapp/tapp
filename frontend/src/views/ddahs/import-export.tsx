@@ -8,12 +8,12 @@ import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
-    dataToFile,
-    SpreadsheetRowMapper,
+    prepareSpreadsheet,
+    prepareDdahDataFactory,
     matchByUtoridOrName,
-} from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
-import { diffImport, getChanged, DiffSpec } from "../../libs/diffUtils";
+    SpreadsheetRowMapper,
+} from "../../libs/import-export";
+import { diffImport, getChanged, DiffSpec } from "../../libs/diffs";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
 import {
     exportDdahs,
@@ -25,72 +25,6 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
-
-/**
- * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
- *
- * @param {Ddah} ddah
- * @returns {((string | number)[])}
- */
-function flattenDuties(ddah: Ddah): (string | number)[] {
-    const ret = [];
-    const duties = [...ddah.duties];
-    duties.sort((a, b) => a.order - b.order);
-
-    for (const duty of duties) {
-        ret.push(duty.hours);
-        ret.push(duty.description);
-    }
-
-    return ret;
-}
-
-/**
- * Turns an array of Ddah objects into an Array of Arrays suitable
- * for converting into a spreadsheet.
- *
- * @export
- * @param {Ddah[]} ddahs
- * @returns {((string | number)[][])}
- */
-export function prepareDdahsSpreadsheet(ddahs: Ddah[]): (string | number)[][] {
-    // Compute the maximum number of duties, because each duty gets a column.
-    const maxDuties = Math.max(
-        ...ddahs.map((ddah) => ddah.duties.length || 0),
-        0
-    );
-    // Create headers for the duty columns
-    const dutyHeaders = Array.from({ length: maxDuties * 2 }, (_, i) => {
-        if (i % 2 === 0) {
-            return `Hours ${i / 2 + 1}`;
-        }
-        return `Duty ${(i - 1) / 2 + 1}`;
-    });
-
-    return [
-        [
-            "Position",
-            "Last Name",
-            "First Name",
-            "email",
-            "Assignment Hours",
-            "Offer Status",
-            "",
-        ].concat(dutyHeaders),
-    ].concat(
-        ddahs.map((ddah) =>
-            [
-                ddah.assignment.position.position_code,
-                ddah.assignment.applicant.last_name,
-                ddah.assignment.applicant.first_name,
-                ddah.assignment.applicant.email,
-                ddah.assignment.hours,
-                ddah.assignment.active_offer_status,
-                "",
-            ].concat(flattenDuties(ddah))
-        ) as any[][]
-    );
-}
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -120,31 +54,22 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
 
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(
-                ddahs: Ddah[],
-                dataFormat: "csv" | "json" | "xlsx"
-            ) {
-                // If we have selected specific DDAHs, filter so we only export them.
-                if (selectedDdahIds && selectedDdahIds.length > 0) {
-                    ddahs = ddahs.filter((d) => selectedDdahIds.includes(d.id));
-                }
-
-                return dataToFile(
-                    {
-                        toSpreadsheet: () => prepareDdahsSpreadsheet(ddahs),
-                        toJson: () => ({
-                            ddahs: ddahs.map((ddah) =>
-                                prepareMinimal.ddah(ddah)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "ddahs"
-                );
-            }
-
-            const file = await dispatch(exportDdahs(prepareData, exportType));
+            const file = await dispatch(
+                exportDdahs(
+                    prepareDdahDataFactory(
+                        (ddahs: Ddah[], selectedIds = selectedDdahIds) => {
+                            // If we have selected specific DDAHs, filter so we only export them.
+                            if (selectedIds && selectedIds.length > 0) {
+                                ddahs = ddahs.filter((d: Ddah) =>
+                                    selectedIds.includes(d.id)
+                                );
+                            }
+                            return ddahs;
+                        }
+                    ),
+                    exportType
+                )
+            );
             FileSaver.saveAs(file);
         }
         doExport().catch(console.error);
@@ -422,7 +347,7 @@ function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
     // Create an object with arrays of DDAHs for every position
     const ddahsByPosition: { [key: string]: any[][] } = {};
     for (const position_code of Array.from(posSet)) {
-        ddahsByPosition[position_code] = prepareDdahsSpreadsheet(
+        ddahsByPosition[position_code] = prepareSpreadsheet.ddah(
             allDdahs.filter(
                 (ddah) =>
                     ddah.assignment.position.position_code === position_code

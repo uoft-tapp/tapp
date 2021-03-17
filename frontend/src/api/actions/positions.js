@@ -13,7 +13,7 @@ import {
     flattenIdFactory,
     splitObjByProps,
 } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { positionsReducer } from "../reducers/positions";
 import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";

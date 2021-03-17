@@ -12,7 +12,7 @@ import {
     arrayToHash,
     flattenIdFactory,
 } from "./utils";
-import { apiGET, apiPOST } from "../../libs/apiUtils";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import { assignmentsReducer } from "../reducers/assignments";
 import { createSelector } from "reselect";
 import { applicantsSelector } from "./applicants";
