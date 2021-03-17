@@ -42,7 +42,10 @@ export function ConnectedPostingsList({ editable = true }) {
             accessor: "close_date",
             Cell: generateCell("close_date", "date"),
         },
-        { Header: generateHeaderCell("Status"), accessor: "status" },
+        {
+            Header: generateHeaderCell("Availability"),
+            accessor: "availability",
+        },
     ];
 
     return (
