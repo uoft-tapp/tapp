@@ -1,11 +1,7 @@
 import React from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { offerTableSelector, setSelectedRows } from "../offertable/actions";
-import {
-    assignmentsSelector,
-    upsertApplicant,
-    upsertAssignment,
-} from "../../api/actions";
+import { connect, useDispatch } from "react-redux";
+import { offerTableSelector } from "../offertable/actions";
+import { assignmentsSelector } from "../../api/actions";
 import {
     offerForAssignmentCreate,
     offerForAssignmentEmail,
@@ -24,9 +20,7 @@ import {
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
 import { Button, Modal } from "react-bootstrap";
-import { formatDate } from "../../libs/utils";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
-import { ApplicantCell, AssignmentCell, StatusCell } from "../offertable";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -142,7 +136,7 @@ function OfferActionButtons(props) {
             selectedAssignments.every(OfferTest[key]);
     }
 
-    function MultiWithdrawConfirmationTable() {
+    function MultiWithdrawOfferConfirmationTable() {
         // const { editable = false } = props;
         const dispatch = useDispatch();
         const data = selectedAssignments;
@@ -252,7 +246,7 @@ function OfferActionButtons(props) {
                         {selectedAssignments?.length} offers
                     </div>
                     <div className="mb-3">
-                        <MultiWithdrawConfirmationTable />
+                        <MultiWithdrawOfferConfirmationTable />
                     </div>
                     Are you sure?
                 </Modal.Body>
