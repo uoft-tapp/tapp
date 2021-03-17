@@ -1,7 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
-import { offerTableSelector } from "../offertable/actions";
-import { assignmentsSelector } from "../../api/actions";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { offerTableSelector, setSelectedRows } from "../offertable/actions";
+import {
+    assignmentsSelector,
+    upsertApplicant,
+    upsertAssignment,
+} from "../../api/actions";
 import {
     offerForAssignmentCreate,
     offerForAssignmentEmail,
@@ -20,6 +24,9 @@ import {
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
 import { Button, Modal } from "react-bootstrap";
+import { formatDate } from "../../libs/utils";
+import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
+import { ApplicantCell, AssignmentCell, StatusCell } from "../offertable";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -70,8 +77,24 @@ function OfferActionButtons(props) {
         }
     }
     function confirmOfferWithdraw() {
+        function compareString(str1, str2) {
+            if (str1 > str2) {
+                return 1;
+            } else if (str1 < str2) {
+                return -1;
+            }
+            return 0;
+        }
+
         // if withdrawing multiple offers at once, show confirmation
         if (selectedAssignments?.length > 1) {
+            selectedAssignments.sort((a1, a2) => {
+                return (
+                    compareString(a1.position_code, a2.position_code) ||
+                    compareString(a1.last_name, a2.last_name) ||
+                    compareString(a1.first_name, a2.first_name)
+                );
+            });
             setDdahDeletionConfirmationVisible(true);
         } else {
             // does not need confirmation if only withdrawing one offer
@@ -117,6 +140,56 @@ function OfferActionButtons(props) {
         actionPermitted[key] =
             selectedAssignments.length !== 0 &&
             selectedAssignments.every(OfferTest[key]);
+    }
+
+    function MultiWithdrawConfirmationTable() {
+        // const { editable = false } = props;
+        const dispatch = useDispatch();
+        const data = selectedAssignments;
+
+        // We want to minimize the re-render of the table. Since some bindings for columns
+        // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
+        const columns = React.useMemo(() => {
+            return [
+                {
+                    Header: "Last Name",
+                    accessor: "applicant.last_name",
+                },
+                {
+                    Header: "First Name",
+                    accessor: "applicant.first_name",
+                },
+                {
+                    Header: "Position",
+                    accessor: "position.position_code",
+                },
+                {
+                    Header: "Hours",
+                    accessor: "hours",
+                    className: "number-cell",
+                    maxWidth: 70,
+                },
+                {
+                    Header: "Status",
+                    id: "status",
+                    // We want items with no active offer to appear at the end of the list
+                    // when sorted, so we set their accessor to null (the accessor is used by react table
+                    // when sorting items).
+                    accessor: (data) =>
+                        data.active_offer_status === "No Contract"
+                            ? null
+                            : data.active_offer_status,
+                },
+            ];
+        }, [dispatch]);
+
+        return (
+            <AdvancedFilterTable
+                filterable={true}
+                columns={columns}
+                data={data}
+            />
+        );
     }
 
     return (
@@ -168,6 +241,7 @@ function OfferActionButtons(props) {
                 onHide={() => {
                     setDdahDeletionConfirmationVisible(false);
                 }}
+                size="lg"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
@@ -178,17 +252,7 @@ function OfferActionButtons(props) {
                         {selectedAssignments?.length} offers
                     </div>
                     <div className="mb-3">
-                        {selectedAssignments.map((selectedAssignment) => {
-                            return (
-                                <li>
-                                    {`${selectedAssignment.applicant.first_name} 
-                                    ${selectedAssignment.applicant.last_name}: 
-                                    ${selectedAssignment.position.position_code} -
-                                    ${selectedAssignment.position.position_title} 
-                                    (${selectedAssignment.hours} hrs)`}
-                                </li>
-                            );
-                        })}
+                        <MultiWithdrawConfirmationTable />
                     </div>
                     Are you sure?
                 </Modal.Body>
