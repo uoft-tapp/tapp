@@ -102,14 +102,14 @@ export function instructorsPermissionTests(api) {
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
 
-        let emptyRoleUserId;
+        let emptyRoleUserExists = false;
         resp.payload.forEach((user) => {
             if (user.utorid === emptyRoleUserData.utorid) {
-                emptyRoleUserId = user.id;
+                emptyRoleUserExists = true;
             }
         });
 
-        expect(emptyRoleUserId).toBeDefined();
+        expect(emptyRoleUserExists).toBeTruthy();
 
         const instructorData = {
             utorid: emptyRoleUserUtorid,
@@ -122,7 +122,6 @@ export function instructorsPermissionTests(api) {
 
         resp = await apiGET(`/admin/instructors`);
         expect(resp).toHaveStatus("success");
-        console.log(resp.payload);
         let instructorId;
         resp.payload.forEach((instructor) => {
             if (instructor.utorid === emptyRoleUserUtorid) {
@@ -148,20 +147,31 @@ export function instructorsPermissionTests(api) {
         );
         expect(resp).toHaveStatus("success");
 
-        resp = await apiGET(`/debug/users`);
+        // set active user to trigger role update
+        resp = await apiPOST(`/debug/active_user`, emptyRoleUserData);
         expect(resp).toHaveStatus("success");
-        console.log(resp.payload);
-        let assignedInstructorRoleUser;
-        resp.payload.forEach((user) => {
-            if (user.id === emptyRoleUserId) {
-                expect(user.roles).toEqual(
-                    expect.arrayContaining(["instructor"])
-                );
-                assignedInstructorRoleUser = user;
-            }
-        });
+        resp = await apiGET(`/debug/active_user`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.utorid).toEqual(emptyRoleUserData.utorid);
+        expect(resp.payload.roles).toEqual(
+            expect.arrayContaining(["instructor"])
+        );
 
-        expect(assignedInstructorRoleUser).toBeDefined();
+        // This requires further confirmation. The following logic for checking roles may be wrong.
+        //
+        // resp = await apiGET(`/debug/users`);
+        // expect(resp).toHaveStatus("success");
+        // let assignedInstructorRoleUser;
+        // resp.payload.forEach((user) => {
+        //     if (user.utorid === emptyRoleUserData.utorid) {
+        //         expect(user.roles).toEqual(
+        //             expect.arrayContaining(["instructor"])
+        //         );
+        //         assignedInstructorRoleUser = user;
+        //     }
+        // });
+        //
+        // expect(assignedInstructorRoleUser).toBeDefined();
     });
 
     it("fetch instructors", async () => {

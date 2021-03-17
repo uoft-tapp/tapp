@@ -16,7 +16,7 @@ export function usersTests(api) {
     const { apiGET, apiPOST } = api;
 
     const newUserData = {
-        utorid: "userxx",
+        utorid: "user_test_new_user",
         roles: ["instructor"],
     };
 
@@ -77,12 +77,17 @@ export function usersTests(api) {
     });
 
     it("[debug only] sets the active user", async () => {
-        let resp = await apiPOST("/debug/active_user", { id: newUserData.id });
+        let resp = await apiPOST("/debug/users", newUserData);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST("/debug/active_user", {
+            utorid: newUserData.utorid,
+        });
         expect(resp).toHaveStatus("success");
 
         resp = await apiGET("/debug/active_user");
 
-        expect(resp.payload).toEqual(newUserData);
+        expect(resp.payload.utorid).toEqual(newUserData.utorid);
 
         // Set the active user back to the default so everything
         // is left in a nice state after the tests run.
