@@ -19,4 +19,7 @@ const basicReducers = createBasicReducerObject(
     DELETE_ONE_POSTING_POSITION_SUCCESS
 );
 
-export const postingPositionsReducer = createReducer(initialState, basicReducers);
+export const postingPositionsReducer = createReducer(
+    initialState,
+    basicReducers
+);
