@@ -3,7 +3,7 @@
  * used for computing difference when importing objects.
  */
 
-export const existingObjectsForInstructorImport = {
+export const initialInstructorData = {
     instructors: [
         {
             first_name: "Henry",
@@ -19,7 +19,7 @@ export const existingObjectsForInstructorImport = {
     ],
 };
 
-export const existingObjectsForApplicantImport = {
+export const initialApplicantData = {
     applicants: [
         {
             first_name: "John",
@@ -39,7 +39,7 @@ export const existingObjectsForApplicantImport = {
     ],
 };
 
-export const existingObjectsForPositionImport = {
+export const initialPositionData = {
     positions: [
         {
             position_code: "MAT136H1F",
@@ -109,7 +109,7 @@ export const existingObjectsForPositionImport = {
     ],
 };
 
-export const existingObjectsNoInstructorForPositionImport = {
+export const initialPositionDataNoInstructor = {
     positions: [],
     instructors: [],
     contractTemplates: [
@@ -119,7 +119,7 @@ export const existingObjectsNoInstructorForPositionImport = {
     ],
 };
 
-export const existingObjectsForAssignmentImport = {
+export const initialAssignmentData = {
     assignments: [
         {
             applicant: {
@@ -214,7 +214,7 @@ export const existingObjectsForAssignmentImport = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const existingObjectsNoApplicantForAssignmentImport = {
+export const initialAssignmentDataNoApplicant = {
     assignments: [],
     positions: [
         {
@@ -242,7 +242,7 @@ export const existingObjectsNoApplicantForAssignmentImport = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const existingObjectsNoPositionForAssignmentImport = {
+export const initialAssignmentDataNoPosition = {
     assignments: [],
     positions: [],
     applicants: [
@@ -259,7 +259,7 @@ export const existingObjectsNoPositionForAssignmentImport = {
     session: { rate: 50, rate1: 50, rate2: 50, rate3: 50 },
 };
 
-export const existingApplicantsForDdahImport = [
+export const initialApplicantDataForDdah = [
     {
         first_name: "Hanna",
         last_name: "Wilson",
@@ -270,7 +270,7 @@ export const existingApplicantsForDdahImport = [
     },
 ];
 
-export const existingObjectsForDdahImport = {
+export const initialDdahData = {
     ddahs: [
         {
             assignment: {
@@ -385,7 +385,7 @@ export const existingObjectsForDdahImport = {
     ],
 };
 
-export const existingObjectsNoAssignmentForDdahImport = {
+export const initialDdahDataNoAssignment = {
     ddahs: [],
     assignments: [],
 };
