@@ -3,8 +3,8 @@
 class PositionSerializer < ActiveModel::Serializer
     def initialize(*args, **kwargs)
         super(*args, **kwargs)
-        # We want to combine position's data with position_data_for_matching.
-        # `PositionService` does exactly this.
+        # Constructing a position can be complicated, so we leave it
+        # up to the service.
         @service = PositionService.new(position: object)
     end
 

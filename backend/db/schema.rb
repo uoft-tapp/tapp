@@ -15,18 +15,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "applicant_data_for_matchings", force: :cascade do |t|
-    t.bigint "applicant_id", null: false
-    t.string "program"
-    t.string "department"
-    t.text "previous_uoft_experience"
-    t.integer "yip"
-    t.string "annotation"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["applicant_id"], name: "index_applicant_data_for_matchings_on_applicant_id"
-  end
-
   create_table "applicants", force: :cascade do |t|
     t.string "utorid", null: false
     t.string "student_number"
@@ -45,6 +33,14 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.text "comments"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "program"
+    t.string "department"
+    t.integer "yip"
+    t.integer "status"
+    t.string "annotation"
+    t.text "previous_uoft_experience"
+    t.float "gpa"
+    t.text "custom_question_answers"
     t.bigint "posting_id"
     t.index ["applicant_id"], name: "index_applications_on_applicant_id"
     t.index ["posting_id"], name: "index_applications_on_posting_id"
@@ -149,16 +145,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.index ["url_token"], name: "index_offers_on_url_token"
   end
 
-  create_table "position_data_for_matchings", force: :cascade do |t|
-    t.bigint "position_id", null: false
-    t.integer "desired_num_assignments"
-    t.integer "current_enrollment"
-    t.integer "current_waitlisted"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["position_id"], name: "index_position_data_for_matchings_on_position_id"
-  end
-
   create_table "position_preferences", force: :cascade do |t|
     t.bigint "position_id", null: false
     t.bigint "application_id", null: false
@@ -182,6 +168,9 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.bigint "contract_template_id", null: false
     t.text "duties"
     t.text "qualifications"
+    t.integer "desired_num_assignments"
+    t.integer "current_enrollment"
+    t.integer "current_waitlisted"
     t.index ["contract_template_id"], name: "index_positions_on_contract_template_id"
     t.index ["session_id"], name: "index_positions_on_session_id"
   end
@@ -208,7 +197,7 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.bigint "session_id", null: false
     t.datetime "open_date"
     t.datetime "close_date"
-    t.integer "status", default: 0
+    t.integer "availability", default: 0
     t.text "intro_text"
     t.text "custom_questions"
     t.string "name", null: false
@@ -266,7 +255,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.index ["assignment_id"], name: "index_wage_chunks_on_assignment_id"
   end
 
-  add_foreign_key "applicant_data_for_matchings", "applicants"
   add_foreign_key "applications", "applicants"
   add_foreign_key "applications", "postings"
   add_foreign_key "applications", "sessions"
@@ -277,7 +265,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
   add_foreign_key "ddahs", "assignments"
   add_foreign_key "duties", "ddahs"
   add_foreign_key "offers", "assignments"
-  add_foreign_key "position_data_for_matchings", "positions"
   add_foreign_key "position_preferences", "applications"
   add_foreign_key "position_preferences", "positions"
   add_foreign_key "positions", "contract_templates"

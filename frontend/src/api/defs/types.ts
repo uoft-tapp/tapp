@@ -92,7 +92,7 @@ export interface MinimalPosting {
     open_date: string;
     close_date: string;
     intro_text?: string;
-    status?: string;
+    availability?: "auto" | "open" | "closed";
     posting_positions: MinimalPostingPosition[];
 }
 

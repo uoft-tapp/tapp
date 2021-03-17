@@ -6,7 +6,6 @@ RSpec.describe Applicant, type: :model do
     describe 'associations' do
         it { should have_many(:assignments) }
         it { should have_many(:applications) }
-        it { should have_one(:applicant_data_for_matching) }
     end
 
     describe 'validations' do

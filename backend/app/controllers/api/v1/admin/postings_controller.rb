@@ -62,7 +62,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
             :close_date,
             :intro_text,
             :custom_questions,
-            :status
+            :availability
         ).permit!
     end
 
@@ -74,7 +74,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
             :close_date,
             :intro_text,
             :custom_questions,
-            :status
+            :availability
         ).permit!
     end
 end

@@ -9,7 +9,6 @@ RSpec.describe Position, type: :model do
         it { should have_many(:assignments) }
         it { should have_many(:position_preferences) }
         it { should have_many(:applications).through(:position_preferences) }
-        it { should have_one(:position_data_for_matching) }
         it { should belong_to(:session) }
         it { should belong_to(:contract_template) }
     end

@@ -4,7 +4,7 @@ class CreatePostings < ActiveRecord::Migration[6.1]
             t.references :session, null: false, foreign_key: true
             t.datetime :open_date
             t.datetime :close_date
-            t.integer :status, default: 0
+            t.integer :availability, default: 0
             t.text :intro_text
             t.text :custom_questions
             t.string :name, null: false
