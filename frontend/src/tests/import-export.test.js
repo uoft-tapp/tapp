@@ -333,7 +333,7 @@ it("Import Positions from JSON/CSV/XLSX", () => {
     }
     // compute the difference with existing positions
     const positionsDiff = {
-        initialData: initialPositionData,
+        initialData: initialPositionData.positions,
         modifiedData: normalizedSpreadsheetPositions,
         expectedDiff: diffImport.positions(
             normalizedSpreadsheetPositions,
@@ -393,7 +393,7 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
     );
     // Compute the difference with existing assignments
     const assignmentsDiff = {
-        initialData: initialAssignmentData,
+        initialData: initialAssignmentData.assignments,
         modifiedData: normalizedJsonAssignments,
         expectedDiff: diffImport.assignments(
             normalizedJsonAssignments,
@@ -448,7 +448,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
     expect(normalizedJsonDdahs).toMatchSnapshot();
     // Compute the difference with existing ddahs
     const ddahsDiff = {
-        initialData: initialDdahData,
+        initialData: initialDdahData.ddahs,
         modifiedData: normalizedJsonDdahs,
         expectedDiff: diffImport.ddahs(normalizedJsonDdahs, initialDdahData),
     };
