@@ -29,17 +29,24 @@ import {
     normalizeDdahImports,
 } from "../libs/import-export";
 import {
-    initialInstructorData,
     initialApplicantData,
-    initialPositionData,
-    initialPositionDataNoInstructor,
-    initialAssignmentData,
-    initialAssignmentDataNoApplicant,
-    initialAssignmentDataNoPosition,
     initialApplicantDataForDdah,
+    initialAssignmentData,
     initialDdahData,
-    initialDdahDataNoAssignment,
-} from "./import-export-data/initial-data-when-import";
+    initialInstructorData,
+    initialPositionData,
+} from "./import-export-data/initial-data";
+import {
+    modifiedApplicantData,
+    modifiedAssignmentData,
+    modifiedAssignmentDataInvalidApplicant,
+    modifiedAssignmentDataInvalidPosition,
+    modifiedDdahData,
+    modifiedDdahDataInvalidAssignment,
+    modifiedInstructorData,
+    modifiedPositionData,
+    modifiedPositionDataInvalidInstructor,
+} from "./import-export-data/modified-data";
 
 // create a shim for native File object for export round trip test
 function File(fileBits, fileName, options) {
@@ -228,16 +235,6 @@ describe("Import/export library functionality", () => {
                 instructorSchema
             ).toThrow(Error)
         );
-        // compute the difference between existing instructors
-        const instructorsDiff = {
-            initialData: initialInstructorData,
-            modifiedData: normalizedSpreadsheetInstructors,
-            expectedDiff: diffImport.instructors(
-                normalizedSpreadsheetInstructors,
-                initialInstructorData
-            ),
-        };
-        expect(instructorsDiff).toMatchSnapshot();
     });
 
     it("Import Applicants from JSON/CSV/XLSX", () => {
@@ -271,16 +268,6 @@ describe("Import/export library functionality", () => {
                 applicantSchema
             ).toThrow(Error)
         );
-        // compute the difference between existing applicants
-        const applicantsDiff = {
-            initialData: initialApplicantData,
-            modifiedData: normalizedSpreadsheetApplicants,
-            expectedDiff: diffImport.applicants(
-                normalizedSpreadsheetApplicants,
-                initialApplicantData
-            ),
-        };
-        expect(applicantsDiff).toMatchSnapshot();
     });
 });
 
@@ -323,31 +310,6 @@ it("Import Positions from JSON/CSV/XLSX", () => {
             positionSchema
         ).toThrow(Error)
     );
-    // make sure the instructors are valid instructors
-    for (const item of normalizedSpreadsheetPositions) {
-        item.instructors = diffImport
-            .instructorsListFromField(item.instructors || [], {
-                instructors: initialPositionData.instructors,
-            })
-            .map((x) => x.utorid);
-    }
-    // compute the difference with existing positions
-    const positionsDiff = {
-        initialData: initialPositionData.positions,
-        modifiedData: normalizedSpreadsheetPositions,
-        expectedDiff: diffImport.positions(
-            normalizedSpreadsheetPositions,
-            initialPositionData
-        ),
-    };
-    expect(positionsDiff).toMatchSnapshot();
-    // import positions assigned to invalid instructors should throw error
-    expect(() =>
-        diffImport.positions(
-            normalizedSpreadsheetPositions,
-            initialPositionDataNoInstructor
-        )
-    ).toThrow(Error);
 });
 
 it("Import Assignments from JSON/CSV/XLSX", () => {
@@ -391,30 +353,6 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             assignmentSchema
         ).toThrow(Error)
     );
-    // Compute the difference with existing assignments
-    const assignmentsDiff = {
-        initialData: initialAssignmentData.assignments,
-        modifiedData: normalizedJsonAssignments,
-        expectedDiff: diffImport.assignments(
-            normalizedJsonAssignments,
-            initialAssignmentData
-        ),
-    };
-    expect(assignmentsDiff).toMatchSnapshot();
-    // import assignments with invalid applicant should throw error
-    expect(() =>
-        diffImport.assignments(
-            normalizedJsonAssignments,
-            initialAssignmentDataNoApplicant
-        )
-    ).toThrow(Error);
-    // import assignments with invalid position should throw error
-    expect(() =>
-        diffImport.assignments(
-            normalizedJsonAssignments,
-            initialAssignmentDataNoPosition
-        )
-    ).toThrow(Error);
 });
 
 it("Import Ddahs from JSON/CSV/XLSX", () => {
@@ -446,15 +384,74 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
         []
     );
     expect(normalizedJsonDdahs).toMatchSnapshot();
-    // Compute the difference with existing ddahs
-    const ddahsDiff = {
-        initialData: initialDdahData.ddahs,
-        modifiedData: normalizedJsonDdahs,
-        expectedDiff: diffImport.ddahs(normalizedJsonDdahs, initialDdahData),
-    };
-    expect(ddahsDiff).toMatchSnapshot();
-    // import ddah with invalid assignment should throw error
+});
+
+it("Compute Instructors difference", () => {
+    const instructorsDiff = diffImport.instructors(
+        modifiedInstructorData,
+        initialInstructorData
+    );
+    expect(instructorsDiff).toMatchSnapshot();
+});
+
+it("Compute Applicants difference", () => {
+    const applicantsDiff = diffImport.applicants(
+        modifiedApplicantData,
+        initialApplicantData
+    );
+    expect(applicantsDiff).toMatchSnapshot();
+});
+
+it("Compute Positions difference", () => {
+    // make sure the instructors are valid instructors
+    for (const item of modifiedPositionData) {
+        item.instructors = diffImport
+            .instructorsListFromField(item.instructors || [], {
+                instructors: initialPositionData.instructors,
+            })
+            .map((x) => x.utorid);
+    }
+    const positionsDiff = diffImport.positions(
+        modifiedPositionData,
+        initialPositionData
+    );
+    expect(positionsDiff).toMatchSnapshot();
+    // positions with invalid instructor should throw error
     expect(() =>
-        diffImport.ddahs(normalizedJsonDdahs, initialDdahDataNoAssignment)
+        diffImport.positions(
+            modifiedPositionDataInvalidInstructor,
+            initialPositionData
+        )
+    ).toThrow(Error);
+});
+
+it("Compute Assignments difference", () => {
+    const assignmentsDiff = diffImport.assignments(
+        modifiedAssignmentData,
+        initialAssignmentData
+    );
+    expect(assignmentsDiff).toMatchSnapshot();
+    // assignments with invalid applicant should throw error
+    expect(() =>
+        diffImport.assignments(
+            modifiedAssignmentDataInvalidApplicant,
+            initialAssignmentData
+        )
+    ).toThrow(Error);
+    // assignments with invalid position should throw error
+    expect(() =>
+        diffImport.assignments(
+            modifiedAssignmentDataInvalidPosition,
+            initialAssignmentData
+        )
+    ).toThrow(Error);
+});
+
+it("Compute Ddahs difference", () => {
+    const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialDdahData);
+    expect(ddahsDiff).toMatchSnapshot();
+    // ddahs with invalid assignment should throw error
+    expect(() =>
+        diffImport.ddahs(modifiedDdahDataInvalidAssignment, initialDdahData)
     ).toThrow(Error);
 });
