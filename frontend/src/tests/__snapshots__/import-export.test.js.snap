@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Compute Applicants difference 1`] = `
+exports[`Compute Applicants diff 1`] = `
 Array [
   Object {
     "changes": Object {
@@ -44,7 +44,7 @@ Array [
 ]
 `;
 
-exports[`Compute Assignments difference 1`] = `
+exports[`Compute Assignments diff 1`] = `
 Array [
   Object {
     "changes": Object {},
@@ -219,7 +219,7 @@ Array [
 ]
 `;
 
-exports[`Compute Ddahs difference 1`] = `
+exports[`Compute Ddahs diff 1`] = `
 Array [
   Object {
     "changes": Object {
@@ -299,7 +299,7 @@ Array [
 ]
 `;
 
-exports[`Compute Instructors difference 1`] = `
+exports[`Compute Instructors diff 1`] = `
 Array [
   Object {
     "changes": Object {
@@ -335,7 +335,7 @@ Array [
 ]
 `;
 
-exports[`Compute Positions difference 1`] = `
+exports[`Compute Positions diff 1`] = `
 Array [
   Object {
     "changes": Object {
