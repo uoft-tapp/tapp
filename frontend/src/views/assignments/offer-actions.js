@@ -19,7 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
-import { MultiWithdrawOfferConfirmationTable } from "./withdraw-confirmation";
+import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -163,7 +163,7 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <MultiWithdrawOfferConfirmationTable
+            <MultiWithdrawOfferConfirmation
                 data={selectedAssignments}
                 visible={ddahDeletionConfirmationVisible}
                 setVisible={setDdahDeletionConfirmationVisible}

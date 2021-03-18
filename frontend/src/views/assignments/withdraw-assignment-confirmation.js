@@ -12,7 +12,7 @@ function compareString(str1, str2) {
     return 0;
 }
 
-export function MultiWithdrawOfferConfirmationTable(props) {
+export function MultiWithdrawOfferConfirmation(props) {
     const dispatch = useDispatch();
     const { data, visible, setVisible, withdrawOffers } = props;
 
