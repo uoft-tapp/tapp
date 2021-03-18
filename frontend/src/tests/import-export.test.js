@@ -35,8 +35,6 @@ import {
     initialDdahData,
     initialInstructorData,
     initialPositionData,
-} from "./import-export-data/initial-data";
-import {
     modifiedApplicantData,
     modifiedAssignmentData,
     modifiedAssignmentDataInvalidApplicant,
@@ -46,7 +44,7 @@ import {
     modifiedInstructorData,
     modifiedPositionData,
     modifiedPositionDataInvalidInstructor,
-} from "./import-export-data/modified-data";
+} from "./import-export-data/diff-data";
 
 // create a shim for native File object for export round trip test
 function File(fileBits, fileName, options) {
@@ -386,7 +384,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
     expect(normalizedJsonDdahs).toMatchSnapshot();
 });
 
-it("Compute Instructors difference", () => {
+it("Compute Instructors diff", () => {
     const instructorsDiff = diffImport.instructors(
         modifiedInstructorData,
         initialInstructorData
@@ -394,7 +392,7 @@ it("Compute Instructors difference", () => {
     expect(instructorsDiff).toMatchSnapshot();
 });
 
-it("Compute Applicants difference", () => {
+it("Compute Applicants diff", () => {
     const applicantsDiff = diffImport.applicants(
         modifiedApplicantData,
         initialApplicantData
@@ -402,7 +400,7 @@ it("Compute Applicants difference", () => {
     expect(applicantsDiff).toMatchSnapshot();
 });
 
-it("Compute Positions difference", () => {
+it("Compute Positions diff", () => {
     // make sure the instructors are valid instructors
     for (const item of modifiedPositionData) {
         item.instructors = diffImport
@@ -425,7 +423,7 @@ it("Compute Positions difference", () => {
     ).toThrow(Error);
 });
 
-it("Compute Assignments difference", () => {
+it("Compute Assignments diff", () => {
     const assignmentsDiff = diffImport.assignments(
         modifiedAssignmentData,
         initialAssignmentData
@@ -447,7 +445,7 @@ it("Compute Assignments difference", () => {
     ).toThrow(Error);
 });
 
-it("Compute Ddahs difference", () => {
+it("Compute Ddahs diff", () => {
     const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialDdahData);
     expect(ddahsDiff).toMatchSnapshot();
     // ddahs with invalid assignment should throw error
