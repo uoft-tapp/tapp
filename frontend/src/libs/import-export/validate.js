@@ -8,7 +8,7 @@
  * @param {*} schema
  */
 export function validate(data, schema) {
-    const { requiredKeys } = schema;
+    const { requiredKeys, keys } = schema;
     for (const item of data) {
         for (const key of requiredKeys) {
             if (item[key] == null) {
@@ -17,6 +17,11 @@ export function validate(data, schema) {
                         item
                     )}" missing required property "${key}"`
                 );
+            }
+        }
+        for (const key of keys) {
+            if (item[key] == undefined) {
+                item[key] = null;
             }
         }
     }

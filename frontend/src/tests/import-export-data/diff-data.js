@@ -49,6 +49,7 @@ export const initialApplicantData = {
             utorid: "johnd",
             email: "goofy-duck@donald.com",
             student_number: "OLD10000000",
+            phone: null,
         },
         {
             first_name: "哈利",
@@ -71,11 +72,11 @@ export const modifiedApplicantData = [
         utorid: "johnd",
     },
     {
-        email: undefined,
+        email: null,
         first_name: "Ron",
         last_name: "Weasley",
-        phone: undefined,
-        student_number: undefined,
+        phone: null,
+        student_number: null,
         utorid: "weasleyr",
     },
     {
@@ -114,6 +115,9 @@ export const initialPositionData = {
             },
             duties: "",
             qualifications: "",
+            current_enrollment: null,
+            current_waitlisted: null,
+            desired_num_assignments: null,
         },
         {
             position_code: "CSC494",
@@ -138,6 +142,9 @@ export const initialPositionData = {
             },
             duties: "",
             qualifications: "",
+            current_enrollment: null,
+            current_waitlisted: null,
+            desired_num_assignments: null,
         },
     ],
     instructors: [
@@ -162,9 +169,9 @@ export const initialPositionData = {
 export const modifiedPositionData = [
     {
         contract_template: "Regular",
-        current_enrollment: undefined,
-        current_waitlisted: undefined,
-        desired_num_assignments: undefined,
+        current_enrollment: null,
+        current_waitlisted: null,
+        desired_num_assignments: null,
         duties: "",
         end_date: "2020-05-01T00:00:00.000Z",
         hours_per_assignment: 20,
@@ -176,9 +183,9 @@ export const modifiedPositionData = [
     },
     {
         contract_template: "Regular",
-        current_enrollment: undefined,
-        current_waitlisted: undefined,
-        desired_num_assignments: undefined,
+        current_enrollment: null,
+        current_waitlisted: null,
+        desired_num_assignments: null,
         duties: "",
         end_date: "2020-12-31T00:00:00.000Z",
         hours_per_assignment: 70,
@@ -190,9 +197,9 @@ export const modifiedPositionData = [
     },
     {
         contract_template: "Regular",
-        current_enrollment: undefined,
-        current_waitlisted: undefined,
-        desired_num_assignments: undefined,
+        current_enrollment: null,
+        current_waitlisted: null,
+        desired_num_assignments: null,
         duties: "Tutorials",
         end_date: "2020-12-31T00:00:00.000Z",
         hours_per_assignment: 75,
@@ -207,9 +214,9 @@ export const modifiedPositionData = [
 export const modifiedPositionDataInvalidInstructor = [
     {
         contract_template: "Regular",
-        current_enrollment: undefined,
-        current_waitlisted: undefined,
-        desired_num_assignments: undefined,
+        current_enrollment: null,
+        current_waitlisted: null,
+        desired_num_assignments: null,
         duties: "",
         end_date: "2020-12-31T00:00:00.000Z",
         hours_per_assignment: 70,
