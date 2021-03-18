@@ -23,7 +23,7 @@ function compareString(str1: string, str2: string) {
     return 0;
 }
 
-export function MultiDeleteDdahConfirmationTable(props: {
+export function MultiDeleteDdahConfirmation(props: {
     selectedDdahs: any[];
     visible: boolean;
     setVisible: (visible: boolean) => void;

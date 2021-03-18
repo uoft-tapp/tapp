@@ -25,7 +25,7 @@ import {
     deleteDdah,
 } from "../../api/actions/ddahs";
 import { Ddah } from "../../api/defs/types";
-import { MultiDeleteDdahConfirmationTable } from "./delete-confirmation";
+import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
 
 export function AdminDdahsView(): React.ReactNode {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -130,7 +130,7 @@ export function AdminDdahsView(): React.ReactNode {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
-            <MultiDeleteDdahConfirmationTable
+            <MultiDeleteDdahConfirmation
                 selectedDdahs={selectedDdahs}
                 visible={ddahDeletionConfirmationVisible}
                 setVisible={setDdahDeletionConfirmationVisible}
