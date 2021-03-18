@@ -45,10 +45,8 @@ fi
 if [[ ! "$STAGED_RUBY_FILES" = "" ]]; then
     printf "\nValidating Ruby:\n"
 
-    RUBOCOP="$(git rev-parse --show-toplevel)/backend/resources/rubocop.rb"
-    # RUBOCOP="$(git rev-parse --show-toplevel)"
-    EXCLUDED_FILE="$(git rev-parse --show-toplevel)/backend/config/initializers/rake.rb"
-    # docker-compose run backend rubocop --force-exclusion $EXCLUDED_FILE
+    # RUBOCOP="$(git rev-parse --show-toplevel)/backend/resources/rubocop.rb"
+    # EXCLUDED_FILE="$(git rev-parse --show-toplevel)/backend/config/initializers/rake.rb"
     docker-compose run backend rubocop
     # ruby $RUBOCOP --staged -a --fail-level convention --force-exclusion $EXCLUDED_FILE
     RUBOCOP_EXIT=$?
