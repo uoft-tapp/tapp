@@ -71,6 +71,7 @@ export function ConnectedAddDdahDialog(props: {
     const assignmentsWithoutDdah = useSelector<any, Assignment[]>(
         assignmentsSelector
     ).filter((x) => {
+        // Filter assignments without ddah and status is not withdrawn or rejected
         return (
             !assignmentsWithDdahHash[x.id] &&
             x.active_offer_status !== "withdrawn" &&
