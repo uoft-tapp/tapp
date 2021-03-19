@@ -1668,6 +1668,22 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-notification-system-redux@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@types/react-notification-system-redux/-/react-notification-system-redux-1.1.6.tgz#b78626e15851a5aac0594c8daba73b80e5635428"
+  integrity sha512-1Bi7ddqw0Taud2qYAvgN8STBat0/YxXEaRK+t9GlZBywKaO9ZaQ6uBHZPynVFYkmqQtURQPPYt7cNgdVzGlrNA==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-notification-system" "*"
+    redux "^3.6.0"
+
+"@types/react-notification-system@*":
+  version "0.2.40"
+  resolved "https://registry.yarnpkg.com/@types/react-notification-system/-/react-notification-system-0.2.40.tgz#bd0075f58a92074d689b42eac3c0fbe9b1dce723"
+  integrity sha512-clq+SpMSqbKsciuxsr0x7wlS0FCO4QhyZvfiA5j6LfgLRLFLje8zhSr3eYaaPRXI5ncTktJXi0IOISELzeKy8w==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^7.1.14":
   version "7.1.14"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.14.tgz#694609eb906ffc2da4b01f0a1e4f27c1937ac33a"
@@ -9678,7 +9694,7 @@ redux-thunk@^2.3.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
-redux@^3.x.x:
+redux@^3.6.0, redux@^3.x.x:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
   integrity sha512-pNqnf9q1hI5HHZRBkj3bAngGZW/JMCmexDlOxw4XagXY2o1327nHH54LoTjiPJ0gizoqPDRqWyX/00g0hD6w+A==
