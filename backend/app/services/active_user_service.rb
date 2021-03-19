@@ -19,7 +19,7 @@ class ActiveUserService
             utorid, _password = credentials.split(':')
             @user = User.find_by(utorid: utorid)
 
-            return User.new(utorid: utorid, roles: grant_roles)
+            return User.new(utorid: utorid, roles: granted_roles)
         end
 
         if (Rails.application.config.respond_to? :active_user_override) &&
@@ -27,7 +27,7 @@ class ActiveUserService
             @user = User.find_by(id: Rails.application.config.active_user_id)
             if @user
                 return User.new(
-                  utorid: @user.utorid, roles: grant_roles
+                  utorid: @user.utorid, roles: granted_roles
               )
             else
                 # If we're here, the database doesn't have the specified active user,
@@ -46,7 +46,7 @@ class ActiveUserService
         # rubocop:enable Style/RaiseArgs
     end
 
-    def self.grant_roles
+    def self.granted_roles
         utorid = @user.utorid
         # Every user has the TA role
         roles = @user ? @user.roles + %w[ta] : %w[ta]

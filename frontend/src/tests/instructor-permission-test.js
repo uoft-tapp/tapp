@@ -77,14 +77,12 @@ export function instructorsPermissionTests(api) {
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
 
-        resp.payload.forEach((user) => {
-            if (user.utorid === instructorOnlyUserData.utorid) {
-                expect(user.roles).toEqual(["instructor"]);
-                instructorOnlyUser = user;
-            }
-        });
+        instructorOnlyUser = resp.payload.find(
+            (user) => user.utorid === instructorOnlyUserData.utorid
+        );
 
         expect(instructorOnlyUser).toBeDefined();
+        expect(instructorOnlyUser.roles).toEqual(["instructor"]);
     }, 30000);
 
     it("assigning to be instructor of a course grants instructor role", async () => {
@@ -102,35 +100,29 @@ export function instructorsPermissionTests(api) {
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
 
-        let emptyRoleUserExists = false;
-        resp.payload.forEach((user) => {
-            if (user.utorid === emptyRoleUserData.utorid) {
-                emptyRoleUserExists = true;
-            }
-        });
+        const emptyRoleUserExists = resp.payload.some(
+            (user) => user.utorid === emptyRoleUserData.utorid
+        );
 
         expect(emptyRoleUserExists).toBeTruthy();
 
         const instructorData = {
             utorid: emptyRoleUserUtorid,
-            first_name: "course_assign_grant_instructor_test_first_name",
-            last_name: "course_assign_grant_instructor_test_last_name",
-            email: "course_assign_grant_instructor_test_email",
+            first_name: "doe",
+            last_name: "jane",
+            email: "janedoe@mail.com",
         };
         resp = await apiPOST(`/admin/instructors`, instructorData);
         expect(resp).toHaveStatus("success");
 
         resp = await apiGET(`/admin/instructors`);
         expect(resp).toHaveStatus("success");
-        let instructorId;
-        resp.payload.forEach((instructor) => {
-            if (instructor.utorid === emptyRoleUserUtorid) {
-                instructorId = instructor.id;
-            }
-        });
+        const instructorId = resp.payload.find(
+            (instructor) => instructor.utorid === emptyRoleUserUtorid
+        );
         expect(instructorId).toBeDefined();
 
-        const defaultTestPosition = {
+        const testPosition = {
             position_code: "course_assign_grant_instructor_test_position_code",
             position_title:
                 "course assign grant instructor test position title",
@@ -143,7 +135,7 @@ export function instructorsPermissionTests(api) {
         // upon successfully making the following position upsert, the no-role user should be granted instructor role
         resp = await apiPOST(
             `/admin/sessions/${session.id}/positions`,
-            defaultTestPosition
+            testPosition
         );
         expect(resp).toHaveStatus("success");
 
@@ -219,8 +211,8 @@ export function instructorsPermissionTests(api) {
         defaultUserWithUpdatedInformation.email =
             "instructor_permission_instructor_update_test@test.com";
 
-        // instructor can not modify other instructors
-        // in this example, the instructor only user cant update default user's information
+        // instructor does not have permission to update other instructors' information
+        // in this example, the instructor-only-user should not have permission to update the default user's information
         await switchToInstructorOnlyUser();
         let respInvalidRouteWithSession = await apiPOST(
             `/instructor/instructors`,
@@ -231,7 +223,7 @@ export function instructorsPermissionTests(api) {
 
         await restoreDefaultUser();
 
-        // instructors can modify themselves
+        // instructors have permission to modify their own information
         let respModDefaultUser = await apiPOST(
             `/instructor/instructors`,
             defaultUserWithUpdatedInformation
@@ -255,6 +247,7 @@ export function instructorsPermissionTests(api) {
     it("can't update session", async () => {
         await switchToInstructorOnlyUser();
 
+        // instructors does not have permission to create a new session
         const newSession = {
             start_date: "2020-04-10T01:00:00.000Z",
             end_date: "2020-11-31T00:01:20.000Z",
@@ -265,6 +258,20 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("error");
 
         resp = await apiPOST("/admin/sessions", newSession);
+        expect(resp).toHaveStatus("error");
+
+        // instructors does not have permission to update an existing session
+        const updatedSession = {
+            id: session.id,
+            start_date: "2000-04-10T01:00:00.000Z",
+            end_date: "2000-11-31T00:01:20.000Z",
+            name: "updated session name (should not be allowed)",
+        };
+
+        resp = await apiPOST("/instructor/sessions", updatedSession);
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiPOST("/admin/sessions", updatedSession);
         expect(resp).toHaveStatus("error");
 
         await restoreDefaultUser();
@@ -281,6 +288,7 @@ export function instructorsPermissionTests(api) {
     });
 
     it("can't update position", async () => {
+        // instructors are not allowed to create new positions
         await switchToInstructorOnlyUser();
 
         const newPosition = {
@@ -311,6 +319,57 @@ export function instructorsPermissionTests(api) {
         resp = await apiPOST(`/instructor/positions`, newPosition);
         expect(resp).toHaveStatus("error");
 
+        // instructors are not allowed to update existing positions
+        // first actually create the new position with an admin user
+        await restoreDefaultUser();
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPosition
+        );
+        expect(resp).toHaveStatus("success");
+
+        // fetch the newly created position's id
+        resp = await apiGET(`/admin/sessions/${session.id}/positions`);
+        expect(resp).toHaveStatus("success");
+        const newPositionObject = resp.payload.find(
+            (position) => position.position_code === newPosition.position_code
+        );
+        expect(newPositionObject).toBeDefined();
+        const newPositionId = newPositionObject.id;
+
+        // the instructor should not be able to update this position
+        await switchToInstructorOnlyUser();
+
+        const updatedPosition = {
+            id: newPositionId,
+            position_code:
+                "instructor_permission_cant_update_position_test_code",
+            position_title:
+                "instructor permission cant update position changed title",
+            hours_per_assignment: 30,
+            contract_template_id: existingContractTemplateId,
+            duties: "Tutorials",
+        };
+
+        resp = await apiPOST(
+            `/instructor/sessions/${session.id}/positions`,
+            updatedPosition
+        );
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            updatedPosition
+        );
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiPOST(`/admin/positions`, updatedPosition);
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiPOST(`/instructor/positions`, updatedPosition);
+        expect(resp).toHaveStatus("error");
+
         await restoreDefaultUser();
     });
 
@@ -336,6 +395,7 @@ export function instructorsPermissionTests(api) {
             template_name: "Test",
         };
 
+        // a user with only the instructor role should not be allowed to modify contract_templates
         let resp = await apiPOST(
             `/instructor/sessions/${session.id}/contract_templates`,
             newTemplate
