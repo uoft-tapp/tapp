@@ -22,8 +22,10 @@ export function prepareApplicantData(applicants, dataFormat) {
                     prepareSpreadsheet.applicant(applicants)
                 ),
             toJson: () => ({
-                applicants: applicants.map((applicant) =>
-                    jsonUndefinedToNull(prepareMinimal.applicant(applicant))
+                applicants: jsonUndefinedToNull(
+                    applicants.map((applicant) =>
+                        prepareMinimal.applicant(applicant)
+                    )
                 ),
             }),
         },
@@ -53,8 +55,8 @@ export function prepareAssignmentDataFactory(session, assignmentFilter = null) {
                         prepareSpreadsheet.assignment(assignments)
                     ),
                 toJson: () => ({
-                    assignments: assignments.map((assignment) =>
-                        jsonUndefinedToNull(
+                    assignments: jsonUndefinedToNull(
+                        assignments.map((assignment) =>
                             prepareMinimal.assignment(assignment, session)
                         )
                     ),
@@ -84,8 +86,8 @@ export function prepareDdahDataFactory(ddahFilter) {
                 toSpreadsheet: () =>
                     spreadsheetUndefinedToNull(prepareSpreadsheet.ddah(ddahs)),
                 toJson: () => ({
-                    ddahs: ddahs.map((ddah) =>
-                        jsonUndefinedToNull(prepareMinimal.ddah(ddah))
+                    ddahs: jsonUndefinedToNull(
+                        ddahs.map((ddah) => prepareMinimal.ddah(ddah))
                     ),
                 }),
             },
@@ -111,8 +113,10 @@ export function prepareInstructorData(instructors, dataFormat) {
                     prepareSpreadsheet.instructor(instructors)
                 ),
             toJson: () => ({
-                instructors: instructors.map((instructor) =>
-                    jsonUndefinedToNull(prepareMinimal.instructor(instructor))
+                instructors: jsonUndefinedToNull(
+                    instructors.map((instructor) =>
+                        prepareMinimal.instructor(instructor)
+                    )
                 ),
             }),
         },
@@ -137,8 +141,10 @@ export function preparePositionData(positions, dataFormat) {
                     prepareSpreadsheet.position(positions)
                 ),
             toJson: () => ({
-                positions: positions.map((position) =>
-                    jsonUndefinedToNull(prepareMinimal.position(position))
+                positions: jsonUndefinedToNull(
+                    positions.map((position) =>
+                        prepareMinimal.position(position)
+                    )
                 ),
             }),
         },

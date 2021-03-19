@@ -5,11 +5,14 @@
  * @param {Object} item
  * @returns{Object}
  */
-export function jsonUndefinedToNull(item) {
-    for (const key of Object.keys(item)) {
-        item[key] = item[key] ?? null;
-    }
-    return item;
+export function jsonUndefinedToNull(items) {
+    const newItems = items.map(function (item) {
+        for (const key of Object.keys(item)) {
+            item[key] = item[key] ?? null;
+        }
+        return item;
+    });
+    return newItems;
 }
 
 /**
@@ -22,10 +25,7 @@ export function jsonUndefinedToNull(item) {
 export function spreadsheetUndefinedToNull(items) {
     const newItems = items.map(function (item) {
         let newItem = item.map(function (val) {
-            if (val == undefined) {
-                return null;
-            }
-            return val;
+            return val ?? null;
         });
         return newItem;
     });

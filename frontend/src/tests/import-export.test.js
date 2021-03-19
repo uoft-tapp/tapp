@@ -131,8 +131,8 @@ describe("Import/export library functionality", () => {
         expect(instructorSpreadsheet).toMatchSnapshot();
 
         // prepare instructor json
-        const instructorJson = instructorData.map(
-            jsonUndefinedToNull(prepareMinimal.instructor)
+        const instructorJson = jsonUndefinedToNull(
+            instructorData.map(prepareMinimal.instructor)
         );
         expect(instructorJson).toMatchSnapshot();
 
@@ -166,8 +166,8 @@ describe("Import/export library functionality", () => {
         expect(applicantSpreadsheet).toMatchSnapshot();
 
         // prepare applicant json
-        const applicantJson = applicantData.map(
-            jsonUndefinedToNull(prepareMinimal.applicant)
+        const applicantJson = jsonUndefinedToNull(
+            applicantData.map(prepareMinimal.applicant)
         );
         expect(applicantJson).toMatchSnapshot();
     });
@@ -180,8 +180,8 @@ describe("Import/export library functionality", () => {
         expect(positionSpreadsheet).toMatchSnapshot();
 
         // prepare position json
-        const positionJson = positionData.map(
-            jsonUndefinedToNull(prepareMinimal.position)
+        const positionJson = jsonUndefinedToNull(
+            positionData.map(prepareMinimal.position)
         );
         expect(positionJson).toMatchSnapshot();
     });
@@ -194,15 +194,15 @@ describe("Import/export library functionality", () => {
         expect(assignmentSpreadsheet).toMatchSnapshot();
 
         // prepare assignment json
-        const assignmentJson = assignmentData.map(function (assignment) {
-            return jsonUndefinedToNull(
-                prepareMinimal.assignment(assignment, {
+        const assignmentJson = jsonUndefinedToNull(
+            assignmentData.map(function (assignment) {
+                return prepareMinimal.assignment(assignment, {
                     rate: 50,
                     rate1: 50,
                     rate2: 50,
-                })
-            );
-        });
+                });
+            })
+        );
         expect(assignmentJson).toMatchSnapshot();
     });
 
@@ -214,7 +214,7 @@ describe("Import/export library functionality", () => {
         expect(ddahSpreadsheet).toMatchSnapshot();
 
         // prepare ddah json
-        const ddahJson = ddahData.map(jsonUndefinedToNull(prepareMinimal.ddah));
+        const ddahJson = jsonUndefinedToNull(ddahData.map(prepareMinimal.ddah));
         expect(ddahJson).toMatchSnapshot();
     });
 
