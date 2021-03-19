@@ -29,12 +29,7 @@ import {
     normalizeDdahImports,
 } from "../libs/import-export";
 import {
-    initialApplicantData,
-    initialApplicantDataForDdah,
-    initialAssignmentData,
-    initialDdahData,
-    initialInstructorData,
-    initialPositionData,
+    initialObjects,
     modifiedApplicantData,
     modifiedAssignmentData,
     modifiedAssignmentDataInvalidApplicant,
@@ -360,7 +355,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("ddahs_correct.xlsx"),
         },
-        initialApplicantDataForDdah
+        initialObjects.applicants
     );
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
     // import ddahs with invalid applicant should throw error
@@ -370,7 +365,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("ddahs_invalid_applicant.xlsx"),
             },
-            initialApplicantDataForDdah
+            initialObjects.applicants
         )
     ).toThrow(Error);
     // import correct ddahs from JSON
@@ -387,17 +382,35 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
 it("Compute Instructors diff", () => {
     const instructorsDiff = diffImport.instructors(
         modifiedInstructorData,
-        initialInstructorData
+        initialObjects
     );
-    expect(instructorsDiff).toMatchSnapshot();
+    // the modified(email), duplicate, and new instructors in modifiedInstructorData should be computed as modified, duplicate, and new
+    expect(instructorsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: expect.objectContaining({ email: expect.any(String) }),
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
 });
 
 it("Compute Applicants diff", () => {
     const applicantsDiff = diffImport.applicants(
         modifiedApplicantData,
-        initialApplicantData
+        initialObjects
     );
-    expect(applicantsDiff).toMatchSnapshot();
+    // the modified(student_number), duplicate, and new applicants in modifiedApplicantData should be computed as modified, duplicate, and new
+    expect(applicantsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: expect.objectContaining({
+                student_number: expect.any(String),
+            }),
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
 });
 
 it("Compute Positions diff", () => {
@@ -405,20 +418,33 @@ it("Compute Positions diff", () => {
     for (const item of modifiedPositionData) {
         item.instructors = diffImport
             .instructorsListFromField(item.instructors || [], {
-                instructors: initialPositionData.instructors,
+                instructors: initialObjects.instructors,
             })
             .map((x) => x.utorid);
     }
     const positionsDiff = diffImport.positions(
         modifiedPositionData,
-        initialPositionData
+        initialObjects
     );
-    expect(positionsDiff).toMatchSnapshot();
+    // the modified(start_date, end_date, instructors and hours_per_assignment), duplicate, and new positions in modifiedPositionData should be computed as modified, duplicate, and new
+    expect(positionsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: expect.objectContaining({
+                start_date: expect.any(String),
+                end_date: expect.any(String),
+                instructors: expect.any(String),
+                hours_per_assignment: expect.any(String),
+            }),
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
     // positions with invalid instructor should throw error
     expect(() =>
         diffImport.positions(
             modifiedPositionDataInvalidInstructor,
-            initialPositionData
+            initialObjects
         )
     ).toThrow(Error);
 });
@@ -426,30 +452,50 @@ it("Compute Positions diff", () => {
 it("Compute Assignments diff", () => {
     const assignmentsDiff = diffImport.assignments(
         modifiedAssignmentData,
-        initialAssignmentData
+        initialObjects
     );
-    expect(assignmentsDiff).toMatchSnapshot();
+    // the modified(wage_chunks), duplicate, and new assignments in modifiedAssignmentData should be computed as modified, duplicate, and new
+    expect(assignmentsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: expect.objectContaining({
+                wage_chunks: expect.any(String),
+            }),
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
     // assignments with invalid applicant should throw error
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidApplicant,
-            initialAssignmentData
+            initialObjects
         )
     ).toThrow(Error);
     // assignments with invalid position should throw error
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidPosition,
-            initialAssignmentData
+            initialObjects
         )
     ).toThrow(Error);
 });
 
 it("Compute Ddahs diff", () => {
-    const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialDdahData);
-    expect(ddahsDiff).toMatchSnapshot();
+    const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialObjects);
+    // the modified(duties), duplicate, and new ddahs in modifiedDdahData should be computed as modified, duplicate, and new
+    expect(ddahsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: expect.objectContaining({
+                duties: expect.any(String),
+            }),
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
     // ddahs with invalid assignment should throw error
     expect(() =>
-        diffImport.ddahs(modifiedDdahDataInvalidAssignment, initialDdahData)
+        diffImport.ddahs(modifiedDdahDataInvalidAssignment, initialObjects)
     ).toThrow(Error);
 });
