@@ -73,11 +73,10 @@ export function ConnectedAddDdahDialog(props: {
     ).filter((x) => {
         return (
             !assignmentsWithDdahHash[x.id] &&
-            (x.active_offer_status !== "withdrawn" &&
-                x.active_offer_status !== "rejected")
+            x.active_offer_status !== "withdrawn" &&
+            x.active_offer_status !== "rejected"
         );
     });
-
 
     function _upsertDdah(ddah: PartialDdah) {
         if (ddah.assignment == null) {
