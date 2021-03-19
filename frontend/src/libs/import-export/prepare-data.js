@@ -1,6 +1,10 @@
 import { dataToFile } from "./data-to-file";
 import { prepareSpreadsheet } from "./prepare-spreadsheet";
 import { prepareMinimal } from "./prepare-json";
+import {
+    spreadsheetUndefinedToNull,
+    jsonUndefinedToNull,
+} from "./undefinedToNull";
 
 /**
  * Make a function that converts a list of applicants into a `File` object.
@@ -13,10 +17,13 @@ import { prepareMinimal } from "./prepare-json";
 export function prepareApplicantData(applicants, dataFormat) {
     return dataToFile(
         {
-            toSpreadsheet: () => prepareSpreadsheet.applicant(applicants),
+            toSpreadsheet: () =>
+                spreadsheetUndefinedToNull(
+                    prepareSpreadsheet.applicant(applicants)
+                ),
             toJson: () => ({
                 applicants: applicants.map((applicant) =>
-                    prepareMinimal.applicant(applicant)
+                    jsonUndefinedToNull(prepareMinimal.applicant(applicant))
                 ),
             }),
         },
@@ -41,10 +48,15 @@ export function prepareAssignmentDataFactory(session, assignmentFilter = null) {
         }
         return dataToFile(
             {
-                toSpreadsheet: () => prepareSpreadsheet.assignment(assignments),
+                toSpreadsheet: () =>
+                    spreadsheetUndefinedToNull(
+                        prepareSpreadsheet.assignment(assignments)
+                    ),
                 toJson: () => ({
                     assignments: assignments.map((assignment) =>
-                        prepareMinimal.assignment(assignment, session)
+                        jsonUndefinedToNull(
+                            prepareMinimal.assignment(assignment, session)
+                        )
                     ),
                 }),
             },
@@ -69,9 +81,12 @@ export function prepareDdahDataFactory(ddahFilter) {
         }
         return dataToFile(
             {
-                toSpreadsheet: () => prepareSpreadsheet.ddah(ddahs),
+                toSpreadsheet: () =>
+                    spreadsheetUndefinedToNull(prepareSpreadsheet.ddah(ddahs)),
                 toJson: () => ({
-                    ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
+                    ddahs: ddahs.map((ddah) =>
+                        jsonUndefinedToNull(prepareMinimal.ddah(ddah))
+                    ),
                 }),
             },
             dataFormat,
@@ -91,10 +106,13 @@ export function prepareDdahDataFactory(ddahFilter) {
 export function prepareInstructorData(instructors, dataFormat) {
     return dataToFile(
         {
-            toSpreadsheet: () => prepareSpreadsheet.instructor(instructors),
+            toSpreadsheet: () =>
+                spreadsheetUndefinedToNull(
+                    prepareSpreadsheet.instructor(instructors)
+                ),
             toJson: () => ({
                 instructors: instructors.map((instructor) =>
-                    prepareMinimal.instructor(instructor)
+                    jsonUndefinedToNull(prepareMinimal.instructor(instructor))
                 ),
             }),
         },
@@ -114,10 +132,13 @@ export function prepareInstructorData(instructors, dataFormat) {
 export function preparePositionData(positions, dataFormat) {
     return dataToFile(
         {
-            toSpreadsheet: () => prepareSpreadsheet.position(positions),
+            toSpreadsheet: () =>
+                spreadsheetUndefinedToNull(
+                    prepareSpreadsheet.position(positions)
+                ),
             toJson: () => ({
                 positions: positions.map((position) =>
-                    prepareMinimal.position(position)
+                    jsonUndefinedToNull(prepareMinimal.position(position))
                 ),
             }),
         },

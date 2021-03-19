@@ -118,6 +118,10 @@ export const initialPositionData = {
             current_enrollment: null,
             current_waitlisted: null,
             desired_num_assignments: null,
+            ad_close_date: null,
+            ad_hours_per_assignment: null,
+            ad_num_assignments: null,
+            ad_open_date: null,
         },
         {
             position_code: "CSC494",
@@ -145,6 +149,10 @@ export const initialPositionData = {
             current_enrollment: null,
             current_waitlisted: null,
             desired_num_assignments: null,
+            ad_close_date: null,
+            ad_hours_per_assignment: null,
+            ad_num_assignments: null,
+            ad_open_date: null,
         },
     ],
     instructors: [
@@ -180,6 +188,10 @@ export const modifiedPositionData = [
         position_title: "Capstone Project",
         qualifications: "",
         start_date: "2020-01-01T00:00:00.000Z",
+        ad_close_date: null,
+        ad_hours_per_assignment: null,
+        ad_num_assignments: null,
+        ad_open_date: null,
     },
     {
         contract_template: "Regular",
@@ -194,6 +206,10 @@ export const modifiedPositionData = [
         position_title: "代数",
         qualifications: "",
         start_date: "2020-02-10T00:00:00.000Z",
+        ad_close_date: null,
+        ad_hours_per_assignment: null,
+        ad_num_assignments: null,
+        ad_open_date: null,
     },
     {
         contract_template: "Regular",
@@ -208,6 +224,10 @@ export const modifiedPositionData = [
         position_title: "Computer Fun",
         qualifications: "",
         start_date: "2020-02-10T00:00:00.000Z",
+        ad_close_date: null,
+        ad_hours_per_assignment: null,
+        ad_num_assignments: null,
+        ad_open_date: null,
     },
 ];
 

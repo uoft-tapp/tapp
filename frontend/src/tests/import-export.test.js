@@ -45,6 +45,10 @@ import {
     modifiedPositionData,
     modifiedPositionDataInvalidInstructor,
 } from "./import-export-data/diff-data";
+import {
+    spreadsheetUndefinedToNull,
+    jsonUndefinedToNull,
+} from "../libs/import-export/undefinedToNull";
 
 // create a shim for native File object for export round trip test
 function File(fileBits, fileName, options) {
@@ -121,13 +125,15 @@ describe("Import/export library functionality", () => {
 
     it("Export Instructors to JSON/CSV/XLSX", () => {
         // prepare instructor spreadsheet
-        const instructorSpreadsheet = prepareSpreadsheet.instructor(
-            instructorData
+        const instructorSpreadsheet = spreadsheetUndefinedToNull(
+            prepareSpreadsheet.instructor(instructorData)
         );
         expect(instructorSpreadsheet).toMatchSnapshot();
 
         // prepare instructor json
-        const instructorJson = instructorData.map(prepareMinimal.instructor);
+        const instructorJson = instructorData.map(
+            jsonUndefinedToNull(prepareMinimal.instructor)
+        );
         expect(instructorJson).toMatchSnapshot();
 
         // ROUND TRIP TEST for prepareData function
@@ -145,7 +151,7 @@ describe("Import/export library functionality", () => {
         // transform to array of objects
         dataCSV = dataCSV.map(function (row) {
             let instructor = {};
-            keys.forEach((key, i) => (instructor[key] = row[i]));
+            keys.forEach((key, i) => (instructor[key] = row[i] ?? null));
             return instructor;
         });
         // check with original instructor data
@@ -154,51 +160,61 @@ describe("Import/export library functionality", () => {
 
     it("Export Applicants to JSON/CSV/XLSX", () => {
         // prepare applicant spreadsheet
-        const applicantSpreadsheet = prepareSpreadsheet.applicant(
-            applicantData
+        const applicantSpreadsheet = spreadsheetUndefinedToNull(
+            prepareSpreadsheet.applicant(applicantData)
         );
         expect(applicantSpreadsheet).toMatchSnapshot();
 
         // prepare applicant json
-        const applicantJson = applicantData.map(prepareMinimal.applicant);
+        const applicantJson = applicantData.map(
+            jsonUndefinedToNull(prepareMinimal.applicant)
+        );
         expect(applicantJson).toMatchSnapshot();
     });
 
     it("Export Positions to JSON/CSV/XLSX", () => {
         // prepare position spreadsheet
-        const positionSpreadsheet = prepareSpreadsheet.position(positionData);
+        const positionSpreadsheet = spreadsheetUndefinedToNull(
+            prepareSpreadsheet.position(positionData)
+        );
         expect(positionSpreadsheet).toMatchSnapshot();
 
         // prepare position json
-        const positionJson = positionData.map(prepareMinimal.position);
+        const positionJson = positionData.map(
+            jsonUndefinedToNull(prepareMinimal.position)
+        );
         expect(positionJson).toMatchSnapshot();
     });
 
     it("Export Assignments to JSON/CSV/XLSX", () => {
         // prepare assignment spreadsheet
-        const assignmentSpreadsheet = prepareSpreadsheet.assignment(
-            assignmentData
+        const assignmentSpreadsheet = spreadsheetUndefinedToNull(
+            prepareSpreadsheet.assignment(assignmentData)
         );
         expect(assignmentSpreadsheet).toMatchSnapshot();
 
         // prepare assignment json
         const assignmentJson = assignmentData.map(function (assignment) {
-            return prepareMinimal.assignment(assignment, {
-                rate: 50,
-                rate1: 50,
-                rate2: 50,
-            });
+            return jsonUndefinedToNull(
+                prepareMinimal.assignment(assignment, {
+                    rate: 50,
+                    rate1: 50,
+                    rate2: 50,
+                })
+            );
         });
         expect(assignmentJson).toMatchSnapshot();
     });
 
     it("Export Ddahs to JSON/CSV/XLSX", () => {
         // prepare ddah spreadsheet
-        const ddahSpreadsheet = prepareSpreadsheet.ddah(ddahData);
+        const ddahSpreadsheet = spreadsheetUndefinedToNull(
+            prepareSpreadsheet.ddah(ddahData)
+        );
         expect(ddahSpreadsheet).toMatchSnapshot();
 
         // prepare ddah json
-        const ddahJson = ddahData.map(prepareMinimal.ddah);
+        const ddahJson = ddahData.map(jsonUndefinedToNull(prepareMinimal.ddah));
         expect(ddahJson).toMatchSnapshot();
     });
 

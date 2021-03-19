@@ -253,7 +253,7 @@ export const prepareSpreadsheet = {
                 assignment.contract_template,
                 assignment.contract_override_pdf,
                 assignment.active_offer_status,
-                undefined,
+                null,
                 assignment.active_offer_recent_activity_date,
                 ...formatWageChunksToList(assignment.wage_chunks),
             ])

@@ -10,7 +10,6 @@ export const instructorData = [
     {
         id: 2,
         first_name: "Anna",
-        last_name: "Smith",
         email: "a@b.com",
         utorid: "smitha",
     },
@@ -62,7 +61,6 @@ export const applicantData = [
         email: "a@c.com",
         utorid: "smith史密斯",
         phone: "41666666666",
-        student_number: "1000000000",
     },
 ];
 
