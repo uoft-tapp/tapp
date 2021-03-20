@@ -388,7 +388,7 @@ it("Compute Instructors diff", () => {
     expect(instructorsDiff).toMatchObject([
         {
             status: "modified",
-            changes: expect.objectContaining({ email: expect.any(String) }),
+            changes: { email: expect.any(String) },
         },
         { status: "duplicate" },
         { status: "new" },
@@ -404,9 +404,9 @@ it("Compute Applicants diff", () => {
     expect(applicantsDiff).toMatchObject([
         {
             status: "modified",
-            changes: expect.objectContaining({
+            changes: {
                 email: expect.any(String),
-            }),
+            },
         },
         { status: "duplicate" },
         { status: "duplicate" },
@@ -431,9 +431,9 @@ it("Compute Positions diff", () => {
     expect(positionsDiff).toMatchObject([
         {
             status: "modified",
-            changes: expect.objectContaining({
+            changes: {
                 position_title: expect.any(String),
-            }),
+            },
         },
         { status: "duplicate" },
         { status: "new" },
@@ -456,9 +456,9 @@ it("Compute Assignments diff", () => {
     expect(assignmentsDiff).toMatchObject([
         {
             status: "modified",
-            changes: expect.objectContaining({
+            changes: {
                 wage_chunks: expect.any(String),
-            }),
+            },
         },
         {
             status: "duplicate",
@@ -487,9 +487,9 @@ it("Compute Ddahs diff", () => {
     expect(ddahsDiff).toMatchObject([
         {
             status: "modified",
-            changes: expect.objectContaining({
+            changes: {
                 duties: expect.any(String),
-            }),
+            },
         },
         { status: "new" },
     ]);
