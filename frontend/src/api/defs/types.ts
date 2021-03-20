@@ -167,3 +167,14 @@ export interface Ddah {
     total_hours: number;
     status: "accepted" | "emailed" | null;
 }
+
+// These are the types returned by the API
+
+interface HasId {
+    id: number;
+}
+export interface RawSession extends HasId {
+    start_date: string;
+    end_date: string;
+    name: string;
+}

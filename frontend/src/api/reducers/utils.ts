@@ -4,16 +4,50 @@
 
 import { combineReducers as _origCombineReducers } from "redux";
 import { createReducer as _origCreateReducer } from "redux-create-reducer";
+import type { Action, AnyAction, Reducer } from "redux";
+import type { Selector } from "reselect";
+
+type HasIdField = { id: number };
+export interface HasPayload<T> extends AnyAction {
+    payload: T;
+}
+//export type HasPayload<T> = { payload: T } & AnyAction;
+export type BasicState<T> = { _modelData: T[] };
+export type TaggedState<T> = BasicState<T> & { _storePath: _StorePath };
+type Handlers<State> = {
+    [key: string]: (state: State, action: any) => State;
+};
+
+type _StorePath = {
+    id: number;
+    path: (string | number)[];
+};
+interface _StorePathWithPushToPath extends _StorePath {
+    pushToPath: (dir: string | number) => void;
+}
+interface TaggedReducer<State, A extends Action = AnyAction>
+    extends Reducer<State, A> {
+    _storePath: _StorePathWithPushToPath;
+}
+
+interface TaggedReducerWithSelector<State> extends TaggedReducer<State> {
+    _localStoreSelector: Selector<any, State>;
+}
+
+type TaggedReducersMapObject<State, A extends Action = AnyAction> = {
+    [K in keyof State & string]: TaggedReducer<State[K], A>;
+};
 
 /**
  * Either updates the item `modelData`
  * with id == newItem.id, or appends it.
  *
- * @param {object} modelData
- * @param {object} newItem
  * @returns {object} An updated version of modelData
  */
-export function upsertItem(modelData, newItem) {
+export function upsertItem<T extends HasIdField>(
+    modelData: T[],
+    newItem: T
+): T[] {
     let didUpdate = false;
     const newModelData = modelData.map((item) => {
         if (item.id === newItem.id) {
@@ -38,32 +72,28 @@ export function upsertItem(modelData, newItem) {
  * an array and that each item in that array has an `id`
  * that can be used to determine upserts and deletes, etc..
  *
- * @param {string} FETCH_MANY
- * @param {string} FETCH_ONE
- * @param {string} UPSERT_ONE
- * @param {string} DELETE_ONE
- * @returns {object} An object of reducers suitable for passing to `createReducer`
+ * @returns An object of reducers suitable for passing to `createReducer`
  */
-export function createBasicReducerObject(
-    FETCH_MANY,
-    FETCH_ONE,
-    UPSERT_ONE,
-    DELETE_ONE
+export function createBasicReducerObject<T extends HasIdField>(
+    FETCH_MANY: string,
+    FETCH_ONE: string,
+    UPSERT_ONE: string,
+    DELETE_ONE: string
 ) {
     return {
-        [FETCH_MANY]: (state, action) => ({
+        [FETCH_MANY]: (state: BasicState<T>, action: HasPayload<T>) => ({
             ...state,
             _modelData: action.payload,
         }),
-        [FETCH_ONE]: (state, action) => ({
+        [FETCH_ONE]: (state: BasicState<T>, action: HasPayload<T>) => ({
             ...state,
             _modelData: upsertItem(state._modelData, action.payload),
         }),
-        [UPSERT_ONE]: (state, action) => ({
+        [UPSERT_ONE]: (state: BasicState<T>, action: HasPayload<T>) => ({
             ...state,
             _modelData: upsertItem(state._modelData, action.payload),
         }),
-        [DELETE_ONE]: (state, action) => {
+        [DELETE_ONE]: (state: BasicState<T>, action: HasPayload<T>) => {
             const deletedItem = action.payload;
             return {
                 ...state,
@@ -86,23 +116,35 @@ export function createBasicReducerObject(
  * @param {object} handlers
  * @returns
  */
-export function createReducer(initialState, handlers) {
-    const path = [];
-    function pushToPath(dir) {
+export function createReducer<State>(
+    initialState: State,
+    handlers: Handlers<State>
+) {
+    const path: (string | number)[] = [];
+    function pushToPath(dir: string | number) {
         path.unshift(dir);
     }
     // Every isolated state should have a unique id, so generate
     // a random one.
-    const _storePath = { id: Math.random(), path, pushToPath };
+    const _storePath: _StorePathWithPushToPath = {
+        id: Math.random(),
+        path,
+        pushToPath,
+    };
 
     // add _storePath to the initial state and to the
     // new reducer
-    initialState._storePath = _storePath;
-    const reducer = _origCreateReducer(initialState, handlers);
+    ((initialState as unknown) as TaggedState<unknown>)._storePath = _storePath;
+    const reducer = _origCreateReducer(
+        initialState,
+        handlers as any
+    ) as TaggedReducerWithSelector<typeof initialState>;
     reducer._storePath = _storePath;
 
     // For convenience, attach a local store selector to the reducer
-    reducer._localStoreSelector = createLocalStoreSelector(_storePath);
+    reducer._localStoreSelector = (createLocalStoreSelector<State>(
+        _storePath
+    ) as unknown) as Selector<State, State>;
 
     return reducer;
 }
@@ -116,7 +158,10 @@ export function createReducer(initialState, handlers) {
  * @param {object} _storePath The `_storePath` object to use for searching `state`
  * @returns
  */
-function _localStoreSelector(state, _storePath) {
+function _localStoreSelector<T>(
+    state: TaggedState<T> | any,
+    _storePath: _StorePath
+): TaggedState<T> {
     if (state._storePath && state._storePath.id === _storePath.id) {
         return state;
     }
@@ -132,7 +177,7 @@ function _localStoreSelector(state, _storePath) {
             "Searching",
             state,
             "for local state with path",
-            _storePath.join("."),
+            _storePath,
             "but encountered an error"
         );
     }
@@ -149,13 +194,13 @@ function _localStoreSelector(state, _storePath) {
  * the returned selector will return `state.a.b`.
  *
  * @export
- * @param {object} _storePath
- * @param {array} _storePath.path The path to search in the redux state
- * @param {array} _storePath.id The unique id of the local state
+ * @param _storePath
+ * @param _storePath.path The path to search in the redux state
+ * @param _storePath.id The unique id of the local state
  * @returns {Function} A selector that returns the local state (based on `_storePath`) when passed the global state
  */
-export function createLocalStoreSelector(_storePath) {
-    return (state) => _localStoreSelector(state, _storePath);
+export function createLocalStoreSelector<T>(_storePath: _StorePath) {
+    return (state: any) => _localStoreSelector<T>(state, _storePath);
 }
 
 /**
@@ -171,28 +216,34 @@ export function createLocalStoreSelector(_storePath) {
  * variable that is present in each reducer and which can be passed to a smart selector.
  *
  * @export
- * @param {object} model An object whose values are reducers
- * @returns {Function} A reducer
+ * @param model An object whose values are reducers
+ * @returns  A reducer
  */
-export function combineReducers(model) {
-    const pushToPathCallbacks = [];
+export function combineReducers<T extends TaggedReducersMapObject<S>, S>(
+    model: T
+) {
+    const pushToPathCallbacks: Function[] = [];
     // recursively call all `pushToPath` functions.
     // They have been stored in `pushToPathCallbacks`
-    function pushToPath(dir) {
+    function pushToPath(dir: string) {
         for (const func of pushToPathCallbacks) {
             func(dir);
         }
     }
 
-    for (const [dir, reducer] of Object.entries(model)) {
+    for (const [dir, reducer] of Object.entries(model) as Array<
+        [keyof T & string, TaggedReducer<T>]
+    >) {
         if (reducer._storePath) {
             reducer._storePath.pushToPath(dir);
             pushToPathCallbacks.push(reducer._storePath.pushToPath);
         }
     }
 
-    const newReducer = _origCombineReducers(model);
-    newReducer._storePath = { pushToPath };
+    const newReducer = _origCombineReducers(model as any);
+    (newReducer as any)._storePath = { pushToPath };
 
-    return newReducer;
+    return (newReducer as unknown) as TaggedReducer<
+        { [K in keyof T]: ReturnType<T[K]> }
+    >;
 }
