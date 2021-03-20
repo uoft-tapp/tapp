@@ -28,18 +28,7 @@ import {
     normalizeImport,
     normalizeDdahImports,
 } from "../libs/import-export";
-import {
-    reduxStoreData,
-    modifiedApplicantData,
-    modifiedAssignmentData,
-    modifiedAssignmentDataInvalidApplicant,
-    modifiedAssignmentDataInvalidPosition,
-    modifiedDdahData,
-    modifiedDdahDataInvalidAssignment,
-    modifiedInstructorData,
-    modifiedPositionData,
-    modifiedPositionDataInvalidInstructor,
-} from "./import-export-data/diff-data";
+import { reduxStoreData } from "./import-export-data/redux-store-data";
 
 // create a shim for native File object for export round trip test
 function File(fileBits, fileName, options) {
@@ -380,11 +369,25 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
 });
 
 it("Compute Instructors diff", () => {
+    // modified instructor data used for computing the diff with initial objects
+    const modifiedInstructorData = reduxStoreData.instructors.map(
+        prepareMinimal.instructor
+    );
+    // modify first instructor's email
+    modifiedInstructorData[0].email = "new.email@mail.utoronto.ca";
+    // add a new instructor
+    modifiedInstructorData.push({
+        first_name: "Megan",
+        last_name: "Miller",
+        email: "megan.miller@utoronto.ca",
+        utorid: "millerm",
+    });
+    // compute diff
     const instructorsDiff = diffImport.instructors(
         modifiedInstructorData,
         reduxStoreData
     );
-    // modifiedInstructorData contains three instructors who are: modified(email), duplicate, and new
+    // modifiedInstructorData instructors should be computed as: modified(email), duplicate, and new
     expect(instructorsDiff).toMatchObject([
         {
             status: "modified",
@@ -396,11 +399,27 @@ it("Compute Instructors diff", () => {
 });
 
 it("Compute Applicants diff", () => {
+    // modified applicant data used for computing the diff with initial objects
+    const modifiedApplicantData = reduxStoreData.applicants.map(
+        prepareMinimal.applicant
+    );
+    // modify first applicant's email
+    modifiedApplicantData[0].email = "new.email@mail.utoronto.ca";
+    // add a new applicant
+    modifiedApplicantData.push({
+        first_name: "Tom",
+        last_name: "Jerry",
+        email: "jerryt@mail.utoronto.ca",
+        phone: null,
+        utorid: "jerryt",
+        student_number: "777777777",
+    });
+    // compute diff
     const applicantsDiff = diffImport.applicants(
         modifiedApplicantData,
         reduxStoreData
     );
-    // modifiedApplicantData contains four applicants who are: modified(email), duplicate, duplicate, and new
+    // modifiedApplicantData applicants should be computed as: modified(email), duplicate, duplicate, and new
     expect(applicantsDiff).toMatchObject([
         {
             status: "modified",
@@ -415,6 +434,31 @@ it("Compute Applicants diff", () => {
 });
 
 it("Compute Positions diff", () => {
+    // modified position data used for computing the diff with initial objects
+    const modifiedPositionData = reduxStoreData.positions.map(
+        prepareMinimal.position
+    );
+    // modify first position's position_title
+    modifiedPositionData[0].position_title = "New Title";
+    // add a new position
+    modifiedPositionData.push({
+        position_code: "CSC135H1F",
+        position_title: "Computer Fun",
+        start_date: "2020-02-10T00:00:00.000Z",
+        end_date: "2020-12-31T00:00:00.000Z",
+        hours_per_assignment: 75,
+        qualifications: null,
+        duties: "Tutorials",
+        ad_hours_per_assignment: null,
+        ad_num_assignments: null,
+        ad_open_date: null,
+        ad_close_date: null,
+        desired_num_assignments: null,
+        current_enrollment: null,
+        current_waitlisted: null,
+        instructors: [],
+        contract_template: "Regular",
+    });
     // make sure the instructors are valid instructors
     for (const item of modifiedPositionData) {
         item.instructors = diffImport
@@ -423,11 +467,12 @@ it("Compute Positions diff", () => {
             })
             .map((x) => x.utorid);
     }
+    // compute diff
     const positionsDiff = diffImport.positions(
         modifiedPositionData,
         reduxStoreData
     );
-    // modifiedPositionData contains three positions which are: modified(position_title), duplicate, and new
+    // modifiedPositionData positions should be computed as: modified(position_title), duplicate, and new
     expect(positionsDiff).toMatchObject([
         {
             status: "modified",
@@ -439,6 +484,27 @@ it("Compute Positions diff", () => {
         { status: "new" },
     ]);
     // positions with invalid instructor should throw error
+    const modifiedPositionDataInvalidInstructor = [
+        // position with invalid instructor
+        {
+            position_code: "CSC135H1F",
+            position_title: "Computer Fun",
+            start_date: "2020-02-10T00:00:00.000Z",
+            end_date: "2020-12-31T00:00:00.000Z",
+            hours_per_assignment: 75,
+            qualifications: null,
+            duties: "Tutorials",
+            ad_hours_per_assignment: null,
+            ad_num_assignments: null,
+            ad_open_date: null,
+            ad_close_date: null,
+            desired_num_assignments: null,
+            current_enrollment: null,
+            current_waitlisted: null,
+            instructors: ["invalid"],
+            contract_template: "Regular",
+        },
+    ];
     expect(() =>
         diffImport.positions(
             modifiedPositionDataInvalidInstructor,
@@ -448,11 +514,63 @@ it("Compute Positions diff", () => {
 });
 
 it("Compute Assignments diff", () => {
+    // modified assignment data used for computing the diff with initial objects
+    const modifiedAssignmentData = reduxStoreData.assignments.map(
+        prepareMinimal.assignment
+    );
+    // modify first assignment's wage_chunks
+    modifiedAssignmentData[0].wage_chunks = [
+        {
+            start_date: "2020-01-01T00:00:00.000Z",
+            end_date: "2020-03-31T00:00:00.000Z",
+            hours: 30,
+            rate: 50,
+        },
+        {
+            start_date: "2020-04-01T00:00:00.000Z",
+            end_date: "2020-05-01T00:00:00.000Z",
+            hours: 40,
+            rate: 50,
+        },
+    ];
+    // add a new assignment
+    modifiedAssignmentData.push({
+        contract_override_pdf: null,
+        active_offer_status: null,
+        active_offer_recent_activity_date: null,
+        contract_template: "regular",
+        end_date: "2021-12-10T00:00:00.000Z",
+        hours: 80,
+        position_code: "CSC494",
+        start_date: "2020-12-10T00:00:00.000Z",
+        utorid: "wilsonh",
+        wage_chunks: [
+            {
+                end_date: "2020-12-31T00:00:00.000Z",
+                hours: 30,
+                rate: 50,
+                start_date: "2020-12-10T00:00:00.000Z",
+            },
+            {
+                end_date: "2021-06-30T00:00:00.000Z",
+                hours: 30,
+                rate: 50,
+                start_date: "2021-01-01T00:00:00.000Z",
+            },
+            {
+                end_date: "2021-12-10T00:00:00.000Z",
+                hours: 20,
+                rate: 50,
+                start_date: "2021-07-01T00:00:00.000Z",
+            },
+        ],
+    });
+    // compute diff
     const assignmentsDiff = diffImport.assignments(
         modifiedAssignmentData,
         reduxStoreData
     );
-    // modifiedAssignmentData contains three assignments which are: modified(wage_chunks), duplicate, and new
+    // modifiedAssignmentData assignments should be computed as: modified(wage_chunks), duplicate, and new
     expect(assignmentsDiff).toMatchObject([
         {
             status: "modified",
@@ -466,6 +584,40 @@ it("Compute Assignments diff", () => {
         { status: "new" },
     ]);
     // assignments with invalid applicant should throw error
+    const modifiedAssignmentDataInvalidApplicant = [
+        // assignment with invalid Applicant
+        {
+            contract_override_pdf: null,
+            active_offer_status: null,
+            active_offer_recent_activity_date: null,
+            contract_template: "regular",
+            end_date: "2021-12-10T00:00:00.000Z",
+            hours: 80,
+            position_code: "CSC494",
+            start_date: "2020-12-10T00:00:00.000Z",
+            utorid: "invalid",
+            wage_chunks: [
+                {
+                    end_date: "2020-12-31T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-06-30T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2021-01-01T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    hours: 20,
+                    rate: 50,
+                    start_date: "2021-07-01T00:00:00.000Z",
+                },
+            ],
+        },
+    ];
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidApplicant,
@@ -473,6 +625,40 @@ it("Compute Assignments diff", () => {
         )
     ).toThrow(Error);
     // assignments with invalid position should throw error
+    const modifiedAssignmentDataInvalidPosition = [
+        // assignment with invalid position
+        {
+            contract_override_pdf: null,
+            active_offer_status: null,
+            active_offer_recent_activity_date: null,
+            contract_template: "regular",
+            end_date: "2021-12-10T00:00:00.000Z",
+            hours: 80,
+            position_code: "invalid",
+            start_date: "2020-12-10T00:00:00.000Z",
+            utorid: "wilsonh",
+            wage_chunks: [
+                {
+                    end_date: "2020-12-31T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-06-30T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2021-01-01T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    hours: 20,
+                    rate: 50,
+                    start_date: "2021-07-01T00:00:00.000Z",
+                },
+            ],
+        },
+    ];
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidPosition,
@@ -482,8 +668,33 @@ it("Compute Assignments diff", () => {
 });
 
 it("Compute Ddahs diff", () => {
+    // modified ddah data used for computing the diff with initial objects
+    const modifiedDdahData = reduxStoreData.ddahs.map(prepareMinimal.ddah);
+    // modify first ddah's duties
+    modifiedDdahData[0].duties = [
+        {
+            description: "new duty",
+            hours: 40,
+        },
+    ];
+    // add a new ddah
+    modifiedDdahData.push({
+        applicant: "johnd",
+        duties: [
+            {
+                description: "Initial training",
+                hours: 30,
+            },
+            {
+                description: "Marking the midterm",
+                hours: 50,
+            },
+        ],
+        position_code: "CSC494",
+    });
+    // compute diff
     const ddahsDiff = diffImport.ddahs(modifiedDdahData, reduxStoreData);
-    // modifiedDdahData contains two ddahs which are: modified(duties) and new
+    // modifiedDdahData ddahs should be computed as: modified(duties) and new
     expect(ddahsDiff).toMatchObject([
         {
             status: "modified",
@@ -494,6 +705,27 @@ it("Compute Ddahs diff", () => {
         { status: "new" },
     ]);
     // ddahs with invalid assignment should throw error
+    const modifiedDdahDataInvalidAssignment = [
+        // ddah with invalid assignment (invalid applicant `potterh` and position `invalid` matching)
+        {
+            applicant: "potterh",
+            duties: [
+                {
+                    description: "Initial training",
+                    hours: 80,
+                },
+                {
+                    description: "Marking the midterm",
+                    hours: 10,
+                },
+                {
+                    description: "Running tutorials",
+                    hours: 20,
+                },
+            ],
+            position_code: "invalid",
+        },
+    ];
     expect(() =>
         diffImport.ddahs(modifiedDdahDataInvalidAssignment, reduxStoreData)
     ).toThrow(Error);
