@@ -29,7 +29,7 @@ import {
     normalizeDdahImports,
 } from "../libs/import-export";
 import {
-    initialObjects,
+    reduxStoreData,
     modifiedApplicantData,
     modifiedAssignmentData,
     modifiedAssignmentDataInvalidApplicant,
@@ -355,7 +355,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("ddahs_correct.xlsx"),
         },
-        initialObjects.applicants
+        reduxStoreData.applicants
     );
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
     // import ddahs with invalid applicant should throw error
@@ -365,7 +365,7 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("ddahs_invalid_applicant.xlsx"),
             },
-            initialObjects.applicants
+            reduxStoreData.applicants
         )
     ).toThrow(Error);
     // import correct ddahs from JSON
@@ -382,9 +382,9 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
 it("Compute Instructors diff", () => {
     const instructorsDiff = diffImport.instructors(
         modifiedInstructorData,
-        initialObjects
+        reduxStoreData
     );
-    // the modified(email), duplicate, and new instructors in modifiedInstructorData should be computed as modified, duplicate, and new
+    // modifiedInstructorData contains three instructors who are: modified(email), duplicate, and new
     expect(instructorsDiff).toMatchObject([
         {
             status: "modified",
@@ -398,16 +398,17 @@ it("Compute Instructors diff", () => {
 it("Compute Applicants diff", () => {
     const applicantsDiff = diffImport.applicants(
         modifiedApplicantData,
-        initialObjects
+        reduxStoreData
     );
-    // the modified(student_number), duplicate, and new applicants in modifiedApplicantData should be computed as modified, duplicate, and new
+    // modifiedApplicantData contains four applicants who are: modified(email), duplicate, duplicate, and new
     expect(applicantsDiff).toMatchObject([
         {
             status: "modified",
             changes: expect.objectContaining({
-                student_number: expect.any(String),
+                email: expect.any(String),
             }),
         },
+        { status: "duplicate" },
         { status: "duplicate" },
         { status: "new" },
     ]);
@@ -418,23 +419,20 @@ it("Compute Positions diff", () => {
     for (const item of modifiedPositionData) {
         item.instructors = diffImport
             .instructorsListFromField(item.instructors || [], {
-                instructors: initialObjects.instructors,
+                instructors: reduxStoreData.instructors,
             })
             .map((x) => x.utorid);
     }
     const positionsDiff = diffImport.positions(
         modifiedPositionData,
-        initialObjects
+        reduxStoreData
     );
-    // the modified(start_date, end_date, instructors and hours_per_assignment), duplicate, and new positions in modifiedPositionData should be computed as modified, duplicate, and new
+    // modifiedPositionData contains three positions which are: modified(position_title), duplicate, and new
     expect(positionsDiff).toMatchObject([
         {
             status: "modified",
             changes: expect.objectContaining({
-                start_date: expect.any(String),
-                end_date: expect.any(String),
-                instructors: expect.any(String),
-                hours_per_assignment: expect.any(String),
+                position_title: expect.any(String),
             }),
         },
         { status: "duplicate" },
@@ -444,7 +442,7 @@ it("Compute Positions diff", () => {
     expect(() =>
         diffImport.positions(
             modifiedPositionDataInvalidInstructor,
-            initialObjects
+            reduxStoreData
         )
     ).toThrow(Error);
 });
@@ -452,9 +450,9 @@ it("Compute Positions diff", () => {
 it("Compute Assignments diff", () => {
     const assignmentsDiff = diffImport.assignments(
         modifiedAssignmentData,
-        initialObjects
+        reduxStoreData
     );
-    // the modified(wage_chunks), duplicate, and new assignments in modifiedAssignmentData should be computed as modified, duplicate, and new
+    // modifiedAssignmentData contains three assignments which are: modified(wage_chunks), duplicate, and new
     expect(assignmentsDiff).toMatchObject([
         {
             status: "modified",
@@ -462,28 +460,30 @@ it("Compute Assignments diff", () => {
                 wage_chunks: expect.any(String),
             }),
         },
-        { status: "duplicate" },
+        {
+            status: "duplicate",
+        },
         { status: "new" },
     ]);
     // assignments with invalid applicant should throw error
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidApplicant,
-            initialObjects
+            reduxStoreData
         )
     ).toThrow(Error);
     // assignments with invalid position should throw error
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidPosition,
-            initialObjects
+            reduxStoreData
         )
     ).toThrow(Error);
 });
 
 it("Compute Ddahs diff", () => {
-    const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialObjects);
-    // the modified(duties), duplicate, and new ddahs in modifiedDdahData should be computed as modified, duplicate, and new
+    const ddahsDiff = diffImport.ddahs(modifiedDdahData, reduxStoreData);
+    // modifiedDdahData contains two ddahs which are: modified(duties) and new
     expect(ddahsDiff).toMatchObject([
         {
             status: "modified",
@@ -491,11 +491,10 @@ it("Compute Ddahs diff", () => {
                 duties: expect.any(String),
             }),
         },
-        { status: "duplicate" },
         { status: "new" },
     ]);
     // ddahs with invalid assignment should throw error
     expect(() =>
-        diffImport.ddahs(modifiedDdahDataInvalidAssignment, initialObjects)
+        diffImport.ddahs(modifiedDdahDataInvalidAssignment, reduxStoreData)
     ).toThrow(Error);
 });
