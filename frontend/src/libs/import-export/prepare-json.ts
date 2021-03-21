@@ -266,7 +266,7 @@ interface IdContext extends Context {
     id: number;
 }
 
-interface prepareFull {
+interface PrepareFull {
     session: PrepareUpsertable<MinimalSession, Session, { id: number }>;
     contractTemplate: PrepareUpsertable<
         MinimalContractTemplate,
@@ -309,7 +309,7 @@ interface prepareFull {
     >;
 }
 
-export const prepareFull: prepareFull = {
+export const prepareFull: PrepareFull = {
     session: function (minSession: MinimalSession, context?: any): any {
         const { id } = context || {};
         if (id != null) {

@@ -1,4 +1,3 @@
-import { Session } from "inspector";
 import {
     FETCH_SESSIONS_SUCCESS,
     FETCH_ONE_SESSION_SUCCESS,

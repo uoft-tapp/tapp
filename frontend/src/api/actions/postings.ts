@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { createSelector } from "reselect";
 import {
     FETCH_POSTINGS_SUCCESS,
@@ -11,29 +10,38 @@ import {
     DELETE_ONE_POSTING_POSITION_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import { actionFactory, validatedApiDispatcher } from "./utils";
+import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { postingsReducer } from "../reducers/postings";
 import { activeRoleSelector } from "./users";
 import { postingPositionsReducer } from "../reducers/posting_positions";
+import type { Posting, PostingPosition, RawPosting, RawPostingPosition } from "../defs/types";
 
 // actions
-const fetchPostingsSuccess = actionFactory(FETCH_POSTINGS_SUCCESS);
-const fetchOnePostingSuccess = actionFactory(FETCH_ONE_POSTING_SUCCESS);
-const upsertOnePostingSuccess = actionFactory(UPSERT_ONE_POSTING_SUCCESS);
-const deleteOnePostingSuccess = actionFactory(DELETE_ONE_POSTING_SUCCESS);
+const fetchPostingsSuccess = actionFactory<RawPosting[]>(
+    FETCH_POSTINGS_SUCCESS
+);
+const fetchOnePostingSuccess = actionFactory<RawPosting>(
+    FETCH_ONE_POSTING_SUCCESS
+);
+const upsertOnePostingSuccess = actionFactory<RawPosting>(
+    UPSERT_ONE_POSTING_SUCCESS
+);
+const deleteOnePostingSuccess = actionFactory<RawPosting>(
+    DELETE_ONE_POSTING_SUCCESS
+);
 
 // PostingPosition actions
-const fetchPostingPositionsSuccess = actionFactory(
+const fetchPostingPositionsSuccess = actionFactory<RawPostingPosition[]>(
     FETCH_POSTING_POSITIONS_SUCCESS
 );
-const fetchOnePostingPositionSuccess = actionFactory(
+const fetchOnePostingPositionSuccess = actionFactory<RawPostingPosition>(
     FETCH_ONE_POSTING_POSITION_SUCCESS
 );
-const upsertOnePostingPositionSuccess = actionFactory(
+const upsertOnePostingPositionSuccess = actionFactory<RawPostingPosition>(
     UPSERT_ONE_POSTING_POSITION_SUCCESS
 );
-const deleteOnePostingPositionSuccess = actionFactory(
+const deleteOnePostingPositionSuccess = actionFactory<RawPostingPosition>(
     DELETE_ONE_POSTING_POSITION_SUCCESS
 );
 
@@ -43,12 +51,16 @@ export const fetchPostings = validatedApiDispatcher({
     description: "Fetch postings",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const activeSession = getState().model.sessions.activeSession;
+        if (activeSession == null) {
+            throw new Error("Cannot fetch Postings without an active session");
+        }
+        const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/postings`
-        );
-        await dispatch(fetchPostingsSuccess(data));
+        )) as RawPosting[];
+        dispatch(fetchPostingsSuccess(data));
         return data;
     },
 });
@@ -56,11 +68,12 @@ export const fetchPostings = validatedApiDispatcher({
 export const fetchPosting = validatedApiDispatcher({
     name: "fetchPosting",
     description: "Fetch posting",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/postings/${payload.id}`);
+        const data = (await apiGET(
+            `/${role}/postings/${payload.id}`
+        )) as RawPosting;
         dispatch(fetchOnePostingSuccess(data));
         return data;
     },
@@ -69,15 +82,21 @@ export const fetchPosting = validatedApiDispatcher({
 export const upsertPosting = validatedApiDispatcher({
     name: "upsertPosting",
     description: "Add/insert posting",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: Partial<RawPosting>) => async (
+        dispatch,
+        getState
+    ) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
+        const activeSession = getState().model.sessions.activeSession;
+        if (activeSession == null) {
+            throw new Error("Cannot fetch Postings without an active session");
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiPOST(
             `/${role}/sessions/${activeSessionId}/postings`,
             payload
-        );
+        )) as RawPosting;
         dispatch(upsertOnePostingSuccess(data));
         return data;
     },
@@ -86,11 +105,13 @@ export const upsertPosting = validatedApiDispatcher({
 export const deletePosting = validatedApiDispatcher({
     name: "deletePosting",
     description: "Delete posting",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(`/${role}/postings/delete`, payload);
+        const data = (await apiPOST(
+            `/${role}/postings/delete`,
+            payload
+        )) as RawPosting;
         dispatch(deleteOnePostingSuccess(data));
     },
 });
@@ -101,12 +122,18 @@ export const fetchPostingPositions = validatedApiDispatcher({
     description: "Fetch posting_positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const activeSession = getState().model.sessions.activeSession;
+        if (activeSession == null) {
+            throw new Error(
+                "Cannot fetch PostingPositions without an active session"
+            );
+        }
+        const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/posting_positions`
-        );
-        await dispatch(fetchPostingPositionsSuccess(data));
+        )) as RawPostingPosition[];
+        dispatch(fetchPostingPositionsSuccess(data));
         return data;
     },
 });
@@ -114,11 +141,12 @@ export const fetchPostingPositions = validatedApiDispatcher({
 export const fetchPostingPosition = validatedApiDispatcher({
     name: "fetchPostingPosition",
     description: "Fetch posting_position",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/posting_positions/${payload.id}`);
+        const data = (await apiGET(
+            `/${role}/posting_positions/${payload.id}`
+        )) as RawPostingPosition;
         dispatch(fetchOnePostingPositionSuccess(data));
         return data;
     },
@@ -127,11 +155,16 @@ export const fetchPostingPosition = validatedApiDispatcher({
 export const upsertPostingPosition = validatedApiDispatcher({
     name: "upsertPostingPosition",
     description: "Add/insert posting_position",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: Partial<RawPostingPosition>) => async (
+        dispatch,
+        getState
+    ) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(`/${role}/posting_positions`, payload);
+        const data = (await apiPOST(
+            `/${role}/posting_positions`,
+            payload
+        )) as RawPostingPosition;
         dispatch(upsertOnePostingPositionSuccess(data));
         return data;
     },
@@ -140,14 +173,15 @@ export const upsertPostingPosition = validatedApiDispatcher({
 export const deletePostingPosition = validatedApiDispatcher({
     name: "deletePostingPosition",
     description: "Delete posting_position",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (
+        payload: Pick<RawPostingPosition, "position_id" | "posting_id">
+    ) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(
+        const data = (await apiPOST(
             `/${role}/posting_positions/delete`,
             payload
-        );
+        )) as RawPostingPosition;
         dispatch(deleteOnePostingPositionSuccess(data));
     },
 });
@@ -156,11 +190,11 @@ export const deletePostingPosition = validatedApiDispatcher({
 const localStoreSelector = postingsReducer._localStoreSelector;
 export const postingsSelector = createSelector(
     localStoreSelector,
-    (state) => state._modelData
+    (state) => state._modelData as Posting[]
 );
 
 const localStoreSelector2 = postingPositionsReducer._localStoreSelector;
 export const postingPositionsSelector = createSelector(
     localStoreSelector2,
-    (state) => state._modelData
+    (state) => (state._modelData as unknown) as PostingPosition[]
 );

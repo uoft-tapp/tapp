@@ -7,7 +7,7 @@ import {
     SET_ACTIVE_SESSION,
 } from "../constants";
 import { fetchError, upsertError, deleteError, apiError } from "./errors";
-import { actionFactory, validatedApiDispatcher } from "./utils";
+import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { sessionsReducer } from "../reducers/sessions";
 import { activeRoleSelector } from "./users";
@@ -48,7 +48,7 @@ export const fetchSession = validatedApiDispatcher({
     name: "fetchSession",
     description: "Fetch session",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload: Session) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = (await apiGET(
             `/${role}/sessions/${payload.id}`

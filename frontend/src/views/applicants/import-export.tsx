@@ -48,7 +48,7 @@ export function ConnectedExportApplicantsAction() {
                 exportApplicants(prepareApplicantData, exportType)
             );
 
-            FileSaver.saveAs(file);
+            FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
     }, [exportType, dispatch]);

@@ -67,8 +67,8 @@ export function splitObjByProps<
 }
 
 export type HasId = { id: number };
-type HasSubIdField<M extends string> = { [key in M]: HasId };
-type HasSubIdFieldArray<M extends string> = { [key in M]: HasId[] };
+export type HasSubIdField<M extends string> = { [key in M]: HasId };
+export type HasSubIdFieldArray<M extends string> = { [key in M]: HasId[] };
 
 /**
  * Test whether `obj[key].id` exists.
@@ -78,7 +78,7 @@ type HasSubIdFieldArray<M extends string> = { [key in M]: HasId[] };
  * @param {M} key
  * @returns {obj is HasSubIdField<M>}
  */
-function hasSubIdField<M extends string>(
+export function hasSubIdField<M extends string>(
     obj: any,
     key: M
 ): obj is HasSubIdField<M> {

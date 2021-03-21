@@ -4,7 +4,7 @@
     "license": "MIT",
     "dependencies": {
         "@prettier/plugin-ruby": "^0.18.2",
-        "babel-eslint": "^10.0.3",
+        "babel-eslint": "^10.1.0",
         "eslint": "6.1.0",
         "eslint-plugin-react": "^7.20.0",
         "prettier": "^2.1.2",
