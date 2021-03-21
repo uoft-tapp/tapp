@@ -5,7 +5,6 @@
 class Applicant < ApplicationRecord
     has_many :assignments
     has_many :applications, dependent: :destroy
-    has_one :applicant_data_for_matching, dependent: :destroy
 
     validates_presence_of :utorid
     validates_uniqueness_of :utorid, case_sensitive: false

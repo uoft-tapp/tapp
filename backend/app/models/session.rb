@@ -6,6 +6,7 @@ class Session < ApplicationRecord
     # positions must be listed first. Since they also may contain references to
     # `constract_templates`, there is a potential foreign key issue when destroying them
     has_many :positions, dependent: :destroy
+    has_many :postings, dependent: :destroy
     has_many :contract_templates, dependent: :destroy
 
     validates :rate1, numericality: { only_float: true }, allow_nil: true

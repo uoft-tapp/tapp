@@ -82,6 +82,11 @@ export function offersTests(api) {
         expect(resp).toHaveStatus("success");
         const previousDate = resp.payload.emailed_date;
 
+        // Wait just a little bit to ensure some time has elapsed
+        await new Promise((resolve) => {
+            setTimeout(resolve, 100);
+        });
+
         // send the email again
         const resp1 = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/email`

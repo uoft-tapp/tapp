@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Col } from "react-bootstrap";
+import { Form, Col, FormControlProps } from "react-bootstrap";
+import { EditableType } from "../editable-cell";
 
 /**
  * A higher-order-function which returns a function that creates editable fields.
@@ -13,18 +14,21 @@ import { Form, Col } from "react-bootstrap";
  *
  * @export
  * @param {object} boundData - object whose attributes will be (non-destructively) set
- * @param {function(object): void} setBoundData - setter function
+ * @param {Function} setBoundData - setter function
  * @returnType {function(title: string, attr: string, type: string, inputAttrs: object): React.Node}
  */
-export function fieldEditorFactory(boundData, setBoundData) {
+export function fieldEditorFactory<T>(
+    boundData: T,
+    setBoundData: (data: T) => any
+) {
     /**
      * Create a callback function which updates the specified attribute.
      *
      * @param {string} attr
      * @returns
      */
-    function setAttrFactory(attr, coerceFunc = (x) => x) {
-        return (e) => {
+    function setAttrFactory(attr: keyof T, coerceFunc = (x: any) => x) {
+        return (e: React.ChangeEvent<HTMLInputElement>) => {
             const newVal = e.target.value || "";
             const newData = { ...boundData, [attr]: coerceFunc(newVal) };
             setBoundData(newData);
@@ -41,12 +45,17 @@ export function fieldEditorFactory(boundData, setBoundData) {
      * @param {object?} inputAttrs - additional attributes to be passed to the `<input />` element
      * @returnType {React.Node}
      */
-    function createFieldEditor(title, attr, type = "text", inputAttrs = {}) {
+    function createFieldEditor(
+        title: string,
+        attr: keyof T,
+        type: EditableType = "text",
+        inputAttrs: Partial<FormControlProps> = {}
+    ) {
         // Function called on the value before it is passed to setBoundData
-        let coerceFunc = (x) => x;
+        let coerceFunc = (x: any) => x;
         // Function that is called on the value before it is passed to the `<input />`
         // element
-        let valueFunc = (x) => x || "";
+        let valueFunc = (x: any) => x || "";
 
         // depending on the type we want to coerce values appropriately
         switch (type) {
@@ -84,15 +93,20 @@ export function fieldEditorFactory(boundData, setBoundData) {
 }
 
 /**
- * Place all children side-by-side in a react-boostrap `Form.Row`
+ * Place all children side-by-side in a react-bootstrap `Form.Row`
  *
  * @export
  * @param {*} props
  * @returnType {React.Node}
  */
-export function DialogRow(props) {
-    const { children, icon = null } = props;
-    let iconNode = null;
+export function DialogRow({
+    children,
+    icon = null,
+}: {
+    children: JSX.Element[] | JSX.Element;
+    icon?: JSX.Element | null;
+}) {
+    let iconNode: JSX.Element | null = null;
     if (icon) {
         iconNode = <div className="input-row-icon">{icon}</div>;
     }
