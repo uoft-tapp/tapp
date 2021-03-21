@@ -15,7 +15,12 @@ import { apiGET, apiPOST } from "../../libs/api-utils";
 import { postingsReducer } from "../reducers/postings";
 import { activeRoleSelector } from "./users";
 import { postingPositionsReducer } from "../reducers/posting_positions";
-import type { Posting, PostingPosition, RawPosting, RawPostingPosition } from "../defs/types";
+import type {
+    Posting,
+    PostingPosition,
+    RawPosting,
+    RawPostingPosition,
+} from "../defs/types";
 
 // actions
 const fetchPostingsSuccess = actionFactory<RawPosting[]>(

@@ -83,8 +83,7 @@ export interface MinimalPostingPosition {
     num_positions: number;
 }
 
-export interface PostingPosition extends MinimalPostingPosition {
-}
+export interface PostingPosition extends MinimalPostingPosition {}
 
 export interface MinimalPosting {
     name: string;

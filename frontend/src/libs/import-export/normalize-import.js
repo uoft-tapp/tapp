@@ -41,7 +41,8 @@ function parseDate(str) {
  */
 export function normalizeImport(
     data,
-    schema = { keys: [], requiredKeys: [], dateColumns: [] }
+    schema = { keys: [], requiredKeys: [], dateColumns: [] },
+    log = true
 ) {
     const { keys, baseName } = schema;
     let ret = [];
@@ -68,7 +69,7 @@ export function normalizeImport(
         const rowMapper = new SpreadsheetRowMapper(schema);
 
         for (const row of data) {
-            ret.push(rowMapper.formatRow(row));
+            ret.push(rowMapper.formatRow(row, log));
         }
     }
 
