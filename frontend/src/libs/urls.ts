@@ -10,7 +10,7 @@
  * @param {string} s
  * @returns
  */
-function stringToNativeType(s) {
+function stringToNativeType(s: string) {
     if (typeof s === "string" && s !== "" && !Number.isNaN(+s)) {
         return +s;
     }
@@ -21,9 +21,9 @@ function stringToNativeType(s) {
     }
 }
 
-function parseURLSearchString(s) {
+function parseURLSearchString(s: string) {
     const searchParams = new URLSearchParams(s);
-    const ret = {};
+    const ret: Record<string, any> = {};
     for (const [key, val] of searchParams.entries()) {
         ret[key] = stringToNativeType(val);
     }

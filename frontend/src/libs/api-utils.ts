@@ -3,7 +3,7 @@
  */
 
 const API_URL = "/api/v1";
-const FETCH_INIT = {
+const FETCH_INIT: RequestInit = {
     credentials: "same-origin",
     headers: {
         "Content-Type": "application/json",
@@ -17,7 +17,10 @@ const FETCH_INIT = {
  * @extends {Error}
  */
 class ApiError extends Error {
-    constructor(resp) {
+    response: Partial<Response>;
+    status: Response["status"];
+
+    constructor(resp: Pick<Response, "status"> & { message: string }) {
         const errorMessage = resp.message;
         super(errorMessage);
         if (Error.captureStackTrace) {
@@ -36,21 +39,16 @@ class ApiError extends Error {
  * @extends {ApiError}
  */
 class ApiFetchError extends ApiError {
-    constructor(resp, path) {
+    constructor(resp: Response, path: string) {
         const errorMessage = `Got status ${resp.status} ${
             resp.statusText
         } when fetching ${API_URL + path}`;
-        super({ message: errorMessage });
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, ApiFetchError);
-        }
-        this.response = resp;
-        this.status = resp.status;
+        super({ ...resp, message: errorMessage });
     }
 }
 
 // Ensure that `path` starts with a `/`
-function _ensurePath(path) {
+function _ensurePath(path: string) {
     return path.startsWith("/") ? path : "/" + path;
 }
 
@@ -59,7 +57,7 @@ function _ensurePath(path) {
 // the form `{status: ("success"|"error"), message: "...", payload: ...}.
 // Throw an error on a failed HTTP request or a `status !== "success"`
 // response from the API.
-async function _processFetchResponse(resp, path) {
+async function _processFetchResponse(resp: Response, path: string) {
     if (resp.status === 200) {
         const json = await resp.json();
         if (json.status !== "success") {
@@ -81,11 +79,11 @@ async function _processFetchResponse(resp, path) {
 /**
  * Do a GET request on the specified api route
  *
- * @param {string} path
- * @returns {Promise<object>} Promise containing the processed JSON response
+ * @param path
+ * @returns Promise containing the processed JSON response
  * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
-async function apiGET(path) {
+async function apiGET(path: string) {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path);
     const resp = await fetch(API_URL + path, {
@@ -98,12 +96,12 @@ async function apiGET(path) {
 /**
  * Do a POST request on the specified api route
  *
- * @param {string} path
- * @param {object} [body={}]
- * @returns {Promise<object>} Promise containing the processed JSON response
+ * @param path
+ * @param  [body={}]
+ * @returns Promise containing the processed JSON response
  * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
-async function apiPOST(path, body = {}) {
+async function apiPOST(path: string, body: any = {}) {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path);
     const resp = await fetch(API_URL + path, {
