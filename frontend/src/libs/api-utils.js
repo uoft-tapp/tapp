@@ -1,5 +1,5 @@
 /*
- * A collection of untilty functions for interfacing with the API
+ * A collection of utility functions for interfacing with the API
  */
 
 const API_URL = "/api/v1";
@@ -79,7 +79,7 @@ async function _processFetchResponse(resp, path) {
 }
 
 /**
- * Do a GET requestion on the specified api route
+ * Do a GET request on the specified api route
  *
  * @param {string} path
  * @returns {Promise<object>} Promise containing the processed JSON response
@@ -96,7 +96,7 @@ async function apiGET(path) {
 }
 
 /**
- * Do a POST requestion on the specified api route
+ * Do a POST request on the specified api route
  *
  * @param {string} path
  * @param {object} [body={}]
