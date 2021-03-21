@@ -15,5 +15,11 @@
         "tabWidth": 4,
         "semi": true,
         "endOfLine": "lf"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     }
 }
