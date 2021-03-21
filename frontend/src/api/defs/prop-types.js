@@ -171,10 +171,10 @@ function generatePropTypes(PropTypes) {
             intro_text: PropTypes.string,
             open_date: PropTypes.string,
             close_date: PropTypes.string,
-            status: PropTypes.oneOf(["active", "inactive"]),
+            availability: PropTypes.oneOf(["auto", "open", "closed"]),
             custom_questions: PropTypes.any,
-            posting_positions: PropTypes.arrayOf(id),
-            applications: PropTypes.arrayOf(id),
+            posting_position_ids: PropTypes.arrayOf(id),
+            application_ids: PropTypes.arrayOf(id),
         }),
         posting_position: PropTypes.shape({
             hours: PropTypes.number,

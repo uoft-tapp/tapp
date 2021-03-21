@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_DDAHS_SUCCESS,
     FETCH_ONE_DDAH_SUCCESS,
@@ -13,20 +12,24 @@ import {
     validatedApiDispatcher,
     arrayToHash,
     flattenIdFactory,
+    HasId,
+    HasSubIdField,
+    hasSubIdField,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 import { ddahsReducer } from "../reducers";
 import { assignmentsSelector } from "./assignments";
+import type { Ddah, RawAttachment, RawDdah } from "../defs/types";
 
 // actions
-const fetchDdahsSuccess = actionFactory(FETCH_DDAHS_SUCCESS);
-const fetchOneDdahSuccess = actionFactory(FETCH_ONE_DDAH_SUCCESS);
-const upsertOneDdahSuccess = actionFactory(UPSERT_ONE_DDAH_SUCCESS);
-const deleteOneDdahSuccess = actionFactory(DELETE_ONE_DDAH_SUCCESS);
-const approveOneDdahSuccess = actionFactory(DDAH_APPROVE_SUCCESS);
-const emailOneDdahSuccess = actionFactory(DDAH_EMAIL_SUCCESS);
+const fetchDdahsSuccess = actionFactory<RawDdah[]>(FETCH_DDAHS_SUCCESS);
+const fetchOneDdahSuccess = actionFactory<RawDdah>(FETCH_ONE_DDAH_SUCCESS);
+const upsertOneDdahSuccess = actionFactory<RawDdah>(UPSERT_ONE_DDAH_SUCCESS);
+const deleteOneDdahSuccess = actionFactory<RawDdah>(DELETE_ONE_DDAH_SUCCESS);
+const approveOneDdahSuccess = actionFactory<RawDdah>(DDAH_APPROVE_SUCCESS);
+const emailOneDdahSuccess = actionFactory<RawDdah>(DDAH_EMAIL_SUCCESS);
 
 // dispatchers
 export const fetchDdahs = validatedApiDispatcher({
@@ -35,8 +38,14 @@ export const fetchDdahs = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(`/${role}/sessions/${activeSessionId}/ddahs`);
+        const activeSession = getState().model.sessions.activeSession;
+        if (activeSession == null) {
+            throw new Error("Cannot fetch DDAHs without an active session");
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiGET(
+            `/${role}/sessions/${activeSessionId}/ddahs`
+        )) as RawDdah[];
         dispatch(fetchDdahsSuccess(data));
         return data;
     },
@@ -45,11 +54,10 @@ export const fetchDdahs = validatedApiDispatcher({
 export const fetchDdah = validatedApiDispatcher({
     name: "fetchDdah",
     description: "Fetch a DDAH",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/ddahs/${payload.id}`);
+        const data = (await apiGET(`/${role}/ddahs/${payload.id}`)) as RawDdah;
         dispatch(fetchOneDdahSuccess(data));
         return data;
     },
@@ -57,24 +65,27 @@ export const fetchDdah = validatedApiDispatcher({
 
 // Some helper functions to convert the data that the UI uses
 // into data that the API can use
-const assignmentToAssignmentId = flattenIdFactory(
+const assignmentToAssignmentId = flattenIdFactory<
+    HasSubIdField<"assignment">,
     "assignment",
     "assignment_id"
-);
-function prepForApi(data) {
-    const ret = assignmentToAssignmentId(data);
-    delete ret.applicant;
-    return ret;
+>("assignment", "assignment_id");
+function prepForApi(data: Partial<Ddah>) {
+    if (hasSubIdField(data, "assignment")) {
+        return assignmentToAssignmentId(data);
+    }
+    return data;
 }
 
 export const approveDdah = validatedApiDispatcher({
     name: "approveDdah",
     description: "Set a DDAH's status to approved",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = await apiPOST(`/${role}/ddahs/${payload.id}/approve`);
+        let data = (await apiPOST(
+            `/${role}/ddahs/${payload.id}/approve`
+        )) as RawDdah;
         dispatch(approveOneDdahSuccess(data));
         // The previous action doesn't actually update the redux store,
         // so we dispatch a fake upsert action to make sure the store gets updated
@@ -87,11 +98,12 @@ export const approveDdah = validatedApiDispatcher({
 export const emailDdah = validatedApiDispatcher({
     name: "emailDdah",
     description: "Email a DDAH",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = await apiPOST(`/${role}/ddahs/${payload.id}/email`);
+        let data = (await apiPOST(
+            `/${role}/ddahs/${payload.id}/email`
+        )) as RawDdah;
         dispatch(emailOneDdahSuccess(data));
         // The previous action doesn't actually update the redux store,
         // so we dispatch a fake upsert action to make sure the store gets updated
@@ -104,11 +116,13 @@ export const emailDdah = validatedApiDispatcher({
 export const upsertDdah = validatedApiDispatcher({
     name: "upsertDdah",
     description: "Add/insert a DDAH",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: Partial<Ddah>) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data = await apiPOST(`/${role}/ddahs`, prepForApi(payload));
+        let data = (await apiPOST(
+            `/${role}/ddahs`,
+            prepForApi(payload)
+        )) as RawDdah;
         dispatch(upsertOneDdahSuccess(data));
         return data;
     },
@@ -117,14 +131,13 @@ export const upsertDdah = validatedApiDispatcher({
 export const deleteDdah = validatedApiDispatcher({
     name: "deleteDdah",
     description: "Delete a DDAH",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(
+        const data = (await apiPOST(
             `/${role}/assignments/delete`,
             prepForApi(payload)
-        );
+        )) as RawDdah;
         dispatch(deleteOneDdahSuccess(data));
     },
 });
@@ -154,7 +167,7 @@ export const upsertDdahs = validatedApiDispatcher({
     name: "upsertDdahs",
     description: "Upsert a list of DDAHs",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (ddahs) => async (dispatch) => {
+    dispatcher: (ddahs: Partial<Ddah>[]) => async (dispatch) => {
         if (ddahs.length === 0) {
             return;
         }
@@ -171,10 +184,14 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
+        const activeSession = getState().model.sessions.activeSession;
+        if (activeSession == null) {
+            throw new Error("Cannot fetch DDAHs without an active session");
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/ddahs/accepted_list.pdf`
-        );
+        )) as RawAttachment;
 
         // The data comes in encoded as base64, so we decode it as binary data.
         const content = new Uint8Array(
@@ -196,7 +213,7 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
  * @param {*} ddah
  * @returns
  */
-function computeDdahStatus(ddah) {
+function computeDdahStatus(ddah: Pick<Ddah, "accepted_date" | "emailed_date">) {
     if (ddah.accepted_date) {
         return "accepted";
     }
@@ -212,7 +229,7 @@ function computeDdahStatus(ddah) {
  * @param {*} ddah
  * @returns
  */
-function computeDdahHours(ddah) {
+function computeDdahHours(ddah: Pick<Ddah, "duties">) {
     let ret = 0;
     for (const duty of ddah.duties) {
         ret += duty.hours;
@@ -231,7 +248,7 @@ export const localStoreSelector = ddahsReducer._localStoreSelector;
  */
 const _ddahsSelector = createSelector(
     localStoreSelector,
-    (state) => state._modelData
+    (state) => state._modelData as RawDdah[]
 );
 /**
  * Get the current ddahs. This selector is memoized and will only
@@ -249,6 +266,6 @@ export const ddahsSelector = createSelector(
             status: computeDdahStatus(rest),
             total_hours: computeDdahHours(rest),
             assignment: assignments[assignment_id] || {},
-        }));
+        })) as Ddah[];
     }
 );

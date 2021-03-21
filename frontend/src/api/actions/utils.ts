@@ -1,24 +1,23 @@
 import uuid from "uuid-random";
-import PropTypes from "prop-types";
 import { apiError } from "./errors";
 import { apiInteractionStart, apiInteractionEnd } from "./status";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { Action } from "redux";
+import { HasPayload } from "../reducers/utils";
+import { RootState } from "../../rootReducer";
 
 /**
  * Turn an array of items into a hash of items indexed
  * by the value of `indexBy`
  *
- * @export
- * @param {array} l
- * @param {string} [indexBy="id"]
- * @returns {object[]}
  */
-export function arrayToHash(l, indexBy = "id") {
+export function arrayToHash<T extends { id: number }>(l: T[]) {
     if (!Array.isArray(l)) {
         return l;
     }
-    const ret = {};
+    const ret: { [key: number]: T } = {};
     for (const d of l) {
-        ret[d[indexBy]] = d;
+        ret[d.id] = d;
     }
     return ret;
 }
@@ -32,13 +31,9 @@ export function arrayToHash(l, indexBy = "id") {
  *    }
  * ```
  * This factory function can be used if your action is of this standard form.
- *
- * @export
- * @param {string} type
- * @returns {function(object): {type: string, payload: object}}
  */
-export function actionFactory(type) {
-    return (payload) => ({
+export function actionFactory<T>(type: string) {
+    return (payload: T): HasPayload<T> => ({
         type,
         payload,
     });
@@ -50,22 +45,68 @@ export function actionFactory(type) {
  *
  * @param {*} obj - object to be split
  * @param {*} [props=[]] - list of properties to split out
- * @returns {[object, object]} list of two objects. The first contains all properties not listed in `props`. The second contains all properties listed in `props`
+ * @returns list of two objects. The first contains all properties not listed in `props`. The second contains all properties listed in `props`
  */
-export function splitObjByProps(obj, props = []) {
-    const ret = {},
-        filtered = {};
+export function splitObjByProps<
+    T extends object,
+    Props extends [...(keyof T)[]]
+>(obj: T, props: Props): [Omit<T, Props[number]>, Pick<T, Props[number]>] {
+    const preserved: Partial<T> = {},
+        removed: Partial<T> = {};
     for (const prop of props) {
         if (Object.hasOwnProperty.call(obj, prop)) {
-            filtered[prop] = obj[prop];
+            removed[prop] = obj[prop];
         }
     }
     for (const prop in obj) {
-        if (!Object.hasOwnProperty.call(filtered, prop)) {
-            ret[prop] = obj[prop];
+        if (!Object.hasOwnProperty.call(removed, prop)) {
+            preserved[prop] = obj[prop];
         }
     }
-    return [ret, filtered];
+    return [preserved, removed] as any;
+}
+
+export type HasId = { id: number };
+export type HasSubIdField<M extends string> = { [key in M]: HasId };
+export type HasSubIdFieldArray<M extends string> = { [key in M]: HasId[] };
+
+/**
+ * Test whether `obj[key].id` exists.
+ *
+ * @template M
+ * @param {*} obj
+ * @param {M} key
+ * @returns {obj is HasSubIdField<M>}
+ */
+export function hasSubIdField<M extends string>(
+    obj: any,
+    key: M
+): obj is HasSubIdField<M> {
+    if ("id" in obj[key]) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Test whether `obj[key]` is an array of objects with `id` fields.
+ *
+ * @template M
+ * @param {*} obj
+ * @param {M} key
+ * @returns {obj is HasSubIdFieldArray<M>}
+ */
+function hasSubIdFieldArray<M extends string>(
+    obj: any,
+    key: M
+): obj is HasSubIdFieldArray<M> {
+    if (
+        Array.isArray(obj[key]) &&
+        (obj[key].length === 0 || "id" in obj[key][0])
+    ) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -73,36 +114,60 @@ export function splitObjByProps(obj, props = []) {
  * `obj[outPropName] = obj[inPropName].id; delete obj[inPropName]` but
  * is non-destructive.
  *
- * @export
- * @param {string} inPropName
- * @param {string} outPropName
- * @param {boolean} [isArrayOfIds=false]
+ * ```typescript
+ * let orig = { foo: { id: 4 } }
+ * let renamed = flattenIdFactory<{ foo: { id: number } }, "foo", "foo_id">(
+ *    "foo",
+ *    "foo_id"
+ * )({ foo: { id: 4 } });
+ * // `renamed` now has a `foo_id` property.
+ * renamed.foo_id === 4
+ * ```
+ *
  * @returns
  */
-export function flattenIdFactory(
-    inPropName,
-    outPropName,
-    isArrayOfIds = false
-) {
-    return function (obj) {
+export function flattenIdFactory<
+    T extends HasSubIdField<InProp> | HasSubIdFieldArray<InProp>,
+    InProp extends keyof T & string,
+    OutProp extends string
+>(inPropName: InProp, outPropName: OutProp) {
+    return function (
+        obj: T
+    ): T extends HasSubIdField<InProp>
+        ? Omit<T, InProp> & { [key in OutProp]: number }
+        : Omit<T, InProp> & { [key in OutProp]: number[] } {
         // if the `inPropName` field doesn't exist, don't change anything
         // and don't error!
         if (obj[inPropName] == null) {
-            return obj;
+            return obj as any;
         }
-        const [ret, filtered] = splitObjByProps(obj, [inPropName]);
-        if (isArrayOfIds) {
-            ret[outPropName] = filtered[inPropName].map((x) => x.id);
-        } else {
+        const [ret, filtered]: [any, Pick<T, InProp>] = splitObjByProps(obj, [
+            inPropName,
+        ]);
+
+        if (hasSubIdField(filtered, inPropName)) {
             ret[outPropName] = filtered[inPropName].id;
+        } else if (hasSubIdFieldArray(filtered, inPropName)) {
+            ret[outPropName] = filtered[inPropName].map((x) => x.id);
         }
+
         return ret;
     };
 }
+
+interface DispatcherParams<RetType, ArgType extends unknown[]> {
+    name: string;
+    description: string;
+    onErrorDispatch: (e: Error) => Action;
+    dispatcher: (
+        ...args: ArgType
+    ) => ThunkAction<RetType | Promise<RetType>, RootState, void, Action>;
+}
+
 /**
- * Create a dispatcher that validates `payload` accoring to the specified
+ * Create a dispatcher that validates `payload` according to the specified
  * `propTypes`. If validation fails, a warning will be printed to the console
- * and exectution of the dispatcher will stop. This function also wraps the
+ * and execution of the dispatcher will stop. This function also wraps the
  * dispatch in `apiInteractionStart` and `apiInteractionEnd` actions.
  *
  * If the action only accepts one argument, then `propTypes` should be a single
@@ -116,59 +181,19 @@ export function flattenIdFactory(
  * @param {string} obj.name The name of the action
  * @param {string} obj.description A description of what the action does
  * @param {?(PropTypes|PropTypes[])} obj.propTypes A PropTypes object or an array of PropTypes objects
- * @param {?(function|boolean)} obj.onErrorDispatch Function that returns an action to be executed on error, or boolean `true` to autogenerate an error action
+ * @param {?(function|boolean)} obj.onErrorDispatch Function that returns an action to be executed on error, or boolean `true` to auto-generate an error action
  * @returns {function} A redux-thunk action
  */
-export function validatedApiDispatcher({
+export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
     dispatcher,
-    // eslint-disable-next-line react/forbid-foreign-prop-types
-    propTypes,
     name,
     description,
     onErrorDispatch,
-}) {
-    return (...args) => {
+}: DispatcherParams<RetType, ArgType>) {
+    return (...args: ArgType) => {
         // we return a new dispatcher that performs some validation
         // and then dispatches as usual
-        return async (dispatch) => {
-            // validate `args`. `args` is an array containing the arguments.
-            // if propTypes is an array, it lists the propTypes for every argument,
-            // otherwise there is just one argument.
-
-            let wasPropTypesError = false;
-            // This function performs the actual PropType check with extra arguments that
-            // will make the warnings in the console more descriptive
-            function propTypeCheck(propTypes, arg) {
-                PropTypes.checkPropTypes(
-                    propTypes,
-                    arg || {},
-                    "api action argument",
-                    name,
-                    () => {
-                        wasPropTypesError = true;
-                    }
-                );
-            }
-            if (Array.isArray(propTypes)) {
-                if (propTypes.length !== args.length) {
-                    wasPropTypesError = true;
-                } else {
-                    for (let i = 0; i < propTypes.length; i++) {
-                        propTypeCheck(propTypes[i], args[i]);
-                    }
-                }
-            } else if (propTypes) {
-                propTypeCheck(propTypes, args[0]);
-            }
-            if (wasPropTypesError) {
-                dispatch(
-                    apiError(
-                        `Invalid arguments to ${name} while attempting action "${description}"`
-                    )
-                );
-                return;
-            }
-
+        return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
             // Declare the start of an API interaction. Generate a `statusId`
             // so that we can specify which API interaction is ending (since multiple
             // ones may be going at the same time).

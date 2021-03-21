@@ -8,14 +8,14 @@ class PostingSerializer < ActiveModel::Serializer
                :intro_text,
                :availability,
                :custom_questions,
-               :posting_positions,
-               :applications
+               :posting_position_ids,
+               :application_ids
 
-    def posting_positions
+    def posting_position_ids
         object.posting_positions.ids
     end
 
-    def applications
+    def application_ids
         object.applications.ids
     end
 end

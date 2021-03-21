@@ -1,4 +1,3 @@
-import { reducer as formReducer } from "redux-form";
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
@@ -47,11 +46,11 @@ const reducer = combineReducers({
     }),
     ui: combineReducers({
         notifications: notificationReducer,
-        form: formReducer,
         offerTable: offerTableReducer,
         ddahsTable: ddahsTableReducer,
         globals: globalReducer,
     }),
 });
 
+export type RootState = ReturnType<typeof reducer>;
 export default reducer;

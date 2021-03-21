@@ -20,7 +20,8 @@ export function normalizeDdahImports(
         fileType: "json" | "spreadsheet";
         data: any;
     },
-    applicants: Applicant[]
+    applicants: Applicant[],
+    log = true
 ): MinimalDdah[] {
     let ret: MinimalDdah[] = [];
 
@@ -74,7 +75,7 @@ export function normalizeDdahImports(
         for (const row of unwrapped) {
             const normalized: {
                 [key: string]: any;
-            } = rowMapper.formatRow(row);
+            } = rowMapper.formatRow(row, log);
             if (normalized.utorid == null) {
                 // If a UTORid column was not specified, we need to manually search the applicants for
                 // someone matching the first/last name. `matchByUtoridOrName` will succeed or throw an error,

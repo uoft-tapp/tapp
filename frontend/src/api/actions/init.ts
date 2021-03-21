@@ -21,6 +21,20 @@ import { fetchPositions, fetchPositionsSuccess } from "./positions";
 import { setGlobals, globalsSelector } from "./globals";
 import { parseURLSearchString } from "../../libs/urls";
 import { fetchDdahs } from "./ddahs";
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "../../rootReducer";
+import { AnyAction } from "redux";
+
+type InitStages =
+    | "pageLoad"
+    | "toggleMockAPI"
+    | "setActiveUser"
+    | "setActiveUserRole"
+    | "fetchInstructors"
+    | "fetchSessions"
+    | "setActiveSession"
+    | "updateGlobals"
+    | "fetchSessionDependentData";
 
 /**
  * A helper function to replace all API actions to
@@ -28,7 +42,7 @@ import { fetchDdahs } from "./ddahs";
  *
  * @param {boolean} enableMockAPI
  */
-function toggleMockApi(enableMockAPI) {
+function toggleMockApi(enableMockAPI: boolean) {
     // in production, ToggleMockApi is a no-op. In development, it actually
     // does something.
     /* eslint-disable */
@@ -50,11 +64,13 @@ function toggleMockApi(enableMockAPI) {
  * return value is the same as the input except with `null` entries
  * removed.
  *
- * @param {*} globals
- * @returns {object} same as input but with `null` values removed.
+ * @param globals
+ * @returns same as input but with `null` values removed.
  */
-function prepareGlobals(globals) {
-    const ret = {};
+function prepareGlobals<T extends Record<string, string | number | null>>(
+    globals: T
+) {
+    const ret: Record<string, string | number> = {};
     for (const [key, val] of Object.entries(globals)) {
         if (val != null) {
             ret[key] = val;
@@ -73,12 +89,15 @@ function prepareGlobals(globals) {
  * required actions depending on the stage specified.
  *
  * @export
- * @param {string} stage - What stage to start the init procedure at
- * @param {{ startAfterStage: boolean }} options - if true, start from the stage following the specified stage; if false, start from the specified stage
- * @returns {function} an async function that handles all the API calls.
+ * @param stage - What stage to start the init procedure at
+ * @param options - if true, start from the stage following the specified stage; if false, start from the specified stage
+ * @returns an async function that handles all the API calls.
  */
-export function initFromStage(stage, options = { startAfterStage: false }) {
-    const startAfterStage = !!options.startAfterStage;
+export function initFromStage(
+    stage: InitStages,
+    options = { startAfterStage: false }
+): ThunkAction<Promise<void>, RootState, void, AnyAction> {
+    const startAfterStage = +!!options.startAfterStage;
 
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };
@@ -91,12 +110,11 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
          * A helper function to determine if the `currentStage`
          * should be run
          *
-         * @param {string} queryStage
-         * @returns {boolean} whether the `currentStage` action
-         * should be performed
+         * @param queryStage
+         * @returns whether the `currentStage` action should be performed
          */
-        function shouldRunStage(queryStage) {
-            const initOrder = [
+        function shouldRunStage(queryStage: InitStages) {
+            const initOrder: InitStages[] = [
                 "pageLoad",
                 "toggleMockAPI",
                 "setActiveUser",
@@ -228,7 +246,9 @@ export function initFromStage(stage, options = { startAfterStage: false }) {
             ];
 
             // The order of fetching here doesn't matter, so dispatch all at once
-            await Promise.all(fetchActions.map((action) => dispatch(action())));
+            await Promise.all(
+                fetchActions.map((action) => dispatch(action() as any))
+            );
         }
 
         // Wait for async actions dispatched earlier to complete.

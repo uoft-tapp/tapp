@@ -193,7 +193,8 @@ describe("Import/export library functionality", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("instructors_correct.xlsx"),
             },
-            instructorSchema
+            instructorSchema,
+            false
         );
         expect(normalizedSpreadsheetInstructors).toMatchSnapshot();
         // import correct instructors from JSON
@@ -202,7 +203,8 @@ describe("Import/export library functionality", () => {
                 fileType: "json",
                 data: importObjectJSONs.instructors,
             },
-            instructorSchema
+            instructorSchema,
+            false
         );
         expect(normalizedJsonInstructors).toMatchSnapshot();
         // import instructors data missing required key utorid should throw error
@@ -214,9 +216,10 @@ describe("Import/export library functionality", () => {
                         "instructors_missing_required_keys.xlsx"
                     ),
                 },
-                instructorSchema
-            ).toThrow(Error)
-        );
+                instructorSchema,
+                false
+            )
+        ).toThrow(Error);
     });
 
     it("Import Applicants from JSON/CSV/XLSX", () => {
@@ -226,7 +229,8 @@ describe("Import/export library functionality", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("applicants_correct.csv"),
             },
-            applicantSchema
+            applicantSchema,
+            false
         );
         expect(normalizedSpreadsheetApplicants).toMatchSnapshot();
         // import correct applicants from JSON
@@ -235,7 +239,8 @@ describe("Import/export library functionality", () => {
                 fileType: "json",
                 data: importObjectJSONs.applicants,
             },
-            applicantSchema
+            applicantSchema,
+            false
         );
         expect(normalizedJsonApplicants).toMatchSnapshot();
         // import applicants data missing required key utorid should throw error
@@ -247,9 +252,10 @@ describe("Import/export library functionality", () => {
                         "applicants_missing_required_keys.csv"
                     ),
                 },
-                applicantSchema
-            ).toThrow(Error)
-        );
+                applicantSchema,
+                false
+            )
+        ).toThrow(Error);
     });
 });
 
@@ -260,7 +266,8 @@ it("Import Positions from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("positions_correct.xlsx"),
         },
-        positionSchema
+        positionSchema,
+        false
     );
     expect(normalizedSpreadsheetPositions).toMatchSnapshot();
     // import correct positions from JSON
@@ -269,7 +276,8 @@ it("Import Positions from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.positions,
         },
-        positionSchema
+        positionSchema,
+        false
     );
     expect(normalizedJsonPositions).toMatchSnapshot();
     // import positions data missing required key utorid should throw error
@@ -279,9 +287,10 @@ it("Import Positions from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("positions_missing_required_keys.xlsx"),
             },
-            positionSchema
-        ).toThrow(Error)
-    );
+            positionSchema,
+            false
+        )
+    ).toThrow(Error);
     // import positions data with invalid start_date should throw error
     expect(() =>
         normalizeImport(
@@ -289,9 +298,10 @@ it("Import Positions from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("positions_invalid_date_columns.xlsx"),
             },
-            positionSchema
-        ).toThrow(Error)
-    );
+            positionSchema,
+            false
+        )
+    ).toThrow(Error);
 });
 
 it("Import Assignments from JSON/CSV/XLSX", () => {
@@ -301,7 +311,8 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("assignments_correct.xlsx"),
         },
-        assignmentSchema
+        assignmentSchema,
+        false
     );
     expect(normalizedSpreadsheetAssignments).toMatchSnapshot();
     // import correct assignments from JSON
@@ -310,7 +321,8 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.assignments,
         },
-        assignmentSchema
+        assignmentSchema,
+        false
     );
     expect(normalizedJsonAssignments).toMatchSnapshot();
     // import assignments data missing required key utorid should throw error
@@ -322,9 +334,10 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
                     "assignments_missing_required_keys.xlsx"
                 ),
             },
-            assignmentSchema
-        ).toThrow(Error)
-    );
+            assignmentSchema,
+            false
+        )
+    ).toThrow(Error);
     // import assignments data with invalid start_date should throw error
     expect(() =>
         normalizeImport(
@@ -332,9 +345,10 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("assignments_invalid_date_columns.xlsx"),
             },
-            assignmentSchema
-        ).toThrow(Error)
-    );
+            assignmentSchema,
+            false
+        )
+    ).toThrow(Error);
 });
 
 it("Import Ddahs from JSON/CSV/XLSX", () => {
@@ -344,7 +358,8 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("ddahs_correct.xlsx"),
         },
-        reduxStoreData.applicants
+        reduxStoreData.applicants,
+        false
     );
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
     // import ddahs with invalid applicant should throw error
@@ -354,7 +369,8 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("ddahs_invalid_applicant.xlsx"),
             },
-            reduxStoreData.applicants
+            reduxStoreData.applicants,
+            false
         )
     ).toThrow(Error);
     // import correct ddahs from JSON
@@ -363,7 +379,8 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.ddahs,
         },
-        []
+        [],
+        false
     );
     expect(normalizedJsonDdahs).toMatchSnapshot();
 });

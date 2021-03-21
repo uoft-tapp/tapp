@@ -6,9 +6,14 @@ import {
     SET_ACTIVE_SESSION,
 } from "../constants";
 import { createBasicReducerObject, createReducer } from "./utils";
+import type { BasicState, HasPayload } from "./utils";
+import { RawSession } from "../defs/types";
 
-const initialState = {
-    _modelData: [],
+export type SessionState = BasicState<RawSession> & {
+    activeSession: RawSession | null;
+};
+const initialState: SessionState = {
+    _modelData: [] as RawSession[],
     activeSession: null,
 };
 
@@ -21,9 +26,12 @@ const basicReducers = createBasicReducerObject(
     DELETE_ONE_SESSION_SUCCESS
 );
 
-export const sessionsReducer = createReducer(initialState, {
+export const sessionsReducer = createReducer<SessionState>(initialState, {
     ...basicReducers,
-    [SET_ACTIVE_SESSION]: (state, action) => ({
+    [SET_ACTIVE_SESSION]: (
+        state: SessionState,
+        action: HasPayload<RawSession>
+    ): SessionState => ({
         ...state,
         activeSession: action.payload,
     }),

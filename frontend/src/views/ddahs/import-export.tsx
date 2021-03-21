@@ -69,7 +69,7 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
                     exportType
                 )
             );
-            FileSaver.saveAs(file);
+            FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
     }, [exportType, dispatch, selectedDdahIds]);
@@ -311,7 +311,7 @@ export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
 
     async function downloadClicked() {
         const file = await dispatch(downloadDdahAcceptedList());
-        FileSaver.saveAs(file);
+        FileSaver.saveAs(file as any);
     }
 
     return (
