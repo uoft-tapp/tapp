@@ -19,6 +19,7 @@ import {
     ApplicantsList,
     ApplicantsDiffList,
 } from "../../components/applicants";
+import { applicantSchema } from "../../libs/schema";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -59,31 +60,6 @@ export function ConnectedExportApplicantsAction() {
 
     return <ExportActionButton onClick={onClick} />;
 }
-
-const applicantSchema = {
-    keys: [
-        "first_name",
-        "last_name",
-        "utorid",
-        "email",
-        "student_number",
-        "phone",
-    ],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-        "Student Number": "student_number",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "applicants",
-};
 
 export function ConnectedImportInstructorAction() {
     const dispatch = useDispatch();

@@ -1,5 +1,298 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Import Assignments from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "CSC494",
+    "start_date": "2020-01-01T00:00:00.000Z",
+    "utorid": "johnd",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": undefined,
+    "end_date": undefined,
+    "hours": undefined,
+    "position_code": "MAT136H1F",
+    "start_date": undefined,
+    "utorid": "potterh",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "MAT136H1F",
+    "start_date": "2020-02-10T00:00:00.000Z",
+    "utorid": "howeyb",
+  },
+  Object {
+    "contract_override_pdf": undefined,
+    "contract_template": "Regular",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours": 70,
+    "position_code": "MAT136H1F",
+    "start_date": "2020-02-10T00:00:00.000Z",
+    "utorid": "brownd",
+  },
+]
+`;
+
+exports[`Import Assignments from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "contract_override_pdf": null,
+    "contract_template": "regular",
+    "end_date": "2021-12-10T00:00:00.000Z",
+    "hours": 50,
+    "position_code": "CSC494",
+    "start_date": "2020-12-10T00:00:00.000Z",
+    "utorid": "potterh",
+    "wage_chunks": Array [
+      Object {
+        "end_date": "2020-12-31T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-06-30T00:00:00.000Z",
+        "hours": 10,
+        "rate": 50,
+        "start_date": "2021-01-01T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2021-07-01T00:00:00.000Z",
+      },
+    ],
+  },
+  Object {
+    "contract_override_pdf": null,
+    "contract_template": "regular",
+    "end_date": "2021-12-10T00:00:00.000Z",
+    "hours": 100,
+    "position_code": "CSC494",
+    "start_date": "2020-12-10T00:00:00.000Z",
+    "utorid": "weasleyr",
+    "wage_chunks": Array [
+      Object {
+        "end_date": "2020-12-31T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2020-12-10T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-06-30T00:00:00.000Z",
+        "hours": 10,
+        "rate": 50,
+        "start_date": "2021-01-01T00:00:00.000Z",
+      },
+      Object {
+        "end_date": "2021-12-10T00:00:00.000Z",
+        "hours": 30,
+        "rate": 50,
+        "start_date": "2021-07-01T00:00:00.000Z",
+      },
+    ],
+  },
+]
+`;
+
+exports[`Import Ddahs from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "applicant": "wilsonh",
+    "duties": Array [
+      Object {
+        "description": "Initial training",
+        "hours": 4,
+      },
+      Object {
+        "description": "Marking the midterm",
+        "hours": 25,
+      },
+      Object {
+        "description": "Running tutorials",
+        "hours": 40,
+      },
+    ],
+    "position_code": "CSC135H1F",
+  },
+]
+`;
+
+exports[`Import Ddahs from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "applicant": "potterh",
+    "duties": Array [
+      Object {
+        "description": "Initial training",
+        "hours": 80,
+      },
+      Object {
+        "description": "Marking the midterm",
+        "hours": 10,
+      },
+      Object {
+        "description": "Running tutorials",
+        "hours": 20,
+      },
+    ],
+    "position_code": "CSC135H1F",
+  },
+]
+`;
+
+exports[`Import Positions from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours_per_assignment": 20,
+    "instructors": "",
+    "position_code": "CSC494",
+    "position_title": "Capstone Project",
+    "qualifications": "",
+    "start_date": "2020-01-01T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 70,
+    "instructors": "Garcia, Emily; Smith, Henry",
+    "position_code": "MAT136H1F",
+    "position_title": "代数",
+    "qualifications": "",
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "Tutorials",
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 75,
+    "instructors": "Smith, Henry",
+    "position_code": "CSC135H1F",
+    "position_title": "Computer Fun",
+    "qualifications": "",
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": "",
+    "end_date": undefined,
+    "hours_per_assignment": undefined,
+    "instructors": undefined,
+    "position_code": "MAT235H1F",
+    "position_title": undefined,
+    "qualifications": "",
+    "start_date": undefined,
+  },
+]
+`;
+
+exports[`Import Positions from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 140,
+    "instructors": Array [
+      "millerm",
+    ],
+    "position_code": "MAT235H1F",
+    "position_title": "Calculus III",
+    "qualifications": null,
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "ad_close_date": undefined,
+    "ad_hours_per_assignment": undefined,
+    "ad_num_assignments": undefined,
+    "ad_open_date": undefined,
+    "contract_template": "Regular",
+    "current_enrollment": undefined,
+    "current_waitlisted": undefined,
+    "desired_num_assignments": undefined,
+    "duties": undefined,
+    "end_date": undefined,
+    "hours_per_assignment": undefined,
+    "instructors": undefined,
+    "position_code": "CSC135H1F",
+    "position_title": undefined,
+    "qualifications": undefined,
+    "start_date": undefined,
+  },
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-12-31T00:00:00.000Z",
+    "hours_per_assignment": 70,
+    "instructors": Array [
+      "smithh",
+      "garciae",
+    ],
+    "position_code": "MAT136H1F",
+    "position_title": "代数",
+    "qualifications": null,
+    "start_date": "2020-02-10T00:00:00.000Z",
+  },
+  Object {
+    "ad_close_date": null,
+    "ad_hours_per_assignment": null,
+    "ad_num_assignments": null,
+    "ad_open_date": null,
+    "contract_template": "Regular",
+    "current_enrollment": null,
+    "current_waitlisted": null,
+    "desired_num_assignments": null,
+    "duties": null,
+    "end_date": "2020-05-01T00:00:00.000Z",
+    "hours_per_assignment": 20,
+    "instructors": Array [],
+    "position_code": "CSC494",
+    "position_title": "Capstone Project",
+    "qualifications": null,
+    "start_date": "2020-01-01T00:00:00.000Z",
+  },
+]
+`;
+
 exports[`Import/export library functionality Export Applicants to JSON/CSV/XLSX 1`] = `
 Array [
   Array [
@@ -641,6 +934,138 @@ Array [
     "position_title": "Java入门",
     "qualifications": "99分 in CSC207",
     "start_date": "2020-02-10T00:00:00.000Z",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Applicants from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "email": "goofy-duck@donald.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "4166666666",
+    "student_number": "10000000",
+    "utorid": "johnd",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Ron",
+    "last_name": "Weasley",
+    "phone": undefined,
+    "student_number": undefined,
+    "utorid": "weasleyr",
+  },
+  Object {
+    "email": "harry@potter.com",
+    "first_name": "哈利",
+    "last_name": "Potter",
+    "phone": "41888888888",
+    "student_number": "999666999",
+    "utorid": "potterh",
+  },
+  Object {
+    "email": "smithb@mail.utoronto.ca",
+    "first_name": "Bethany",
+    "last_name": "Smith",
+    "phone": "41999999999",
+    "student_number": "131382748",
+    "utorid": "smithb",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Applicants from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "email": "goofy-duck@donald.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "phone": "4166666666",
+    "student_number": "10000000",
+    "utorid": "johnd",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Ron",
+    "last_name": "Weasley",
+    "phone": undefined,
+    "student_number": undefined,
+    "utorid": "weasleyr",
+  },
+  Object {
+    "email": "harry@potter.com",
+    "first_name": "哈利",
+    "last_name": "Potter",
+    "phone": "41888888888",
+    "student_number": "999666999",
+    "utorid": "potterh",
+  },
+  Object {
+    "email": "smithb@mail.utoronto.ca",
+    "first_name": "Bethany",
+    "last_name": "Smith",
+    "phone": "41999999999",
+    "student_number": "131382748",
+    "utorid": "smithb",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 1`] = `
+Array [
+  Object {
+    "email": "hery.smith@utoronto.ca",
+    "first_name": "Henry",
+    "last_name": "Smith",
+    "utorid": "smithh",
+  },
+  Object {
+    "email": "gordon.smith@utoronto.ca",
+    "first_name": "戈登",
+    "last_name": "Smith",
+    "utorid": "smithhg",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Emily",
+    "last_name": "Garcia",
+    "utorid": "garciae",
+  },
+  Object {
+    "email": "megan.miller@utoronto.ca",
+    "first_name": "Miller",
+    "last_name": "Miles",
+    "utorid": "millerm",
+  },
+]
+`;
+
+exports[`Import/export library functionality Import Instructors from JSON/CSV/XLSX 2`] = `
+Array [
+  Object {
+    "email": "hery.smith@utoronto.ca",
+    "first_name": "Henry",
+    "last_name": "Smith",
+    "utorid": "smithh",
+  },
+  Object {
+    "email": "gordon.smith@utoronto.ca",
+    "first_name": "戈登",
+    "last_name": "Smith",
+    "utorid": "smithg",
+  },
+  Object {
+    "email": undefined,
+    "first_name": "Emily",
+    "last_name": "Garcia",
+    "utorid": "garciae",
+  },
+  Object {
+    "email": "megan.miller@utoronto.ca",
+    "first_name": "Miller",
+    "last_name": "Miles",
+    "utorid": "millerm",
   },
 ]
 `;

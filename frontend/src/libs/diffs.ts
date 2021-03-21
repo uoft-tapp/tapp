@@ -123,7 +123,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching position in the existing list
         const matchingPosition = existingPositions.find(
             (x) => x.position_code === position.position_code
         );
@@ -219,7 +219,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching assignment in the existing list
         const assignmentHash = hashAssignment(assignment);
         const matchingAssignment = existingAssignments.find(
             (x) => hashAssignment(x) === assignmentHash
@@ -312,7 +312,7 @@ export const diffImport = {
             changes: {},
             obj: null as any, // Set to any temporarily to keep typescript from complaining
         };
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching applicant in the existing list
         const matchingApplicant = existingApplicants.find(
             (x) => x.utorid === applicant.utorid
         );
@@ -356,7 +356,7 @@ export const diffImport = {
         };
         const assignments = context.assignments;
 
-        // Check to see if there is a matching instructor in the existing list
+        // Check to see if there is a matching ddah in the existing list
         const matchingDdah = existingDdahs.find(
             (x) =>
                 x.assignment.position.position_code === ddah.position_code &&

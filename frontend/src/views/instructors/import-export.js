@@ -18,6 +18,7 @@ import {
     prepareInstructorData,
 } from "../../libs/import-export";
 import { diffImport, getChanged } from "../../libs/diffs";
+import { instructorSchema } from "../../libs/schema";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -56,23 +57,6 @@ export function ConnectedExportInstructorsAction() {
 
     return <ExportActionButton onClick={onClick} />;
 }
-
-const instructorSchema = {
-    keys: ["first_name", "last_name", "utorid", "email"],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "instructors",
-};
 
 export function ConnectedImportInstructorAction({
     setImportInProgress = null,
