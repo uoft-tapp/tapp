@@ -22,6 +22,7 @@ import { activeRoleSelector } from "./users";
 import { ddahsReducer } from "../reducers";
 import { assignmentsSelector } from "./assignments";
 import type { Ddah, RawAttachment, RawDdah } from "../defs/types";
+import { activeSessionSelector } from "./sessions";
 
 // actions
 const fetchDdahsSuccess = actionFactory<RawDdah[]>(FETCH_DDAHS_SUCCESS);
@@ -38,7 +39,7 @@ export const fetchDdahs = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const activeSession = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {
             throw new Error("Cannot fetch DDAHs without an active session");
         }
@@ -184,7 +185,7 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const activeSession = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {
             throw new Error("Cannot fetch DDAHs without an active session");
         }

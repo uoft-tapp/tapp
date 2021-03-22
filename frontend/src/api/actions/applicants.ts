@@ -12,12 +12,21 @@ import { applicantsReducer } from "../reducers/applicants";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 import { activeSessionSelector } from "./sessions";
+import { Applicant, RawApplicant } from "../defs/types";
 
 // actions
-export const fetchApplicantsSuccess = actionFactory(FETCH_APPLICANTS_SUCCESS);
-const fetchOneApplicantSuccess = actionFactory(FETCH_ONE_APPLICANT_SUCCESS);
-const upsertOneApplicantSuccess = actionFactory(UPSERT_ONE_APPLICANT_SUCCESS);
-const deleteOneApplicantSuccess = actionFactory(DELETE_ONE_APPLICANT_SUCCESS);
+export const fetchApplicantsSuccess = actionFactory<RawApplicant[]>(
+    FETCH_APPLICANTS_SUCCESS
+);
+const fetchOneApplicantSuccess = actionFactory<RawApplicant>(
+    FETCH_ONE_APPLICANT_SUCCESS
+);
+const upsertOneApplicantSuccess = actionFactory<RawApplicant>(
+    UPSERT_ONE_APPLICANT_SUCCESS
+);
+const deleteOneApplicantSuccess = actionFactory<RawApplicant>(
+    DELETE_ONE_APPLICANT_SUCCESS
+);
 
 // dispatchers
 export const fetchApplicants = validatedApiDispatcher({
@@ -27,7 +36,11 @@ export const fetchApplicants = validatedApiDispatcher({
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         // When we fetch applicants, we only want the applicants associated with the current session
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw new Error("Cannot fetch DDAHs without an active session");
+        }
+        const { id: activeSessionId } = activeSession;
         const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/applicants`
         );
@@ -39,7 +52,6 @@ export const fetchApplicants = validatedApiDispatcher({
 export const fetchApplicant = validatedApiDispatcher({
     name: "fetchApplicant",
     description: "Fetch applicant",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
@@ -52,15 +64,18 @@ export const fetchApplicant = validatedApiDispatcher({
 export const upsertApplicant = validatedApiDispatcher({
     name: "upsertApplicant",
     description: "Add/insert applicant",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: (payload, bySession = true) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         let data;
         if (bySession) {
-            const session = activeSessionSelector(getState());
+            const activeSession = activeSessionSelector(getState());
+            if (activeSession == null) {
+                throw new Error("Cannot fetch DDAHs without an active session");
+            }
+            const { id: activeSessionId } = activeSession;
             data = await apiPOST(
-                `/${role}/sessions/${session.id}/applicants`,
+                `/${role}/sessions/${activeSessionId}/applicants`,
                 payload
             );
         } else {
@@ -74,7 +89,6 @@ export const upsertApplicant = validatedApiDispatcher({
 export const deleteApplicant = validatedApiDispatcher({
     name: "deleteApplicant",
     description: "Delete applicant",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
     dispatcher: (payload) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
@@ -108,7 +122,7 @@ export const upsertApplicants = validatedApiDispatcher({
     name: "upsertApplicants",
     description: "Upsert applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (applicants) => async (dispatch) => {
+    dispatcher: (applicants: Applicant[]) => async (dispatch) => {
         if (applicants.length === 0) {
             return;
         }

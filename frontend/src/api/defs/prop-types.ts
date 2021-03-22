@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import * as OrigPropTypes from "prop-types";
 
 /**
  * Generate proptypes for API responses using the passed-in proptypes function.
@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
  * @param {*} PropTypes - a PropTypes function (coming from the `"prop-types"` module or elsewhere)
  * @returns an object of PropTypes
  */
-function generatePropTypes(PropTypes) {
+function generatePropTypes(PropTypes: typeof OrigPropTypes) {
     const id = PropTypes.oneOfType([PropTypes.number, PropTypes.string]);
 
     return {
@@ -130,15 +130,14 @@ function generatePropTypes(PropTypes) {
             nag_count: PropTypes.number,
         }),
         application: PropTypes.shape({
-            session_id: id,
             posting_id: id,
+            applicant_id: id,
             comments: PropTypes.string,
             program: PropTypes.string,
             department: PropTypes.string,
             previous_uoft_experience: PropTypes.string,
             yip: PropTypes.number,
             annotation: PropTypes.string,
-            applicant_id: id,
             position_preference: PropTypes.arrayOf(
                 PropTypes.shape({
                     preference_level: PropTypes.number,
@@ -185,6 +184,6 @@ function generatePropTypes(PropTypes) {
     };
 }
 
-const apiPropTypes = generatePropTypes(PropTypes);
+const apiPropTypes = generatePropTypes(OrigPropTypes);
 
 export { apiPropTypes, generatePropTypes };

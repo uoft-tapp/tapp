@@ -156,14 +156,25 @@ export interface Ddah {
     id: number;
     assignment: Assignment;
     signature?: string;
-    approved_date?: string;
-    accepted_date?: string;
-    revised_date?: string;
-    emailed_date?: string;
+    approved_date?: string | null;
+    accepted_date?: string | null;
+    revised_date?: string | null;
+    emailed_date?: string | null;
     url_token: string;
     duties: Duty[];
     total_hours: number;
     status: "accepted" | "emailed" | null;
+}
+
+export type UserRole = "admin" | "instructor" | "ta";
+export interface User extends HasId {
+    utorid: string;
+    roles: UserRole[];
+}
+
+export interface ActiveUser extends Omit<User, "id"> {
+    id: number | null;
+    active_role: UserRole;
 }
 
 // The Raw* types are the types returned by the API
@@ -175,22 +186,84 @@ export interface RawSession extends HasId {
     start_date: string;
     end_date: string;
     name: string;
+    rate1: number;
+    rate2: number | null;
 }
 
-export interface RawAttachment {
-    file_name: string;
-    mime_type: string;
-    content: string;
+export interface RawPosition extends HasId {
+    position_code: string;
+    position_title: string | null;
+    hours_per_assignment: number;
+    start_date: string;
+    end_date: string;
+    contract_template_id: number;
+    qualifications: string | null;
+    duties: string | null;
+    desired_num_assignments: number | null;
+    current_enrollment: number | null;
+    current_waitlisted: number | null;
+    instructor_ids: number[];
 }
 
-export interface RawDdah {
+export interface RawApplicant extends HasId {
+    utorid: string;
+    student_number: string | null;
+    first_name: string;
+    last_name: string | null;
+    email: string | null;
+    phone: string | null;
+}
+
+export interface RawApplication extends HasId {
+    applicant_id: number;
+    posting_id: number | null;
+    comments: string | null;
+    program: string | null;
+    department: string | null;
+    previous_uoft_experience: string | null;
+    yip: number | null;
+    gpa: number | null;
+    status: string | null;
+    custom_question_answers: any;
+    annotation: string | null;
+}
+
+export interface RawAssignment extends HasId {
+    applicant_id: number;
+    position_id: number;
+    start_date: string;
+    end_date: string;
+    note: string | null;
+    contract_override_pdf: string | null;
+    active_offer_status:
+        | "accepted"
+        | "rejected"
+        | "withdrawn"
+        | "provisional"
+        | "pending"
+        | "no_offer"
+        | null;
+    active_offer_url_token: string | null;
+    active_offer_recent_activity_date: string | null;
+    active_offer_nag_count: number | null;
+    hours: number;
+}
+
+export interface RawInstructor extends HasId {
+    first_name: string;
+    last_name: string | null;
+    email: string | null;
+    utorid: string;
+}
+
+export interface RawDdah extends HasId {
     id: number;
     assignment_id: number;
-    signature?: string;
-    approved_date?: string;
-    accepted_date?: string;
-    revised_date?: string;
-    emailed_date?: string;
+    signature: string | null;
+    approved_date: string | null;
+    accepted_date: string | null;
+    revised_date: string | null;
+    emailed_date: string | null;
     url_token: string;
     duties: Duty[];
 }
@@ -207,8 +280,27 @@ export interface RawPosting extends HasId {
 }
 
 export interface RawPostingPosition {
-    hours: number;
-    num_positions: number;
     position_id: number;
     posting_id: number;
+    hours: number;
+    num_positions: number;
+}
+
+export interface RawContractTemplate extends HasId {
+    template_file: string;
+    template_name: string;
+}
+
+export interface RawWageChunk extends HasId {
+    assignment_id: number;
+    start_date: string;
+    end_date: string;
+    hours: number;
+    rate: number;
+}
+
+export interface RawAttachment {
+    file_name: string;
+    mime_type: string;
+    content: string;
 }
