@@ -8,7 +8,7 @@ import {
     positionsSelector,
     upsertAssignments,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -23,6 +23,7 @@ import {
 import { diffImport, getChanged } from "../../libs/diffs";
 import { offerTableSelector } from "../offertable/actions";
 import { assignmentSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -35,7 +36,7 @@ export function ConnectedExportAssignmentsAction({
     disabled = false,
     setExportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
@@ -96,7 +97,7 @@ export function ConnectedImportAssignmentsAction({
     disabled = false,
     setImportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
     const positions = useSelector(positionsSelector);

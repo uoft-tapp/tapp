@@ -62,9 +62,9 @@ export const fetchPostings = validatedApiDispatcher({
         }
         const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = (await apiGET(
+        const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/postings` as const
-        ));
+        );
         dispatch(fetchPostingsSuccess(data));
         return data;
     },

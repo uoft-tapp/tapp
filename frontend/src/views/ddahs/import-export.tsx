@@ -3,7 +3,7 @@ import FileSaver from "file-saver";
 import JSZip from "jszip";
 import XLSX from "xlsx";
 import { applicantsSelector, assignmentsSelector } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -24,6 +24,7 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -33,7 +34,7 @@ import { FaDownload } from "react-icons/fa";
  * @returns
  */
 export function ConnectedExportDdahsAction({ disabled = false }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<
         "spreadsheet" | "json" | null
     >(null);
@@ -88,7 +89,7 @@ export function ConnectedImportDdahsAction({
     disabled: boolean;
     setImportInProgress?: Function | null;
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const applicants = useSelector<any, Applicant[]>(applicantsSelector);
@@ -307,7 +308,7 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 }
 
 export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     async function downloadClicked() {
         const file = await dispatch(downloadDdahAcceptedList());

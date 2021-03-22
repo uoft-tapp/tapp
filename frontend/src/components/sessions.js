@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
 import { EditableField } from "./edit-field-widgets";
 import { formatDate } from "../libs/utils";
@@ -7,6 +7,7 @@ import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { useThunkDispatch } from "../libs/thunk-dispatch";
 
 function EditableCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
@@ -65,7 +66,7 @@ export function ConnectedSessionsList(props) {
     const { inDeleteMode = false } = props;
     const [sessionToDelete, setSessionToDelete] = React.useState(null);
     const sessions = useSelector(sessionsSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     function _upsertSession(session) {
         return dispatch(upsertSession(session));

@@ -5,7 +5,7 @@ import {
     applicantsSelector,
     upsertApplicants,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -20,6 +20,7 @@ import {
     ApplicantsDiffList,
 } from "../../components/applicants";
 import { applicantSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -29,7 +30,7 @@ import { applicantSchema } from "../../libs/schema";
  * @returns
  */
 export function ConnectedExportApplicantsAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<
         "spreadsheet" | "json" | null
     >(null);
@@ -65,7 +66,7 @@ export function ConnectedExportApplicantsAction() {
 }
 
 export function ConnectedImportInstructorAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const applicants = useSelector(applicantsSelector);
     const [fileContent, setFileContent] = React.useState<{
         fileType: "json" | "spreadsheet";

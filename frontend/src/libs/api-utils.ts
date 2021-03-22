@@ -121,6 +121,9 @@ async function apiPOST(path: string, body: any = {}) {
 
 export { API_URL, ApiError, ApiFetchError, apiGET, apiPOST };
 
+// XXX TODO: this is the start of a type system for typing API
+// requests. However, it appears not to be usable in TypeScript 4.2 with template literals,
+// which we use all over the code. See https://stackoverflow.com/questions/66739139/typescript-infer-temlate-lieral-from-const-template-literal/66739356#66739356
 type PathVariable = string;
 type ExtractPathVariable<T extends string> = T extends `:${string}`
     ? PathVariable

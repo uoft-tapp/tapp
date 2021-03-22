@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { initFromStage, activeRoleSelector } from "./api/actions";
 import { ConnectedNotifications } from "./views/notifications";
 import { AdminRoutes, InstructorRoutes } from "./views/routes";
@@ -8,10 +8,11 @@ import { AdminHeader } from "./views/admin";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { InstructorHeader } from "./views/instructor";
+import { useThunkDispatch } from "./libs/thunk-dispatch";
 
 export default function ConnectedApp() {
     const activeRole = useSelector(activeRoleSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     useEffect(() => {
         // When the page is first loaded, we need to fetch all the data

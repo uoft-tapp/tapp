@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { offerTableSelector } from "../offertable/actions";
 import {
     assignmentsSelector,
@@ -10,6 +10,7 @@ import { Assignment, WageChunk } from "../../api/defs/types";
 import { formatDate } from "../../libs/utils";
 import { ActionButton } from "../../components/action-buttons";
 import { FaSearchDollar } from "react-icons/fa";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 function WagechunkDetails({ wageChunks }: { wageChunks: WageChunk[] }) {
     return (
@@ -43,7 +44,7 @@ export function ConnectedAssignmentDetails({
 }) {
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const assignment = assignments.find((a) => a.id === assignmentId);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     React.useEffect(() => {
         if (assignment?.wage_chunks) {
