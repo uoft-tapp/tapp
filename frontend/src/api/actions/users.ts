@@ -33,11 +33,10 @@ export const fetchActiveUser = validatedApiDispatcher({
         // If our currently-set role is one that we don't have,
         // set our role to one we do have.
         const currentRole = activeRoleSelector(getState());
-        if (
-            data.roles &&
-            currentRole != null &&
-            !data.roles.includes(currentRole)
-        ) {
+        // `currentRole` could be `null`. However `Array.includes` is
+        // a safe operation for any type, so we force TypeScript to stop complaining
+        // by passing in `currentRole!`
+        if (data.roles && !data.roles.includes(currentRole!)) {
             dispatch(setActiveUserRole(data.roles[0]));
         }
         return data;

@@ -183,7 +183,7 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
     name: "downloadDdahAcceptedList",
     description: "Download a pdf list of accepted DDAHs for the active session",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: () => async (dispatch, getState) => {
+    dispatcher: () => async (_dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {

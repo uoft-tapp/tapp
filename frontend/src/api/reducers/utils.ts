@@ -81,7 +81,7 @@ export function createBasicReducerObject<T extends HasIdField>(
     DELETE_ONE: string
 ) {
     return {
-        [FETCH_MANY]: (state: BasicState<T>, action: HasPayload<T>) => ({
+        [FETCH_MANY]: (state: BasicState<T>, action: HasPayload<T[]>) => ({
             ...state,
             _modelData: action.payload,
         }),

@@ -1,6 +1,18 @@
 import { dataToFile } from "./data-to-file";
 import { prepareSpreadsheet } from "./prepare-spreadsheet";
 import { prepareMinimal } from "./prepare-json";
+import type {
+    Applicant,
+    Assignment,
+    Ddah,
+    Instructor,
+    Position,
+    Session,
+} from "../../api/defs/types";
+import type { ExportFormat } from "./data-to-file";
+
+export type PrepareDataFunc<T> = (data: T[], dataFormat: ExportFormat) => File;
+type FilterFunc<T> = ((array: T[]) => T[]) | null;
 
 /**
  * Make a function that converts a list of applicants into a `File` object.
@@ -10,7 +22,10 @@ import { prepareMinimal } from "./prepare-json";
  * @param {"csv" | "json" | "xlsx"} dataFormat
  * @returns
  */
-export function prepareApplicantData(applicants, dataFormat) {
+export function prepareApplicantData(
+    applicants: Applicant[],
+    dataFormat: ExportFormat
+) {
     return dataToFile(
         {
             toSpreadsheet: () => prepareSpreadsheet.applicant(applicants),
@@ -29,13 +44,19 @@ export function prepareApplicantData(applicants, dataFormat) {
  * A factory function which produces assignment prepareData function,
  *
  * @export
- * @param {Session} session
- * @param {Function | null} assignmentFilter
- * @returns {Function}
+ * @param session
+ * @param assignmentFilter
+ * @returns
  */
-export function prepareAssignmentDataFactory(session, assignmentFilter = null) {
+export function prepareAssignmentDataFactory(
+    session: Session,
+    assignmentFilter: FilterFunc<Assignment> = null
+) {
     // Make a function that converts a list of assignments into a `File` object.
-    return function prepareData(assignments, dataFormat) {
+    return function prepareData(
+        assignments: Assignment[],
+        dataFormat: ExportFormat
+    ) {
         if (assignmentFilter instanceof Function) {
             assignments = assignmentFilter(assignments);
         }
@@ -58,12 +79,12 @@ export function prepareAssignmentDataFactory(session, assignmentFilter = null) {
  * A factory function which produces ddah prepareData function,
  *
  * @export
- * @param {Function | null} ddahFilter
- * @returns {Function}
+ * @param ddahFilter
+ * @returns
  */
-export function prepareDdahDataFactory(ddahFilter) {
+export function prepareDdahDataFactory(ddahFilter: FilterFunc<Ddah>) {
     // Make a function that converts a list of ddahs into a `File` object.
-    return function prepareData(ddahs, dataFormat) {
+    return function prepareData(ddahs: Ddah[], dataFormat: ExportFormat) {
         if (ddahFilter instanceof Function) {
             ddahs = ddahFilter(ddahs);
         }
@@ -88,7 +109,10 @@ export function prepareDdahDataFactory(ddahFilter) {
  * @param {"csv" | "json" | "xlsx"} dataFormat
  * @returns
  */
-export function prepareInstructorData(instructors, dataFormat) {
+export function prepareInstructorData(
+    instructors: Instructor[],
+    dataFormat: ExportFormat
+) {
     return dataToFile(
         {
             toSpreadsheet: () => prepareSpreadsheet.instructor(instructors),
@@ -111,7 +135,10 @@ export function prepareInstructorData(instructors, dataFormat) {
  * @param {"csv" | "json" | "xlsx"} dataFormat
  * @returns
  */
-export function preparePositionData(positions, dataFormat) {
+export function preparePositionData(
+    positions: Position[],
+    dataFormat: ExportFormat
+) {
     return dataToFile(
         {
             toSpreadsheet: () => prepareSpreadsheet.position(positions),

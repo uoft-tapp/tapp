@@ -82,7 +82,10 @@ function ConfirmDeleteDialog(props: {
 export function ConnectedApplicantsList({ inDeleteMode = false }) {
     const applicants = useSelector(applicantsSelector) as Applicant[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
-    const [applicantToDelete, setApplicantToDelete] = React.useState(null);
+    const [
+        applicantToDelete,
+        setApplicantToDelete,
+    ] = React.useState<Applicant | null>(null);
     const dispatch = useDispatch();
 
     const assignmentsHash: { [key: string]: boolean } = {};
@@ -181,8 +184,10 @@ export function ConnectedApplicantsList({ inDeleteMode = false }) {
                 show={!!applicantToDelete}
                 onHide={() => setApplicantToDelete(null)}
                 onDelete={async () => {
-                    await dispatch(deleteApplicant(applicantToDelete));
-                    setApplicantToDelete(null);
+                    if (applicantToDelete != null) {
+                        await dispatch(deleteApplicant(applicantToDelete));
+                        setApplicantToDelete(null);
+                    }
                 }}
             />
         </React.Fragment>

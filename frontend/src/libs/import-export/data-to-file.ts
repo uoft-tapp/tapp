@@ -1,14 +1,24 @@
 import XLSX from "xlsx";
 
+export type ExportFormat = "csv" | "json" | "spreadsheet";
+export type ExportFormatters = {
+    toJson: () => any;
+    toSpreadsheet: () => (string | number | null | undefined)[][];
+};
+
 /**
  *  Create a `File` object containing of the specified format.
  *
- * @param {{toSpreadsheet: func, toJson: func}} formatters - Formatters return an array of objects (usable as spreadsheet rows) or a javascript object to be passed to JSON.stringify
- * @param {"xlsx" | "csv" | "json"} dataFormat
- * @param {string} filePrefix
- * @returns {File}
+ * @param formatters - Formatters return an array of objects (usable as spreadsheet rows) or a javascript object to be passed to JSON.stringify
+ * @param dataFormat
+ * @param filePrefix
+ * @returns
  */
-export function dataToFile(formatters, dataFormat, filePrefix = "") {
+export function dataToFile(
+    formatters: ExportFormatters,
+    dataFormat: ExportFormat,
+    filePrefix = ""
+) {
     const fileName = `${filePrefix}${
         filePrefix ? "_" : ""
     }export_${new Date().toLocaleDateString("en-CA", {

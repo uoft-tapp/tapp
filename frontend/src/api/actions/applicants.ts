@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_APPLICANTS_SUCCESS,
     FETCH_ONE_APPLICANT_SUCCESS,
@@ -6,13 +5,14 @@ import {
     DELETE_ONE_APPLICANT_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import { actionFactory, validatedApiDispatcher } from "./utils";
+import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { applicantsReducer } from "../reducers/applicants";
 import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 import { activeSessionSelector } from "./sessions";
 import { Applicant, RawApplicant } from "../defs/types";
+import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
 
 // actions
 export const fetchApplicantsSuccess = actionFactory<RawApplicant[]>(
@@ -41,9 +41,9 @@ export const fetchApplicants = validatedApiDispatcher({
             throw new Error("Cannot fetch DDAHs without an active session");
         }
         const { id: activeSessionId } = activeSession;
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/applicants`
-        );
+        )) as RawApplicant[];
         dispatch(fetchApplicantsSuccess(data));
         return data;
     },
@@ -53,9 +53,11 @@ export const fetchApplicant = validatedApiDispatcher({
     name: "fetchApplicant",
     description: "Fetch applicant",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/applicants/${payload.id}`);
+        const data = (await apiGET(
+            `/${role}/applicants/${payload.id}`
+        )) as RawApplicant;
         dispatch(fetchOneApplicantSuccess(data));
         return data;
     },
@@ -65,9 +67,12 @@ export const upsertApplicant = validatedApiDispatcher({
     name: "upsertApplicant",
     description: "Add/insert applicant",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload, bySession = true) => async (dispatch, getState) => {
+    dispatcher: (
+        payload: Partial<Applicant>,
+        bySession: boolean = true
+    ) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        let data;
+        let data: RawApplicant;
         if (bySession) {
             const activeSession = activeSessionSelector(getState());
             if (activeSession == null) {
@@ -90,10 +95,14 @@ export const deleteApplicant = validatedApiDispatcher({
     name: "deleteApplicant",
     description: "Delete applicant",
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(`/${role}/applicants/delete`, payload);
+        const data = (await apiPOST(
+            `/${role}/applicants/delete`,
+            payload
+        )) as RawApplicant;
         dispatch(deleteOneApplicantSuccess(data));
+        return data;
     },
 });
 
@@ -101,10 +110,10 @@ export const exportApplicants = validatedApiDispatcher({
     name: "exportApplicants",
     description: "Export applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (formatter, format = "spreadsheet") => async (
-        dispatch,
-        getState
-    ) => {
+    dispatcher: (
+        formatter: PrepareDataFunc<Applicant>,
+        format: ExportFormat = "spreadsheet"
+    ) => async (dispatch, getState) => {
         if (!(formatter instanceof Function)) {
             throw new Error(
                 `"formatter" must be a function when using the export action.`
@@ -122,7 +131,7 @@ export const upsertApplicants = validatedApiDispatcher({
     name: "upsertApplicants",
     description: "Upsert applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (applicants: Applicant[]) => async (dispatch) => {
+    dispatcher: (applicants: Partial<Applicant>[]) => async (dispatch) => {
         if (applicants.length === 0) {
             return;
         }
@@ -144,5 +153,5 @@ export const upsertApplicants = validatedApiDispatcher({
 export const localStoreSelector = applicantsReducer._localStoreSelector;
 export const applicantsSelector = createSelector(
     localStoreSelector,
-    (state) => state._modelData
+    (state) => state._modelData as Applicant[]
 );

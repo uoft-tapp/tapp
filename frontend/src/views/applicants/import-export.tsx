@@ -44,6 +44,9 @@ export function ConnectedExportApplicantsAction() {
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
+            if (exportType == null) {
+                throw new Error(`Unknown export type ${exportType}`);
+            }
 
             const file = await dispatch(
                 exportApplicants(prepareApplicantData, exportType)
