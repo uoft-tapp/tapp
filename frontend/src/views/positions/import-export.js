@@ -11,13 +11,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
+import { normalizeImport, preparePositionData } from "../../libs/import-export";
 import {
     PositionsList,
     PositionsDiffList,
 } from "../../components/positions-list";
-import { prepareMinimal } from "../../libs/exportUtils";
-import { diffImport, getChanged } from "../../libs/diffUtils";
+import { diffImport, getChanged } from "../../libs/diffs";
+import { positionSchema } from "../../libs/schema";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -41,66 +41,8 @@ export function ConnectedExportPositionsAction({ disabled }) {
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
 
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(positions, dataFormat) {
-                return dataToFile(
-                    {
-                        toSpreadsheet: () =>
-                            [
-                                [
-                                    "Position Code",
-                                    "Position Title",
-                                    "Start Date",
-                                    "End Date",
-                                    "Hours Per Assignment",
-                                    "Number of Assignments",
-                                    "Contract Template",
-                                    "Instructors",
-                                    "Duties",
-                                    "Qualifications",
-                                    "Current Enrollment",
-                                    "Current Waitlist",
-                                ],
-                            ].concat(
-                                positions.map((position) => [
-                                    position.position_code,
-                                    position.position_title,
-                                    position.start_date &&
-                                        new Date(position.start_date)
-                                            .toJSON()
-                                            .slice(0, 10),
-                                    position.end_date &&
-                                        new Date(position.end_date)
-                                            .toJSON()
-                                            .slice(0, 10),
-                                    position.hours_per_assignment,
-                                    position.desired_num_assignments,
-                                    position.contract_template.template_name,
-                                    position.instructors
-                                        .map(
-                                            (instructor) =>
-                                                `${instructor.last_name}, ${instructor.first_name}`
-                                        )
-                                        .join("; "),
-                                    position.duties || "",
-                                    position.qualifications || "",
-                                    position.current_enrollment,
-                                    position.current_waitlisted,
-                                ])
-                            ),
-                        toJson: () => ({
-                            positions: positions.map((position) =>
-                                prepareMinimal.position(position)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "positions"
-                );
-            }
-
             const file = await dispatch(
-                exportPositions(prepareData, exportType)
+                exportPositions(preparePositionData, exportType)
             );
 
             FileSaver.saveAs(file);
@@ -114,46 +56,6 @@ export function ConnectedExportPositionsAction({ disabled }) {
 
     return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
-
-const positionSchema = {
-    keys: [
-        "position_code",
-        "position_title",
-        "start_date",
-        "end_date",
-        "hours_per_assignment",
-        "desired_num_assignments",
-        "contract_template",
-        "instructors",
-        "duties",
-        "qualifications",
-        "current_enrollment",
-        "current_waitlisted",
-        "ad_open_date",
-        "ad_close_date",
-        "ad_hours_per_assignment",
-        "ad_num_assignments",
-    ],
-    keyMap: {
-        "Position Code": "position_code",
-        "Course Code": "position_code",
-        "Course Name": "position_code",
-        "Position Title": "position_title",
-        "Start Date": "start_date",
-        Start: "start_date",
-        "End Date": "end_date",
-        End: "end_date",
-        "Hours Per Assignment": "hours_per_assignment",
-        "Number of Assignments": "desired_num_assignments",
-        "Contract Template": "contract_template",
-        "Current Enrollment": "current_enrollment",
-        "Current Waitlist": "current_waitlisted",
-    },
-    dateColumns: ["start_date", "end_date"],
-    requiredKeys: ["position_code", "contract_template"],
-    primaryKey: "position_code",
-    baseName: "positions",
-};
 
 export function ConnectedImportPositionsAction({
     disabled,

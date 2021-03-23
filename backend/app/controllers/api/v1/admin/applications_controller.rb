@@ -16,9 +16,6 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
 
         start_transaction_and_rollback_on_exception do
             application = Application.create!(application_params)
-            application.create_applicant_data_for_matching!(
-                applicant_data_for_matching_params
-            )
             render_success application.as_json
         end
     end
@@ -26,26 +23,23 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
     private
 
     def application_params
-        params.permit(:comments, :session_id)
-    end
-
-    def applicant_data_for_matching_params
         params.permit(
+            :comments,
+            :session_id,
             :program,
             :department,
             :previous_uoft_experience,
             :yip,
             :annotation,
-            :applicant_id
+            :gpa,
+            :status,
+            :custom_question_answers
         )
     end
 
     def update
         start_transaction_and_rollback_on_exception do
-            @application.update!(application_update_params)
-            @application.applicant_data_for_matching.update!(
-                applicant_data_for_matching_params
-            )
+            @application.update!(application_params)
             render_success application.as_json
         end
     end

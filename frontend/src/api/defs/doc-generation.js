@@ -65,8 +65,8 @@ function propTypesProxy(obj, callChain = []) {
 }
 const wrappedPropTypes = propTypesProxy(PropTypes);
 /**
- * PropType defintions for the API that have been wrapped in
- * a proxy so they can be convereted into documentation.
+ * PropType definitions for the API that have been wrapped in
+ * a proxy so they can be converted into documentation.
  */
 const docApiPropTypes = generatePropTypes(wrappedPropTypes);
 
@@ -177,7 +177,7 @@ function wrapInStandardApiResponseForSwagger(payload = { type: "object" }) {
  */
 function urlTemplateToSwagger(url) {
     // get the template variables
-    // using a trick: have the RoutePasers
+    // using a trick: have the RouteParsers
     // parse it's own template, giving us
     // a list of variables in the process
     const parsed = RouteParser(url);
@@ -209,7 +209,7 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
     ret.summary =
         `(prefixes: ${prefixRoles.map((x) => "/" + x).join(", ")}) ` +
         docs.summary;
-    // If there are templateVars, they should become `paramters`
+    // If there are templateVars, they should become `parameters`
     if (templateVars.length > 0) {
         ret.parameters = templateVars.map((x) => ({
             name: x,

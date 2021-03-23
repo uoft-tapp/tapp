@@ -52,10 +52,6 @@ function generatePropTypes(PropTypes) {
             contract_template_id: id,
             duties: PropTypes.string,
             qualifications: PropTypes.string,
-            ad_hours_per_assignment: PropTypes.number,
-            ad_num_assignments: PropTypes.number,
-            ad_open_date: PropTypes.string,
-            ad_close_date: PropTypes.string,
             desired_num_assignments: PropTypes.number,
             current_enrollment: PropTypes.number,
             current_waitlisted: PropTypes.number,
@@ -135,6 +131,7 @@ function generatePropTypes(PropTypes) {
         }),
         application: PropTypes.shape({
             session_id: id,
+            posting_id: id,
             comments: PropTypes.string,
             program: PropTypes.string,
             department: PropTypes.string,
@@ -168,6 +165,22 @@ function generatePropTypes(PropTypes) {
                     order: PropTypes.number,
                 })
             ),
+        }),
+        posting: PropTypes.shape({
+            name: PropTypes.string,
+            intro_text: PropTypes.string,
+            open_date: PropTypes.string,
+            close_date: PropTypes.string,
+            availability: PropTypes.oneOf(["auto", "open", "closed"]),
+            custom_questions: PropTypes.any,
+            posting_position_ids: PropTypes.arrayOf(id),
+            application_ids: PropTypes.arrayOf(id),
+        }),
+        posting_position: PropTypes.shape({
+            hours: PropTypes.number,
+            num_positions: PropTypes.number,
+            position_id: id,
+            posting_id: id,
         }),
     };
 }

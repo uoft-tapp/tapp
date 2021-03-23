@@ -10,7 +10,7 @@ import {
 } from "../defs/doc-generation";
 import { Session } from "./sessions";
 import { Assignment } from "./assignments";
-import { stringToNativeType } from "../../libs/urlUtils";
+import { stringToNativeType } from "../../libs/urls";
 
 export class Ddah extends MockAPIController {
     constructor(data) {

@@ -13,9 +13,12 @@ import {
     InstructorsDiffList,
 } from "../../components/instructors";
 import { Alert } from "react-bootstrap";
-import { normalizeImport, dataToFile } from "../../libs/importExportUtils";
-import { prepareMinimal } from "../../libs/exportUtils";
-import { diffImport, getChanged } from "../../libs/diffUtils";
+import {
+    normalizeImport,
+    prepareInstructorData,
+} from "../../libs/import-export";
+import { diffImport, getChanged } from "../../libs/diffs";
+import { instructorSchema } from "../../libs/schema";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -39,34 +42,8 @@ export function ConnectedExportInstructorsAction() {
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
 
-            // Make a function that converts a list of instructors into a `File` object.
-            function prepareData(instructors, dataFormat) {
-                return dataToFile(
-                    {
-                        toSpreadsheet: () =>
-                            [
-                                ["Last Name", "First Name", "UTORid", "email"],
-                            ].concat(
-                                instructors.map((instructor) => [
-                                    instructor.last_name,
-                                    instructor.first_name,
-                                    instructor.utorid,
-                                    instructor.email,
-                                ])
-                            ),
-                        toJson: () => ({
-                            instructors: instructors.map((instructor) =>
-                                prepareMinimal.instructor(instructor)
-                            ),
-                        }),
-                    },
-                    dataFormat,
-                    "instructors"
-                );
-            }
-
             const file = await dispatch(
-                exportInstructors(prepareData, exportType)
+                exportInstructors(prepareInstructorData, exportType)
             );
 
             FileSaver.saveAs(file);
@@ -80,23 +57,6 @@ export function ConnectedExportInstructorsAction() {
 
     return <ExportActionButton onClick={onClick} />;
 }
-
-const instructorSchema = {
-    keys: ["first_name", "last_name", "utorid", "email"],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "instructors",
-};
 
 export function ConnectedImportInstructorAction({
     setImportInProgress = null,

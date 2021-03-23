@@ -91,7 +91,7 @@ export function sessionsTests(api) {
         // get the sessions list and make sure we're updated there as well
         const resp2 = await apiGET("/admin/sessions");
         // filter session list to get the updated session obj
-        const updatedSession = resp2.payload.filter((s) => s.id == session.id);
+        const updatedSession = resp2.payload.filter((s) => s.id === session.id);
         expect(updatedSession).toContainObject(newData);
     });
 

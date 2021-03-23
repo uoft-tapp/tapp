@@ -37,10 +37,6 @@ export interface MinimalPosition {
     end_date: string;
     duties?: string;
     qualifications?: string;
-    ad_hours_per_assignment?: number;
-    ad_num_assignments?: number;
-    ad_open_date?: string;
-    ad_close_date?: string;
     desired_num_assignments?: number;
     current_enrollment?: number;
     current_waitlisted?: number;
@@ -78,6 +74,29 @@ export interface MinimalDdah {
     position_code: string;
     applicant: Utorid;
     duties: { hours: number; description: string }[];
+}
+
+export interface MinimalPostingPosition {
+    position_code: string;
+    posting_name: string;
+    hours: number;
+    num_positions: number;
+}
+
+export interface PostingPosition extends MinimalPostingPosition {}
+
+export interface MinimalPosting {
+    name: string;
+    open_date: string;
+    close_date: string;
+    intro_text?: string;
+    availability?: "auto" | "open" | "closed";
+    posting_positions: MinimalPostingPosition[];
+}
+
+export interface Posting extends MinimalPosting {
+    id: number;
+    url_token: string;
 }
 
 /**
@@ -145,4 +164,51 @@ export interface Ddah {
     duties: Duty[];
     total_hours: number;
     status: "accepted" | "emailed" | null;
+}
+
+// The Raw* types are the types returned by the API
+
+interface HasId {
+    id: number;
+}
+export interface RawSession extends HasId {
+    start_date: string;
+    end_date: string;
+    name: string;
+}
+
+export interface RawAttachment {
+    file_name: string;
+    mime_type: string;
+    content: string;
+}
+
+export interface RawDdah {
+    id: number;
+    assignment_id: number;
+    signature?: string;
+    approved_date?: string;
+    accepted_date?: string;
+    revised_date?: string;
+    emailed_date?: string;
+    url_token: string;
+    duties: Duty[];
+}
+
+export interface RawPosting extends HasId {
+    name: string;
+    intro_text: string;
+    open_date: string;
+    close_date: string;
+    availability: "auto" | "open" | "closed";
+    custom_questions: any;
+    posting_position_ids: number[];
+    application_ids: number[];
+}
+
+export interface RawPostingPosition {
+    hours: number;
+    num_positions: number;
+    position_id: number;
+    posting_id: number;
 }

@@ -9,7 +9,7 @@ import {
     beforeAll,
 } from "./utils";
 import { databaseSeeder } from "./setup";
-import { base64ToBytes } from "../api/mockAPI/utils";
+import { base64ToBytes, bytesToBase64 } from "../api/mockAPI/utils";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
@@ -210,5 +210,26 @@ export function templatesTests(api) {
     // Since we don't want to pollute the filesystem by creating random names, when
     // you implement this test, use node.js commands to detect and delete an existing
     // file
-    it.todo("upload a template");
+    it("upload a template", async () => {
+        let template = {
+            content: "Contents of the file",
+            file_name: "TestTemplate.html",
+        };
+
+        template.content = bytesToBase64(template.content);
+        checkPropTypes(offerTemplatePropTypes, template);
+
+        const resp2 = await apiPOST(
+            `/admin/contract_templates/upload`,
+            template
+        );
+        expect(resp2).toHaveStatus("success");
+
+        // Testing to ensure that duplicate file names are not added
+        const resp3 = await apiPOST(
+            `/admin/contract_templates/upload`,
+            template
+        );
+        expect(resp3).toHaveStatus("error");
+    });
 }

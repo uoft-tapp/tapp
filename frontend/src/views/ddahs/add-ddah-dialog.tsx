@@ -70,7 +70,14 @@ export function ConnectedAddDdahDialog(props: {
     }
     const assignmentsWithoutDdah = useSelector<any, Assignment[]>(
         assignmentsSelector
-    ).filter((x) => !assignmentsWithDdahHash[x.id]);
+    ).filter((x) => {
+        // Filter assignments without ddah and status is not withdrawn or rejected
+        return (
+            !assignmentsWithDdahHash[x.id] &&
+            x.active_offer_status !== "withdrawn" &&
+            x.active_offer_status !== "rejected"
+        );
+    });
 
     function _upsertDdah(ddah: PartialDdah) {
         if (ddah.assignment == null) {
