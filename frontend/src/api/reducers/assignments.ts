@@ -6,9 +6,14 @@ import {
     FETCH_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
     UPSERT_WAGE_CHUNKS_FOR_ASSIGNMENT_SUCCESS,
 } from "../constants";
-import { createBasicReducerObject, createReducer } from "./utils";
+import { RawAssignment, RawWageChunk } from "../defs/types";
+import { createBasicReducerObject, createReducer, HasPayload } from "./utils";
 
-const initialState = {
+interface AssignmentState {
+    _modelData: RawAssignment[];
+    _wageChunksByAssignmentId: Record<number, RawWageChunk[]>;
+}
+const initialState: AssignmentState = {
     _modelData: [],
     // Since we don't want to fetch all wage chunks all the time,
     // we fetch them on a per-assignment basis and store them here.
@@ -17,7 +22,7 @@ const initialState = {
 
 // basicReducers is an object whose keys are FETCH_SESSIONS_SUCCESS, etc,
 // and values are the corresponding reducer functions
-const basicReducers = createBasicReducerObject(
+const basicReducers = createBasicReducerObject<RawAssignment>(
     FETCH_ASSIGNMENTS_SUCCESS,
     FETCH_ONE_ASSIGNMENT_SUCCESS,
     UPSERT_ONE_ASSIGNMENT_SUCCESS,
@@ -32,7 +37,10 @@ const basicReducers = createBasicReducerObject(
  * @param {{payload: object}} action
  * @returns
  */
-function setWageChunks(state, action) {
+function setWageChunks(
+    state: AssignmentState,
+    action: HasPayload<RawWageChunk[]>
+): AssignmentState {
     const assignmentId = (action.payload[0] || {}).assignment_id;
     if (!assignmentId) {
         return state;

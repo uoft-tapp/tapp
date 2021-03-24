@@ -8,34 +8,41 @@ import {
     OFFER_WITHDRAW_SUCCESS,
 } from "../constants";
 import { fetchError } from "./errors";
-import { actionFactory, validatedApiDispatcher } from "./utils";
+import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { fetchAssignment } from "./assignments";
 import { activeRoleSelector } from "./users";
+import { Assignment, RawOffer } from "../defs/types";
 
 // actions
-export const fetchOfferSuccess = actionFactory(FETCH_ONE_OFFER_SUCCESS);
-export const setOfferAcceptedSuccess = actionFactory(
+// XXX These actions don't actually do anything ATM; They're here in case we want to incorporate
+// this information into the reducer at some point.
+export const fetchOfferSuccess = actionFactory<RawOffer>(
+    FETCH_ONE_OFFER_SUCCESS
+);
+export const setOfferAcceptedSuccess = actionFactory<RawOffer>(
     SET_OFFER_ACCEPTED_SUCCESS
 );
-export const setOfferRejectedSuccess = actionFactory(
+export const setOfferRejectedSuccess = actionFactory<RawOffer>(
     SET_OFFER_REJECTED_SUCCESS
 );
-export const offerCreateSuccess = actionFactory(OFFER_CREATE_SUCCESS);
-export const offerEmailSuccess = actionFactory(OFFER_EMAIL_SUCCESS);
-export const offerNagSuccess = actionFactory(OFFER_NAG_SUCCESS);
-export const offerWithdrawSuccess = actionFactory(OFFER_WITHDRAW_SUCCESS);
+export const offerCreateSuccess = actionFactory<RawOffer>(OFFER_CREATE_SUCCESS);
+export const offerEmailSuccess = actionFactory<RawOffer>(OFFER_EMAIL_SUCCESS);
+export const offerNagSuccess = actionFactory<RawOffer>(OFFER_NAG_SUCCESS);
+export const offerWithdrawSuccess = actionFactory<RawOffer>(
+    OFFER_WITHDRAW_SUCCESS
+);
 
 // dispatchers
 export const fetchActiveOfferForAssignment = validatedApiDispatcher({
     name: "fetchActiveOfferForAssignment",
     description: "Fetch an offer associated with an assignment",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/assignments/${payload.id}/active_offer`
-        );
+        )) as RawOffer;
         dispatch(fetchOfferSuccess(data));
         return data;
     },
@@ -45,7 +52,7 @@ export const setOfferForAssignmentAccepted = validatedApiDispatcher({
     name: "setOfferForAssignmentAccepted",
     description: "Set an offer as accepted",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/accept`
@@ -61,7 +68,7 @@ export const setOfferForAssignmentRejected = validatedApiDispatcher({
     name: "setOfferForAssignmentRejected",
     description: "Set an offer as rejected",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/reject`
@@ -77,7 +84,7 @@ export const offerForAssignmentWithdraw = validatedApiDispatcher({
     name: "offerForAssignmentWithdraw",
     description: "Withdraw an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/withdraw`
@@ -93,7 +100,7 @@ export const offerForAssignmentCreate = validatedApiDispatcher({
     name: "offerForAssignmentCreate",
     description: "Create an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/create`
@@ -109,7 +116,7 @@ export const offerForAssignmentEmail = validatedApiDispatcher({
     name: "offerForAssignmentEmail",
     description: "Email an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/email`
@@ -125,7 +132,7 @@ export const offerForAssignmentNag = validatedApiDispatcher({
     name: "offerForAssignmentNag",
     description: "Send a nag email for an offer",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignment) => async (dispatch, getState) => {
+    dispatcher: (assignment: Assignment) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/${assignment.id}/active_offer/nag`

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_APPLICATIONS_SUCCESS,
     FETCH_ONE_APPLICATION_SUCCESS,
@@ -11,39 +10,38 @@ import {
     arrayToHash,
     validatedApiDispatcher,
     flattenIdFactory,
-    splitObjByProps,
+    HasId,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { applicationsReducer } from "../reducers/applications";
 import { createSelector } from "reselect";
 import { applicantsSelector } from "./applicants";
 import { activeRoleSelector } from "./users";
-import { positionsSelector } from "./positions";
+import type { Application, RawApplication } from "../defs/types";
+import { activeSessionSelector } from "./sessions";
+import { postingsSelector } from "./postings";
 
 // actions
-export const fetchApplicationsSuccess = actionFactory(
+export const fetchApplicationsSuccess = actionFactory<RawApplication[]>(
     FETCH_APPLICATIONS_SUCCESS
 );
-const fetchOneApplicationSuccess = actionFactory(FETCH_ONE_APPLICATION_SUCCESS);
-const upsertOneApplicationSuccess = actionFactory(
+const fetchOneApplicationSuccess = actionFactory<RawApplication>(
+    FETCH_ONE_APPLICATION_SUCCESS
+);
+const upsertOneApplicationSuccess = actionFactory<RawApplication>(
     UPSERT_ONE_APPLICATION_SUCCESS
 );
-const deleteOneApplicationSuccess = actionFactory(
+const deleteOneApplicationSuccess = actionFactory<RawApplication>(
     DELETE_ONE_APPLICATION_SUCCESS
 );
 
-const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
-const positionToPositionId = flattenIdFactory("position", "position_id");
-function prepForApi(data) {
-    const [ret, filtered] = splitObjByProps(data, ["position_preferences"]);
+const applicantToApplicantId = flattenIdFactory<"applicant", "applicant_id">(
+    "applicant",
+    "applicant_id"
+);
 
-    if (filtered["position_preferences"]) {
-        ret["position_preferences"] = filtered[
-            "position_preferences"
-        ].map((preference) => positionToPositionId(preference));
-    }
-
-    return applicantToApplicantId(ret);
+function prepApplicationForApi(data: Partial<Application>) {
+    return applicantToApplicantId(data as any);
 }
 
 // dispatchers
@@ -53,10 +51,16 @@ export const fetchApplications = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw new Error(
+                "Cannot fetch Applications without an active session"
+            );
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/applications`
-        );
+        )) as RawApplication[];
         dispatch(fetchApplicationsSuccess(data));
         return data;
     },
@@ -65,14 +69,19 @@ export const fetchApplications = validatedApiDispatcher({
 export const fetchApplication = validatedApiDispatcher({
     name: "fetchApplication",
     description: "Fetch application",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw new Error(
+                "Cannot fetch Applications without an active session"
+            );
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/applications/${payload.id}`
-        );
+        )) as RawApplication;
         dispatch(fetchOneApplicationSuccess(data));
         return data;
     },
@@ -81,15 +90,23 @@ export const fetchApplication = validatedApiDispatcher({
 export const upsertApplication = validatedApiDispatcher({
     name: "upsertApplication",
     description: "Add/insert application",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: Partial<Application>) => async (
+        dispatch,
+        getState
+    ) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw new Error(
+                "Cannot upsert Applications without an active session"
+            );
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiPOST(
             `/${role}/sessions/${activeSessionId}/applications`,
-            prepForApi(payload)
-        );
+            prepApplicationForApi(payload)
+        )) as RawApplication;
         dispatch(upsertOneApplicationSuccess(data));
         return data;
     },
@@ -98,15 +115,20 @@ export const upsertApplication = validatedApiDispatcher({
 export const deleteApplication = validatedApiDispatcher({
     name: "deleteApplication",
     description: "Delete application",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiPOST(
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw new Error(
+                "Cannot delete Applications without an active session"
+            );
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiPOST(
             `/${role}/sessions/${activeSessionId}/applications/delete`,
-            prepForApi(payload)
-        );
+            prepApplicationForApi(payload)
+        )) as RawApplication;
         dispatch(deleteOneApplicationSuccess(data));
     },
 });
@@ -117,7 +139,7 @@ export const deleteApplication = validatedApiDispatcher({
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-export const localStoreSelector = applicationsReducer._localStoreSelector;
+const localStoreSelector = applicationsReducer._localStoreSelector;
 export const _applicationsSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData
@@ -126,29 +148,28 @@ export const _applicationsSelector = createSelector(
 // Get the current list of applications and recompute `applicant_id` and `position_id`
 // to have corresponding `applicant` and `position` objects
 export const applicationsSelector = createSelector(
-    [_applicationsSelector, applicantsSelector, positionsSelector],
-    (applications, applicants, positions) => {
+    [_applicationsSelector, applicantsSelector, postingsSelector],
+    (applications, applicants, postings) => {
         if (applications.length === 0) {
             return [];
         }
 
         const applicantsById = arrayToHash(applicants);
-        const positionsById = arrayToHash(positions);
+        const postingsById = arrayToHash(postings);
 
         // Change `applicant_id` to the corresponding `applicant` object
         // and similarly, change each `position_id` in each entry of
         // `position_preferences` to corresponding `position` object.
         return applications.map(
-            ({ position_preferences, applicant_id, ...rest }) => ({
-                ...rest,
-                applicant: applicantsById[applicant_id] || {},
-                position_preferences: (position_preferences || []).map(
-                    ({ position_id, ...rest }) => ({
-                        position: positionsById[position_id],
-                        ...rest,
-                    })
-                ),
-            })
+            ({ posting_id, applicant_id, ...rest }) =>
+                (({
+                    ...rest,
+                    applicant: applicantsById[applicant_id] || {},
+                    posting:
+                        posting_id != null
+                            ? postingsById[posting_id] || {}
+                            : null,
+                } as unknown) as Application)
         );
     }
 );

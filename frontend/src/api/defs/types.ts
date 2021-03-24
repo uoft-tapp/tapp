@@ -99,6 +99,20 @@ export interface Posting extends MinimalPosting {
     url_token: string;
 }
 
+export interface Application extends HasId {
+    applicant: Applicant;
+    posting?: Posting | null;
+    comments?: string | null;
+    program?: string | null;
+    department?: string | null;
+    previous_uoft_experience?: string | null;
+    yip?: number | null;
+    gpa?: number | null;
+    status?: string | null;
+    custom_question_answers?: any;
+    annotation?: string | null;
+}
+
 /**
  * A duty that is part of a DDAH.
  *
@@ -270,13 +284,14 @@ export interface RawDdah extends HasId {
 
 export interface RawPosting extends HasId {
     name: string;
-    intro_text: string;
-    open_date: string;
-    close_date: string;
+    intro_text: string | null;
+    open_date: string | null;
+    close_date: string | null;
     availability: "auto" | "open" | "closed";
     custom_questions: any;
     posting_position_ids: number[];
     application_ids: number[];
+    url_token: string;
 }
 
 export interface RawPostingPosition {
@@ -303,4 +318,30 @@ export interface RawAttachment {
     file_name: string;
     mime_type: string;
     content: string;
+}
+
+export interface RawOffer extends HasId {
+    assignment_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    position_code: string;
+    position_title: string;
+    position_start_date: string;
+    position_end_date: string;
+    first_time_ta: boolean | null;
+    instructor_contact_desc: string;
+    pay_period_desc: string;
+    installments: null;
+    ta_coordinator_name: string;
+    ta_coordinator_email: string;
+    signature: string | null;
+    emailed_date: string | null;
+    accepted_date: string | null;
+    rejected_date: string | null;
+    withdrawn_date: string | null;
+    url_token: string;
+    nag_count: number;
+    status: "provisional" | "pending" | "accepted" | "rejected" | "withdrawn";
+    hours: number;
 }

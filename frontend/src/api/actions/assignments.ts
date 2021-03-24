@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_ASSIGNMENTS_SUCCESS,
     FETCH_ONE_ASSIGNMENT_SUCCESS,
@@ -11,6 +10,7 @@ import {
     validatedApiDispatcher,
     arrayToHash,
     flattenIdFactory,
+    HasId,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { assignmentsReducer } from "../reducers/assignments";
@@ -23,12 +23,27 @@ import {
     wageChunksByAssignmentSelector,
     upsertWageChunksForAssignment,
 } from "./wage_chunks";
+import type { RawAssignment, Assignment, WageChunk } from "../defs/types";
+import { activeSessionSelector } from "./sessions";
+import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
 
 // actions
-export const fetchAssignmentsSuccess = actionFactory(FETCH_ASSIGNMENTS_SUCCESS);
-const fetchOneAssignmentSuccess = actionFactory(FETCH_ONE_ASSIGNMENT_SUCCESS);
-const upsertOneAssignmentSuccess = actionFactory(UPSERT_ONE_ASSIGNMENT_SUCCESS);
-const deleteOneAssignmentSuccess = actionFactory(DELETE_ONE_ASSIGNMENT_SUCCESS);
+export const fetchAssignmentsSuccess = actionFactory<RawAssignment[]>(
+    FETCH_ASSIGNMENTS_SUCCESS
+);
+const fetchOneAssignmentSuccess = actionFactory<RawAssignment>(
+    FETCH_ONE_ASSIGNMENT_SUCCESS
+);
+const upsertOneAssignmentSuccess = actionFactory<RawAssignment>(
+    UPSERT_ONE_ASSIGNMENT_SUCCESS
+);
+const deleteOneAssignmentSuccess = actionFactory<RawAssignment>(
+    DELETE_ONE_ASSIGNMENT_SUCCESS
+);
+
+const MissingActiveSessionError = new Error(
+    "Cannot interact with Assignments without an active session"
+);
 
 // dispatchers
 export const fetchAssignments = validatedApiDispatcher({
@@ -37,10 +52,14 @@ export const fetchAssignments = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
-        const data = await apiGET(
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw MissingActiveSessionError;
+        }
+        const { id: activeSessionId } = activeSession;
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/assignments`
-        );
+        )) as RawAssignment[];
         dispatch(fetchAssignmentsSuccess(data));
         return data;
     },
@@ -49,11 +68,12 @@ export const fetchAssignments = validatedApiDispatcher({
 export const fetchAssignment = validatedApiDispatcher({
     name: "fetchAssignment",
     description: "Fetch assignment",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/assignments/${payload.id}`);
+        const data = (await apiGET(
+            `/${role}/assignments/${payload.id}`
+        )) as RawAssignment;
         dispatch(fetchOneAssignmentSuccess(data));
         return data;
     },
@@ -61,20 +81,33 @@ export const fetchAssignment = validatedApiDispatcher({
 
 // Some helper functions to convert the data that the UI uses
 // into data that the API can use
-const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
-const positionToPositionId = flattenIdFactory("position", "position_id");
-function prepForApi(data) {
-    return positionToPositionId(applicantToApplicantId(data));
+const applicantToApplicantId = flattenIdFactory<"applicant", "applicant_id">(
+    "applicant",
+    "applicant_id"
+);
+const positionToPositionId = flattenIdFactory<"position", "position_id">(
+    "position",
+    "position_id"
+);
+function prepForApi(data: Partial<Assignment>) {
+    return positionToPositionId(
+        applicantToApplicantId(data)
+    ) as Partial<RawAssignment>;
 }
 
 export const upsertAssignment = validatedApiDispatcher({
     name: "upsertAssignment",
     description: "Add/insert assignment",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: Partial<Assignment>) => async (
+        dispatch,
+        getState
+    ) => {
         const role = activeRoleSelector(getState());
-        let data = await apiPOST(`/${role}/assignments`, prepForApi(payload));
+        let data = (await apiPOST(
+            `/${role}/assignments`,
+            prepForApi(payload)
+        )) as RawAssignment;
         dispatch(upsertOneAssignmentSuccess(data));
         if (payload.wage_chunks) {
             await dispatch(
@@ -92,9 +125,8 @@ export const upsertAssignment = validatedApiDispatcher({
 export const deleteAssignment = validatedApiDispatcher({
     name: "deleteAssignment",
     description: "Delete assignment",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = await apiPOST(
             `/${role}/assignments/delete`,
@@ -108,10 +140,10 @@ export const exportAssignments = validatedApiDispatcher({
     name: "exportAssignments",
     description: "Export assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (formatter, format = "spreadsheet") => async (
-        dispatch,
-        getState
-    ) => {
+    dispatcher: (
+        formatter: PrepareDataFunc<Assignment>,
+        format: ExportFormat = "spreadsheet"
+    ) => async (dispatch, getState) => {
         if (!(formatter instanceof Function)) {
             throw new Error(
                 `"formatter" must be a function when using the export action.`
@@ -142,7 +174,7 @@ export const upsertAssignments = validatedApiDispatcher({
     name: "upsertAssignments",
     description: "Upsert a list of assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (assignments) => async (dispatch) => {
+    dispatcher: (assignments: Partial<Assignment>[]) => async (dispatch) => {
         if (assignments.length === 0) {
             return;
         }
@@ -165,7 +197,10 @@ export const upsertAssignments = validatedApiDispatcher({
  * @param {*} wageChunks
  * @returns
  */
-function wageChunksMatchAssignment(assignment, wageChunks) {
+function wageChunksMatchAssignment(
+    assignment: RawAssignment,
+    wageChunks: WageChunk[]
+) {
     if (!wageChunks) {
         return true;
     }
@@ -180,7 +215,7 @@ function wageChunksMatchAssignment(assignment, wageChunks) {
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-export const localStoreSelector = assignmentsReducer._localStoreSelector;
+const localStoreSelector = assignmentsReducer._localStoreSelector;
 /**
  * Get just the assignment data as it appears in the store; i.e., it has references to
  * id's of applicants and positions.
@@ -205,21 +240,21 @@ export const assignmentsSelector = createSelector(
         if (assignments.length === 0) {
             return [];
         }
-        applicants = arrayToHash(applicants);
-        positions = arrayToHash(positions);
+        const applicantsById = arrayToHash(applicants);
+        const positionsById = arrayToHash(positions);
         return assignments.map((assignment) => {
             const { position_id, applicant_id, ...rest } = assignment;
             const wage_chunks = getWageChunksForAssignment(assignment);
             return {
                 ...rest,
-                position: positions[position_id] || {},
-                applicant: applicants[applicant_id] || {},
+                position: positionsById[position_id] || {},
+                applicant: applicantsById[applicant_id] || {},
                 // Only return wage chunks if they match the current assignment. This
                 // ensures stale (previously-loaded) wage chunks don't get served.
                 wage_chunks: wageChunksMatchAssignment(assignment, wage_chunks)
                     ? wage_chunks
                     : null,
-            };
+            } as Assignment;
         });
     }
 );

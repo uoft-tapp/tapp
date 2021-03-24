@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_POSITIONS_SUCCESS,
     FETCH_ONE_POSITION_SUCCESS,
@@ -11,7 +10,7 @@ import {
     validatedApiDispatcher,
     arrayToHash,
     flattenIdFactory,
-    splitObjByProps,
+    HasId,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { positionsReducer } from "../reducers/positions";
@@ -19,13 +18,27 @@ import { createSelector } from "reselect";
 import { instructorsSelector } from "./instructors";
 import { contractTemplatesSelector } from "./contract_templates";
 import { activeRoleSelector } from "./users";
-import { applicantsSelector } from "./applicants";
+import { Position, RawPosition } from "../defs/types";
+import { activeSessionSelector } from "./sessions";
+import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
 
 // actions
-export const fetchPositionsSuccess = actionFactory(FETCH_POSITIONS_SUCCESS);
-const fetchOnePositionSuccess = actionFactory(FETCH_ONE_POSITION_SUCCESS);
-const upsertOnePositionSuccess = actionFactory(UPSERT_ONE_POSITION_SUCCESS);
-const deleteOnePositionSuccess = actionFactory(DELETE_ONE_POSITION_SUCCESS);
+export const fetchPositionsSuccess = actionFactory<RawPosition[]>(
+    FETCH_POSITIONS_SUCCESS
+);
+const fetchOnePositionSuccess = actionFactory<RawPosition>(
+    FETCH_ONE_POSITION_SUCCESS
+);
+const upsertOnePositionSuccess = actionFactory<RawPosition>(
+    UPSERT_ONE_POSITION_SUCCESS
+);
+const deleteOnePositionSuccess = actionFactory<RawPosition>(
+    DELETE_ONE_POSITION_SUCCESS
+);
+
+const MissingActiveSessionError = new Error(
+    "Cannot interact with Positions without an active session"
+);
 
 // dispatchers
 export const fetchPositions = validatedApiDispatcher({
@@ -33,11 +46,15 @@ export const fetchPositions = validatedApiDispatcher({
     description: "Fetch positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw MissingActiveSessionError;
+        }
+        const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/positions`
-        );
+        )) as RawPosition[];
         dispatch(fetchPositionsSuccess(data));
     },
 });
@@ -45,65 +62,53 @@ export const fetchPositions = validatedApiDispatcher({
 export const fetchPosition = validatedApiDispatcher({
     name: "fetchPosition",
     description: "Fetch position",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw MissingActiveSessionError;
+        }
+        const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = await apiGET(
+        const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/positions/${payload.id}`
-        );
+        )) as RawPosition;
         dispatch(fetchOnePositionSuccess(data));
     },
 });
 
 // Some helper functions to convert the data that the UI uses
 // into data that the API can use
-const instructorsToInstructorIds = flattenIdFactory(
+const instructorsToInstructorIds = flattenIdFactory<
     "instructors",
-    "instructor_ids",
-    true
-);
-const contractTemplateToContractTemplateId = flattenIdFactory(
+    "instructor_ids"
+>("instructors", "instructor_ids");
+const contractTemplateToContractTemplateId = flattenIdFactory<
     "contract_template",
     "contract_template_id"
-);
+>("contract_template", "contract_template_id");
 
-const instructorToInstructorId = flattenIdFactory(
-    "instructor",
-    "instructor_id"
-);
-
-const applicantToApplicantId = flattenIdFactory("applicant", "applicant_id");
-
-function prepForApi(data) {
-    const [ret, filtered] = splitObjByProps(data, ["instructor_preferences"]);
-
-    if (filtered["instructor_preferences"]) {
-        ret["instructor_preferences"] = filtered[
-            "instructor_preferences"
-        ].map((preference) =>
-            applicantToApplicantId(instructorToInstructorId(preference))
-        );
-    }
-
+function prepForApi(data: Partial<Position>) {
     return contractTemplateToContractTemplateId(
-        instructorsToInstructorIds(ret)
-    );
+        instructorsToInstructorIds(data)
+    ) as Partial<RawPosition>;
 }
 
 export const upsertPosition = validatedApiDispatcher({
     name: "upsertPosition",
     description: "Add/insert position",
-    propTypes: {},
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
-        const { id: activeSessionId } = getState().model.sessions.activeSession;
+    dispatcher: (payload: Partial<Position>) => async (dispatch, getState) => {
+        const activeSession = activeSessionSelector(getState());
+        if (activeSession == null) {
+            throw MissingActiveSessionError;
+        }
+        const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(
+        const data = (await apiPOST(
             `/${role}/sessions/${activeSessionId}/positions`,
             prepForApi(payload)
-        );
+        )) as RawPosition;
         dispatch(upsertOnePositionSuccess(data));
     },
 });
@@ -111,14 +116,13 @@ export const upsertPosition = validatedApiDispatcher({
 export const deletePosition = validatedApiDispatcher({
     name: "deletePosition",
     description: "Delete position",
-    propTypes: { id: PropTypes.any.isRequired },
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (payload) => async (dispatch, getState) => {
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiPOST(
+        const data = (await apiPOST(
             `/${role}/positions/delete`,
             prepForApi(payload)
-        );
+        )) as RawPosition;
         dispatch(deleteOnePositionSuccess(data));
     },
 });
@@ -127,10 +131,10 @@ export const exportPositions = validatedApiDispatcher({
     name: "exportPositions",
     description: "Export positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (formatter, format = "spreadsheet") => async (
-        dispatch,
-        getState
-    ) => {
+    dispatcher: (
+        formatter: PrepareDataFunc<Position>,
+        format: ExportFormat = "spreadsheet"
+    ) => async (dispatch, getState) => {
         if (!(formatter instanceof Function)) {
             throw new Error(
                 `"formatter" must be a function when using the export action.`
@@ -148,7 +152,7 @@ export const upsertPositions = validatedApiDispatcher({
     name: "upsertPositions",
     description: "Upsert a list of positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (positions) => async (dispatch) => {
+    dispatcher: (positions: Partial<Position>[]) => async (dispatch) => {
         if (positions.length === 0) {
             return;
         }
@@ -167,7 +171,7 @@ export const upsertPositions = validatedApiDispatcher({
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-export const localStoreSelector = positionsReducer._localStoreSelector;
+const localStoreSelector = positionsReducer._localStoreSelector;
 const _positionsSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData
@@ -177,27 +181,16 @@ const _positionsSelector = createSelector(
  * information.
  */
 export const positionsSelector = createSelector(
-    [
-        _positionsSelector,
-        instructorsSelector,
-        contractTemplatesSelector,
-        applicantsSelector,
-    ],
-    (positions, instructors, contractTemplates, applicants) => {
+    [_positionsSelector, instructorsSelector, contractTemplatesSelector],
+    (positions, instructors, contractTemplates) => {
         // Hash the instructors by `id` for fast lookup
         const instructorsById = arrayToHash(instructors);
         const contractTemplatesById = arrayToHash(contractTemplates);
-        const applicantsById = arrayToHash(applicants);
 
         // Leave all the data alone, except replace the `instructor_ids` list
         // with the full instructor data.
         return positions.map(
-            ({
-                instructor_ids,
-                contract_template_id,
-                instructor_preferences,
-                ...rest
-            }) => ({
+            ({ instructor_ids, contract_template_id, ...rest }) => ({
                 ...rest,
                 // When the instructor list references an instructor that we haven't loaded
                 // we don't want the frontend to crash, so filter out any null instructors
@@ -205,14 +198,7 @@ export const positionsSelector = createSelector(
                     .map((x) => instructorsById[x])
                     .filter((x) => x),
                 contract_template: contractTemplatesById[contract_template_id],
-                instructor_preferences: (instructor_preferences || []).map(
-                    ({ applicant_id, instructor_id, ...rest }) => ({
-                        instructor: instructorsById[instructor_id],
-                        applicant: applicantsById[applicant_id],
-                        ...rest,
-                    })
-                ),
             })
-        );
+        ) as Position[];
     }
 );

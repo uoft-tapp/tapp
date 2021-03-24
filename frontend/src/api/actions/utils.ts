@@ -11,7 +11,9 @@ import { RootState } from "../../rootReducer";
  * by the value of `indexBy`
  *
  */
-export function arrayToHash<T extends { id: number }>(l: T[]) {
+export function arrayToHash<T extends { id: number }>(
+    l: T[]
+): Record<number, T> {
     if (!Array.isArray(l)) {
         return l;
     }
@@ -69,6 +71,23 @@ export function splitObjByProps<
 export type HasId = { id: number };
 export type HasSubIdField<M extends string> = { [key in M]: HasId };
 export type HasSubIdFieldArray<M extends string> = { [key in M]: HasId[] };
+export type HasSubField<M extends string> = { [key in M]: unknown };
+
+/**
+ * Test whether `obj` has `key` as an attribute.
+ *
+ * @template T
+ * @template M
+ * @param {T} obj
+ * @param {M} key
+ * @returns {(obj is T & HasSubField<M>)}
+ */
+function hasSubField<T, M extends string>(
+    obj: T,
+    key: M
+): obj is T & HasSubField<M> {
+    return key in obj;
+}
 
 /**
  * Test whether `obj[key].id` exists.
@@ -126,24 +145,23 @@ function hasSubIdFieldArray<M extends string>(
  *
  * @returns
  */
-export function flattenIdFactory<
-    T extends HasSubIdField<InProp> | HasSubIdFieldArray<InProp>,
-    InProp extends keyof T & string,
-    OutProp extends string
->(inPropName: InProp, outPropName: OutProp) {
-    return function (
+export function flattenIdFactory<InProp extends string, OutProp extends string>(
+    inPropName: InProp,
+    outPropName: OutProp
+) {
+    return function <T>(
         obj: T
     ): T extends HasSubIdField<InProp>
         ? Omit<T, InProp> & { [key in OutProp]: number }
-        : Omit<T, InProp> & { [key in OutProp]: number[] } {
+        : T extends HasSubIdFieldArray<InProp>
+        ? Omit<T, InProp> & { [key in OutProp]: number[] }
+        : T {
         // if the `inPropName` field doesn't exist, don't change anything
         // and don't error!
-        if (obj[inPropName] == null) {
+        if (!hasSubField(obj, inPropName) || obj[inPropName] == null) {
             return obj as any;
         }
-        const [ret, filtered]: [any, Pick<T, InProp>] = splitObjByProps(obj, [
-            inPropName,
-        ]);
+        const [ret, filtered]: [any, any] = splitObjByProps(obj, [inPropName]);
 
         if (hasSubIdField(filtered, inPropName)) {
             ret[outPropName] = filtered[inPropName].id;
@@ -176,13 +194,12 @@ interface DispatcherParams<RetType, ArgType extends unknown[]> {
  * of accepted arguments) of `PropTypes` objects.
  *
  * @export
- * @param {object} obj An object with information to create an action
- * @param {function} obj.dispatcher The action that will be dispatched after validation passes
- * @param {string} obj.name The name of the action
- * @param {string} obj.description A description of what the action does
- * @param {?(PropTypes|PropTypes[])} obj.propTypes A PropTypes object or an array of PropTypes objects
- * @param {?(function|boolean)} obj.onErrorDispatch Function that returns an action to be executed on error, or boolean `true` to auto-generate an error action
- * @returns {function} A redux-thunk action
+ * @param obj An object with information to create an action
+ * @param obj.dispatcher The action that will be dispatched after validation passes
+ * @param obj.name The name of the action
+ * @param obj.description A description of what the action does
+ * @param obj.onErrorDispatch Function that returns an action to be executed on error, or boolean `true` to auto-generate an error action
+ * @returns A redux-thunk action
  */
 export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
     dispatcher,
@@ -193,7 +210,9 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
     return (...args: ArgType) => {
         // we return a new dispatcher that performs some validation
         // and then dispatches as usual
-        return async (dispatch: ThunkDispatch<RootState, void, Action>) => {
+        return async (
+            dispatch: ThunkDispatch<RootState, void, Action>
+        ): Promise<RetType> => {
             // Declare the start of an API interaction. Generate a `statusId`
             // so that we can specify which API interaction is ending (since multiple
             // ones may be going at the same time).
@@ -202,7 +221,8 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
             try {
                 // We need to await so that promise errors get thrown
                 // as real errors
-                return await dispatch(dispatcher(...args));
+                const ret = await dispatch(dispatcher(...args));
+                return ret;
             } catch (e) {
                 console.warn("API Error", e);
                 if (onErrorDispatch) {
@@ -215,9 +235,8 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
                             )
                         );
                     }
-                } else {
-                    throw e;
                 }
+                throw e;
             } finally {
                 // Always declare the API interaction done, even
                 // if there was an error somewhere along the way.

@@ -150,7 +150,7 @@ export const upsertApplicants = validatedApiDispatcher({
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-export const localStoreSelector = applicantsReducer._localStoreSelector;
+const localStoreSelector = applicantsReducer._localStoreSelector;
 export const applicantsSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData as Applicant[]

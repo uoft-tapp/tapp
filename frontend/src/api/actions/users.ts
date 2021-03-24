@@ -122,7 +122,7 @@ export const debugOnlySetActiveUser = validatedApiDispatcher({
 // pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
 // search for and return the isolated state associated with `reducer`. This is not
 // a standard redux function.
-export const localStoreSelector = usersReducer._localStoreSelector;
+const localStoreSelector = usersReducer._localStoreSelector;
 export const usersSelector = (state: RootState) =>
     localStoreSelector(state).users;
 export const activeUserSelector = (state: RootState) =>

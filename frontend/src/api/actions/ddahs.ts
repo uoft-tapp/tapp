@@ -13,7 +13,6 @@ import {
     arrayToHash,
     flattenIdFactory,
     HasId,
-    HasSubIdField,
     hasSubIdField,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
@@ -67,7 +66,6 @@ export const fetchDdah = validatedApiDispatcher({
 // Some helper functions to convert the data that the UI uses
 // into data that the API can use
 const assignmentToAssignmentId = flattenIdFactory<
-    HasSubIdField<"assignment">,
     "assignment",
     "assignment_id"
 >("assignment", "assignment_id");
@@ -261,12 +259,12 @@ export const ddahsSelector = createSelector(
         if (ddahs.length === 0) {
             return [];
         }
-        assignments = arrayToHash(assignments);
+        const assignmentsHash = arrayToHash(assignments);
         return ddahs.map(({ assignment_id, ...rest }) => ({
             ...rest,
             status: computeDdahStatus(rest),
             total_hours: computeDdahHours(rest),
-            assignment: assignments[assignment_id] || {},
+            assignment: assignmentsHash[assignment_id] || {},
         })) as Ddah[];
     }
 );

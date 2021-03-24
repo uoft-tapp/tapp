@@ -1,7 +1,12 @@
-import { createReducer } from "./utils";
+import { createReducer, HasPayload } from "./utils";
 import { API_INTERACTION_START, API_INTERACTION_END } from "../constants";
 
-const initialState = {
+type Interaction = { id: string; message: string };
+interface StatusState {
+    ongoingInteraction: boolean;
+    ongoingInteractionsList: Interaction[];
+}
+const initialState: StatusState = {
     ongoingInteraction: false,
     ongoingInteractionsList: [],
 };
@@ -10,7 +15,7 @@ const initialState = {
 // This way we could display a spinner or some-such while interactions
 // are going on. Interactions will be mostly network-based interactions.
 export const statusReducer = createReducer(initialState, {
-    [API_INTERACTION_START]: (state, action) => ({
+    [API_INTERACTION_START]: (state, action: HasPayload<Interaction>) => ({
         ...state,
         ongoingInteraction: true,
         ongoingInteractionsList: [
@@ -18,7 +23,7 @@ export const statusReducer = createReducer(initialState, {
             action.payload,
         ],
     }),
-    [API_INTERACTION_END]: (state, action) => {
+    [API_INTERACTION_END]: (state, action: HasPayload<{ id: string }>) => {
         // remove the current interaction
         const ongoingInteractionsList = state.ongoingInteractionsList.filter(
             (i) => i.id !== action.payload.id

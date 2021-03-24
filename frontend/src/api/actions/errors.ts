@@ -5,23 +5,23 @@ const defaultNotifProps = {
     position: "tr",
     autoDismiss: 10,
     title: "Error",
-};
+} as const;
 
-export const fetchError = (payload) =>
+export const fetchError = (payload: string) =>
     error({
         ...defaultNotifProps,
         title: "Error fetching data",
         message: payload,
     });
 
-export const upsertError = (payload) =>
+export const upsertError = (payload: string) =>
     error({
         ...defaultNotifProps,
         title: "Error updating/inserting data",
         message: payload,
     });
 
-export const deleteError = (payload) =>
+export const deleteError = (payload: string) =>
     error({
         ...defaultNotifProps,
         title: "Error deleting data",
@@ -30,7 +30,7 @@ export const deleteError = (payload) =>
 
 // General error for when a more specific error
 // type is not known
-export const apiError = (payload) =>
+export const apiError = (payload: string) =>
     error({
         ...defaultNotifProps,
         title: "API Error",

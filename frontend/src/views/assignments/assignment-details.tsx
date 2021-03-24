@@ -6,7 +6,7 @@ import {
     fetchWageChunksForAssignment,
 } from "../../api/actions";
 import { Button, Modal, Alert, Spinner } from "react-bootstrap";
-import { Assignment, WageChunk } from "../../api/defs/types";
+import { WageChunk } from "../../api/defs/types";
 import { formatDate } from "../../libs/utils";
 import { ActionButton } from "../../components/action-buttons";
 import { FaSearchDollar } from "react-icons/fa";
@@ -42,12 +42,12 @@ export function ConnectedAssignmentDetails({
 }: {
     assignmentId: Number;
 }) {
-    const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
+    const assignments = useSelector(assignmentsSelector);
     const assignment = assignments.find((a) => a.id === assignmentId);
     const dispatch = useThunkDispatch();
 
     React.useEffect(() => {
-        if (assignment?.wage_chunks) {
+        if (assignment == null || assignment?.wage_chunks) {
             // If the assignment already has wage chunks, we don't need to refetch them.
             return;
         }
@@ -106,7 +106,7 @@ export function ConnectedAssignmentDetails({
 }
 
 export function ConnectedViewAssignmentDetailsAction() {
-    const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
+    const assignments = useSelector(assignmentsSelector);
     const { selectedAssignmentIds } = useSelector<
         any,
         { selectedAssignmentIds: Number[] }
