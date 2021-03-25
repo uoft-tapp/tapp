@@ -23,6 +23,20 @@ class Offer < ApplicationRecord
         !accepted? && !rejected? && !withdrawn?
     end
 
+    #Compute a difference between our hash and the hash used in the other
+    def compute_diff(other):
+        if offer == other:
+            return false
+
+        # Store the other's differences into a hash
+        diff = Hash.new
+        other.attribute.keys.each do |k|
+            if other[k] == self[k]:
+                diff.[k] = other[k] 
+        end
+        return diff
+    end
+
     private
 
     def populate_offer
