@@ -1,5 +1,5 @@
-// a collection of key-mapping between imported JSON keys/ Spreadsheet Column names and 
-// actual keys of an object 
+// a collection of key-mapping between imported JSON keys/ Spreadsheet Column names and
+// actual keys of an object
 
 export interface NormalizationSchema<T extends string[]> {
     keys: T;
