@@ -40,14 +40,13 @@ export function AdminDdahsView(): React.ReactNode {
         selectedDdahIds.includes(ddah.id)
     );
 
-    const [
-        ddahDeletionConfirmationVisible,
-        setDdahDeletionConfirmationVisible,
-    ] = React.useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(
+        false
+    );
 
     function confirmDDAHDeletion() {
         if (selectedDdahs?.length > 1) {
-            setDdahDeletionConfirmationVisible(true);
+            setShowDeleteConfirmation(true);
         } else {
             deleteDDAHs();
         }
@@ -58,7 +57,7 @@ export function AdminDdahsView(): React.ReactNode {
             dispatch(deleteDdah(ddah));
         }
 
-        setDdahDeletionConfirmationVisible(false);
+        setShowDeleteConfirmation(false);
     }
 
     return (
@@ -132,8 +131,8 @@ export function AdminDdahsView(): React.ReactNode {
             </ContentArea>
             <MultiDeleteDdahConfirmation
                 selectedDdahs={selectedDdahs}
-                visible={ddahDeletionConfirmationVisible}
-                setVisible={setDdahDeletionConfirmationVisible}
+                visible={showDeleteConfirmation}
+                setVisible={setShowDeleteConfirmation}
                 deleteDDAHs={deleteDDAHs}
             />
         </div>
