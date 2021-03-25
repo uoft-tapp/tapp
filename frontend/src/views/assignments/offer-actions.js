@@ -59,10 +59,9 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    const [
-        ddahDeletionConfirmationVisible,
-        setDdahDeletionConfirmationVisible,
-    ] = React.useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(
+        false
+    );
 
     function createOffers() {
         for (const assignment of selectedAssignments) {
@@ -72,7 +71,7 @@ function OfferActionButtons(props) {
     function confirmOfferWithdraw() {
         // if withdrawing multiple offers at once, show confirmation
         if (selectedAssignments?.length > 1) {
-            setDdahDeletionConfirmationVisible(true);
+            setShowDeleteConfirmation(true);
         } else {
             // does not need confirmation if only withdrawing one offer
             withdrawOffers();
@@ -82,7 +81,7 @@ function OfferActionButtons(props) {
         for (const assignment of selectedAssignments) {
             offerForAssignmentWithdraw(assignment);
         }
-        setDdahDeletionConfirmationVisible(false);
+        setShowDeleteConfirmation(false);
     }
     function emailOffers() {
         for (const assignment of selectedAssignments) {
@@ -165,8 +164,8 @@ function OfferActionButtons(props) {
             </ActionButton>
             <MultiWithdrawOfferConfirmation
                 data={selectedAssignments}
-                visible={ddahDeletionConfirmationVisible}
-                setVisible={setDdahDeletionConfirmationVisible}
+                visible={showDeleteConfirmation}
+                setVisible={setShowDeleteConfirmation}
                 withdrawOffers={withdrawOffers}
             />
         </React.Fragment>
