@@ -38,6 +38,13 @@ class OfferMailer < ApplicationMailer
 
     private
 
+    def get_prev_offer_diff
+        latest =
+            Offer.where('assignment_id = ?', params[@offer.assignment_id])
+                .order('emailed_date DESC').limit(1)
+        return @offer.compute_diff(latest)
+    end
+
     def generate_vars(offer)
         @offer = offer
         # It is possible that the email from when the offer was created is stale,
@@ -54,5 +61,8 @@ class OfferMailer < ApplicationMailer
                 offer.url_token
             }/view"
         @nag_count = offer.nag_count
+
+        @diff = get_prev_offer_diff
+
     end
 end

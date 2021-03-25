@@ -6,6 +6,14 @@
     </style>
   </head>
   <body>
+  <p><%= @status_message %></p>
+  <% if @diff != false %>
+    <p>The key differences of this newely received offer are:</p>
+    <% @diff.keys.each do |k| %>
+      <p>@diff[k]</p> is now <p>@offer[k]</p>  
+    <% end %>
+  <% end %>
+  <br>
   <p>Dear <%= @first_name %> <%= @last_name %></p>
   <p>
     We would like to offer you a position as a TA for <%= @position_code %> <%= @position_title %>.
