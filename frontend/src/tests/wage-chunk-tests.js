@@ -80,7 +80,7 @@ export function wageChunksTests(api) {
         );
     });
 
-    it("create wage_chunk for assignment using `/admin/assignments/${assignment.id}/wage_chunks` route", async () => {
+    it("create wage_chunk for assignment using `/admin/assignments/{assignment_id}/wage_chunks` route", async () => {
         // Clear the wage chunks for the assignment so that we can create new ones
         let resp1 = await apiPOST(
             `/admin/assignments/${assignment.id}/wage_chunks`,

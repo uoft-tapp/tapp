@@ -1,3 +1,5 @@
+/* eslint-env node */
+import XLSX from "xlsx";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
@@ -204,7 +206,7 @@ export async function addSession(api, include = { contract_templates: true }) {
     resp = await api.apiPOST(`/admin/sessions`, newSessionData);
     const session = resp.payload;
     if (include.contract_templates) {
-        addContractTemplateToSession(api, session);
+        await addContractTemplateToSession(api, session);
     }
     return session;
 }
@@ -287,6 +289,28 @@ export function checkPropTypes(propTypes, data) {
             `Object ${JSON.stringify(data)} failed proptypes check`
         );
     }
+}
+
+/**
+ * parse spreadsheet file containing objects data into an array of objects
+ *
+ * @export
+ * @param {String} fileName
+ */
+export function parseSpreadsheet(fileName) {
+    const workbook = XLSX.readFile(
+        __dirname + `/import-export-data/${fileName}`
+    );
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    let dataCSV = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    // transform to array of objects
+    const keys = dataCSV.shift();
+    dataCSV = dataCSV.map(function (row) {
+        let instructor = {};
+        keys.forEach((key, i) => (instructor[key] = row[i]));
+        return instructor;
+    });
+    return dataCSV;
 }
 
 export const apiResponsePropTypes = apiPropTypes.apiResponse;

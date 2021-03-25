@@ -1,6 +1,7 @@
 /**
  * @jest-environment node
  */
+import fs from "fs";
 import { apiGET, apiPOST, describe, it } from "./utils";
 import { mockAPI } from "../api/mockAPI";
 import { databaseSeeder } from "./setup";
@@ -23,6 +24,7 @@ import { userPermissionsTests } from "./user-permission-tests";
 import { applicantTests } from "./applicant-tests";
 import { instructorsPermissionTests } from "./instructor-permission-test";
 import { ddahTests, ddahsEmailAndDownloadTests } from "./ddah-tests";
+import { postingTests } from "./posting-tests";
 
 // Run the actual tests for both the API and the Mock API
 describe("API tests", () => {
@@ -38,6 +40,12 @@ describe("API tests", () => {
     }, 30000);
 
     describe("template tests", () => {
+        // Remove the test template file if it already exists
+        const testFile =
+            "/storage_mounted_for_testing/contract_templates/TestTemplate.html";
+        if (fs.existsSync(testFile)) {
+            fs.unlinkSync(testFile);
+        }
         templatesTests(api);
     });
 
@@ -68,7 +76,7 @@ describe("API tests", () => {
             offerDownloadTests({ apiGET, apiPOST });
         });
     });
-    describe.skip("reporting_tag tests", () => {
+    describe("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
     });
     describe.skip("`/admin/applications` tests", () => {
@@ -88,6 +96,9 @@ describe("API tests", () => {
     });
     describe("Instructor permissions tests", () => {
         instructorsPermissionTests({ apiGET, apiPOST });
+    });
+    describe("Posting tests", () => {
+        postingTests({ apiGET, apiPOST });
     });
     describe("DDAH tests", () => {
         // These need to be in separate `describe`.

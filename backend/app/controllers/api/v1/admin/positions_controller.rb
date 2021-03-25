@@ -62,10 +62,6 @@ class Api::V1::Admin::PositionsController < ApplicationController
             :current_waitlisted,
             :duties,
             :qualifications,
-            :ad_hours_per_assignment,
-            :ad_num_assignments,
-            :ad_open_date,
-            :ad_close_date,
             instructor_ids: []
         )
     end

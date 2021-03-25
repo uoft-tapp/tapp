@@ -9,7 +9,9 @@ RUN apk update && apk add build-base \
   tzdata \
   graphviz \
   postgresql-client \
-  less
+  less \
+  # `freedesktop.org.xml` is no longer distributed with the `mimemagic` Gem, so we need to copy it manually
+  shared-mime-info
 
 RUN apk add --update --no-cache \
   libgcc libstdc++ libx11 glib libxrender libxext libintl \

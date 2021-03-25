@@ -144,4 +144,15 @@ export function assignmentsTests(api) {
         );
         expect(createdAssignment.end_date).toEqual(newPositionData.end_date);
     });
+
+    it("update assignment hours using a string", async () => {
+        const updatedAssignmentData = {
+            ...assignment,
+            hours: "100",
+        };
+        const resp = await apiPOST(`/admin/assignments`, updatedAssignmentData);
+        expect(resp).toHaveStatus("success");
+        const { payload: updatedAssignment } = resp;
+        expect(updatedAssignment.hours).toEqual(100);
+    });
 }
