@@ -1,10 +1,11 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal, Button, Alert, Spinner } from "react-bootstrap";
 import { applicantsSelector, upsertApplicant } from "../../api/actions";
 import { strip } from "../../libs/utils";
 import { Applicant } from "../../api/defs/types";
 import { ApplicantEditor } from "../../components/applicants";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 const BLANK_APPLICANT = {
     first_name: "",
@@ -61,7 +62,7 @@ export function ConnectedAddApplicantDialog(props: {
     const [inProgress, setInProgress] = React.useState(false);
 
     const applicants = useSelector(applicantsSelector) as Applicant[];
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     function _upsertApplicant(applicant: Partial<Applicant>) {
         return dispatch(upsertApplicant(applicant));

@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     sessionsSelector,
     activeSessionSelector,
@@ -11,11 +11,12 @@ import {
 import { ActiveUserDisplay } from "../../components/active-user";
 import { ActiveSessionDisplay } from "../../components/active-session";
 import { Session, Role } from "../../api/defs/types";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 export function ConnectedActiveSessionDisplay() {
     const sessions = useSelector(sessionsSelector);
     const activeSession = useSelector(activeSessionSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     function _setActiveSession(session: Session) {
         return dispatch(setActiveSession(session));
@@ -33,7 +34,7 @@ export function ConnectedActiveSessionDisplay() {
 export function ConnectedActiveUserDisplay() {
     const activeUser = useSelector(activeUserSelector);
     const activeRole = useSelector(activeRoleSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     function _setActiveUserRole(role: Role) {
         return dispatch(setActiveUserRole(role));

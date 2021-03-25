@@ -145,10 +145,6 @@ export const prepareMinimal = {
             end_date: position.end_date,
             duties: position.duties,
             qualifications: position.qualifications,
-            ad_hours_per_assignment: position.ad_hours_per_assignment,
-            ad_num_assignments: position.ad_num_assignments,
-            ad_open_date: position.ad_open_date,
-            ad_close_date: position.ad_close_date,
             desired_num_assignments: position.desired_num_assignments,
             current_enrollment: position.current_enrollment,
             current_waitlisted: position.current_waitlisted,
@@ -270,7 +266,7 @@ interface IdContext extends Context {
     id: number;
 }
 
-interface prepareFull {
+interface PrepareFull {
     session: PrepareUpsertable<MinimalSession, Session, { id: number }>;
     contractTemplate: PrepareUpsertable<
         MinimalContractTemplate,
@@ -313,7 +309,7 @@ interface prepareFull {
     >;
 }
 
-export const prepareFull: prepareFull = {
+export const prepareFull: PrepareFull = {
     session: function (minSession: MinimalSession, context?: any): any {
         const { id } = context || {};
         if (id != null) {
@@ -370,10 +366,6 @@ export const prepareFull: prepareFull = {
             end_date: minPosition.end_date,
             duties: minPosition.duties,
             qualifications: minPosition.qualifications,
-            ad_hours_per_assignment: minPosition.ad_hours_per_assignment,
-            ad_num_assignments: minPosition.ad_num_assignments,
-            ad_open_date: minPosition.ad_open_date,
-            ad_close_date: minPosition.ad_close_date,
             desired_num_assignments: minPosition.desired_num_assignments,
             current_enrollment: minPosition.current_enrollment,
             current_waitlisted: minPosition.current_waitlisted,

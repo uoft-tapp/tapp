@@ -28,23 +28,7 @@ import {
     normalizeImport,
     normalizeDdahImports,
 } from "../libs/import-export";
-import {
-    initialApplicantData,
-    initialApplicantDataForDdah,
-    initialAssignmentData,
-    initialDdahData,
-    initialInstructorData,
-    initialPositionData,
-    modifiedApplicantData,
-    modifiedAssignmentData,
-    modifiedAssignmentDataInvalidApplicant,
-    modifiedAssignmentDataInvalidPosition,
-    modifiedDdahData,
-    modifiedDdahDataInvalidAssignment,
-    modifiedInstructorData,
-    modifiedPositionData,
-    modifiedPositionDataInvalidInstructor,
-} from "./import-export-data/diff-data";
+import { reduxStoreData } from "./import-export-data/redux-store-data";
 import {
     spreadsheetUndefinedToNull,
     jsonUndefinedToNull,
@@ -225,7 +209,8 @@ describe("Import/export library functionality", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("instructors_correct.xlsx"),
             },
-            instructorSchema
+            instructorSchema,
+            false
         );
         expect(normalizedSpreadsheetInstructors).toMatchSnapshot();
         // import correct instructors from JSON
@@ -234,7 +219,8 @@ describe("Import/export library functionality", () => {
                 fileType: "json",
                 data: importObjectJSONs.instructors,
             },
-            instructorSchema
+            instructorSchema,
+            false
         );
         expect(normalizedJsonInstructors).toMatchSnapshot();
         // import instructors data missing required key utorid should throw error
@@ -246,9 +232,10 @@ describe("Import/export library functionality", () => {
                         "instructors_missing_required_keys.xlsx"
                     ),
                 },
-                instructorSchema
-            ).toThrow(Error)
-        );
+                instructorSchema,
+                false
+            )
+        ).toThrow(Error);
     });
 
     it("Import Applicants from JSON/CSV/XLSX", () => {
@@ -258,7 +245,8 @@ describe("Import/export library functionality", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("applicants_correct.csv"),
             },
-            applicantSchema
+            applicantSchema,
+            false
         );
         expect(normalizedSpreadsheetApplicants).toMatchSnapshot();
         // import correct applicants from JSON
@@ -267,7 +255,8 @@ describe("Import/export library functionality", () => {
                 fileType: "json",
                 data: importObjectJSONs.applicants,
             },
-            applicantSchema
+            applicantSchema,
+            false
         );
         expect(normalizedJsonApplicants).toMatchSnapshot();
         // import applicants data missing required key utorid should throw error
@@ -279,9 +268,10 @@ describe("Import/export library functionality", () => {
                         "applicants_missing_required_keys.csv"
                     ),
                 },
-                applicantSchema
-            ).toThrow(Error)
-        );
+                applicantSchema,
+                false
+            )
+        ).toThrow(Error);
     });
 });
 
@@ -292,7 +282,8 @@ it("Import Positions from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("positions_correct.xlsx"),
         },
-        positionSchema
+        positionSchema,
+        false
     );
     expect(normalizedSpreadsheetPositions).toMatchSnapshot();
     // import correct positions from JSON
@@ -301,7 +292,8 @@ it("Import Positions from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.positions,
         },
-        positionSchema
+        positionSchema,
+        false
     );
     expect(normalizedJsonPositions).toMatchSnapshot();
     // import positions data missing required key utorid should throw error
@@ -311,9 +303,10 @@ it("Import Positions from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("positions_missing_required_keys.xlsx"),
             },
-            positionSchema
-        ).toThrow(Error)
-    );
+            positionSchema,
+            false
+        )
+    ).toThrow(Error);
     // import positions data with invalid start_date should throw error
     expect(() =>
         normalizeImport(
@@ -321,9 +314,10 @@ it("Import Positions from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("positions_invalid_date_columns.xlsx"),
             },
-            positionSchema
-        ).toThrow(Error)
-    );
+            positionSchema,
+            false
+        )
+    ).toThrow(Error);
 });
 
 it("Import Assignments from JSON/CSV/XLSX", () => {
@@ -333,7 +327,8 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("assignments_correct.xlsx"),
         },
-        assignmentSchema
+        assignmentSchema,
+        false
     );
     expect(normalizedSpreadsheetAssignments).toMatchSnapshot();
     // import correct assignments from JSON
@@ -342,7 +337,8 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.assignments,
         },
-        assignmentSchema
+        assignmentSchema,
+        false
     );
     expect(normalizedJsonAssignments).toMatchSnapshot();
     // import assignments data missing required key utorid should throw error
@@ -354,9 +350,10 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
                     "assignments_missing_required_keys.xlsx"
                 ),
             },
-            assignmentSchema
-        ).toThrow(Error)
-    );
+            assignmentSchema,
+            false
+        )
+    ).toThrow(Error);
     // import assignments data with invalid start_date should throw error
     expect(() =>
         normalizeImport(
@@ -364,9 +361,10 @@ it("Import Assignments from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("assignments_invalid_date_columns.xlsx"),
             },
-            assignmentSchema
-        ).toThrow(Error)
-    );
+            assignmentSchema,
+            false
+        )
+    ).toThrow(Error);
 });
 
 it("Import Ddahs from JSON/CSV/XLSX", () => {
@@ -376,7 +374,8 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "spreadsheet",
             data: parseSpreadsheet("ddahs_correct.xlsx"),
         },
-        initialApplicantDataForDdah
+        reduxStoreData.applicants,
+        false
     );
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
     // import ddahs with invalid applicant should throw error
@@ -386,7 +385,8 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
                 fileType: "spreadsheet",
                 data: parseSpreadsheet("ddahs_invalid_applicant.xlsx"),
             },
-            initialApplicantDataForDdah
+            reduxStoreData.applicants,
+            false
         )
     ).toThrow(Error);
     // import correct ddahs from JSON
@@ -395,77 +395,371 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
             fileType: "json",
             data: importObjectJSONs.ddahs,
         },
-        []
+        [],
+        false
     );
     expect(normalizedJsonDdahs).toMatchSnapshot();
 });
 
 it("Compute Instructors diff", () => {
+    // modified instructor data used for computing the diff with initial objects
+    const modifiedInstructorData = reduxStoreData.instructors.map(
+        prepareMinimal.instructor
+    );
+    // modify first instructor's email
+    modifiedInstructorData[0].email = "new.email@mail.utoronto.ca";
+    // add a new instructor
+    modifiedInstructorData.push({
+        first_name: "Megan",
+        last_name: "Miller",
+        email: "megan.miller@utoronto.ca",
+        utorid: "millerm",
+    });
+    // compute diff
     const instructorsDiff = diffImport.instructors(
         modifiedInstructorData,
-        initialInstructorData
+        reduxStoreData
     );
-    expect(instructorsDiff).toMatchSnapshot();
+    // modifiedInstructorData instructors should be computed as: modified(email), duplicate, and new
+    expect(instructorsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: { email: expect.any(String) },
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
 });
 
 it("Compute Applicants diff", () => {
+    // modified applicant data used for computing the diff with initial objects
+    const modifiedApplicantData = reduxStoreData.applicants.map(
+        prepareMinimal.applicant
+    );
+    // modify first applicant's email
+    modifiedApplicantData[0].email = "new.email@mail.utoronto.ca";
+    // add a new applicant
+    modifiedApplicantData.push({
+        first_name: "Tom",
+        last_name: "Jerry",
+        email: "jerryt@mail.utoronto.ca",
+        phone: null,
+        utorid: "jerryt",
+        student_number: "777777777",
+    });
+    // compute diff
     const applicantsDiff = diffImport.applicants(
         modifiedApplicantData,
-        initialApplicantData
+        reduxStoreData
     );
-    expect(applicantsDiff).toMatchSnapshot();
+    // modifiedApplicantData applicants should be computed as: modified(email), duplicate, duplicate, and new
+    expect(applicantsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: {
+                email: expect.any(String),
+            },
+        },
+        { status: "duplicate" },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
 });
 
 it("Compute Positions diff", () => {
+    // modified position data used for computing the diff with initial objects
+    const modifiedPositionData = reduxStoreData.positions.map(
+        prepareMinimal.position
+    );
+    // modify first position's position_title
+    modifiedPositionData[0].position_title = "New Title";
+    // add a new position
+    modifiedPositionData.push({
+        position_code: "CSC135H1F",
+        position_title: "Computer Fun",
+        start_date: "2020-02-10T00:00:00.000Z",
+        end_date: "2020-12-31T00:00:00.000Z",
+        hours_per_assignment: 75,
+        qualifications: null,
+        duties: "Tutorials",
+        ad_hours_per_assignment: null,
+        ad_num_assignments: null,
+        ad_open_date: null,
+        ad_close_date: null,
+        desired_num_assignments: null,
+        current_enrollment: null,
+        current_waitlisted: null,
+        instructors: [],
+        contract_template: "Regular",
+    });
     // make sure the instructors are valid instructors
     for (const item of modifiedPositionData) {
         item.instructors = diffImport
             .instructorsListFromField(item.instructors || [], {
-                instructors: initialPositionData.instructors,
+                instructors: reduxStoreData.instructors,
             })
             .map((x) => x.utorid);
     }
+    // compute diff
     const positionsDiff = diffImport.positions(
         modifiedPositionData,
-        initialPositionData
+        reduxStoreData
     );
-    expect(positionsDiff).toMatchSnapshot();
+    // modifiedPositionData positions should be computed as: modified(position_title), duplicate, and new
+    expect(positionsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: {
+                position_title: expect.any(String),
+            },
+        },
+        { status: "duplicate" },
+        { status: "new" },
+    ]);
     // positions with invalid instructor should throw error
+    const modifiedPositionDataInvalidInstructor = [
+        // position with invalid instructor
+        {
+            position_code: "CSC135H1F",
+            position_title: "Computer Fun",
+            start_date: "2020-02-10T00:00:00.000Z",
+            end_date: "2020-12-31T00:00:00.000Z",
+            hours_per_assignment: 75,
+            qualifications: null,
+            duties: "Tutorials",
+            ad_hours_per_assignment: null,
+            ad_num_assignments: null,
+            ad_open_date: null,
+            ad_close_date: null,
+            desired_num_assignments: null,
+            current_enrollment: null,
+            current_waitlisted: null,
+            instructors: ["invalid"],
+            contract_template: "Regular",
+        },
+    ];
     expect(() =>
         diffImport.positions(
             modifiedPositionDataInvalidInstructor,
-            initialPositionData
+            reduxStoreData
         )
     ).toThrow(Error);
 });
 
 it("Compute Assignments diff", () => {
+    // modified assignment data used for computing the diff with initial objects
+    const modifiedAssignmentData = reduxStoreData.assignments.map(
+        prepareMinimal.assignment
+    );
+    // modify first assignment's wage_chunks
+    modifiedAssignmentData[0].wage_chunks = [
+        {
+            start_date: "2020-01-01T00:00:00.000Z",
+            end_date: "2020-03-31T00:00:00.000Z",
+            hours: 30,
+            rate: 50,
+        },
+        {
+            start_date: "2020-04-01T00:00:00.000Z",
+            end_date: "2020-05-01T00:00:00.000Z",
+            hours: 40,
+            rate: 50,
+        },
+    ];
+    // add a new assignment
+    modifiedAssignmentData.push({
+        contract_override_pdf: null,
+        active_offer_status: null,
+        active_offer_recent_activity_date: null,
+        contract_template: "regular",
+        end_date: "2021-12-10T00:00:00.000Z",
+        hours: 80,
+        position_code: "CSC494",
+        start_date: "2020-12-10T00:00:00.000Z",
+        utorid: "wilsonh",
+        wage_chunks: [
+            {
+                end_date: "2020-12-31T00:00:00.000Z",
+                hours: 30,
+                rate: 50,
+                start_date: "2020-12-10T00:00:00.000Z",
+            },
+            {
+                end_date: "2021-06-30T00:00:00.000Z",
+                hours: 30,
+                rate: 50,
+                start_date: "2021-01-01T00:00:00.000Z",
+            },
+            {
+                end_date: "2021-12-10T00:00:00.000Z",
+                hours: 20,
+                rate: 50,
+                start_date: "2021-07-01T00:00:00.000Z",
+            },
+        ],
+    });
+    // compute diff
     const assignmentsDiff = diffImport.assignments(
         modifiedAssignmentData,
-        initialAssignmentData
+        reduxStoreData
     );
-    expect(assignmentsDiff).toMatchSnapshot();
+    // modifiedAssignmentData assignments should be computed as: modified(wage_chunks), duplicate, and new
+    expect(assignmentsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: {
+                wage_chunks: expect.any(String),
+            },
+        },
+        {
+            status: "duplicate",
+        },
+        { status: "new" },
+    ]);
     // assignments with invalid applicant should throw error
+    const modifiedAssignmentDataInvalidApplicant = [
+        // assignment with invalid Applicant
+        {
+            contract_override_pdf: null,
+            active_offer_status: null,
+            active_offer_recent_activity_date: null,
+            contract_template: "regular",
+            end_date: "2021-12-10T00:00:00.000Z",
+            hours: 80,
+            position_code: "CSC494",
+            start_date: "2020-12-10T00:00:00.000Z",
+            utorid: "invalid",
+            wage_chunks: [
+                {
+                    end_date: "2020-12-31T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-06-30T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2021-01-01T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    hours: 20,
+                    rate: 50,
+                    start_date: "2021-07-01T00:00:00.000Z",
+                },
+            ],
+        },
+    ];
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidApplicant,
-            initialAssignmentData
+            reduxStoreData
         )
     ).toThrow(Error);
     // assignments with invalid position should throw error
+    const modifiedAssignmentDataInvalidPosition = [
+        // assignment with invalid position
+        {
+            contract_override_pdf: null,
+            active_offer_status: null,
+            active_offer_recent_activity_date: null,
+            contract_template: "regular",
+            end_date: "2021-12-10T00:00:00.000Z",
+            hours: 80,
+            position_code: "invalid",
+            start_date: "2020-12-10T00:00:00.000Z",
+            utorid: "wilsonh",
+            wage_chunks: [
+                {
+                    end_date: "2020-12-31T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2020-12-10T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-06-30T00:00:00.000Z",
+                    hours: 30,
+                    rate: 50,
+                    start_date: "2021-01-01T00:00:00.000Z",
+                },
+                {
+                    end_date: "2021-12-10T00:00:00.000Z",
+                    hours: 20,
+                    rate: 50,
+                    start_date: "2021-07-01T00:00:00.000Z",
+                },
+            ],
+        },
+    ];
     expect(() =>
         diffImport.assignments(
             modifiedAssignmentDataInvalidPosition,
-            initialAssignmentData
+            reduxStoreData
         )
     ).toThrow(Error);
 });
 
 it("Compute Ddahs diff", () => {
-    const ddahsDiff = diffImport.ddahs(modifiedDdahData, initialDdahData);
-    expect(ddahsDiff).toMatchSnapshot();
+    // modified ddah data used for computing the diff with initial objects
+    const modifiedDdahData = reduxStoreData.ddahs.map(prepareMinimal.ddah);
+    // modify first ddah's duties
+    modifiedDdahData[0].duties = [
+        {
+            description: "new duty",
+            hours: 40,
+        },
+    ];
+    // add a new ddah
+    modifiedDdahData.push({
+        applicant: "johnd",
+        duties: [
+            {
+                description: "Initial training",
+                hours: 30,
+            },
+            {
+                description: "Marking the midterm",
+                hours: 50,
+            },
+        ],
+        position_code: "CSC494",
+    });
+    // compute diff
+    const ddahsDiff = diffImport.ddahs(modifiedDdahData, reduxStoreData);
+    // modifiedDdahData ddahs should be computed as: modified(duties) and new
+    expect(ddahsDiff).toMatchObject([
+        {
+            status: "modified",
+            changes: {
+                duties: expect.any(String),
+            },
+        },
+        { status: "new" },
+    ]);
     // ddahs with invalid assignment should throw error
+    const modifiedDdahDataInvalidAssignment = [
+        // ddah with invalid assignment (invalid applicant `potterh` and position `invalid` matching)
+        {
+            applicant: "potterh",
+            duties: [
+                {
+                    description: "Initial training",
+                    hours: 80,
+                },
+                {
+                    description: "Marking the midterm",
+                    hours: 10,
+                },
+                {
+                    description: "Running tutorials",
+                    hours: 20,
+                },
+            ],
+            position_code: "invalid",
+        },
+    ];
     expect(() =>
-        diffImport.ddahs(modifiedDdahDataInvalidAssignment, initialDdahData)
+        diffImport.ddahs(modifiedDdahDataInvalidAssignment, reduxStoreData)
     ).toThrow(Error);
 });

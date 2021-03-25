@@ -19,8 +19,8 @@ export function jsonUndefinedToNull(items) {
  * Util functions to turn undefined to null for spreadsheets
  *
  * @exports
- * @param {Object} item
- * @returns{Object}
+ * @param {Object[] item
+ * @returns{(number | string | null | undefined) [][]}
  */
 export function spreadsheetUndefinedToNull(items) {
     const newItems = items.map(function (item) {
