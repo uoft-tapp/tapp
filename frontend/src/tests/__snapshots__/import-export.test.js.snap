@@ -426,7 +426,7 @@ Array [
     "Period 3 End Date",
   ],
   Array [
-    "Smith",
+    null,
     "Gordon",
     "smithg",
     "a@a.com",
@@ -696,7 +696,7 @@ Array [
   ],
   Array [
     "CSC148",
-    "Smith",
+    null,
     "Gordon",
     "a@a.com",
     80,

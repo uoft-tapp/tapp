@@ -135,7 +135,6 @@ export const assignmentData = [
     {
         applicant: {
             first_name: "Gordon",
-            last_name: "Smith",
             email: "a@a.com",
             utorid: "smithg",
             phone: "41666666666",
@@ -143,7 +142,6 @@ export const assignmentData = [
         },
         position: {
             position_code: "CSC148",
-            position_title: "Intro to Comp Sci",
             hours_per_assignment: 10,
             start_date: "2020-02-10T00:00:00.000Z",
             end_date: "2020-12-31T00:00:00.000Z",
@@ -470,7 +468,6 @@ export const ddahData = [
         assignment: {
             applicant: {
                 first_name: "Gordon",
-                last_name: "Smith",
                 email: "a@a.com",
                 utorid: "smithg8",
                 phone: "41666666666",
@@ -478,7 +475,6 @@ export const ddahData = [
             },
             position: {
                 position_code: "CSC148",
-                position_title: "Intro to Comp Sci",
                 hours_per_assignment: 10,
                 start_date: "2020-02-10T00:00:00.000Z",
                 end_date: "2020-12-31T00:00:00.000Z",
