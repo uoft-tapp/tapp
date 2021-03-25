@@ -1,10 +1,6 @@
 import { dataToFile } from "./data-to-file";
 import { prepareSpreadsheet } from "./prepare-spreadsheet";
 import { prepareMinimal } from "./prepare-json";
-import {
-    spreadsheetUndefinedToNull,
-    jsonUndefinedToNull,
-} from "./undefinedToNull";
 import type {
     Applicant,
     Assignment,
@@ -32,15 +28,10 @@ export function prepareApplicantData(
 ) {
     return dataToFile(
         {
-            toSpreadsheet: () =>
-                spreadsheetUndefinedToNull(
-                    prepareSpreadsheet.applicant(applicants)
-                ),
+            toSpreadsheet: () => prepareSpreadsheet.applicant(applicants),
             toJson: () => ({
-                applicants: jsonUndefinedToNull(
-                    applicants.map((applicant) =>
-                        prepareMinimal.applicant(applicant)
-                    )
+                applicants: applicants.map((applicant) =>
+                    prepareMinimal.applicant(applicant)
                 ),
             }),
         },
@@ -71,15 +62,10 @@ export function prepareAssignmentDataFactory(
         }
         return dataToFile(
             {
-                toSpreadsheet: () =>
-                    spreadsheetUndefinedToNull(
-                        prepareSpreadsheet.assignment(assignments)
-                    ),
+                toSpreadsheet: () => prepareSpreadsheet.assignment(assignments),
                 toJson: () => ({
-                    assignments: jsonUndefinedToNull(
-                        assignments.map((assignment) =>
-                            prepareMinimal.assignment(assignment, session)
-                        )
+                    assignments: assignments.map((assignment) =>
+                        prepareMinimal.assignment(assignment, session)
                     ),
                 }),
             },
@@ -104,12 +90,9 @@ export function prepareDdahDataFactory(ddahFilter: FilterFunc<Ddah>) {
         }
         return dataToFile(
             {
-                toSpreadsheet: () =>
-                    spreadsheetUndefinedToNull(prepareSpreadsheet.ddah(ddahs)),
+                toSpreadsheet: () => prepareSpreadsheet.ddah(ddahs),
                 toJson: () => ({
-                    ddahs: jsonUndefinedToNull(
-                        ddahs.map((ddah) => prepareMinimal.ddah(ddah))
-                    ),
+                    ddahs: ddahs.map((ddah) => prepareMinimal.ddah(ddah)),
                 }),
             },
             dataFormat,
@@ -132,15 +115,10 @@ export function prepareInstructorData(
 ) {
     return dataToFile(
         {
-            toSpreadsheet: () =>
-                spreadsheetUndefinedToNull(
-                    prepareSpreadsheet.instructor(instructors)
-                ),
+            toSpreadsheet: () => prepareSpreadsheet.instructor(instructors),
             toJson: () => ({
-                instructors: jsonUndefinedToNull(
-                    instructors.map((instructor) =>
-                        prepareMinimal.instructor(instructor)
-                    )
+                instructors: instructors.map((instructor) =>
+                    prepareMinimal.instructor(instructor)
                 ),
             }),
         },
@@ -163,15 +141,10 @@ export function preparePositionData(
 ) {
     return dataToFile(
         {
-            toSpreadsheet: () =>
-                spreadsheetUndefinedToNull(
-                    prepareSpreadsheet.position(positions)
-                ),
+            toSpreadsheet: () => prepareSpreadsheet.position(positions),
             toJson: () => ({
-                positions: jsonUndefinedToNull(
-                    positions.map((position) =>
-                        prepareMinimal.position(position)
-                    )
+                positions: positions.map((position) =>
+                    prepareMinimal.position(position)
                 ),
             }),
         },

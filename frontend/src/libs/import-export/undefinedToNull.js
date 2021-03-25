@@ -1,25 +1,12 @@
-/**
- * Util functions to turn undefined to null for json
- *
- * @exports
- * @param {Object} item
- * @returns{Object}
- */
-export function jsonUndefinedToNull(items) {
-    const newItems = items.map(function (item) {
-        for (const key of Object.keys(item)) {
-            item[key] = item[key] ?? null;
-        }
-        return item;
-    });
-    return newItems;
-}
+// for json containing object data, we do not need another helper function
+// to convert undefined to null since in dataToFile function in "./data-to-file" 
+// we use JSON.stringify which will do the conversion
 
 /**
  * Util functions to turn undefined to null for spreadsheets
  *
  * @exports
- * @param {Object[] item
+ * @param {(number | string | null) [][] item
  * @returns{(number | string | null | undefined) [][]}
  */
 export function spreadsheetUndefinedToNull(items) {
