@@ -35,7 +35,7 @@ export function usersTests(api) {
         const resp = await apiPOST("/admin/users", newUserData);
 
         expect(resp).toHaveStatus("success");
-        expect(resp.payload).toMatchObject(newUserData);
+        expect(resp.payload.utorid).toEqual(newUserData.utorid);
         // Save any extra attributes we got, such as an `id`
         Object.assign(newUserData, resp.payload);
 
@@ -45,28 +45,39 @@ export function usersTests(api) {
 
     it("Changes a user's role", async () => {
         let resp = await apiPOST("/admin/users", {
-            id: newUserData.id,
+            utorid: newUserData.utorid,
             roles: [],
         });
 
-        // Empty the roles
+        // Empty the roles (all user will still by default has the ta role,
+        // but they will not by default have instructor role)
         expect(resp).toHaveStatus("success");
-        expect(resp.payload.roles).toEqual([]);
+        expect(resp.payload.roles).toEqual(
+            expect.not.arrayContaining(["instructor"])
+        );
 
-        // Set the roles to "ta" only
+        // add instructor role to the user
         resp = await apiPOST("/admin/users", {
             id: newUserData.id,
-            roles: ["ta"],
+            roles: ["instructor"],
         });
-        expect(resp.payload.roles).toEqual(["ta"]);
+        expect(resp.payload.roles).toEqual(
+            expect.arrayContaining(["instructor"])
+        );
 
         // Make sure that we've been saved in the full user list
         resp = await apiGET("/admin/users");
-        const ta = resp.payload.find((x) => x.id === newUserData.id);
-        expect(ta).toEqual({ ...newUserData, roles: ["ta"] });
+        expect(resp).toHaveStatus("success");
+        const updatedUser = resp.payload.find(
+            (user) => user.utorid === newUserData.utorid
+        );
+        expect(updatedUser).toBeDefined();
+        expect(updatedUser.roles).toEqual(
+            expect.arrayContaining(["instructor"])
+        );
 
         // Save the updated state
-        Object.assign(newUserData, ta);
+        Object.assign(newUserData, updatedUser);
     });
 
     it("Fetches the active user", async () => {

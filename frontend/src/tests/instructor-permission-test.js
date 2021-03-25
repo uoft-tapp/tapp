@@ -15,7 +15,7 @@ export function instructorsPermissionTests(api) {
     // eslint-disable-next-line
     const { apiGET, apiPOST } = api;
     let session = null;
-    let instructorOnlyUser;
+    let instructorUser;
     let defaultUser;
     let existingContractTemplateId;
 
@@ -28,7 +28,7 @@ export function instructorsPermissionTests(api) {
     async function switchToInstructorOnlyUser() {
         let respSwitchToInstOnlyUser = await apiPOST(
             `/debug/active_user`,
-            instructorOnlyUser
+            instructorUser
         );
         expect(respSwitchToInstOnlyUser).toHaveStatus("success");
     }
@@ -77,12 +77,14 @@ export function instructorsPermissionTests(api) {
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
 
-        instructorOnlyUser = resp.payload.find(
+        instructorUser = resp.payload.find(
             (user) => user.utorid === instructorOnlyUserData.utorid
         );
 
-        expect(instructorOnlyUser).toBeDefined();
-        expect(instructorOnlyUser.roles).toEqual(["instructor"]);
+        expect(instructorUser).toBeDefined();
+        expect(instructorUser.roles).toEqual(
+            expect.arrayContaining(["instructor"])
+        );
     }, 30000);
 
     it("assigning to be instructor of a course grants instructor role", async () => {
@@ -96,6 +98,9 @@ export function instructorsPermissionTests(api) {
 
         let resp = await apiPOST(`/debug/users`, emptyRoleUserData);
         expect(resp).toHaveStatus("success");
+        expect(resp.payload.roles).toEqual(
+            expect.not.arrayContaining(["instructor"])
+        );
 
         resp = await apiGET(`/debug/users`);
         expect(resp).toHaveStatus("success");
