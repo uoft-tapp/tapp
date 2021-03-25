@@ -42,7 +42,7 @@ export const setGlobalsInUrl = validatedApiDispatcher({
             newUrl.search = "?" + searchParams;
             let url = "" + newUrl;
             if ("" + url !== "" + window.location) {
-                window.history.pushState({ path: newUrl }, "", url);
+                window.history.pushState({ path: url }, "", url);
             }
         }
     },

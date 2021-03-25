@@ -7,13 +7,9 @@ import {
     documentCallback,
     wrappedPropTypes,
     docApiPropTypes,
+    RouteParams,
 } from "../defs/doc-generation";
 import { Session as SessionType } from "../defs/types";
-
-interface RouteParams {
-    role: "admin" | "instructor" | "ta";
-    [key: string]: string;
-}
 
 export class Session extends MockAPIController {
     constructor(data: any) {

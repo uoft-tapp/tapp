@@ -1,4 +1,15 @@
-export const instructorSchema = {
+export interface NormalizationSchema<T extends string[]> {
+    keys: T;
+    keyMap: Record<string, T[number]>;
+    requiredKeys: T[number][];
+    primaryKey: T[number] | T[number][];
+    dateColumns: T[number][];
+    baseName: string;
+}
+
+export const instructorSchema: NormalizationSchema<
+    ["first_name", "last_name", "utorid", "email"]
+> = {
     keys: ["first_name", "last_name", "utorid", "email"],
     keyMap: {
         "First Name": "first_name",
@@ -15,7 +26,9 @@ export const instructorSchema = {
     baseName: "instructors",
 };
 
-export const applicantSchema = {
+export const applicantSchema: NormalizationSchema<
+    ["first_name", "last_name", "utorid", "email", "student_number", "phone"]
+> = {
     keys: [
         "first_name",
         "last_name",
@@ -40,7 +53,26 @@ export const applicantSchema = {
     baseName: "applicants",
 };
 
-export const positionSchema = {
+export const positionSchema: NormalizationSchema<
+    [
+        "position_code",
+        "position_title",
+        "start_date",
+        "end_date",
+        "hours_per_assignment",
+        "desired_num_assignments",
+        "contract_template",
+        "instructors",
+        "duties",
+        "qualifications",
+        "current_enrollment",
+        "current_waitlisted",
+        "ad_open_date",
+        "ad_close_date",
+        "ad_hours_per_assignment",
+        "ad_num_assignments"
+    ]
+> = {
     keys: [
         "position_code",
         "position_title",
@@ -80,7 +112,18 @@ export const positionSchema = {
     baseName: "positions",
 };
 
-export const assignmentSchema = {
+export const assignmentSchema: NormalizationSchema<
+    [
+        "utorid",
+        "position_code",
+        "start_date",
+        "end_date",
+        "contract_template",
+        "contract_override_pdf",
+        "hours",
+        "wage_chunks"
+    ]
+> = {
     // We don't list "active_offer_status" because that cannot be imported. It has to be set
     // via the TA or manually by the admin.
     keys: [

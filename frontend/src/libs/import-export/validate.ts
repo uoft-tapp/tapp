@@ -1,3 +1,5 @@
+import { NormalizationSchema } from "../schema";
+
 /**
  * Validates `data` based on the specified `schema`. At the moment this
  * function only checks that every key specified by `schema.requiredKeys` is
@@ -7,7 +9,7 @@
  * @param {*} data
  * @param {*} schema
  */
-export function validate(data, schema) {
+export function validate(data: any[], schema: NormalizationSchema<string[]>) {
     const { requiredKeys } = schema;
     for (const item of data) {
         for (const key of requiredKeys) {

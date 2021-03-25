@@ -1,4 +1,5 @@
 import FuzzySet from "fuzzyset";
+import { NormalizationSchema } from "../schema";
 
 /**
  * Delete all properties from `keyMap` that have `value` as
@@ -8,7 +9,7 @@ import FuzzySet from "fuzzyset";
  * @param {*} keyMap
  * @returns
  */
-function deleteReferences(value, keyMap) {
+function deleteReferences(value: any, keyMap: Record<any, any>) {
     for (const key in keyMap) {
         if (keyMap[key] === value) {
             delete keyMap[key];
@@ -24,17 +25,20 @@ function deleteReferences(value, keyMap) {
  *
  * If no fuzzy match is found, `null` is returned.
  *
- * @param {*} targetKey
- * @param {*} [keyMap={}]
- * @returns {string | null}
+ * @param targetKey
+ * @param [keyMap={}]
+ * @returns
  */
-function findMatchingKey(targetKey, keyMap = {}) {
+function findMatchingKey(
+    targetKey: string,
+    keyMap: Record<string, string | number> = {}
+) {
     if (targetKey in keyMap) {
         return keyMap[targetKey];
     }
     const fuzzySet = FuzzySet(Object.keys(keyMap));
     // We set a 70% match threshold to prevent mismatches.
-    const matches = fuzzySet.get(targetKey, null, 0.7);
+    const matches = (fuzzySet.get as any)(targetKey, null, 0.7);
     if (matches) {
         // Since we already checked for 100% matches, `matches` will
         // always be an array of results of the form [[<%match>, <value matched>]]
@@ -51,8 +55,16 @@ function findMatchingKey(targetKey, keyMap = {}) {
  *
  * @class SpreadsheetRowMapper
  */
-export class SpreadsheetRowMapper {
-    constructor(schema) {
+export class SpreadsheetRowMapper<
+    T extends Pick<NormalizationSchema<string[]>, "keys" | "keyMap">
+> {
+    keys: T["keys"];
+    keyMap: Record<string, string | number>;
+    unmatchedKeys: Record<string, string | number>;
+    empiricalKeyMap: Record<string, string | number>;
+    unknownKeys: Record<string, boolean>;
+
+    constructor(schema: T) {
         this.keys = schema.keys;
         this.keyMap = { ...schema.keyMap };
         // `keys` are always valid, so make sure they are in the keymap.
@@ -77,12 +89,12 @@ export class SpreadsheetRowMapper {
      * The search for appropriate keys is done with a fuzzy matching algorithm, so
      * the processed spreadsheet headers don't need to exactly match what's given.
      *
-     * @param {*} row
-     * @param {boolean} log - whether or not to show lookups using `console.log`
+     * @param row
+     * @param log - whether or not to show lookups using `console.log`
      * @memberof SpreadsheetRowMapper
      */
-    formatRow(row, log = true) {
-        const ret = {};
+    formatRow(row: Record<string, any>, log = true) {
+        const ret: Record<string, any> = {};
         for (const [key, value] of Object.entries(row)) {
             // If we've found this key before, use the cached version.
             if (key in this.empiricalKeyMap) {

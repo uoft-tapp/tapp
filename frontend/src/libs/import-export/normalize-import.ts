@@ -1,14 +1,15 @@
 import * as chrono from "chrono-node";
+import { NormalizationSchema } from "../schema";
 import { SpreadsheetRowMapper } from "./spreadsheet-row-mapper";
 import { validate } from "./validate";
 
 /**
  * Parse a date string or integer and return a normalized date string.
  *
- * @param {string | number} str - input date; either a string or an excel date integer
- * @returns {string} - date in YYYY-MM-DD:T00:00:00.000 format
+ * @param str - input date; either a string or an excel date integer
+ * @returns date in YYYY-MM-DD:T00:00:00.000 format
  */
-function parseDate(str) {
+function parseDate(str: string | number) {
     // Dates parsed from excel will come in as a number. Convert those to an appropriate string first.
     if (typeof str === "number") {
         // Convert to seconds since epoch
@@ -27,6 +28,10 @@ function parseDate(str) {
     }
 }
 
+type DataFormat =
+    | { fileType: "json"; data: any }
+    | { fileType: "spreadsheet"; data: any[][] };
+
 /**
  * Use `schema` to normalize `data` to be an array of objects specified
  * by `schema`. `data` is expected to be an object with `fileType`
@@ -35,25 +40,30 @@ function parseDate(str) {
  * is converted to match the schema using fuzzy matching on column names (if needed).
  *
  * @export
- * @param {{fileType: "json" | "spreadsheet", data: any}} data
- * @param {*} [schema={ keys: [], requiredKeys: [] }]
  * @returns
  */
 export function normalizeImport(
-    data,
-    schema = { keys: [], requiredKeys: [], dateColumns: [] },
+    dataWrapper: DataFormat,
+    schema: NormalizationSchema<string[]> = {
+        keys: [],
+        requiredKeys: [],
+        dateColumns: [],
+        keyMap: {},
+        primaryKey: "",
+        baseName: "",
+    },
     log = true
 ) {
     const { keys, baseName } = schema;
     let ret = [];
-    if (data.fileType === "json") {
+    if (dataWrapper.fileType === "json") {
         // Unwrap data so that it's just an array
-        data = data.data;
+        let data = dataWrapper.data;
         if (data[baseName]) {
             data = data[baseName];
         }
         for (const item of data) {
-            const newItem = {};
+            const newItem: Record<string, any> = {};
             for (const key of keys) {
                 newItem[key] = item[key];
             }
@@ -61,10 +71,10 @@ export function normalizeImport(
         }
     }
 
-    if (data.fileType === "spreadsheet") {
+    if (dataWrapper.fileType === "spreadsheet") {
         // `data` should be an array of objects indexed by column name.
         // E.g., [{"First Name": "Joe", "Last Name": "Smith"}, ...]
-        data = data.data;
+        let data = dataWrapper.data;
 
         const rowMapper = new SpreadsheetRowMapper(schema);
 

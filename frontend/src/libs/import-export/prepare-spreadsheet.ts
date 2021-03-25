@@ -1,10 +1,24 @@
+import {
+    Applicant,
+    Assignment,
+    Ddah,
+    Instructor,
+    Position,
+    WageChunk,
+} from "../../api/defs/types";
+
+/**
+ * Type of a spreadsheet cell
+ */
+type CellType = number | string | null | undefined;
+
 /**
  * Return an array of [hours, duty, hours duty, ...] for the specified `ddah`
  *
- * @param {Ddah} ddah
- * @returns {((string | number)[])}
+ * @param ddah
+ * @returns
  */
-function flattenDuties(ddah) {
+function flattenDuties(ddah: Ddah) {
     const ret = [];
     const duties = [...ddah.duties];
     duties.sort((a, b) => a.order - b.order);
@@ -23,12 +37,17 @@ function flattenDuties(ddah) {
  * @param {*} date
  * @returns
  */
-function formatDateForSpreadsheet(date) {
+function formatDateForSpreadsheet(date: string | number | null | undefined) {
     try {
         return date && new Date(date).toJSON().slice(0, 10);
     } catch (e) {
         return "";
     }
+}
+
+type BasicWageChunk = ({ hours: number } & Record<string, any>)[];
+interface HasWageChunk extends Record<string, any> {
+    wage_chunks: BasicWageChunk | undefined;
 }
 
 /**
@@ -37,8 +56,8 @@ function formatDateForSpreadsheet(date) {
  * @param {*} assignments
  * @returns
  */
-function createPayPeriodHeaders(assignments) {
-    const ret = [];
+function createPayPeriodHeaders(assignments: HasWageChunk[]) {
+    const ret: string[] = [];
     if (!assignments) {
         return ret;
     }
@@ -64,8 +83,10 @@ function createPayPeriodHeaders(assignments) {
  * @param {*} wageChunks
  * @returns
  */
-function formatWageChunksToList(wageChunks) {
-    const ret = [];
+function formatWageChunksToList(
+    wageChunks: Omit<WageChunk, "id">[] | null | undefined
+) {
+    const ret: (string | number | undefined | null)[] = [];
     if (!wageChunks) {
         return ret;
     }
@@ -87,7 +108,7 @@ function formatWageChunksToList(wageChunks) {
  * for converting into a spreadsheet.
  */
 export const prepareSpreadsheet = {
-    instructor: function (instructors) {
+    instructor: function (instructors: Instructor[]) {
         return [["Last Name", "First Name", "UTORid", "email"]].concat(
             instructors.map((instructor) => [
                 instructor.last_name,
@@ -97,7 +118,7 @@ export const prepareSpreadsheet = {
             ])
         );
     },
-    applicant: function (applicants) {
+    applicant: function (applicants: Applicant[]) {
         return [
             [
                 "Last Name",
@@ -118,8 +139,8 @@ export const prepareSpreadsheet = {
             ])
         );
     },
-    position: function (positions) {
-        return [
+    position: function (positions: Position[]) {
+        return ([
             [
                 "Position Code",
                 "Position Title",
@@ -134,7 +155,7 @@ export const prepareSpreadsheet = {
                 "Current Enrollment",
                 "Current Waitlist",
             ],
-        ].concat(
+        ] as CellType[][]).concat(
             positions.map((position) => [
                 position.position_code,
                 position.position_title,
@@ -158,7 +179,7 @@ export const prepareSpreadsheet = {
             ])
         );
     },
-    ddah: function prepareDdahsSpreadsheet(ddahs) {
+    ddah: function prepareDdahsSpreadsheet(ddahs: Ddah[]) {
         // Compute the maximum number of duties, because each duty gets a column.
         const maxDuties = Math.max(
             ...ddahs.map((ddah) => ddah.duties.length || 0),
@@ -172,7 +193,7 @@ export const prepareSpreadsheet = {
             return `Duty ${(i - 1) / 2 + 1}`;
         });
 
-        return [
+        return ([
             [
                 "Position",
                 "Last Name",
@@ -182,7 +203,7 @@ export const prepareSpreadsheet = {
                 "Offer Status",
                 "",
             ].concat(dutyHeaders),
-        ].concat(
+        ] as CellType[][]).concat(
             ddahs.map((ddah) =>
                 [
                     ddah.assignment.position.position_code,
@@ -196,7 +217,7 @@ export const prepareSpreadsheet = {
             )
         );
     },
-    assignment: function (assignments) {
+    assignment: function (assignments: Assignment[]) {
         // We want to flatten a lot of the data in `assignments` and only include the information
         // we need.
         const assignmentsForSpreadsheet = assignments.map((assignment) => ({
@@ -215,14 +236,14 @@ export const prepareSpreadsheet = {
             active_offer_status: assignment.active_offer_status,
             active_offer_recent_activity_date:
                 assignment.active_offer_recent_activity_date,
-            wage_chunks: assignment.wage_chunks.map((chunk) => ({
+            wage_chunks: assignment.wage_chunks?.map((chunk) => ({
                 hours: chunk.hours,
                 rate: chunk.rate,
                 start_date: chunk.start_date,
                 end_date: chunk.end_date,
             })),
         }));
-        return [
+        return ([
             [
                 "Last Name",
                 "First Name",
@@ -240,7 +261,7 @@ export const prepareSpreadsheet = {
                 "Number of Pay Periods",
                 ...createPayPeriodHeaders(assignmentsForSpreadsheet),
             ],
-        ].concat(
+        ] as CellType[][]).concat(
             assignmentsForSpreadsheet.map((assignment) => [
                 assignment.last_name,
                 assignment.first_name,

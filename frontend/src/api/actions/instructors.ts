@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import {
     FETCH_INSTRUCTORS_SUCCESS,
     FETCH_ONE_INSTRUCTOR_SUCCESS,

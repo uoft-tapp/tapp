@@ -5,9 +5,13 @@
 import PropTypes from "prop-types";
 import RouteParser from "route-parser";
 import { generatePropTypes } from "./prop-types";
+import { Role } from "./types";
 
 class CallAtom {
-    constructor(prop, args) {
+    name: string;
+    args?: any[];
+
+    constructor(prop: string, args?: any[]) {
         this.name = prop;
         this.args = args;
     }
@@ -18,7 +22,7 @@ class CallAtom {
         return "" + this.name + "(" + this.args.join(", ") + ")";
     }
 }
-function createCallChain(chain = [], prop, args) {
+function createCallChain(chain: CallAtom[] = [], prop: string, args?: any[]) {
     return chain.concat([new CallAtom(prop, args)]);
 }
 /**
@@ -27,13 +31,16 @@ function createCallChain(chain = [], prop, args) {
  * which would return an array of `CallAtom` objects consisting of `bool` and `isRequired`.
  * This can be used to generate documentation from existing proptype definitions.
  *
- * @param {*} obj
+ * @param {*} innerObj
  * @param {*} [callChain=[]]
  * @returns
  */
-function propTypesProxy(obj, callChain = []) {
-    const handler = {
-        get(obj, prop, receiver) {
+function propTypesProxy<T extends object | Function>(
+    innerObj: T,
+    callChain: CallAtom[] = []
+) {
+    const handler: ProxyHandler<T> = {
+        get(obj, prop: string, receiver) {
             if (prop === "callChain") {
                 return callChain;
             } else if (prop === "toJSON") {
@@ -47,7 +54,7 @@ function propTypesProxy(obj, callChain = []) {
         },
         apply(obj, thisArg, args) {
             const lastProp = callChain.pop() || { name: "<root>" };
-            const ret = Reflect.apply(obj, thisArg, args);
+            const ret = Reflect.apply(obj as any, thisArg, args);
             if (ret instanceof Object) {
                 return propTypesProxy(
                     ret,
@@ -61,7 +68,7 @@ function propTypesProxy(obj, callChain = []) {
         },
     };
 
-    return new Proxy(obj, handler);
+    return new Proxy(innerObj, handler);
 }
 const wrappedPropTypes = propTypesProxy(PropTypes);
 /**
@@ -79,8 +86,8 @@ const PROPTYPES_TO_SWAGGER_TYPES = {
     any: {},
 };
 
-function wrappedPropTypesToSwagger(pt) {
-    const ret = {};
+function wrappedPropTypesToSwagger(pt: any) {
+    const ret: Record<string, any> = {};
     if (!pt.callChain) {
         // eslint-disable-next-line
         console.warn(
@@ -135,9 +142,12 @@ function wrappedPropTypesToSwagger(pt) {
                     break;
             }
         } else {
-            if (PROPTYPES_TO_SWAGGER_TYPES[type.name]) {
+            if (type.name in PROPTYPES_TO_SWAGGER_TYPES) {
                 // in this case, we're a basic swagger type
-                ret["type"] = PROPTYPES_TO_SWAGGER_TYPES[type.name];
+                ret["type"] =
+                    PROPTYPES_TO_SWAGGER_TYPES[
+                        type.name as keyof typeof PROPTYPES_TO_SWAGGER_TYPES
+                    ];
             }
         }
     }
@@ -172,21 +182,38 @@ function wrapInStandardApiResponseForSwagger(payload = { type: "object" }) {
  * form, e.g. `/sessions/:session_id`, and encode it for
  * consumption by swagger, e.g., `/sessions/{session_id}`.
  *
- * @param {string} url
- * @returns {string}
+ * @param url
+ * @returns
  */
-function urlTemplateToSwagger(url) {
+function urlTemplateToSwagger(url: string) {
     // get the template variables
     // using a trick: have the RouteParsers
     // parse it's own template, giving us
     // a list of variables in the process
-    const parsed = RouteParser(url);
-    const templateVars = Object.keys(parsed.match(parsed.spec));
-    const subs = {};
+    const parsed = new RouteParser(url);
+    const templateVars = Object.keys(parsed.match((parsed as any).spec));
+    const subs: Record<string, string> = {};
     for (const templateVar of templateVars) {
         subs[templateVar] = "{" + templateVar + "}";
     }
-    return { url: decodeURI(parsed.reverse(subs)), templateVars };
+    return { url: decodeURI(parsed.reverse(subs) || ""), templateVars };
+}
+
+interface SwaggerDoc {
+    summary: string;
+    parameters: {
+        name: string;
+        in: string;
+        description: string;
+        required: boolean;
+    }[];
+    responses: {
+        default: {
+            content: { "application/json": { schema: any } };
+        };
+    };
+    requestBody: { content: { "application/json": { schema: any } } };
+    tags: string[];
 }
 
 /**
@@ -194,12 +221,15 @@ function urlTemplateToSwagger(url) {
  * has been documented with `documentCallback` into an openapi
  * object.
  *
- * @param {object} docs
- * @param {string[]} [templateVars=[]] - list of template variables in the route
- * @returns {object} - openapi object
+ * @param docs
+ * @param [templateVars=[]] - list of template variables in the route
+ * @returns openapi object
  */
-function documentedCallbackToSwagger(docs, templateVars = []) {
-    const ret = { responses: { default: {} } };
+function documentedCallbackToSwagger(
+    docs: DocumentCallbackArgs,
+    templateVars: string[] = []
+) {
+    const ret: SwaggerDoc = { responses: { default: {} } } as SwaggerDoc;
     if (!docs) {
         return ret;
     }
@@ -224,7 +254,7 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
             content: {
                 "application/json": {
                     schema: wrapInStandardApiResponseForSwagger(
-                        wrappedPropTypesToSwagger(docs.returns)
+                        wrappedPropTypesToSwagger(docs.returns) as any
                     ),
                 },
             },
@@ -248,19 +278,27 @@ function documentedCallbackToSwagger(docs, templateVars = []) {
 /**
  * Turn mockAPI routes into swagger-ui JSON object
  *
- * @param {{getRoutes: object, postRoutes: object}} [mockAPI={}]
- * @returns {object} - openapi configuration
+ * @param [mockAPI={}]
+ * @returns openapi configuration
  */
-function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
+function mockApiRoutesAsSwaggerPaths(
+    mockAPI: {
+        getRoutes?: Record<string, ReturnType<typeof documentCallback>>;
+        postRoutes?: Record<string, ReturnType<typeof documentCallback>>;
+    } = {}
+) {
     const { getRoutes = {}, postRoutes = {} } = mockAPI;
-    const ret = {};
+    const ret: Record<string, Record<"get" | "post", SwaggerDoc>> = {} as any;
     for (const [path, val] of Object.entries(getRoutes)) {
         const { url: templatePath, templateVars } = urlTemplateToSwagger(path);
         if (val.docs && val.docs.exclude) {
             continue;
         }
         ret[templatePath] = Object.assign(ret[templatePath] || {}, {
-            get: documentedCallbackToSwagger(val.docs, templateVars),
+            get: documentedCallbackToSwagger(
+                val.docs as DocumentCallbackArgs,
+                templateVars
+            ),
         });
     }
     for (const [path, val] of Object.entries(postRoutes)) {
@@ -269,7 +307,10 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
             continue;
         }
         ret[templatePath] = Object.assign(ret[templatePath] || {}, {
-            post: documentedCallbackToSwagger(val.docs, templateVars),
+            post: documentedCallbackToSwagger(
+                val.docs as DocumentCallbackArgs,
+                templateVars
+            ),
         });
     }
 
@@ -283,7 +324,7 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
         )
     );
     // If a route contains one of the "tags", then it should be annotated
-    // accordingly (with each relavent tag)
+    // accordingly (with each relevant tag)
     for (const [path, info] of Object.entries(ret)) {
         const applicableTags = tags.filter((x) => path.includes(x));
         if (info.get && applicableTags.length > 0) {
@@ -295,7 +336,7 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
     }
 
     // Alphabetize the routes so they display in a sensible order.
-    const sortedRet = {};
+    const sortedRet: Record<string, any> = {};
     for (const path of Object.keys(ret).sort()) {
         sortedRet[path] = ret[path];
     }
@@ -303,16 +344,34 @@ function mockApiRoutesAsSwaggerPaths(mockAPI = {}) {
     return sortedRet;
 }
 
+export interface RouteParams {
+    role: "admin" | "instructor" | "ta";
+    [key: string]: string;
+}
+
+interface DocumentCallbackArgs {
+    func: Function;
+    summary: string;
+    posts?: any;
+    returns?: any;
+    roles?: Role[];
+    exclude?: boolean;
+}
+
 /**
- * Document a function with attributes for autogenerating openapi
+ * Document a function with attributes for auto-generating openapi
  * specifications from.
  *
  * @param {*} { func, exclude = false, ...attrs }
  * @returns
  */
-function documentCallback({ func, exclude = false, ...attrs }) {
+function documentCallback({
+    func,
+    exclude = false,
+    ...attrs
+}: DocumentCallbackArgs) {
     // create a wrapped function that we can stuff attributes onto
-    const ret = (...args) => func(...args);
+    const ret = <T>(...args: [T, ...any]) => func(...args);
     ret.docs = {
         exclude,
         ...attrs,

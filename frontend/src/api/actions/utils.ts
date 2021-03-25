@@ -86,7 +86,7 @@ function hasSubField<T, M extends string>(
     obj: T,
     key: M
 ): obj is T & HasSubField<M> {
-    return key in obj;
+    return typeof obj === "object" && key in obj;
 }
 
 /**
@@ -101,7 +101,7 @@ export function hasSubIdField<M extends string>(
     obj: any,
     key: M
 ): obj is HasSubIdField<M> {
-    if ("id" in obj[key]) {
+    if (typeof obj[key] === "object" && "id" in obj[key]) {
         return true;
     }
     return false;
@@ -121,7 +121,8 @@ function hasSubIdFieldArray<M extends string>(
 ): obj is HasSubIdFieldArray<M> {
     if (
         Array.isArray(obj[key]) &&
-        (obj[key].length === 0 || "id" in obj[key][0])
+        (obj[key].length === 0 ||
+            (typeof obj[key][0] === "object" && "id" in obj[key][0]))
     ) {
         return true;
     }
