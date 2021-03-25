@@ -153,22 +153,6 @@ export function instructorsPermissionTests(api) {
         expect(resp.payload.roles).toEqual(
             expect.arrayContaining(["instructor"])
         );
-
-        // This requires further confirmation. The following logic for checking roles may be wrong.
-        //
-        // resp = await apiGET(`/debug/users`);
-        // expect(resp).toHaveStatus("success");
-        // let assignedInstructorRoleUser;
-        // resp.payload.forEach((user) => {
-        //     if (user.utorid === emptyRoleUserData.utorid) {
-        //         expect(user.roles).toEqual(
-        //             expect.arrayContaining(["instructor"])
-        //         );
-        //         assignedInstructorRoleUser = user;
-        //     }
-        // });
-        //
-        // expect(assignedInstructorRoleUser).toBeDefined();
     });
 
     it("fetch instructors", async () => {
@@ -245,8 +229,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET("/instructor/sessions");
-        expect(resp).toHaveStatus("success");
     });
 
     it("can't update session", async () => {
@@ -288,8 +270,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/positions`);
-        expect(resp).toHaveStatus("success");
     });
 
     it("can't update position", async () => {
@@ -386,10 +366,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET(
-            `/instructor/sessions/${session.id}/contract_templates`
-        );
-        expect(resp).toHaveStatus("success");
     });
 
     it("can't update contract template", async () => {
@@ -424,8 +400,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/applicants`);
-        expect(resp).toHaveStatus("success");
     });
 
     it("can't update applicants", async () => {
@@ -473,8 +447,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
-        expect(resp).toHaveStatus("success");
     });
 
     it("can't update applications", async () => {
@@ -501,8 +473,6 @@ export function instructorsPermissionTests(api) {
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/applications`);
-        expect(resp).toHaveStatus("success");
     });
 
     it.todo("fetch Ddahs");
