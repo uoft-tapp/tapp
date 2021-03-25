@@ -1,10 +1,11 @@
 import React from "react";
 import { strip } from "../../libs/utils";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { upsertPosting, postingsSelector } from "../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { Posting } from "../../api/defs/types";
 import { PostingEditor } from "../../components/forms/posting-editor";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 interface Conflict {
     delayShow: string;
@@ -43,7 +44,7 @@ export function ConnectedAddPostingDialog({
 }) {
     const [newPosting, setNewPosting] = React.useState(BLANK_POSTING);
     const postings: Posting[] = useSelector(postingsSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     async function _upsertPosting(posting: Partial<Posting>) {
         await dispatch(upsertPosting(posting));
     }

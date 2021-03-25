@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ddahTableSelector, setSelectedRows } from "./actions";
 import { Ddah, Assignment, Instructor } from "../../api/defs/types";
 import {
@@ -16,6 +16,7 @@ import { formatDate, formatDownloadUrl } from "../../libs/utils";
 import { DdahEditor } from "../../components/ddahs";
 import { generateHeaderCell } from "../../components/table-utils";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 interface RowData {
     id?: number;
@@ -257,7 +258,7 @@ function ConnectedDdahEditorModal({
     onHide?: Function;
 }): React.ReactElement {
     const [inProgress, setInProgress] = React.useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [newDdah, setNewDdah] = React.useState<Ddah | null>(ddah);
 
     React.useEffect(() => {
@@ -328,7 +329,7 @@ export function ConnectedDdahsTable() {
     let ddahs = useSelector(ddahsSelector) as Ddah[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const selected = useSelector(ddahTableSelector).selectedDdahIds;
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     const [previewVisible, setPreviewVisible] = React.useState<Boolean>(false);
     const [editVisible, setEditVisible] = React.useState<Boolean>(false);

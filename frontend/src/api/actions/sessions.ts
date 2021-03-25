@@ -128,7 +128,7 @@ export const setActiveSession = validatedApiDispatcher({
 });
 
 // selectors
-export const localStoreSelector = sessionsReducer._localStoreSelector;
+const localStoreSelector = sessionsReducer._localStoreSelector;
 export const sessionsSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData as Session[]

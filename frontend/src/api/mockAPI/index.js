@@ -226,7 +226,7 @@ export class MockAPI {
                 "Responding with",
                 mockResponse
             );
-            // Create a `Response` object to return so that we fully immitate
+            // Create a `Response` object to return so that we fully imitate
             // the `fetch` api.
             const responseObj = new Response(
                 new Blob([JSON.stringify(mockResponse)], {

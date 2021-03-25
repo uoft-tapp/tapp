@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { postingsSelector, upsertPosting } from "../../api/actions";
 import type { Posting } from "../../api/defs/types";
 import type { EditableType } from "../../components/editable-cell";
@@ -7,10 +7,11 @@ import type { Cell, Column } from "react-table";
 import { EditableCell } from "../../components/editable-cell";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../components/table-utils";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 export function ConnectedPostingsList({ editable = true }) {
     const postings: Posting[] = useSelector(postingsSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const _upsertPosting = (val: Partial<Posting>) =>
         dispatch(upsertPosting(val));
 

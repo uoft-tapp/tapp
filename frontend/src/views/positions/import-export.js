@@ -7,7 +7,7 @@ import {
     contractTemplatesSelector,
     upsertPositions,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -18,6 +18,7 @@ import {
 } from "../../components/positions-list";
 import { diffImport, getChanged } from "../../libs/diffs";
 import { positionSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -27,7 +28,7 @@ import { positionSchema } from "../../libs/schema";
  * @returns
  */
 export function ConnectedExportPositionsAction({ disabled }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState(null);
 
     React.useEffect(() => {
@@ -61,7 +62,7 @@ export function ConnectedImportPositionsAction({
     disabled,
     setImportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const positions = useSelector(positionsSelector);
     const instructors = useSelector(instructorsSelector);
     const contractTemplates = useSelector(contractTemplatesSelector);

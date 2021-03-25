@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     assignmentsSelector,
     upsertApplicant,
@@ -11,6 +11,7 @@ import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../libs/utils";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * A cell that renders editable applicant information
@@ -109,7 +110,7 @@ function AssignmentCell(props) {
 
 export function ConnectedOfferTable(props) {
     const { editable = true } = props;
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const setSelected = React.useCallback(
         (...args) => dispatch(setSelectedRows(...args)),
         [dispatch]

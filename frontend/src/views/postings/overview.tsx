@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../api/actions";
 import { ContentArea } from "../../components/layout";
 import { Session } from "../../api/defs/types";
@@ -12,11 +12,12 @@ import { MissingActiveSessionWarning } from "../../components/sessions";
 import { FaPlus } from "react-icons/fa";
 import { ConnectedPostingsList } from "./posting-list";
 import { ConnectedAddPostingDialog } from "./add-posting-dialog";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 function ConnectedPostingOverview() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
     const activeSession = useSelector(activeSessionSelector) as Session | null;
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     // We don't load postings by default, so we load them dynamically whenever
     // we view this page.

@@ -1,7 +1,6 @@
 import React from "react";
 import { ActionButton } from "../../components/action-buttons";
 import { FaUpload } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { uploadContractTemplate } from "../../api/actions";
 import {
     Modal,
@@ -12,9 +11,10 @@ import {
     Button,
     Spinner,
 } from "react-bootstrap";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 export function ConnectedUploadContractTemplateAction({ disabled = false }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [file, setFile] = React.useState<File | null>(null);
     const [fileInputLabel, setFileInputLabel] = React.useState(
         "Select an HTML template file."
