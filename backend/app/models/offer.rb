@@ -24,15 +24,17 @@ class Offer < ApplicationRecord
     end
 
     #Compute a difference between our hash and the hash used in the other
-    def compute_diff(other):
-        if offer == other:
+    def compute_diff(other)
+        if offer == other
             return false
+        end
 
         # Store the other's differences into a hash
         diff = Hash.new
         other.attribute.keys.each do |k|
-            if other[k] == self[k]:
-                diff.[k] = other[k] 
+            if other[k] == self[k]
+                diff[k] = other[k] 
+            end
         end
         return diff
     end
