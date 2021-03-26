@@ -76,18 +76,25 @@ export function MultiDeleteDdahConfirmation(props: {
             Header: generateHeaderCell("Position"),
             accessor: "position_code",
         },
-        { Header: generateHeaderCell("Last Name"), accessor: "last_name" },
+        {
+            Header: generateHeaderCell("Last Name"),
+            accessor: "last_name",
+            maxWidth: 120,
+        },
         {
             Header: generateHeaderCell("First Name"),
             accessor: "first_name",
+            maxWidth: 120,
         },
         {
             Header: generateHeaderCell("Status"),
             accessor: "status",
+            maxWidth: 100,
         },
         {
             Header: generateHeaderCell("Issues"),
             accessor: "issue",
+            width: 250,
         },
     ];
 
@@ -113,7 +120,7 @@ export function MultiDeleteDdahConfirmation(props: {
                         // for Header, so we will opt out of the type system here.
                         columns={columns as any}
                         data={data}
-                        filterable={true}
+                        filterable={false}
                     />
                 </div>
                 Are you sure?
