@@ -3,8 +3,8 @@
 class PositionSerializer < ActiveModel::Serializer
     def initialize(*args, **kwargs)
         super(*args, **kwargs)
-        # We want to combine position's data with position_data_for_matching
-        # and position_data_for_ad. `PositionService` does exactly this.
+        # Constructing a position can be complicated, so we leave it
+        # up to the service.
         @service = PositionService.new(position: object)
     end
 
@@ -21,10 +21,6 @@ class PositionSerializer < ActiveModel::Serializer
             :contract_template_id,
             :qualifications,
             :duties,
-            :ad_hours_per_assignment,
-            :ad_num_assignments,
-            :ad_open_date,
-            :ad_close_date,
             :desired_num_assignments,
             :current_enrollment,
             :current_waitlisted,

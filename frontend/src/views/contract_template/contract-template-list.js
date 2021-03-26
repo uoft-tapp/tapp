@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import FileSaver from "file-saver";
 import { FaDownload } from "react-icons/fa";
 import {
@@ -11,6 +11,7 @@ import { ContractTemplatesList } from "../../components/contract-templates-list"
 import { FaSearch } from "react-icons/fa";
 import { Button, Modal, Alert, Spinner } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 function TemplatePreviewDialog({ show, onClose, template_id }) {
     const [isLoading, setIsLoading] = React.useState(false);
@@ -18,7 +19,7 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
         id: null,
         content: null,
     });
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     React.useEffect(() => {
         if (

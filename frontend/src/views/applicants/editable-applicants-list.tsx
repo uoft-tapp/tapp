@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     applicantsSelector,
     assignmentsSelector,
@@ -12,6 +12,7 @@ import { ApplicantsList } from "../../components/applicants";
 import { FaLock, FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "../../components/table-utils";
 import { Button, Modal } from "react-bootstrap";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * A cell that renders editable applicant information
@@ -82,8 +83,11 @@ function ConfirmDeleteDialog(props: {
 export function ConnectedApplicantsList({ inDeleteMode = false }) {
     const applicants = useSelector(applicantsSelector) as Applicant[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
-    const [applicantToDelete, setApplicantToDelete] = React.useState(null);
-    const dispatch = useDispatch();
+    const [
+        applicantToDelete,
+        setApplicantToDelete,
+    ] = React.useState<Applicant | null>(null);
+    const dispatch = useThunkDispatch();
 
     const assignmentsHash: { [key: string]: boolean } = {};
     for (const assignment of assignments) {
@@ -181,8 +185,10 @@ export function ConnectedApplicantsList({ inDeleteMode = false }) {
                 show={!!applicantToDelete}
                 onHide={() => setApplicantToDelete(null)}
                 onDelete={async () => {
-                    await dispatch(deleteApplicant(applicantToDelete));
-                    setApplicantToDelete(null);
+                    if (applicantToDelete != null) {
+                        await dispatch(deleteApplicant(applicantToDelete));
+                        setApplicantToDelete(null);
+                    }
                 }}
             />
         </React.Fragment>

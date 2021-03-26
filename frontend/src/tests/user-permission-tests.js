@@ -4,9 +4,8 @@ import { databaseSeeder } from "./setup";
 /**
  * Tests for the API. These are encapsulated in a function so that
  * different `apiGET` and `apiPOST` functions can be passed in. For example,
- * they may be functions that make actual requests via http or they may
- * be from the mock API.
- *
+ * they may be functions that make actual requests via http or they may be from
+ * the mock API.
  * @param {object} api
  * @param {Function} api.apiGET A function that when passed a route will return the get response
  * @param {Function} api.apiPOST A function that when passed a route and data, will return the post response
@@ -14,42 +13,137 @@ import { databaseSeeder } from "./setup";
 export function userPermissionsTests(api) {
     const { apiGET, apiPOST } = api;
 
-    const newUserData = {
-        utorid: "userxx",
+    let defaultUser;
+
+    const instructorOnlyUser = {
+        utorid: "user_permission_test_instructor_only_utorid",
         roles: ["instructor"],
     };
 
+    const taOnlyUser = {
+        utorid: "user_permission_test_ta_only_utorid",
+        roles: ["ta"],
+    };
+
+    const taInstructorUser = {
+        utorid: "user_permission_test_ta_and_instructor_utorid",
+        roles: ["ta", "instructor"],
+    };
+
+    /**
+     * Switch current active user to the user represented by the given user data. If given user does not exist, one will
+     * be created.
+     * @param newActiveUser the user to be set to the active user
+     * @returns {Promise<void>}
+     */
+    async function switchToUser(newActiveUser) {
+        // Set the active user to the target user
+        let resp = await apiPOST("/debug/active_user", newActiveUser);
+        expect(resp).toHaveStatus("success");
+    }
+
+    /**
+     * Restores the active user to the default user (the user logged during test setup in beforeAll).
+     *
+     * @returns {Promise<void>}
+     */
+    async function restoreDefaultUser() {
+        let resp = await apiPOST(`/debug/active_user`, defaultUser);
+        expect(resp).toHaveStatus("success");
+    }
+
     beforeAll(async () => {
         await databaseSeeder.seed(api);
+        let resp = await apiGET(`/debug/active_user`);
+        expect(resp).toHaveStatus("success");
+        defaultUser = {
+            utorid: resp.payload.utorid,
+            roles: resp.payload.roles,
+        };
+
+        // create users with specific roles for permission testing (access to role-specific routes)
+        resp = await apiPOST("/debug/users", instructorOnlyUser);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST("/debug/users", taOnlyUser);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST("/debug/users", taInstructorUser);
+        expect(resp).toHaveStatus("success");
     }, 30000);
 
     it("Admin user can access admin route", async () => {
         // the default user has all roles, including the admin role
-        const resp = await apiGET("/admin/active_user");
+        let resp = await apiGET("/admin/active_user");
         expect(resp).toHaveStatus("success");
     });
 
-    it("A non-admin cannot access the admin route", async () => {
-        let resp = await apiPOST("/admin/users", newUserData);
-        // Save any extra attributes we got, such as an `id`
-        Object.assign(newUserData, resp.payload);
+    it("A non-admin cannot access admin routes", async () => {
+        await switchToUser(instructorOnlyUser);
 
-        // Set the active user to the newly-created user
-        resp = await apiPOST("/debug/active_user", { id: newUserData.id });
-
-        // Try to fetch an admin route
-        resp = await apiGET("/admin/active_user");
+        // Try to fetch admin routes
+        let resp = await apiGET("/admin/active_user");
         expect(resp).toHaveStatus("error");
 
-        // Set the active_user back to the default.
-        resp = await apiPOST("/debug/active_user", {
-            id: databaseSeeder.seededData.active_user.id,
-        });
+        resp = await apiGET("/admin/instructors");
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiGET("/admin/sessions");
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiGET("/admin/users");
+        expect(resp).toHaveStatus("error");
+
+        resp = await apiGET("/admin/applicants");
+        expect(resp).toHaveStatus("error");
+
+        await restoreDefaultUser();
     });
 
-    it.todo("An instructor can access instructor routes");
-    it.todo("A TA can access TA routes");
-    it.todo(
-        "An instructor who is also a TA can access instructor and TA routes"
-    );
+    it("An instructor can access instructor routes", async () => {
+        // switch to instructor only user
+        await switchToUser(instructorOnlyUser);
+        let resp = await apiGET("/instructor/active_user");
+        expect(resp).toHaveStatus("success");
+
+        await restoreDefaultUser();
+        // the default user has all roles, including the instructor role
+        resp = await apiGET("/instructor/active_user");
+        expect(resp).toHaveStatus("success");
+    });
+
+    it("A TA can access TA routes", async () => {
+        await switchToUser(taOnlyUser);
+
+        // Try to fetch a TA route
+        let resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+
+        await restoreDefaultUser();
+        // the default user has all roles, including the TA role
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+    });
+
+    it("An instructor who is also a TA can access instructor and TA routes", async () => {
+        await switchToUser(taInstructorUser);
+
+        // Try to fetch a TA route
+        let resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+
+        // try to fetch instructor routes
+        resp = await apiGET("/instructor/instructors");
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiGET("/instructor/active_user");
+        expect(resp).toHaveStatus("success");
+
+        await restoreDefaultUser();
+        // the default user has all roles, including both the instructor role and the TA role
+        resp = await apiGET("/ta/active_user");
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET("/instructor/active_user");
+        expect(resp).toHaveStatus("success");
+    });
 }
