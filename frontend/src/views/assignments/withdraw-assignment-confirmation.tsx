@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import React from "react";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 import { Button, Modal } from "react-bootstrap";
+import { Assignment } from "../../api/defs/types";
 
 function compareString(str1: string, str2: string) {
     if (str1 > str2) {
@@ -12,30 +13,19 @@ function compareString(str1: string, str2: string) {
     return 0;
 }
 
-function compareAssignment(
-    a1: {
-        position_code: string;
-        last_name: string;
-        first_name: string;
-    },
-    a2: {
-        position_code: string;
-        last_name: string;
-        first_name: string;
-    }
-) {
+function compareAssignment(a1: Assignment, a2: Assignment) {
     return (
-        compareString(a1.position_code, a2.position_code) ||
-        compareString(a1.last_name, a2.last_name) ||
-        compareString(a1.first_name, a2.first_name)
+        compareString(a1.position.position_code, a2.position.position_code) ||
+        compareString(a1.applicant.last_name, a2.applicant.last_name) ||
+        compareString(a1.applicant.first_name, a2.applicant.first_name)
     );
 }
 
 export function MultiWithdrawOfferConfirmation(props: {
-    data: any;
-    visible: any;
-    setVisible: any;
-    withdrawOffers: any;
+    data: Assignment[];
+    visible: boolean;
+    setVisible: (visibility: boolean) => void;
+    withdrawOffers: () => void;
 }) {
     const dispatch = useDispatch();
     const { data, visible, setVisible, withdrawOffers } = props;
