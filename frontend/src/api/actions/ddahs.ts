@@ -13,7 +13,6 @@ import {
     arrayToHash,
     flattenIdFactory,
     HasId,
-    HasSubIdField,
     hasSubIdField,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
@@ -22,6 +21,7 @@ import { activeRoleSelector } from "./users";
 import { ddahsReducer } from "../reducers";
 import { assignmentsSelector } from "./assignments";
 import type { Ddah, RawAttachment, RawDdah } from "../defs/types";
+import { activeSessionSelector } from "./sessions";
 
 // actions
 const fetchDdahsSuccess = actionFactory<RawDdah[]>(FETCH_DDAHS_SUCCESS);
@@ -38,7 +38,7 @@ export const fetchDdahs = validatedApiDispatcher({
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const activeSession = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {
             throw new Error("Cannot fetch DDAHs without an active session");
         }
@@ -66,7 +66,6 @@ export const fetchDdah = validatedApiDispatcher({
 // Some helper functions to convert the data that the UI uses
 // into data that the API can use
 const assignmentToAssignmentId = flattenIdFactory<
-    HasSubIdField<"assignment">,
     "assignment",
     "assignment_id"
 >("assignment", "assignment_id");
@@ -182,9 +181,9 @@ export const downloadDdahAcceptedList = validatedApiDispatcher({
     name: "downloadDdahAcceptedList",
     description: "Download a pdf list of accepted DDAHs for the active session",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: () => async (dispatch, getState) => {
+    dispatcher: () => async (_dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const activeSession = getState().model.sessions.activeSession;
+        const activeSession = activeSessionSelector(getState());
         if (activeSession == null) {
             throw new Error("Cannot fetch DDAHs without an active session");
         }
@@ -260,12 +259,12 @@ export const ddahsSelector = createSelector(
         if (ddahs.length === 0) {
             return [];
         }
-        assignments = arrayToHash(assignments);
+        const assignmentsHash = arrayToHash(assignments);
         return ddahs.map(({ assignment_id, ...rest }) => ({
             ...rest,
             status: computeDdahStatus(rest),
             total_hours: computeDdahHours(rest),
-            assignment: assignments[assignment_id] || {},
+            assignment: assignmentsHash[assignment_id] || {},
         })) as Ddah[];
     }
 );

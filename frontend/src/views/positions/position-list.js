@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     positionsSelector,
     deletePosition,
@@ -17,6 +17,7 @@ import {
 } from "../../components/edit-field-widgets";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { generateHeaderCell } from "../../components/table-utils";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Turn a list of instructor objects into a hash string for comparison as to whether
@@ -153,7 +154,7 @@ function EditInstructorsCell({ row }) {
     // row._original is from ReactTable v6; We can get rid of it when we drop the dependency
     const position = row.original || row._original;
     const [dialogShow, setDialogShow] = React.useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     return (
         <div className="show-on-hover-wrapper">
@@ -220,7 +221,7 @@ export function ConnectedPositionsList({
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
     const [positionToDelete, setPositionToDelete] = React.useState(null);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     function _upsertPosition(position) {
         return dispatch(upsertPosition(position));

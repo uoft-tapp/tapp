@@ -5,7 +5,7 @@ import {
     exportInstructors,
     upsertInstructors,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import {
@@ -19,6 +19,7 @@ import {
 } from "../../libs/import-export";
 import { diffImport, getChanged } from "../../libs/diffs";
 import { instructorSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -28,7 +29,7 @@ import { instructorSchema } from "../../libs/schema";
  * @returns
  */
 export function ConnectedExportInstructorsAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState(null);
 
     React.useEffect(() => {
@@ -61,7 +62,7 @@ export function ConnectedExportInstructorsAction() {
 export function ConnectedImportInstructorAction({
     setImportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);

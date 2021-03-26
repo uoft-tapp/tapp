@@ -49,7 +49,10 @@ export function AssignmentEditor(props) {
         applicants,
         positions,
     } = props;
-    const assignment = { ...DEFAULT_ASSIGNMENT, ...assignmentProp };
+    const assignment = React.useMemo(
+        () => ({ ...DEFAULT_ASSIGNMENT, ...assignmentProp }),
+        [assignmentProp]
+    );
 
     React.useEffect(() => {
         // Create or destroy wage chunks based on whether an assignment's dates

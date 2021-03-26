@@ -62,9 +62,9 @@ export const fetchPostings = validatedApiDispatcher({
         }
         const { id: activeSessionId } = activeSession;
         const role = activeRoleSelector(getState());
-        const data = (await apiGET(
-            `/${role}/sessions/${activeSessionId}/postings`
-        )) as RawPosting[];
+        const data = await apiGET(
+            `/${role}/sessions/${activeSessionId}/postings` as const
+        );
         dispatch(fetchPostingsSuccess(data));
         return data;
     },
@@ -195,11 +195,13 @@ export const deletePostingPosition = validatedApiDispatcher({
 const localStoreSelector = postingsReducer._localStoreSelector;
 export const postingsSelector = createSelector(
     localStoreSelector,
-    (state) => state._modelData as Posting[]
+    // XXX TODO properly convert this to a Posting
+    (state) => (state._modelData as unknown) as Posting[]
 );
 
 const localStoreSelector2 = postingPositionsReducer._localStoreSelector;
 export const postingPositionsSelector = createSelector(
     localStoreSelector2,
+    // XXX TODO we need to properly convert this to a PostingPosition
     (state) => (state._modelData as unknown) as PostingPosition[]
 );

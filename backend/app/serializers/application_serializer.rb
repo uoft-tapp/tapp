@@ -2,6 +2,8 @@
 
 class ApplicationSerializer < ActiveModel::Serializer
     attributes :id,
+               :applicant_id,
+               :posting_id,
                :comments,
                :program,
                :department,
