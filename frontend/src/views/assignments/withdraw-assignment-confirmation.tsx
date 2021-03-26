@@ -1,8 +1,43 @@
-import { useDispatch } from "react-redux";
 import React from "react";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 import { Button, Modal } from "react-bootstrap";
 import { Assignment } from "../../api/defs/types";
+
+const withdrawModalColumn = [
+    {
+        Header: "Last Name",
+        accessor: "applicant.last_name",
+        maxWidth: 120,
+    },
+    {
+        Header: "First Name",
+        accessor: "applicant.first_name",
+        maxWidth: 120,
+    },
+    {
+        Header: "Position",
+        accessor: "position.position_code",
+        width: 200,
+    },
+    {
+        Header: "Hours",
+        accessor: "hours",
+        className: "number-cell",
+        maxWidth: 70,
+    },
+    {
+        Header: "Status",
+        maxWidth: 100,
+        id: "status",
+        // We want items with no active offer to appear at the end of the list
+        // when sorted, so we set their accessor to null (the accessor is used by react table
+        // when sorting items).
+        accessor: (data: { active_offer_status: string }) =>
+            data.active_offer_status === "No Contract"
+                ? null
+                : data.active_offer_status,
+    },
+];
 
 function compareString(str1: string, str2: string) {
     if (str1 > str2) {
@@ -27,51 +62,12 @@ export function MultiWithdrawOfferConfirmation(props: {
     setVisible: (visibility: boolean) => void;
     withdrawOffers: () => void;
 }) {
-    const dispatch = useDispatch();
     const { data, visible, setVisible, withdrawOffers } = props;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
 
     data.sort(compareAssignment);
-
-    const columns = React.useMemo(() => {
-        return [
-            {
-                Header: "Last Name",
-                accessor: "applicant.last_name",
-                maxWidth: 120,
-            },
-            {
-                Header: "First Name",
-                accessor: "applicant.first_name",
-                maxWidth: 120,
-            },
-            {
-                Header: "Position",
-                accessor: "position.position_code",
-                width: 200,
-            },
-            {
-                Header: "Hours",
-                accessor: "hours",
-                className: "number-cell",
-                maxWidth: 70,
-            },
-            {
-                Header: "Status",
-                maxWidth: 100,
-                id: "status",
-                // We want items with no active offer to appear at the end of the list
-                // when sorted, so we set their accessor to null (the accessor is used by react table
-                // when sorting items).
-                accessor: (data: { active_offer_status: string }) =>
-                    data.active_offer_status === "No Contract"
-                        ? null
-                        : data.active_offer_status,
-            },
-        ];
-    }, [dispatch]);
 
     return (
         <Modal
@@ -92,7 +88,7 @@ export function MultiWithdrawOfferConfirmation(props: {
                 <div className="mb-3">
                     <AdvancedFilterTable
                         filterable={false}
-                        columns={columns}
+                        columns={withdrawModalColumn}
                         data={data}
                     />
                 </div>
