@@ -1,0 +1,62 @@
+{
+    "assignments": [
+        {
+            "utorid": "potterh",
+            "position_code": "CSC494",
+            "hours": 50,
+            "start_date": "2020-12-10T00:00:00.000Z",
+            "end_date": "2021-12-10T00:00:00.000Z",
+            "contract_template": "regular",
+            "contract_override_pdf": null,
+            "wage_chunks": [
+                {
+                    "hours": 30,
+                    "rate": 50,
+                    "start_date": "2020-12-10T00:00:00.000Z",
+                    "end_date": "2020-12-31T00:00:00.000Z"
+                },
+                {
+                    "hours": 10,
+                    "rate": 50,
+                    "start_date": "2021-01-01T00:00:00.000Z",
+                    "end_date": "2021-06-30T00:00:00.000Z"
+                },
+                {
+                    "hours": 30,
+                    "rate": 50,
+                    "start_date": "2021-07-01T00:00:00.000Z",
+                    "end_date": "2021-12-10T00:00:00.000Z"
+                }
+            ]
+        },
+        {
+            "utorid": "weasleyr",
+            "position_code": "CSC494",
+            "hours": 100,
+            "start_date": "2020-12-10T00:00:00.000Z",
+            "end_date": "2021-12-10T00:00:00.000Z",
+            "contract_template": "regular",
+            "contract_override_pdf": null,
+            "wage_chunks": [
+                {
+                    "hours": 30,
+                    "rate": 50,
+                    "start_date": "2020-12-10T00:00:00.000Z",
+                    "end_date": "2020-12-31T00:00:00.000Z"
+                },
+                {
+                    "hours": 10,
+                    "rate": 50,
+                    "start_date": "2021-01-01T00:00:00.000Z",
+                    "end_date": "2021-06-30T00:00:00.000Z"
+                },
+                {
+                    "hours": 30,
+                    "rate": 50,
+                    "start_date": "2021-07-01T00:00:00.000Z",
+                    "end_date": "2021-12-10T00:00:00.000Z"
+                }
+            ]
+        }
+    ]
+}

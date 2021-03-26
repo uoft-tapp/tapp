@@ -5,7 +5,7 @@ import {
     applicantsSelector,
     upsertApplicants,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -19,6 +19,8 @@ import {
     ApplicantsList,
     ApplicantsDiffList,
 } from "../../components/applicants";
+import { applicantSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -28,7 +30,7 @@ import {
  * @returns
  */
 export function ConnectedExportApplicantsAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<
         "spreadsheet" | "json" | null
     >(null);
@@ -43,12 +45,15 @@ export function ConnectedExportApplicantsAction() {
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
             setExportType(null);
+            if (exportType == null) {
+                throw new Error(`Unknown export type ${exportType}`);
+            }
 
             const file = await dispatch(
                 exportApplicants(prepareApplicantData, exportType)
             );
 
-            FileSaver.saveAs(file);
+            FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
     }, [exportType, dispatch]);
@@ -60,33 +65,8 @@ export function ConnectedExportApplicantsAction() {
     return <ExportActionButton onClick={onClick} />;
 }
 
-const applicantSchema = {
-    keys: [
-        "first_name",
-        "last_name",
-        "utorid",
-        "email",
-        "student_number",
-        "phone",
-    ],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-        "Student Number": "student_number",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "applicants",
-};
-
 export function ConnectedImportInstructorAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const applicants = useSelector(applicantsSelector);
     const [fileContent, setFileContent] = React.useState<{
         fileType: "json" | "spreadsheet";

@@ -5,7 +5,7 @@ import {
     exportInstructors,
     upsertInstructors,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import {
@@ -18,6 +18,8 @@ import {
     prepareInstructorData,
 } from "../../libs/import-export";
 import { diffImport, getChanged } from "../../libs/diffs";
+import { instructorSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -27,7 +29,7 @@ import { diffImport, getChanged } from "../../libs/diffs";
  * @returns
  */
 export function ConnectedExportInstructorsAction() {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState(null);
 
     React.useEffect(() => {
@@ -57,27 +59,10 @@ export function ConnectedExportInstructorsAction() {
     return <ExportActionButton onClick={onClick} />;
 }
 
-const instructorSchema = {
-    keys: ["first_name", "last_name", "utorid", "email"],
-    keyMap: {
-        "First Name": "first_name",
-        "Given Name": "first_name",
-        First: "first_name",
-        "Last Name": "last_name",
-        Surname: "last_name",
-        "Family Name": "last_name",
-        Last: "last_name",
-    },
-    requiredKeys: ["utorid"],
-    primaryKey: "utorid",
-    dateColumns: [],
-    baseName: "instructors",
-};
-
 export function ConnectedImportInstructorAction({
     setImportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
     const [fileContent, setFileContent] = React.useState(null);
     const [diffed, setDiffed] = React.useState(null);

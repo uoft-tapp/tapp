@@ -3,15 +3,14 @@ import FileSaver from "file-saver";
 import JSZip from "jszip";
 import XLSX from "xlsx";
 import { applicantsSelector, assignmentsSelector } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
     prepareSpreadsheet,
     prepareDdahDataFactory,
-    matchByUtoridOrName,
-    SpreadsheetRowMapper,
+    normalizeDdahImports,
 } from "../../libs/import-export";
 import { diffImport, getChanged, DiffSpec } from "../../libs/diffs";
 import { Applicant, Ddah, MinimalDdah, Assignment } from "../../api/defs/types";
@@ -25,6 +24,7 @@ import { DdahsList, DdahsDiffList } from "../../components/ddahs";
 import { ddahTableSelector } from "../ddah-table/actions";
 import { ActionButton } from "../../components/action-buttons";
 import { FaDownload } from "react-icons/fa";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -34,7 +34,7 @@ import { FaDownload } from "react-icons/fa";
  * @returns
  */
 export function ConnectedExportDdahsAction({ disabled = false }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const [exportType, setExportType] = React.useState<
         "spreadsheet" | "json" | null
     >(null);
@@ -70,7 +70,7 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
                     exportType
                 )
             );
-            FileSaver.saveAs(file);
+            FileSaver.saveAs(file as any);
         }
         doExport().catch(console.error);
     }, [exportType, dispatch, selectedDdahIds]);
@@ -82,112 +82,6 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
     return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
-/**
- * Convert imported spreadsheet or JSON data into an
- * array of minimal DDAH objects.
- *
- * @param {({
- *     fileType: "json" | "spreadsheet";
- *     data: any;
- * })} data
- * @param {Applicant[]} applicants
- * @returns {MinimalDdah[]}
- */
-function normalizeDdahImports(
-    data: {
-        fileType: "json" | "spreadsheet";
-        data: any;
-    },
-    applicants: Applicant[]
-): MinimalDdah[] {
-    let ret: MinimalDdah[] = [];
-
-    if (data.fileType === "json") {
-        let unwrapped: MinimalDdah[] = data.data;
-        if ((unwrapped as any).ddahs) {
-            unwrapped = (unwrapped as any).ddahs;
-        }
-        for (const ddah of unwrapped) {
-            ret.push(ddah);
-        }
-    }
-
-    if (data.fileType === "spreadsheet") {
-        const unwrapped = data.data;
-        // Get an upper bound for the maximum number of duties that the spreadsheet might have
-        const maxDuties = Math.round(
-            Math.max(
-                ...unwrapped.map((row: object) => Object.keys(row).length),
-                0
-            ) / 2
-        );
-
-        // We need to generate a keymap for all the likely column names
-        const keyMap: { [key: string]: string } = {
-            Position: "position_code",
-            "First Name": "first_name",
-            "Given Name": "first_name",
-            First: "first_name",
-            "Last Name": "last_name",
-            Surname: "last_name",
-            "Family Name": "last_name",
-            Last: "last_name",
-        };
-        // We will also add `Hours #` and `Duty #` to the keymap for the number of duties in our range
-        for (let i = 0; i <= maxDuties; i++) {
-            keyMap[`Duty ${i}`] = `duty_${i}`;
-            keyMap[`Hours ${i}`] = `hours_${i}`;
-            if (i < 10) {
-                keyMap[`Duty 0${i}`] = `duty_${i}`;
-                keyMap[`Hours 0${i}`] = `hours_${i}`;
-            }
-        }
-
-        // SpreadsheetRowMapper will perform fuzzy matching of column names for us.
-        const rowMapper = new SpreadsheetRowMapper({
-            keys: ["position_code", "first_name", "last_name", "utorid"],
-            keyMap,
-        });
-
-        for (const row of unwrapped) {
-            const normalized: {
-                [key: string]: any;
-            } = rowMapper.formatRow(row);
-            if (normalized.utorid == null) {
-                // If a UTORid column was not specified, we need to manually search the applicants for
-                // someone matching the first/last name. `matchByUtoridOrName` will succeed or throw an error,
-                // so if we make it past this line of code, we've successfully found a match.
-                const applicant = matchByUtoridOrName(
-                    `${normalized.first_name} ${normalized.last_name}`,
-                    applicants
-                ) as Applicant;
-                normalized.utorid = applicant.utorid;
-                delete normalized.first_name;
-                delete normalized.last_name;
-            }
-            // Now we need to condense duties to a list
-            // The easiest way is to just hunt for them
-            const duties: { description: string; hours: number }[] = [];
-            for (let i = 0; i <= maxDuties; i++) {
-                const duty = normalized[`duty_${i}`];
-                const hours = normalized[`hours_${i}`];
-                if (duty != null || hours != null) {
-                    duties.push({ description: duty || "", hours: hours || 0 });
-                    delete normalized[`duty_${i}`];
-                    delete normalized[`hours_${i}`];
-                }
-            }
-            ret.push({
-                position_code: normalized.position_code,
-                applicant: normalized.utorid,
-                duties,
-            });
-        }
-    }
-
-    return ret;
-}
-
 export function ConnectedImportDdahsAction({
     disabled = false,
     setImportInProgress = null,
@@ -195,7 +89,7 @@ export function ConnectedImportDdahsAction({
     disabled: boolean;
     setImportInProgress?: Function | null;
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
     const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
     const applicants = useSelector<any, Applicant[]>(applicantsSelector);
@@ -414,11 +308,11 @@ export function ConnectedDownloadPositionDdahTemplatesAction({
 }
 
 export function ConnectedDownloadDdahsAcceptedListAction({ disabled = false }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
 
     async function downloadClicked() {
         const file = await dispatch(downloadDdahAcceptedList());
-        FileSaver.saveAs(file);
+        FileSaver.saveAs(file as any);
     }
 
     return (

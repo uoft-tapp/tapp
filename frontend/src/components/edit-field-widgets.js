@@ -109,7 +109,7 @@ export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
  * `onChange` is called if "save" is pressed in the edit dialog.
  *
  * @export
- * @param {{children, title, value, onChange: function, editable: boolean}} props
+ * @param {{children, title, value, onChange: function, editable: boolean, type?: string}} props
  * @returns
  */
 export function EditableField(props) {

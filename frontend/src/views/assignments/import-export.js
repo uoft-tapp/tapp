@@ -8,7 +8,7 @@ import {
     positionsSelector,
     upsertAssignments,
 } from "../../api/actions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../components/export-button";
 import { ImportActionButton } from "../../components/import-button";
 import { Alert } from "react-bootstrap";
@@ -22,6 +22,8 @@ import {
 } from "../../components/assignments-list";
 import { diffImport, getChanged } from "../../libs/diffs";
 import { offerTableSelector } from "../offertable/actions";
+import { assignmentSchema } from "../../libs/schema";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -34,7 +36,7 @@ export function ConnectedExportAssignmentsAction({
     disabled = false,
     setExportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const session = useSelector(activeSessionSelector);
     const [exportType, setExportType] = React.useState(null);
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
@@ -91,40 +93,11 @@ export function ConnectedExportAssignmentsAction({
     return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
-const assignmentSchema = {
-    // We don't list "active_offer_status" because that cannot be imported. It has to be set
-    // via the TA or manually by the admin.
-    keys: [
-        "utorid",
-        "position_code",
-        "start_date",
-        "end_date",
-        "contract_template",
-        "contract_override_pdf",
-        "hours",
-        "wage_chunks",
-    ],
-    keyMap: {
-        "Position Code": "position_code",
-        "Course Name": "position_code",
-        "Start Date": "start_date",
-        Start: "start_date",
-        "End Date": "end_date",
-        End: "end_date",
-        Hours: "hours",
-        "Contract Override PDF": "contract_override_pdf",
-    },
-    dateColumns: ["start_date", "end_date"],
-    requiredKeys: ["position_code", "utorid"],
-    primaryKey: ["utorid", "position_code"],
-    baseName: "assignments",
-};
-
 export function ConnectedImportAssignmentsAction({
     disabled = false,
     setImportInProgress = null,
 }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const assignments = useSelector(assignmentsSelector);
     const applicants = useSelector(applicantsSelector);
     const positions = useSelector(positionsSelector);
@@ -170,7 +143,7 @@ export function ConnectedImportAssignmentsAction({
                 }
             }
 
-            // Compute which positions have been added/modified
+            // Compute which assignments have been added/modified
             const newDiff = diffImport.assignments(data, {
                 assignments,
                 positions,
