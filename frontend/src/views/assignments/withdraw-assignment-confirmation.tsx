@@ -60,6 +60,7 @@ export function MultiWithdrawOfferConfirmation(props: {
             {
                 Header: "Position",
                 accessor: "position.position_code",
+                width: 200,
             },
             {
                 Header: "Hours",
