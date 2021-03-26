@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { it, expect, beforeAll } from "./utils";
+import { it, expect, beforeAll, addSession } from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
 
@@ -31,9 +31,10 @@ function computeTotalHoursForDdah(ddah) {
  */
 export function ddahTests(api) {
     const { apiGET, apiPOST } = api;
-    let resp1;
+
     let session = null;
     let assignments = null;
+    let appliants = null;
     let ddah = {};
 
     beforeAll(async () => {
@@ -41,6 +42,7 @@ export function ddahTests(api) {
         await databaseSeeder.seedForInstructors(api);
         session = databaseSeeder.seededData.session;
         assignments = databaseSeeder.seededData.assignments;
+        appliants = databaseSeeder.seededData.applicants;
     }, 30000);
 
     it("create a ddah", async () => {
@@ -65,32 +67,101 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.duties.length).toEqual(newDdah.duties.length);
-        expect(computeTotalHoursForDdah(resp1.payload)).toEqual(
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.duties.length).toEqual(newDdah.duties.length);
+        expect(computeTotalHoursForDdah(resp.payload)).toEqual(
             computeTotalHoursForDdah(newDdah)
         );
 
         // We've passed the insert test, so save the DDAH for later
-        Object.assign(ddah, resp1.payload);
+        Object.assign(ddah, resp.payload);
     });
 
     it("get a ddah", async () => {
-        resp1 = await apiGET(`/admin/ddahs/${ddah.id}`);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toMatchObject(ddah);
+        let resp = await apiGET(`/admin/ddahs/${ddah.id}`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject(ddah);
     });
 
     it("get all ddahs associated with a session", async () => {
-        resp1 = await apiGET(`/admin/sessions/${session.id}/ddahs`);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toContainObject(ddah);
+        let resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+        // Originally only one ddah is seeded
+        expect(resp.payload.length).toEqual(1);
+        expect(resp.payload).toContainObject(ddah);
     });
 
-    it.todo(
-        "getting ddahs for one session will not return ddahs for another session"
-    );
+    it("getting ddahs for one session will not return ddahs for another session", async () => {
+        // first create a new session filled with new position, assignment, and contract.
+        const newSession = await addSession(api);
+        let resp = await apiGET(
+            `/admin/sessions/${newSession.id}/contract_templates`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.length).toBeGreaterThan(0);
+        const newContract = resp.payload[0];
+
+        const newPosition = {
+            position_code: "MAT135F",
+            position_title: "Calculus I",
+            hours_per_assignment: 70,
+            start_date: newSession.start_date,
+            end_date: newSession.end_date,
+            contract_template_id: newContract.id,
+        };
+        resp = await apiPOST(
+            `/admin/sessions/${newSession.id}/positions`,
+            newPosition
+        );
+        expect(resp).toHaveStatus("success");
+        Object.assign(newPosition, resp.payload);
+
+        const newAssignment = {
+            position_id: newPosition.id,
+            applicant_id: appliants[0].id,
+            hours: 70,
+            start_date: newPosition.start_date,
+            end_date: newPosition.end_date,
+        };
+
+        resp = await apiPOST(`/admin/assignments`, newAssignment);
+        expect(resp).toHaveStatus("success");
+        Object.assign(newAssignment, resp.payload);
+
+        // create a new DDAH
+        const newDdah = {
+            assignment_id: newAssignment.id,
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "Marking the midterm",
+                },
+            ],
+        };
+
+        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+
+        // retrieve all ddahs for both sessions
+        resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+        const ddahs = resp.payload;
+
+        resp = await apiGET(`/admin/sessions/${newSession.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+        const newDdahs = resp.payload;
+
+        // compare two arrays of ddahs do not contain the same ddahs.
+        ddahs.forEach((d) => {
+            expect(newDdahs).not.toContainObject(d);
+        });
+
+        newDdahs.forEach((d) => {
+            expect(ddahs).not.toContainObject(d);
+        });
+    });
 
     it("modify a ddah", async () => {
         const newDdah = {
@@ -104,43 +175,45 @@ export function ddahTests(api) {
             ],
         };
 
-        resp1 = await apiPOST(`/admin/ddahs`, newDdah);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.id).toEqual(ddah.id);
-        expect(computeTotalHoursForDdah(resp1.payload)).toEqual(100);
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.id).toEqual(ddah.id);
+        expect(computeTotalHoursForDdah(resp.payload)).toEqual(100);
 
         // We've modified this object, so let's keep it up to date
-        Object.assign(ddah, resp1.payload);
+        Object.assign(ddah, resp.payload);
     });
 
     it("approve a ddah", async () => {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.approved_date).toBeFalsy();
 
-        resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.approved_date).toBeTruthy();
+        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.approved_date).toBeTruthy();
 
         // We've modified this object, so let's keep it up to date
-        Object.assign(ddah, resp1.payload);
+        Object.assign(ddah, resp.payload);
     });
 
     it("email a ddah", async () => {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.emailed_date).toBeFalsy();
 
-        resp1 = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload.emailed_date).toBeTruthy();
+        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.emailed_date).toBeTruthy();
 
         // We've modified this object, so let's keep it up to date
-        Object.assign(ddah, resp1.payload);
+        Object.assign(ddah, resp.payload);
     });
 
     it("get ddah from assignment route", async () => {
-        resp1 = await apiGET(`/admin/assignments/${ddah.assignment_id}/ddah`);
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toMatchObject(ddah);
+        let resp = await apiGET(
+            `/admin/assignments/${ddah.assignment_id}/ddah`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject(ddah);
     });
 
     it("create ddah from assignment route", async () => {
@@ -155,12 +228,12 @@ export function ddahTests(api) {
                 },
             ],
         };
-        resp1 = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${newAssignment.id}/ddah`,
             newDdah
         );
-        expect(resp1).toHaveStatus("success");
-        expect(resp1.payload).toMatchObject({
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toMatchObject({
             ...newDdah,
             assignment_id: newAssignment.id,
         });
@@ -241,7 +314,6 @@ export function ddahsEmailAndDownloadTests(api) {
     const { apiGET, apiPOST } = api;
     const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
     const BACKEND_BASE_URL = "http://backend:3000";
-    let resp;
     let assignments = null;
     let ddah = {};
     let session = null;
@@ -288,7 +360,7 @@ export function ddahsEmailAndDownloadTests(api) {
             ],
         };
 
-        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         Object.assign(ddah, resp.payload);
 
@@ -323,7 +395,7 @@ export function ddahsEmailAndDownloadTests(api) {
     });
 
     it("can download pdf versions ddah signature list", async () => {
-        resp = await apiGET(
+        let resp = await apiGET(
             `/admin/sessions/${session.id}/ddahs/accepted_list.pdf`
         );
         expect(resp).toHaveStatus("success");

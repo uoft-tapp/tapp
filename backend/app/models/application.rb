@@ -6,13 +6,10 @@ class Application < ApplicationRecord
     has_many :positions, through: :position_preferences
     belongs_to :applicant
     belongs_to :session
+    belongs_to :posting, optional: true
 
-    scope :all_applications,
-          lambda {
-              includes(applicant: :applicant_data_for_matching).all.order(:id)
-          }
     scope :by_session,
-          ->(session_id) { all_applications.where(session_id: session_id) }
+          ->(session_id) { where(session_id: session_id) }
 
     def applicant_data_for_matching
         applicant.applicant_data_for_matching

@@ -1,0 +1,22 @@
+{
+    "ddahs": [
+        {
+            "position_code": "CSC135H1F",
+            "applicant": "potterh",
+            "duties": [
+                {
+                    "hours": 80,
+                    "description": "Initial training"
+                },
+                {
+                    "hours": 10,
+                    "description": "Marking the midterm"
+                },
+                {
+                    "hours": 20,
+                    "description": "Running tutorials"
+                }
+            ]
+        }
+    ]
+}

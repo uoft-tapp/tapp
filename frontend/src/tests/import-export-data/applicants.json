@@ -1,0 +1,34 @@
+{
+    "applicants": [
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "utorid": "johnd",
+            "email": "goofy-duck@donald.com",
+            "student_number": "10000000",
+            "phone": "4166666666"
+        },
+        {
+            "first_name": "Ron",
+            "last_name": "Weasley",
+            "utorid": "weasleyr"
+        },
+        {
+            "first_name": "哈利",
+            "last_name": "Potter",
+            "utorid": "potterh",
+            "email": "harry@potter.com",
+            "student_number": "999666999",
+            "phone": "41888888888"
+        },
+        {
+            "first_name": "Bethany",
+            "last_name": "Smith",
+            "utorid": "smithb",
+            "email": "smithb@mail.utoronto.ca",
+            "student_number": "131382748",
+            "phone": "41999999999",
+            "age": 33
+        }
+    ]
+}

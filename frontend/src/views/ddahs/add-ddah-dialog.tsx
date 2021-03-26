@@ -1,10 +1,11 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal, Button, Alert, Spinner } from "react-bootstrap";
 import { Duty, Assignment, Ddah } from "../../api/defs/types";
 import { upsertDdah, ddahsSelector } from "../../api/actions/ddahs";
 import { DdahEditor } from "../../components/ddahs";
 import { assignmentsSelector } from "../../api/actions";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 interface PartialDdah {
     assignment: Assignment | null;
@@ -63,14 +64,21 @@ export function ConnectedAddDdahDialog(props: {
     const [inProgress, setInProgress] = React.useState(false);
 
     const ddahs = useSelector(ddahsSelector) as Ddah[];
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const assignmentsWithDdahHash = {} as { [key: string]: boolean };
     for (const ddah of ddahs) {
         assignmentsWithDdahHash[ddah.assignment.id] = true;
     }
     const assignmentsWithoutDdah = useSelector<any, Assignment[]>(
         assignmentsSelector
-    ).filter((x) => !assignmentsWithDdahHash[x.id]);
+    ).filter((x) => {
+        // Filter assignments without ddah and status is not withdrawn or rejected
+        return (
+            !assignmentsWithDdahHash[x.id] &&
+            x.active_offer_status !== "withdrawn" &&
+            x.active_offer_status !== "rejected"
+        );
+    });
 
     function _upsertDdah(ddah: PartialDdah) {
         if (ddah.assignment == null) {
