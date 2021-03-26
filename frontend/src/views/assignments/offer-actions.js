@@ -59,9 +59,10 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    const [showWithdrawConfirmation, setShowWithdrawConfirmation] = React.useState(
-        false
-    );
+    const [
+        showWithdrawConfirmation,
+        setShowWithdrawConfirmation,
+    ] = React.useState(false);
 
     function createOffers() {
         for (const assignment of selectedAssignments) {
