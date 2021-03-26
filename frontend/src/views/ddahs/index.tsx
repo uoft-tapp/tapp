@@ -57,8 +57,6 @@ export function AdminDdahsView(): React.ReactNode {
         for (const ddah of selectedDdahs) {
             dispatch(deleteDdah(ddah));
         }
-
-        setShowDeleteConfirmation(false);
     }
 
     return (

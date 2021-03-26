@@ -111,9 +111,9 @@ export function MultiDeleteDdahConfirmation(props: {
                 <Modal.Title>Deleting Multiple DDAHs</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="mb-3">
-                    You are deleting all of the following{" "}
-                    {selectedDdahs?.length} DDAHs!
+                <div className="mb-3 alert alert-info" role="alert">
+                    You are <b>deleting</b> all of the following{" "}
+                    {selectedDdahs?.length} DDAHs
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -124,7 +124,6 @@ export function MultiDeleteDdahConfirmation(props: {
                         filterable={false}
                     />
                 </div>
-                Are you sure?
             </Modal.Body>
             <Modal.Footer>
                 <Button
@@ -135,7 +134,14 @@ export function MultiDeleteDdahConfirmation(props: {
                 >
                     Cancel
                 </Button>
-                <Button onClick={deleteDDAHs}>Delete All</Button>
+                <Button
+                    onClick={() => {
+                        deleteDDAHs();
+                        setVisible(false);
+                    }}
+                >
+                    Delete {selectedDdahs?.length} DDAHs
+                </Button>
             </Modal.Footer>
         </Modal>
     );
