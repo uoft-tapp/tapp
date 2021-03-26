@@ -15,7 +15,7 @@ import {
 import { ContentArea } from "../../components/layout";
 import { ConnectedDdahsTable } from "../ddah-table";
 import { MissingActiveSessionWarning } from "../../components/sessions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../api/actions";
 import { ddahTableSelector } from "../ddah-table/actions";
 import {
@@ -26,6 +26,7 @@ import {
 } from "../../api/actions/ddahs";
 import { Ddah } from "../../api/defs/types";
 import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
+import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 export function AdminDdahsView(): React.ReactNode {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -35,7 +36,7 @@ export function AdminDdahsView(): React.ReactNode {
     const activeSession = useSelector(activeSessionSelector);
     const { selectedDdahIds } = useSelector(ddahTableSelector);
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
     const selectedDdahs = ddahs.filter((ddah) =>
         selectedDdahIds.includes(ddah.id)
     );

@@ -62,6 +62,18 @@ export const routes = [
             },
         ],
     },
+    {
+        route: "/postings",
+        name: "Job Postings",
+        description: "Manage and create job postings",
+        subroutes: [
+            {
+                route: "/overview",
+                name: "Overview",
+                description: "Manage Job Postings",
+            },
+        ],
+    },
 ];
 
 /**

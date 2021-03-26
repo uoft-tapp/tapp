@@ -12,6 +12,7 @@ import { Landing } from "../admin/landing.tsx";
 import { Landing as InstructorLanding } from "../instructor/landing.tsx";
 import { AdminApplicantsView } from "../applicants";
 import { AdminDdahsView } from "../ddahs";
+import { PostingOverview } from "../postings/overview";
 
 export function AdminRoutes() {
     return (
@@ -51,6 +52,12 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/applicants_and_matching/applicants">
                 <AdminApplicantsView />
+            </Route>
+            <Route exact path="/postings">
+                <Redirect to="/postings/overview" />
+            </Route>
+            <Route exact path="/postings/overview">
+                <PostingOverview />
             </Route>
         </Switch>
     );

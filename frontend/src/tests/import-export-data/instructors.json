@@ -1,0 +1,28 @@
+{
+    "instructors": [
+        {
+            "first_name": "Henry",
+            "last_name": "Smith",
+            "utorid": "smithh",
+            "email": "hery.smith@utoronto.ca"
+        },
+        {
+            "first_name": "戈登",
+            "last_name": "Smith",
+            "utorid": "smithg",
+            "email": "gordon.smith@utoronto.ca"
+        },
+        {
+            "first_name": "Emily",
+            "last_name": "Garcia",
+            "utorid": "garciae"
+        },
+        {
+            "first_name": "Miller",
+            "last_name": "Miles",
+            "utorid": "millerm",
+            "email": "megan.miller@utoronto.ca",
+            "age": 33
+        }
+    ]
+}
