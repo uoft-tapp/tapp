@@ -25,15 +25,20 @@ class Offer < ApplicationRecord
 
     #Compute a difference between our hash and the hash used in the other
     def compute_diff(other)
-        if offer == other
-            return false
-        end
+        return false if self == other
+
+        puts other
 
         # Store the other's differences into a hash
         diff = Hash.new
-        other.attribute.keys.each do |k|
-            if other[k] == self[k]
-                diff[k] = other[k] 
+        self.attributes.keys.each do |k|
+            if not k.to_s.include? "id"
+                # puts k
+                # puts self
+                # puts self[k]
+                # puts other
+                # puts other[k]
+                diff[k] = other[k] if other[k] == self[k]
             end
         end
         return diff
@@ -49,7 +54,8 @@ class Offer < ApplicationRecord
         position = assignment.position
 
         # inherit attributes defined from the applicant and the position
-        self.attributes = attributes.merge(
+        self.attributes =
+            attributes.merge(
                 applicant.as_json(only: applicant_attrs),
                 position.as_json(only: position_attrs)
             )
