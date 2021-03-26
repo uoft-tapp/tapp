@@ -17,22 +17,20 @@ class ActiveUserService
                   request
               )
             utorid, _password = credentials.split(':')
-            return User.find_by(utorid: utorid)
+            user = User.find_by(utorid: utorid)
+
+            return User.new(utorid: utorid, roles: user.computed_roles)
         end
 
         if (Rails.application.config.respond_to? :active_user_override) &&
           Rails.application.config.active_user_override
             user = User.find_by(id: Rails.application.config.active_user_id)
-            return user if user
+            return User.new(utorid: user.utorid, roles: user.computed_roles) if user
 
             # If we're here, the database doesn't have the specified active user,
-            # so createa fake one with all the permissions. We *do not* save this
+            # so create a fake one with all the permissions. We *do not* save this
             # user to the database.
-            return(
-              User.new(
-                utorid: 'defaultactive', roles: %w[admin instructor ta]
-            )
-          )
+            return User.new(utorid: 'defaultactive', roles: %w[admin instructor ta])
         end
 
         # rubocop:disable Style/RaiseArgs

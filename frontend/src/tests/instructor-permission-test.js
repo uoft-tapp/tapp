@@ -147,6 +147,11 @@ export function instructorsPermissionTests(api) {
         // set active user to trigger role update
         resp = await apiPOST(`/debug/active_user`, emptyRoleUserData);
         expect(resp).toHaveStatus("success");
+
+        // since the user gained instructor role, it should now have access to instructor routes
+        resp = await apiGET(`/instructor/active_user`);
+        expect(resp).toHaveStatus("success");
+
         resp = await apiGET(`/debug/active_user`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.utorid).toEqual(emptyRoleUserData.utorid);
