@@ -27,17 +27,12 @@ class Offer < ApplicationRecord
     def compute_diff(other)
         return false if self == other
 
-        puts other
+        # puts other
 
         # Store the other's differences into a hash
         diff = Hash.new
         self.attributes.keys.each do |k|
             if not k.to_s.include? "id"
-                # puts k
-                # puts self
-                # puts self[k]
-                # puts other
-                # puts other[k]
                 diff[k] = other[k] if other[k] == self[k]
             end
         end

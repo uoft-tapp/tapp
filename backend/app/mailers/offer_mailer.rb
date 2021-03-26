@@ -41,11 +41,9 @@ class OfferMailer < ApplicationMailer
     def get_prev_offer_diff
         id = @offer.assignment_id
         latest =
-            Offer.where('assignment_id = ?', id)
-                .order('emailed_date DESC').limit(1)
-        # puts @offer
-        # puts latest
-        return @offer.compute_diff(latest)
+            Offer.where('assignment_id = ?', id).order('emailed_date DESC')
+                .limit(1)
+        return @offer.compute_diff(latest[0])
     end
 
     def generate_vars(offer)
@@ -65,7 +63,6 @@ class OfferMailer < ApplicationMailer
             }/view"
         @nag_count = offer.nag_count
 
-        # @diff = get_prev_offer_diff
-
+        @diff = get_prev_offer_diff
     end
 end
