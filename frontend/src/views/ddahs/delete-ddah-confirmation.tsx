@@ -23,6 +23,25 @@ function compareString(str1: string, str2: string) {
     return 0;
 }
 
+function compareDDAH(
+    d1: {
+        position_code: string;
+        last_name: string;
+        first_name: string;
+    },
+    d2: {
+        position_code: string;
+        last_name: string;
+        first_name: string;
+    }
+) {
+    return (
+        compareString(d1.position_code, d2.position_code) ||
+        compareString(d1.last_name, d2.last_name) ||
+        compareString(d1.first_name, d2.first_name)
+    );
+}
+
 export function MultiDeleteDdahConfirmation(props: {
     selectedDdahs: any[];
     visible: boolean;
@@ -50,26 +69,7 @@ export function MultiDeleteDdahConfirmation(props: {
     });
 
     // Sort the table by position_code by default
-    data.sort(
-        (
-            d1: {
-                position_code: string;
-                last_name: string;
-                first_name: string;
-            },
-            d2: {
-                position_code: string;
-                last_name: string;
-                first_name: string;
-            }
-        ) => {
-            return (
-                compareString(d1.position_code, d2.position_code) ||
-                compareString(d1.last_name, d2.last_name) ||
-                compareString(d1.first_name, d2.first_name)
-            );
-        }
-    );
+    data.sort(compareDDAH);
 
     const columns = [
         {
