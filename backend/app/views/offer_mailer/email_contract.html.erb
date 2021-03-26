@@ -8,7 +8,7 @@
   <body>
   <p><%= @status_message %></p>
   <% if @diff != false %>
-    <p>The key differences of this newely received offer are:</p>
+    <p>The key differences of this newly received offer are:</p>
     <% @diff.keys.each do |k| %>
       <p>@diff[k]</p> is now <p>@offer[k]</p>  
     <% end %>

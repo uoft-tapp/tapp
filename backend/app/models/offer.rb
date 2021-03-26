@@ -39,6 +39,20 @@ class Offer < ApplicationRecord
         return diff
     end
 
+    def get_status_message
+        case status.to_sym
+        when :accepted
+            status_message = 'You have accepted this offer'
+        when :rejected
+            status_message = 'You have rejected this offer'
+        when :withdrawn
+            status_message = 'This offer has been withdrawn'
+        when :pending
+            status_message = 'You have not responded to this offer'
+        end
+        return status_message
+    end
+
     private
 
     def populate_offer
@@ -68,7 +82,6 @@ class Offer < ApplicationRecord
         self.ta_coordinator_email =
             Rails.application.config.ta_coordinator_email
         self.ta_coordinator_name = Rails.application.config.ta_coordinator_name
-        self
     end
 
     def set_status_date

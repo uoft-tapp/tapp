@@ -62,7 +62,7 @@ class OfferMailer < ApplicationMailer
                 offer.url_token
             }/view"
         @nag_count = offer.nag_count
-
+        @status_message = @offer.get_status_message
         @diff = get_prev_offer_diff
     end
 end
