@@ -6,5 +6,4 @@ class UserSerializer < ActiveModel::Serializer
     def roles
         object.computed_roles
     end
-
 end
