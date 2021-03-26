@@ -75,6 +75,7 @@ export function MultiDeleteDdahConfirmation(props: {
         {
             Header: generateHeaderCell("Position"),
             accessor: "position_code",
+            width: 200,
         },
         {
             Header: generateHeaderCell("Last Name"),
