@@ -95,8 +95,9 @@ export function MultiWithdrawOfferConfirmation(props: {
                 <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="mb-3">
-                    You are withdrawing from the following {data?.length} offers
+                <div className="mb-3 alert alert-info" role="alert">
+                    You are <b>withdrawing</b> from the following {data?.length}{" "}
+                    offers:
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -105,7 +106,6 @@ export function MultiWithdrawOfferConfirmation(props: {
                         data={data}
                     />
                 </div>
-                Are you sure?
             </Modal.Body>
             <Modal.Footer>
                 <Button
@@ -116,7 +116,14 @@ export function MultiWithdrawOfferConfirmation(props: {
                 >
                     Cancel
                 </Button>
-                <Button onClick={withdrawOffers}>Withdraw</Button>
+                <Button
+                    onClick={() => {
+                        withdrawOffers();
+                        setVisible(false);
+                    }}
+                >
+                    Withdraw {data?.length} Offers
+                </Button>
             </Modal.Footer>
         </Modal>
     );

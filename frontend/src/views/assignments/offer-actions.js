@@ -82,7 +82,6 @@ function OfferActionButtons(props) {
         for (const assignment of selectedAssignments) {
             offerForAssignmentWithdraw(assignment);
         }
-        setShowWithdrawConfirmation(false);
     }
     function emailOffers() {
         for (const assignment of selectedAssignments) {
