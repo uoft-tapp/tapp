@@ -21,6 +21,7 @@ export function validate(data: any[], schema: NormalizationSchema<string[]>) {
                 );
             }
         }
+        // convert all undefined values to null inside normalized object
         for (const key of keys) {
             if (item[key] === undefined) {
                 item[key] = null;
