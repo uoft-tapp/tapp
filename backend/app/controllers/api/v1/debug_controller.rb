@@ -70,7 +70,7 @@ class Api::V1::DebugController < ApplicationController
                 path = route.path.spec.to_s
 
                 # skip over any /rails specific routes
-                if !path.start_with?('/api/') and !path.start_with?('/public')
+                if !path.start_with?('/api/') && !path.start_with?('/public')
                     next
                 end
 
@@ -101,44 +101,35 @@ class Api::V1::DebugController < ApplicationController
         # Returns a list of all serializers and attributes that are serialized.
         # These make up the majority of the available return types from the API
 
-        all_serializers = []
-
         # Since Rails dynamically loads classes the first time they're requested,
         # we cannot rely on introspection to get a list of all the serializers. Instead,
         # we must list all files in the serializers directory; since the files must
         # follow the naming convention, we can assume they all contain valid serializers
         # of the same name.
-        render_success Dir
-                           .foreach(Rails.root.join('app', 'serializers'))
-                           .select { |file_name|
-                               file_name.ends_with? 'serializer.rb'
-                           }
-                           .map { |file_name|
-                               File.basename file_name, File.extname(file_name)
-                           }
-                           .map { |serializer_name|
-                               serializer_name.camelize.constantize
-                           }
-                           .map { |serializer|
-                               {
-                                   name: serializer.to_s.chomp('Serializer'),
-                                   serializer: serializer.to_s,
-                                   attributes:
-                                       serializer._attributes.map(&:to_s) +
-                                           (
-                                               # if `explicit_attributes` is defined, we also want to
-                                               # include any of those listed attributes
-                                               if (
-                                                      serializer.respond_to? :explicit_attributes
-                                                  )
-                                                   serializer
-                                                       .explicit_attributes
-                                               else
-                                                   []
-                                               end
-                                           ).map(&:to_s)
-                               }
-                           }
+        render_success Dir.foreach(Rails.root.join('app', 'serializers'))
+                           .select do |file_name|
+            file_name.ends_with? 'serializer.rb'
+        end.map do |file_name|
+            File.basename file_name, File.extname(file_name)
+        end.map do |serializer_name|
+            serializer_name.camelize.constantize
+        end.map do |serializer|
+            {
+                name: serializer.to_s.chomp('Serializer'),
+                serializer: serializer.to_s,
+                attributes:
+                    serializer._attributes.map(&:to_s) +
+                        (
+                            # if `explicit_attributes` is defined, we also want to
+                            # include any of those listed attributes
+                            if serializer.respond_to? :explicit_attributes
+                                serializer.explicit_attributes
+                            else
+                                []
+                            end
+                        ).map(&:to_s)
+            }
+        end
     end
 
     private
