@@ -169,7 +169,7 @@ export const prepareMinimal = {
         const ret: MinimalAssignment = {
             utorid: assignment.applicant.utorid,
             position_code: assignment.position.position_code,
-        };
+        } as MinimalAssignment;
         // If there is an contract_override_pdf, we store it, otherwise
         // the contract comes from the `position` so we don't need to store it.
         if (assignment.contract_override_pdf) {

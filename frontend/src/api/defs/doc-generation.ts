@@ -5,7 +5,7 @@
 import PropTypes from "prop-types";
 import RouteParser from "route-parser";
 import { generatePropTypes } from "./prop-types";
-import { Role } from "./types";
+import { UserRole } from "./types";
 
 class CallAtom {
     name: string;
@@ -354,7 +354,7 @@ interface DocumentCallbackArgs {
     summary: string;
     posts?: any;
     returns?: any;
-    roles?: Role[];
+    roles?: UserRole[];
     exclude?: boolean;
 }
 

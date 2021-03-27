@@ -111,7 +111,9 @@ function formatWageChunksToList(
 export const prepareSpreadsheet = {
     instructor: function (instructors: Instructor[]) {
         return spreadsheetUndefinedToNull(
-            [["Last Name", "First Name", "UTORid", "email"]].concat(
+            ([
+                ["Last Name", "First Name", "UTORid", "email"],
+            ] as CellType[][]).concat(
                 instructors.map((instructor) => [
                     instructor.last_name,
                     instructor.first_name,
@@ -123,7 +125,7 @@ export const prepareSpreadsheet = {
     },
     applicant: function (applicants: Applicant[]) {
         return spreadsheetUndefinedToNull(
-            [
+            ([
                 [
                     "Last Name",
                     "First Name",
@@ -132,7 +134,7 @@ export const prepareSpreadsheet = {
                     "email",
                     "Phone",
                 ],
-            ].concat(
+            ] as CellType[][]).concat(
                 applicants.map((applicant) => [
                     applicant.last_name,
                     applicant.first_name,
