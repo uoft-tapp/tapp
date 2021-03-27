@@ -169,6 +169,7 @@ Rails
                             member do
                                 post :approve
                                 post :email
+                                post :delete
                             end
                         end
 
