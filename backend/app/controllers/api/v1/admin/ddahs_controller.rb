@@ -84,6 +84,17 @@ class Api::V1::Admin::DdahsController < ApplicationController
         render_success @ddah
     end
 
+    # POST /ddahs/:ddah_id/delete
+    def delete
+        find_ddah
+        render_on_condition(
+          object: @ddah,
+          condition: proc { @ddah.destroy! },
+          error_message:
+            "Could not delete ddah '#{@ddah.id}'."
+      )
+    end
+
     # POST /ddahs/:ddah_id/email
     def email
         find_ddah

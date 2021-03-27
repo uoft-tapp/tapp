@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedAddDdahDialog } from "./add-ddah-dialog";
-import { FaPlus, FaMailBulk, FaCheck } from "react-icons/fa";
+import { FaPlus, FaMailBulk, FaCheck, FaTrash } from "react-icons/fa";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
@@ -18,8 +18,14 @@ import { MissingActiveSessionWarning } from "../../components/sessions";
 import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../api/actions";
 import { ddahTableSelector } from "../ddah-table/actions";
-import { ddahsSelector, emailDdah, approveDdah } from "../../api/actions/ddahs";
+import {
+    ddahsSelector,
+    emailDdah,
+    approveDdah,
+    deleteDdah,
+} from "../../api/actions/ddahs";
 import { Ddah } from "../../api/defs/types";
+import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
 export function AdminDdahsView(): React.ReactNode {
@@ -34,6 +40,24 @@ export function AdminDdahsView(): React.ReactNode {
     const selectedDdahs = ddahs.filter((ddah) =>
         selectedDdahIds.includes(ddah.id)
     );
+
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(
+        false
+    );
+
+    function confirmDDAHDeletion() {
+        if (selectedDdahs?.length > 1) {
+            setShowDeleteConfirmation(true);
+        } else {
+            deleteDDAHs();
+        }
+    }
+
+    function deleteDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(deleteDdah(ddah));
+        }
+    }
 
     return (
         <div className="page-body">
@@ -84,6 +108,13 @@ export function AdminDdahsView(): React.ReactNode {
                 >
                     Approve DDAH
                 </ActionButton>
+                <ActionButton
+                    icon={FaTrash}
+                    onClick={confirmDDAHDeletion}
+                    disabled={selectedDdahIds.length === 0}
+                >
+                    Delete DDAH
+                </ActionButton>
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -97,6 +128,12 @@ export function AdminDdahsView(): React.ReactNode {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
+            <MultiDeleteDdahConfirmation
+                selectedDdahs={selectedDdahs}
+                visible={showDeleteConfirmation}
+                setVisible={setShowDeleteConfirmation}
+                deleteDDAHs={deleteDDAHs}
+            />
         </div>
     );
 }

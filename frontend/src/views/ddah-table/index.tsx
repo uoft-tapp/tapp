@@ -18,7 +18,7 @@ import { generateHeaderCell } from "../../components/table-utils";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 
-interface RowData {
+export interface RowData {
     id?: number;
     position_code: string;
     last_name: string;
@@ -36,14 +36,14 @@ interface RowData {
  * @param {Ddah} ddah
  * @returns
  */
-function ddahIssues(ddah: Ddah) {
+export function ddahIssues(ddah: Ddah) {
     if (ddah.total_hours !== ddah.assignment.hours) {
         return `Hours Mismatch (${ddah.total_hours} vs. ${ddah.assignment.hours})`;
     }
     return null;
 }
 
-function getReadableStatus(ddah: Pick<Ddah, "status">) {
+export function getReadableStatus(ddah: Pick<Ddah, "status">) {
     switch (ddah.status) {
         case "accepted":
             return "Accepted";
@@ -60,7 +60,7 @@ function getReadableStatus(ddah: Pick<Ddah, "status">) {
  * @param {{ original: RowData }} { original }
  * @returns {React.ReactNode}
  */
-function StatusCell({
+export function StatusCell({
     row,
     children = null,
 }: {
@@ -120,7 +120,7 @@ function IssuesCell({
  * @param {{ original: RowData }} { original }
  * @returns {React.ReactNode}
  */
-function PreviewCell({
+export function PreviewCell({
     row,
     onClick = () => {},
 }: {
@@ -144,7 +144,7 @@ function PreviewCell({
     );
 }
 
-function DdahPreviewModal({
+export function DdahPreviewModal({
     ddah,
     show,
     onHide = () => {},
@@ -248,7 +248,7 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
     );
 }
 
-function ConnectedDdahEditorModal({
+export function ConnectedDdahEditorModal({
     ddah,
     show,
     onHide = () => {},
