@@ -17,7 +17,18 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
         @session = Session.find(params[:session_id])
         template = @session.contract_templates.new(contract_template_params)
         render_on_condition(
-            object: template, condition: proc { template.save! }
+            object: template,
+            condition: proc { template.save! }
+        )
+    end
+
+    # POST /contract_templates/delete
+    def delete
+        @contract_template = ContractTemplate.find_by(id: params[:id])
+
+        render_on_condition(
+            object: @contract_template,
+            condition: proc { @contract_template.destroy! }
         )
     end
 
@@ -25,15 +36,16 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
     def available
         contract_dir = Rails.application.config.contract_template_dir
         files =
-            Dir.glob("#{contract_dir}/*.html").map do |entry|
-                { template_file: entry.sub(contract_dir, '') }
-            end
+            Dir
+                .glob("#{contract_dir}/*.html")
+                .map { |entry| { template_file: entry.sub(contract_dir, '') } }
         render_success files
     end
 
     # GET /contract_templates/:id/view
     def view
         ensure_contract_template
+
         # load the offer as a Liquid template
         template = Liquid::Template.parse(template_html)
 
@@ -93,10 +105,13 @@ class Api::V1::Admin::ContractTemplatesController < ApplicationController
     def template_file_full_path(file_name: @contract_template.template_file)
         contract_dir = Rails.application.config.contract_template_dir
         template_file = "#{contract_dir}/#{file_name}"
+
         # Verify that the template file is actually contained in the template directory
-        unless Pathname.new(template_file).realdirpath.to_s.starts_with?(
-                   contract_dir
-               )
+        unless Pathname
+                   .new(template_file)
+                   .realdirpath
+                   .to_s
+                   .starts_with?(contract_dir)
             raise StandardError, "Invalid contract path #{template_file}"
         end
 
