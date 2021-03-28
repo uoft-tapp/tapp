@@ -107,7 +107,7 @@ Rails
                             to: 'contract_templates#available'
 
                         # Contract Templates
-                        resources :contract_templates, only: %i[index create] do
+                        resources :contract_templates, only: %i[create] do
                             collection { post :delete, :upload }
                             member do
                                 get :view
@@ -187,7 +187,7 @@ Rails
                         end
 
                         # Postings
-                        resources :postings, only: %i[index create show] do
+                        resources :postings, only: %i[create show] do
                             collection { post :delete }
 
                             # XXX For some reasong `index` doesn't work for a `posting_position`, only
@@ -245,7 +245,7 @@ Rails
                 post :reject, format: false, to: 'contracts#reject'
             end
             resources :ddahs, format: nil, only: %i[show] do
-                get :view, format: false, to: 'ddahs#view', format: nil
+                get :view, format: false, to: 'ddahs#view'
                 post :accept, format: false, to: 'ddahs#accept'
             end
         end

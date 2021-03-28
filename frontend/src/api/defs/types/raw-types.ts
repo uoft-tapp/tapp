@@ -168,3 +168,7 @@ export interface RawUser extends HasId {
     utorid: Utorid;
     roles: UserRole[];
 }
+
+export interface RawReportingTag {
+    name: string;
+}

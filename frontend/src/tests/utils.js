@@ -62,6 +62,98 @@ expect.extend({
             };
         }
     },
+    toHaveKey(received, argument) {
+        if (typeof received !== "object" || received == null) {
+            throw new Error("Only objects can have keys");
+        }
+        if (argument in received) {
+            return {
+                pass: true,
+                message: () =>
+                    `expected object response to not have key ${this.utils.printExpected(
+                        argument
+                    )} but it does.`,
+            };
+        } else {
+            return {
+                pass: false,
+                message: () =>
+                    `expected object to have key ${this.utils.printExpected(
+                        argument
+                    )} but only has keys ${this.utils.printReceived(
+                        Object.keys(received)
+                    )}`,
+            };
+        }
+    },
+    toContainTypeDescription(received, argument) {
+        // `received` is expected to be an object with keys
+        // that are Typescript type names and values containing a `properties`
+        // filed which is an object with keys equal to the types properties.
+        // e.g.
+        // { RawUser: { properties: { id: ..., utorid: ..., roles: ... } } }
+        if (typeof received !== "object" || received == null) {
+            throw new Error("Invalid typescript definition");
+        }
+        if (argument.name in received) {
+            const properties = Object.keys(
+                received[argument.name].properties || {}
+            ).sort();
+            const expectedProperties = [...argument.attributes].sort();
+            const pass = this.equals(properties, expectedProperties);
+            if (pass) {
+                return {
+                    pass: true,
+                    message: () =>
+                        `expected ${this.utils.printExpected(
+                            argument.name
+                        )} type to not have attributes ${this.utils.printExpected(
+                            argument.attributes
+                        )} but it does.`,
+                };
+            } else {
+                return {
+                    pass: false,
+                    message: () =>
+                        `expected ${this.utils.printExpected(
+                            argument.name
+                        )} type to have attributes ${this.utils.printExpected(
+                            expectedProperties
+                        )} but found attributes ${this.utils.printReceived(
+                            properties
+                        )}.\n\n${this.utils.diff(
+                            expectedProperties,
+                            properties
+                        )}`,
+                };
+            }
+        } else {
+            return {
+                pass: false,
+                message: () =>
+                    `expected type definition for ${this.utils.printExpected(
+                        argument
+                    )} but only have type definitions for ${this.utils.printReceived(
+                        Object.keys(received)
+                    )}`,
+            };
+        }
+    },
+    toListNoMissingRoutes(received) {
+        if (received.length > 0) {
+            return {
+                pass: false,
+                message: () =>
+                    `Expected no missing routes, but found the routes\n\n
+                        ${this.utils.diff([], received)}\n\nwere missing.`,
+            };
+        } else {
+            return {
+                pass: true,
+                message: () => `Expected missing routes, but found all routes`,
+            };
+        }
+    },
 });
 
 export { expect, test, it, describe, beforeAll };
@@ -76,7 +168,7 @@ function _ensurePath(path) {
 
 /**
  * Make a GET request to the api route specified by `url`.
- * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessiosn")
+ * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessions")
  *
  * @export
  * @param {string} url The api un-prefixed url route (e.g. "/sessions")
@@ -102,7 +194,7 @@ export async function apiGET(url) {
 
 /**
  * Make a POST request to the api route specified by `url`.
- * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessiosn")
+ * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessions")
  *
  * @export
  * @param {string} url The api un-prefixed url route (e.g. "/sessions")

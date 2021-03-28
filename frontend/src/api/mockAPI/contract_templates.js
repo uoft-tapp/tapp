@@ -75,7 +75,7 @@ export class ContractTemplate extends MockAPIController {
     }
     upsertBySession(obj, session) {
         const matchingSession = new Session(this.data).find(session);
-        // If this is not an upsert, validate the paramters. Otherwise, don't validate.
+        // If this is not an upsert, validate the parameters. Otherwise, don't validate.
         if (!this.find(obj)) {
             this.validateNew(obj, matchingSession);
         }
@@ -170,6 +170,22 @@ export const templatesRoutes = {
             returns: wrappedPropTypes.arrayOf(
                 docApiPropTypes.contractTemplateMinimal
             ),
+        }),
+        "/contract_templates/delete": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Delete a contract template",
+            posts: docApiPropTypes.contractTemplate,
+            returns: docApiPropTypes.contractTemplate,
+        }),
+        "/contract_templates": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Update a contract template",
+            posts: docApiPropTypes.contractTemplate,
+            returns: docApiPropTypes.contractTemplate,
         }),
     },
 };
