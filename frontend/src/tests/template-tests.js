@@ -160,7 +160,7 @@ export function templatesTests(api) {
     });
 
     it("Preview/download a template", async () => {
-        // Because previewing a template involves reading a real file off the harddrive,
+        // Because previewing a template involves reading a real file off the hard drive,
         // we need to first create a template corresponding to a real file.
         const resp = await apiGET("/admin/available_contract_templates");
         expect(resp).toHaveStatus("success");
@@ -232,4 +232,6 @@ export function templatesTests(api) {
         );
         expect(resp3).toHaveStatus("error");
     });
+
+    it.todo("deleting a contract template removes it from its session");
 }

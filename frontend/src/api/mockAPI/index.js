@@ -14,6 +14,7 @@ import { activeUserRoutes, User } from "./active_user";
 import { ddahsRoutes } from "./ddahs";
 import { reportingTagRoutes } from "./reportingTags";
 import { postingRoutes } from "./postings";
+import { publicRoutes } from "./public-routes";
 
 /**
  * Mock API server that runs locally; useful for demo purposes.
@@ -39,6 +40,7 @@ export class MockAPI {
         debugRoutes.get,
         activeUserRoutes.get,
         postingRoutes.get,
+        publicRoutes.get,
         {
             "/all_data": documentCallback({
                 func: (data) => data,
@@ -60,7 +62,8 @@ export class MockAPI {
         reportingTagRoutes.post,
         debugRoutes.post,
         activeUserRoutes.post,
-        postingRoutes.post
+        postingRoutes.post,
+        publicRoutes.post
     );
 
     constructor(seedData) {

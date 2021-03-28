@@ -412,7 +412,7 @@ export function ConnectedDdahsTable() {
         }
         data.push({
             position_code: assignment.position.position_code,
-            last_name: assignment.applicant.last_name,
+            last_name: assignment.applicant.last_name || "",
             first_name: assignment.applicant.first_name,
             total_hours: null,
             status: null,

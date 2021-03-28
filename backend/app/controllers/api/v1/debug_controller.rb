@@ -58,7 +58,92 @@ class Api::V1::DebugController < ApplicationController
         render_success
     end
 
+    # GET /routes
+    def routes
+        # Returns a list of all TAPP-specific routes available.
+        all_routes = []
+        Rails
+            .application
+            .routes
+            .routes
+            .each do |route|
+                path = route.path.spec.to_s
+
+                # skip over any /rails specific routes
+                if !path.start_with?('/api/') && !path.start_with?('/public')
+                    next
+                end
+
+                # skip any routes that don't have a controller
+                next if route.requirements[:controller].nil?
+
+                controller_name =
+                    "#{route.requirements[:controller].camelize}Controller"
+                action_name = route.requirements[:action]
+
+                all_routes.push(
+                    {
+                        path: path,
+                        verb: route.verb,
+                        parts: route.required_parts,
+                        controller: controller_name,
+                        action: action_name,
+                        source_location:
+                            get_controller_source(controller_name, action_name)
+                    }
+                )
+            end
+        render_success all_routes
+    end
+
+    # GET /serializers
+    def serializers
+        # Returns a list of all serializers and attributes that are serialized.
+        # These make up the majority of the available return types from the API
+
+        # Since Rails dynamically loads classes the first time they're requested,
+        # we cannot rely on introspection to get a list of all the serializers. Instead,
+        # we must list all files in the serializers directory; since the files must
+        # follow the naming convention, we can assume they all contain valid serializers
+        # of the same name.
+        render_success(
+            Dir
+                .foreach(Rails.root.join('app', 'serializers'))
+                .select { |file_name| file_name.ends_with? 'serializer.rb' }
+                .map do |file_name|
+                    File.basename file_name, File.extname(file_name)
+                end
+                .map { |serializer_name| serializer_name.camelize.constantize }
+                .map do |serializer|
+                    {
+                        name: serializer.to_s.chomp('Serializer'),
+                        serializer: serializer.to_s,
+                        attributes:
+                            serializer._attributes.map(&:to_s) +
+                                (
+                                    # if `explicit_attributes` is defined, we also want to
+                                    # include any of those listed attributes
+                                    if serializer.respond_to? :explicit_attributes
+                                        serializer.explicit_attributes
+                                    else
+                                        []
+                                    end
+                                ).map(&:to_s)
+                    }
+                end
+        )
+    end
+
     private
+
+    def get_controller_source(controller_name, action_name)
+        controller_name
+            .constantize
+            .instance_method(action_name.to_sym)
+            .source_location
+    rescue NameError
+        ['No Method Found', 0]
+    end
 
     def set_active_user_params
         params.permit(:id, :utorid)
@@ -70,7 +155,8 @@ class Api::V1::DebugController < ApplicationController
 
     def update_user
         render_on_condition(
-            object: @user, condition: proc { @user.update!(user_params) }
+            object: @user,
+            condition: proc { @user.update!(user_params) }
         )
     end
 end

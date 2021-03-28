@@ -68,6 +68,7 @@
     "browserslist": [],
     "devDependencies": {
         "axios": "^0.21.1",
-        "redux-devtools-extension": "^2.13.8"
+        "redux-devtools-extension": "^2.13.8",
+        "typescript-json-schema": "^0.50.0"
     }
 }
