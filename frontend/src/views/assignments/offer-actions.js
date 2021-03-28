@@ -9,7 +9,7 @@ import {
     offerForAssignmentWithdraw,
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
-} from "../../api/actions/offers";
+} from "../../api/actions";
 import {
     FaEnvelope,
     FaBan,
@@ -19,6 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
+import { CreateOfferConfirmation } from "./create-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -58,16 +59,25 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    function createOffers() {
+    const [showCreateConfirmation, setShowCreateConfirmation] = React.useState(
+        false
+    );
+
+    function confirmOfferCreate() {
+        // if withdrawing multiple offers at once, show confirmation
         if (
             selectedAssignments.some(
                 (assignment) => assignment.active_offer_status === "withdrawn"
             )
         ) {
-            window.confirm(
-                "Some of the selected assignments include withdrawn offers. Do you confirm to create new offers?"
-            );
+            setShowCreateConfirmation(true);
+        } else {
+            // does not need confirmation if only withdrawing one offer
+            createOffers();
         }
+    }
+
+    function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
         }
@@ -116,7 +126,7 @@ function OfferActionButtons(props) {
         <React.Fragment>
             <ActionButton
                 icon={<FaUserPlus />}
-                onClick={createOffers}
+                onClick={confirmOfferCreate}
                 disabled={!actionPermitted.canCreate}
             >
                 Create Offer
@@ -156,6 +166,12 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
+            <CreateOfferConfirmation
+                data={selectedAssignments}
+                visible={showCreateConfirmation}
+                setVisible={setShowCreateConfirmation}
+                createOffers={createOffers}
+            />
         </React.Fragment>
     );
 }
