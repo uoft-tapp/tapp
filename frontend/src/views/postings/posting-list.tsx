@@ -8,6 +8,8 @@ import { EditableCell } from "../../components/editable-cell";
 import { AdvancedFilterTable } from "../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../components/table-utils";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
+import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export function ConnectedPostingsList({ editable = true }) {
     const postings: Posting[] = useSelector(postingsSelector);
@@ -27,7 +29,32 @@ export function ConnectedPostingsList({ editable = true }) {
         );
     }
 
-    const DEFAULT_COLUMNS: Column<Posting>[] = [
+    // props.original contains the row data for this particular session
+    function CellDetailsButton({ row }: Cell<Posting>) {
+        const posting = row?.original || {};
+        return (
+            <div className="details-button-container">
+                <Link to={`/postings/${posting.id}/details`}>
+                    <FaSearch
+                        className="details-row-button"
+                        title={`View details of ${posting.name}`}
+                    />
+                </Link>
+            </div>
+        );
+    }
+    const DEFAULT_COLUMNS: (Column<Posting> & {
+        className?: string;
+        resizable?: boolean;
+    })[] = [
+        {
+            Header: generateHeaderCell("Details"),
+            id: "details-col",
+            className: "details-col",
+            maxWidth: 32,
+            resizable: false,
+            Cell: CellDetailsButton,
+        },
         {
             Header: generateHeaderCell("Name"),
             accessor: "name",

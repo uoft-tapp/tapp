@@ -162,6 +162,7 @@ Rails
                                 end
                             end
                             resources :postings, only: %i[index create]
+                            resources :posting_positions, only: %i[index]
                         end
 
                         # DDAHs

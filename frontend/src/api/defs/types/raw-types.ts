@@ -115,8 +115,8 @@ export interface RawPosting extends HasId {
 export interface RawPostingPosition {
     position_id: number;
     posting_id: number;
-    hours: number;
-    num_positions: number;
+    hours: number | null;
+    num_positions: number | null;
 }
 
 export interface RawContractTemplate extends HasId {

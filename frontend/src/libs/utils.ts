@@ -69,6 +69,19 @@ if (process.env.REACT_APP_DEV_FEATURES) {
 
 export { formatDownloadUrl };
 
+/**
+ * Returns all the elements that are in `a` but not `b`.
+ *
+ * @export
+ * @template T
+ * @param {T[]} a
+ * @param {any[]} b
+ * @returns {T[]}
+ */
+export function arrayDiff<T>(a: T[], b: any[]): T[] {
+    return a.filter((x) => !b.includes(x));
+}
+
 // Debounce hook from https://dev.to/gabe_ragland/debouncing-with-react-hooks-jci
 /**
  * Debounce a value. This hook will continue returning the initially passed in `value`
