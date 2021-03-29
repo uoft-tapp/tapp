@@ -19,7 +19,7 @@ import { useThunkDispatch } from "../../libs/thunk-dispatch";
  * @param {*} props
  * @returns
  */
-function ApplicantCell(props) {
+export function ApplicantCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field, editable } = props;
     const applicant = props.row.original || props.row._original;
@@ -46,7 +46,7 @@ function ApplicantCell(props) {
  * @param {*} { original }
  * @returns
  */
-function StatusCell({ row }) {
+export function StatusCell({ row }) {
     const original = row.original || row._original;
     const formattedStatus = capitalize(original.active_offer_status || "");
     const activeOfferUrlToken = original.active_offer_url_token;
@@ -81,7 +81,7 @@ function StatusCell({ row }) {
  * @param {*} props
  * @returns
  */
-function AssignmentCell(props) {
+export function AssignmentCell(props) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertAssignment, field, editable = true } = props;
     const assignment = props.row.original || props.row._original;

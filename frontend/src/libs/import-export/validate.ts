@@ -10,7 +10,7 @@ import { NormalizationSchema } from "../schema";
  * @param {*} schema
  */
 export function validate(data: any[], schema: NormalizationSchema<string[]>) {
-    const { requiredKeys } = schema;
+    const { requiredKeys, keys } = schema;
     for (const item of data) {
         for (const key of requiredKeys) {
             if (item[key] == null) {
@@ -19,6 +19,12 @@ export function validate(data: any[], schema: NormalizationSchema<string[]>) {
                         item
                     )}" missing required property "${key}"`
                 );
+            }
+        }
+        // convert all undefined values to null inside normalized object
+        for (const key of keys) {
+            if (item[key] === undefined) {
+                item[key] = null;
             }
         }
     }
