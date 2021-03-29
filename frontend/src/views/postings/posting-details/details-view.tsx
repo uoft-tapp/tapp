@@ -4,13 +4,9 @@ import { Column } from "react-table";
 import {
     deletePostingPosition,
     positionsSelector,
-    postingPositionsSelector,
     upsertPostingPosition,
 } from "../../../api/actions";
-import {
-    Posting,
-    PostingPosition,
-} from "../../../api/defs/types";
+import { Posting, PostingPosition } from "../../../api/defs/types";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { arrayDiff, formatDate } from "../../../libs/utils";
@@ -44,11 +40,8 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     const dispatch = useDispatch();
     const posting_id = posting.id;
     const positions = useSelector(positionsSelector);
-    const allPostingPositions = useSelector(postingPositionsSelector);
     const { postingPositions, tableData, selected } = React.useMemo(() => {
-        const postingPositions = allPostingPositions.filter(
-            (postingPosition) => postingPosition.posting.id === posting_id
-        );
+        const postingPositions = posting.posting_positions;
         // We want a row for every position; since we are only looking at a single
         // posting, the position ids form a unique set of ids.
         const tableData = positions.map(
@@ -80,7 +73,7 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
             .filter((row) => row.true_posting_position)
             .map((row) => row.id);
         return { postingPositions, tableData, selected };
-    }, [posting_id, allPostingPositions, positions]);
+    }, [posting_id, posting, positions]);
 
     const selectionChange = React.useCallback(
         async (newSelection: number[]) => {

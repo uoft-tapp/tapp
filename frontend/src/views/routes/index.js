@@ -14,6 +14,7 @@ import { AdminApplicantsView } from "../applicants";
 import { AdminDdahsView } from "../ddahs";
 import { PostingOverview } from "../postings/overview";
 import { PostingDetails } from "../postings/posting-details";
+import { PostingPreview } from "../postings/posting-preview";
 
 export function AdminRoutes() {
     return (
@@ -64,7 +65,7 @@ export function AdminRoutes() {
                 <PostingDetails />
             </Route>
             <Route exact path="/postings/:posting_id/preview">
-                <PostingDetails />
+                <PostingPreview />
             </Route>
         </Switch>
     );

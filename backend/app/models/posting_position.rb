@@ -6,8 +6,7 @@ class PostingPosition < ApplicationRecord
 
     validates :position_id, uniqueness: { scope: :posting }
 
-    scope :by_session,
-          ->(session_id) {
-              joins(:posting).where(posting: { session_id: session_id })
-          }
+    scope :by_session, lambda do |session_id|
+        joins(:posting).where(posting: { session_id: session_id })
+    end
 end

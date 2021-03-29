@@ -12,9 +12,9 @@ import { ActionHeader, ActionsList } from "../../components/action-buttons";
 import { MissingActiveSessionWarning } from "../../components/sessions";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { useParams } from "react-router";
-import { ConnectedPostingDetailsView } from "./posting-details/details-view";
+import { ConnectedPostingPreviewView } from "./posting-details/preview-view";
 
-function ConnectedPostingDetails() {
+function ConnectedPostingPreview() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
     const postings = useSelector(postingsSelector);
     const dispatch = useThunkDispatch();
@@ -73,10 +73,10 @@ function ConnectedPostingDetails() {
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view, modify, or create postings, you must select a session." />
                 )}
-                <ConnectedPostingDetailsView posting={posting} />
+                <ConnectedPostingPreviewView posting={posting} />
             </ContentArea>
         </div>
     );
 }
 
-export { ConnectedPostingDetails as PostingDetails };
+export { ConnectedPostingPreview as PostingPreview };
