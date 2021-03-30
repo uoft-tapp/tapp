@@ -9,7 +9,6 @@ import {
 } from "react-table";
 import { shallowEqual } from "react-redux";
 import { FixedSizeList } from "react-window";
-// import Scrollbars from "react-custom-scrollbars";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
@@ -148,17 +147,6 @@ export function AdvancedFilterTable({
         [table]
     );
 
-    // const handleScroll = React.useCallback(
-    //     ({ target }) => {
-    //         const { scrollTop } = target;
-
-    //         if (scrollRef.current) {
-    //             scrollRef.current.scrollTo(scrollTop);
-    //         }
-    //     },
-    //     [scrollRef]
-    // );
-
     return (
         <div className="filter-table-container">
             {filterable && (
@@ -190,25 +178,15 @@ export function AdvancedFilterTable({
                             // Don't let the table get too short no matter what
                             //height = Math.max(height, 300);
                             return (
-                                // <Scrollbars
-                                //     style={{ width, height}}
-                                //     onScroll={handleScroll}
-
-                                // >
                                 <FixedSizeList
-                                    // className="List"
                                     height={height}
                                     itemCount={table.rows.length}
                                     itemSize={30}
                                     width={table.totalColumnsWidth}
                                     ref={scrollRef}
-                                    // style={{
-                                    //     overflow: "visible",
-                                    // }}
                                 >
                                     {renderRow}
                                 </FixedSizeList>
-                                // </Scrollbars>
                             );
                         }}
                     </AutoSizer>
