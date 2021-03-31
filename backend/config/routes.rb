@@ -45,7 +45,7 @@ Rails
     .routes
     .draw do
         namespace :api do
-            namespace :v1 do
+            namespace :v1, format: false do
                 # Debug
                 unless Rails.env.production?
                     resources :debug, only: [] do
@@ -57,6 +57,8 @@ Rails
                             post :snapshot, to: 'debug#snapshot'
                             get :users, to: 'debug#users'
                             post :users, to: 'debug#upsert_user'
+                            get :routes, to: 'debug#routes'
+                            get :serializers, to: 'debug#serializers'
                         end
                     end
                 end
@@ -105,7 +107,7 @@ Rails
                             to: 'contract_templates#available'
 
                         # Contract Templates
-                        resources :contract_templates, only: %i[index create] do
+                        resources :contract_templates, only: %i[create] do
                             collection { post :delete, :upload }
                             member do
                                 get :view
@@ -137,7 +139,8 @@ Rails
                             resources :ddahs, only: %i[index] do
                                 collection do
                                     get :accepted_list,
-                                        to: 'ddahs#accepted_list'
+                                        to: 'ddahs#accepted_list',
+                                        format: nil # setting format to `nil` makes :format an optional url param
                                 end
                             end
                             resources :contract_templates,
@@ -166,6 +169,7 @@ Rails
                             member do
                                 post :approve
                                 post :email
+                                post :delete
                             end
                         end
 
@@ -183,7 +187,7 @@ Rails
                         end
 
                         # Postings
-                        resources :postings, only: %i[index create show] do
+                        resources :postings, only: %i[create show] do
                             collection { post :delete }
 
                             # XXX For some reasong `index` doesn't work for a `posting_position`, only
@@ -233,15 +237,16 @@ Rails
             end
         end
 
-        namespace :public do
-            resources :contracts, only: %i[show] do
-                get :view, to: 'contracts#view'
-                post :accept, to: 'contracts#accept'
-                post :reject, to: 'contracts#reject'
+        namespace :public, format: false do
+            # setting format to `nil` makes :format an optional url param
+            resources :contracts, only: %i[show], format: nil do
+                get :view, format: false, to: 'contracts#view'
+                post :accept, format: false, to: 'contracts#accept'
+                post :reject, format: false, to: 'contracts#reject'
             end
-            resources :ddahs, only: %i[show] do
-                get :view, to: 'ddahs#view'
-                post :accept, to: 'ddahs#accept'
+            resources :ddahs, format: nil, only: %i[show] do
+                get :view, format: false, to: 'ddahs#view'
+                post :accept, format: false, to: 'ddahs#accept'
             end
         end
 

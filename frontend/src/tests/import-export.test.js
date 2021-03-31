@@ -129,7 +129,7 @@ describe("Import/export library functionality", () => {
         // transform to array of objects
         dataCSV = dataCSV.map(function (row) {
             let instructor = {};
-            keys.forEach((key, i) => (instructor[key] = row[i]));
+            keys.forEach((key, i) => (instructor[key] = row[i] ?? null));
             return instructor;
         });
         // check with original instructor data

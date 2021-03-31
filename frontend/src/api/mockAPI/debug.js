@@ -55,6 +55,15 @@ export const debugRoutes = {
             summary: "Get a list of all users",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.user),
         }),
+        "/debug/routes": documentCallback({
+            func: () => {},
+            summary: "Get a all available routes",
+        }),
+        "/debug/serializers": documentCallback({
+            func: () => {},
+            summary:
+                "Get a all available serializers and their attributes. These will cover the majority of the payloads that the API can return.",
+        }),
     },
     post: {
         "/debug/active_user": documentCallback({

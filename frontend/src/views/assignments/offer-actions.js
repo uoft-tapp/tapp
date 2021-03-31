@@ -9,7 +9,7 @@ import {
     offerForAssignmentWithdraw,
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
-} from "../../api/actions/offers";
+} from "../../api/actions";
 import {
     FaEnvelope,
     FaBan,
@@ -19,6 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../components/action-buttons";
+import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -58,9 +59,23 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
+    const [
+        showWithdrawConfirmation,
+        setShowWithdrawConfirmation,
+    ] = React.useState(false);
+
     function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
+        }
+    }
+    function confirmOfferWithdraw() {
+        // if withdrawing multiple offers at once, show confirmation
+        if (selectedAssignments?.length > 1) {
+            setShowWithdrawConfirmation(true);
+        } else {
+            // does not need confirmation if only withdrawing one offer
+            withdrawOffers();
         }
     }
     function withdrawOffers() {
@@ -114,7 +129,7 @@ function OfferActionButtons(props) {
             </ActionButton>
             <ActionButton
                 icon={<FaUserTimes />}
-                onClick={withdrawOffers}
+                onClick={confirmOfferWithdraw}
                 disabled={!actionPermitted.canWithdraw}
             >
                 Withdraw Offer
@@ -147,6 +162,12 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
+            <MultiWithdrawOfferConfirmation
+                data={selectedAssignments}
+                visible={showWithdrawConfirmation}
+                setVisible={setShowWithdrawConfirmation}
+                withdrawOffers={withdrawOffers}
+            />
         </React.Fragment>
     );
 }

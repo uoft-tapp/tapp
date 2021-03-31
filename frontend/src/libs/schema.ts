@@ -1,3 +1,6 @@
+// a collection of key-mapping between imported JSON keys/ Spreadsheet Column names and
+// actual keys of an object
+
 export interface NormalizationSchema<T extends string[]> {
     keys: T;
     keyMap: Record<string, T[number]>;
