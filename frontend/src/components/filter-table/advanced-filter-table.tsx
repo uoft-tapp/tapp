@@ -32,13 +32,7 @@ import "./filter-table.css";
  *     filterable?: boolean | null;
  *     selected?: any[];
  *     setSelected?: Function;
- * })} {
- *     columns,
- *     data,
- *     filterable = null,
- *     selected,
- *     setSelected,
- * }
+ * })} 
  * @returns
  */
 export function AdvancedFilterTable({
@@ -175,8 +169,6 @@ export function AdvancedFilterTable({
                 <div {...table.getTableBodyProps()} className="tbody">
                     <AutoSizer>
                         {({ height }) => {
-                            // Don't let the table get too short no matter what
-                            //height = Math.max(height, 300);
                             return (
                                 <FixedSizeList
                                     height={height}
