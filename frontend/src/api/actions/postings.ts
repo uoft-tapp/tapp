@@ -331,17 +331,19 @@ export const postingPositionsSelector = createSelector(
     positionsSelector,
     (postingPositionsState, postingsState, positions) => {
         const rawPostingPositions = postingPositionsState._modelData;
-        return postingsState._modelData
-            .map((rawPosting) =>
-                combinePostingAndPostingPosition(
-                    rawPosting,
-                    rawPostingPositions,
-                    positions
+        return (
+            postingsState._modelData
+                .map((rawPosting) =>
+                    combinePostingAndPostingPosition(
+                        rawPosting,
+                        rawPostingPositions,
+                        positions
+                    )
                 )
-            )
-            .map((processed) => processed.postingPositions)
-            // A PostingPosition is uniquely determined by its Position and Posting, so
-            // it is impossible to have duplicates when we call `.flat()`
-            .flat();
+                .map((processed) => processed.postingPositions)
+                // A PostingPosition is uniquely determined by its Position and Posting, so
+                // it is impossible to have duplicates when we call `.flat()`
+                .flat()
+        );
     }
 );
