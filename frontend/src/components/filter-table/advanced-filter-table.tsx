@@ -32,7 +32,7 @@ import "./filter-table.css";
  *     filterable?: boolean | null;
  *     selected?: any[];
  *     setSelected?: Function;
- * })} 
+ * })}
  * @returns
  */
 export function AdvancedFilterTable({
