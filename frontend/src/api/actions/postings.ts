@@ -129,6 +129,19 @@ export const deletePosting = validatedApiDispatcher({
     },
 });
 
+export const fetchSurvey = validatedApiDispatcher({
+    name: "fetchSurvey",
+    description: "Fetch the survey associated with a posting",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload: HasId) => async (_dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = (await apiGET(
+            `/${role}/postings/${payload.id}/survey`
+        )) as any;
+        return data;
+    },
+});
+
 // PostingPosition dispatchers
 export const fetchPostingPositions = validatedApiDispatcher({
     name: "fetchPostingPositions",

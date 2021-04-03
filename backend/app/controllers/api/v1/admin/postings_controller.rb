@@ -27,6 +27,13 @@ class Api::V1::Admin::PostingsController < ApplicationController
         )
     end
 
+    # GET /postions/:posting_id/survey
+    def survey
+        posting = Posting.find(params[:posting_id])
+        posting_service = PostingService.new(posting: posting)
+        render_success posting_service.survey
+    end
+
     private
 
     def find_session
@@ -56,25 +63,33 @@ class Api::V1::Admin::PostingsController < ApplicationController
     end
 
     def posting_update_params
-        params.slice(
-            :name,
-            :open_date,
-            :close_date,
-            :intro_text,
-            :custom_questions,
-            :availability
-        ).permit!
+        filtered_params =
+            params.slice(
+                :name,
+                :open_date,
+                :close_date,
+                :intro_text,
+                :custom_questions,
+                :availability
+            ).permit!
+        filtered_params[:custom_questions] =
+            filtered_params[:custom_questions].to_json
+        filtered_params
     end
 
     def posting_insert_params
-        params.slice(
-            :session_id,
-            :name,
-            :open_date,
-            :close_date,
-            :intro_text,
-            :custom_questions,
-            :availability
-        ).permit!
+        filtered_params =
+            params.slice(
+                :session_id,
+                :name,
+                :open_date,
+                :close_date,
+                :intro_text,
+                :custom_questions,
+                :availability
+            ).permit!
+        filtered_params[:custom_questions] =
+            filtered_params[:custom_questions].to_json
+        filtered_params
     end
 end

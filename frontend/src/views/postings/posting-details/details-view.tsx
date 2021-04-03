@@ -1,15 +1,19 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { Button, Container, Modal, Row, Alert } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Column } from "react-table";
 import {
     deletePostingPosition,
     positionsSelector,
+    upsertPosting,
     upsertPostingPosition,
 } from "../../../api/actions";
 import { Posting, PostingPosition } from "../../../api/defs/types";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { arrayDiff, formatDate } from "../../../libs/utils";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 interface PostingPositionRow {
     id: number;
@@ -21,6 +25,42 @@ interface PostingPositionRow {
     hours: number | null;
     true_posting_position: boolean;
 }
+
+const emptyCustomQuestions = {
+    pages: [
+        {
+            name: "page1",
+        },
+    ],
+};
+
+/**
+ * Validate JSON to be in the format expected for
+ * extra posting questions.
+ *
+ * @param {string} json
+ * @returns
+ */
+function validateJson(json: string) {
+    try {
+        const parsed = JSON.parse(json);
+        if (Array.isArray(parsed?.pages)) {
+            return { valid: true, message: "" };
+        }
+        return {
+            valid: false,
+            message:
+                'Expected the root of the JSON object to be `{ "pages": [...] }`',
+        };
+    } catch (e) {
+        return {
+            valid: false,
+            message:
+                "The JSON data is not formatted correctly. (" + e.message + ")",
+        };
+    }
+}
+
 const DEFAULT_COLUMNS: Column<PostingPositionRow>[] = [
     {
         Header: generateHeaderCell("Position Code"),
@@ -37,7 +77,18 @@ const DEFAULT_COLUMNS: Column<PostingPositionRow>[] = [
 ];
 
 export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
-    const dispatch = useDispatch();
+    const dispatch = useThunkDispatch();
+    const [customQuestions, setCustomQuestions] = React.useState(
+        JSON.stringify(
+            posting.custom_questions || emptyCustomQuestions,
+            null,
+            4
+        )
+    );
+    const [customQuestionsVisible, setCustomQuestionsVisible] = React.useState(
+        false
+    );
+    const customQuestionsValid = validateJson(customQuestions);
     const posting_id = posting.id;
     const positions = useSelector(positionsSelector);
     const { postingPositions, tableData, selected } = React.useMemo(() => {
@@ -108,6 +159,28 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         [selected, positions, postingPositions, posting, dispatch]
     );
 
+    const updateCustomQuestions = React.useCallback(
+        async (customQuestions) => {
+            try {
+                await dispatch(
+                    upsertPosting({
+                        id: posting.id,
+                        custom_questions: JSON.parse(customQuestions),
+                    })
+                );
+            } catch (e) {}
+        },
+        [dispatch, posting]
+    );
+
+    let numCustomQuestions = 0;
+    if (Array.isArray(posting.custom_questions?.pages)) {
+        for (const page of posting.custom_questions.pages) {
+            numCustomQuestions +=
+                page?.elements?.length || page?.questions?.length || 0;
+        }
+    }
+
     return (
         <React.Fragment>
             <table>
@@ -137,6 +210,81 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                 selected={selected}
                 setSelected={selectionChange}
             />
+            <h4>Custom Questions</h4>
+            <p>There are currently {numCustomQuestions} custom questions.</p>
+            <Button onClick={() => setCustomQuestionsVisible(true)}>
+                Edit Custom Questions
+            </Button>
+            <Modal
+                show={customQuestionsVisible}
+                onHide={() => setCustomQuestionsVisible(false)}
+                size="xl"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Custom Questions</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        <Row>
+                            <p>
+                                To edit custom survey questions, please go to{" "}
+                                <a
+                                    href="https://surveyjs.io/create-survey"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    surveyjs.io/create-survey
+                                </a>{" "}
+                                and click the <em>JSON Editor</em> tab. You may
+                                then copy and paste the text below into the JSON
+                                editor and switch to the{" "}
+                                <em>Survey Designer</em> tab. When you are done,
+                                switch back to the <em>JSON Editor</em> tab and
+                                copy-and-paste the JSON data below.
+                            </p>
+                        </Row>
+                        <Row className="mb-2">
+                            <CopyToClipboard text={customQuestions}>
+                                <Button>Copy Custom Questions</Button>
+                            </CopyToClipboard>
+                        </Row>
+                        <Row>
+                            <textarea
+                                style={{ width: "100%", minHeight: "20em" }}
+                                value={customQuestions}
+                                onChange={(e) =>
+                                    setCustomQuestions(e.target.value)
+                                }
+                            ></textarea>
+                        </Row>
+                        <Row>
+                            {!customQuestionsValid.valid && (
+                                <Alert variant="danger">
+                                    {customQuestionsValid.message}
+                                </Alert>
+                            )}
+                        </Row>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={() => setCustomQuestionsVisible(false)}
+                        variant="light"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        title="Save"
+                        disabled={!customQuestionsValid.valid}
+                        onClick={async () => {
+                            await updateCustomQuestions(customQuestions);
+                            setCustomQuestionsVisible(false);
+                        }}
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </React.Fragment>
     );
 }

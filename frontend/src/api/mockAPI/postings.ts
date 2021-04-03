@@ -34,6 +34,13 @@ export const postingRoutes = {
             summary: "Get a single posting",
             returns: docApiPropTypes.posting,
         }),
+        "/postings/:posting_id/survey": documentCallback({
+            func: () => {
+                throw new Error("Not implemented");
+            },
+            summary: "Get the survey associated with a posting",
+            returns: wrappedPropTypes.any,
+        }),
         "/posting_positions/:posting_position_id": documentCallback({
             func: () => {
                 throw new Error("Not implemented");
