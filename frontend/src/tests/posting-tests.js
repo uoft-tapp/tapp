@@ -12,11 +12,18 @@ export function postingTests(api = { apiGET, apiPOST }) {
     it.todo("Modify a posting");
     it.todo("Cannot set the `status` of a posting to an invalid value");
     it.todo("Fetch all postings for a session");
+    it.todo(
+        "Can set `custom_questions` to an arbitrary serializable object and the same object (i.e., an object and not the stringified version) gets returned."
+    );
     it.todo("Two postings for the same session cannot have the same name");
     it.todo("Two postings for different sessions may have the same name");
     it.todo("Create a posting_position for a posting");
     it.todo("A posting contains a list of all associated posting_position ids");
     it.todo("A posting contains a list of all associated application ids");
+    it.todo("Fetch a survey for a posting");
+    it.todo(
+        "Survey for a posting includes questions related to each PostingPosition"
+    );
     it.todo(
         "Cannot create a posting_position with a position associated with a different session than the posting"
     );

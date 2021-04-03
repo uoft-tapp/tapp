@@ -1,11 +1,12 @@
 import React from "react";
+import { useRouteMatch } from "react-router";
 import { Header } from "../../components/header";
 import {
     ConnectedActiveSessionDisplay,
     ConnectedActiveUserDisplay,
 } from "../header";
 
-export const routes = [
+export const ROUTES = [
     {
         route: "/session_setup",
         name: "Session Setup",
@@ -62,19 +63,20 @@ export const routes = [
             },
         ],
     },
-    {
-        route: "/postings",
-        name: "Job Postings",
-        description: "Manage and create job postings",
-        subroutes: [
-            {
-                route: "/overview",
-                name: "Overview",
-                description: "Manage Job Postings",
-            },
-        ],
-    },
 ];
+
+const POSTINGS_ROUTES = {
+    route: "/postings",
+    name: "Job Postings",
+    description: "Manage and create job postings",
+    subroutes: [
+        {
+            route: "/overview",
+            name: "Overview",
+            description: "Manage Job Postings",
+        },
+    ],
+};
 
 /**
  * Header showing the routes that a user with `role=admin`
@@ -84,6 +86,39 @@ export const routes = [
  */
 
 function AdminHeader() {
+    const match = useRouteMatch<{ posting_id: string }>(
+        "/postings/:posting_id/"
+    );
+
+    const routes = [...ROUTES];
+
+    // There are routes that are visible only when viewing a posting;
+    // Dynamically insert those.
+    if (
+        match &&
+        match.params?.posting_id &&
+        !isNaN(parseInt("" + match.params.posting_id))
+    ) {
+        const posting_id = match.params.posting_id;
+        const postingRoutes = { ...POSTINGS_ROUTES };
+        postingRoutes.subroutes = [
+            ...postingRoutes.subroutes,
+            {
+                route: `/${posting_id}/details`,
+                name: "Details",
+                description: "Edit/View Details of a Job Postings",
+            },
+            {
+                route: `/${posting_id}/preview`,
+                name: "Preview",
+                description: "Preview a Job Postings",
+            },
+        ];
+        routes.push(postingRoutes);
+    } else {
+        routes.push(POSTINGS_ROUTES);
+    }
+
     return (
         <Header
             routes={routes}

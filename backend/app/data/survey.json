@@ -1,0 +1,139 @@
+{
+    "title": "",
+    "pages": [
+        {
+            "name": "profile_page",
+            "elements": [
+                {
+                    "type": "text",
+                    "name": "first_name",
+                    "title": "First Name",
+                    "isRequired": true
+                },
+                {
+                    "type": "text",
+                    "name": "last_name",
+                    "title": "Last Name (Family Name)",
+                    "isRequired": true
+                },
+                {
+                    "type": "text",
+                    "name": "email",
+                    "title": "Email",
+                    "inputType": "email",
+                    "isRequired": true
+                },
+                {
+                    "type": "text",
+                    "name": "question2",
+                    "title": "Cell Phone"
+                },
+                {
+                    "type": "text",
+                    "name": "student_number",
+                    "title": "U of T Student Number"
+                },
+                {
+                    "type": "text",
+                    "name": "utorid",
+                    "title": "UTORid",
+                    "isRequired": true,
+                    "readOnly": true,
+                    "placeHolder": "XXX"
+                }
+            ]
+        },
+        {
+            "name": "status_page",
+            "elements": [
+                {
+                    "type": "dropdown",
+                    "name": "status",
+                    "title": "At the start of the next academic term, your status at the University of Toronto will be...",
+                    "isRequired": true,
+                    "choices": [
+                        {
+                            "value": "P",
+                            "text": "PhD Student"
+                        },
+                        {
+                            "value": "M",
+                            "text": "Masters Student"
+                        },
+                        {
+                            "value": "U",
+                            "text": "Undergraduate Student"
+                        }
+                    ],
+                    "hasOther": true
+                },
+                {
+                    "type": "text",
+                    "name": "program_start",
+                    "title": "When did you start your program?",
+                    "isRequired": true,
+                    "inputType": "date"
+                },
+                {
+                    "type": "dropdown",
+                    "name": "department",
+                    "title": "What is your program of study?",
+                    "isRequired": true,
+                    "choices": [
+                        {
+                            "value": "math",
+                            "text": "Mathematics/Applied Mathematics"
+                        },
+                        {
+                            "value": "cs",
+                            "text": "Computer Science"
+                        },
+                        {
+                            "value": "engr",
+                            "text": "Engineering"
+                        },
+                        {
+                            "value": "phys",
+                            "text": "Physics"
+                        },
+                        {
+                            "value": "stat",
+                            "text": "Statistics"
+                        }
+                    ],
+                    "hasOther": true
+                },
+                {
+                    "type": "file",
+                    "name": "transcripts",
+                    "visibleIf": "{status} = 'U'",
+                    "title": "Please upload your unofficial transcript(s).",
+                    "isRequired": true,
+                    "allowMultiple": true,
+                    "maxSize": 5242880
+                }
+            ]
+        },
+        {
+            "name": "preferences_page",
+            "elements": [
+                {
+                    "type": "matrix",
+                    "name": "position_preferences",
+                    "title": "Please rank your preferences for the available positions.",
+                    "cellType": "rating",
+                    "columns": [
+                        { "value": 3, "text": "High" },
+                        { "value": 2, "text": "Medium" },
+                        { "value": 1, "text": "Low" },
+                        { "value": 0, "text": "N/A" },
+                        { "value": -1, "text": "Strong Preference Against" }
+                    ],
+                    "rows": [
+                        { "text": "Example Course", "value": "EXAMPLE_COURSE" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

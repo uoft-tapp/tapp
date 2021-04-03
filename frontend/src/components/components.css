@@ -106,3 +106,25 @@
     margin-right: 0.8em;
     margin-bottom: 0.3em;
 }
+
+.details-button-container {
+    text-align: center;
+}
+
+.details-row-button.disabled,
+.details-row-button.disabled:hover {
+    color: rgb(180, 180, 180);
+    cursor: default;
+}
+
+.details-row-button {
+    transition: color 0.2s;
+    cursor: pointer;
+}
+.details-row-button:hover {
+    color: var(--primary);
+}
+
+.details-row-column-header-icon {
+    color: var(--primary);
+}

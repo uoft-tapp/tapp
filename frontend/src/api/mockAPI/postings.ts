@@ -13,6 +13,13 @@ export const postingRoutes = {
             summary: "Get all postings associated with a session",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.posting),
         }),
+        "/sessions/:session_id/posting_positions": documentCallback({
+            func: () => {
+                throw new Error("Not implemented");
+            },
+            summary: "Get all posting_positions associated with a session",
+            returns: wrappedPropTypes.arrayOf(docApiPropTypes.posting_position),
+        }),
         "/postings/:posting_id/posting_positions": documentCallback({
             func: () => {
                 throw new Error("Not implemented");
@@ -26,6 +33,13 @@ export const postingRoutes = {
             },
             summary: "Get a single posting",
             returns: docApiPropTypes.posting,
+        }),
+        "/postings/:posting_id/survey": documentCallback({
+            func: () => {
+                throw new Error("Not implemented");
+            },
+            summary: "Get the survey associated with a posting",
+            returns: wrappedPropTypes.any,
         }),
         "/posting_positions/:posting_position_id": documentCallback({
             func: () => {
