@@ -194,7 +194,9 @@ Rails
                             # XXX For some reasong `index` doesn't work for a `posting_position`, only
                             # `show`. I don't know why...Ideally we should be using `index`.
                             resource :posting_positions, only: %i[show create]
-                            resource :survey, to: 'postings#survey'
+                            resource :survey,
+                                     to: 'postings#survey',
+                                     only: %i[show]
                         end
 
                         # PostingPositions
