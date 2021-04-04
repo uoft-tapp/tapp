@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import { DevFrame as _DevFrame } from "./views/dev_frame";
 import App from "./App";
 import configureStore from "./store";
 
@@ -14,11 +13,24 @@ const { store, persistor } = configureStore();
 let DevFrame = function (props) {
     return <React.Fragment>{props.children}</React.Fragment>;
 };
-/* eslint-disable */
 if (process.env.REACT_APP_DEV_FEATURES) {
-    DevFrame = _DevFrame;
+    // We only want to load the dev frame parts if they are needed,
+    // so we use React.lazy to load them on demand.
+    const FullDevFrame = React.lazy(async () =>
+        import("./views/dev_frame").then((module) => ({
+            // Because `React.lazy` expects a default export, we need to fake
+            // the default export in the case of a named export.
+            default: module.DevFrame,
+        }))
+    );
+    DevFrame = function (props) {
+        return (
+            <React.Suspense fallback="Loading...">
+                <FullDevFrame>{props.children}</FullDevFrame>
+            </React.Suspense>
+        );
+    };
 }
-/* eslint-enable */
 
 const render = (Component) => {
     return ReactDOM.render(

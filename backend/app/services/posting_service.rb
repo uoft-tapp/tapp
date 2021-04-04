@@ -15,6 +15,7 @@ class PostingService
 
         # Set the global survey title
         fixed_survey['title'] = @posting.name
+        fixed_survey['description'] = @posting.intro_text
 
         # Find the preferences page and set a preference for each PostingPosition
         preferences_page =

@@ -210,7 +210,7 @@ export function ConnectedOfferTable(props) {
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
                 Cell: ({ value }) => (value ? value : null),
-                maxWidth: 100,
+                maxWidth: 30,
             },
         ];
     }, [dispatch, editable]);

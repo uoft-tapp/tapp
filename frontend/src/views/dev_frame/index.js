@@ -7,7 +7,7 @@ import "./main.css";
 import { Navbar, Nav } from "react-bootstrap";
 import { ToggleMockApi } from "./mockAPI";
 
-import SwaggerUI from "swagger-ui-react";
+//import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
 import { mockAPI } from "../../api/mockAPI";
@@ -19,6 +19,9 @@ import {
     debugOnlyFetchUsers,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
+
+// We don't need SwaggerUI all the time, so load it lazily.
+const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -140,7 +143,12 @@ function DevFrame(props) {
                 <div id="dev-frame-body-inner">
                     <Switch>
                         <Route path="/api-docs">
-                            <SwaggerUI spec={swaggerData} docExpansion="list" />
+                            <React.Suspense fallback="Loading...">
+                                <SwaggerUI
+                                    spec={swaggerData}
+                                    docExpansion="list"
+                                />
+                            </React.Suspense>
                         </Route>
                         <Route>{props.children}</Route>
                     </Switch>
