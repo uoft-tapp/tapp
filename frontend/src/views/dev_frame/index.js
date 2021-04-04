@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import { NavLink, Switch, Route } from "react-router-dom";
 
 import "./main.css";
+import "../../components/components.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import { ToggleMockApi } from "./mockAPI";
 
-//import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
 import { mockAPI } from "../../api/mockAPI";
@@ -59,11 +60,11 @@ const swaggerData = {
         { url: "/api/v1" },
     ],
     paths: {
-        /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documenation
+        /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documentation
         "/bob": {
             get: {
                 summary: "Bob's summary",
-                tags: ["helful"],
+                tags: ["helpful"],
                 produces: "application/json",
                 responses: {
                     default: {

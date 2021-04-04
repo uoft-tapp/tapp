@@ -8,7 +8,7 @@ import {
     InstructorAssignmentsView,
 } from "../assignments";
 import { AdminContractTemplatesView } from "../contract_template";
-import { Landing } from "../admin/landing.tsx";
+import { Landing } from "../admin-header/landing.tsx";
 import { Landing as InstructorLanding } from "../instructor/landing.tsx";
 import { AdminApplicantsView } from "../applicants";
 import { AdminDdahsView } from "../ddahs";

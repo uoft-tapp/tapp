@@ -3,13 +3,19 @@ import { useSelector } from "react-redux";
 import { initFromStage, activeRoleSelector } from "./api/actions";
 import { ConnectedNotifications } from "./views/notifications";
 import { AdminRoutes, InstructorRoutes } from "./views/routes";
-import { AdminHeader } from "./views/admin";
+import { AdminHeader } from "./views/admin-header";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./main-entry.css";
 import { InstructorHeader } from "./views/instructor";
 import { useThunkDispatch } from "./libs/thunk-dispatch";
 
+/**
+ * This is the entry point for full app for admins/instructors/tas
+ *
+ * @export
+ * @returns
+ */
 export default function ConnectedApp() {
     const activeRole = useSelector(activeRoleSelector);
     const dispatch = useThunkDispatch();
@@ -44,7 +50,7 @@ export default function ConnectedApp() {
         );
     }
     if (activeRole === "ta") {
-        body = "Viewing as TA";
+        body = <div>"Viewing as TA"</div>;
     }
 
     return (

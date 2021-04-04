@@ -3,14 +3,14 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import App from "./App";
+import DynamicEntryRouter from "./dynamic-entry-router";
 import configureStore from "./store";
 
 const { store, persistor } = configureStore();
 
 // In production, we don't want to wrap the app in a dev frame,
 // but we do want to in development
-let DevFrame = function (props) {
+let DevFrame = function (props: any) {
     return <React.Fragment>{props.children}</React.Fragment>;
 };
 if (process.env.REACT_APP_DEV_FEATURES) {
@@ -32,7 +32,7 @@ if (process.env.REACT_APP_DEV_FEATURES) {
     };
 }
 
-const render = (Component) => {
+const render = (Component: React.ElementType) => {
     return ReactDOM.render(
         <HashRouter>
             <Provider store={store}>
@@ -49,15 +49,15 @@ const render = (Component) => {
     );
 };
 
-render(App);
+render(DynamicEntryRouter);
 
 // Hot module reloading
 // https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642
 
 /*eslint-disable */
-if (module.hot) {
-    module.hot.accept("./App", () => {
-        const NextApp = require("./App").default;
+if ("hot" in module) {
+    (module as any).hot.accept("./dynamic-entry-router", () => {
+        const NextApp = require("./dynamic-entry-router").default;
         render(NextApp);
     });
 }

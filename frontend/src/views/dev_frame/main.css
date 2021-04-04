@@ -1,3 +1,11 @@
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
 #dev-frame {
     width: 100%;
     height: 100%;
@@ -27,5 +35,5 @@
     margin-left: 4px;
 }
 .logged-in-as-container label {
-    margin-right: .5em;
+    margin-right: 0.5em;
 }
