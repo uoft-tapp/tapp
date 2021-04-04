@@ -245,6 +245,7 @@ Rails
             # setting format to `nil` makes :format an optional url param
             resources :contracts, only: %i[show], format: nil do
                 get :view, format: false, to: 'contracts#view'
+                get :details, format: false, to: 'contracts#details'
                 post :accept, format: false, to: 'contracts#accept'
                 post :reject, format: false, to: 'contracts#reject'
             end

@@ -30,6 +30,14 @@ export const publicRoutes = {
             summary: "View an offer with an accept dialog",
             returns: {},
         }),
+        "/public/contracts/:token/details": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary:
+                "Get a JSON object with all the details about the offer",
+            returns: {},
+        }),
     },
     post: {
         "/public/ddahs/:ddah_id/accept": documentCallback({

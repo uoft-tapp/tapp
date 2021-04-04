@@ -1,8 +1,8 @@
 tmp
 .idea
-public
 .env
 node_modules
+backend/public
 .byebug_history
 .DS_Store
 pg_data/*

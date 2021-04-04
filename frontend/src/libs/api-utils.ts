@@ -84,16 +84,20 @@ async function _processFetchResponse(resp: Response, path: string) {
  * want type inference when using template literals, you must declare the template literal `as const`
  * (e.g. ``apiGET(`/sessions` as const)``).
  *
+ * If `omitPrefix == true`, then `/api/v1` will not be prepended to the start of
+ * the request.
+ *
  * @param path
  * @returns Promise containing the processed JSON response
  * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
 async function apiGET<Path extends string, Ret = ApiGetReturnType<Path>>(
-    path: Path
+    path: Path,
+    omitPrefix = false
 ): Promise<Ret> {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path) as Path;
-    const resp = await fetch(API_URL + path, {
+    const resp = await fetch((omitPrefix ? "" : API_URL) + path, {
         ...FETCH_INIT,
         method: "GET",
     });
@@ -101,17 +105,18 @@ async function apiGET<Path extends string, Ret = ApiGetReturnType<Path>>(
 }
 
 /**
- * Do a POST request on the specified api route
+ * Do a POST request on the specified api route. If `omitPrefix == true`, `/api/v1` will
+ * not be inserted at the front of the URL
  *
  * @param path
  * @param  [body={}]
  * @returns Promise containing the processed JSON response
  * @throws {(ApiError|ApiFetchError|Error)} Throws an error if the fetch fails or returns with `status==="error"`
  */
-async function apiPOST(path: string, body: any = {}) {
+async function apiPOST(path: string, body: any = {}, omitPrefix = false) {
     // remove a leading "/" if there is one in `path`
     path = _ensurePath(path);
-    const resp = await fetch(API_URL + path, {
+    const resp = await fetch((omitPrefix ? "" : API_URL) + path, {
         ...FETCH_INIT,
         method: "POST",
         body: JSON.stringify(body),
