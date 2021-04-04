@@ -53,6 +53,7 @@
 .page-actions {
     height: 100%;
     overflow: auto;
+    min-width: 13em;
 }
 
 .action-accordion {
