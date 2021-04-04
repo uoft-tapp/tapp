@@ -60,15 +60,6 @@ export function formatDate(dateString: string): string {
  * @param {string} url
  */
 let formatDownloadUrl = (url: string) => url;
-if (process.env.REACT_APP_DEV_FEATURES) {
-    formatDownloadUrl = (url: string) => {
-        const newUrl = new URL(url, window.location.href);
-        if (newUrl.port === "8000") {
-            newUrl.port = "3000";
-        }
-        return newUrl.href;
-    };
-}
 
 export { formatDownloadUrl };
 

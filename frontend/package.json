@@ -72,6 +72,7 @@
     "browserslist": [],
     "devDependencies": {
         "axios": "^0.21.1",
+        "http-proxy-middleware": "^1.1.0",
         "redux-devtools-extension": "^2.13.8",
         "typescript-json-schema": "^0.50.0"
     }
