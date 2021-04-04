@@ -3,7 +3,7 @@ import { Header } from "../../components/header";
 import {
     ConnectedActiveSessionDisplay,
     ConnectedActiveUserDisplay,
-} from "../header";
+} from "../common/header-components";
 
 export const routes = [
     {

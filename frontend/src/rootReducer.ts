@@ -1,7 +1,7 @@
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
-import offerTableReducer from "./views/offertable/reducers";
+import offerTableReducer from "./views/admin/offertable/reducers";
 import {
     statusReducer,
     sessionsReducer,
@@ -16,7 +16,7 @@ import {
     postingPositionsReducer,
 } from "./api/reducers";
 import { usersReducer } from "./api/reducers/users";
-import ddahsTableReducer from "./views/ddah-table/reducers";
+import ddahsTableReducer from "./views/admin/ddah-table/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.

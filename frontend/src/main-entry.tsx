@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { initFromStage, activeRoleSelector } from "./api/actions";
-import { ConnectedNotifications } from "./views/notifications";
-import { AdminRoutes, InstructorRoutes } from "./views/routes";
-import { AdminHeader } from "./views/admin-header";
+import { ConnectedNotifications } from "./views/common/notifications";
+import { AdminRoutes } from "./views/admin/routes";
+import { InstructorRoutes } from "./views/instructor/routes";
+import { AdminHeader } from "./views/admin/admin-header";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./main-entry.css";
