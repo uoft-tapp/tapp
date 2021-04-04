@@ -457,7 +457,7 @@ export function ConnectedDdahsTable() {
         {
             Header: generateHeaderCell("Approved"),
             accessor: "approved",
-            maxWidth: 100,
+            maxWidth: 50,
             Cell: ({ value }: any) =>
                 value ? (
                     <div className="accepted-ddah">
