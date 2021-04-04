@@ -279,6 +279,7 @@ function combinePostingAndPostingPosition(
     const positionsMap = new Map(
         positions.map((position) => [position.id, position])
     );
+    // eslint-disable-next-line
     const [partialPosting, _postingRest] = splitObjByProps(rawPosting, [
         "application_ids",
         "posting_position_ids",
