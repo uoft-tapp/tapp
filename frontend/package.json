@@ -71,7 +71,6 @@
     },
     "browserslist": [],
     "devDependencies": {
-        "@typescript-eslint/parser": "^4.20.0",
         "axios": "^0.21.1",
         "redux-devtools-extension": "^2.13.8",
         "typescript-json-schema": "^0.50.0"
