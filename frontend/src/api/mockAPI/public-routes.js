@@ -34,8 +34,7 @@ export const publicRoutes = {
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },
-            summary:
-                "Get a JSON object with all the details about the offer",
+            summary: "Get a JSON object with all the details about the offer",
             returns: {},
         }),
     },
