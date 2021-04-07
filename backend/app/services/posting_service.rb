@@ -98,18 +98,23 @@ class PostingService
         # to only positions that are actually associated with this posting
         # through a PostingPosition
         position_preferences_attributes =
-            PostingPosition.joins(:position).where(
-                position: { position_code: position_preferences_hash.keys },
-                posting: @posting
-            ).pluck('position.id', 'position.position_code')
-                .map do |(position_id, position_code)|
-                {
-                    position_id: position_id,
-                    preference_level: position_preferences_hash[position_code],
-                    # These are needed so we can use the upsert method
-                    created_at: DateTime.now,
-                    updated_at: DateTime.now
-                }
+            if position_preferences_hash
+                PostingPosition.joins(:position).where(
+                    position: { position_code: position_preferences_hash.keys },
+                    posting: @posting
+                ).pluck('position.id', 'position.position_code')
+                    .map do |(position_id, position_code)|
+                    {
+                        position_id: position_id,
+                        preference_level:
+                            position_preferences_hash[position_code],
+                        # These are needed so we can use the upsert method
+                        created_at: DateTime.now,
+                        updated_at: DateTime.now
+                    }
+                end
+            else
+                []
             end
 
         # Find if there's an existing applicant and associated application.
@@ -132,12 +137,14 @@ class PostingService
             @applicant.save!
             application = @applicant.applications.find_by(posting: @posting)
             # upsert_all will very efficiently upsert all the position preferences.
-            PositionPreference.upsert_all(
-                @position_preferences_attributes.map do |a|
-                    a.merge({ application_id: application.id })
-                end,
-                unique_by: %i[position_id application_id]
-            )
+            unless @position_preferences_attributes.blank?
+                PositionPreference.upsert_all(
+                    @position_preferences_attributes.map do |a|
+                        a.merge({ application_id: application.id })
+                    end,
+                    unique_by: %i[position_id application_id]
+                )
+            end
         end
     end
 

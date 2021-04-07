@@ -107,7 +107,7 @@
                 {
                     "type": "file",
                     "name": "transcripts",
-                    "visibleIf": "{status} = 'U'",
+                    "visibleIf": "{program} = 'U'",
                     "title": "Please upload your unofficial transcript(s).",
                     "isRequired": true,
                     "allowMultiple": true,

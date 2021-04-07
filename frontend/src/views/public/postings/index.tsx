@@ -4,6 +4,7 @@ import { apiGET, apiPOST } from "../../../libs/api-utils";
 import * as Survey from "survey-react";
 //import "survey-react/survey.css";
 import "./survey.css";
+import { Button, Modal, Spinner } from "react-bootstrap";
 
 // XXX This is a temporary function to make all questions optional during debugging
 function stripIsRequired(obj: any) {
@@ -19,6 +20,10 @@ export function PostingView() {
     const [surveyPrefilledData, setSurveyPrefilledData] = React.useState<any>(
         null
     );
+    const [surveyData, setSurveyData] = React.useState<any>(null);
+    const [submitDialogVisible, setSubmitDialogVisible] = React.useState(false);
+    const [hasSubmitted, setHasSubmitted] = React.useState(false);
+    const [waiting, setWaiting] = React.useState(false);
 
     React.useEffect(() => {
         if (url_token == null) {
@@ -39,6 +44,31 @@ export function PostingView() {
         fetchSurvey();
     }, [url_token, setSurveyJson, setSurveyPrefilledData]);
 
+    const survey = React.useMemo(() => {
+        Survey.StylesManager.applyTheme("bootstrap");
+        Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
+        const survey = new Survey.Model(surveyJson);
+        survey.showPreviewBeforeComplete = "showAnsweredQuestions";
+        survey.showQuestionNumbers = "off";
+
+        // The utorid is auto-filled when the user is actually taking a survey.
+        survey.data = surveyData || surveyPrefilledData;
+
+        return survey;
+    }, [surveyJson, surveyData, surveyPrefilledData]);
+
+    React.useEffect(() => {
+        // We only want to add this callback once when the survey is initialized
+        survey.onCompleting.add((result, options) => {
+            if (!hasSubmitted) {
+                options.allowComplete = false;
+                setSurveyData(result.data);
+                setSubmitDialogVisible(true);
+                setTimeout(() => survey.showPreview(), 0);
+            }
+        });
+    }, [survey, setSurveyData, setSubmitDialogVisible]);
+
     if (url_token == null) {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
     }
@@ -47,17 +77,59 @@ export function PostingView() {
         return <React.Fragment>Loading...</React.Fragment>;
     }
 
-    Survey.StylesManager.applyTheme("bootstrap");
-    Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-    const survey = new Survey.Model(surveyJson);
-    survey.showPreviewBeforeComplete = "showAnsweredQuestions";
-    survey.showQuestionNumbers = "off";
-    survey.onComplete.add((result) =>
-        console.log("GOT SURVEY RESULTS", result.data)
+    async function confirmClicked() {
+        console.log("Submitting data", surveyData);
+        try {
+            setWaiting(true);
+            await apiPOST(
+                `/public/postings/${url_token}/submit`,
+                { answers: surveyData },
+                true
+            );
+            setHasSubmitted(true);
+            survey.doComplete();
+            setSurveyData(surveyPrefilledData);
+            setSubmitDialogVisible(false);
+        } catch (e) {
+            console.warn(e);
+        } finally {
+            setWaiting(false);
+        }
+    }
+
+    function hideDialogAndResetData() {
+        survey.data = surveyData || survey.data;
+        setHasSubmitted(false);
+        setSubmitDialogVisible(false);
+    }
+
+    return (
+        <React.Fragment>
+            <Survey.Survey model={survey} />
+            <Modal show={submitDialogVisible} onHide={hideDialogAndResetData}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Submit Application</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to submit this TA application?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={hideDialogAndResetData}
+                    >
+                        Cancel
+                    </Button>
+                    <Button onClick={confirmClicked}>
+                        {waiting ? (
+                            <span className="spinner-surround">
+                                <Spinner animation="border" size="sm" />
+                            </span>
+                        ) : null}
+                        submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </React.Fragment>
     );
-
-    // The utorid is auto-filled when the user is actually taking a survey.
-    survey.data = surveyPrefilledData;
-
-    return <Survey.Survey model={survey} />;
 }
