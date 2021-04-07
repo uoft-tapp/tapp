@@ -67,7 +67,7 @@ export function PostingView() {
                 setTimeout(() => survey.showPreview(), 0);
             }
         });
-    }, [survey, setSurveyData, setSubmitDialogVisible]);
+    }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
 
     if (url_token == null) {
         return <React.Fragment>Unknown URL token.</React.Fragment>;
