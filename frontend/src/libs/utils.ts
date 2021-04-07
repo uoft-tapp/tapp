@@ -60,12 +60,6 @@ export function formatDate(dateString: string): string {
  * @param {string} url
  */
 let formatDownloadUrl = (url: string) => url;
-if (process.env.REACT_APP_DEV_FEATURES) {
-    formatDownloadUrl = (url: string) => {
-        url = new URL(url, window.location.href).href;
-        return url.replace("localhost:8000", "localhost:3000");
-    };
-}
 
 export { formatDownloadUrl };
 
