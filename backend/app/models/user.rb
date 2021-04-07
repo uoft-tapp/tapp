@@ -18,19 +18,12 @@ class User < ApplicationRecord
 
     def computed_roles
         # Every user has the TA role
-        calculated_roles = if roles.include? 'ta'
-                               roles
-                           else
-                               roles + %w[ta]
-                           end
-
-        calculated_roles += %w[instructor] if Instructor.find_by(utorid: utorid)
+        calculated_roles = roles + [:ta]
+        calculated_roles += [:instructor] if Instructor.find_by(utorid: utorid)
         # Check if they are listed as an instructor for any course
-        if Rails.application.config.always_admin.include?(utorid)
-            calculated_roles += %w[admin]
-        end
+        calculated_roles += [:admin] if Rails.application.config.always_admin.include?(utorid)
 
-        calculated_roles
+        calculated_roles.uniq
     end
 end
 
