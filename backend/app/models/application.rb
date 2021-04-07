@@ -2,14 +2,13 @@
 
 # A class representing an application of an applicant.
 class Application < ApplicationRecord
-    has_many :position_preferences
+    has_many :position_preferences, dependent: :destroy
     has_many :positions, through: :position_preferences
     belongs_to :applicant
     belongs_to :session
     belongs_to :posting, optional: true
 
-    scope :by_session,
-          ->(session_id) { where(session_id: session_id) }
+    scope :by_session, ->(session_id) { where(session_id: session_id) }
 
     def applicant_data_for_matching
         applicant.applicant_data_for_matching

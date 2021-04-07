@@ -1,5 +1,6 @@
 {
     "title": "",
+    "showProgressBar": "top",
     "pages": [
         {
             "name": "profile_page",
@@ -25,7 +26,7 @@
                 },
                 {
                     "type": "text",
-                    "name": "question2",
+                    "name": "phone",
                     "title": "Cell Phone"
                 },
                 {
@@ -44,11 +45,11 @@
             ]
         },
         {
-            "name": "status_page",
+            "name": "program_page",
             "elements": [
                 {
                     "type": "dropdown",
-                    "name": "status",
+                    "name": "program",
                     "title": "At the start of the next academic term, your status at the University of Toronto will be...",
                     "isRequired": true,
                     "choices": [

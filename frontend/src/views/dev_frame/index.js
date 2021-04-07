@@ -58,6 +58,7 @@ const swaggerData = {
         { url: "/api/v1/instructor" },
         { url: "/api/v1/ta" },
         { url: "/api/v1" },
+        { url: "/" },
     ],
     paths: {
         /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documentation

@@ -253,6 +253,9 @@ Rails
                 get :view, format: false, to: 'ddahs#view'
                 post :accept, format: false, to: 'ddahs#accept'
             end
+            resources :postings, only: %i[show] do
+                post :submit, to: 'postings#submit'
+            end
         end
 
         # Catch all other route requests and deliver a standard error payload.

@@ -1,7 +1,8 @@
 * {
     box-sizing: border-box;
 }
-#app-body {
+#app-body,
+.contract-page {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -19,57 +20,66 @@ body {
     display: flex;
     flex-direction: column;
 }
-.header,
-.content,
-.footer {
+.contract-page .header,
+.contract-page .content,
+.contract-page .footer {
     position: relative;
 }
-.header {
+
+.contract-page .header {
     padding: 5px;
     background-color: #313131;
     color: white;
     z-index: 100;
 }
-.header h1 {
+
+.contract-page .header h1 {
     margin: 0;
     text-align: center;
     font-size: larger;
 }
-#logout {
+
+.contract-page #logout {
     float: right;
 }
-.content {
+
+.contract-page .content {
     flex-grow: 1;
     background-color: #f2f5f5;
     display: flex;
     flex-direction: row;
 }
-.footer {
+
+.contract-page .footer {
     background-color: #bcbcbc;
 }
-.footer p {
+
+.contract-page .footer p {
     padding: 8px;
     margin: 0px;
 }
 
-.accept,
-.accepted {
+.contract-page .accept,
+.contract-page .accepted {
     color: #008e00;
 }
-.reject,
-.rejected {
+
+.contract-page .reject,
+.contract-page .rejected {
     color: #e23400;
 }
-.pending,
-.provisional,
-.withdrawn {
+
+.contract-page .pending,
+.contract-page .provisional,
+.contract-page .withdrawn {
     color: #fda400;
 }
-.capitalize {
+
+.contract-page .capitalize {
     text-transform: capitalize;
 }
 
-input[type="radio"] + label {
+.contract-page input[type="radio"] + label {
     font-weight: bold;
     cursor: pointer;
     display: inline-block;
@@ -79,11 +89,13 @@ input[type="radio"] + label {
     transition: color 0.2s;
     user-select: none;
 }
-input[type="radio"]:focus + label {
+
+.contract-page input[type="radio"]:focus + label {
     outline: thin dotted;
     outline-offset: -3px;
 }
-input[type="radio"] + label::before {
+
+.contract-page input[type="radio"] + label::before {
     content: "";
     display: block;
     text-align: center;
@@ -98,48 +110,60 @@ input[type="radio"] + label::before {
     border: 1px solid black;
     border-radius: 2px;
 }
-input[type="radio"]:disabled + label {
+
+.contract-page input[type="radio"]:disabled + label {
     color: #929292;
 }
-input[type="radio"]:checked + label::before {
+
+.contract-page input[type="radio"]:checked + label::before {
     color: inherit;
     content: "✓";
 }
-input[type="radio"]:checked + label {
+
+.contract-page input[type="radio"]:checked + label {
     color: #008e00;
 }
-input[type="radio"]:checked + label[for="radio-reject"] {
+
+.contract-page input[type="radio"]:checked + label[for="radio-reject"] {
     color: #e23400;
 }
-input[type="radio"] + label:hover {
+
+.contract-page input[type="radio"] + label:hover {
     text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.57);
 }
-input[type="radio"]:not(:disabled) + label:hover::before {
+
+.contract-page input[type="radio"]:not(:disabled) + label:hover::before {
     background-color: #ffffff;
     text-shadow: none;
     box-shadow: 0px 0px 3px 0px rgba(95, 95, 95, 0.55);
 }
-input[type="radio"] {
+
+.contract-page input[type="radio"] {
     width: 0px;
     height: 0px;
     opacity: 0;
     /* display: none; */
     -moz-appearance: unset;
 }
-#radio-accept:checked ~ .signature {
+
+.contract-page #radio-accept:checked ~ .signature {
     opacity: 1;
 }
-#radio-accept:checked ~ .signature input {
+
+.contract-page #radio-accept:checked ~ .signature input {
     display: inline-block;
 }
-#radio-accept:checked ~ .signature .input-placeholder {
+
+.contract-page #radio-accept:checked ~ .signature .input-placeholder {
     display: none;
 }
-.signature input {
+
+.contract-page .signature input {
     display: none;
     width: 20em;
 }
-.signature {
+
+.contract-page .signature {
     opacity: 0;
     flex-basis: 100%;
     transition: opacity 0.3s;
@@ -147,13 +171,14 @@ input[type="radio"] {
     display: flex;
     justify-content: center;
 }
-.decision-container {
+
+.contract-page .decision-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.button {
+.contract-page .button {
     text-decoration: none;
     border: 1px solid transparent;
     user-select: none;
@@ -166,18 +191,21 @@ input[type="radio"] {
     cursor: pointer;
     display: inline-block;
 }
-.button:hover {
+
+.contract-page .button:hover {
     background-color: #00c3ff;
 }
-.button:active {
+
+.contract-page .button:active {
     background-color: #05a0d0;
 }
-.button:focus {
+
+.contract-page .button:focus {
     outline: thin dotted;
     outline-offset: -3px;
 }
 
-input[type="text"] {
+.contract-page input[type="text"] {
     background-color: white;
     line-height: 1.5;
     padding: 0em 0.3em;
@@ -187,10 +215,12 @@ input[type="text"] {
     border-radius: 4px;
     width: 20em;
 }
-input[type="text"]:focus {
+
+.contract-page input[type="text"]:focus {
     border: 1px solid #08b9ef;
 }
-.input-placeholder {
+
+.contract-page .input-placeholder {
     display: inline-block;
     width: 20em;
     background-color: white;
@@ -199,7 +229,8 @@ input[type="text"]:focus {
     border-radius: 4px;
     color: white;
 }
-.decision {
+
+.contract-page .decision {
     position: relative;
     flex-grow: 0;
     flex-basis: 400px;
@@ -208,16 +239,19 @@ input[type="text"]:focus {
     box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.44);
     z-index: 50;
 }
-.decision h3 {
+
+.contract-page .decision h3 {
     font-weight: normal;
     font-size: 1em;
 }
-.contract-view {
+
+.contract-page .contract-view {
     background-color: white;
     flex-grow: 1;
     overflow: hidden;
 }
-iframe {
+
+.contract-page iframe {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -225,16 +259,16 @@ iframe {
 }
 
 @media only screen and (max-width: 1000px) {
-    .content {
+    .contract-page .content {
         flex-direction: column-reverse;
     }
-    .decision {
+    .contract-page .decision {
         flex-basis: auto;
         border: none;
     }
 }
 
-.spinner-surround {
+.contract-page .spinner-surround {
     padding-right: 4px;
     vertical-align: 5%;
 }

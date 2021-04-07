@@ -1,6 +1,7 @@
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { ContractView } from "../contracts";
+import { PostingView } from "../postings";
 
 export function PublicRoutes() {
     return (
@@ -8,7 +9,9 @@ export function PublicRoutes() {
             <Route path="/public/contracts/:url_token">
                 <ContractView />
             </Route>
-            <Route path="/public/postings/:url_token">View the posting</Route>
+            <Route path="/public/postings/:url_token">
+                <PostingView />
+            </Route>
         </Switch>
     );
 }

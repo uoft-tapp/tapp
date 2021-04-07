@@ -74,7 +74,7 @@ export function ContractView() {
     const status = offer.status;
 
     return (
-        <React.Fragment>
+        <div className="contract-page">
             <div className="header">
                 <h1>Offer of Teaching Assistantship for {position_code}</h1>
             </div>
@@ -221,6 +221,6 @@ export function ContractView() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </React.Fragment>
+        </div>
     );
 }
