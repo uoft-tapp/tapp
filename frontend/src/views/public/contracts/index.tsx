@@ -188,7 +188,10 @@ export function ContractView() {
                     </div>
                 </div>
                 <div className="contract-view">
-                    <iframe src={`/public/contracts/${url_token}`}></iframe>
+                    <iframe
+                        title="Contract"
+                        src={`/public/contracts/${url_token}`}
+                    ></iframe>
                 </div>
             </div>
             <Modal
