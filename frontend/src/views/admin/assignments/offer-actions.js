@@ -19,7 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../../components/action-buttons";
-import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
+import { MultiManipulateOfferConfirmation } from "./manipulate-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -64,6 +64,10 @@ function OfferActionButtons(props) {
         setShowWithdrawConfirmation,
     ] = React.useState(false);
 
+    const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
+        false
+    );
+
     function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
@@ -82,6 +86,10 @@ function OfferActionButtons(props) {
         for (const assignment of selectedAssignments) {
             offerForAssignmentWithdraw(assignment);
         }
+    }
+    function confirmOfferEmail() {
+        console.log("hi");
+        setShowEmailConfirmation(true);
     }
     function emailOffers() {
         for (const assignment of selectedAssignments) {
@@ -136,7 +144,7 @@ function OfferActionButtons(props) {
             </ActionButton>
             <ActionButton
                 icon={<FaEnvelope />}
-                onClick={emailOffers}
+                onClick={confirmOfferEmail}
                 disabled={!actionPermitted.canEmail}
             >
                 Email Offer
@@ -162,11 +170,19 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <MultiWithdrawOfferConfirmation
+            <MultiManipulateOfferConfirmation
                 data={selectedAssignments}
                 visible={showWithdrawConfirmation}
                 setVisible={setShowWithdrawConfirmation}
-                withdrawOffers={withdrawOffers}
+                manipulateOffers={withdrawOffers}
+                action="Withdraw"
+            />
+            <MultiManipulateOfferConfirmation
+                data={selectedAssignments}
+                visible={showEmailConfirmation}
+                setVisible={setShowEmailConfirmation}
+                manipulateOffers={emailOffers}
+                action="Email"
             />
         </React.Fragment>
     );
