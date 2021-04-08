@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_035325) do
     t.string "annotation"
     t.text "previous_uoft_experience"
     t.float "gpa"
-    t.text "custom_question_answers"
+    t.json "custom_question_answers"
     t.bigint "posting_id"
     t.index ["applicant_id"], name: "index_applications_on_applicant_id"
     t.index ["posting_id"], name: "index_applications_on_posting_id"
@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_035325) do
     t.datetime "close_date"
     t.integer "availability", default: 0
     t.text "intro_text"
-    t.text "custom_questions"
+    t.json "custom_questions"
     t.string "name", null: false
     t.string "url_token"
     t.datetime "created_at", precision: 6, null: false

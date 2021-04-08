@@ -27,7 +27,7 @@ class PostingService
         preferences_page['elements'][0]['rows'] = assemble_preferences_rows
 
         # Add any custom questions there may be
-        custom_questions = JSON.parse @posting.custom_questions
+        custom_questions = @posting.custom_questions
         if custom_questions.respond_to? :dig
             fixed_survey['pages'].concat custom_questions['pages']
         end
@@ -119,7 +119,7 @@ class PostingService
 
         # Extract all the file upload questions
         @file_upload_answers = rest
-        rest = @file_upload_answers.slice! *file_upload_questions.map(&:to_sym)
+        rest = @file_upload_answers.slice!(*file_upload_questions.map(&:to_sym))
 
         # Find if there's an existing applicant and associated application.
         @applicant = Applicant.find_or_initialize_by(utorid: utorid)
@@ -198,11 +198,12 @@ end
 # https://stackoverflow.com/questions/22720849/ruby-search-for-super-nested-key-from-json-response
 def nested_find(obj, needed_key)
     return [] unless obj.is_a?(Array) || obj.is_a?(Hash)
+
     ret = []
 
     if obj.is_a?(Hash)
         ret.push obj if obj[needed_key]
-        obj.each { |hash, val| ret += nested_find(val, needed_key) }
+        obj.each { |_hash, val| ret += nested_find(val, needed_key) }
     end
     obj.each { |val| ret += nested_find(val, needed_key) } if obj.is_a?(Array)
     ret

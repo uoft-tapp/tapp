@@ -12,5 +12,17 @@ class ApplicationSerializer < ActiveModel::Serializer
                :gpa,
                :status,
                :custom_question_answers,
-               :annotation
+               :annotation,
+               :documents
+
+    def documents
+        object.documents.blobs.map do |blob|
+            {
+                name: blob.filename,
+                type: blob.content_type,
+                size: blob.byte_size,
+                url_token: blob.key
+            }
+        end
+    end
 end

@@ -174,8 +174,9 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     );
 
     let numCustomQuestions = 0;
-    if (Array.isArray(posting.custom_questions?.pages)) {
-        for (const page of posting.custom_questions.pages) {
+    const pages = posting.custom_questions?.pages;
+    if (Array.isArray(pages)) {
+        for (const page of pages) {
             numCustomQuestions +=
                 page?.elements?.length || page?.questions?.length || 0;
         }
