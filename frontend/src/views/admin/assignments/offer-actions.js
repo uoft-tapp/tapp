@@ -88,7 +88,6 @@ function OfferActionButtons(props) {
         }
     }
     function confirmOfferEmail() {
-        console.log("hi");
         setShowEmailConfirmation(true);
     }
     function emailOffers() {
