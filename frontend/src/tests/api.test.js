@@ -148,10 +148,6 @@ describe("Mock API tests", () => {
     describe("User permissions tests", () => {
         userPermissionsTests(mockAPI);
     });
-
-    describe("Instructor permissions tests", () => {
-        instructorsPermissionTests({ apiGET, apiPOST });
-    });
     describe("DDAH tests", () => {
         ddahTests({ apiGET, apiPOST });
     });

@@ -15,6 +15,16 @@ class User < ApplicationRecord
     # to the end. Roles can be accessed with `User.is_<role>?` or `User.has_roles? :<role>, ...`
     # See https://github.com/martinrehfeld/role_model
     roles :admin, :instructor, :ta
+
+    def computed_roles
+        # Every user has the TA role
+        calculated_roles = roles + [:ta]
+        calculated_roles += [:instructor] if Instructor.find_by(utorid: utorid)
+        # Check if they are listed as an instructor for any course
+        calculated_roles += [:admin] if Rails.application.config.always_admin.include?(utorid)
+
+        calculated_roles.uniq
+    end
 end
 
 # == Schema Information

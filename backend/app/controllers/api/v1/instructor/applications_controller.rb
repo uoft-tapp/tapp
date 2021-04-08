@@ -10,7 +10,7 @@ class Api::V1::Instructor::ApplicationsController < ApplicationController
         # we actually *are* an instructor. If we aren't an instructor, return an empty
         # array.
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
-        render_success [] && return unless active_instructor
+        render_success([]) && return unless active_instructor
 
         # Find the IDs of all instructors that are associated with the same positions we are
         position_ids =
