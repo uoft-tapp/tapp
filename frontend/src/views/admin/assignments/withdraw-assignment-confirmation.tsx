@@ -6,28 +6,23 @@ import { Assignment } from "../../../api/defs/types";
 const withdrawModalColumn = [
     {
         Header: "Last Name",
-        accessor: "applicant.last_name",
-        maxWidth: 120,
+        accessor: "applicant.last_name"
     },
     {
         Header: "First Name",
-        accessor: "applicant.first_name",
-        maxWidth: 120,
+        accessor: "applicant.first_name"
     },
     {
         Header: "Position",
-        accessor: "position.position_code",
-        width: 200,
+        accessor: "position.position_code"
     },
     {
         Header: "Hours",
         accessor: "hours",
-        className: "number-cell",
-        maxWidth: 70,
+        className: "number-cell"
     },
     {
         Header: "Status",
-        maxWidth: 100,
         id: "status",
         // We want items with no active offer to appear at the end of the list
         // when sorted, so we set their accessor to null (the accessor is used by react table

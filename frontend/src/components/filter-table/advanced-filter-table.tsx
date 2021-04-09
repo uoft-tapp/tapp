@@ -4,7 +4,7 @@ import {
     useTable,
     useSortBy,
     useGlobalFilter,
-    useBlockLayout,
+    useFlexLayout,
     useResizeColumns,
 } from "react-table";
 import { shallowEqual } from "react-redux";
@@ -95,7 +95,7 @@ export function AdvancedFilterTable({
                     .map((col) => col.id),
             },
         },
-        useBlockLayout,
+        useFlexLayout,
         useResizeColumns,
         useGlobalFilter,
         useSortBy,
