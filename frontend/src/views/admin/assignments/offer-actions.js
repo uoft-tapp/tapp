@@ -19,7 +19,8 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../../components/action-buttons";
-import { MultiManipulateOfferConfirmation } from "./manipulate-assignment-confirmation";
+import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
+import { MultiEmailOfferConfirmation } from "./email-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -32,7 +33,11 @@ const OfferTest = {
         );
     },
     canEmail(assignment) {
-        return assignment.active_offer_status != null;
+        return (
+            assignment.active_offer_status != null &&
+            assignment.active_offer_status !== "withdrawn" &&
+            assignment.active_offer_status !== "rejected"
+        );
     },
     canNag(assignment) {
         return assignment.active_offer_status === "pending";
@@ -169,19 +174,17 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <MultiManipulateOfferConfirmation
+            <MultiWithdrawOfferConfirmation
                 data={selectedAssignments}
                 visible={showWithdrawConfirmation}
                 setVisible={setShowWithdrawConfirmation}
-                manipulateOffers={withdrawOffers}
-                action="Withdraw"
+                withdrawOffers={withdrawOffers}
             />
-            <MultiManipulateOfferConfirmation
+            <MultiEmailOfferConfirmation
                 data={selectedAssignments}
                 visible={showEmailConfirmation}
                 setVisible={setShowEmailConfirmation}
-                manipulateOffers={emailOffers}
-                action="Email"
+                emailOffers={emailOffers}
             />
         </React.Fragment>
     );

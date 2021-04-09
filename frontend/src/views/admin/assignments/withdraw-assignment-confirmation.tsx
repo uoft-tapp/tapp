@@ -3,7 +3,7 @@ import { AdvancedFilterTable } from "../../../components/filter-table/advanced-f
 import { Button, Modal } from "react-bootstrap";
 import { Assignment } from "../../../api/defs/types";
 
-const manipulateModalColumn = [
+const withdrawModalColumn = [
     {
         Header: "Last Name",
         accessor: "applicant.last_name",
@@ -59,14 +59,13 @@ function compareAssignment(a1: Assignment, a2: Assignment) {
     );
 }
 
-export function MultiManipulateOfferConfirmation(props: {
+export function MultiWithdrawOfferConfirmation(props: {
     data: Assignment[];
     visible: boolean;
     setVisible: (visibility: boolean) => void;
-    manipulateOffers: () => void;
-    action: String;
+    withdrawOffers: () => void;
 }) {
-    const { data, visible, setVisible, manipulateOffers, action } = props;
+    const { data, visible, setVisible, withdrawOffers } = props;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
@@ -82,17 +81,17 @@ export function MultiManipulateOfferConfirmation(props: {
             size="lg"
         >
             <Modal.Header closeButton>
-                <Modal.Title>{action}ing Multiple Offers</Modal.Title>
+                <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    You are <b>{action.toLowerCase()}ing</b> the following{" "}
-                    {data?.length} offers:
+                    You are <b>withdrawing</b> from the following {data?.length}{" "}
+                    offers:
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
                         filterable={false}
-                        columns={manipulateModalColumn}
+                        columns={withdrawModalColumn}
                         data={data}
                     />
                 </div>
@@ -108,11 +107,11 @@ export function MultiManipulateOfferConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        manipulateOffers();
+                        withdrawOffers();
                         setVisible(false);
                     }}
                 >
-                    {action} {data?.length} Offers
+                    Withdraw {data?.length} Offers
                 </Button>
             </Modal.Footer>
         </Modal>
