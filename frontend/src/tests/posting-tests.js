@@ -9,11 +9,11 @@ import {
 } from "./utils";
 import PropTypes from "prop-types";
 import { databaseSeeder } from "./setup";
-import { apiPropTypes } from "../api/defs/prop-types";
 
 // TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
 
 export function postingTests(api = { apiGET, apiPOST }) {
+	// eslint-disable-next-line
     const { apiGET, apiPOST } = api;
     let session;
     let position;
