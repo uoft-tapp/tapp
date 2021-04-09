@@ -428,3 +428,7 @@ export const wageChunkPropTypes = apiPropTypes.wageChunk;
 export const reportingTagsPropTypes = apiPropTypes.reportingTags;
 
 export const userPropTypes = apiPropTypes.user;
+
+export const postingPropTypes = apiPropTypes.posting;
+
+export const postingPositionPropTypes = apiPropTypes.posting_position;
