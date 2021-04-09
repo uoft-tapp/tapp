@@ -12,42 +12,39 @@ import { databaseSeeder } from "./setup";
 import { apiPropTypes } from "../api/defs/prop-types";
 
 // TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
-// eslint-disable-next-line
+
 export function postingTests(api = { apiGET, apiPOST }) {
     const { apiGET, apiPOST } = api;
     let session;
     let position;
     let resp;
-    let posting;
-    let postingPos;
+    const posting = {
+        name: "CSC494F TA",
+        intro_text: "TA posting for CSC494F",
+        open_date: "2021/01/01",
+        close_date: "2021/05/01",
+        availability: "auto",
+    };
+    const postingPos = {
+        hours: 20,
+        num_positions: 1,
+    };
 
     beforeAll(async () => {
         await databaseSeeder.seed(api);
-        await databaseSeeder.seedForPostings(api);
         session = databaseSeeder.seededData.session;
         position = databaseSeeder.seededData.position;
-        posting = databaseSeeder.seededData.posting;
-        postingPos = databaseSeeder.seededData.postingPosition;
     });
 
     it("Create a posting for a session", async () => {
-        const newPosting = {
-            name: "CSC100F",
-            intro_text: "Testing posting for CSC100F",
-            open_date: "2021/01/01",
-            close_date: "2021/05/01",
-            availability: "auto",
-            custom_questions: [
-                "What year of study are you in?",
-                "Do you have any previous TA experience?",
-            ],
+        resp = await apiPOST("/admin/postings", {
+            ...posting,
             session_id: session.id,
-        };
-
-        resp = await apiPOST("/admin/postings", newPosting);
+        });
         expect(resp).toHaveStatus("success");
         checkPropTypes(postingPropTypes, resp.payload);
         expect(resp.payload.id).not.toBeNull();
+        Object.assign(posting, resp.payload);
 
         const newPosting2 = {
             name: "CSC200F TA",
@@ -89,17 +86,19 @@ export function postingTests(api = { apiGET, apiPOST }) {
         );
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(updatedPostingData2);
+        Object.assign(posting, resp.payload);
     });
     it("Cannot set the `status` of a posting to an invalid value", async () => {
-        const updatedPostingData = {
-            id: posting.id,
+        resp = await apiPOST("/admin/postings", {
+            ...posting,
             availability: "test",
-        };
-        resp = await apiPOST("/admin/postings", updatedPostingData);
+        });
         expect(resp).toHaveStatus("error");
 
-        updatedPostingData.availability = 3;
-        resp = await apiPOST("/admin/postings", updatedPostingData);
+        resp = await apiPOST("/admin/postings", {
+            ...posting,
+            availability: 3,
+        });
         expect(resp).toHaveStatus("error");
     });
     it("Fetch all postings for a session", async () => {
@@ -180,32 +179,14 @@ export function postingTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
     });
     it("Create a posting_position for a posting", async () => {
-        const newPosting = {
-            name: "CSC500F TA",
-            intro_text: "Posting for CSC500F",
-            open_date: "2021/04/01",
-            close_date: "2021/05/01",
-            availability: "auto",
-        };
-
         resp = await apiPOST(
-            `/admin/sessions/${session.id}/postings`,
-            newPosting
-        );
-        Object.assign(newPosting, resp.payload);
-        const newPostingPos = {
-            hours: 30,
-            num_positions: 4,
-            position_id: position.id,
-        };
-        resp = await apiPOST(
-            `/admin/postings/${newPosting.id}/posting_positions`,
-            newPostingPos
+            `/admin/postings/${posting.id}/posting_positions`,
+            { ...postingPos, position_id: position.id }
         );
         expect(resp).toHaveStatus("success");
         checkPropTypes(postingPositionPropTypes, resp.payload);
-        expect(resp.payload.id).not.toBeNull();
-        expect(resp.payload.posting_id).toEqual(newPosting.id);
+        expect(resp.payload.posting_id).toEqual(posting.id);
+        Object.assign(postingPos, resp.payload);
     });
     it.todo("A posting contains a list of all associated posting_position ids"); //create or fetch?
     it.todo("A posting contains a list of all associated application ids"); //create or fetch?
@@ -243,14 +224,15 @@ export function postingTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("error");
     });
     it("Delete a posting_position", async () => {
-        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
         resp = await apiPOST(`/admin/posting_positions/delete`, {
             posting_id: posting.id,
             position_id: position.id,
         });
         expect(resp).toHaveStatus("success");
         resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
-        expect(resp.payload.length).toEqual(0);
+        expect(
+            resp.payload.filter((p) => p.position_id === position.id).length
+        ).toEqual(0);
     });
     it("Modify a posting_position", async () => {
         const updatePostingPos = {
@@ -272,10 +254,54 @@ export function postingTests(api = { apiGET, apiPOST }) {
         resp = await apiGET(`/admin/postings/${posting.id}`);
         expect(resp).toHaveStatus("error");
     });
-    it.todo(
-        "Cannot create two posting_positions with the same position_id for a single posting"
-    );
-    it.todo(
-        "Can create two posting_positions with the same position_id for different postings"
-    );
+    it("Cannot create two posting_positions with the same position_id for a single posting", async () => {
+        const newPostingPos = {
+            position_id: position.id,
+            hours: 10,
+            num_positions: 2,
+        };
+
+        resp = await apiPOST(
+            `/admin/postings/${posting.id}/posting_positions`,
+            newPostingPos
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
+        expect(
+            resp.payload.filter((p) => p.position_id === position.id).length
+        ).toEqual(1);
+    });
+    it("Can create two posting_positions with the same position_id for different postings", async () => {
+        const newPosting = {
+            name: "CSC500F TA",
+            intro_text: "Posting for CSC500F",
+            open_date: "2021/04/01",
+            close_date: "2021/05/01",
+            availability: "auto",
+        };
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/postings`,
+            newPosting
+        );
+        Object.assign(newPosting, resp.payload);
+
+        const newPostingPos = {
+            position_id: position.id,
+            hours: 10,
+            num_positions: 2,
+        };
+
+        resp = await apiPOST(
+            `/admin/postings/${newPosting.id}/posting_positions`,
+            newPostingPos
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET(
+            `/admin/postings/${newPosting.id}/posting_positions`
+        );
+        expect(
+            resp.payload.filter((p) => p.position_id === position.id).length
+        ).toEqual(1);
+    });
 }

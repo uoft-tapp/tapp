@@ -174,17 +174,6 @@ class DatabaseSeeder {
                     applicant_utorid: "weasleyr",
                 },
             ],
-            posting: {
-                name: "CSC494F TA",
-                intro_text: "TA posting for CSC494F",
-                open_date: "2021/01/01",
-                close_date: "2021/05/01",
-                availability: "auto",
-            },
-            postingPosition: {
-                hours: 20,
-                num_positions: 1,
-            },
         };
     }
 
@@ -209,18 +198,6 @@ class DatabaseSeeder {
      */
     async seedForInstructors(api) {
         return await seedDatabaseForInstructors(api, this.seededData);
-    }
-
-    /**
-     * Seeds the database with enough data to test posting
-     * routes. The database is *not* cleared before this call
-     * and it is assume that `this.seed()` has been called prior.
-     *
-     * @param {*} api
-     * @memberof DatabaseSeeder
-     */
-    async seedForPostings(api) {
-        return await seedDatabaseForPostings(api, this.seededData);
     }
 
     /**
@@ -455,34 +432,4 @@ async function seedDatabaseForInstructors(
         expect(resp).toHaveStatus("success");
         Object.assign(assignment, resp.payload);
     }
-}
-
-async function seedDatabaseForPostings(
-    api,
-    seeded = {
-        posting: null,
-        postingPosition: null,
-    }
-) {
-    const { apiPOST } = api;
-    let resp = null;
-	
-    // Posting
-    resp = await apiPOST(
-        `/admin/sessions/${seeded.session.id}/postings`,
-        seeded.posting
-    );
-    expect(resp).toHaveStatus("success");
-    Object.assign(seeded.posting, resp.payload);
-
-	//Posting Position
-	Object.assign(seeded.postingPosition, {
-		position_id: seeded.position.id,
-	})
-	resp = await apiPOST(
-		`/admin/postings/${seeded.posting.id}/posting_positions`,
-		seeded.postingPosition
-	);
-	expect(resp).toHaveStatus("success");
-	Object.assign(seeded.postingPosition, resp.payload);
 }
