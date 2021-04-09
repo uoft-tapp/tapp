@@ -93,7 +93,12 @@ function OfferActionButtons(props) {
         }
     }
     function confirmOfferEmail() {
-        setShowEmailConfirmation(true);
+        if (selectedAssignments?.length > 1) {
+            setShowEmailConfirmation(true);
+        } else {
+            // does not need confirmation if only withdrawing one offer
+            emailOffers();
+        }
     }
     function emailOffers() {
         for (const assignment of selectedAssignments) {

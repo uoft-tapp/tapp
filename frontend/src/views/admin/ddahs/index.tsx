@@ -26,6 +26,7 @@ import {
 } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
 import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
+import { MultiEmailDdahConfirmation } from "./email-ddah-confirmation";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function AdminDdahsView() {
@@ -45,6 +46,10 @@ export function AdminDdahsView() {
         false
     );
 
+    const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
+        false
+    );
+
     function confirmDDAHDeletion() {
         if (selectedDdahs?.length > 1) {
             setShowDeleteConfirmation(true);
@@ -53,9 +58,23 @@ export function AdminDdahsView() {
         }
     }
 
+    function confirmDDAHEmail() {
+        if (selectedDdahs?.length > 1) {
+            setShowEmailConfirmation(true);
+        } else {
+            emailDDAHs();
+        }
+    }
+
     function deleteDDAHs() {
         for (const ddah of selectedDdahs) {
             dispatch(deleteDdah(ddah));
+        }
+    }
+
+    function emailDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(emailDdah(ddah));
         }
     }
 
@@ -88,11 +107,7 @@ export function AdminDdahsView() {
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
                 <ActionButton
                     icon={FaMailBulk}
-                    onClick={() => {
-                        for (const ddah of selectedDdahs) {
-                            dispatch(emailDdah(ddah));
-                        }
-                    }}
+                    onClick={confirmDDAHEmail}
                     disabled={selectedDdahIds.length === 0}
                 >
                     Email DDAH
@@ -133,6 +148,12 @@ export function AdminDdahsView() {
                 visible={showDeleteConfirmation}
                 setVisible={setShowDeleteConfirmation}
                 deleteDDAHs={deleteDDAHs}
+            />
+            <MultiEmailDdahConfirmation
+                selectedDdahs={selectedDdahs}
+                visible={showEmailConfirmation}
+                setVisible={setShowEmailConfirmation}
+                emailDDAHs={emailDDAHs}
             />
         </div>
     );
