@@ -6,20 +6,20 @@ import { Assignment } from "../../../api/defs/types";
 const withdrawModalColumn = [
     {
         Header: "Last Name",
-        accessor: "applicant.last_name"
+        accessor: "applicant.last_name",
     },
     {
         Header: "First Name",
-        accessor: "applicant.first_name"
+        accessor: "applicant.first_name",
     },
     {
         Header: "Position",
-        accessor: "position.position_code"
+        accessor: "position.position_code",
     },
     {
         Header: "Hours",
         accessor: "hours",
-        className: "number-cell"
+        className: "number-cell",
     },
     {
         Header: "Status",
