@@ -46,9 +46,8 @@ export function postingTests(api = { apiGET, apiPOST }) {
 
         resp = await apiPOST("/admin/postings", newPosting);
         expect(resp).toHaveStatus("success");
-        Object.assign(newPosting, resp.payload);
-        checkPropTypes(postingPropTypes, newPosting);
-        expect(newPosting.id).not.toBeNull();
+        checkPropTypes(postingPropTypes, resp.payload);
+        expect(resp.payload.id).not.toBeNull();
 
         const newPosting2 = {
             name: "CSC200F TA",
@@ -63,9 +62,8 @@ export function postingTests(api = { apiGET, apiPOST }) {
             newPosting2
         );
         expect(resp).toHaveStatus("success");
-        Object.assign(newPosting2, resp.payload);
-        checkPropTypes(postingPropTypes, newPosting2);
-        expect(newPosting2.id).not.toBeNull();
+        checkPropTypes(postingPropTypes, resp.payload);
+        expect(resp.payload.id).not.toBeNull();
     });
 
     it("Modify a posting", async () => {
@@ -182,19 +180,32 @@ export function postingTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
     });
     it("Create a posting_position for a posting", async () => {
+        const newPosting = {
+            name: "CSC500F TA",
+            intro_text: "Posting for CSC500F",
+            open_date: "2021/04/01",
+            close_date: "2021/05/01",
+            availability: "auto",
+        };
+
+        resp = await apiPOST(
+            `/admin/sessions/${session.id}/postings`,
+            newPosting
+        );
+        Object.assign(newPosting, resp.payload);
         const newPostingPos = {
             hours: 30,
             num_positions: 4,
             position_id: position.id,
         };
         resp = await apiPOST(
-            `/admin/postings/${posting.id}/posting_positions`,
+            `/admin/postings/${newPosting.id}/posting_positions`,
             newPostingPos
         );
         expect(resp).toHaveStatus("success");
         checkPropTypes(postingPositionPropTypes, resp.payload);
         expect(resp.payload.id).not.toBeNull();
-        expect(resp.payload.posting_id).toEqual(posting.id);
+        expect(resp.payload.posting_id).toEqual(newPosting.id);
     });
     it.todo("A posting contains a list of all associated posting_position ids"); //create or fetch?
     it.todo("A posting contains a list of all associated application ids"); //create or fetch?
@@ -232,15 +243,16 @@ export function postingTests(api = { apiGET, apiPOST }) {
         expect(resp).toHaveStatus("error");
     });
     it("Delete a posting_position", async () => {
+        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
         resp = await apiPOST(`/admin/posting_positions/delete`, {
-            id: postingPosition.id,
-        }); // undefined method `destroy!'
+            posting_id: posting.id,
+            position_id: position.id,
+        });
         expect(resp).toHaveStatus("success");
-        resp = await apiGET(`/admin/posting_positions/${postingPosition.id}`);
-        expect(resp).toHaveStatus("error");
+        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
+        expect(resp.payload.length).toEqual(0);
     });
     it("Modify a posting_position", async () => {
-        console.log(postingPos);
         const updatePostingPos = {
             position_id: postingPos.position_id,
             hours: 10,
@@ -257,7 +269,7 @@ export function postingTests(api = { apiGET, apiPOST }) {
     it("Deleting a posting also deletes all associated posting_positions", async () => {
         resp = await apiPOST("/admin/postings/delete", { id: posting.id });
         expect(resp).toHaveStatus("success");
-        resp = await apiGET(`/admin/posting_positions/${postingPos.id}`);
+        resp = await apiGET(`/admin/postings/${posting.id}`);
         expect(resp).toHaveStatus("error");
     });
     it.todo(
