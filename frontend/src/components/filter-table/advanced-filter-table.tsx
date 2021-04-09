@@ -8,8 +8,6 @@ import {
     useResizeColumns,
 } from "react-table";
 import { shallowEqual } from "react-redux";
-import { FixedSizeList } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
 
@@ -101,7 +99,6 @@ export function AdvancedFilterTable({
         generateSelectionHook({ enabled: !!setSelected, selected, setSelected })
     );
     const { isHiddenRowsSelected } = table;
-    const scrollRef = React.useRef<FixedSizeList>(null);
 
     // If we do not set the `"custom"` filter method, it won't be called.
     React.useEffect(() => {
@@ -113,39 +110,6 @@ export function AdvancedFilterTable({
             setFilterStrings(newFilter);
         }
     }
-
-    const renderRow = React.useCallback(
-        ({ index, style }) => {
-            const row = table.rows[index];
-            table.prepareRow(row);
-            return (
-                <div
-                    {...row.getRowProps({ style })}
-                    className={classNames("tr", {
-                        "table-primary":
-                            row.isSelected && (row.original as any)?.id != null,
-                    })}
-                >
-                    {row.cells.map((cell) => (
-                        <div
-                            {...cell.getCellProps()}
-                            className={classNames(
-                                "td",
-                                (cell.column as any).className,
-                                {
-                                    "selection-checkbox":
-                                        cell.column.id === "selection",
-                                }
-                            )}
-                        >
-                            {cell.render("Cell")}
-                        </div>
-                    ))}
-                </div>
-            );
-        },
-        [table]
-    );
 
     return (
         <div className="filter-table-container">
@@ -173,7 +137,7 @@ export function AdvancedFilterTable({
                 </div>
                 <HiddenRowWarning visible={isHiddenRowsSelected} />
                 <div {...table.getTableBodyProps()} className="tbody">
-                    {table.rows.map((row, index) => {
+                    {table.rows.map((row) => {
                         table.prepareRow(row);
                         return (
                             <div
