@@ -9,7 +9,6 @@ import {
 } from "react-table";
 import { shallowEqual } from "react-redux";
 import { FixedSizeList } from "react-window";
-import Scrollbars from "react-custom-scrollbars";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
@@ -148,17 +147,6 @@ export function AdvancedFilterTable({
         [table]
     );
 
-    const handleScroll = React.useCallback(
-        ({ target }) => {
-            const { scrollTop } = target;
-
-            if (scrollRef.current) {
-                scrollRef.current.scrollTo(scrollTop);
-            }
-        },
-        [scrollRef]
-    );
-
     return (
         <div className="filter-table-container">
             {filterable && (
@@ -185,31 +173,52 @@ export function AdvancedFilterTable({
                 </div>
                 <HiddenRowWarning visible={isHiddenRowsSelected} />
                 <div {...table.getTableBodyProps()} className="tbody">
-                    <AutoSizer>
-                        {({ width, height }) => {
-                            // Don't let the table get too short no matter what
-                            //height = Math.max(height, 300);
-                            return (
-                                <Scrollbars
-                                    style={{ width, height }}
-                                    onScroll={handleScroll}
-                                >
-                                    <FixedSizeList
-                                        height={height}
-                                        itemCount={table.rows.length}
-                                        itemSize={30}
-                                        width={table.totalColumnsWidth}
-                                        ref={scrollRef}
-                                        style={{
-                                            overflow: "visible",
-                                        }}
+                    {table.rows.map((row, index) => {
+                        table.prepareRow(row);
+                        return (
+                            <div
+                                {...row.getRowProps()}
+                                className={classNames("tr", {
+                                    "table-primary":
+                                        row.isSelected &&
+                                        (row.original as any)?.id != null,
+                                })}
+                            >
+                                {row.cells.map((cell) => (
+                                    <div
+                                        {...cell.getCellProps()}
+                                        className={classNames(
+                                            "td",
+                                            (cell.column as any).className,
+                                            {
+                                                "selection-checkbox":
+                                                    cell.column.id ===
+                                                    "selection",
+                                            }
+                                        )}
                                     >
-                                        {renderRow}
-                                    </FixedSizeList>
-                                </Scrollbars>
-                            );
-                        }}
-                    </AutoSizer>
+                                        {cell.render("Cell")}
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    })}
+                    {/*<AutoSizer>*/}
+                    {/*    {({ width, height }) => (*/}
+                    {/*        <FixedSizeList*/}
+                    {/*            height={height}*/}
+                    {/*            itemCount={table.rows.length}*/}
+                    {/*            itemSize={30}*/}
+                    {/*            width={table.totalColumnsWidth}*/}
+                    {/*            ref={scrollRef}*/}
+                    {/*            style={{*/}
+                    {/*                overflow: "visible",*/}
+                    {/*            }}*/}
+                    {/*        >*/}
+                    {/*            {renderRow}*/}
+                    {/*        </FixedSizeList>*/}
+                    {/*    )}*/}
+                    {/*</AutoSizer>*/}
                 </div>
             </div>
         </div>
