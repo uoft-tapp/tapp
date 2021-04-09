@@ -4,10 +4,11 @@ import PropTypes from "prop-types";
 import { NavLink, Switch, Route } from "react-router-dom";
 
 import "./main.css";
+import "../../components/components.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import { ToggleMockApi } from "./mockAPI";
 
-import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 import { mockApiRoutesAsSwaggerPaths } from "../../api/defs/doc-generation";
 import { mockAPI } from "../../api/mockAPI";
@@ -19,6 +20,9 @@ import {
     debugOnlyFetchUsers,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
+
+// We don't need SwaggerUI all the time, so load it lazily.
+const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
 
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
@@ -54,13 +58,14 @@ const swaggerData = {
         { url: "/api/v1/instructor" },
         { url: "/api/v1/ta" },
         { url: "/api/v1" },
+        { url: "/" },
     ],
     paths: {
-        /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documenation
+        /* XXX this is hear temporarily to serve as an example for generating Swagger (openapi) documentation
         "/bob": {
             get: {
                 summary: "Bob's summary",
-                tags: ["helful"],
+                tags: ["helpful"],
                 produces: "application/json",
                 responses: {
                     default: {
@@ -140,7 +145,12 @@ function DevFrame(props) {
                 <div id="dev-frame-body-inner">
                     <Switch>
                         <Route path="/api-docs">
-                            <SwaggerUI spec={swaggerData} docExpansion="list" />
+                            <React.Suspense fallback="Loading...">
+                                <SwaggerUI
+                                    spec={swaggerData}
+                                    docExpansion="list"
+                                />
+                            </React.Suspense>
                         </Route>
                         <Route>{props.children}</Route>
                     </Switch>

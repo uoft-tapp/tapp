@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_202440) do
+ActiveRecord::Schema.define(version: 2021_04_05_000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,8 +149,8 @@ ActiveRecord::Schema.define(version: 2021_03_14_202440) do
     t.bigint "position_id", null: false
     t.bigint "application_id", null: false
     t.integer "preference_level"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
     t.index ["application_id"], name: "index_position_preferences_on_application_id"
     t.index ["position_id", "application_id"], name: "index_position_preferences_on_position_id_and_application_id", unique: true
     t.index ["position_id"], name: "index_position_preferences_on_position_id"

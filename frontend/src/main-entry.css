@@ -1,0 +1,103 @@
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+:root {
+    --actions-background: #a8d6ff16;
+    --actions-background-active: #a8d6ffff;
+    --actions-background-hover: #a8d6ff56;
+    --actions-border: #cee1f7;
+    --actions-color: #007bff;
+
+    /*
+    --actions-background: #479dfc;
+    --actions-color: #fff;
+    */
+}
+:root .x {
+    --actions-background: #479dfc;
+    --actions-color: #fff;
+}
+
+.wide-modal {
+    width: 90%;
+    max-width: none;
+}
+.fullscreen-modal {
+    /* A fullscreen modal doesn't take up the _entire_ screen.
+       We leave some room at the top and bottom (hence -70px) */
+    height: calc(100vh - 70px);
+}
+.fullscreen-modal .modal-content {
+    height: 100%;
+}
+.fullscreen-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.diff-changed-cell {
+    margin: -3px;
+    padding: 5px;
+    border-radius: 7px;
+    font-size: smaller;
+}
+
+.view-container {
+    /* padding: 1em; */
+    box-shadow: inset 0 70px 1px -70px #00356f38;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.page-body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.page-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex-grow: 1;
+    background-color: white;
+    padding: 1em;
+    box-shadow: inset 70px 70px 1px -70px #00356f38;
+}
+
+#app-body {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.wagechunk-details-table th,
+.wagechunk-details-table td {
+    padding-left: 1em;
+}
+.wagechunk-details-table th:first-child,
+.wagechunk-details-table td:first-child {
+    padding-left: 0em;
+}
+.wagechunk-details-table th {
+    font-size: smaller;
+    color: var(--gray);
+}
+
+.assignment-details-table th {
+    padding-right: 1em;
+}
+
+.filterable-table-filter {
+    padding: 0.4em;
+    padding-left: 1.1em;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+}

@@ -111,6 +111,7 @@
     overflow: hidden;
 }
 .delete-col,
+.details-col,
 .selection-checkbox {
     padding-left: 0px;
     padding-right: 0px;

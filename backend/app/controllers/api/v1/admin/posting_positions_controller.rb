@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class Api::V1::Admin::PostingPositionsController < ApplicationController
+    # GET /sessions/:session_id/postings
+    def index
+        render_success PostingPosition.by_session(params[:session_id])
+    end
+
     # GET /postings/:posting_id/posting_positions
     def show
         # `show` is called for both `index` and `show`. To differentiate between
         # the two, we look for the precense of an `id` field. If it's there, we
-        # want to see that single posting_position; otherwise, we wan tall posting_positions
+        # want to see that single posting_position; otherwise, we want all posting_positions
         # for the specified posting.
         if params[:id].blank?
             find_posting
@@ -25,7 +30,11 @@ class Api::V1::Admin::PostingPositionsController < ApplicationController
 
     # POST /posting_positions/delete
     def delete
-        @posting_position = PostingPosition.find(params[:id])
+        @posting_position =
+            PostingPosition.find_by(
+                position_id: params[:position_id],
+                posting_id: params[:posting_id]
+            )
         render_on_condition(
             object: @posting_position,
             condition: proc { @posting_position.destroy! }

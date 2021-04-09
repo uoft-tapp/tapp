@@ -80,6 +80,13 @@ class Public::ContractsController < ActionController::Base
         render(inline: template.render(offer_substitutions.merge(header_subs)))
     end
 
+    # /public/contracts/<contract_id>/details
+    def details
+        return unless valid_offer?(url_token: params[:contract_id])
+
+        render json: { status: 'success', payload: offer_substitutions }
+    end
+
     private
 
     def show_params

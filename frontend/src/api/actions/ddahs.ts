@@ -134,7 +134,7 @@ export const deleteDdah = validatedApiDispatcher({
     dispatcher: (payload: HasId) => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
         const data = (await apiPOST(
-            `/${role}/assignments/delete`,
+            `/${role}/ddahs/${payload.id}/delete`,
             prepForApi(payload)
         )) as RawDdah;
         dispatch(deleteOneDdahSuccess(data));

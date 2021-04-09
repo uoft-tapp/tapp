@@ -10,17 +10,25 @@ import {
     DELETE_ONE_POSTING_POSITION_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
+import {
+    actionFactory,
+    HasId,
+    splitObjByProps,
+    validatedApiDispatcher,
+} from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { postingsReducer } from "../reducers/postings";
 import { activeRoleSelector } from "./users";
 import { postingPositionsReducer } from "../reducers/posting_positions";
 import type {
+    Position,
     Posting,
     PostingPosition,
     RawPosting,
     RawPostingPosition,
+    RequireSome,
 } from "../defs/types";
+import { positionsSelector } from "./positions";
 
 // actions
 const fetchPostingsSuccess = actionFactory<RawPosting[]>(
@@ -121,6 +129,19 @@ export const deletePosting = validatedApiDispatcher({
     },
 });
 
+export const fetchSurvey = validatedApiDispatcher({
+    name: "fetchSurvey",
+    description: "Fetch the survey associated with a posting",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload: HasId) => async (_dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = (await apiGET(
+            `/${role}/postings/${payload.id}/survey`
+        )) as any;
+        return data;
+    },
+});
+
 // PostingPosition dispatchers
 export const fetchPostingPositions = validatedApiDispatcher({
     name: "fetchPostingPositions",
@@ -137,6 +158,20 @@ export const fetchPostingPositions = validatedApiDispatcher({
         const role = activeRoleSelector(getState());
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/posting_positions`
+        )) as RawPostingPosition[];
+        dispatch(fetchPostingPositionsSuccess(data));
+        return data;
+    },
+});
+
+export const fetchPostingPositionsForPosting = validatedApiDispatcher({
+    name: "fetchPostingPositionsForPosting",
+    description: "Fetch posting_positions for a particular posting",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (posting: HasId) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const data = (await apiGET(
+            `/${role}/postings/${posting.id}/posting_positions`
         )) as RawPostingPosition[];
         dispatch(fetchPostingPositionsSuccess(data));
         return data;
@@ -161,14 +196,16 @@ export const upsertPostingPosition = validatedApiDispatcher({
     name: "upsertPostingPosition",
     description: "Add/insert posting_position",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<RawPostingPosition>) => async (
-        dispatch,
-        getState
-    ) => {
+    dispatcher: (
+        payload:
+            | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+            | RequireSome<PostingPosition, "position" | "posting">
+    ) => async (dispatch, getState) => {
+        const rawPostingPosition = prepPostingPositionForApi(payload);
         const role = activeRoleSelector(getState());
         const data = (await apiPOST(
             `/${role}/posting_positions`,
-            payload
+            rawPostingPosition
         )) as RawPostingPosition;
         dispatch(upsertOnePostingPositionSuccess(data));
         return data;
@@ -180,28 +217,147 @@ export const deletePostingPosition = validatedApiDispatcher({
     description: "Delete posting_position",
     onErrorDispatch: (e) => deleteError(e.toString()),
     dispatcher: (
-        payload: Pick<RawPostingPosition, "position_id" | "posting_id">
+        payload:
+            | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+            | RequireSome<PostingPosition, "position" | "posting">
     ) => async (dispatch, getState) => {
+        const rawPostingPosition = prepPostingPositionForApi(payload);
         const role = activeRoleSelector(getState());
         const data = (await apiPOST(
             `/${role}/posting_positions/delete`,
-            payload
+            rawPostingPosition
         )) as RawPostingPosition;
         dispatch(deleteOnePostingPositionSuccess(data));
     },
 });
 
+function isRawPostingPosition(
+    obj: any
+): obj is RequireSome<RawPostingPosition, "position_id" | "posting_id"> {
+    if (
+        obj != null &&
+        typeof obj === "object" &&
+        "posting_id" in obj &&
+        "position_id" in obj
+    ) {
+        return true;
+    }
+    return false;
+}
+
+function prepPostingPositionForApi(
+    obj:
+        | RequireSome<PostingPosition, "position" | "posting">
+        | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+): RequireSome<RawPostingPosition, "position_id" | "posting_id"> {
+    if (isRawPostingPosition(obj)) {
+        return obj;
+    }
+    const [core, rest] = splitObjByProps(obj, ["position", "posting"]);
+    return {
+        ...core,
+        position_id: rest.position.id,
+        posting_id: rest.posting.id,
+    };
+}
+
 // selectors
+/**
+ * Since Postings and PostingPositions reference each other,
+ * we need a function that can create both at the same time.
+ *
+ * @param {RawPosting} rawPosting
+ * @param {RawPostingPosition[]} rawPostingPositions
+ * @param {Position[]} positions
+ * @returns
+ */
+function combinePostingAndPostingPosition(
+    rawPosting: RawPosting,
+    rawPostingPositions: RawPostingPosition[],
+    positions: Position[]
+) {
+    const positionsMap = new Map(
+        positions.map((position) => [position.id, position])
+    );
+    // eslint-disable-next-line
+    const [partialPosting, _postingRest] = splitObjByProps(rawPosting, [
+        "application_ids",
+        "posting_position_ids",
+    ]);
+    const posting: Posting = {
+        ...partialPosting,
+        applications: [],
+        posting_positions: [],
+    };
+    const postingPositions = rawPostingPositions
+        // We only want PostingPositions associated with the given posting
+        .filter(
+            (rawPostingPosition) =>
+                rawPostingPosition.posting_id === rawPosting.id
+        )
+        // We only want PostingPositions whose corresponding position has been loaded/exits
+        .filter((rawPostingPosition) =>
+            positionsMap.has(rawPostingPosition.position_id)
+        )
+        .map<PostingPosition>((rawPostingPosition) => {
+            const [
+                partialPostingPosition,
+                rest,
+            ] = splitObjByProps(rawPostingPosition, [
+                "position_id",
+                "posting_id",
+            ]);
+            return {
+                ...partialPostingPosition,
+                position: positionsMap.get(rest.position_id)!,
+                posting,
+            };
+        });
+
+    posting.posting_positions = postingPositions;
+
+    return { posting, postingPositions };
+}
+
 const localStoreSelector = postingsReducer._localStoreSelector;
+const localStoreSelector2 = postingPositionsReducer._localStoreSelector;
 export const postingsSelector = createSelector(
     localStoreSelector,
-    // XXX TODO properly convert this to a Posting
-    (state) => (state._modelData as unknown) as Posting[]
+    localStoreSelector2,
+    positionsSelector,
+    (postingsState, postingPositionsState, positions) => {
+        const rawPostingPositions = postingPositionsState._modelData;
+        return postingsState._modelData
+            .map((rawPosting) =>
+                combinePostingAndPostingPosition(
+                    rawPosting,
+                    rawPostingPositions,
+                    positions
+                )
+            )
+            .map((processed) => processed.posting);
+    }
 );
 
-const localStoreSelector2 = postingPositionsReducer._localStoreSelector;
 export const postingPositionsSelector = createSelector(
     localStoreSelector2,
-    // XXX TODO we need to properly convert this to a PostingPosition
-    (state) => (state._modelData as unknown) as PostingPosition[]
+    localStoreSelector,
+    positionsSelector,
+    (postingPositionsState, postingsState, positions) => {
+        const rawPostingPositions = postingPositionsState._modelData;
+        return (
+            postingsState._modelData
+                .map((rawPosting) =>
+                    combinePostingAndPostingPosition(
+                        rawPosting,
+                        rawPostingPositions,
+                        positions
+                    )
+                )
+                .map((processed) => processed.postingPositions)
+                // A PostingPosition is uniquely determined by its Position and Posting, so
+                // it is impossible to have duplicates when we call `.flat()`
+                .flat()
+        );
+    }
 );
