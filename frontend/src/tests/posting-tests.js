@@ -12,8 +12,7 @@ import { databaseSeeder } from "./setup";
 
 // TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
 
-export function postingTests(api = { apiGET, apiPOST }) {
-	// eslint-disable-next-line
+export function postingTests(api) {
     const { apiGET, apiPOST } = api;
     let session;
     let position;
