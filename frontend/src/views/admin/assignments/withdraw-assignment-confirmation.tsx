@@ -7,27 +7,22 @@ const withdrawModalColumn = [
     {
         Header: "Last Name",
         accessor: "applicant.last_name",
-        maxWidth: 120,
     },
     {
         Header: "First Name",
         accessor: "applicant.first_name",
-        maxWidth: 120,
     },
     {
         Header: "Position",
         accessor: "position.position_code",
-        width: 200,
     },
     {
         Header: "Hours",
         accessor: "hours",
         className: "number-cell",
-        maxWidth: 70,
     },
     {
         Header: "Status",
-        maxWidth: 100,
         id: "status",
         // We want items with no active offer to appear at the end of the list
         // when sorted, so we set their accessor to null (the accessor is used by react table

@@ -50,7 +50,7 @@
 }
 
 .table {
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .table-header {
@@ -83,6 +83,8 @@
     border-bottom: 1px solid rgba(167, 182, 194, 0.4);
     box-shadow: 0px 3px 8px -3px rgba(167, 182, 194, 0.5);
     user-select: none;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .th {
     display: flex !important;
@@ -90,6 +92,7 @@
     font-size: 105%;
     border-right: 1px solid rgba(167, 182, 194, 0.4);
     align-items: center;
+    position: relative;
 }
 .th > * {
     flex-grow: 1;
@@ -109,6 +112,9 @@
     padding-left: 0.7em;
     white-space: nowrap;
     overflow: hidden;
+    text-align: center;
+    width: fit-content;
+    position: relative;
 }
 .delete-col,
 .details-col,
