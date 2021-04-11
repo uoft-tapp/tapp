@@ -60,9 +60,13 @@ export interface Posting
 }
 
 export interface Application
-    extends Omit<RawApplication, "applicant_id" | "posting_id"> {
+    extends Omit<
+        RawApplication,
+        "applicant_id" | "posting_id" | "position_preferences"
+    > {
     applicant: Applicant;
-    posting: Posting;
+    posting: Posting | null;
+    position_preferences: { position: Position; preference_level: number }[];
 }
 
 export interface PostingPosition

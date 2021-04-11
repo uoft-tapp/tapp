@@ -39,6 +39,10 @@ module Tapp
             ENV.fetch('CONTRACT_TEMPLATE_DIR', '/storage/contract_templates')
                 .presence || '/storage/contract_templates'
 
+        # The required dependencies for ActiveStorage::Analyzer::ImageAnalyzer is not installed,
+        # so we force all analyzers to be disabled
+        config.active_storage.analyzers = []
+
         # This was added to use in the emails that send contract links.
         config.base_url =
             ENV.fetch('BASE_URL', 'localhost:3000').presence || 'localhost:3000'

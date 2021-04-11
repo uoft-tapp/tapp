@@ -27,7 +27,7 @@ class PostingService
         preferences_page['elements'][0]['rows'] = assemble_preferences_rows
 
         # Add any custom questions there may be
-        custom_questions = JSON.parse @posting.custom_questions
+        custom_questions = @posting.custom_questions
         if custom_questions.respond_to? :dig
             fixed_survey['pages'].concat custom_questions['pages']
         end
@@ -117,6 +117,10 @@ class PostingService
                 []
             end
 
+        # Extract all the file upload questions
+        @file_upload_answers = rest
+        rest = @file_upload_answers.slice!(*file_upload_questions.map(&:to_sym))
+
         # Find if there's an existing applicant and associated application.
         @applicant = Applicant.find_or_initialize_by(utorid: utorid)
         application = @applicant.applications.find_by(posting: @posting)
@@ -146,6 +150,11 @@ class PostingService
                 )
             end
         end
+        # Saving attachments cannot happen inside of a transaction.
+        # See https://github.com/rails/rails/issues/41903
+        application = @applicant.applications.find_by(posting: @posting)
+        application.documents.purge
+        application.documents.attach files_for_active_storage
     end
 
     private
@@ -159,4 +168,50 @@ class PostingService
             { text: (title.blank? ? code : "#{code} - #{title}"), value: code }
         end
     end
+
+    # Returns a list of all question ids for questions with a file upload
+    def file_upload_questions
+        nested_find(survey, 'type').filter do |obj|
+            obj['type'] == 'file'
+        end.map { |obj| obj['name'] }
+    end
+
+    # Active storage wants blobs formatted the format
+    # { io: ..., filename: ..., content_type: ... }
+    def files_for_active_storage
+        @file_upload_answers.map do |key, objs|
+            # objs should be an array of survey.js file objects.
+            # A survey.js file object has feilds "name", "type", "content"
+            objs.map do |survey_js_file|
+                base_64_data = survey_js_file['content'].sub(/^data:.*,/, '')
+                decoded_data = Base64.decode64(base_64_data)
+
+                {
+                    io: StringIO.new(decoded_data),
+                    filename: "#{key}_#{survey_js_file['name']}",
+                    content_type: survey_js_file['type'],
+                    # without `identify: false`, rails will try to call various programs (e.g. ImageMagic)
+                    # to analyze files. We don't have those programs installed, so we don't wan't rails erroring
+                    # while trying to call them.
+                    identify: false
+                }
+            end
+        end.flatten
+    end
+end
+
+# Recursively find all objects with the specified key.
+# This function is modified from
+# https://stackoverflow.com/questions/22720849/ruby-search-for-super-nested-key-from-json-response
+def nested_find(obj, needed_key)
+    return [] unless obj.is_a?(Array) || obj.is_a?(Hash)
+
+    ret = []
+
+    if obj.is_a?(Hash)
+        ret.push obj if obj[needed_key]
+        obj.each { |_hash, val| ret += nested_find(val, needed_key) }
+    end
+    obj.each { |val| ret += nested_find(val, needed_key) } if obj.is_a?(Array)
+    ret
 end
