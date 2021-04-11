@@ -1,5 +1,6 @@
 import {
     Applicant,
+    Application,
     Assignment,
     Ddah,
     Instructor,
@@ -7,6 +8,7 @@ import {
     WageChunk,
 } from "../../api/defs/types";
 import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
+import { prepareMinimal } from "./prepare-json";
 
 /**
  * Type of a spreadsheet cell
@@ -142,6 +144,67 @@ export const prepareSpreadsheet = {
                     applicant.student_number,
                     applicant.email,
                     applicant.phone,
+                ])
+            )
+        );
+    },
+    application: function (applications: Application[]) {
+        const minApps = applications.map(prepareMinimal.application);
+        const baseUrl = document.location.origin;
+        return spreadsheetUndefinedToNull(
+            ([
+                [
+                    "Last Name",
+                    "First Name",
+                    "UTORid",
+                    "Student Number",
+                    "email",
+                    "Phone",
+                    "Annotation",
+                    "Department",
+                    "Program",
+                    "YIP",
+                    "GPA",
+                    "Posting",
+                    "Position Preferences",
+                    "Previous UofT Experience",
+                    "Comments",
+                    "Documents",
+                    "Custom Question Answers",
+                ],
+            ] as CellType[][]).concat(
+                minApps.map((application) => [
+                    application.last_name,
+                    application.first_name,
+                    application.utorid,
+                    application.student_number,
+                    application.email,
+                    application.phone,
+                    application.annotation,
+                    application.department,
+                    application.program,
+                    application.yip,
+                    application.gpa,
+                    application.posting,
+                    application.position_preferences
+                        .map(
+                            (position_preference) =>
+                                `${position_preference.preference_level}:${position_preference.position_code}`
+                        )
+                        .join("; "),
+                    application.previous_uoft_experience,
+                    application.comments,
+                    application.documents
+                        .map(
+                            (document) =>
+                                new URL(
+                                    `${baseUrl}/public/files/${document.url_token}`
+                                ).href
+                        )
+                        .join(" "),
+                    application.custom_question_answers
+                        ? JSON.stringify(application.custom_question_answers)
+                        : null,
                 ])
             )
         );

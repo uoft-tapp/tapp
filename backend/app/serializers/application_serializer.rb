@@ -13,7 +13,8 @@ class ApplicationSerializer < ActiveModel::Serializer
                :status,
                :custom_question_answers,
                :annotation,
-               :documents
+               :documents,
+               :position_preferences
 
     def documents
         object.documents.blobs.map do |blob|
@@ -22,6 +23,15 @@ class ApplicationSerializer < ActiveModel::Serializer
                 type: blob.content_type,
                 size: blob.byte_size,
                 url_token: blob.key
+            }
+        end
+    end
+
+    def position_preferences
+        object.position_preferences.map do |position_preference|
+            {
+                position_id: position_preference.position_id,
+                preference_level: position_preference.preference_level
             }
         end
     end

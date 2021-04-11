@@ -45,6 +45,13 @@ export const publicRoutes = {
                 "Get a JSON object with the survey_js data for the posting",
             returns: wrappedPropTypes.any,
         }),
+        "/public/files/:token": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Return the file corresponding to the specified token",
+            returns: wrappedPropTypes.any,
+        }),
     },
     post: {
         "/public/ddahs/:ddah_id/accept": documentCallback({

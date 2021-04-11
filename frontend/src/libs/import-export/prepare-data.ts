@@ -3,6 +3,7 @@ import { prepareSpreadsheet } from "./prepare-spreadsheet";
 import { prepareMinimal } from "./prepare-json";
 import type {
     Applicant,
+    Application,
     Assignment,
     Ddah,
     Instructor,
@@ -13,6 +14,32 @@ import type { ExportFormat } from "./data-to-file";
 
 export type PrepareDataFunc<T> = (data: T[], dataFormat: ExportFormat) => File;
 type FilterFunc<T> = ((array: T[]) => T[]) | null;
+
+/**
+ * Make a function that converts a list of applicants into a `File` object.
+ *
+ * @export
+ * @param {Applicant[]} applications
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function prepareApplicationData(
+    applications: Application[],
+    dataFormat: ExportFormat
+) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.application(applications),
+            toJson: () => ({
+                applications: applications.map((application) =>
+                    prepareMinimal.application(application)
+                ),
+            }),
+        },
+        dataFormat,
+        "applications"
+    );
+}
 
 /**
  * Make a function that converts a list of applicants into a `File` object.

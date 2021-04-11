@@ -149,9 +149,12 @@ class PostingService
                     unique_by: %i[position_id application_id]
                 )
             end
-            application.documents.purge
-            application.documents.attach files_for_active_storage
         end
+        # Saving attachments cannot happen inside of a transaction.
+        # See https://github.com/rails/rails/issues/41903
+        application = @applicant.applications.find_by(posting: @posting)
+        application.documents.purge
+        application.documents.attach files_for_active_storage
     end
 
     private
@@ -186,7 +189,11 @@ class PostingService
                 {
                     io: StringIO.new(decoded_data),
                     filename: "#{key}_#{survey_js_file['name']}",
-                    content_type: survey_js_file['type']
+                    content_type: survey_js_file['type'],
+                    # without `identify: false`, rails will try to call various programs (e.g. ImageMagic)
+                    # to analyze files. We don't have those programs installed, so we don't wan't rails erroring
+                    # while trying to call them.
+                    identify: false
                 }
             end
         end.flatten

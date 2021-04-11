@@ -19,6 +19,8 @@ import {
     MinimalApplicant,
     MinimalDdah,
     Ddah,
+    MinimalApplication,
+    Application,
 } from "../../api/defs/types";
 
 /**
@@ -223,6 +225,27 @@ export const prepareMinimal = {
             student_number: applicant.student_number,
             phone: applicant.phone,
         };
+    },
+    application: function (application: Application): MinimalApplication {
+        return Object.assign(prepareMinimal.applicant(application.applicant), {
+            annotation: application.annotation,
+            comments: application.comments,
+            department: application.department,
+            gpa: application.gpa,
+            program: application.program,
+            status: application.status,
+            yip: application.yip,
+            previous_uoft_experience: application.previous_uoft_experience,
+            documents: application.documents,
+            custom_question_answers: application.custom_question_answers,
+            posting: application.posting?.name || null,
+            position_preferences: application.position_preferences.map(
+                (position_preference) => ({
+                    position_code: position_preference.position.position_code,
+                    preference_level: position_preference.preference_level,
+                })
+            ),
+        });
     },
     ddah: function (ddah: Ddah): MinimalDdah {
         const duties = [...ddah.duties];
