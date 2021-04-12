@@ -63,26 +63,41 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
+    const [showCreateConfirmation, setShowCreateConfirmation] = React.useState(
+        false
+    );
     const [
         showWithdrawConfirmation,
         setShowWithdrawConfirmation,
     ] = React.useState(false);
-
     const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
         false
     );
+    const [showNagConfirmation, setShowNagConfirmation] = React.useState(false);
+    const [showAcceptConfirmation, setShowAcceptConfirmation] = React.useState(
+        false
+    );
+    const [showRejectConfirmation, setShowRejectConfirmation] = React.useState(
+        false
+    );
 
+    function confirmOfferCreate() {
+        if (selectedAssignments?.length > 1) {
+            setShowCreateConfirmation(true);
+        } else {
+            createOffers();
+        }
+    }
     function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
         }
     }
+
     function confirmOfferWithdraw() {
-        // if withdrawing multiple offers at once, show confirmation
         if (selectedAssignments?.length > 1) {
             setShowWithdrawConfirmation(true);
         } else {
-            // does not need confirmation if only withdrawing one offer
             withdrawOffers();
         }
     }
@@ -91,11 +106,11 @@ function OfferActionButtons(props) {
             offerForAssignmentWithdraw(assignment);
         }
     }
+
     function confirmOfferEmail() {
         if (selectedAssignments?.length > 1) {
             setShowEmailConfirmation(true);
         } else {
-            // does not need confirmation if only withdrawing one offer
             emailOffers();
         }
     }
@@ -104,14 +119,38 @@ function OfferActionButtons(props) {
             offerForAssignmentEmail(assignment);
         }
     }
+
+    function confirmOfferNag() {
+        if (selectedAssignments?.length > 1) {
+            setShowNagConfirmation(true);
+        } else {
+            nagOffers();
+        }
+    }
     function nagOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentNag(assignment);
         }
     }
+
+    function confirmOfferAccept() {
+        if (selectedAssignments?.length > 1) {
+            setShowAcceptConfirmation(true);
+        } else {
+            acceptOffers();
+        }
+    }
     function acceptOffers() {
         for (const assignment of selectedAssignments) {
             setOfferForAssignmentAccepted(assignment);
+        }
+    }
+
+    function confirmOfferReject() {
+        if (selectedAssignments?.length > 1) {
+            setShowRejectConfirmation(true);
+        } else {
+            rejectOffers();
         }
     }
     function rejectOffers() {
@@ -138,7 +177,7 @@ function OfferActionButtons(props) {
         <React.Fragment>
             <ActionButton
                 icon={<FaUserPlus />}
-                onClick={createOffers}
+                onClick={confirmOfferCreate}
                 disabled={!actionPermitted.canCreate}
             >
                 Create Offer
@@ -159,25 +198,34 @@ function OfferActionButtons(props) {
             </ActionButton>
             <ActionButton
                 icon={<FaUserClock />}
-                onClick={nagOffers}
+                onClick={confirmOfferNag}
                 disabled={!actionPermitted.canNag}
             >
                 Nag Offer
             </ActionButton>
             <ActionButton
                 icon={<FaCheck />}
-                onClick={acceptOffers}
+                onClick={confirmOfferAccept}
                 disabled={!actionPermitted.canAccept}
             >
                 Set as Accepted
             </ActionButton>
             <ActionButton
                 icon={<FaBan />}
-                onClick={rejectOffers}
+                onClick={confirmOfferReject}
                 disabled={!actionPermitted.canReject}
             >
                 Set as Rejected
             </ActionButton>
+            <MultiManipulateOfferConfirmation
+                data={selectedAssignments}
+                visible={showCreateConfirmation}
+                setVisible={setShowCreateConfirmation}
+                manipulateOffers={createOffers}
+                titleMsg="Creating Multiple Offers"
+                alertMsg={`You are creating the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Create ${selectedAssignments.length} Offers`}
+            />
             <MultiManipulateOfferConfirmation
                 data={selectedAssignments}
                 visible={showWithdrawConfirmation}
@@ -195,6 +243,33 @@ function OfferActionButtons(props) {
                 titleMsg="Emailing Multiple Offers"
                 alertMsg={`You are emailing the following ${selectedAssignments.length} offers:`}
                 confirmBtnMsg={`Email ${selectedAssignments.length} Offers`}
+            />
+            <MultiManipulateOfferConfirmation
+                data={selectedAssignments}
+                visible={showNagConfirmation}
+                setVisible={setShowNagConfirmation}
+                manipulateOffers={nagOffers}
+                titleMsg="Nagging Multiple Offers"
+                alertMsg={`You are nagging the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Nag ${selectedAssignments.length} Offers`}
+            />
+            <MultiManipulateOfferConfirmation
+                data={selectedAssignments}
+                visible={showAcceptConfirmation}
+                setVisible={setShowAcceptConfirmation}
+                manipulateOffers={acceptOffers}
+                titleMsg="Accepting Multiple Offers"
+                alertMsg={`You are accepting the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Accept ${selectedAssignments.length} Offers`}
+            />
+            <MultiManipulateOfferConfirmation
+                data={selectedAssignments}
+                visible={showRejectConfirmation}
+                setVisible={setShowRejectConfirmation}
+                manipulateOffers={rejectOffers}
+                titleMsg="Rejecting Multiple Offers"
+                alertMsg={`You are rejecting the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Reject ${selectedAssignments.length} Offers`}
             />
         </React.Fragment>
     );
