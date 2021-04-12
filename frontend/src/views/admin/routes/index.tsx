@@ -11,6 +11,7 @@ import { AdminDdahsView } from "../ddahs";
 import { PostingOverview } from "../postings/overview";
 import { PostingDetails } from "../postings/posting-details";
 import { PostingPreview } from "../postings/posting-preview";
+import { AdminApplicationsView } from "../applications";
 
 export function AdminRoutes() {
     return (
@@ -50,6 +51,9 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/applicants_and_matching/applicants">
                 <AdminApplicantsView />
+            </Route>
+            <Route exact path="/applicants_and_matching/applications">
+                <AdminApplicationsView />
             </Route>
             <Route exact path="/postings">
                 <Redirect to="/postings/overview" />

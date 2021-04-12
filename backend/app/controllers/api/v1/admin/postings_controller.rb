@@ -22,8 +22,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
     def delete
         @posting = Posting.find(params[:id])
         render_on_condition(
-            object: @posting,
-            condition: proc { @posting.destroy! }
+            object: @posting, condition: proc { @posting.destroy! }
         )
     end
 
@@ -73,7 +72,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :availability
             ).permit!
         filtered_params[:custom_questions] =
-            filtered_params[:custom_questions].to_json
+            filtered_params[:custom_questions].to_hash.deep_stringify_keys
         filtered_params
     end
 
@@ -89,7 +88,7 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :availability
             ).permit!
         filtered_params[:custom_questions] =
-            filtered_params[:custom_questions].to_json
+            filtered_params[:custom_questions].to_hash.deep_stringify_keys
         filtered_params
     end
 end

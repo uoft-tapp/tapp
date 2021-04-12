@@ -61,6 +61,11 @@ export const ROUTES = [
                 name: "Applicants",
                 description: "Manage Applicants",
             },
+            {
+                route: "/applications",
+                name: "Applications",
+                description: "Manage Applications",
+            },
         ],
     },
 ];
