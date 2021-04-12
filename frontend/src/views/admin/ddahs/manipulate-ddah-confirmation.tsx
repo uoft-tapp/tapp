@@ -4,6 +4,7 @@ import { ddahIssues, getReadableStatus } from "../ddah-table";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
 import { compareDDAH } from "../../../libs/compare-table-rows";
+import { generateHeaderCell } from "../../../components/table-utils";
 
 const ddahModalColumn = [
     {
