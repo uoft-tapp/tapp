@@ -3,15 +3,64 @@ import React from "react";
 import { ddahIssues, getReadableStatus } from "../ddah-table";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
-import { ConfirmationDdahRowData, compareDDAH, ddahModalColumn } from "./utils";
+import { compareDDAH } from "../../../libs/compare-table-rows";
 
-export function MultiDeleteDdahConfirmation(props: {
+const ddahModalColumn = [
+    {
+        Header: generateHeaderCell("Position"),
+        accessor: "position_code",
+        width: 200,
+    },
+    {
+        Header: generateHeaderCell("Last Name"),
+        accessor: "last_name",
+        maxWidth: 120,
+    },
+    {
+        Header: generateHeaderCell("First Name"),
+        accessor: "first_name",
+        maxWidth: 120,
+    },
+    {
+        Header: generateHeaderCell("Status"),
+        accessor: "status",
+        maxWidth: 100,
+    },
+    {
+        Header: generateHeaderCell("Issues"),
+        accessor: "issue",
+        width: 250,
+    },
+];
+
+export interface ConfirmationDdahRowData {
+    id?: number;
+    position_code: string;
+    last_name: string;
+    first_name: string;
+    total_hours: number | null;
+    status: string;
+    issue: string;
+}
+
+export function MultiManipulateDdahConfirmation(props: {
     selectedDdahs: Ddah[];
     visible: boolean;
     setVisible: (visible: boolean) => void;
-    deleteDDAHs: () => void;
+    manipulateDDAHs: () => void;
+    titleMsg: String;
+    alertMsg: String;
+    confirmBtnMsg: String;
 }) {
-    const { selectedDdahs, visible, setVisible, deleteDDAHs } = props;
+    const {
+        selectedDdahs,
+        visible,
+        setVisible,
+        manipulateDDAHs,
+        titleMsg,
+        alertMsg,
+        confirmBtnMsg,
+    } = props;
 
     // The omni-search doesn't work on nested properties, so we need to flatten
     // the data we display before sending it to the table.
@@ -43,12 +92,11 @@ export function MultiDeleteDdahConfirmation(props: {
             size={"lg"}
         >
             <Modal.Header closeButton>
-                <Modal.Title>Deleting Multiple DDAHs</Modal.Title>
+                <Modal.Title>{titleMsg}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    You are <b>deleting</b> all of the following{" "}
-                    {selectedDdahs?.length} DDAHs
+                    {alertMsg}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -71,11 +119,11 @@ export function MultiDeleteDdahConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        deleteDDAHs();
+                        manipulateDDAHs();
                         setVisible(false);
                     }}
                 >
-                    Delete {selectedDdahs?.length} DDAHs
+                    {confirmBtnMsg}
                 </Button>
             </Modal.Footer>
         </Modal>

@@ -25,8 +25,7 @@ import {
     deleteDdah,
 } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
-import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
-import { MultiEmailDdahConfirmation } from "./email-ddah-confirmation";
+import { MultiManipulateDdahConfirmation } from "./manipulate-ddah-confirmation";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function AdminDdahsView() {
@@ -50,6 +49,11 @@ export function AdminDdahsView() {
         false
     );
 
+    const [
+        showApproveConfirmation,
+        setShowApproveConfirmation,
+    ] = React.useState(false);
+
     function confirmDDAHDeletion() {
         if (selectedDdahs?.length > 1) {
             setShowDeleteConfirmation(true);
@@ -66,6 +70,14 @@ export function AdminDdahsView() {
         }
     }
 
+    function confirmDDAHApprove() {
+        if (selectedDdahs?.length > 1) {
+            setShowApproveConfirmation(true);
+        } else {
+            approveDDAHs();
+        }
+    }
+
     function deleteDDAHs() {
         for (const ddah of selectedDdahs) {
             dispatch(deleteDdah(ddah));
@@ -75,6 +87,12 @@ export function AdminDdahsView() {
     function emailDDAHs() {
         for (const ddah of selectedDdahs) {
             dispatch(emailDdah(ddah));
+        }
+    }
+
+    function approveDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(approveDdah(ddah));
         }
     }
 
@@ -114,11 +132,7 @@ export function AdminDdahsView() {
                 </ActionButton>
                 <ActionButton
                     icon={FaCheck}
-                    onClick={() => {
-                        for (const ddah of selectedDdahs) {
-                            dispatch(approveDdah(ddah));
-                        }
-                    }}
+                    onClick={confirmDDAHApprove}
                     disabled={selectedDdahIds.length === 0}
                 >
                     Approve DDAH
@@ -143,17 +157,32 @@ export function AdminDdahsView() {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
-            <MultiDeleteDdahConfirmation
+            <MultiManipulateDdahConfirmation
                 selectedDdahs={selectedDdahs}
                 visible={showDeleteConfirmation}
                 setVisible={setShowDeleteConfirmation}
-                deleteDDAHs={deleteDDAHs}
+                manipulateDDAHs={deleteDDAHs}
+                titleMsg="Deleting Multiple DDAHs"
+                alertMsg={`You are deleting all of the following ${selectedDdahs.length} DDAHs`}
+                confirmBtnMsg={`Delete ${selectedDdahs.length} DDAHs`}
             />
-            <MultiEmailDdahConfirmation
+            <MultiManipulateDdahConfirmation
                 selectedDdahs={selectedDdahs}
                 visible={showEmailConfirmation}
                 setVisible={setShowEmailConfirmation}
-                emailDDAHs={emailDDAHs}
+                manipulateDDAHs={emailDDAHs}
+                titleMsg="Emailing Multiple DDAHs"
+                alertMsg={`You are emailing all of the following ${selectedDdahs.length} DDAHs`}
+                confirmBtnMsg={`Email ${selectedDdahs.length} DDAHs`}
+            />
+            <MultiManipulateDdahConfirmation
+                selectedDdahs={selectedDdahs}
+                visible={showApproveConfirmation}
+                setVisible={setShowApproveConfirmation}
+                manipulateDDAHs={approveDDAHs}
+                titleMsg="Approving Multiple DDAHs"
+                alertMsg={`You are approving all of the following ${selectedDdahs.length} DDAHs`}
+                confirmBtnMsg={`Approve ${selectedDdahs.length} DDAHs`}
             />
         </div>
     );
