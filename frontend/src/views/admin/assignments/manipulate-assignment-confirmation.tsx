@@ -4,13 +4,24 @@ import { Button, Modal } from "react-bootstrap";
 import { Assignment } from "../../../api/defs/types";
 import { compareAssignment, assignmentModalColumn } from "./utils";
 
-export function MultiWithdrawOfferConfirmation(props: {
+export function MultiManipulateOfferConfirmation(props: {
     data: Assignment[];
     visible: boolean;
     setVisible: (visibility: boolean) => void;
-    withdrawOffers: () => void;
+    manipulateOffers: () => void;
+    titleMsg: String;
+    alertMsg: String;
+    confirmBtnMsg: String;
 }) {
-    const { data, visible, setVisible, withdrawOffers } = props;
+    const {
+        data,
+        visible,
+        setVisible,
+        manipulateOffers,
+        titleMsg,
+        alertMsg,
+        confirmBtnMsg,
+    } = props;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
@@ -26,12 +37,11 @@ export function MultiWithdrawOfferConfirmation(props: {
             size="lg"
         >
             <Modal.Header closeButton>
-                <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
+                <Modal.Title>{titleMsg}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    You are <b>withdrawing</b> from the following {data?.length}{" "}
-                    offers:
+                    {alertMsg}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -52,11 +62,11 @@ export function MultiWithdrawOfferConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        withdrawOffers();
+                        manipulateOffers();
                         setVisible(false);
                     }}
                 >
-                    Withdraw {data?.length} Offers
+                    {confirmBtnMsg}
                 </Button>
             </Modal.Footer>
         </Modal>

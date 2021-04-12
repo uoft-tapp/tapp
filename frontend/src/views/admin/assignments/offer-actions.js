@@ -19,8 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../../components/action-buttons";
-import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
-import { MultiEmailOfferConfirmation } from "./email-assignment-confirmation";
+import { MultiManipulateOfferConfirmation } from "./manipulate-assignment-confirmation";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -179,17 +178,23 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <MultiWithdrawOfferConfirmation
+            <MultiManipulateOfferConfirmation
                 data={selectedAssignments}
                 visible={showWithdrawConfirmation}
                 setVisible={setShowWithdrawConfirmation}
-                withdrawOffers={withdrawOffers}
+                manipulateOffers={withdrawOffers}
+                titleMsg="Withdrawing Multiple Offers"
+                alertMsg={`You are withdrawing from the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Withdraw ${selectedAssignments.length} Offers`}
             />
-            <MultiEmailOfferConfirmation
+            <MultiManipulateOfferConfirmation
                 data={selectedAssignments}
                 visible={showEmailConfirmation}
                 setVisible={setShowEmailConfirmation}
-                emailOffers={emailOffers}
+                manipulateOffers={emailOffers}
+                titleMsg="Emailing Multiple Offers"
+                alertMsg={`You are emailing the following ${selectedAssignments.length} offers:`}
+                confirmBtnMsg={`Email ${selectedAssignments.length} Offers`}
             />
         </React.Fragment>
     );
