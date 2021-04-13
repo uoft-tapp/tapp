@@ -3,7 +3,7 @@ import React from "react";
 import { ddahIssues, getReadableStatus } from "../ddah-table";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
-import { compareDDAH } from "../../../libs/compare-table-rows";
+import { compareString } from "../../../libs/utils";
 import { generateHeaderCell } from "../../../components/table-utils";
 
 const ddahModalColumn = [
@@ -34,7 +34,7 @@ const ddahModalColumn = [
     },
 ];
 
-export interface ConfirmationDdahRowData {
+type ConfirmationDdahRowData = {
     id?: number;
     position_code: string;
     last_name: string;
@@ -42,25 +42,33 @@ export interface ConfirmationDdahRowData {
     total_hours: number | null;
     status: string;
     issue: string;
+};
+
+function compareDDAH(d1: ConfirmationDdahRowData, d2: ConfirmationDdahRowData) {
+    return (
+        compareString(d1.position_code, d2.position_code) ||
+        compareString(d1.last_name, d2.last_name) ||
+        compareString(d1.first_name, d2.first_name)
+    );
 }
 
-export function MultiManipulateDdahConfirmation(props: {
+export function DdahConfirmationDialog(props: {
     selectedDdahs: Ddah[];
     visible: boolean;
-    setVisible: (visible: boolean) => void;
-    manipulateDDAHs: () => void;
-    titleMsg: String;
-    alertMsg: String;
-    confirmBtnMsg: String;
+    setVisible: Function;
+    callback: Function;
+    title: string;
+    body: string;
+    confirmation: string;
 }) {
     const {
         selectedDdahs,
         visible,
         setVisible,
-        manipulateDDAHs,
-        titleMsg,
-        alertMsg,
-        confirmBtnMsg,
+        callback,
+        title,
+        body,
+        confirmation,
     } = props;
 
     // The omni-search doesn't work on nested properties, so we need to flatten
@@ -93,11 +101,11 @@ export function MultiManipulateDdahConfirmation(props: {
             size={"lg"}
         >
             <Modal.Header closeButton>
-                <Modal.Title>{titleMsg}</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    {alertMsg}
+                    {body}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -120,11 +128,11 @@ export function MultiManipulateDdahConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        manipulateDDAHs();
+                        callback();
                         setVisible(false);
                     }}
                 >
-                    {confirmBtnMsg}
+                    {confirmation}
                 </Button>
             </Modal.Footer>
         </Modal>

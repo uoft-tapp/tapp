@@ -25,7 +25,7 @@ import {
     deleteDdah,
 } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
-import { MultiManipulateDdahConfirmation } from "./manipulate-ddah-confirmation";
+import { DdahConfirmationDialog } from "./ddah-confirmation-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function AdminDdahsView() {
@@ -157,32 +157,32 @@ export function AdminDdahsView() {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
-            <MultiManipulateDdahConfirmation
+            <DdahConfirmationDialog
                 selectedDdahs={selectedDdahs}
                 visible={showDeleteConfirmation}
                 setVisible={setShowDeleteConfirmation}
-                manipulateDDAHs={deleteDDAHs}
-                titleMsg="Deleting Multiple DDAHs"
-                alertMsg={`You are deleting all of the following ${selectedDdahs.length} DDAHs`}
-                confirmBtnMsg={`Delete ${selectedDdahs.length} DDAHs`}
+                callback={deleteDDAHs}
+                title="Deleting Multiple DDAHs"
+                body={`You are deleting all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Delete ${selectedDdahs.length} DDAHs`}
             />
-            <MultiManipulateDdahConfirmation
+            <DdahConfirmationDialog
                 selectedDdahs={selectedDdahs}
                 visible={showEmailConfirmation}
                 setVisible={setShowEmailConfirmation}
-                manipulateDDAHs={emailDDAHs}
-                titleMsg="Emailing Multiple DDAHs"
-                alertMsg={`You are emailing all of the following ${selectedDdahs.length} DDAHs`}
-                confirmBtnMsg={`Email ${selectedDdahs.length} DDAHs`}
+                callback={emailDDAHs}
+                title="Emailing Multiple DDAHs"
+                body={`You are emailing all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Email ${selectedDdahs.length} DDAHs`}
             />
-            <MultiManipulateDdahConfirmation
+            <DdahConfirmationDialog
                 selectedDdahs={selectedDdahs}
                 visible={showApproveConfirmation}
                 setVisible={setShowApproveConfirmation}
-                manipulateDDAHs={approveDDAHs}
-                titleMsg="Approving Multiple DDAHs"
-                alertMsg={`You are approving all of the following ${selectedDdahs.length} DDAHs`}
-                confirmBtnMsg={`Approve ${selectedDdahs.length} DDAHs`}
+                callback={approveDDAHs}
+                title="Approving Multiple DDAHs"
+                body={`You are approving all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Approve ${selectedDdahs.length} DDAHs`}
             />
         </div>
     );

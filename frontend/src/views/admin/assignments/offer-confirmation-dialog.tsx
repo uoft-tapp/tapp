@@ -2,7 +2,7 @@ import React from "react";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Button, Modal } from "react-bootstrap";
 import { Assignment } from "../../../api/defs/types";
-import { compareAssignment } from "../../../libs/compare-table-rows";
+import { compareString } from "../../../libs/utils";
 
 const assignmentModalColumn = [
     {
@@ -40,23 +40,34 @@ const assignmentModalColumn = [
     },
 ];
 
-export function MultiManipulateOfferConfirmation(props: {
+function compareAssignment(a1: Assignment, a2: Assignment) {
+    return (
+        compareString(a1.position.position_code, a2.position.position_code) ||
+        compareString(
+            a1.applicant.last_name || "",
+            a2.applicant.last_name || ""
+        ) ||
+        compareString(a1.applicant.first_name, a2.applicant.first_name)
+    );
+}
+
+export function OfferConfirmationDialog(props: {
     data: Assignment[];
     visible: boolean;
-    setVisible: (visibility: boolean) => void;
-    manipulateOffers: () => void;
-    titleMsg: String;
-    alertMsg: String;
-    confirmBtnMsg: String;
+    setVisible: Function;
+    callback: Function;
+    title: string;
+    body: string;
+    confirmation: string;
 }) {
     const {
         data,
         visible,
         setVisible,
-        manipulateOffers,
-        titleMsg,
-        alertMsg,
-        confirmBtnMsg,
+        callback,
+        title,
+        body,
+        confirmation,
     } = props;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
@@ -73,11 +84,11 @@ export function MultiManipulateOfferConfirmation(props: {
             size="lg"
         >
             <Modal.Header closeButton>
-                <Modal.Title>{titleMsg}</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    {alertMsg}
+                    {body}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
@@ -98,11 +109,11 @@ export function MultiManipulateOfferConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        manipulateOffers();
+                        callback();
                         setVisible(false);
                     }}
                 >
-                    {confirmBtnMsg}
+                    {confirmation}
                 </Button>
             </Modal.Footer>
         </Modal>

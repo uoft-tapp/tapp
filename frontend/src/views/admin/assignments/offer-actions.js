@@ -19,7 +19,7 @@ import {
     FaUserPlus,
 } from "react-icons/fa";
 import { ActionButton } from "../../../components/action-buttons";
-import { MultiManipulateOfferConfirmation } from "./manipulate-assignment-confirmation";
+import { OfferConfirmationDialog } from "./offer-confirmation-dialog";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -217,59 +217,59 @@ function OfferActionButtons(props) {
             >
                 Set as Rejected
             </ActionButton>
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showCreateConfirmation}
                 setVisible={setShowCreateConfirmation}
-                manipulateOffers={createOffers}
-                titleMsg="Creating Multiple Offers"
-                alertMsg={`You are creating the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Create ${selectedAssignments.length} Offers`}
+                callback={createOffers}
+                title="Creating Multiple Offers"
+                body={`You are creating the following ${selectedAssignments.length} offers:`}
+                confirmation={`Create ${selectedAssignments.length} Offers`}
             />
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showWithdrawConfirmation}
                 setVisible={setShowWithdrawConfirmation}
-                manipulateOffers={withdrawOffers}
-                titleMsg="Withdrawing Multiple Offers"
-                alertMsg={`You are withdrawing from the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Withdraw ${selectedAssignments.length} Offers`}
+                callback={withdrawOffers}
+                title="Withdrawing Multiple Offers"
+                body={`You are withdrawing from the following ${selectedAssignments.length} offers:`}
+                confirmation={`Withdraw ${selectedAssignments.length} Offers`}
             />
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showEmailConfirmation}
                 setVisible={setShowEmailConfirmation}
-                manipulateOffers={emailOffers}
-                titleMsg="Emailing Multiple Offers"
-                alertMsg={`You are emailing the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Email ${selectedAssignments.length} Offers`}
+                callback={emailOffers}
+                title="Emailing Multiple Offers"
+                body={`You are emailing the following ${selectedAssignments.length} offers:`}
+                confirmation={`Email ${selectedAssignments.length} Offers`}
             />
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showNagConfirmation}
                 setVisible={setShowNagConfirmation}
-                manipulateOffers={nagOffers}
-                titleMsg="Nagging Multiple Offers"
-                alertMsg={`You are nagging the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Nag ${selectedAssignments.length} Offers`}
+                callback={nagOffers}
+                title="Nagging Multiple Offers"
+                body={`You are nagging the following ${selectedAssignments.length} offers:`}
+                confirmation={`Nag ${selectedAssignments.length} Offers`}
             />
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showAcceptConfirmation}
                 setVisible={setShowAcceptConfirmation}
-                manipulateOffers={acceptOffers}
-                titleMsg="Accepting Multiple Offers"
-                alertMsg={`You are accepting the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Accept ${selectedAssignments.length} Offers`}
+                callback={acceptOffers}
+                title="Accepting Multiple Offers"
+                body={`You are accepting the following ${selectedAssignments.length} offers:`}
+                confirmation={`Accept ${selectedAssignments.length} Offers`}
             />
-            <MultiManipulateOfferConfirmation
+            <OfferConfirmationDialog
                 data={selectedAssignments}
                 visible={showRejectConfirmation}
                 setVisible={setShowRejectConfirmation}
-                manipulateOffers={rejectOffers}
-                titleMsg="Rejecting Multiple Offers"
-                alertMsg={`You are rejecting the following ${selectedAssignments.length} offers:`}
-                confirmBtnMsg={`Reject ${selectedAssignments.length} Offers`}
+                callback={rejectOffers}
+                title="Rejecting Multiple Offers"
+                body={`You are rejecting the following ${selectedAssignments.length} offers:`}
+                confirmation={`Reject ${selectedAssignments.length} Offers`}
             />
         </React.Fragment>
     );
