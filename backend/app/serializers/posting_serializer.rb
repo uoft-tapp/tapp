@@ -19,10 +19,4 @@ class PostingSerializer < ActiveModel::Serializer
     def application_ids
         object.applications.ids
     end
-
-    def custom_questions
-        # The custom questions are stored as JSON strings in the database,
-        # but this should be transpared to API users.
-        JSON.parse object.custom_questions
-    end
 end

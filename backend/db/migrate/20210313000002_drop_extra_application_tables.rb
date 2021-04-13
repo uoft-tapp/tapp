@@ -10,7 +10,7 @@ class DropExtraApplicationTables < ActiveRecord::Migration[6.1]
 
             t.text :previous_uoft_experience
             t.float :gpa
-            t.text :custom_question_answers
+            t.json :custom_question_answers
         end
         drop_table :applicant_data_for_matchings
     end

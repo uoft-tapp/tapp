@@ -4,6 +4,7 @@
 class Application < ApplicationRecord
     has_many :position_preferences, dependent: :destroy
     has_many :positions, through: :position_preferences
+    has_many_attached :documents, service: :application_local
     belongs_to :applicant
     belongs_to :session
     belongs_to :posting, optional: true

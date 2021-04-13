@@ -1,4 +1,5 @@
 import React from "react";
+import { HasId } from "../api/defs/types";
 import { formatDate } from "../libs/utils";
 import { EditableField } from "./edit-field-widgets";
 
@@ -50,7 +51,7 @@ export type EditableType =
  * }
  * @returns {React.ReactElement}
  */
-export function EditableCell<T>({
+export function EditableCell<T extends HasId, Field extends keyof T>({
     column,
     upsert,
     field,
@@ -60,8 +61,8 @@ export function EditableCell<T>({
     editable = true,
 }: {
     column: any;
-    upsert: Function;
-    field: string;
+    upsert: (obj: Partial<T> & HasId) => any;
+    field: Field;
     value: string;
     row: { original: T };
     type?: EditableType;
@@ -72,7 +73,11 @@ export function EditableCell<T>({
 
     async function onChange(newVal: string | number | null) {
         const id = (row.original || (row as any)._original).id;
-        return await upsert({ id, [field]: newVal });
+        try {
+            return await upsert({ id, [field]: newVal } as any);
+        } catch (e) {
+            console.warn(e);
+        }
     }
 
     const formattedValue = isDate ? (value || "").slice(0, 10) : value || "";

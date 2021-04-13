@@ -134,7 +134,7 @@ Rails
                         resources :sessions, only: %i[index create] do
                             collection { post :delete, to: 'sessions#delete' }
                             resources :applicants, only: %i[index create]
-                            resources :applications, only: %i[index]
+                            resources :applications, only: %i[index create]
                             resources :assignments, only: %i[index]
                             resources :ddahs, only: %i[index] do
                                 collection do
@@ -256,6 +256,7 @@ Rails
             resources :postings, only: %i[show] do
                 post :submit, to: 'postings#submit'
             end
+            resources :files, only: %i[show]
         end
 
         # Catch all other route requests and deliver a standard error payload.

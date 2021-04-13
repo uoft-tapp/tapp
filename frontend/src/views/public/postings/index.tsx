@@ -54,8 +54,14 @@ export function PostingView() {
         // The utorid is auto-filled when the user is actually taking a survey.
         survey.data = surveyData || surveyPrefilledData;
 
+        // If the data has changed but we've finished the survey, make sure to set the survey to
+        // a finished state.
+        if (hasSubmitted) {
+            setTimeout(() => survey.doComplete(), 0);
+        }
+
         return survey;
-    }, [surveyJson, surveyData, surveyPrefilledData]);
+    }, [surveyJson, surveyData, surveyPrefilledData, hasSubmitted]);
 
     React.useEffect(() => {
         // We only want to add this callback once when the survey is initialized

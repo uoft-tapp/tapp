@@ -1,6 +1,7 @@
 import type { Utorid } from "./common";
 import type {
     Applicant,
+    Application,
     Assignment,
     ContractTemplate,
     Instructor,
@@ -53,4 +54,14 @@ export interface MinimalPosting
         "posting_positions" | "applications" | "availability"
     > {
     posting_positions: MinimalPostingPosition[];
+}
+
+export interface MinimalApplication
+    extends Omit<
+            NoId<Application>,
+            "posting" | "applicant" | "position_preferences"
+        >,
+        MinimalApplicant {
+    posting: string | null;
+    position_preferences: { position_code: string; preference_level: number }[];
 }

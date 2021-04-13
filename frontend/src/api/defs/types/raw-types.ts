@@ -45,8 +45,15 @@ export interface RawApplication extends HasId {
     yip: number | null;
     gpa: number | null;
     status: string | null;
-    custom_question_answers: any;
+    custom_question_answers: unknown | null;
     annotation: string | null;
+    documents: {
+        name: string;
+        type: string;
+        size: number;
+        url_token: string;
+    }[];
+    position_preferences: { position_id: number; preference_level: number }[];
 }
 
 export interface RawAssignment extends HasId {
@@ -106,7 +113,7 @@ export interface RawPosting extends HasId {
     open_date: string | null;
     close_date: string | null;
     availability: "auto" | "open" | "closed";
-    custom_questions: any;
+    custom_questions: { pages: { name: string; [key: string]: any }[] } | null;
     posting_position_ids: number[];
     application_ids: number[];
     url_token: string;

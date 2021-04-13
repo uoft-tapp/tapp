@@ -6,7 +6,7 @@ class CreatePostings < ActiveRecord::Migration[6.1]
             t.datetime :close_date
             t.integer :availability, default: 0
             t.text :intro_text
-            t.text :custom_questions
+            t.json :custom_questions
             t.string :name, null: false
             t.string :url_token
 

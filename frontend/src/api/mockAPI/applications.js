@@ -53,5 +53,11 @@ export const applicationsRoutes = {
             posts: docApiPropTypes.application,
             returns: docApiPropTypes.application,
         }),
+        "/sessions/:session_id/applications": documentCallback({
+            func: (data, params, body) => new Application(data).upsert(body),
+            summary: "Upsert an application",
+            posts: docApiPropTypes.application,
+            returns: docApiPropTypes.application,
+        }),
     },
 };
