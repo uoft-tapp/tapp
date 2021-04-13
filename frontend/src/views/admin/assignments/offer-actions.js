@@ -10,16 +10,8 @@ import {
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
 } from "../../../api/actions";
-import {
-    FaEnvelope,
-    FaBan,
-    FaCheck,
-    FaUserTimes,
-    FaUserClock,
-    FaUserPlus,
-} from "react-icons/fa";
-import { ActionButton } from "../../../components/action-buttons";
-import { OfferConfirmationDialog } from "./offer-confirmation-dialog";
+import { ActionButtons } from "./action-buttons";
+import { ActionConfirmationDialogs } from "./action-confirmation-dialogs";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -52,7 +44,7 @@ const OfferTest = {
     },
 };
 
-function OfferActionButtons(props) {
+function ConfirmWithDialogActionButton(props) {
     const selectedAssignments = props.assignments;
     const {
         offerForAssignmentCreate,
@@ -173,103 +165,53 @@ function OfferActionButtons(props) {
             selectedAssignments.every(OfferTest[key]);
     }
 
+    const actionConfirmation = {
+        accept: confirmOfferAccept,
+        create: confirmOfferCreate,
+        nag: confirmOfferNag,
+        reject: confirmOfferReject,
+        withdraw: confirmOfferWithdraw,
+        email: confirmOfferEmail,
+    };
+
+    const actionCallback = {
+        accept: acceptOffers,
+        create: createOffers,
+        nag: nagOffers,
+        reject: rejectOffers,
+        withdraw: withdrawOffers,
+        email: emailOffers,
+    };
+
+    const dialogVisible = {
+        accept: showAcceptConfirmation,
+        create: showCreateConfirmation,
+        nag: showNagConfirmation,
+        reject: showRejectConfirmation,
+        withdraw: showWithdrawConfirmation,
+        email: showEmailConfirmation,
+    };
+
+    const dialogSetVisible = {
+        accept: setShowAcceptConfirmation,
+        create: setShowCreateConfirmation,
+        nag: setShowNagConfirmation,
+        reject: setShowRejectConfirmation,
+        withdraw: setShowWithdrawConfirmation,
+        email: setShowEmailConfirmation,
+    };
+
     return (
         <React.Fragment>
-            <ActionButton
-                icon={<FaUserPlus />}
-                onClick={confirmOfferCreate}
-                disabled={!actionPermitted.canCreate}
-            >
-                Create Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaUserTimes />}
-                onClick={confirmOfferWithdraw}
-                disabled={!actionPermitted.canWithdraw}
-            >
-                Withdraw Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaEnvelope />}
-                onClick={confirmOfferEmail}
-                disabled={!actionPermitted.canEmail}
-            >
-                Email Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaUserClock />}
-                onClick={confirmOfferNag}
-                disabled={!actionPermitted.canNag}
-            >
-                Nag Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaCheck />}
-                onClick={confirmOfferAccept}
-                disabled={!actionPermitted.canAccept}
-            >
-                Set as Accepted
-            </ActionButton>
-            <ActionButton
-                icon={<FaBan />}
-                onClick={confirmOfferReject}
-                disabled={!actionPermitted.canReject}
-            >
-                Set as Rejected
-            </ActionButton>
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showCreateConfirmation}
-                setVisible={setShowCreateConfirmation}
-                callback={createOffers}
-                title="Creating Multiple Offers"
-                body={`You are creating the following ${selectedAssignments.length} offers:`}
-                confirmation={`Create ${selectedAssignments.length} Offers`}
+            <ActionButtons
+                actionPermitted={actionPermitted}
+                actionConfirmation={actionConfirmation}
             />
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showWithdrawConfirmation}
-                setVisible={setShowWithdrawConfirmation}
-                callback={withdrawOffers}
-                title="Withdrawing Multiple Offers"
-                body={`You are withdrawing from the following ${selectedAssignments.length} offers:`}
-                confirmation={`Withdraw ${selectedAssignments.length} Offers`}
-            />
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showEmailConfirmation}
-                setVisible={setShowEmailConfirmation}
-                callback={emailOffers}
-                title="Emailing Multiple Offers"
-                body={`You are emailing the following ${selectedAssignments.length} offers:`}
-                confirmation={`Email ${selectedAssignments.length} Offers`}
-            />
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showNagConfirmation}
-                setVisible={setShowNagConfirmation}
-                callback={nagOffers}
-                title="Nagging Multiple Offers"
-                body={`You are nagging the following ${selectedAssignments.length} offers:`}
-                confirmation={`Nag ${selectedAssignments.length} Offers`}
-            />
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showAcceptConfirmation}
-                setVisible={setShowAcceptConfirmation}
-                callback={acceptOffers}
-                title="Accepting Multiple Offers"
-                body={`You are accepting the following ${selectedAssignments.length} offers:`}
-                confirmation={`Accept ${selectedAssignments.length} Offers`}
-            />
-            <OfferConfirmationDialog
-                data={selectedAssignments}
-                visible={showRejectConfirmation}
-                setVisible={setShowRejectConfirmation}
-                callback={rejectOffers}
-                title="Rejecting Multiple Offers"
-                body={`You are rejecting the following ${selectedAssignments.length} offers:`}
-                confirmation={`Reject ${selectedAssignments.length} Offers`}
+            <ActionConfirmationDialogs
+                selectedAssignments={selectedAssignments}
+                actionCallback={actionCallback}
+                dialogVisible={dialogVisible}
+                dialogSetVisible={dialogSetVisible}
             />
         </React.Fragment>
     );
@@ -293,4 +235,4 @@ export const ConnectedOfferActionButtons = connect(
         setOfferForAssignmentAccepted,
         setOfferForAssignmentRejected,
     }
-)(OfferActionButtons);
+)(ConfirmWithDialogActionButton);
