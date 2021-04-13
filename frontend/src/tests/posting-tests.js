@@ -10,8 +10,6 @@ import {
 import PropTypes from "prop-types";
 import { databaseSeeder } from "./setup";
 
-// TODO: Remove eslint disable. This can be done as soon as these tests are actually implemented.
-
 export function postingTests(api) {
     const { apiGET, apiPOST } = api;
     let session;
@@ -23,6 +21,10 @@ export function postingTests(api) {
         open_date: "2021/01/01",
         close_date: "2021/05/01",
         availability: "auto",
+        custom_questions: [
+            "What year of study are you in?",
+            "Do you have any previous TA experience?",
+        ],
     };
     const postingPos = {
         hours: 20,
@@ -62,6 +64,7 @@ export function postingTests(api) {
         expect(resp.payload.id).not.toBeNull();
     });
 
+    // "Create a posting for a session" has to be run before this test case
     it("Modify a posting", async () => {
         const updatedPostingData = {
             id: posting.id,
@@ -105,6 +108,7 @@ export function postingTests(api) {
         expect(resp).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(postingPropTypes), resp.payload);
     });
+
     it("Can set `custom_questions` to an arbitrary serializable object and the same object (i.e., an object and not the stringified version) gets returned.", async () => {
         const updatePostingData = {
             id: posting.id,
@@ -187,16 +191,21 @@ export function postingTests(api) {
         expect(resp.payload.posting_id).toEqual(posting.id);
         Object.assign(postingPos, resp.payload);
     });
-    it.todo("A posting contains a list of all associated posting_position ids"); //create or fetch?
-    it.todo("A posting contains a list of all associated application ids"); //create or fetch?
+
+    // `/admin/postings/${posting.id}/applications` need to be implemented
+    it.todo("Fetch all applications associated with a posting");
+
     it("Fetch a survey for a posting", async () => {
         resp = await apiGET(`/admin/postings/${posting.id}/survey`);
         expect(resp).toHaveStatus("success");
+        console.log(resp.payload.pages);
     });
+
     it.todo(
         "Survey for a posting includes questions related to each PostingPosition"
     );
-    it("Cannot create a posting_position with a position associated with a different session than the posting", async () => {
+
+    it.skip("Cannot create a posting_position with a position associated with a different session than the posting", async () => {
         const newSession = await addSession(api);
         const newPosting = {
             name: "CSC400F TA",
@@ -222,17 +231,8 @@ export function postingTests(api) {
         );
         expect(resp).toHaveStatus("error");
     });
-    it("Delete a posting_position", async () => {
-        resp = await apiPOST(`/admin/posting_positions/delete`, {
-            posting_id: posting.id,
-            position_id: position.id,
-        });
-        expect(resp).toHaveStatus("success");
-        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
-        expect(
-            resp.payload.filter((p) => p.position_id === position.id).length
-        ).toEqual(0);
-    });
+
+    // "Create a posting_position for a posting" has to be run before this test case
     it("Modify a posting_position", async () => {
         const updatePostingPos = {
             position_id: postingPos.position_id,
@@ -247,12 +247,7 @@ export function postingTests(api) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(updatePostingPos);
     });
-    it("Deleting a posting also deletes all associated posting_positions", async () => {
-        resp = await apiPOST("/admin/postings/delete", { id: posting.id });
-        expect(resp).toHaveStatus("success");
-        resp = await apiGET(`/admin/postings/${posting.id}`);
-        expect(resp).toHaveStatus("error");
-    });
+
     it("Cannot create two posting_positions with the same position_id for a single posting", async () => {
         const newPostingPos = {
             position_id: position.id,
@@ -266,6 +261,8 @@ export function postingTests(api) {
         );
         expect(resp).toHaveStatus("success");
         resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
+
+        // The previous POST request should not create a new posting_position and instead it upserts to an existing one
         expect(
             resp.payload.filter((p) => p.position_id === position.id).length
         ).toEqual(1);
@@ -295,12 +292,38 @@ export function postingTests(api) {
             `/admin/postings/${newPosting.id}/posting_positions`,
             newPostingPos
         );
+
         expect(resp).toHaveStatus("success");
         resp = await apiGET(
             `/admin/postings/${newPosting.id}/posting_positions`
         );
+        // Verify a new posting_position is created successfully for the new posting
         expect(
             resp.payload.filter((p) => p.position_id === position.id).length
         ).toEqual(1);
+    });
+
+    it("Delete a posting_position", async () => {
+        resp = await apiPOST(`/admin/posting_positions/delete`, {
+            posting_id: posting.id,
+            position_id: position.id,
+        });
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
+        expect(
+            resp.payload.filter((p) => p.position_id === position.id).length
+        ).toEqual(0);
+    });
+
+    it.skip("Deleting a posting also deletes all associated posting_positions", async () => {
+        // Recreate the posting_position because it has been deleted in the previous test case
+        resp = await apiPOST(
+            `/admin/postings/${posting.id}/posting_positions`,
+            { ...postingPos, position_id: position.id }
+        );
+        resp = await apiPOST("/admin/postings/delete", { id: posting.id });
+        expect(resp).toHaveStatus("success");
+        resp = await apiGET(`/admin/postings/${posting.id}`);
+        expect(resp).toHaveStatus("error");
     });
 }
