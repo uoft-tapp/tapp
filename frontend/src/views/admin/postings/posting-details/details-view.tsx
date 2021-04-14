@@ -2,7 +2,7 @@ import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button, Container, Modal, Row, Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Column } from "react-table";
+import { Cell, Column } from "react-table";
 import {
     deletePostingPosition,
     positionsSelector,
@@ -15,7 +15,10 @@ import { generateHeaderCell } from "../../../../components/table-utils";
 import { arrayDiff } from "../../../../libs/utils";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import "./style.css";
-import { EditableCell } from "../../../../components/editable-cell";
+import {
+    EditableCell,
+    EditableType,
+} from "../../../../components/editable-cell";
 
 interface PostingPositionRow {
     id: number;
@@ -62,21 +65,6 @@ function validateJson(json: string) {
         };
     }
 }
-
-const DEFAULT_COLUMNS: Column<PostingPositionRow>[] = [
-    {
-        Header: generateHeaderCell("Position Code"),
-        accessor: "position_code",
-    },
-    {
-        Header: generateHeaderCell("Num Positions"),
-        accessor: "num_positions",
-    },
-    {
-        Header: generateHeaderCell("Hours per Assignment"),
-        accessor: "hours",
-    },
-];
 
 export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     const dispatch = useThunkDispatch();
@@ -128,6 +116,48 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         return { postingPositions, tableData, selected };
     }, [posting_id, posting, positions]);
 
+    function generateCell(field: keyof PostingPositionRow, type: EditableType) {
+        return (props: Cell<PostingPositionRow>) => {
+            const row = props.row.original;
+            function upsert(partial: Partial<PostingPositionRow>) {
+                let newVal = partial[field];
+                return dispatch(
+                    upsertPostingPosition({
+                        position_id: row.position_id,
+                        posting_id: row.posting_id,
+                        [field]: newVal,
+                    })
+                );
+            }
+            return (
+                <EditableCell
+                    field={field}
+                    upsert={upsert}
+                    type={type}
+                    editable={row.true_posting_position}
+                    {...props}
+                />
+            );
+        };
+    }
+
+    const columns: Column<PostingPositionRow>[] = [
+        {
+            Header: generateHeaderCell("Position Code"),
+            accessor: "position_code",
+        },
+        {
+            Header: generateHeaderCell("Num Positions"),
+            accessor: "num_positions",
+            Cell: generateCell("num_positions", "number"),
+        },
+        {
+            Header: generateHeaderCell("Hours per Assignment"),
+            accessor: "hours",
+            Cell: generateCell("hours", "number"),
+        },
+    ];
+
     const selectionChange = React.useCallback(
         async (newSelection: number[]) => {
             const added = arrayDiff(newSelection, selected);
@@ -175,8 +205,9 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         [dispatch, posting]
     );
 
-    const _upsertPosting = (posting: Partial<Posting>) =>
+    function _upsertPosting(posting: Partial<Posting>) {
         dispatch(upsertPosting(posting));
+    }
 
     let numCustomQuestions = 0;
     const pages = posting.custom_questions?.pages;
@@ -246,10 +277,12 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
             <h4 className="mt-2">Positions</h4>
             <p>
                 The selected positions below will be available when applicants
-                apply to this posting.
+                apply to this posting (You cannot edit <em>Num Position</em> or{" "}
+                <em>Hours per Assignment</em> until it is selected as part of
+                this posting.)
             </p>
             <AdvancedFilterTable
-                columns={DEFAULT_COLUMNS}
+                columns={columns}
                 data={tableData}
                 filterable={true}
                 selected={selected}
