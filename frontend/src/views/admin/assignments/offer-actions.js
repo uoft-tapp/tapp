@@ -10,12 +10,14 @@ import {
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
 } from "../../../api/actions";
-import { CreateOfferButtonWithDialog } from "./create-offer-button-with-dialog";
-import { WithdrawOfferButtonWithDialog } from "./withdraw-offer-button-with-dialog";
-import { EmailOfferButtonWithDialog } from "./email-offer-button-with-dialog";
-import { NagOfferButtonWithDialog } from "./nag-offer-button-with-dialog";
-import { AcceptOfferButtonWithDialog } from "./accept-offer-button-with-dialog";
-import { RejectOfferButtonWithDialog } from "./reject-offer-button-with-dialog";
+import {
+    CreateOfferButtonWithDialog,
+    WithdrawOfferButtonWithDialog,
+    EmailOfferButtonWithDialog,
+    NagOfferButtonWithDialog,
+    AcceptOfferButtonWithDialog,
+    RejectOfferButtonWithDialog,
+} from "./offer-button-with-dialog";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -59,96 +61,36 @@ function ConfirmWithDialogActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    const [showCreateConfirmation, setShowCreateConfirmation] = React.useState(
-        false
-    );
-    const [
-        showWithdrawConfirmation,
-        setShowWithdrawConfirmation,
-    ] = React.useState(false);
-    const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
-        false
-    );
-    const [showNagConfirmation, setShowNagConfirmation] = React.useState(false);
-    const [showAcceptConfirmation, setShowAcceptConfirmation] = React.useState(
-        false
-    );
-    const [showRejectConfirmation, setShowRejectConfirmation] = React.useState(
-        false
-    );
-
-    function confirmOfferCreate() {
-        if (selectedAssignments?.length > 1) {
-            setShowCreateConfirmation(true);
-        } else {
-            createOffers();
-        }
-    }
     function createOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentCreate(assignment);
         }
     }
 
-    function confirmOfferWithdraw() {
-        if (selectedAssignments?.length > 1) {
-            setShowWithdrawConfirmation(true);
-        } else {
-            withdrawOffers();
-        }
-    }
     function withdrawOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentWithdraw(assignment);
         }
     }
 
-    function confirmOfferEmail() {
-        if (selectedAssignments?.length > 1) {
-            setShowEmailConfirmation(true);
-        } else {
-            emailOffers();
-        }
-    }
     function emailOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentEmail(assignment);
         }
     }
 
-    function confirmOfferNag() {
-        if (selectedAssignments?.length > 1) {
-            setShowNagConfirmation(true);
-        } else {
-            nagOffers();
-        }
-    }
     function nagOffers() {
         for (const assignment of selectedAssignments) {
             offerForAssignmentNag(assignment);
         }
     }
 
-    function confirmOfferAccept() {
-        if (selectedAssignments?.length > 1) {
-            setShowAcceptConfirmation(true);
-        } else {
-            acceptOffers();
-        }
-    }
     function acceptOffers() {
         for (const assignment of selectedAssignments) {
             setOfferForAssignmentAccepted(assignment);
         }
     }
 
-    function confirmOfferReject() {
-        if (selectedAssignments?.length > 1) {
-            setShowRejectConfirmation(true);
-        } else {
-            rejectOffers();
-        }
-    }
     function rejectOffers() {
         for (const assignment of selectedAssignments) {
             setOfferForAssignmentRejected(assignment);
@@ -173,50 +115,32 @@ function ConfirmWithDialogActionButtons(props) {
         <React.Fragment>
             <CreateOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canCreate}
-                actionButtonOnClick={confirmOfferCreate}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showCreateConfirmation}
-                dialogSetVisible={setShowCreateConfirmation}
                 actionCallback={createOffers}
             />
             <WithdrawOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canWithdraw}
-                actionButtonOnClick={confirmOfferWithdraw}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showWithdrawConfirmation}
-                dialogSetVisible={setShowWithdrawConfirmation}
                 actionCallback={withdrawOffers}
             />
             <EmailOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canEmail}
-                actionButtonOnClick={confirmOfferEmail}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showEmailConfirmation}
-                dialogSetVisible={setShowEmailConfirmation}
                 actionCallback={emailOffers}
             />
             <NagOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canNag}
-                actionButtonOnClick={confirmOfferNag}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showNagConfirmation}
-                dialogSetVisible={setShowNagConfirmation}
                 actionCallback={nagOffers}
             />
             <AcceptOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canAccept}
-                actionButtonOnClick={confirmOfferAccept}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showAcceptConfirmation}
-                dialogSetVisible={setShowAcceptConfirmation}
                 actionCallback={acceptOffers}
             />
             <RejectOfferButtonWithDialog
                 actionButtonEnable={actionPermitted.canReject}
-                actionButtonOnClick={confirmOfferReject}
                 selectedAssignments={selectedAssignments}
-                dialogVisible={showRejectConfirmation}
-                dialogSetVisible={setShowRejectConfirmation}
                 actionCallback={rejectOffers}
             />
         </React.Fragment>
