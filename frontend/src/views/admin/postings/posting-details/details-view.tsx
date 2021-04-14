@@ -12,8 +12,10 @@ import {
 import { Posting, PostingPosition } from "../../../../api/defs/types";
 import { AdvancedFilterTable } from "../../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../../components/table-utils";
-import { arrayDiff, formatDate } from "../../../../libs/utils";
+import { arrayDiff } from "../../../../libs/utils";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
+import "./style.css";
+import { EditableCell } from "../../../../components/editable-cell";
 
 interface PostingPositionRow {
     id: number;
@@ -173,6 +175,9 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         [dispatch, posting]
     );
 
+    const _upsertPosting = (posting: Partial<Posting>) =>
+        dispatch(upsertPosting(posting));
+
     let numCustomQuestions = 0;
     const pages = posting.custom_questions?.pages;
     if (Array.isArray(pages)) {
@@ -184,26 +189,65 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
 
     return (
         <React.Fragment>
-            <table>
+            <table className="posting-details-view">
                 <tbody>
                     <tr>
                         <th>Name</th>
-                        <td>{posting.name}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Posting Name" }}
+                                upsert={_upsertPosting}
+                                field="name"
+                                row={{ original: posting }}
+                                value={posting.name}
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Open Date</th>
-                        <td>{formatDate(posting.open_date || "")}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Open Date" }}
+                                upsert={_upsertPosting}
+                                field="open_date"
+                                row={{ original: posting }}
+                                value={posting.open_date || ""}
+                                type="date"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Close Date</th>
-                        <td>{formatDate(posting.close_date || "")}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Close Date" }}
+                                upsert={_upsertPosting}
+                                field="close_date"
+                                row={{ original: posting }}
+                                value={posting.close_date || ""}
+                                type="date"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Intro Text</th>
-                        <td>{posting.intro_text}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Intro Text" }}
+                                upsert={_upsertPosting}
+                                field="intro_text"
+                                row={{ original: posting }}
+                                value={posting.intro_text || ""}
+                            />
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <h4 className="mt-2">Positions</h4>
+            <p>
+                The selected positions below will be available when applicants
+                apply to this posting.
+            </p>
             <AdvancedFilterTable
                 columns={DEFAULT_COLUMNS}
                 data={tableData}
