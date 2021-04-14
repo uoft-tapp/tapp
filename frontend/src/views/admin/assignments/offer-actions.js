@@ -10,15 +10,12 @@ import {
     setOfferForAssignmentAccepted,
     setOfferForAssignmentRejected,
 } from "../../../api/actions";
-import {
-    FaEnvelope,
-    FaBan,
-    FaCheck,
-    FaUserTimes,
-    FaUserClock,
-    FaUserPlus,
-} from "react-icons/fa";
-import { ConfirmWithDialogActionButton } from "./confirm-with-dialog-action-button";
+import { CreateOfferButtonWithDialog } from "./create-offer-button-with-dialog";
+import { WithdrawOfferButtonWithDialog } from "./withdraw-offer-button-with-dialog";
+import { EmailOfferButtonWithDialog } from "./email-offer-button-with-dialog";
+import { NagOfferButtonWithDialog } from "./nag-offer-button-with-dialog";
+import { AcceptOfferButtonWithDialog } from "./accept-offer-button-with-dialog";
+import { RejectOfferButtonWithDialog } from "./reject-offer-button-with-dialog";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -174,83 +171,53 @@ function ConfirmWithDialogActionButtons(props) {
 
     return (
         <React.Fragment>
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaUserPlus />}
-                actionConfirmation={confirmOfferCreate}
-                buttonEnable={actionPermitted.canCreate}
-                buttonText="Create Offer"
+            <CreateOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canCreate}
+                actionButtonOnClick={confirmOfferCreate}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showCreateConfirmation}
                 dialogSetVisible={setShowCreateConfirmation}
                 actionCallback={createOffers}
-                dialogTitle="Creating Multiple Offers"
-                dialogBody={`You are creating the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Create ${selectedAssignments.length} Offers`}
             />
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaUserTimes />}
-                actionConfirmation={confirmOfferWithdraw}
-                buttonEnable={actionPermitted.canWithdraw}
-                buttonText="Withdraw Offer"
+            <WithdrawOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canWithdraw}
+                actionButtonOnClick={confirmOfferWithdraw}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showWithdrawConfirmation}
                 dialogSetVisible={setShowWithdrawConfirmation}
                 actionCallback={withdrawOffers}
-                dialogTitle="Withdrawing Multiple Offers"
-                dialogBody={`You are withdrawing from the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Withdraw ${selectedAssignments.length} Offers`}
             />
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaEnvelope />}
-                actionConfirmation={confirmOfferEmail}
-                buttonEnable={actionPermitted.canEmail}
-                buttonText="Email Offer"
+            <EmailOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canEmail}
+                actionButtonOnClick={confirmOfferEmail}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showEmailConfirmation}
                 dialogSetVisible={setShowEmailConfirmation}
                 actionCallback={emailOffers}
-                dialogTitle="Emailing Multiple Offers"
-                dialogBody={`You are emailing the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Email ${selectedAssignments.length} Offers`}
             />
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaUserClock />}
-                actionConfirmation={confirmOfferNag}
-                buttonEnable={actionPermitted.canNag}
-                buttonText="Nag Offer"
+            <NagOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canNag}
+                actionButtonOnClick={confirmOfferNag}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showNagConfirmation}
                 dialogSetVisible={setShowNagConfirmation}
                 actionCallback={nagOffers}
-                dialogTitle="Nagging Multiple Offers"
-                dialogBody={`You are nagging the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Nag ${selectedAssignments.length} Offers`}
             />
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaCheck />}
-                actionConfirmation={confirmOfferAccept}
-                buttonEnable={actionPermitted.canAccept}
-                buttonText="Set as Accepted"
+            <AcceptOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canAccept}
+                actionButtonOnClick={confirmOfferAccept}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showAcceptConfirmation}
                 dialogSetVisible={setShowAcceptConfirmation}
                 actionCallback={acceptOffers}
-                dialogTitle="Accepting Multiple Offers"
-                dialogBody={`You are accepting the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Accept ${selectedAssignments.length} Offers`}
             />
-            <ConfirmWithDialogActionButton
-                buttonIcon={<FaBan />}
-                actionConfirmation={confirmOfferReject}
-                buttonEnable={actionPermitted.canReject}
-                buttonText="Set as Rejected"
+            <RejectOfferButtonWithDialog
+                actionButtonEnable={actionPermitted.canReject}
+                actionButtonOnClick={confirmOfferReject}
                 selectedAssignments={selectedAssignments}
                 dialogVisible={showRejectConfirmation}
                 dialogSetVisible={setShowRejectConfirmation}
                 actionCallback={rejectOffers}
-                dialogTitle="Reject Multiple Offers"
-                dialogBody={`You are rejecting the following ${selectedAssignments.length} offers:`}
-                dialogConfirmation={`Reject ${selectedAssignments.length} Offers`}
             />
         </React.Fragment>
     );
