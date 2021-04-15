@@ -12,13 +12,13 @@ import {
 } from "react-icons/fa";
 
 type ButtonWithDialogProps = {
-    actionButtonDisable?: boolean;
+    disabled?: boolean;
     selectedAssignments: Assignment[];
     callback: Function;
 };
 
 export function CreateOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -37,7 +37,7 @@ export function CreateOfferButtonWithDialog({
             <ActionButton
                 icon={<FaUserPlus />}
                 onClick={confirmOfferCreate}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Create Offer
             </ActionButton>
@@ -55,7 +55,7 @@ export function CreateOfferButtonWithDialog({
 }
 
 export function WithdrawOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -74,7 +74,7 @@ export function WithdrawOfferButtonWithDialog({
             <ActionButton
                 icon={<FaUserTimes />}
                 onClick={confirmOfferWithdraw}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Withdraw Offer
             </ActionButton>
@@ -92,7 +92,7 @@ export function WithdrawOfferButtonWithDialog({
 }
 
 export function EmailOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -111,7 +111,7 @@ export function EmailOfferButtonWithDialog({
             <ActionButton
                 icon={<FaEnvelope />}
                 onClick={confirmOfferEmail}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Email Offer
             </ActionButton>
@@ -129,7 +129,7 @@ export function EmailOfferButtonWithDialog({
 }
 
 export function NagOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -148,7 +148,7 @@ export function NagOfferButtonWithDialog({
             <ActionButton
                 icon={<FaUserClock />}
                 onClick={confirmOfferNag}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Nag Offer
             </ActionButton>
@@ -166,7 +166,7 @@ export function NagOfferButtonWithDialog({
 }
 
 export function AcceptOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -185,7 +185,7 @@ export function AcceptOfferButtonWithDialog({
             <ActionButton
                 icon={<FaCheck />}
                 onClick={confirmOfferAccept}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Set as Accepted
             </ActionButton>
@@ -203,7 +203,7 @@ export function AcceptOfferButtonWithDialog({
 }
 
 export function RejectOfferButtonWithDialog({
-    actionButtonDisable = true,
+    disabled = true,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -222,7 +222,7 @@ export function RejectOfferButtonWithDialog({
             <ActionButton
                 icon={<FaBan />}
                 onClick={confirmOfferReject}
-                disabled={actionButtonDisable}
+                disabled={disabled}
             >
                 Set as Rejected
             </ActionButton>

@@ -72,11 +72,12 @@ export function OfferConfirmationDialog(props: {
 
     const [inProgress, setInProgress] = React.useState(false);
 
-    async function executeCallback() {
+    function executeCallback() {
         setInProgress(true);
-        await callback();
-        setInProgress(false);
-        setVisible(false);
+        Promise.all(callback()).then(() => {
+            setInProgress(false);
+            setVisible(false);
+        });
     }
 
     // When a confirm operation is in progress, a spinner is displayed; otherwise

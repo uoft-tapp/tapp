@@ -61,40 +61,40 @@ function ConfirmWithDialogActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    async function createOffers() {
-        for (const assignment of selectedAssignments) {
-            await offerForAssignmentCreate(assignment);
-        }
+    function createOffers() {
+        return selectedAssignments.map((assignment) =>
+            offerForAssignmentCreate(assignment)
+        );
     }
 
-    async function withdrawOffers() {
-        for (const assignment of selectedAssignments) {
-            await offerForAssignmentWithdraw(assignment);
-        }
+    function withdrawOffers() {
+        return selectedAssignments.map((assignment) =>
+            offerForAssignmentWithdraw(assignment)
+        );
     }
 
-    async function emailOffers() {
-        for (const assignment of selectedAssignments) {
-            await offerForAssignmentEmail(assignment);
-        }
+    function emailOffers() {
+        return selectedAssignments.map((assignment) =>
+            offerForAssignmentEmail(assignment)
+        );
     }
 
-    async function nagOffers() {
-        for (const assignment of selectedAssignments) {
-            await offerForAssignmentNag(assignment);
-        }
+    function nagOffers() {
+        return selectedAssignments.map((assignment) =>
+            offerForAssignmentNag(assignment)
+        );
     }
 
-    async function acceptOffers() {
-        for (const assignment of selectedAssignments) {
-            await setOfferForAssignmentAccepted(assignment);
-        }
+    function acceptOffers() {
+        return selectedAssignments.map((assignment) =>
+            setOfferForAssignmentAccepted(assignment)
+        );
     }
 
-    async function rejectOffers() {
-        for (const assignment of selectedAssignments) {
-            await setOfferForAssignmentRejected(assignment);
-        }
+    function rejectOffers() {
+        return selectedAssignments.map((assignment) =>
+            setOfferForAssignmentRejected(assignment)
+        );
     }
 
     const actionPermitted = {};
@@ -114,32 +114,32 @@ function ConfirmWithDialogActionButtons(props) {
     return (
         <React.Fragment>
             <CreateOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canCreate}
+                disabled={!actionPermitted.canCreate}
                 selectedAssignments={selectedAssignments}
                 callback={createOffers}
             />
             <WithdrawOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canWithdraw}
+                disabled={!actionPermitted.canWithdraw}
                 selectedAssignments={selectedAssignments}
                 callback={withdrawOffers}
             />
             <EmailOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canEmail}
+                disabled={!actionPermitted.canEmail}
                 selectedAssignments={selectedAssignments}
                 callback={emailOffers}
             />
             <NagOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canNag}
+                disabled={!actionPermitted.canNag}
                 selectedAssignments={selectedAssignments}
                 callback={nagOffers}
             />
             <AcceptOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canAccept}
+                disabled={!actionPermitted.canAccept}
                 selectedAssignments={selectedAssignments}
                 callback={acceptOffers}
             />
             <RejectOfferButtonWithDialog
-                actionButtonDisable={!actionPermitted.canReject}
+                disabled={!actionPermitted.canReject}
                 selectedAssignments={selectedAssignments}
                 callback={rejectOffers}
             />
