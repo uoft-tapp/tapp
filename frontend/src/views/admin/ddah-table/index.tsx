@@ -25,6 +25,7 @@ export interface RowData {
     first_name: string;
     total_hours: number | null;
     status: string | null;
+    recent_activity_date: string;
     issues: string | null;
     issue_code: "hours_mismatch" | "missing" | null;
 }
@@ -52,6 +53,35 @@ export function getReadableStatus(ddah: Pick<Ddah, "status">) {
         default:
             return "Unsent";
     }
+}
+
+function isIsoDateString(dateString: string | null) {
+    if (dateString == null) return false;
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateString))
+        return false;
+    const date = new Date(dateString);
+    return date.toISOString() === dateString;
+}
+
+function getRecentActivityDate(ddah: Ddah) {
+    const validDates = [
+        ddah.accepted_date,
+        ddah.approved_date,
+        ddah.emailed_date,
+        ddah.revised_date,
+    ]
+        .filter((dateString) => {
+            return isIsoDateString(dateString);
+        })
+        // dateString || 0 is required to avoid
+        // typescript complaining about potentially passing null to Date constructor,
+        // which cannot happen (although it complains) due to previous filtering
+        .map((dateString) => new Date(dateString || 0).getTime());
+    if (validDates.length === 0) return "";
+    const recentActivityDate = new Date(Math.max.apply(null, validDates));
+    return `${recentActivityDate.toLocaleDateString(
+        "en-CA"
+    )} ${recentActivityDate.toLocaleTimeString("en-CA")}`;
 }
 
 /**
@@ -382,6 +412,7 @@ export function ConnectedDdahsTable() {
                 first_name: ddah.assignment.applicant.first_name,
                 total_hours: ddah.total_hours,
                 status: ddah.status || "unsent",
+                recent_activity_date: getRecentActivityDate(ddah),
                 approved: ddah.approved_date ? "Approved" : "",
                 readable_status: getReadableStatus(ddah),
                 issues: ddahIssues(ddah),
@@ -416,6 +447,7 @@ export function ConnectedDdahsTable() {
             first_name: assignment.applicant.first_name,
             total_hours: null,
             status: null,
+            recent_activity_date: "",
             issues: "Missing DDAH",
             issue_code: "missing",
         });
@@ -453,6 +485,10 @@ export function ConnectedDdahsTable() {
             Header: generateHeaderCell("Status"),
             accessor: "status",
             Cell: WrappedStatusCell,
+        },
+        {
+            Header: generateHeaderCell("Recent Activity"),
+            accessor: "recent_activity_date",
         },
         {
             Header: generateHeaderCell("Approved"),
