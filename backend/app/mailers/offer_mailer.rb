@@ -41,9 +41,7 @@ class OfferMailer < ApplicationMailer
     def get_prev_offer_diff
         id = @offer.assignment_id
         latest = Offer.order(withdrawn_date: :desc).limit(2)
-        if latest.length() == 2
-            @diff = @offer.compute_diff(latest[1])
-        end
+        @diff = @offer.compute_diff(latest[1]) if latest.length == 2
     end
 
     def generate_vars(offer)

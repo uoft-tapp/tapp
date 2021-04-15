@@ -28,9 +28,7 @@ class Offer < ApplicationRecord
         return false if self == other
         puts self
         puts other
-        if self.hours != other.hours
-            return other.hours
-        end
+        return other.hours if self.hours != other.hours
         return false
     end
 
