@@ -61,39 +61,39 @@ function ConfirmWithDialogActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    function createOffers() {
+    async function createOffers() {
         for (const assignment of selectedAssignments) {
-            offerForAssignmentCreate(assignment);
+            await offerForAssignmentCreate(assignment);
         }
     }
 
-    function withdrawOffers() {
+    async function withdrawOffers() {
         for (const assignment of selectedAssignments) {
-            offerForAssignmentWithdraw(assignment);
+            await offerForAssignmentWithdraw(assignment);
         }
     }
 
-    function emailOffers() {
+    async function emailOffers() {
         for (const assignment of selectedAssignments) {
-            offerForAssignmentEmail(assignment);
+            await offerForAssignmentEmail(assignment);
         }
     }
 
-    function nagOffers() {
+    async function nagOffers() {
         for (const assignment of selectedAssignments) {
-            offerForAssignmentNag(assignment);
+            await offerForAssignmentNag(assignment);
         }
     }
 
-    function acceptOffers() {
+    async function acceptOffers() {
         for (const assignment of selectedAssignments) {
-            setOfferForAssignmentAccepted(assignment);
+            await setOfferForAssignmentAccepted(assignment);
         }
     }
 
-    function rejectOffers() {
+    async function rejectOffers() {
         for (const assignment of selectedAssignments) {
-            setOfferForAssignmentRejected(assignment);
+            await setOfferForAssignmentRejected(assignment);
         }
     }
 
@@ -114,34 +114,34 @@ function ConfirmWithDialogActionButtons(props) {
     return (
         <React.Fragment>
             <CreateOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canCreate}
+                actionButtonDisable={!actionPermitted.canCreate}
                 selectedAssignments={selectedAssignments}
-                actionCallback={createOffers}
+                callback={createOffers}
             />
             <WithdrawOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canWithdraw}
+                actionButtonDisable={!actionPermitted.canWithdraw}
                 selectedAssignments={selectedAssignments}
-                actionCallback={withdrawOffers}
+                callback={withdrawOffers}
             />
             <EmailOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canEmail}
+                actionButtonDisable={!actionPermitted.canEmail}
                 selectedAssignments={selectedAssignments}
-                actionCallback={emailOffers}
+                callback={emailOffers}
             />
             <NagOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canNag}
+                actionButtonDisable={!actionPermitted.canNag}
                 selectedAssignments={selectedAssignments}
-                actionCallback={nagOffers}
+                callback={nagOffers}
             />
             <AcceptOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canAccept}
+                actionButtonDisable={!actionPermitted.canAccept}
                 selectedAssignments={selectedAssignments}
-                actionCallback={acceptOffers}
+                callback={acceptOffers}
             />
             <RejectOfferButtonWithDialog
-                actionButtonEnable={actionPermitted.canReject}
+                actionButtonDisable={!actionPermitted.canReject}
                 selectedAssignments={selectedAssignments}
-                actionCallback={rejectOffers}
+                callback={rejectOffers}
             />
         </React.Fragment>
     );

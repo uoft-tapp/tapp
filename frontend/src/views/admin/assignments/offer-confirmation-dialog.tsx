@@ -1,6 +1,6 @@
 import React from "react";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { Assignment } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
 
@@ -70,6 +70,21 @@ export function OfferConfirmationDialog(props: {
         confirmation,
     } = props;
 
+    const [inProgress, setInProgress] = React.useState(false);
+
+    async function executeCallback() {
+        setInProgress(true);
+        await callback();
+        setInProgress(false);
+        setVisible(false);
+    }
+
+    // When a confirm operation is in progress, a spinner is displayed; otherwise
+    // it's hidden
+    const spinner = inProgress ? (
+        <Spinner animation="border" size="sm" className="mr-1" />
+    ) : null;
+
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
 
@@ -107,12 +122,8 @@ export function OfferConfirmationDialog(props: {
                 >
                     Cancel
                 </Button>
-                <Button
-                    onClick={() => {
-                        callback();
-                        setVisible(false);
-                    }}
-                >
+                <Button onClick={executeCallback}>
+                    {spinner}
                     {confirmation}
                 </Button>
             </Modal.Footer>
