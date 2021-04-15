@@ -23,34 +23,22 @@ class Offer < ApplicationRecord
         !accepted? && !rejected? && !withdrawn?
     end
 
-    #Compute a difference between our hash and the hash used in the other
+    #Compute a difference in hours between two offers.
     def compute_diff(other)
         return false if self == other
-
-        # puts other
-
-        # Store the other's differences into a hash
-        diff = Hash.new
-        self.attributes.keys.each do |k|
-            if not k.to_s.include? "id"
-                diff[k] = other[k] if other[k] == self[k]
-            end
+        puts self
+        puts other
+        if self.hours != other.hours
+            return other.hours
         end
-        return diff
+        return false
     end
 
     def get_status_message
         case status.to_sym
-        when :accepted
-            status_message = 'You have accepted this offer'
-        when :rejected
-            status_message = 'You have rejected this offer'
-        when :withdrawn
-            status_message = 'This offer has been withdrawn'
         when :pending
-            status_message = 'You have not responded to this offer'
+            'You have not responded to this offer'
         end
-        return status_message
     end
 
     private

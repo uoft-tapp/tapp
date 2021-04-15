@@ -7,18 +7,16 @@
   </head>
   <body>
   <p><%= @status_message %></p>
-  <% if @diff != false %>
-    <p>The key differences of this newly received offer are:</p>
-    <% @diff.keys.each do |k| %>
-      <p>@diff[k]</p> is now <p>@offer[k]</p>  
-    <% end %>
-  <% end %>
   <br>
   <p>Dear <%= @first_name %> <%= @last_name %></p>
   <p>
     We would like to offer you a position as a TA for <%= @position_code %> <%= @position_title %>.
   </p>
+  <% if @diff != false %>
+  <p>The key differences of this newly received offer are:<br>
+    Your hours have changed from <%= @diff %> to <%= @hours %>
   <p>
+  <% end %>
     Please click the link below to view your offer and accept or reject it:<br/>
     <a href="http://<%= @url %>"><%= @url %></a>
   </p>

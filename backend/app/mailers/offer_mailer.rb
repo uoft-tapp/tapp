@@ -40,10 +40,10 @@ class OfferMailer < ApplicationMailer
 
     def get_prev_offer_diff
         id = @offer.assignment_id
-        latest =
-            Offer.where('assignment_id = ?', id).order('emailed_date DESC')
-                .limit(1)
-        return @offer.compute_diff(latest[0])
+        latest = Offer.order(withdrawn_date: :desc).limit(2)
+        if latest.length() == 2
+            @diff = @offer.compute_diff(latest[1])
+        end
     end
 
     def generate_vars(offer)
@@ -54,6 +54,7 @@ class OfferMailer < ApplicationMailer
         @first_name = offer.first_name
         @last_name = offer.last_name
         @position_code = offer.position_code
+        @hours = offer.hours
         @position_title = offer.position_title
         @ta_coordinator_email = offer.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
@@ -62,7 +63,7 @@ class OfferMailer < ApplicationMailer
                 offer.url_token
             }/view"
         @nag_count = offer.nag_count
-        @status_message = @offer.get_status_message
-        @diff = get_prev_offer_diff
+        @status_message = offer.get_status_message
+        get_prev_offer_diff
     end
 end
