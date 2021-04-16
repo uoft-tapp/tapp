@@ -11,15 +11,13 @@ import {
     setOfferForAssignmentRejected,
 } from "../../../api/actions";
 import {
-    FaEnvelope,
-    FaBan,
-    FaCheck,
-    FaUserTimes,
-    FaUserClock,
-    FaUserPlus,
-} from "react-icons/fa";
-import { ActionButton } from "../../../components/action-buttons";
-import { MultiWithdrawOfferConfirmation } from "./withdraw-assignment-confirmation";
+    CreateOfferButtonWithDialog,
+    WithdrawOfferButtonWithDialog,
+    EmailOfferButtonWithDialog,
+    NagOfferButtonWithDialog,
+    AcceptOfferButtonWithDialog,
+    RejectOfferButtonWithDialog,
+} from "./offer-button-with-dialog";
 
 /**
  * Functions to test what actions you can do with a particular assignment
@@ -32,7 +30,11 @@ const OfferTest = {
         );
     },
     canEmail(assignment) {
-        return assignment.active_offer_status != null;
+        return (
+            assignment.active_offer_status != null &&
+            assignment.active_offer_status !== "withdrawn" &&
+            assignment.active_offer_status !== "rejected"
+        );
     },
     canNag(assignment) {
         return assignment.active_offer_status === "pending";
@@ -48,7 +50,7 @@ const OfferTest = {
     },
 };
 
-function OfferActionButtons(props) {
+function ConfirmWithDialogActionButtons(props) {
     const selectedAssignments = props.assignments;
     const {
         offerForAssignmentCreate,
@@ -59,49 +61,52 @@ function OfferActionButtons(props) {
         setOfferForAssignmentRejected,
     } = props;
 
-    const [
-        showWithdrawConfirmation,
-        setShowWithdrawConfirmation,
-    ] = React.useState(false);
-
     function createOffers() {
-        for (const assignment of selectedAssignments) {
-            offerForAssignmentCreate(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentCreate(assignment)
+            )
+        );
     }
-    function confirmOfferWithdraw() {
-        // if withdrawing multiple offers at once, show confirmation
-        if (selectedAssignments?.length > 1) {
-            setShowWithdrawConfirmation(true);
-        } else {
-            // does not need confirmation if only withdrawing one offer
-            withdrawOffers();
-        }
-    }
+
     function withdrawOffers() {
-        for (const assignment of selectedAssignments) {
-            offerForAssignmentWithdraw(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentWithdraw(assignment)
+            )
+        );
     }
+
     function emailOffers() {
-        for (const assignment of selectedAssignments) {
-            offerForAssignmentEmail(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentEmail(assignment)
+            )
+        );
     }
+
     function nagOffers() {
-        for (const assignment of selectedAssignments) {
-            offerForAssignmentNag(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentNag(assignment)
+            )
+        );
     }
+
     function acceptOffers() {
-        for (const assignment of selectedAssignments) {
-            setOfferForAssignmentAccepted(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                setOfferForAssignmentAccepted(assignment)
+            )
+        );
     }
+
     function rejectOffers() {
-        for (const assignment of selectedAssignments) {
-            setOfferForAssignmentRejected(assignment);
-        }
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                setOfferForAssignmentRejected(assignment)
+            )
+        );
     }
 
     const actionPermitted = {};
@@ -120,53 +125,35 @@ function OfferActionButtons(props) {
 
     return (
         <React.Fragment>
-            <ActionButton
-                icon={<FaUserPlus />}
-                onClick={createOffers}
+            <CreateOfferButtonWithDialog
                 disabled={!actionPermitted.canCreate}
-            >
-                Create Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaUserTimes />}
-                onClick={confirmOfferWithdraw}
+                selectedAssignments={selectedAssignments}
+                callback={createOffers}
+            />
+            <WithdrawOfferButtonWithDialog
                 disabled={!actionPermitted.canWithdraw}
-            >
-                Withdraw Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaEnvelope />}
-                onClick={emailOffers}
+                selectedAssignments={selectedAssignments}
+                callback={withdrawOffers}
+            />
+            <EmailOfferButtonWithDialog
                 disabled={!actionPermitted.canEmail}
-            >
-                Email Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaUserClock />}
-                onClick={nagOffers}
+                selectedAssignments={selectedAssignments}
+                callback={emailOffers}
+            />
+            <NagOfferButtonWithDialog
                 disabled={!actionPermitted.canNag}
-            >
-                Nag Offer
-            </ActionButton>
-            <ActionButton
-                icon={<FaCheck />}
-                onClick={acceptOffers}
+                selectedAssignments={selectedAssignments}
+                callback={nagOffers}
+            />
+            <AcceptOfferButtonWithDialog
                 disabled={!actionPermitted.canAccept}
-            >
-                Set as Accepted
-            </ActionButton>
-            <ActionButton
-                icon={<FaBan />}
-                onClick={rejectOffers}
+                selectedAssignments={selectedAssignments}
+                callback={acceptOffers}
+            />
+            <RejectOfferButtonWithDialog
                 disabled={!actionPermitted.canReject}
-            >
-                Set as Rejected
-            </ActionButton>
-            <MultiWithdrawOfferConfirmation
-                data={selectedAssignments}
-                visible={showWithdrawConfirmation}
-                setVisible={setShowWithdrawConfirmation}
-                withdrawOffers={withdrawOffers}
+                selectedAssignments={selectedAssignments}
+                callback={rejectOffers}
             />
         </React.Fragment>
     );
@@ -190,4 +177,4 @@ export const ConnectedOfferActionButtons = connect(
         setOfferForAssignmentAccepted,
         setOfferForAssignmentRejected,
     }
-)(OfferActionButtons);
+)(ConfirmWithDialogActionButtons);
