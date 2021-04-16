@@ -62,38 +62,50 @@ function ConfirmWithDialogActionButtons(props) {
     } = props;
 
     function createOffers() {
-        return selectedAssignments.map((assignment) =>
-            offerForAssignmentCreate(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentCreate(assignment)
+            )
         );
     }
 
     function withdrawOffers() {
-        return selectedAssignments.map((assignment) =>
-            offerForAssignmentWithdraw(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentWithdraw(assignment)
+            )
         );
     }
 
     function emailOffers() {
-        return selectedAssignments.map((assignment) =>
-            offerForAssignmentEmail(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentEmail(assignment)
+            )
         );
     }
 
     function nagOffers() {
-        return selectedAssignments.map((assignment) =>
-            offerForAssignmentNag(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                offerForAssignmentNag(assignment)
+            )
         );
     }
 
     function acceptOffers() {
-        return selectedAssignments.map((assignment) =>
-            setOfferForAssignmentAccepted(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                setOfferForAssignmentAccepted(assignment)
+            )
         );
     }
 
     function rejectOffers() {
-        return selectedAssignments.map((assignment) =>
-            setOfferForAssignmentRejected(assignment)
+        return Promise.all(
+            selectedAssignments.map((assignment) =>
+                setOfferForAssignmentRejected(assignment)
+            )
         );
     }
 

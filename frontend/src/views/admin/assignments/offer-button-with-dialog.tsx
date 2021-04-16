@@ -18,7 +18,7 @@ type ButtonWithDialogProps = {
 };
 
 export function CreateOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -55,7 +55,7 @@ export function CreateOfferButtonWithDialog({
 }
 
 export function WithdrawOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -92,7 +92,7 @@ export function WithdrawOfferButtonWithDialog({
 }
 
 export function EmailOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -129,7 +129,7 @@ export function EmailOfferButtonWithDialog({
 }
 
 export function NagOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -166,7 +166,7 @@ export function NagOfferButtonWithDialog({
 }
 
 export function AcceptOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
@@ -203,7 +203,7 @@ export function AcceptOfferButtonWithDialog({
 }
 
 export function RejectOfferButtonWithDialog({
-    disabled = true,
+    disabled = false,
     selectedAssignments,
     callback,
 }: ButtonWithDialogProps) {
