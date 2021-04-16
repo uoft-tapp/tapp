@@ -1,0 +1,19 @@
+.application-details-table {
+    width: 100%;
+}
+.application-details-table th {
+    padding-right: 1em;
+    text-align: right;
+    max-width: 10em;
+}
+.position-preferences-list {
+    margin: unset;
+    padding: unset;
+}
+.position-preferences-list li {
+    margin-right: 4px;
+}
+.application-details-table .custom-questions-row td {
+    border-right: 3px solid var(--gray);
+    border-left: 3px solid var(--gray);
+}

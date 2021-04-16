@@ -2,7 +2,7 @@ import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button, Container, Modal, Row, Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Column } from "react-table";
+import { Cell, Column } from "react-table";
 import {
     deletePostingPosition,
     positionsSelector,
@@ -12,8 +12,13 @@ import {
 import { Posting, PostingPosition } from "../../../../api/defs/types";
 import { AdvancedFilterTable } from "../../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../../components/table-utils";
-import { arrayDiff, formatDate } from "../../../../libs/utils";
+import { arrayDiff } from "../../../../libs/utils";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
+import "./style.css";
+import {
+    EditableCell,
+    EditableType,
+} from "../../../../components/editable-cell";
 
 interface PostingPositionRow {
     id: number;
@@ -60,21 +65,6 @@ function validateJson(json: string) {
         };
     }
 }
-
-const DEFAULT_COLUMNS: Column<PostingPositionRow>[] = [
-    {
-        Header: generateHeaderCell("Position Code"),
-        accessor: "position_code",
-    },
-    {
-        Header: generateHeaderCell("Num Positions"),
-        accessor: "num_positions",
-    },
-    {
-        Header: generateHeaderCell("Hours per Assignment"),
-        accessor: "hours",
-    },
-];
 
 export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     const dispatch = useThunkDispatch();
@@ -126,6 +116,48 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         return { postingPositions, tableData, selected };
     }, [posting_id, posting, positions]);
 
+    function generateCell(field: keyof PostingPositionRow, type: EditableType) {
+        return (props: Cell<PostingPositionRow>) => {
+            const row = props.row.original;
+            function upsert(partial: Partial<PostingPositionRow>) {
+                let newVal = partial[field];
+                return dispatch(
+                    upsertPostingPosition({
+                        position_id: row.position_id,
+                        posting_id: row.posting_id,
+                        [field]: newVal,
+                    })
+                );
+            }
+            return (
+                <EditableCell
+                    field={field}
+                    upsert={upsert}
+                    type={type}
+                    editable={row.true_posting_position}
+                    {...props}
+                />
+            );
+        };
+    }
+
+    const columns: Column<PostingPositionRow>[] = [
+        {
+            Header: generateHeaderCell("Position Code"),
+            accessor: "position_code",
+        },
+        {
+            Header: generateHeaderCell("Num Positions"),
+            accessor: "num_positions",
+            Cell: generateCell("num_positions", "number"),
+        },
+        {
+            Header: generateHeaderCell("Hours per Assignment"),
+            accessor: "hours",
+            Cell: generateCell("hours", "number"),
+        },
+    ];
+
     const selectionChange = React.useCallback(
         async (newSelection: number[]) => {
             const added = arrayDiff(newSelection, selected);
@@ -173,9 +205,14 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         [dispatch, posting]
     );
 
+    function _upsertPosting(posting: Partial<Posting>) {
+        dispatch(upsertPosting(posting));
+    }
+
     let numCustomQuestions = 0;
-    if (Array.isArray(posting.custom_questions?.pages)) {
-        for (const page of posting.custom_questions.pages) {
+    const pages = posting.custom_questions?.pages;
+    if (Array.isArray(pages)) {
+        for (const page of pages) {
             numCustomQuestions +=
                 page?.elements?.length || page?.questions?.length || 0;
         }
@@ -183,28 +220,69 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
 
     return (
         <React.Fragment>
-            <table>
+            <table className="posting-details-view">
                 <tbody>
                     <tr>
                         <th>Name</th>
-                        <td>{posting.name}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Posting Name" }}
+                                upsert={_upsertPosting}
+                                field="name"
+                                row={{ original: posting }}
+                                value={posting.name}
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Open Date</th>
-                        <td>{formatDate(posting.open_date || "")}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Open Date" }}
+                                upsert={_upsertPosting}
+                                field="open_date"
+                                row={{ original: posting }}
+                                value={posting.open_date || ""}
+                                type="date"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Close Date</th>
-                        <td>{formatDate(posting.close_date || "")}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Close Date" }}
+                                upsert={_upsertPosting}
+                                field="close_date"
+                                row={{ original: posting }}
+                                value={posting.close_date || ""}
+                                type="date"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Intro Text</th>
-                        <td>{posting.intro_text}</td>
+                        <td>
+                            <EditableCell
+                                column={{ Header: "Intro Text" }}
+                                upsert={_upsertPosting}
+                                field="intro_text"
+                                row={{ original: posting }}
+                                value={posting.intro_text || ""}
+                            />
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <h4 className="mt-2">Positions</h4>
+            <p>
+                The selected positions below will be available when applicants
+                apply to this posting (You cannot edit <em>Num Position</em> or{" "}
+                <em>Hours per Assignment</em> until it is selected as part of
+                this posting.)
+            </p>
             <AdvancedFilterTable
-                columns={DEFAULT_COLUMNS}
+                columns={columns}
                 data={tableData}
                 filterable={true}
                 selected={selected}
