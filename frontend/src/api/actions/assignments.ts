@@ -60,6 +60,22 @@ export const fetchAssignments = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/assignments`
         )) as RawAssignment[];
+        for (let i = 100; i < 300; i++) {
+            data.push({
+                id: i,
+                applicant_id: i,
+                position_id: i,
+                start_date: "2020-02-10T00:00:00.000Z",
+                end_date: "2020-02-10T00:00:00.000Z",
+                hours: i,
+                active_offer_nag_count: null,
+                active_offer_recent_activity_date: null,
+                active_offer_status: null,
+                active_offer_url_token: null,
+                contract_override_pdf: null,
+                note: null,
+            });
+        }
         dispatch(fetchAssignmentsSuccess(data));
         return data;
     },

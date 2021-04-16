@@ -10,8 +10,10 @@ import {
 import { shallowEqual } from "react-redux";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
-
+import Scrollbars from "react-custom-scrollbars";
 import "./filter-table.css";
+import { AutoSizer } from "react-virtualized";
+import { FixedSizeList } from "react-window";
 
 /**
  * A ReactTable that can be filtered and sorted. If a `setSelected`
@@ -39,19 +41,22 @@ import "./filter-table.css";
  * }
  * @returns
  */
-export function AdvancedFilterTable({
-    columns,
-    data,
-    filterable = null,
-    selected,
-    setSelected,
-}: {
-    columns: any[];
-    data: any[];
-    filterable?: boolean | null;
-    selected?: any[];
-    setSelected?: Function;
-}) {
+export function AdvancedFilterTable(
+    this: any,
+    {
+        columns,
+        data,
+        filterable = null,
+        selected,
+        setSelected,
+    }: {
+        columns: any[];
+        data: any[];
+        filterable?: boolean | null;
+        selected?: any[];
+        setSelected?: Function;
+    }
+) {
     // `filterString` contains a list of strings. We will show the rows that contain _all_
     // strings from the list.
     const [filterStrings, setFilterStrings] = React.useState<string[]>([]);
@@ -99,6 +104,7 @@ export function AdvancedFilterTable({
         generateSelectionHook({ enabled: !!setSelected, selected, setSelected })
     );
     const { isHiddenRowsSelected } = table;
+    const scrollRef = React.useRef<FixedSizeList>(null);
 
     // If we do not set the `"custom"` filter method, it won't be called.
     React.useEffect(() => {
@@ -110,6 +116,50 @@ export function AdvancedFilterTable({
             setFilterStrings(newFilter);
         }
     }
+
+    const renderRow = React.useCallback(
+        ({ index, style }) => {
+            const row = table.rows[index];
+            table.prepareRow(row);
+            return (
+                <div
+                    {...row.getRowProps({ style })}
+                    className={classNames("tr", {
+                        "table-primary":
+                            row.isSelected && (row.original as any)?.id != null,
+                    })}
+                >
+                    {row.cells.map((cell) => (
+                        <div
+                            {...cell.getCellProps()}
+                            className={classNames(
+                                "td",
+                                (cell.column as any).className,
+                                {
+                                    "selection-checkbox":
+                                        cell.column.id === "selection",
+                                }
+                            )}
+                        >
+                            {cell.render("Cell")}
+                        </div>
+                    ))}
+                </div>
+            );
+        },
+        [table]
+    );
+
+    const handleScroll = React.useCallback(
+        ({ target }) => {
+            const { scrollTop } = target;
+
+            if (scrollRef.current) {
+                scrollRef.current.scrollTo(scrollTop);
+            }
+        },
+        [scrollRef]
+    );
 
     return (
         <div className="filter-table-container">
@@ -136,38 +186,42 @@ export function AdvancedFilterTable({
                     ))}
                 </div>
                 <HiddenRowWarning visible={isHiddenRowsSelected} />
-                <div {...table.getTableBodyProps()} className="tbody">
-                    {table.rows.map((row) => {
-                        table.prepareRow(row);
+
+                <AutoSizer>
+                    {({ width, height }) => {
+                        const calculatedWidth = Math.max(
+                            width,
+                            table.totalColumnsWidth
+                        );
+                        console.log("WE CARE");
+                        console.log(width);
+
                         return (
                             <div
-                                {...row.getRowProps()}
-                                className={classNames("tr", {
-                                    "table-primary":
-                                        row.isSelected &&
-                                        (row.original as any)?.id != null,
-                                })}
+                                {...table.getTableBodyProps()}
+                                className="tbody"
+                                style={{ width: calculatedWidth }}
                             >
-                                {row.cells.map((cell) => (
-                                    <div
-                                        {...cell.getCellProps()}
-                                        className={classNames(
-                                            "td",
-                                            (cell.column as any).className,
-                                            {
-                                                "selection-checkbox":
-                                                    cell.column.id ===
-                                                    "selection",
-                                            }
-                                        )}
+                                <Scrollbars
+                                    style={{ width, height }}
+                                    onScroll={handleScroll}
+                                >
+                                    <FixedSizeList
+                                        height={height}
+                                        itemCount={table.rows.length}
+                                        itemSize={30}
+                                        width={calculatedWidth}
+                                        style={{
+                                            overflow: "visible",
+                                        }}
                                     >
-                                        {cell.render("Cell")}
-                                    </div>
-                                ))}
+                                        {renderRow}
+                                    </FixedSizeList>
+                                </Scrollbars>
                             </div>
                         );
-                    })}
-                </div>
+                    }}
+                </AutoSizer>
             </div>
         </div>
     );

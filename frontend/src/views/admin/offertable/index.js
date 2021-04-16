@@ -202,7 +202,6 @@ export function ConnectedOfferTable(props) {
                 Header: "Date",
                 accessor: "active_offer_recent_activity_date",
                 Cell: ({ value }) => (value ? formatDate(value) : null),
-                maxWidth: 120,
             },
             {
                 Header: "Nag Count",
@@ -210,7 +209,6 @@ export function ConnectedOfferTable(props) {
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
                 Cell: ({ value }) => (value ? value : null),
-                maxWidth: 30,
             },
         ];
     }, [dispatch, editable]);
