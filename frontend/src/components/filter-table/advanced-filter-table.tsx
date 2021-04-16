@@ -10,7 +10,7 @@ import {
 import { shallowEqual } from "react-redux";
 import { generateSelectionHook } from "./row-select";
 import { FilterBar, SortableHeader } from "./row-filter";
-import Scrollbars from "react-custom-scrollbars";
+import Scrollbar from "react-scrollbars-custom";
 import "./filter-table.css";
 import { AutoSizer } from "react-virtualized";
 import { FixedSizeList } from "react-window";
@@ -104,7 +104,8 @@ export function AdvancedFilterTable(
         generateSelectionHook({ enabled: !!setSelected, selected, setSelected })
     );
     const { isHiddenRowsSelected } = table;
-    const scrollRef = React.useRef<FixedSizeList>(null);
+    const listScrollRef = React.useRef<FixedSizeList>(null);
+    const theadScrollRef = React.createRef<HTMLDivElement>();
 
     // If we do not set the `"custom"` filter method, it won't be called.
     React.useEffect(() => {
@@ -150,16 +151,15 @@ export function AdvancedFilterTable(
         [table]
     );
 
-    const handleScroll = React.useCallback(
-        ({ target }) => {
-            const { scrollTop } = target;
+    const handleScroll = ({ scrollTop, scrollLeft }: any) => {
+        if (listScrollRef.current) {
+            listScrollRef.current.scrollTo(scrollTop);
+        }
 
-            if (scrollRef.current) {
-                scrollRef.current.scrollTo(scrollTop);
-            }
-        },
-        [scrollRef]
-    );
+        if (theadScrollRef.current) {
+            theadScrollRef.current.scrollLeft = scrollLeft;
+        }
+    };
 
     return (
         <div className="filter-table-container">
@@ -173,7 +173,7 @@ export function AdvancedFilterTable(
                 {...table.getTableProps()}
                 className="table table-bordered table-sm"
             >
-                <div className="thead">
+                <div className="thead" ref={theadScrollRef}>
                     {table.headerGroups.map((headerGroup) => (
                         <div
                             {...headerGroup.getHeaderGroupProps()}
@@ -193,17 +193,21 @@ export function AdvancedFilterTable(
                             width,
                             table.totalColumnsWidth
                         );
-                        console.log("WE CARE");
-                        console.log(width);
 
                         return (
                             <div
                                 {...table.getTableBodyProps()}
                                 className="tbody"
-                                style={{ width: calculatedWidth }}
+                                style={{
+                                    width: calculatedWidth,
+                                    height: height,
+                                }}
                             >
-                                <Scrollbars
-                                    style={{ width, height }}
+                                <Scrollbar
+                                    style={{
+                                        width: width,
+                                        height: height,
+                                    }}
                                     onScroll={handleScroll}
                                 >
                                     <FixedSizeList
@@ -211,13 +215,14 @@ export function AdvancedFilterTable(
                                         itemCount={table.rows.length}
                                         itemSize={30}
                                         width={calculatedWidth}
+                                        ref={listScrollRef}
                                         style={{
                                             overflow: "visible",
                                         }}
                                     >
                                         {renderRow}
                                     </FixedSizeList>
-                                </Scrollbars>
+                                </Scrollbar>
                             </div>
                         );
                     }}

@@ -47,9 +47,8 @@
     content: " rows showing";
 }
 
-.selection-checkbox {
-    text-align: center;
-    padding-top: 4px !important;
+.ScrollbarsCustom-TrackX {
+    bottom: 28px !important;
 }
 
 .number-cell {
@@ -57,15 +56,11 @@
 }
 
 .table {
-    /*overflow-x: scroll;*/
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .tbody {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    /*overflow-y: scroll;*/
+    overflow: hidden;
 }
 
 .table-header {
@@ -97,6 +92,13 @@
 .thead,
 .hidden-row-warning {
     user-select: none;
+    overflow-x: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent; /* make scrollbar transparent */
 }
 
 .th {
@@ -136,12 +138,12 @@
 .delete-col,
 .details-col,
 .selection-checkbox {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .hidden-row-warning {
-    box-shadow: inset 0px -3px 8px -6px rgba(167, 182, 194, 0.5);
+    box-shadow: inset 0 -3px 8px -6px rgba(167, 182, 194, 0.5);
     text-align: center;
     font-size: smaller;
     font-style: italic;
