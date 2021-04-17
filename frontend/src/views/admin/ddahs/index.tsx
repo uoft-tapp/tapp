@@ -18,14 +18,8 @@ import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useSelector } from "react-redux";
 import { activeSessionSelector } from "../../../api/actions";
 import { ddahTableSelector } from "../ddah-table/actions";
-import {
-    ddahsSelector,
-    emailDdah,
-    approveDdah,
-    deleteDdah,
-} from "../../../api/actions/ddahs";
+import { ddahsSelector } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
-import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import {
     ApproveDdahsButtonWithDialog,
     DeleteDdahsButtonWithDialog,
@@ -40,28 +34,9 @@ export function AdminDdahsView() {
     const activeSession = useSelector(activeSessionSelector);
     const { selectedDdahIds } = useSelector(ddahTableSelector);
     const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
-    const dispatch = useThunkDispatch();
     const selectedDdahs = ddahs.filter((ddah) =>
         selectedDdahIds.includes(ddah.id)
     );
-
-    function deleteDDAHs() {
-        return Promise.all(
-            selectedDdahs.map((ddah) => dispatch(deleteDdah(ddah)))
-        );
-    }
-
-    function emailDDAHs() {
-        return Promise.all(
-            selectedDdahs.map((ddah) => dispatch(emailDdah(ddah)))
-        );
-    }
-
-    function approveDDAHs() {
-        return Promise.all(
-            selectedDdahs.map((ddah) => dispatch(approveDdah(ddah)))
-        );
-    }
 
     return (
         <div className="page-body">
@@ -90,21 +65,9 @@ export function AdminDdahsView() {
                 />
                 <ConnectedExportDdahsAction disabled={!activeSession} />
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
-                <EmailDdahsButtonWithDialog
-                    callback={emailDDAHs}
-                    selectedDdahs={selectedDdahs}
-                    disabled={selectedDdahIds.length === 0}
-                />
-                <ApproveDdahsButtonWithDialog
-                    callback={approveDDAHs}
-                    selectedDdahs={selectedDdahs}
-                    disabled={selectedDdahIds.length === 0}
-                />
-                <DeleteDdahsButtonWithDialog
-                    callback={deleteDDAHs}
-                    selectedDdahs={selectedDdahs}
-                    disabled={selectedDdahIds.length === 0}
-                />
+                <EmailDdahsButtonWithDialog selectedDdahs={selectedDdahs} />
+                <ApproveDdahsButtonWithDialog selectedDdahs={selectedDdahs} />
+                <DeleteDdahsButtonWithDialog selectedDdahs={selectedDdahs} />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
