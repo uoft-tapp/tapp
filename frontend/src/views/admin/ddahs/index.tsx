@@ -1,6 +1,6 @@
 import React from "react";
 import { ConnectedAddDdahDialog } from "./add-ddah-dialog";
-import { FaPlus, FaMailBulk, FaCheck, FaTrash } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import {
     ConnectedImportDdahsAction,
     ConnectedExportDdahsAction,
@@ -25,8 +25,12 @@ import {
     deleteDdah,
 } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
-import { DdahConfirmationDialog } from "./ddah-confirmation-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import {
+    ApproveDdahsButtonWithDialog,
+    DeleteDdahsButtonWithDialog,
+    EmailDdahsButtonWithDialog,
+} from "./selected-ddah-actions";
 
 export function AdminDdahsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -41,59 +45,22 @@ export function AdminDdahsView() {
         selectedDdahIds.includes(ddah.id)
     );
 
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = React.useState(
-        false
-    );
-
-    const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
-        false
-    );
-
-    const [
-        showApproveConfirmation,
-        setShowApproveConfirmation,
-    ] = React.useState(false);
-
-    function confirmDDAHDeletion() {
-        if (selectedDdahs?.length > 1) {
-            setShowDeleteConfirmation(true);
-        } else {
-            deleteDDAHs();
-        }
-    }
-
-    function confirmDDAHEmail() {
-        if (selectedDdahs?.length > 1) {
-            setShowEmailConfirmation(true);
-        } else {
-            emailDDAHs();
-        }
-    }
-
-    function confirmDDAHApprove() {
-        if (selectedDdahs?.length > 1) {
-            setShowApproveConfirmation(true);
-        } else {
-            approveDDAHs();
-        }
-    }
-
     function deleteDDAHs() {
-        for (const ddah of selectedDdahs) {
-            dispatch(deleteDdah(ddah));
-        }
+        return Promise.all(
+            selectedDdahs.map((ddah) => dispatch(deleteDdah(ddah)))
+        );
     }
 
     function emailDDAHs() {
-        for (const ddah of selectedDdahs) {
-            dispatch(emailDdah(ddah));
-        }
+        return Promise.all(
+            selectedDdahs.map((ddah) => dispatch(emailDdah(ddah)))
+        );
     }
 
     function approveDDAHs() {
-        for (const ddah of selectedDdahs) {
-            dispatch(approveDdah(ddah));
-        }
+        return Promise.all(
+            selectedDdahs.map((ddah) => dispatch(approveDdah(ddah)))
+        );
     }
 
     return (
@@ -123,27 +90,21 @@ export function AdminDdahsView() {
                 />
                 <ConnectedExportDdahsAction disabled={!activeSession} />
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
-                <ActionButton
-                    icon={FaMailBulk}
-                    onClick={confirmDDAHEmail}
+                <EmailDdahsButtonWithDialog
+                    callback={emailDDAHs}
+                    selectedDdahs={selectedDdahs}
                     disabled={selectedDdahIds.length === 0}
-                >
-                    Email DDAH
-                </ActionButton>
-                <ActionButton
-                    icon={FaCheck}
-                    onClick={confirmDDAHApprove}
+                />
+                <ApproveDdahsButtonWithDialog
+                    callback={approveDDAHs}
+                    selectedDdahs={selectedDdahs}
                     disabled={selectedDdahIds.length === 0}
-                >
-                    Approve DDAH
-                </ActionButton>
-                <ActionButton
-                    icon={FaTrash}
-                    onClick={confirmDDAHDeletion}
+                />
+                <DeleteDdahsButtonWithDialog
+                    callback={deleteDDAHs}
+                    selectedDdahs={selectedDdahs}
                     disabled={selectedDdahIds.length === 0}
-                >
-                    Delete DDAH
-                </ActionButton>
+                />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
@@ -157,33 +118,6 @@ export function AdminDdahsView() {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
-            <DdahConfirmationDialog
-                selectedDdahs={selectedDdahs}
-                visible={showDeleteConfirmation}
-                setVisible={setShowDeleteConfirmation}
-                callback={deleteDDAHs}
-                title="Deleting Multiple DDAHs"
-                body={`You are deleting all of the following ${selectedDdahs.length} DDAHs`}
-                confirmation={`Delete ${selectedDdahs.length} DDAHs`}
-            />
-            <DdahConfirmationDialog
-                selectedDdahs={selectedDdahs}
-                visible={showEmailConfirmation}
-                setVisible={setShowEmailConfirmation}
-                callback={emailDDAHs}
-                title="Emailing Multiple DDAHs"
-                body={`You are emailing all of the following ${selectedDdahs.length} DDAHs`}
-                confirmation={`Email ${selectedDdahs.length} DDAHs`}
-            />
-            <DdahConfirmationDialog
-                selectedDdahs={selectedDdahs}
-                visible={showApproveConfirmation}
-                setVisible={setShowApproveConfirmation}
-                callback={approveDDAHs}
-                title="Approving Multiple DDAHs"
-                body={`You are approving all of the following ${selectedDdahs.length} DDAHs`}
-                confirmation={`Approve ${selectedDdahs.length} DDAHs`}
-            />
         </div>
     );
 }
