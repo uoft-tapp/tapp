@@ -2,6 +2,21 @@ import React from "react";
 import { shallowEqual } from "react-redux";
 
 /**
+ * Compare the two input strings.
+ * @param {string} str1
+ * @param {string} str2
+ * @returns
+ */
+export function compareString(str1: string, str2: string) {
+    if (str1 > str2) {
+        return 1;
+    } else if (str1 < str2) {
+        return -1;
+    }
+    return 0;
+}
+
+/**
  * Capitalizes the input string. The function only capitalizes the first word if there are multiple words in the input string.
  * If `word` isn't a string, it is coerced.
  * @param word a single word.

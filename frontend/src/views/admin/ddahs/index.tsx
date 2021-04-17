@@ -25,7 +25,7 @@ import {
     deleteDdah,
 } from "../../../api/actions/ddahs";
 import { Ddah } from "../../../api/defs/types";
-import { MultiDeleteDdahConfirmation } from "./delete-ddah-confirmation";
+import { DdahConfirmationDialog } from "./ddah-confirmation-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function AdminDdahsView() {
@@ -45,6 +45,15 @@ export function AdminDdahsView() {
         false
     );
 
+    const [showEmailConfirmation, setShowEmailConfirmation] = React.useState(
+        false
+    );
+
+    const [
+        showApproveConfirmation,
+        setShowApproveConfirmation,
+    ] = React.useState(false);
+
     function confirmDDAHDeletion() {
         if (selectedDdahs?.length > 1) {
             setShowDeleteConfirmation(true);
@@ -53,9 +62,37 @@ export function AdminDdahsView() {
         }
     }
 
+    function confirmDDAHEmail() {
+        if (selectedDdahs?.length > 1) {
+            setShowEmailConfirmation(true);
+        } else {
+            emailDDAHs();
+        }
+    }
+
+    function confirmDDAHApprove() {
+        if (selectedDdahs?.length > 1) {
+            setShowApproveConfirmation(true);
+        } else {
+            approveDDAHs();
+        }
+    }
+
     function deleteDDAHs() {
         for (const ddah of selectedDdahs) {
             dispatch(deleteDdah(ddah));
+        }
+    }
+
+    function emailDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(emailDdah(ddah));
+        }
+    }
+
+    function approveDDAHs() {
+        for (const ddah of selectedDdahs) {
+            dispatch(approveDdah(ddah));
         }
     }
 
@@ -88,22 +125,14 @@ export function AdminDdahsView() {
                 <ActionHeader>Selected DDAH Actions</ActionHeader>
                 <ActionButton
                     icon={FaMailBulk}
-                    onClick={() => {
-                        for (const ddah of selectedDdahs) {
-                            dispatch(emailDdah(ddah));
-                        }
-                    }}
+                    onClick={confirmDDAHEmail}
                     disabled={selectedDdahIds.length === 0}
                 >
                     Email DDAH
                 </ActionButton>
                 <ActionButton
                     icon={FaCheck}
-                    onClick={() => {
-                        for (const ddah of selectedDdahs) {
-                            dispatch(approveDdah(ddah));
-                        }
-                    }}
+                    onClick={confirmDDAHApprove}
                     disabled={selectedDdahIds.length === 0}
                 >
                     Approve DDAH
@@ -128,11 +157,32 @@ export function AdminDdahsView() {
                 />
                 {!importInProgress && <ConnectedDdahsTable />}
             </ContentArea>
-            <MultiDeleteDdahConfirmation
+            <DdahConfirmationDialog
                 selectedDdahs={selectedDdahs}
                 visible={showDeleteConfirmation}
                 setVisible={setShowDeleteConfirmation}
-                deleteDDAHs={deleteDDAHs}
+                callback={deleteDDAHs}
+                title="Deleting Multiple DDAHs"
+                body={`You are deleting all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Delete ${selectedDdahs.length} DDAHs`}
+            />
+            <DdahConfirmationDialog
+                selectedDdahs={selectedDdahs}
+                visible={showEmailConfirmation}
+                setVisible={setShowEmailConfirmation}
+                callback={emailDDAHs}
+                title="Emailing Multiple DDAHs"
+                body={`You are emailing all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Email ${selectedDdahs.length} DDAHs`}
+            />
+            <DdahConfirmationDialog
+                selectedDdahs={selectedDdahs}
+                visible={showApproveConfirmation}
+                setVisible={setShowApproveConfirmation}
+                callback={approveDDAHs}
+                title="Approving Multiple DDAHs"
+                body={`You are approving all of the following ${selectedDdahs.length} DDAHs`}
+                confirmation={`Approve ${selectedDdahs.length} DDAHs`}
             />
         </div>
     );
