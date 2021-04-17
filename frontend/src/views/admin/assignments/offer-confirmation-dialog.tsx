@@ -1,9 +1,10 @@
 import React from "react";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { Assignment } from "../../../api/defs/types";
+import { compareString } from "../../../libs/utils";
 
-const withdrawModalColumn = [
+const assignmentModalColumn = [
     {
         Header: "Last Name",
         accessor: "applicant.last_name",
@@ -39,15 +40,6 @@ const withdrawModalColumn = [
     },
 ];
 
-function compareString(str1: string, str2: string) {
-    if (str1 > str2) {
-        return 1;
-    } else if (str1 < str2) {
-        return -1;
-    }
-    return 0;
-}
-
 function compareAssignment(a1: Assignment, a2: Assignment) {
     return (
         compareString(a1.position.position_code, a2.position.position_code) ||
@@ -59,13 +51,39 @@ function compareAssignment(a1: Assignment, a2: Assignment) {
     );
 }
 
-export function MultiWithdrawOfferConfirmation(props: {
+export function OfferConfirmationDialog(props: {
     data: Assignment[];
     visible: boolean;
-    setVisible: (visibility: boolean) => void;
-    withdrawOffers: () => void;
+    setVisible: Function;
+    callback: Function;
+    title: string;
+    body: string;
+    confirmation: string;
 }) {
-    const { data, visible, setVisible, withdrawOffers } = props;
+    const {
+        data,
+        visible,
+        setVisible,
+        callback,
+        title,
+        body,
+        confirmation,
+    } = props;
+
+    const [inProgress, setInProgress] = React.useState(false);
+
+    async function executeCallback() {
+        setInProgress(true);
+        await callback();
+        setInProgress(false);
+        setVisible(false);
+    }
+
+    // When a confirm operation is in progress, a spinner is displayed; otherwise
+    // it's hidden
+    const spinner = inProgress ? (
+        <Spinner animation="border" size="sm" className="mr-1" />
+    ) : null;
 
     // We want to minimize the re-render of the table. Since some bindings for columns
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
@@ -81,17 +99,16 @@ export function MultiWithdrawOfferConfirmation(props: {
             size="lg"
         >
             <Modal.Header closeButton>
-                <Modal.Title>Withdrawing Multiple Offers</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    You are <b>withdrawing</b> from the following {data?.length}{" "}
-                    offers:
+                    {body}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
                         filterable={false}
-                        columns={withdrawModalColumn}
+                        columns={assignmentModalColumn}
                         data={data}
                     />
                 </div>
@@ -105,13 +122,9 @@ export function MultiWithdrawOfferConfirmation(props: {
                 >
                     Cancel
                 </Button>
-                <Button
-                    onClick={() => {
-                        withdrawOffers();
-                        setVisible(false);
-                    }}
-                >
-                    Withdraw {data?.length} Offers
+                <Button onClick={executeCallback}>
+                    {spinner}
+                    {confirmation}
                 </Button>
             </Modal.Footer>
         </Modal>

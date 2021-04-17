@@ -1,21 +1,12 @@
 import { Button, Modal } from "react-bootstrap";
 import React from "react";
 import { ddahIssues, getReadableStatus } from "../ddah-table";
-import { generateHeaderCell } from "../../../components/table-utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
+import { compareString } from "../../../libs/utils";
+import { generateHeaderCell } from "../../../components/table-utils";
 
-interface ConfirmationDdahRowData {
-    id?: number;
-    position_code: string;
-    last_name: string;
-    first_name: string;
-    total_hours: number | null;
-    status: string;
-    issue: string;
-}
-
-const deleteDdahModalColumn = [
+const ddahModalColumn = [
     {
         Header: generateHeaderCell("Position"),
         accessor: "position_code",
@@ -43,14 +34,15 @@ const deleteDdahModalColumn = [
     },
 ];
 
-function compareString(str1: string, str2: string) {
-    if (str1 > str2) {
-        return 1;
-    } else if (str1 < str2) {
-        return -1;
-    }
-    return 0;
-}
+type ConfirmationDdahRowData = {
+    id?: number;
+    position_code: string;
+    last_name: string;
+    first_name: string;
+    total_hours: number | null;
+    status: string;
+    issue: string;
+};
 
 function compareDDAH(d1: ConfirmationDdahRowData, d2: ConfirmationDdahRowData) {
     return (
@@ -60,13 +52,24 @@ function compareDDAH(d1: ConfirmationDdahRowData, d2: ConfirmationDdahRowData) {
     );
 }
 
-export function MultiDeleteDdahConfirmation(props: {
+export function DdahConfirmationDialog(props: {
     selectedDdahs: Ddah[];
     visible: boolean;
-    setVisible: (visible: boolean) => void;
-    deleteDDAHs: () => void;
+    setVisible: Function;
+    callback: Function;
+    title: string;
+    body: string;
+    confirmation: string;
 }) {
-    const { selectedDdahs, visible, setVisible, deleteDDAHs } = props;
+    const {
+        selectedDdahs,
+        visible,
+        setVisible,
+        callback,
+        title,
+        body,
+        confirmation,
+    } = props;
 
     // The omni-search doesn't work on nested properties, so we need to flatten
     // the data we display before sending it to the table.
@@ -98,18 +101,17 @@ export function MultiDeleteDdahConfirmation(props: {
             size={"lg"}
         >
             <Modal.Header closeButton>
-                <Modal.Title>Deleting Multiple DDAHs</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3 alert alert-info" role="alert">
-                    You are <b>deleting</b> all of the following{" "}
-                    {selectedDdahs?.length} DDAHs
+                    {body}
                 </div>
                 <div className="mb-3">
                     <AdvancedFilterTable
                         // The ReactTable types are not smart enough to know that you can use a function
                         // for Header, so we will opt out of the type system here.
-                        columns={deleteDdahModalColumn as any}
+                        columns={ddahModalColumn as any}
                         data={data}
                         filterable={false}
                     />
@@ -126,11 +128,11 @@ export function MultiDeleteDdahConfirmation(props: {
                 </Button>
                 <Button
                     onClick={() => {
-                        deleteDDAHs();
+                        callback();
                         setVisible(false);
                     }}
                 >
-                    Delete {selectedDdahs?.length} DDAHs
+                    {confirmation}
                 </Button>
             </Modal.Footer>
         </Modal>
