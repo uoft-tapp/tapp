@@ -89,8 +89,10 @@ class Api::V1::Admin::PostingsController < ApplicationController
                 :custom_questions,
                 :availability
             ).permit!
-        filtered_params[:custom_questions] =
-            filtered_params[:custom_questions].to_hash.deep_stringify_keys
+        if filtered_params[:custom_questions]
+            filtered_params[:custom_questions] =
+                filtered_params[:custom_questions].to_hash.deep_stringify_keys
+        end
         filtered_params
     end
 end
