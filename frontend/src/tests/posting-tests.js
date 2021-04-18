@@ -211,15 +211,8 @@ export function postingTests(api) {
     it.todo("Fetch all applications associated with a posting");
 
     it("Fetch a survey for a posting", async () => {
-        resp = await apiGET(`/admin/postings/${posting.id}`);
-        console.log(resp.payload);
         resp = await apiGET(`/admin/postings/${posting.id}/survey`);
         expect(resp).toHaveStatus("success");
-        console.log(resp.payload.pages);
-        console.log(
-            resp.payload.pages.filter((p) => p.name === "preferences_page")[0]
-                .elements[0].rows
-        );
     });
 
     it("Survey for a posting includes questions related to each PostingPosition", async () => {
