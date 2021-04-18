@@ -21,10 +21,36 @@ export function postingTests(api) {
         open_date: "2021/01/01",
         close_date: "2021/05/01",
         availability: "auto",
-        custom_questions: [
-            "What year of study are you in?",
-            "Do you have any previous TA experience?",
-        ],
+        custom_questions: {
+            pages: [
+                {
+                    name: "page1",
+                    elements: [
+                        {
+                            type: "text",
+                            name: "question1",
+                        },
+                        {
+                            type: "text",
+                            name: "question2",
+                        },
+                    ],
+                },
+                {
+                    name: "page2",
+                    elements: [
+                        {
+                            type: "text",
+                            name: "question3",
+                        },
+                        {
+                            type: "text",
+                            name: "question4",
+                        },
+                    ],
+                },
+            ],
+        },
     };
     const postingPos = {
         hours: 20,
@@ -64,7 +90,7 @@ export function postingTests(api) {
         expect(resp.payload.id).not.toBeNull();
     });
 
-    // "Create a posting for a session" has to be run before this test case
+    // MUST run "Create a posting for a session" first to load data into ‘posting’
     it("Modify a posting", async () => {
         const updatedPostingData = {
             id: posting.id,
@@ -90,6 +116,7 @@ export function postingTests(api) {
         expect(resp.payload).toMatchObject(updatedPostingData2);
         Object.assign(posting, resp.payload);
     });
+
     it("Cannot set the `status` of a posting to an invalid value", async () => {
         resp = await apiPOST("/admin/postings", {
             ...posting,
@@ -103,25 +130,11 @@ export function postingTests(api) {
         });
         expect(resp).toHaveStatus("error");
     });
+
     it("Fetch all postings for a session", async () => {
         resp = await apiGET(`/admin/sessions/${session.id}/postings`);
         expect(resp).toHaveStatus("success");
         checkPropTypes(PropTypes.arrayOf(postingPropTypes), resp.payload);
-    });
-
-    it("Can set `custom_questions` to an arbitrary serializable object and the same object (i.e., an object and not the stringified version) gets returned.", async () => {
-        const updatePostingData = {
-            id: posting.id,
-            custom_questions: {
-                first: "What year of study are you in?",
-                second: "Do you have any previous TA experience?",
-            },
-        };
-        resp = await apiPOST("/admin/postings", updatePostingData);
-        expect(resp).toHaveStatus("success");
-        expect(resp.payload.custom_questions).toMatchObject(
-            updatePostingData.custom_questions
-        );
     });
 
     it("Two postings for the same session cannot have the same name", async () => {
@@ -152,6 +165,7 @@ export function postingTests(api) {
         );
         expect(resp).toHaveStatus("error");
     });
+
     it("Two postings for different sessions may have the same name", async () => {
         const newSession = await addSession(api);
         const newPosting = {
@@ -181,6 +195,7 @@ export function postingTests(api) {
         );
         expect(resp).toHaveStatus("success");
     });
+
     it("Create a posting_position for a posting", async () => {
         resp = await apiPOST(
             `/admin/postings/${posting.id}/posting_positions`,
@@ -196,14 +211,28 @@ export function postingTests(api) {
     it.todo("Fetch all applications associated with a posting");
 
     it("Fetch a survey for a posting", async () => {
+        resp = await apiGET(`/admin/postings/${posting.id}`);
+        console.log(resp.payload);
         resp = await apiGET(`/admin/postings/${posting.id}/survey`);
         expect(resp).toHaveStatus("success");
         console.log(resp.payload.pages);
+        console.log(
+            resp.payload.pages.filter((p) => p.name === "preferences_page")[0]
+                .elements[0].rows
+        );
     });
 
-    it.todo(
-        "Survey for a posting includes questions related to each PostingPosition"
-    );
+    it("Survey for a posting includes questions related to each PostingPosition", async () => {
+        resp = await apiGET(`/admin/postings/${posting.id}/survey`);
+        expect(resp).toHaveStatus("success");
+        let survey = resp.payload;
+        let postingPosQuestions = survey.pages.filter(
+            (p) => p.name === "preferences_page"
+        )[0].elements[0].rows;
+        resp = await apiGET(`/admin/postings/${posting.id}/posting_positions`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.length).toEqual(postingPosQuestions.length);
+    });
 
     it.skip("Cannot create a posting_position with a position associated with a different session than the posting", async () => {
         const newSession = await addSession(api);
@@ -219,6 +248,7 @@ export function postingTests(api) {
             `/admin/sessions/${newSession.id}/postings`,
             newPosting
         );
+        expect(resp).toHaveStatus("success");
         Object.assign(newPosting, resp.payload);
         const newPostingPos = {
             hours: 20,
@@ -232,7 +262,7 @@ export function postingTests(api) {
         expect(resp).toHaveStatus("error");
     });
 
-    // "Create a posting_position for a posting" has to be run before this test case
+    // MUST run "Create a posting_position for a posting" first to load data into ‘postingPos‘
     it("Modify a posting_position", async () => {
         const updatePostingPos = {
             position_id: postingPos.position_id,
@@ -280,6 +310,7 @@ export function postingTests(api) {
             `/admin/sessions/${session.id}/postings`,
             newPosting
         );
+        expect(resp).toHaveStatus("success");
         Object.assign(newPosting, resp.payload);
 
         const newPostingPos = {
@@ -321,6 +352,7 @@ export function postingTests(api) {
             `/admin/postings/${posting.id}/posting_positions`,
             { ...postingPos, position_id: position.id }
         );
+        expect(resp).toHaveStatus("success");
         resp = await apiPOST("/admin/postings/delete", { id: posting.id });
         expect(resp).toHaveStatus("success");
         resp = await apiGET(`/admin/postings/${posting.id}`);
