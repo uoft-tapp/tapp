@@ -36,6 +36,7 @@ export function EmailDdahsButtonWithDialog({
                 icon={FaMailBulk}
                 onClick={confirmOfferCreate}
                 disabled={selectedDdahs.length === 0}
+                title={"Email selected DDAHs"}
             >
                 Email DDAH
             </ActionButton>
@@ -78,6 +79,7 @@ export function ApproveDdahsButtonWithDialog({
                 icon={FaCheck}
                 onClick={confirmOfferCreate}
                 disabled={selectedDdahs.length === 0}
+                title={"Approve selected DDAHs"}
             >
                 Approve DDAH
             </ActionButton>
@@ -120,6 +122,7 @@ export function DeleteDdahsButtonWithDialog({
                 icon={FaTrash}
                 onClick={confirmOfferCreate}
                 disabled={selectedDdahs.length === 0}
+                title={"Delete selected DDAHs"}
             >
                 Delete DDAH
             </ActionButton>

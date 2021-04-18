@@ -25,6 +25,7 @@ import {
     DeleteDdahsButtonWithDialog,
     EmailDdahsButtonWithDialog,
 } from "./selected-ddah-actions";
+import { DownloadDdahs } from "./download-ddahs";
 
 export function AdminDdahsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -57,6 +58,7 @@ export function AdminDdahsView() {
                 <ConnectedDownloadDdahsAcceptedListAction
                     disabled={!activeSession}
                 />
+                <DownloadDdahs selectedDdahs={selectedDdahs} />
 
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportDdahsAction
