@@ -23,11 +23,14 @@ class DdahService
             if duty_params[:duties]
                 @ddah.duties_attributes =
                     duty_params[:duties].map do |duty|
-                        # make sure all duties descriptions are normalized
-                        # to start with the appropriate prefixes whenever duties are updated.
                         if duty[:description]
+                            # make sure all duties descriptions are normalized
+                            # to start with the appropriate prefixes whenever duties are updated.
+
                             duty[:description] =
-                                self.class.normalize_duty_desc duty[:description]
+                                self.class.normalize_duty_desc duty[
+                                                                   :description
+                                                               ]
                         end
                         duty
                     end
@@ -55,23 +58,52 @@ class DdahService
         @ddah.duties.order(:order).map { |duty| normalize_duty(duty: duty) }
     end
 
+    def categorized_duties
+        duties = normalized_duties
+        ret = {}
+        duties.each do |duty|
+            category, desc = duty.description.split(':', 2)
+            if desc.nil?
+                desc = category
+                category = 'other'
+            end
+            ret[category] ||= []
+            ret[category] << { 'hours' => duty.hours, 'description' => desc }
+        end
+
+        ret
+    end
+
     def self.normalize_duty_desc(desc)
-        if desc.match(/^prep.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'prep:')
-        elsif desc.match(/^train.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'training:')
-        elsif desc.match(/^meet.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'meeting:')
-        elsif desc.match(/^contact.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'contact:')
-        elsif desc.match(/^mark.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'mark:')
-        elsif desc.match(/^grad.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'mark:')
-        elsif desc.match(/^other.{0,15}:/i)
-            trim_replace(desc, $~.to_s, 'other:')
+        case desc
+        when /^\s*prep.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'prep:')
+        when /^\s*train.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'training:')
+        when /^\s*meet.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'meeting:')
+        when /^\s*contact.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'contact:')
+        when /^\s*mark.{0,15}?:/i, /^grad.{0,15}:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'mark:')
+        when /^\s*other.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'other:')
         else
             "other:#{desc.strip}"
+        end
+    end
+
+    class << self
+        private
+
+        def trim_replace(orig, prefix, desired_prefix)
+            # If the prefix is already the desired prefix and it's not followed
+            # by a space, we're all good
+            if prefix == desired_prefix && !Regexp.new("^#{prefix}\\s")
+                return orig
+            end
+
+            "#{desired_prefix}#{orig.sub(Regexp.new("^#{prefix}"), '').strip}"
         end
     end
 
@@ -80,14 +112,6 @@ class DdahService
     def normalize_duty(duty:)
         duty.description = self.class.normalize_duty_desc duty.description
         duty
-    end
-
-    def self.trim_replace(orig, prefix, desired_prefix)
-        # If the prefix is already the desired prefix and it's not followed
-        # by a space, we're all good
-        return orig if prefix == desired_prefix && !Regexp.new("^#{prefix}\\s")
-
-        "#{desired_prefix}#{orig.sub(Regexp.new("^#{prefix}"), '').strip}"
     end
 
     def ddah_params

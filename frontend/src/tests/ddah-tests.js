@@ -34,7 +34,7 @@ export function ddahTests(api) {
 
     let session = null;
     let assignments = null;
-    let appliants = null;
+    let applicants = null;
     let ddah = {};
 
     beforeAll(async () => {
@@ -42,7 +42,7 @@ export function ddahTests(api) {
         await databaseSeeder.seedForInstructors(api);
         session = databaseSeeder.seededData.session;
         assignments = databaseSeeder.seededData.assignments;
-        appliants = databaseSeeder.seededData.applicants;
+        applicants = databaseSeeder.seededData.applicants;
     }, 30000);
 
     it("create a ddah", async () => {
@@ -119,7 +119,7 @@ export function ddahTests(api) {
 
         const newAssignment = {
             position_id: newPosition.id,
-            applicant_id: appliants[0].id,
+            applicant_id: applicants[0].id,
             hours: 70,
             start_date: newPosition.start_date,
             end_date: newPosition.end_date,
@@ -301,6 +301,14 @@ export function ddahTests(api) {
         expect(signedDdah.accepted_date).toBeFalsy();
         expect(signedDdah.revised_date).toBeTruthy();
     });
+
+    // Ddah duty descriptions should start with
+    // "prep:", "training:", "meeting:", "contact:", "mark:", or "other:".
+    // When uploading, basic variants are allowed and should be substituted
+    // for the normalized version. For example, "Preparation: weekly sessions"
+    // should become "prep:weekly sessions". Whitespace in front of the prefix
+    // and before and after the prefix's ":" should be trimmed.
+    it.todo("The prefix of a DDAH duty descriptions is normalized");
 }
 
 /**
