@@ -117,7 +117,7 @@ export function ConnectedAddDdahDialog(props: {
     const conflicts = getConflicts(newDdah, ddahs);
 
     return (
-        <Modal show={show} onHide={onHide}>
+        <Modal show={show} onHide={onHide} size="xl">
             <Modal.Header closeButton>
                 <Modal.Title>Add DDAH</Modal.Title>
             </Modal.Header>

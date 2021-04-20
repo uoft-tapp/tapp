@@ -85,7 +85,7 @@ class DdahService
         when /^\s*contact.{0,15}?:/i
             trim_replace(desc, $LAST_MATCH_INFO.to_s, 'contact:')
         when /^\s*mark.{0,15}?:/i, /^grad.{0,15}:/i
-            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'mark:')
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'marking:')
         when /^\s*other.{0,15}?:/i
             trim_replace(desc, $LAST_MATCH_INFO.to_s, 'other:')
         else
