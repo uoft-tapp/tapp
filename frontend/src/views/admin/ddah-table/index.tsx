@@ -79,9 +79,7 @@ function getRecentActivityDate(ddah: Ddah) {
         .map((dateString) => new Date(dateString || 0).getTime());
     if (validDates.length === 0) return "";
     const recentActivityDate = new Date(Math.max.apply(null, validDates));
-    return `${recentActivityDate.toLocaleDateString(
-        "en-CA"
-    )} ${recentActivityDate.toLocaleTimeString("en-CA")}`;
+    return formatDate(recentActivityDate.toISOString());
 }
 
 /**
