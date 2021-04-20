@@ -311,6 +311,7 @@ export function ddahTests(api) {
     // and before and after the prefix's ":" should be trimmed.
     it.todo("The prefix of a DDAH duty descriptions is normalized");
     it.todo("Can change the prefix of a DDAH duty's description");
+    it.todo("Colons `:` are allowed in a DDAH duty's description");
 }
 
 /**
