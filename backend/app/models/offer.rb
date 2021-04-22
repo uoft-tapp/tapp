@@ -23,16 +23,13 @@ class Offer < ApplicationRecord
         !accepted? && !rejected? && !withdrawn?
     end
 
-    #Compute a difference in hours between two offers.
+    # Compute a difference in hours between two offers.
     def compute_diff(other)
         return false if self == other
-        puts self
-        puts other
-        return other.hours if self.hours != other.hours
-        return false
+        return other.hours if hours != other.hours
     end
 
-    def get_status_message
+    def set_status_message
         case status.to_sym
         when :pending
             'You have not responded to this offer'

@@ -38,8 +38,7 @@ class OfferMailer < ApplicationMailer
 
     private
 
-    def get_prev_offer_diff
-        id = @offer.assignment_id
+    def prev_offer_diff
         latest = Offer.order(withdrawn_date: :desc).limit(2)
         @diff = @offer.compute_diff(latest[1]) if latest.length == 2
     end
@@ -61,7 +60,7 @@ class OfferMailer < ApplicationMailer
                 offer.url_token
             }/view"
         @nag_count = offer.nag_count
-        @status_message = offer.get_status_message
-        get_prev_offer_diff
+        @status_message = offer.set_status_message
+        prev_offer_diff
     end
 end
