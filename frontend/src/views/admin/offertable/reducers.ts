@@ -1,8 +1,12 @@
 import { SET_SELECTED_ROWS } from "./constants";
 import { createReducer } from "redux-create-reducer";
 
+interface OfferTableState {
+    selectedAssignmentIds: number[];
+}
+
 // initialize the state of offer table
-const initialState = {
+const initialState: OfferTableState = {
     selectedAssignmentIds: [],
 };
 

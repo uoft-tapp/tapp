@@ -3,6 +3,7 @@ import { ConnectedOfferTable } from "../offertable";
 import { ConnectedAddAssignmentDialog } from "./add-assignment-dialog";
 import { ConnectedViewAssignmentDetailsAction } from "./assignment-details";
 import { ConnectedOfferActionButtons } from "./offer-actions";
+import { DownloadOfferPdfs } from "./download-offers";
 import {
     ConnectedExportAssignmentsAction,
     ConnectedImportAssignmentsAction,
@@ -16,8 +17,13 @@ import { ContentArea } from "../../../components/layout";
 import { FaPlus } from "react-icons/fa";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useSelector } from "react-redux";
-import { activeSessionSelector } from "../../../api/actions";
+import {
+    activeSessionSelector,
+    assignmentsSelector,
+} from "../../../api/actions";
 import { Spinner } from "react-bootstrap";
+import { offerTableSelector } from "../offertable/actions";
+import { Assignment } from "../../../api/defs/types";
 
 export function AdminAssignmentsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -25,6 +31,19 @@ export function AdminAssignmentsView() {
     // While data is being imported, updating the react table takes a long time,
     // so we use this variable to hide the react table during import.
     const [inProgress, setInProgress] = React.useState(false);
+    const { selectedAssignmentIds } = useSelector(offerTableSelector);
+    const assignments = useSelector(assignmentsSelector);
+    const assignmentsById = React.useMemo(() => {
+        const ret: Record<number, Assignment> = {};
+        for (const assignment of assignments) {
+            ret[assignment.id] = assignment;
+        }
+        return ret;
+    }, [assignments]);
+    const selectedAssignments = React.useMemo(
+        () => selectedAssignmentIds.map((id) => assignmentsById[id]),
+        [selectedAssignmentIds, assignmentsById]
+    );
 
     return (
         <div className="page-body">
@@ -39,6 +58,7 @@ export function AdminAssignmentsView() {
                 >
                     Add Assignment
                 </ActionButton>
+                <DownloadOfferPdfs selectedAssignments={selectedAssignments} />
                 <ActionHeader>Import/Export</ActionHeader>
                 <ConnectedImportAssignmentsAction
                     disabled={!activeSession}
@@ -50,7 +70,9 @@ export function AdminAssignmentsView() {
                 />
                 <ActionHeader>Selected Assignment Actions</ActionHeader>
                 <ConnectedViewAssignmentDetailsAction />
-                <ConnectedOfferActionButtons />
+                <ConnectedOfferActionButtons
+                    selectedAssignments={selectedAssignments}
+                />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (
