@@ -17,6 +17,7 @@ We use Travis CI for our continuous integration pipeline. As of right now, we ha
 2. Rubocop linting tests for our back end
 3. Frontend unit tests
 ```
+Sometimes Travis CI may fail due to high loads of tasks to finish. In this case, wait until all previous tasks are finished and then push to trigger travis CI again.
 
 ### Issues
 
@@ -94,6 +95,7 @@ adding a new position would always fail.
 **Scope**
 
 -   The title of PR should either be exactly the issue title, or a rewording
+-   Add [WIP] tag to any PRs which are still in progress and not yet ready for review
 -   The PR description should mention the associated issue with a hashtag, so that it can be linked
 -   All commits meant to resolve an issue must be reviewed by at least one member of the team
 -   The reviewer will not merge commits until their changes are addressed, if requests for change apply
@@ -203,7 +205,8 @@ docker-compose up
 
 This is equivalent to the command `docker-compose -f docker-compose.yml -f docker-compose.override.yml up`
 or `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
-since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`.
+since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`. On Windows, commands in
+this format should be used, since there are no symbolic links.
 
 #### Debugging
 
@@ -335,26 +338,14 @@ run it manually, just call `rubocop` or `bundle exec rubocop`.
 
 ## Unit tests
 
-We use RSpec as our testing suite. Our tests for models are located under
-`spec/models`. Factories are provided by `FactoryBot` and are located under
-`spec/factories`. To run them, go into your local tapp container, and run:
+We use Jest as our frontend testing suite. Our tests are located under `frontend\src\tests`.
 
-```
-# Get your test database similar to your development database
-rake db:test:prepare
+Some useful tips or reminders:
 
-# Run entire test suite
-rake spec
+- Using `it.skip` can skip specific test cases
+- Using `describe.skip` can skip specific test sections
+- Never manally edit snapshot files located under `frontend\src\tests\__snapshots__`
 
-# Run tests for one specific class do rspec {file_name}
-# For example,
-rspec spec/models/position_spec.rb
-
-# To run specific test block for a class, do rspec {file_name}:{line_number}
-# where line number is the first line the block starts on
-# For example,
-rspec spec/models/position_spec.rb:17
-```
 
 ## API Documentation
 

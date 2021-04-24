@@ -139,3 +139,20 @@ export function useDebounce(value: any, delay: number) {
 
     return debouncedValue;
 }
+
+/**
+ * Duty descriptions come in the form `<category>:<description>`. This
+ * function breaks a `fullDesc` up into it's two parts
+ *
+ * @param {string} fullDesc
+ * @returns
+ */
+export function splitDutyDescription(fullDesc: string) {
+    const colonPos = fullDesc.indexOf(":");
+    if (colonPos < 0) {
+        return { category: "other", description: fullDesc };
+    }
+    const category = fullDesc.slice(0, colonPos);
+    const description = fullDesc.slice(colonPos + 1);
+    return { category, description };
+}

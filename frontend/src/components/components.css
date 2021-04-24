@@ -128,3 +128,7 @@
 .details-row-column-header-icon {
     color: var(--primary);
 }
+
+.form-cell {
+    min-width: 5em;
+}

@@ -52,11 +52,30 @@
             .applicant .signature {
                 border-bottom: 1px solid black;
                 min-width: 2.5in;
+                min-height: 3ex;
                 display: inline-block;
                 margin-left: 0;
             }
             .checkbox {
                 font-size: 18pt;
+            }
+            th.hours {
+                text-align: right;
+                font-weight: normal;
+                padding-right: 1em;
+            }
+            .duties-table {
+                min-width: 20em;
+            }
+            .duties-table thead th {
+                padding-top: .3em;
+                padding-bottom: .3em;
+                background-color: rgb(236, 255, 255);
+                font-weight: normal;
+            }
+            .no-duties {
+                color: rgb(155, 155, 155);
+                font-style: italic;
             }
 
             @media only screen and (max-width: 9in) {
@@ -104,15 +123,73 @@
                 </tr>
             </table>
             <h3 class="i">Duties</h3>
-            <table class="appointment-summary">
-                {% for duty in duties %}
-                <tr>
-                    <th>{{ duty.hours }} <span class="i">hours</span></th>
-                    <td>
-                        {{ duty.description }}
-                    </td>
-                </tr>
-                {% else %} No Duties Listed {% endfor %}
+            <table class="duties-table">
+                <thead><tr><th colspan="2">Meetings</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.meeting %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
+                <thead><tr><th colspan="2">Preparation</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.prep %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
+                <thead><tr><th colspan="2">Contact Time</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.contact %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
+                <thead><tr><th colspan="2">Marking/Grading</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.marking %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
+                <thead><tr><th colspan="2">Training</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.training %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
+                <thead><tr><th colspan="2">Other duties</th></tr></thead>
+                <tbody>
+                    {% for duty in duties.other %}
+                    <tr>
+                        <th class="hours">{{ duty.hours }} <span class="i">hours</span></th>
+                        <td>
+                            {{ duty.description }}
+                        </td>
+                    </tr>
+                    {% else %} <tr><th></th><td class="no-duties">No Duties Listed</td></tr> {% endfor %}
+                </tbody>
             </table>
             <p>
                 Total hours: <span class="emphcolor">{{ total_hours }}</span>.
