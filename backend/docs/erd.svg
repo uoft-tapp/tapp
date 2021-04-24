@@ -130,18 +130,18 @@
 <text text-anchor="start" x="536.5" y="-449.87" font-family="Arial Italic" font-size="10.00" fill="#999999">json</text>
 <text text-anchor="start" x="416.5" y="-436.87" font-family="Arial" font-size="10.00">department </text>
 <text text-anchor="start" x="468.5" y="-436.87" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="416.5" y="-423.87" font-family="Arial" font-size="10.00">gpa </text>
-<text text-anchor="start" x="435.5" y="-423.87" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
-<text text-anchor="start" x="416.5" y="-410.87" font-family="Arial" font-size="10.00">posting_id </text>
-<text text-anchor="start" x="464.5" y="-410.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
-<text text-anchor="start" x="416.5" y="-397.87" font-family="Arial" font-size="10.00">previous_uoft_experience </text>
-<text text-anchor="start" x="531.5" y="-397.87" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
-<text text-anchor="start" x="416.5" y="-384.87" font-family="Arial" font-size="10.00">program </text>
-<text text-anchor="start" x="455.5" y="-384.87" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
-<text text-anchor="start" x="416.5" y="-371.87" font-family="Arial" font-size="10.00">session_id </text>
-<text text-anchor="start" x="466.5" y="-371.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
-<text text-anchor="start" x="416.5" y="-358.87" font-family="Arial" font-size="10.00">status </text>
-<text text-anchor="start" x="447.5" y="-358.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
+<text text-anchor="start" x="416.5" y="-423.87" font-family="Arial" font-size="10.00">first_time_ta </text>
+<text text-anchor="start" x="474.5" y="-423.87" font-family="Arial Italic" font-size="10.00" fill="#999999">boolean</text>
+<text text-anchor="start" x="416.5" y="-410.87" font-family="Arial" font-size="10.00">gpa </text>
+<text text-anchor="start" x="435.5" y="-410.87" font-family="Arial Italic" font-size="10.00" fill="#999999">float</text>
+<text text-anchor="start" x="416.5" y="-397.87" font-family="Arial" font-size="10.00">posting_id </text>
+<text text-anchor="start" x="464.5" y="-397.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) FK</text>
+<text text-anchor="start" x="416.5" y="-384.87" font-family="Arial" font-size="10.00">previous_uoft_experience </text>
+<text text-anchor="start" x="531.5" y="-384.87" font-family="Arial Italic" font-size="10.00" fill="#999999">text</text>
+<text text-anchor="start" x="416.5" y="-371.87" font-family="Arial" font-size="10.00">program </text>
+<text text-anchor="start" x="455.5" y="-371.87" font-family="Arial Italic" font-size="10.00" fill="#999999">string</text>
+<text text-anchor="start" x="416.5" y="-358.87" font-family="Arial" font-size="10.00">session_id </text>
+<text text-anchor="start" x="466.5" y="-358.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer (8) ∗ FK</text>
 <text text-anchor="start" x="416.5" y="-345.87" font-family="Arial" font-size="10.00">yip </text>
 <text text-anchor="start" x="432.5" y="-345.87" font-family="Arial Italic" font-size="10.00" fill="#999999">integer</text>
 </g>
