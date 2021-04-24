@@ -12,7 +12,11 @@ import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import { formatDate, formatDownloadUrl } from "../../../libs/utils";
+import {
+    formatDate,
+    formatDownloadUrl,
+    splitDutyDescription,
+} from "../../../libs/utils";
 import { DdahEditor } from "../../../components/ddahs";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
@@ -216,14 +220,24 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
             </h4>
             <h5>Duties</h5>
             <ul>
-                {duties.map((duty) => (
-                    <li key={duty.order}>
-                        <span className="ddah-duty-hours">{duty.hours}</span>
-                        <span className="ddah-duty-description">
-                            {duty.description}
-                        </span>
-                    </li>
-                ))}
+                {duties.map((duty) => {
+                    const { category, description } = splitDutyDescription(
+                        duty.description
+                    );
+                    return (
+                        <li key={duty.order}>
+                            <span className="ddah-duty-hours">
+                                {duty.hours}
+                            </span>
+                            <span
+                                className={`ddah-duty-category ${category}`}
+                            />
+                            <span className="ddah-duty-description">
+                                {description}
+                            </span>
+                        </li>
+                    );
+                })}
                 <li>
                     <span className="ddah-duty-hours">{ddah.total_hours}</span>
                     <span className="ddah-duty-description">Total</span>

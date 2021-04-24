@@ -8,6 +8,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { stringToNativeType } from "../libs/urls";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { splitDutyDescription } from "../libs/utils";
 
 const DEFAULT_COLUMNS = [
     {
@@ -104,6 +105,81 @@ interface PartialDdah {
     duties: Duty[];
 }
 
+function DutyRow({
+    duty,
+    removeDuty,
+    upsertDuty,
+}: {
+    duty: Duty;
+    removeDuty: Function;
+    upsertDuty: Function;
+}) {
+    const { category, description } = splitDutyDescription(duty.description);
+    return (
+        <DialogRow
+            icon={
+                <Button
+                    title="Remove duty"
+                    onClick={() => removeDuty(duty)}
+                    variant="outline-info"
+                >
+                    <FaTrash />
+                </Button>
+            }
+            colStretch={[1, 2, 7]}
+        >
+            <>
+                <Form.Label>Hours</Form.Label>
+                <Form.Control
+                    type="number"
+                    value={duty.hours}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        upsertDuty({
+                            ...duty,
+                            hours: stringToNativeType(e.target.value) as any,
+                        })
+                    }
+                />
+            </>
+            <>
+                <Form.Label>Category</Form.Label>
+                <Form.Control
+                    title="Enter what category these duties fit into"
+                    as="select"
+                    value={category}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        upsertDuty({
+                            ...duty,
+                            description: `${e.target.value}:${description}`,
+                        })
+                    }
+                >
+                    <option value="meeting">Meetings</option>
+                    <option value="prep">Preparation</option>
+                    <option value="contact">Contact time</option>
+                    <option value="other">Other duties</option>
+                    <option value="marking">Marking/Grading</option>
+                    <option value="training">Training</option>
+                </Form.Control>
+            </>
+            <>
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                    title="Enter a description of what these hours are allocated for"
+                    type="input"
+                    value={description}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        upsertDuty({
+                            ...duty,
+                            description: `${category}:${e.target.value}`,
+                        })
+                    }
+                />
+            </>
+        </DialogRow>
+    );
+}
+
 /**
  * Edit information about an applicant.
  *
@@ -185,52 +261,12 @@ export function DdahEditor(props: {
             </DialogRow>
             <h4>Duties</h4>
             {duties.map((duty) => (
-                <DialogRow
+                <DutyRow
+                    duty={duty}
+                    removeDuty={removeDuty}
+                    upsertDuty={upsertDuty}
                     key={duty.order}
-                    icon={
-                        <Button
-                            title="Remove duty"
-                            onClick={() => removeDuty(duty)}
-                            variant="outline-info"
-                        >
-                            <FaTrash />
-                        </Button>
-                    }
-                >
-                    <>
-                        <Form.Label>Hours</Form.Label>
-                        <Form.Control
-                            type="number"
-                            value={duty.hours}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                upsertDuty({
-                                    ...duty,
-                                    hours: stringToNativeType(
-                                        e.target.value
-                                    ) as any,
-                                })
-                            }
-                        />
-                    </>
-                    <>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            title="Enter a description of what these hours are allocated for"
-                            type="input"
-                            value={duty.description}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                upsertDuty({
-                                    ...duty,
-                                    description: e.target.value,
-                                })
-                            }
-                        />
-                    </>
-                </DialogRow>
+                />
             ))}
             <DialogRow>
                 <Button

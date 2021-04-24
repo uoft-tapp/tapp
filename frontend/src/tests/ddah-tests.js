@@ -34,7 +34,7 @@ export function ddahTests(api) {
 
     let session = null;
     let assignments = null;
-    let appliants = null;
+    let applicants = null;
     let ddah = {};
 
     beforeAll(async () => {
@@ -42,7 +42,7 @@ export function ddahTests(api) {
         await databaseSeeder.seedForInstructors(api);
         session = databaseSeeder.seededData.session;
         assignments = databaseSeeder.seededData.assignments;
-        appliants = databaseSeeder.seededData.applicants;
+        applicants = databaseSeeder.seededData.applicants;
     }, 30000);
 
     it("create a ddah", async () => {
@@ -52,17 +52,17 @@ export function ddahTests(api) {
                 {
                     order: 2,
                     hours: 25,
-                    description: "Marking the midterm",
+                    description: "marking:Marking the midterm",
                 },
                 {
                     order: 1,
                     hours: 4,
-                    description: "Initial training",
+                    description: "training:Initial training",
                 },
                 {
                     order: 3,
                     hours: 40,
-                    description: "Running tutorials",
+                    description: "contact:Running tutorials",
                 },
             ],
         };
@@ -119,7 +119,7 @@ export function ddahTests(api) {
 
         const newAssignment = {
             position_id: newPosition.id,
-            applicant_id: appliants[0].id,
+            applicant_id: applicants[0].id,
             hours: 70,
             start_date: newPosition.start_date,
             end_date: newPosition.end_date,
@@ -136,7 +136,7 @@ export function ddahTests(api) {
                 {
                     order: 2,
                     hours: 25,
-                    description: "Marking the midterm",
+                    description: "marking:Marking the midterm",
                 },
             ],
         };
@@ -170,7 +170,8 @@ export function ddahTests(api) {
                 {
                     order: 1,
                     hours: 100,
-                    description: "Watching Lord of the Rings extended addition",
+                    description:
+                        "other:Watching Lord of the Rings extended addition",
                 },
             ],
         };
@@ -224,7 +225,7 @@ export function ddahTests(api) {
                 {
                     order: 1,
                     hours: 200,
-                    description: "Walking down memory lane",
+                    description: "other:Walking down memory lane",
                 },
             ],
         };
@@ -262,7 +263,7 @@ export function ddahTests(api) {
                 ...ddah.duties,
                 {
                     order: 10,
-                    description: "Hot-pocket eating contest",
+                    description: "meeting:Hot-pocket eating contest",
                     hours: 6,
                 },
             ],
@@ -290,7 +291,7 @@ export function ddahTests(api) {
                 ...ddah.duties,
                 {
                     order: 10,
-                    description: "Hot-pocket eating contest",
+                    description: "meeting:Hot-pocket eating contest",
                     hours: 6,
                 },
             ],
@@ -301,6 +302,16 @@ export function ddahTests(api) {
         expect(signedDdah.accepted_date).toBeFalsy();
         expect(signedDdah.revised_date).toBeTruthy();
     });
+
+    // Ddah duty descriptions should start with
+    // "prep:", "training:", "meeting:", "contact:", "marking:", or "other:".
+    // When uploading, basic variants are allowed and should be substituted
+    // for the normalized version. For example, "Preparation: weekly sessions"
+    // should become "prep:weekly sessions". Whitespace in front of the prefix
+    // and before and after the prefix's ":" should be trimmed.
+    it.todo("The prefix of a DDAH duty descriptions is normalized");
+    it.todo("Can change the prefix of a DDAH duty's description");
+    it.todo("Colons `:` are allowed in a DDAH duty's description");
 }
 
 /**
@@ -345,17 +356,17 @@ export function ddahsEmailAndDownloadTests(api) {
                 {
                     order: 2,
                     hours: 25,
-                    description: "Marking the midterm",
+                    description: "marking:Marking the midterm",
                 },
                 {
                     order: 1,
                     hours: 4,
-                    description: "Initial training",
+                    description: "training:Initial training",
                 },
                 {
                     order: 3,
                     hours: 40,
-                    description: "Running tutorials",
+                    description: "contact:Running tutorials",
                 },
             ],
         };
@@ -400,4 +411,8 @@ export function ddahsEmailAndDownloadTests(api) {
         );
         expect(resp).toHaveStatus("success");
     });
+
+    // For this test, it is sufficient to only check the HTML version,
+    // which can be downloaded by leaving off the `.pdf` suffix from the public route.
+    it.todo("Downloaded ddah includes all duties (from all categories)");
 }
