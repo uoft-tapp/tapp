@@ -85,6 +85,14 @@ class Api::V1::Admin::ActiveOffersController < ApplicationController
         render_success @offer
     end
 
+    # GET /active_offers/history
+    # Fetches the history for past offers ordered by emailed_date
+    def history
+        render_success Offer.where(assignment: @assignment).order(
+                           created_at: :desc
+                       )
+    end
+
     private
 
     def can_be_emailed
