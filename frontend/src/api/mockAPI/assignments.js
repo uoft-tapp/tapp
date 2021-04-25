@@ -359,14 +359,14 @@ class ActiveOffer extends MockAPIController {
         const offers = this.findAllByAssignment(
             this._ensureAssignment(assignment)
         );
-        if (!offers.emailed_date) {
+        if (offers.length == 0) {
             throw new Error(
-                `The active offer for assignment with id=${assignment.id} has not been emailed yet, so a nag email cannot be sent`
+                `There is no offer history for assignment with id=${assignment.id}.`
             );
         }
         // Note: allocating memory inside of the sort callback is frowned upon, but this is just a mock API
         offers.sort(function (a, b) {
-            return new Date(a.emailed_date) - new Date(b.emailed_date);
+            return new Date(b.emailed_date) - new Date(a.emailed_date);
         });
         return offers;
     }
