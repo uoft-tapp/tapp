@@ -4,6 +4,16 @@ import { FaEdit } from "react-icons/fa";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import "./edit-field-widgets.css";
+import { EditableType } from "./editable-cell";
+
+interface EditFieldProps<T> {
+    title: string;
+    value: T;
+    show?: boolean;
+    onHide?: (...args: any[]) => any;
+    onChange?: (...args: any[]) => any;
+    type?: EditableType;
+}
 
 /**
  * A dialog allowing one to edit `props.value`. `onChange` is called
@@ -12,9 +22,16 @@ import "./edit-field-widgets.css";
  * @param {*} props
  * @returns
  */
-function EditFieldDialog(props) {
-    const { title, value, show, onHide, onChange, type } = props;
-    const [fieldVal, setFieldVal] = React.useState(value);
+function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
+    const {
+        title,
+        value,
+        show,
+        onHide = () => {},
+        onChange = () => {},
+        type,
+    } = props;
+    const [fieldVal, setFieldVal] = React.useState<T>(value);
     const [inProgress, setInProgress] = React.useState(false);
     const isDate = type === "date";
 
@@ -49,11 +66,11 @@ function EditFieldDialog(props) {
             <span>
                 Change from{" "}
                 <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(value) : value}
+                    {isDate ? formatDate(value as string) : value}
                 </span>{" "}
                 to{" "}
                 <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(fieldVal) : fieldVal}
+                    {isDate ? formatDate(fieldVal as string) : fieldVal}
                 </span>
             </span>
         );
@@ -67,7 +84,7 @@ function EditFieldDialog(props) {
                 <input
                     type={type}
                     value={fieldVal}
-                    onChange={(e) => setFieldVal(e.currentTarget.value)}
+                    onChange={(e) => setFieldVal(e.currentTarget.value as T)}
                 />{" "}
                 {changeIndicator}
             </Modal.Body>
@@ -87,7 +104,11 @@ function EditFieldDialog(props) {
  * @param {*} props
  * @returns
  */
-export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
+export const EditFieldIcon = React.memo(function EditFieldIcon(props: {
+    title: string;
+    hidden: boolean;
+    onClick: (...args: any[]) => any;
+}) {
     const { title, hidden, onClick } = props;
     if (hidden) {
         return null;
@@ -112,7 +133,12 @@ export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
  * @param {{children, title, value, onChange: function, editable: boolean, type?: string}} props
  * @returns
  */
-export function EditableField(props) {
+export function EditableField<T extends string | number>(
+    props: EditFieldProps<T> & {
+        children: React.ReactNode | null;
+        editable: boolean;
+    }
+) {
     const {
         children,
         title,

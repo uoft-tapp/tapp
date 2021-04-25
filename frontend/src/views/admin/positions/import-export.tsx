@@ -12,6 +12,7 @@ import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
+    ExportFormat,
     normalizeImport,
     preparePositionData,
 } from "../../../libs/import-export";
@@ -19,9 +20,11 @@ import {
     PositionsList,
     PositionsDiffList,
 } from "../../../components/positions-list";
-import { diffImport, getChanged } from "../../../libs/diffs";
+import { diffImport, DiffSpec, getChanged } from "../../../libs/diffs";
 import { positionSchema } from "../../../libs/schema";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { MinimalPosition, Position } from "../../../api/defs/types";
+import type { DataFormat } from "../../../libs/import-export/normalize-import";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -30,9 +33,15 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  * @export
  * @returns
  */
-export function ConnectedExportPositionsAction({ disabled }) {
+export function ConnectedExportPositionsAction({
+    disabled,
+}: {
+    disabled: boolean;
+}) {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -40,6 +49,9 @@ export function ConnectedExportPositionsAction({ disabled }) {
         }
 
         async function doExport() {
+            if (exportType == null) {
+                return;
+            }
             // Having an export type of `null` means we're ready to export again,
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
@@ -54,7 +66,7 @@ export function ConnectedExportPositionsAction({ disabled }) {
         doExport().catch(console.error);
     }, [exportType, dispatch]);
 
-    function onClick(option) {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 
@@ -64,17 +76,24 @@ export function ConnectedExportPositionsAction({ disabled }) {
 export function ConnectedImportPositionsAction({
     disabled,
     setImportInProgress = null,
+}: {
+    disabled: boolean;
+    setImportInProgress?: Function | null;
 }) {
     const dispatch = useThunkDispatch();
     const positions = useSelector(positionsSelector);
     const instructors = useSelector(instructorsSelector);
     const contractTemplates = useSelector(contractTemplatesSelector);
-    const [fileContent, setFileContent] = React.useState(null);
-    const [diffed, setDiffed] = React.useState(null);
+    const [fileContent, setFileContent] = React.useState<DataFormat | null>(
+        null
+    );
+    const [diffed, setDiffed] = React.useState<
+        DiffSpec<MinimalPosition, Position>[] | null
+    >(null);
     const [processingError, setProcessingError] = React.useState(null);
     const [inProgress, _setInProgress] = React.useState(false);
 
-    function setInProgress(state) {
+    function setInProgress(state: any) {
         _setInProgress(state);
         if (typeof setImportInProgress === "function") {
             setImportInProgress(state);
@@ -113,7 +132,7 @@ export function ConnectedImportPositionsAction({
             }
 
             // Compute which positions have been added/modified
-            const newDiff = diffImport.positions(data, {
+            const newDiff = diffImport.positions(data as MinimalPosition[], {
                 positions,
                 instructors,
                 contractTemplates,
@@ -127,6 +146,9 @@ export function ConnectedImportPositionsAction({
     }, [fileContent, positions, contractTemplates, instructors, inProgress]);
 
     async function onConfirm() {
+        if (diffed == null) {
+            throw new Error("Cannot import null data");
+        }
         const changedPositions = getChanged(diffed);
         await dispatch(upsertPositions(changedPositions));
         setFileContent(null);
@@ -151,6 +173,9 @@ export function ConnectedImportPositionsAction({
 const DialogContent = React.memo(function DialogContent({
     diffed,
     processingError,
+}: {
+    diffed: DiffSpec<MinimalPosition, Position>[] | null;
+    processingError: string | null;
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {

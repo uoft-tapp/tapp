@@ -51,7 +51,7 @@ export type EditableType =
  * }
  * @returns {React.ReactElement}
  */
-export function EditableCell<T extends HasId, Field extends keyof T>({
+export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
     column,
     upsert,
     field,

@@ -76,7 +76,6 @@ export function ConnectedApplicationsList() {
         );
     }
 
-    // props.original contains the row data for this particular session
     function CellDetailsButton({ row }: Cell<Application>) {
         const application = row?.original || {};
         return (

@@ -5,8 +5,14 @@ import { formatDate } from "../libs/utils";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { generateHeaderCell } from "./table-utils";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { Instructor, MinimalPosition, Position } from "../api/defs/types";
+import { Cell, Column } from "react-table";
+import { DiffSpec } from "../libs/diffs";
 
-const DEFAULT_COLUMNS = [
+const DEFAULT_COLUMNS: (Column<any> & {
+    className?: string;
+    accessor?: string;
+})[] = [
     { Header: generateHeaderCell("Position Code"), accessor: "position_code" },
     {
         Header: generateHeaderCell("Position Title"),
@@ -21,19 +27,19 @@ const DEFAULT_COLUMNS = [
     {
         Header: generateHeaderCell("Start"),
         accessor: "start_date",
-        Cell: (row) => formatDate(row.value),
+        Cell: (row: Cell<Position>) => formatDate(row.value),
     },
     {
         Header: generateHeaderCell("End"),
         accessor: "end_date",
-        Cell: (row) => formatDate(row.value),
+        Cell: (row: Cell<Position>) => formatDate(row.value),
     },
     {
         Header: generateHeaderCell("Instructors"),
         accessor: "instructors",
-        Cell: (props) => (
+        Cell: (props: Cell<Position, Instructor[]>) => (
             <React.Fragment>
-                {props.value.map((instructor = {}) => {
+                {props.value.map((instructor: Instructor = {} as any) => {
                     const name = `${instructor.first_name} ${instructor.last_name}`;
                     return (
                         <Badge variant="secondary" className="mr-1" key={name}>
@@ -68,11 +74,17 @@ const DEFAULT_COLUMNS = [
  * @param {*} { modifiedInstructors }
  * @returns
  */
-export function PositionsDiffList({ modifiedPositions }) {
+export function PositionsDiffList({
+    modifiedPositions,
+}: {
+    modifiedPositions: DiffSpec<MinimalPosition, Position>[];
+}) {
     return (
         <PositionsList
             positions={modifiedPositions}
-            columns={createDiffColumnsFromColumns(DEFAULT_COLUMNS)}
+            columns={createDiffColumnsFromColumns<Position>(
+                DEFAULT_COLUMNS as any[]
+            )}
         />
     );
 }
@@ -80,12 +92,14 @@ export function PositionsDiffList({ modifiedPositions }) {
 /**
  * List the instructors using a ReactTable. `columns` can be passed
  * in to customize columns/cell renderers.
- *
- * @export
- * @param {{instructors: object[], columns: object[]}} props
- * @returns
  */
-export function PositionsList(props) {
+export function PositionsList(props: {
+    positions:
+        | Position[]
+        | Omit<Position, "id">[]
+        | DiffSpec<MinimalPosition, Position>[];
+    columns?: Column<any>[];
+}) {
     const { positions, columns = DEFAULT_COLUMNS } = props;
     return (
         <AdvancedFilterTable

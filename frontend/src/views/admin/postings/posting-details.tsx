@@ -31,7 +31,6 @@ function PostingLinkDialog({
 }) {
     const url = new URL(window.location.origin);
     url.hash = `/public/postings/${posting.url_token}`;
-    console.log(url, visible);
 
     return (
         <Modal show={visible} onHide={onHide} size="lg">
