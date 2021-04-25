@@ -304,7 +304,7 @@ export function offersTests(api) {
             `/admin/assignments/${assignment.id}/active_offer/withdraw`
         );
         expect(resp).toHaveStatus("success");
-        
+
         resp = await apiPOST(`/admin/assignments`, assignment);
         expect(resp).toHaveStatus("success");
 
