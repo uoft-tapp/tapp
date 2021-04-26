@@ -1411,17 +1411,17 @@ export const mockData = {
                 {
                     order: 2,
                     hours: 25,
-                    description: "Marking the midterm",
+                    description: "marking:Marking the midterm",
                 },
                 {
                     order: 1,
                     hours: 4,
-                    description: "Initial training",
+                    description: "training:Initial training",
                 },
                 {
                     order: 3,
                     hours: 40,
-                    description: "Running tutorials",
+                    description: "contact:Running tutorials",
                 },
             ],
         },
@@ -1438,12 +1438,12 @@ export const mockData = {
                 {
                     order: 2,
                     hours: 50,
-                    description: "Marking the midterm",
+                    description: "marking:Marking the midterm",
                 },
                 {
                     order: 1,
                     hours: 6,
-                    description: "Initial training",
+                    description: "training:Initial training",
                 },
             ],
         },

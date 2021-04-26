@@ -12,7 +12,8 @@ class DdahSerializer < ActiveModel::Serializer
                :duties
 
     def duties
-        object.duties.order(:order).map do |duty|
+        ddah_service = DdahService.new ddah: object
+        ddah_service.normalized_duties.map do |duty|
             duty.slice(:order, :hours, :description)
         end
     end

@@ -94,6 +94,7 @@ Rails
                                     post :withdraw
                                     post :email
                                     post :nag
+                                    get :history
                                 end
                             end
                             member do

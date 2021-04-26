@@ -22,8 +22,8 @@
     width: 3em;
     display: inline-block;
     text-align: right;
-    padding-right: .5em;
-    margin-right: .5em;
+    padding-right: 0.5em;
+    margin-right: 0.5em;
 }
 .ddah-preview-container li:last-child .ddah-duty-hours {
     border-top: 1px solid black;
@@ -36,4 +36,34 @@
 .add-ddah-hours-mismatch {
     color: var(--red);
     font-weight: bold;
+}
+
+.ddah-duty-category {
+    width: 8em;
+    display: inline-block;
+}
+
+.ddah-duty-category.meeting::after {
+    content: "Meetings";
+    color: var(--orange);
+}
+.ddah-duty-category.prep::after {
+    content: "Preparation";
+    color: var(--pink);
+}
+.ddah-duty-category.contact::after {
+    content: "Contact time";
+    color: var(--green);
+}
+.ddah-duty-category.other::after {
+    content: "Other duties";
+    color: var(--cyan);
+}
+.ddah-duty-category.marking::after {
+    content: "Marking/Grading";
+    color: var(--blue);
+}
+.ddah-duty-category.training::after {
+    content: "Training";
+    color: var(--purple);
 }
