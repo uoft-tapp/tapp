@@ -4,7 +4,6 @@ import axios from "axios";
 
 export function offersTests(api) {
     const { apiGET, apiPOST } = api;
-
     let applicant;
     let assignment;
     let position;
