@@ -17,7 +17,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { HasId, Instructor, Position } from "../../../api/defs/types";
 import { Cell, Column } from "react-table";
 import { EditableCell, EditableType } from "../../../components/editable-cell";
-import { setSelectedPositionRows } from "./actions";
+import { setSelectedPosition } from "./actions";
 
 /**
  * Turn a list of instructor objects into a hash string for comparison as to whether
@@ -137,7 +137,7 @@ function EditInstructorsDialog({
     );
 }
 
-function EditInstructorsCell({ row }: Cell<Position>) {
+export function EditInstructorsCell({ row }: { row: { original: Position } }) {
     const position = row.original;
     const [dialogShow, setDialogShow] = React.useState(false);
     const dispatch = useThunkDispatch();
@@ -280,7 +280,7 @@ export function ConnectedPositionsList({
         return (
             <div
                 className="details-button-container"
-                onClick={() => dispatch(setSelectedPositionRows([position.id]))}
+                onClick={() => dispatch(setSelectedPosition(position.id))}
             >
                 <FaSearch
                     className="details-row-button"
