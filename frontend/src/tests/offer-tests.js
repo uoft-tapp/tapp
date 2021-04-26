@@ -282,11 +282,9 @@ export function offersTests(api) {
     });
 
     it("Fetch all past offers pertaining to an assignment", async () => {
-        console.log(assignment.id);
-
         // Withdraw then re-create any existing offers in
         // case they have previously been rejected
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/withdraw`
         );
         resp = await apiPOST(
@@ -308,7 +306,7 @@ export function offersTests(api) {
         resp = await apiPOST(`/admin/assignments`, assignment);
         expect(resp).toHaveStatus("success");
 
-        var resp = await apiPOST(
+        resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/create`
         );
         expect(resp).toHaveStatus("success");
@@ -319,7 +317,6 @@ export function offersTests(api) {
         expect(resp).toHaveStatus("success");
         let second_date = resp.payload.emailed_date;
 
-        console.log(assignment.id);
 
         resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer/history`
