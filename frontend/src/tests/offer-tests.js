@@ -317,7 +317,6 @@ export function offersTests(api) {
         expect(resp).toHaveStatus("success");
         let second_date = resp.payload.emailed_date;
 
-
         resp = await apiGET(
             `/admin/assignments/${assignment.id}/active_offer/history`
         );

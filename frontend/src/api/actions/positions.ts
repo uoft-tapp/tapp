@@ -110,7 +110,7 @@ export const upsertPosition = validatedApiDispatcher({
             prepForApi(payload)
         )) as RawPosition;
         dispatch(upsertOnePositionSuccess(data));
-        return data
+        return data;
     },
 });
 
