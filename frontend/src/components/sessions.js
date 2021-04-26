@@ -1,35 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
-import { EditableField } from "./edit-field-widgets";
-import { formatDate } from "../libs/utils";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
-
-function EditableCell(props) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertSession, field, type, value } = props;
-    const isDate = type === "date";
-
-    function onChange(newVal) {
-        const sessionId = (props.row.original || props.row._original).id;
-        upsertSession({ id: sessionId, [field]: newVal });
-    }
-
-    return (
-        <EditableField
-            title={title}
-            value={type === "date" ? (value || "").slice(0, 10) : value || ""}
-            onChange={onChange}
-            type={type}
-        >
-            {isDate ? formatDate(value) : value}
-        </EditableField>
-    );
-}
+import { EditableCell } from "./editable-cell";
 
 function ConfirmDeleteDialog(props) {
     const { show, onHide, onDelete, session } = props;
@@ -76,7 +53,7 @@ export function ConnectedSessionsList(props) {
         return (props) => (
             <EditableCell
                 field={field}
-                upsertSession={_upsertSession}
+                upsert={_upsertSession}
                 type={type}
                 {...props}
             />
@@ -128,13 +105,13 @@ export function ConnectedSessionsList(props) {
             Header: generateHeaderCell("Rate (Pre-January)"),
             accessor: "rate1",
             className: "number-cell",
-            Cell: generateCell("rate1"),
+            Cell: generateCell("rate1", "number"),
         },
         {
             Header: generateHeaderCell("Rate (Post-January)"),
             accessor: "rate2",
             className: "number-cell",
-            Cell: generateCell("rate2"),
+            Cell: generateCell("rate2", "number"),
         },
     ];
 

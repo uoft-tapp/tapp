@@ -6,6 +6,26 @@ import { formatDate } from "../libs/utils";
 import "./edit-field-widgets.css";
 import { EditableType } from "./editable-cell";
 
+/**
+ * Formats a date/number/text value for display.
+ *
+ * @template T
+ * @param {T} value
+ * @param {EditableType} [type="text"]
+ * @returns
+ */
+function formatValue<T>(value: T, type: EditableType = "text") {
+    if (value == null) {
+        return null;
+    }
+    if (type === "date") {
+        return formatDate("" + value);
+    }
+    if (type === "number") {
+        return +value;
+    }
+    return "" + value;
+}
 interface EditFieldProps<T> {
     title: string;
     value: T;
@@ -13,6 +33,7 @@ interface EditFieldProps<T> {
     onHide?: (...args: any[]) => any;
     onChange?: (...args: any[]) => any;
     type?: EditableType;
+    formatter?: (value: T) => React.ReactNode;
 }
 
 /**
@@ -31,9 +52,11 @@ function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
         onChange = () => {},
         type,
     } = props;
+    const { formatter = (v) => formatValue(v, type) } = props;
     const [fieldVal, setFieldVal] = React.useState<T>(value);
     const [inProgress, setInProgress] = React.useState(false);
-    const isDate = type === "date";
+    const formattedValue = formatter(value);
+    const formattedFieldVal = formatter(fieldVal);
 
     function cancelClick() {
         setFieldVal(value);
@@ -42,14 +65,13 @@ function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
 
     function saveClick() {
         async function doSave() {
-            // eslint-disable-next-line
-            if (fieldVal != value) {
+            if (formattedValue !== formattedFieldVal) {
                 setInProgress(true);
                 // Only call `onChange` if the value has changed
                 await onChange(fieldVal, value);
             }
         }
-        doSave().finally(() => {
+        return doSave().finally(() => {
             setInProgress(false);
             onHide();
         });
@@ -61,18 +83,17 @@ function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
     ) : null;
 
     const changeIndicator =
-        // eslint-disable-next-line
-        fieldVal == value ? null : (
-            <span>
-                Change from{" "}
-                <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(value as string) : value}
-                </span>{" "}
-                to{" "}
-                <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(fieldVal as string) : fieldVal}
-                </span>
-            </span>
+        formattedValue === formattedFieldVal ? null : (
+            <div className="field-dialog-change-content">
+                Change from
+                <div className="field-dialog-formatted-name">
+                    {formattedValue}
+                </div>
+                to
+                <div className="field-dialog-formatted-name">
+                    {formattedFieldVal}
+                </div>
+            </div>
         );
 
     return (
