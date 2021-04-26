@@ -63,18 +63,17 @@ function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
         onHide();
     }
 
-    function saveClick() {
-        async function doSave() {
+    async function saveClick() {
+        try {
             if (formattedValue !== formattedFieldVal) {
                 setInProgress(true);
                 // Only call `onChange` if the value has changed
                 await onChange(fieldVal, value);
             }
-        }
-        return doSave().finally(() => {
+        } finally {
             setInProgress(false);
             onHide();
-        });
+        }
     }
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
@@ -190,7 +189,7 @@ export function EditableField<T extends string | number>(
                     onClick={() => setDialogShow(true)}
                 />
             )}
-            {editable && dialogShow && (
+            {editable && (
                 <EditFieldDialog
                     title={title}
                     value={value}

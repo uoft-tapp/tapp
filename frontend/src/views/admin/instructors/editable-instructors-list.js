@@ -11,7 +11,6 @@ import { DeleteInstructorDialog } from "./delete-instructor-dialog";
 import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
 import { EditableCell } from "../../../components/editable-cell";
 
-
 function EditableInstructorsList(props) {
     const {
         upsertInstructor,
@@ -27,11 +26,7 @@ function EditableInstructorsList(props) {
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
         return (props) => (
-            <EditableCell
-                field={field}
-                upsert={upsertInstructor}
-                {...props}
-            />
+            <EditableCell field={field} upsert={upsertInstructor} {...props} />
         );
     }
 

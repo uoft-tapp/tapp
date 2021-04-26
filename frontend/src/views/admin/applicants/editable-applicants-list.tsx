@@ -94,11 +94,7 @@ export function ConnectedApplicantsList({ inDeleteMode = false }) {
 
     function generateCell(field: string) {
         return (props: any) => (
-            <EditableCell
-                field={field}
-                upsert={_upsertApplicant}
-                {...props}
-            />
+            <EditableCell field={field} upsert={_upsertApplicant} {...props} />
         );
     }
 

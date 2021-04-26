@@ -221,8 +221,8 @@ export function ConnectedPositionsList({
     ] = React.useState<Position | null>(null);
     const dispatch = useThunkDispatch();
 
-    function _upsertPosition(position: Partial<Position> & HasId) {
-        return dispatch(upsertPosition(position));
+    async function _upsertPosition(position: Partial<Position> & HasId) {
+        return await dispatch(upsertPosition(position));
     }
 
     const numAssignmentsByPositionCode = assignments.reduce(
