@@ -13,7 +13,7 @@ function PositionDetailsDialog({
 }: {
     position: Position;
     visible: boolean;
-    onHide: Function;
+    onHide: (...args: any[]) => any;
 }) {
     return (
         <Modal show={visible} onHide={onHide} size="lg">
@@ -24,7 +24,9 @@ function PositionDetailsDialog({
                 <PositionsDetails position={position} />
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary">Close</Button>
+                <Button variant="secondary" onClick={onHide}>
+                    Close
+                </Button>
             </Modal.Footer>
         </Modal>
     );
