@@ -4,6 +4,37 @@ import { FaEdit } from "react-icons/fa";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { formatDate } from "../libs/utils";
 import "./edit-field-widgets.css";
+import { EditableType } from "./editable-cell";
+
+/**
+ * Formats a date/number/text value for display.
+ *
+ * @template T
+ * @param {T} value
+ * @param {EditableType} [type="text"]
+ * @returns
+ */
+function formatValue<T>(value: T, type: EditableType = "text") {
+    if (value == null) {
+        return null;
+    }
+    if (type === "date") {
+        return formatDate("" + value);
+    }
+    if (type === "number") {
+        return +value;
+    }
+    return "" + value;
+}
+interface EditFieldProps<T> {
+    title: string;
+    value: T;
+    show?: boolean;
+    onHide?: (...args: any[]) => any;
+    onChange?: (...args: any[]) => any;
+    type?: EditableType;
+    formatter?: (value: T) => React.ReactNode;
+}
 
 /**
  * A dialog allowing one to edit `props.value`. `onChange` is called
@@ -12,30 +43,37 @@ import "./edit-field-widgets.css";
  * @param {*} props
  * @returns
  */
-function EditFieldDialog(props) {
-    const { title, value, show, onHide, onChange, type } = props;
-    const [fieldVal, setFieldVal] = React.useState(value);
+function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
+    const {
+        title,
+        value,
+        show,
+        onHide = () => {},
+        onChange = () => {},
+        type,
+    } = props;
+    const { formatter = (v) => formatValue(v, type) } = props;
+    const [fieldVal, setFieldVal] = React.useState<T>(value);
     const [inProgress, setInProgress] = React.useState(false);
-    const isDate = type === "date";
+    const formattedValue = formatter(value);
+    const formattedFieldVal = formatter(fieldVal);
 
     function cancelClick() {
         setFieldVal(value);
         onHide();
     }
 
-    function saveClick() {
-        async function doSave() {
-            // eslint-disable-next-line
-            if (fieldVal != value) {
+    async function saveClick() {
+        try {
+            if (formattedValue !== formattedFieldVal) {
                 setInProgress(true);
                 // Only call `onChange` if the value has changed
                 await onChange(fieldVal, value);
             }
-        }
-        doSave().finally(() => {
+        } finally {
             setInProgress(false);
             onHide();
-        });
+        }
     }
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
@@ -44,18 +82,17 @@ function EditFieldDialog(props) {
     ) : null;
 
     const changeIndicator =
-        // eslint-disable-next-line
-        fieldVal == value ? null : (
-            <span>
-                Change from{" "}
-                <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(value) : value}
-                </span>{" "}
-                to{" "}
-                <span className="field-dialog-formatted-name">
-                    {isDate ? formatDate(fieldVal) : fieldVal}
-                </span>
-            </span>
+        formattedValue === formattedFieldVal ? null : (
+            <div className="field-dialog-change-content">
+                Change from
+                <div className="field-dialog-formatted-name">
+                    {formattedValue}
+                </div>
+                to
+                <div className="field-dialog-formatted-name">
+                    {formattedFieldVal}
+                </div>
+            </div>
         );
 
     return (
@@ -67,7 +104,7 @@ function EditFieldDialog(props) {
                 <input
                     type={type}
                     value={fieldVal}
-                    onChange={(e) => setFieldVal(e.currentTarget.value)}
+                    onChange={(e) => setFieldVal(e.currentTarget.value as T)}
                 />{" "}
                 {changeIndicator}
             </Modal.Body>
@@ -87,7 +124,11 @@ function EditFieldDialog(props) {
  * @param {*} props
  * @returns
  */
-export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
+export const EditFieldIcon = React.memo(function EditFieldIcon(props: {
+    title: string;
+    hidden: boolean;
+    onClick: (...args: any[]) => any;
+}) {
     const { title, hidden, onClick } = props;
     if (hidden) {
         return null;
@@ -112,7 +153,12 @@ export const EditFieldIcon = React.memo(function EditFieldIcon(props) {
  * @param {{children, title, value, onChange: function, editable: boolean, type?: string}} props
  * @returns
  */
-export function EditableField(props) {
+export function EditableField<T extends string | number>(
+    props: EditFieldProps<T> & {
+        children: React.ReactNode | null;
+        editable: boolean;
+    }
+) {
     const {
         children,
         title,
@@ -143,7 +189,7 @@ export function EditableField(props) {
                     onClick={() => setDialogShow(true)}
                 />
             )}
-            {editable && dialogShow && (
+            {editable && (
                 <EditFieldDialog
                     title={title}
                     value={value}

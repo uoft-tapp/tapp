@@ -7,33 +7,9 @@ import {
     positionsSelector,
 } from "../../../api/actions";
 import { InstructorsList } from "../../../components/instructors";
-import { EditableField } from "../../../components/edit-field-widgets";
 import { DeleteInstructorDialog } from "./delete-instructor-dialog";
 import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
-
-/**
- * A cell that renders editable applicant information
- *
- * @param {*} props
- * @returns
- */
-function EditableCell(props) {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertInstructor, field } = props;
-    function onChange(newVal) {
-        const applicantId = (props.row.original || props.row._original).id;
-        upsertInstructor({ id: applicantId, [field]: newVal });
-    }
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-        >
-            {props.value}
-        </EditableField>
-    );
-}
+import { EditableCell } from "../../../components/editable-cell";
 
 function EditableInstructorsList(props) {
     const {
@@ -50,11 +26,7 @@ function EditableInstructorsList(props) {
     // Bind an `ApplicantCell` to a particular field
     function generateCell(field) {
         return (props) => (
-            <EditableCell
-                field={field}
-                upsertInstructor={upsertInstructor}
-                {...props}
-            />
+            <EditableCell field={field} upsert={upsertInstructor} {...props} />
         );
     }
 

@@ -23,9 +23,12 @@
     color: var(--primary);
     transition: all 0.3s;
 }
-
+.field-dialog-change-content {
+    margin-top: 1em;
+}
 .field-dialog-formatted-name {
-    white-space: pre;
+    margin-left: 1em;
+    white-space: pre-wrap;
     font-family: monospace;
     color: var(--primary);
 }

@@ -16,6 +16,7 @@ import { ContentArea } from "../../../components/layout";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { activeSessionSelector } from "../../../api/actions";
 import { MissingActiveSessionWarning } from "../../../components/sessions";
+import { ConnectedPositionDetailsDialog } from "./position-details-dialog";
 
 export function AdminPositionsView() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -66,6 +67,7 @@ export function AdminPositionsView() {
                 {!importInProgress && (
                     <ConnectedPositionsList inDeleteMode={inDeleteMode} />
                 )}
+                <ConnectedPositionDetailsDialog />
             </ContentArea>
         </div>
     );
