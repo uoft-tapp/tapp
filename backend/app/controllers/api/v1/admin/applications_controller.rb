@@ -33,7 +33,7 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
             :yip,
             :annotation,
             :gpa,
-            :status,
+            :first_time_ta,
             :custom_question_answers
         )
     end

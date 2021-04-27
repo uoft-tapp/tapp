@@ -359,7 +359,7 @@ class ActiveOffer extends MockAPIController {
         const offers = this.findAllByAssignment(
             this._ensureAssignment(assignment)
         );
-        if (offers.length == 0) {
+        if (offers.length === 0) {
             throw new Error(
                 `There is no offer history for assignment with id=${assignment.id}.`
             );

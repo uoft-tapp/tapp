@@ -9,9 +9,17 @@ import {
 } from "../../../api/actions";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { PositionEditor } from "../../../components/forms/position-editor";
+import {
+    ContractTemplate,
+    Instructor,
+    Position,
+} from "../../../api/defs/types";
 
-function getConflicts(position, positions = []) {
-    const ret = { delayShow: "", immediateShow: "" };
+function getConflicts(position: Position, positions: Position[] = []) {
+    const ret: { delayShow: string; immediateShow: React.ReactNode } = {
+        delayShow: "",
+        immediateShow: "",
+    };
     if (!strip(position.position_code)) {
         ret.delayShow = "A position code is required";
     }
@@ -26,17 +34,23 @@ function getConflicts(position, positions = []) {
     return ret;
 }
 
-const BLANK_POSITION = {
+const BLANK_POSITION: Partial<Position> = {
     position_code: "",
     position_title: "",
     hours_per_assignment: 0,
-    contract_template_id: null,
     duties:
         "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: [],
 };
 
-export function AddPositionDialog(props) {
+export function AddPositionDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => any;
+    positions: Position[];
+    upsertPosition: Function;
+    instructors: Instructor[];
+    contractTemplates: ContractTemplate[];
+}) {
     const {
         show,
         onHide = () => {},
@@ -75,7 +89,6 @@ export function AddPositionDialog(props) {
             contractTemplates[0];
         if (defaultTemplate) {
             BLANK_POSITION.contract_template = defaultTemplate;
-            BLANK_POSITION.contract_template_id = defaultTemplate.id;
         }
     }, [contractTemplates]);
 
@@ -84,10 +97,10 @@ export function AddPositionDialog(props) {
         onHide();
     }
 
-    const conflicts = getConflicts(newPosition, positions);
+    const conflicts = getConflicts(newPosition as Position, positions);
 
     return (
-        <Modal show={show} onHide={onHide}>
+        <Modal show={show} onHide={onHide} size="xl">
             <Modal.Header closeButton>
                 <Modal.Title>Add Position</Modal.Title>
             </Modal.Header>

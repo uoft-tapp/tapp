@@ -6,4 +6,5 @@ backend/public
 .byebug_history
 .DS_Store
 pg_data/*
+backend_storage
 !backend/app/controllers/public

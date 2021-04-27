@@ -8,16 +8,16 @@ import {
     instructorsSelector,
 } from "../../../api/actions";
 import { PositionsList } from "../../../components/positions-list";
-import { formatDate } from "../../../libs/utils";
-import { FaTimes, FaLock, FaTrash } from "react-icons/fa";
+import { FaTimes, FaLock, FaTrash, FaSearch } from "react-icons/fa";
 import { Badge, Modal, Button, Spinner } from "react-bootstrap";
-import {
-    EditableField,
-    EditFieldIcon,
-} from "../../../components/edit-field-widgets";
+import { EditFieldIcon } from "../../../components/edit-field-widgets";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { HasId, Instructor, Position } from "../../../api/defs/types";
+import { Cell, Column } from "react-table";
+import { EditableCell, EditableType } from "../../../components/editable-cell";
+import { setSelectedPosition } from "./actions";
 
 /**
  * Turn a list of instructor objects into a hash string for comparison as to whether
@@ -26,7 +26,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  * @param {*} instructors
  * @returns
  */
-function hashInstructorList(instructors) {
+function hashInstructorList(instructors: Instructor[]) {
     return instructors
         .map((i) => `${i.last_name}, ${i.first_name}`)
         .sort()
@@ -40,7 +40,17 @@ function hashInstructorList(instructors) {
  * @param {*} props
  * @returns
  */
-function EditInstructorsDialog({ position, show, onHide, onChange }) {
+function EditInstructorsDialog({
+    position,
+    show,
+    onHide,
+    onChange,
+}: {
+    position: Position;
+    show: boolean;
+    onHide: Function;
+    onChange: Function;
+}) {
     const value = position.instructors;
     const allInstructors = useSelector(instructorsSelector);
     const [fieldVal, setFieldVal] = React.useState(value);
@@ -127,38 +137,14 @@ function EditInstructorsDialog({ position, show, onHide, onChange }) {
     );
 }
 
-function EditableCell(props) {
-    const title = `Edit ${props.column.Header}`;
-    const { upsertPosition, field, type, value, editable = true } = props;
-    const isDate = type === "date";
-
-    function onChange(newVal) {
-        const positionId = (props.row.original || props.row._original).id;
-        upsertPosition({ id: positionId, [field]: newVal });
-    }
-
-    return (
-        <EditableField
-            title={title}
-            value={type === "date" ? (value || "").slice(0, 10) : value || ""}
-            onChange={onChange}
-            type={type}
-            editable={editable}
-        >
-            {isDate ? formatDate(value) : value}
-        </EditableField>
-    );
-}
-
-function EditInstructorsCell({ row }) {
-    // row._original is from ReactTable v6; We can get rid of it when we drop the dependency
-    const position = row.original || row._original;
+export function EditInstructorsCell({ row }: { row: { original: Position } }) {
+    const position = row.original;
     const [dialogShow, setDialogShow] = React.useState(false);
     const dispatch = useThunkDispatch();
 
     return (
         <div className="show-on-hover-wrapper">
-            {position.instructors.map((instructor = {}) => {
+            {position.instructors.map((instructor = {} as any) => {
                 const name = `${instructor.first_name} ${instructor.last_name}`;
                 return (
                     <Badge variant="secondary" className="mr-1" key={name}>
@@ -175,7 +161,7 @@ function EditInstructorsCell({ row }) {
                 position={position}
                 show={dialogShow}
                 onHide={() => setDialogShow(false)}
-                onChange={async (newInstructors) => {
+                onChange={async (newInstructors: Instructor[]) => {
                     await dispatch(
                         upsertPosition({
                             id: position.id,
@@ -189,7 +175,12 @@ function EditInstructorsCell({ row }) {
     );
 }
 
-function ConfirmDeleteDialog(props) {
+function ConfirmDeleteDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => any;
+    onDelete: (...args: any[]) => any;
+    position: Position | null;
+}) {
     const { show, onHide, onDelete, position } = props;
     return (
         <Modal show={show} onHide={onHide}>
@@ -217,14 +208,21 @@ export function ConnectedPositionsList({
     inDeleteMode = false,
     editable = true,
     columns = null,
+}: {
+    inDeleteMode?: boolean;
+    editable?: boolean;
+    columns?: Column<any>[] | null;
 }) {
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
-    const [positionToDelete, setPositionToDelete] = React.useState(null);
+    const [
+        positionToDelete,
+        setPositionToDelete,
+    ] = React.useState<Position | null>(null);
     const dispatch = useThunkDispatch();
 
-    function _upsertPosition(position) {
-        return dispatch(upsertPosition(position));
+    async function _upsertPosition(position: Partial<Position> & HasId) {
+        return await dispatch(upsertPosition(position));
     }
 
     const numAssignmentsByPositionCode = assignments.reduce(
@@ -234,12 +232,12 @@ export function ConnectedPositionsList({
             acc[position_code] += 1;
             return acc;
         },
-        {}
+        {} as Record<string, number>
     );
 
     // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ row }) {
-        const position = row.original || row._original;
+    function CellDeleteButton({ row }: Cell<Position>) {
+        const position = row.original;
         // If there are any assignments for this position, we should be disabled
         const disabled = numAssignmentsByPositionCode[position.position_code];
         if (disabled) {
@@ -256,7 +254,7 @@ export function ConnectedPositionsList({
             <div className="delete-button-container">
                 <FaTimes
                     className="delete-row-button"
-                    title={`Delete ${position.last_name}, ${position.first_name}`}
+                    title={`Delete ${position.position_code}`}
                     onClick={() => {
                         setPositionToDelete(position);
                     }}
@@ -265,15 +263,30 @@ export function ConnectedPositionsList({
         );
     }
 
-    function generateCell(field, type) {
-        return (props) => (
+    function generateCell(field: keyof Position, type?: EditableType) {
+        return (props: Cell<Position>) => (
             <EditableCell
                 field={field}
-                upsertPosition={_upsertPosition}
                 type={type}
+                upsert={_upsertPosition}
                 editable={editable}
                 {...props}
             />
+        );
+    }
+
+    function CellDetailsButton({ row }: Cell<Position>) {
+        const position = row?.original || {};
+        return (
+            <div
+                className="details-button-container"
+                onClick={() => dispatch(setSelectedPosition(position.id))}
+            >
+                <FaSearch
+                    className="details-row-button"
+                    title={`View details of ${position.position_code}`}
+                />
+            </div>
         );
     }
 
@@ -286,6 +299,14 @@ export function ConnectedPositionsList({
             show: inDeleteMode,
             maxWidth: 32,
             resizable: false,
+        },
+        {
+            Header: generateHeaderCell("Details"),
+            id: "details-col",
+            className: "details-col",
+            maxWidth: 32,
+            resizable: false,
+            Cell: CellDetailsButton,
         },
         {
             Header: generateHeaderCell("Position Code"),
@@ -310,7 +331,8 @@ export function ConnectedPositionsList({
         {
             Header: generateHeaderCell("Instructor(s)"),
             id: "instructors",
-            accessor: (row) => hashInstructorList(row.instructors),
+            accessor: (position: Position) =>
+                hashInstructorList(position.instructors),
             Cell: EditInstructorsCell,
         },
         {
@@ -345,7 +367,7 @@ export function ConnectedPositionsList({
             Header: generateHeaderCell("Current Num Assignments"),
             id: "current_num_assignments",
             className: "number-cell",
-            accessor: (position) =>
+            accessor: (position: Position) =>
                 numAssignmentsByPositionCode[position.position_code] || "",
             maxWidth: 50,
         },
@@ -366,6 +388,9 @@ export function ConnectedPositionsList({
                 show={!!positionToDelete}
                 onHide={() => setPositionToDelete(null)}
                 onDelete={async () => {
+                    if (positionToDelete == null) {
+                        return;
+                    }
                     await dispatch(deletePosition(positionToDelete));
                     setPositionToDelete(null);
                 }}

@@ -226,4 +226,40 @@ export function positionsTests(api = { apiGET, apiPOST }) {
             withNewPosition.find((s) => s.id === newPosition.id)
         ).toMatchObject(dates);
     });
+
+    it("Can update every optional field of a position", async () => {
+        const optional_fields = {
+            current_waitlisted: 100,
+            current_enrollment: 25,
+            desired_num_assignments: 6,
+            hours_per_assignment: 81.5,
+            duties: "A lot of different things",
+            qualifications: "Hard working and such.",
+        };
+
+        const newPositionData = {
+            position_code: "MAT135F",
+            position_title: "Calculus I",
+            hours_per_assignment: 70,
+            start_date: new Date("2018/05/09").toISOString(),
+            end_date: new Date("2018/09/09").toISOString(),
+            contract_template_id: contractTemplate.id,
+        };
+
+        let resp = await apiPOST(
+            `/admin/sessions/${session.id}/positions`,
+            newPositionData
+        );
+        expect(resp).toHaveStatus("success");
+        const position = resp.payload;
+
+        for (const [field, val] of Object.entries(optional_fields)) {
+            resp = await apiPOST(`/admin/sessions/${session.id}/positions`, {
+                ...position,
+                [field]: val,
+            });
+            expect(resp).toHaveStatus("success");
+            expect(resp.payload[field]).toEqual(val);
+        }
+    });
 }

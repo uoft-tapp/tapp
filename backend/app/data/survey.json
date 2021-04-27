@@ -71,7 +71,7 @@
                 {
                     "type": "text",
                     "name": "program_start",
-                    "title": "When did you start your program?",
+                    "title": "When did you start your current program? (If you switched from a Masters to PhD program, please indicate official start of your PhD program.)",
                     "isRequired": true,
                     "inputType": "date"
                 },
@@ -121,7 +121,7 @@
                 {
                     "type": "matrix",
                     "name": "position_preferences",
-                    "title": "Please rank your preferences for the available positions.",
+                    "title": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark no more than 5 positions as High); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "cellType": "rating",
                     "columns": [
                         { "value": 3, "text": "High" },
