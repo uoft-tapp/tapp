@@ -31,11 +31,9 @@ class Offer < ApplicationRecord
     end
 
     def diff(other)
-        check = ['hours', "position_start_date", "position_end_date"]
+        check = %w[hours position_start_date position_end_date]
         diff = Hash.new
-        check.each do |k|
-            diff[k] = other[k] if other[k] != self[k]
-        end
+        check.each { |k| diff[k] = other[k] if other[k] != self[k] }
         return diff
     end
 
