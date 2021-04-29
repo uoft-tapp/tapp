@@ -513,13 +513,13 @@ export function offerEmailTests(api) {
 
         if (
             !emailBody.includes(
-                `Your hours have changed from ${initialHours.toFixed(
+                `hours has changed from ${initialHours.toFixed(
                     1
                 )} to ${newHours.toFixed(1)}`
             )
         ) {
             throw new Error(
-                `Show diff in hours failed, expected "Your hours have changed from ${initialHours.toFixed(
+                `Show diff in hours failed, expected "hours has changed from ${initialHours.toFixed(
                     1
                 )} to ${newHours.toFixed(1)}"`
             );

@@ -12,10 +12,12 @@
   <p>
     We would like to offer you a position as a TA for <%= @position_code %> <%= @position_title %>.
   </p>
-  <% if @diff %>
+  <% if ! @diff.nil? %>
   <p>The key differences of this newly received offer are:<br>
-    Your hours have changed from <%= @diff %> to <%= @hours %>
-  <p>
+  <% @diff.keys.each do |k| %>  
+    <%= k %> has changed from <%= @diff[k] %> to <%= @offer[k] %><br>
+  <% end %>
+    <p>
   <% end %>
     Please click the link below to view your offer and accept or reject it:<br/>
     <a href="http://<%= @url %>"><%= @url %></a>

@@ -40,9 +40,7 @@ class OfferMailer < ApplicationMailer
 
     def prev_offer_diff
         latest = Offer.order(withdrawn_date: :desc).limit(2)
-        if latest.length == 2 && @hours != latest[1].hours
-            @diff = latest[1].hours
-        end
+        @diff = @offer.diff(latest[1]) if latest.length == 2
     end
 
     def generate_vars(offer)

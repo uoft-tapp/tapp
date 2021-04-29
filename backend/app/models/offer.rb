@@ -30,6 +30,15 @@ class Offer < ApplicationRecord
         end
     end
 
+    def diff(other)
+        check = ['hours', "position_start_date", "position_end_date"]
+        diff = Hash.new
+        check.each do |k|
+            diff[k] = other[k] if other[k] != self[k]
+        end
+        return diff
+    end
+
     private
 
     def populate_offer
