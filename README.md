@@ -223,7 +223,7 @@ To manually inspect the binary snapshots in the `pg_dump` folder, run
 
 which will display the output to the command line (it won't actually insert into a database.)
 
-#### Debugging
+#### MailCatcher
 
 To access mailcatcher, visit `localhost:1080`.
 
