@@ -482,12 +482,12 @@ export function ConnectedDdahsTable() {
             Header: generateHeaderCell("DDAH Hours"),
             accessor: "total_hours",
             maxWidth: 120,
-            style: { textAlign: "right" },
         },
         {
             Header: generateHeaderCell("Status"),
             accessor: "status",
             Cell: WrappedStatusCell,
+            maxWidth: 130,
         },
         {
             Header: generateHeaderCell("Recent Activity"),
@@ -496,6 +496,7 @@ export function ConnectedDdahsTable() {
         {
             Header: generateHeaderCell("Approved"),
             accessor: "approved",
+            maxWidth: 50,
             Cell: ({ value }: any) =>
                 value ? (
                     <div className="accepted-ddah">

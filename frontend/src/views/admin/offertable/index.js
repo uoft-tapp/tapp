@@ -12,6 +12,7 @@ import { FaSearch } from "react-icons/fa";
 import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { generateHeaderCell } from "../../../components/table-utils";
 
 /**
  * A cell that renders editable applicant information
@@ -161,33 +162,33 @@ export function ConnectedOfferTable(props) {
 
         return [
             {
-                Header: "Last Name",
+                Header: generateHeaderCell("Last Name"),
                 accessor: "applicant.last_name",
                 Cell: generateApplicantCell("last_name"),
             },
             {
-                Header: "First Name",
+                Header: generateHeaderCell("First Name"),
                 accessor: "applicant.first_name",
                 Cell: generateApplicantCell("first_name"),
             },
             {
-                Header: "Email",
+                Header: generateHeaderCell("Email"),
                 accessor: "applicant.email",
                 Cell: generateApplicantCell("email"),
             },
             {
-                Header: "Position",
+                Header: generateHeaderCell("Position"),
                 accessor: "position.position_code",
             },
             {
-                Header: "Hours",
+                Header: generateHeaderCell("Hours"),
                 accessor: "hours",
                 className: "number-cell",
                 maxWidth: 70,
                 Cell: generateAssignmentCell("hours"),
             },
             {
-                Header: "Status",
+                Header: generateHeaderCell("Status"),
                 id: "status",
                 // We want items with no active offer to appear at the end of the list
                 // when sorted, so we set their accessor to null (the accessor is used by react table
@@ -199,16 +200,17 @@ export function ConnectedOfferTable(props) {
                 Cell: StatusCell,
             },
             {
-                Header: "Date",
+                Header: generateHeaderCell("Date"),
                 accessor: "active_offer_recent_activity_date",
                 Cell: ({ value }) => (value ? formatDate(value) : null),
             },
             {
-                Header: "Nag Count",
+                Header: generateHeaderCell("Nag Count"),
                 accessor: "active_offer_nag_count",
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
                 Cell: ({ value }) => (value ? value : null),
+                maxWidth: 50,
             },
         ];
     }, [dispatch, editable]);

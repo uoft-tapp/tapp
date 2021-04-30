@@ -338,6 +338,7 @@ export function ConnectedPositionsList({
         {
             Header: generateHeaderCell("Hours/Assignment"),
             accessor: "hours_per_assignment",
+            maxWidth: 60,
             className: "number-cell",
             Cell: generateCell("hours_per_assignment"),
         },
@@ -358,12 +359,14 @@ export function ConnectedPositionsList({
         {
             Header: generateHeaderCell("Desired Num Assignments"),
             accessor: "desired_num_assignments",
+            maxWidth: 50,
             className: "number-cell",
             Cell: generateCell("desired_num_assignments"),
         },
         {
             Header: generateHeaderCell("Current Num Assignments"),
             id: "current_num_assignments",
+            maxWidth: 50,
             className: "number-cell",
             accessor: (position: Position) =>
                 numAssignmentsByPositionCode[position.position_code] || "",

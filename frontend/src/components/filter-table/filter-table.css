@@ -107,6 +107,7 @@
     border-bottom: 2px solid rgba(167, 182, 194, 0.4);
     border-right: 1px solid rgba(167, 182, 194, 0.4);
     align-items: center;
+    overflow: hidden;
 }
 
 .th > * {
