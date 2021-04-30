@@ -229,6 +229,8 @@ To access mailcatcher, visit `localhost:1080`.
 
 You can also access all previous uncleared messages at `localhost:1080/messages`
 
+You can also access the contents of an email givens it's id at `localhost:1080/messages/email.id.source`
+
 ##### Running tests from a ram-drive
 
 Since the test suite clears the database several times, it can be slow! To speed things
