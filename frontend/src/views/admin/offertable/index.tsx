@@ -20,11 +20,11 @@ import { generateHeaderCell } from "../../../components/table-utils";
  * @param {*} props
  * @returns
  */
-export function ApplicantCell(props) {
+export function ApplicantCell(props: any) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field, editable } = props;
     const applicant = props.row.original || props.row._original;
-    async function onChange(newVal) {
+    async function onChange(newVal: any) {
         const applicantId = applicant.applicant.id;
         return await upsertApplicant({ id: applicantId, [field]: newVal });
     }
@@ -47,7 +47,7 @@ export function ApplicantCell(props) {
  * @param {*} { original }
  * @returns
  */
-export function StatusCell({ row }) {
+export function StatusCell({ row }: any) {
     const original = row.original || row._original;
     const formattedStatus = capitalize(original.active_offer_status || "");
     const activeOfferUrlToken = original.active_offer_url_token;
@@ -82,12 +82,12 @@ export function StatusCell({ row }) {
  * @param {*} props
  * @returns
  */
-export function AssignmentCell(props) {
+export function AssignmentCell(props: any) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertAssignment, field, editable = true } = props;
     const assignment = props.row.original || props.row._original;
     const active_offer_status = assignment.active_offer_status;
-    async function onChange(newVal) {
+    async function onChange(newVal: any) {
         const assignmentId = assignment.id;
         return await upsertAssignment({ id: assignmentId, [field]: newVal });
     }
@@ -109,10 +109,11 @@ export function AssignmentCell(props) {
     );
 }
 
-export function ConnectedOfferTable(props) {
+export function ConnectedOfferTable(props: any) {
     const { editable = true } = props;
     const dispatch = useThunkDispatch();
     const setSelected = React.useCallback(
+        // @ts-ignore
         (...args) => dispatch(setSelectedRows(...args)),
         [dispatch]
     );
@@ -133,11 +134,12 @@ export function ConnectedOfferTable(props) {
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
     const columns = React.useMemo(() => {
         // Bind an `ApplicantCell` to a particular field
-        function generateApplicantCell(field) {
-            return (props) => (
+        function generateApplicantCell(field: any) {
+            return (props: any) => (
                 <ApplicantCell
                     field={field}
-                    upsertApplicant={(...args) =>
+                    upsertApplicant={(...args: any) =>
+                        // @ts-ignore
                         dispatch(upsertApplicant(...args))
                     }
                     editable={editable}
@@ -147,11 +149,12 @@ export function ConnectedOfferTable(props) {
         }
 
         // Bind an `AssignmentCell` to a particular field
-        function generateAssignmentCell(field) {
-            return (props) => (
+        function generateAssignmentCell(field: any) {
+            return (props: any) => (
                 <AssignmentCell
                     field={field}
-                    upsertAssignment={(...args) =>
+                    upsertAssignment={(...args: any) =>
+                        // @ts-ignore
                         dispatch(upsertAssignment(...args))
                     }
                     editable={editable}
@@ -193,7 +196,7 @@ export function ConnectedOfferTable(props) {
                 // We want items with no active offer to appear at the end of the list
                 // when sorted, so we set their accessor to null (the accessor is used by react table
                 // when sorting items).
-                accessor: (data) =>
+                accessor: (data: { active_offer_status: string }) =>
                     data.active_offer_status === "No Contract"
                         ? null
                         : data.active_offer_status,
@@ -202,14 +205,14 @@ export function ConnectedOfferTable(props) {
             {
                 Header: generateHeaderCell("Date"),
                 accessor: "active_offer_recent_activity_date",
-                Cell: ({ value }) => (value ? formatDate(value) : null),
+                Cell: ({ value }: any) => (value ? formatDate(value) : null),
             },
             {
                 Header: generateHeaderCell("Nag Count"),
                 accessor: "active_offer_nag_count",
                 // If the nag-count is 0, we don't want to show it,
                 // so we return null in that case, which displays nothing.
-                Cell: ({ value }) => (value ? value : null),
+                Cell: ({ value }: any) => (value ? value : null),
                 maxWidth: 50,
             },
         ];
