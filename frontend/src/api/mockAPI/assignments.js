@@ -218,6 +218,24 @@ class ActiveOffer extends MockAPIController {
         const activeOffer = offers[offers.length - 1];
         return activeOffer || null;
     }
+    findAllByAssignment(assignment) {
+        const matchingAssignment = this._ensureAssignment(assignment);
+
+        // As a hack, a `_noActiveOffer` flag is added to an assignment
+        // if the active offer should be ignore.
+        if (matchingAssignment && matchingAssignment._noActiveOffer) {
+            return null;
+        }
+
+        // offers are never deleted, only added to the table, so
+        // picking the last one is the same as picking the "newest"
+        const offers = findAllById(
+            [matchingAssignment.id],
+            this.data.offers,
+            "assignment_id"
+        );
+        return offers;
+    }
     _ensureAssignment(assignment) {
         const matchingAssignment = new Assignment(this.data).rawFind(
             assignment
@@ -337,6 +355,21 @@ class ActiveOffer extends MockAPIController {
             })
         );
     }
+    getHistoryByAssignment(assignment) {
+        const offers = this.findAllByAssignment(
+            this._ensureAssignment(assignment)
+        );
+        if (offers.length === 0) {
+            throw new Error(
+                `There is no offer history for assignment with id=${assignment.id}.`
+            );
+        }
+        // Note: allocating memory inside of the sort callback is frowned upon, but this is just a mock API
+        offers.sort(function (a, b) {
+            return new Date(b.emailed_date) - new Date(a.emailed_date);
+        });
+        return offers;
+    }
     createByAssignment(assignment) {
         const matchingAssignment = this._ensureAssignment(assignment);
         const offer = this.findByAssignment(matchingAssignment);
@@ -414,6 +447,16 @@ export const assignmentsRoutes = {
                     .wageChunks,
             summary: "Get the wage_chunks associated with an assignment",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.wageChunk),
+        }),
+        "/assignments/:assignment_id/active_offer/history": documentCallback({
+            func: (data, params) => {
+                errorUnlessRole(params, "admin");
+                return new ActiveOffer(data).getHistoryByAssignment(
+                    params.assignment_id
+                );
+            },
+            summary: "Fetches all offers that have previously been emailed.",
+            returns: docApiPropTypes.offer,
         }),
     },
     post: {

@@ -28,7 +28,7 @@ function parseDate(str: string | number) {
     }
 }
 
-type DataFormat =
+export type DataFormat =
     | { fileType: "json"; data: any }
     | { fileType: "spreadsheet"; data: any[][] };
 

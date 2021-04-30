@@ -93,7 +93,8 @@ export function fieldEditorFactory<T>(
 }
 
 /**
- * Place all children side-by-side in a react-bootstrap `Form.Row`
+ * Place all children side-by-side in a react-bootstrap `Form.Row`. `colStretch`
+ * is an optional array that specifies the relative size each column should be.
  *
  * @export
  * @param {*} props
@@ -102,9 +103,11 @@ export function fieldEditorFactory<T>(
 export function DialogRow({
     children,
     icon = null,
+    colStretch = [],
 }: {
     children: JSX.Element[] | JSX.Element;
     icon?: JSX.Element | null;
+    colStretch?: number[];
 }) {
     let iconNode: JSX.Element | null = null;
     if (icon) {
@@ -115,7 +118,12 @@ export function DialogRow({
             {iconNode}
             {React.Children.map(children, (child, index) => {
                 return (
-                    <Form.Group as={Col} key={index}>
+                    <Form.Group
+                        as={Col}
+                        key={index}
+                        xs={colStretch[index] || null}
+                        className="form-cell"
+                    >
                         {child}
                     </Form.Group>
                 );

@@ -6,46 +6,13 @@ import {
     deleteApplicant,
     upsertApplicant,
 } from "../../../api/actions";
-import { EditableField } from "../../../components/edit-field-widgets";
 import type { Applicant, Assignment } from "../../../api/defs/types";
 import { ApplicantsList } from "../../../components/applicants";
 import { FaLock, FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { Button, Modal } from "react-bootstrap";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-
-/**
- * A cell that renders editable applicant information
- *
- * @param {*} props
- * @returns
- */
-function EditableCell(props: {
-    column: any;
-    upsertApplicant: Function;
-    field: string;
-    value: string;
-    row: { original: Applicant };
-}): React.ReactElement {
-    const title = `Edit ${"" + props.column.Header}`;
-    const { upsertApplicant, field } = props;
-
-    async function onChange(newVal: string | number | null) {
-        const applicantId = (props.row.original || (props.row as any)._original)
-            .id;
-        return await upsertApplicant({ id: applicantId, [field]: newVal });
-    }
-    return (
-        <EditableField
-            title={title}
-            value={props.value || ""}
-            onChange={onChange}
-            editable={true}
-        >
-            {props.value}
-        </EditableField>
-    );
-}
+import { EditableCell } from "../../../components/editable-cell";
 
 function ConfirmDeleteDialog(props: {
     show: boolean;
@@ -127,11 +94,7 @@ export function ConnectedApplicantsList({ inDeleteMode = false }) {
 
     function generateCell(field: string) {
         return (props: any) => (
-            <EditableCell
-                field={field}
-                upsertApplicant={_upsertApplicant}
-                {...props}
-            />
+            <EditableCell field={field} upsert={_upsertApplicant} {...props} />
         );
     }
 

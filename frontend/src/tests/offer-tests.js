@@ -4,7 +4,6 @@ import axios from "axios";
 
 export function offersTests(api) {
     const { apiGET, apiPOST } = api;
-
     let applicant;
     let assignment;
     let position;
@@ -279,6 +278,50 @@ export function offersTests(api) {
         resp = await apiGET(`/admin/assignments/${assignment.id}`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.hours).not.toEqual(98.6);
+    });
+
+    it("Fetch all past offers pertaining to an assignment", async () => {
+        // Withdraw then re-create any existing offers in
+        // case they have previously been rejected
+        let resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+        let first_date = resp.payload.emailed_date;
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(`/admin/assignments`, assignment);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+        let second_date = resp.payload.emailed_date;
+
+        resp = await apiGET(
+            `/admin/assignments/${assignment.id}/active_offer/history`
+        );
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload[1].emailed_date).toMatch(first_date);
+        expect(resp.payload[0].emailed_date).toMatch(second_date);
     });
 
     it("changing an assignment with a withdrawn/pending active offer should succeed and remove the offer", async () => {

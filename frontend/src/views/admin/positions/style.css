@@ -1,0 +1,12 @@
+table.position-details-view {
+    width: 100%;
+}
+table.position-details-view.extras {
+    margin-top: 1em;
+}
+table.position-details-view.extras th {
+    padding-right: 1em;
+    text-align: right;
+    min-width: 7em;
+    max-width: 10em;
+}

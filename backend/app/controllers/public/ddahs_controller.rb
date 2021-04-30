@@ -97,7 +97,8 @@ class Public::DdahsController < ActionController::Base
     # template based on the ddah
     def ddah_substitutions(ddah: @ddah)
         duties = ddah.duties.order(:order)
-        json_duties = duties.as_json.map(&:stringify_keys)
+        ddah_service = DdahService.new ddah: ddah
+        json_duties = ddah_service.categorized_duties
         total_hours = duties.sum(:hours)
 
         assignment = ddah.assignment

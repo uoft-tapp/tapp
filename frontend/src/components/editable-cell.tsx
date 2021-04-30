@@ -51,7 +51,7 @@ export type EditableType =
  * }
  * @returns {React.ReactElement}
  */
-export function EditableCell<T extends HasId, Field extends keyof T>({
+export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
     column,
     upsert,
     field,
@@ -63,7 +63,7 @@ export function EditableCell<T extends HasId, Field extends keyof T>({
     column: any;
     upsert: (obj: Partial<T> & HasId) => any;
     field: Field;
-    value: string;
+    value: string | number | null;
     row: { original: T };
     type?: EditableType;
     editable?: boolean;
@@ -80,7 +80,7 @@ export function EditableCell<T extends HasId, Field extends keyof T>({
         }
     }
 
-    const formattedValue = isDate ? (value || "").slice(0, 10) : value || "";
+    const formattedValue = isDate ? ("" + value).slice(0, 10) : value || "";
 
     return (
         <EditableField
@@ -90,7 +90,7 @@ export function EditableCell<T extends HasId, Field extends keyof T>({
             editable={editable}
             type={type}
         >
-            {isDate ? formatDate(value) : value}
+            {isDate ? formatDate("" + value) : value}
         </EditableField>
     );
 }

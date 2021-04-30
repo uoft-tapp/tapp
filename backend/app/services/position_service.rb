@@ -44,7 +44,10 @@ class PositionService
             :session_id,
             :duties,
             :qualifications,
-            :contract_template_id
+            :contract_template_id,
+            :desired_num_assignments,
+            :current_enrollment,
+            :current_waitlisted
         )
     end
 

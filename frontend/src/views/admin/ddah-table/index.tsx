@@ -12,7 +12,11 @@ import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import { formatDate, formatDownloadUrl } from "../../../libs/utils";
+import {
+    formatDate,
+    formatDownloadUrl,
+    splitDutyDescription,
+} from "../../../libs/utils";
 import { DdahEditor } from "../../../components/ddahs";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
@@ -25,6 +29,7 @@ export interface RowData {
     first_name: string;
     total_hours: number | null;
     status: string | null;
+    recent_activity_date: string | null;
     issues: string | null;
     issue_code: "hours_mismatch" | "missing" | null;
 }
@@ -52,6 +57,24 @@ export function getReadableStatus(ddah: Pick<Ddah, "status">) {
         default:
             return "Unsent";
     }
+}
+
+function getRecentActivityDate(ddah: Ddah) {
+    const recentActivityDate = (Math.max.apply as (...values: any[]) => number)(
+        null,
+        [
+            ddah.accepted_date,
+            ddah.approved_date,
+            ddah.emailed_date,
+            ddah.revised_date,
+        ]
+            .filter((date) => date)
+            .map((date) => new Date(date || 0))
+    );
+    if (recentActivityDate <= 0) {
+        return null;
+    }
+    return formatDate(new Date(recentActivityDate).toISOString());
 }
 
 /**
@@ -216,14 +239,24 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
             </h4>
             <h5>Duties</h5>
             <ul>
-                {duties.map((duty) => (
-                    <li key={duty.order}>
-                        <span className="ddah-duty-hours">{duty.hours}</span>
-                        <span className="ddah-duty-description">
-                            {duty.description}
-                        </span>
-                    </li>
-                ))}
+                {duties.map((duty) => {
+                    const { category, description } = splitDutyDescription(
+                        duty.description
+                    );
+                    return (
+                        <li key={duty.order}>
+                            <span className="ddah-duty-hours">
+                                {duty.hours}
+                            </span>
+                            <span
+                                className={`ddah-duty-category ${category}`}
+                            />
+                            <span className="ddah-duty-description">
+                                {description}
+                            </span>
+                        </li>
+                    );
+                })}
                 <li>
                     <span className="ddah-duty-hours">{ddah.total_hours}</span>
                     <span className="ddah-duty-description">Total</span>
@@ -382,6 +415,7 @@ export function ConnectedDdahsTable() {
                 first_name: ddah.assignment.applicant.first_name,
                 total_hours: ddah.total_hours,
                 status: ddah.status || "unsent",
+                recent_activity_date: getRecentActivityDate(ddah),
                 approved: ddah.approved_date ? "Approved" : "",
                 readable_status: getReadableStatus(ddah),
                 issues: ddahIssues(ddah),
@@ -416,6 +450,7 @@ export function ConnectedDdahsTable() {
             first_name: assignment.applicant.first_name,
             total_hours: null,
             status: null,
+            recent_activity_date: null,
             issues: "Missing DDAH",
             issue_code: "missing",
         });
@@ -453,6 +488,10 @@ export function ConnectedDdahsTable() {
             Header: generateHeaderCell("Status"),
             accessor: "status",
             Cell: WrappedStatusCell,
+        },
+        {
+            Header: generateHeaderCell("Recent Activity"),
+            accessor: "recent_activity_date",
         },
         {
             Header: generateHeaderCell("Approved"),

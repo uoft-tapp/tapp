@@ -1,4 +1,6 @@
 import React from "react";
+import { Cell, Column } from "react-table";
+import { DiffSpec } from "../libs/diffs";
 
 /**
  * Create a `DiffCell` that will render a field's modification if
@@ -7,11 +9,14 @@ import React from "react";
  * @param {*} accessor
  * @returns
  */
-export function createDiffCell({ accessor, Cell }) {
-    accessor = (accessor || "").split(".");
-    function get(obj) {
+export function createDiffCell<T extends object>({
+    accessor,
+    Cell,
+}: Column<T> & { Cell?: any }) {
+    const accessors = ("" + accessor).split(".");
+    function get(obj: any) {
         let ret = obj;
-        for (const key of accessor) {
+        for (const key of accessors) {
             if (ret == null) {
                 return undefined;
             }
@@ -27,8 +32,8 @@ export function createDiffCell({ accessor, Cell }) {
      * @param {*} {original}
      * @returns
      */
-    function DiffCell({ row }) {
-        const original = row.original || row._original;
+    function DiffCell<T extends object>({ row }: Cell<DiffSpec<any, T>>) {
+        const original = row.original;
         const value = get(original.obj);
         const changed = get(original.changes);
         if (changed != null) {
@@ -59,7 +64,9 @@ export function createDiffCell({ accessor, Cell }) {
  * @param {*} columns
  * @returns
  */
-export function createDiffColumnsFromColumns(columns) {
+export function createDiffColumnsFromColumns<T extends object>(
+    columns: (Column<T> & { accessor?: string })[]
+) {
     return columns.map((column) => {
         const ret = {
             // ReactTable really wants columns to have ids. If a column

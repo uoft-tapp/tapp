@@ -110,6 +110,9 @@
 .details-button-container {
     text-align: center;
 }
+.details-button-container a {
+    color: unset;
+}
 
 .details-row-button.disabled,
 .details-row-button.disabled:hover {
@@ -127,4 +130,8 @@
 
 .details-row-column-header-icon {
     color: var(--primary);
+}
+
+.form-cell {
+    min-width: 5em;
 }

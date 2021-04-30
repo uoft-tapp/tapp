@@ -7,8 +7,9 @@ import { Badge } from "react-bootstrap";
 import { activeSessionSelector } from "../../../api/actions";
 import { Instructor } from "../../../api/defs/types";
 import { ConnectedPositionsList } from "../../admin/positions";
+import { Column } from "react-table";
 
-const POSITION_COLUMNS_FOR_INSTRUCTOR_VIEW = [
+const POSITION_COLUMNS_FOR_INSTRUCTOR_VIEW: Column<any>[] = [
     { Header: "Position", accessor: "position_code" },
     { Header: "Title", accessor: "position_title" },
     {
