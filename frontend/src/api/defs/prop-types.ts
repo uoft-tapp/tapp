@@ -181,6 +181,21 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             position_id: id,
             posting_id: id,
         }),
+        survey: PropTypes.shape({
+            title: PropTypes.string,
+            pages: PropTypes.arrayOf(
+                PropTypes.shape({
+                    name: PropTypes.string,
+                    elements: PropTypes.arrayOf(
+                        PropTypes.shape({
+                            type: PropTypes.string,
+                            name: PropTypes.string,
+                            title: PropTypes.string,
+                        })
+                    ),
+                })
+            ),
+        }),
     };
 }
 
