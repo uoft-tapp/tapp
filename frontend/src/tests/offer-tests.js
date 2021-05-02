@@ -385,7 +385,7 @@ export function offersTests(api) {
  * @param {*} api
  */
 export function offerEmailTests(api) {
-    const { apiPOST } = api;
+    const { apiPOST, apiGET } = api;
     const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
 
     let applicant;
@@ -514,6 +514,59 @@ export function offerEmailTests(api) {
 
         // The subject should contain the position code
         expect(newEmail.recipients[0]).toMatch(new RegExp(applicant.email));
+    });
+
+    it("modify the assignment hours and indicate the change in the offer email.", async () => {
+        // For comparing the two hours
+        let initialHours = assignment.hours;
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+
+        let newAssignment = assignment;
+        let newHours = assignment.hours + 5;
+        newAssignment.hours = newHours;
+        resp = await apiPOST(`/admin/assignments`, newAssignment);
+        expect(resp).toHaveStatus("success");
+
+        var resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const afterEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+        // Assume the email we just sent is at the end of the list
+        const newEmail = afterEmails[afterEmails.length - 1];
+
+        const emailBody = (
+            await axios.get(
+                `${MAILCATCHER_BASE_URL}/messages/${newEmail.id}.source`
+            )
+        ).data;
+
+        if (
+            !emailBody.includes(
+                `hours has changed from ${initialHours.toFixed(
+                    1
+                )} to ${newHours.toFixed(1)}`
+            )
+        ) {
+            throw new Error(
+                `Show diff in hours failed, expected "hours has changed from ${initialHours.toFixed(
+                    1
+                )} to ${newHours.toFixed(1)}"`
+            );
+        }
     });
 }
 

@@ -38,6 +38,11 @@ class OfferMailer < ApplicationMailer
 
     private
 
+    def prev_offer_diff
+        latest = Offer.order(withdrawn_date: :desc).limit(2)
+        @diff = @offer.diff(latest[1]) if latest.length == 2
+    end
+
     def generate_vars(offer)
         @offer = offer
         # It is possible that the email from when the offer was created is stale,
@@ -46,6 +51,7 @@ class OfferMailer < ApplicationMailer
         @first_name = offer.first_name
         @last_name = offer.last_name
         @position_code = offer.position_code
+        @hours = offer.hours
         @position_title = offer.position_title
         @ta_coordinator_email = offer.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
@@ -54,5 +60,7 @@ class OfferMailer < ApplicationMailer
                 offer.url_token
             }/view"
         @nag_count = offer.nag_count
+        @status_message = offer.set_status_message
+        prev_offer_diff
     end
 end
