@@ -67,3 +67,7 @@
     content: "Training";
     color: var(--purple);
 }
+.ddah-duty-category.note::after {
+    content: "Note";
+    color: var(--gray);
+}
