@@ -17,8 +17,9 @@
   <% @diff.keys.each do |k| %>  
     <%= k %> has changed from <%= @diff[k] %> to <%= @offer[k] %><br>
   <% end %>
-    <p>
-  <% end %>
+  </p>
+    <% end %>  
+  <p>
     Please click the link below to view your offer and accept or reject it:<br/>
     <a href="http://<%= @url %>"><%= @url %></a>
   </p>
