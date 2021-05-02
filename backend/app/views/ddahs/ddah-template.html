@@ -122,6 +122,12 @@
                     <td>{{ instructor_desc | escape }}</td>
                 </tr>
             </table>
+            <h3 class="i">Notes</h3>
+            {% for duty in duties.note %}
+            <p>
+                {{ duty.description }}
+            </p>
+            {% endfor %}
             <h3 class="i">Duties</h3>
             <table class="duties-table">
                 <thead><tr><th colspan="2">Meetings</th></tr></thead>

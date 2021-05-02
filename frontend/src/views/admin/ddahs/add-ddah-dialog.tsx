@@ -137,7 +137,7 @@ export function ConnectedAddDdahDialog(props: {
                 </Button>
                 <Button
                     onClick={createDdah}
-                    title={conflicts.delayShow || "Create Instructor"}
+                    title={conflicts.delayShow || "Create DDAH"}
                     disabled={
                         !!conflicts.delayShow || !!conflicts.immediateShow
                     }

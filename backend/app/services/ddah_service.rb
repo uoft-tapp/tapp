@@ -53,7 +53,9 @@ class DdahService
     # The April, 2021 collective agreement states that all duties must be categorized as
     # "meetings", "training", "preparation", "contact time", "other duties", "marking/grading".
     # Therefore, we will prefix all duties with "<duty>:" (the duty type followed by a colon)
-    # so that a render can appropriately distinguish them.
+    # so that a render can appropriately distinguish them. We also add a "note:" prefix that doesn't
+    # correspond to any hours. This is an escape hatch to let us include any missing information on the
+    # DDAH.
     def normalized_duties
         @ddah.duties.order(:order).map { |duty| normalize_duty(duty: duty) }
     end
@@ -76,6 +78,8 @@ class DdahService
 
     def self.normalize_duty_desc(desc)
         case desc
+        when /^\s*note.{0,15}?:/i
+            trim_replace(desc, $LAST_MATCH_INFO.to_s, 'note:')
         when /^\s*prep.{0,15}?:/i
             trim_replace(desc, $LAST_MATCH_INFO.to_s, 'prep:')
         when /^\s*train.{0,15}?:/i

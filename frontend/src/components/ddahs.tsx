@@ -2,7 +2,7 @@ import React from "react";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { MinimalDdah, Ddah, Assignment, Duty } from "../api/defs/types";
 import { DiffSpec, ddahDutiesToString } from "../libs/diffs";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
@@ -130,16 +130,22 @@ function DutyRow({
         >
             <>
                 <Form.Label>Hours</Form.Label>
-                <Form.Control
-                    type="number"
-                    value={duty.hours}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        upsertDuty({
-                            ...duty,
-                            hours: stringToNativeType(e.target.value) as any,
-                        })
-                    }
-                />
+                {category === "note" ? (
+                    <div />
+                ) : (
+                    <Form.Control
+                        type="number"
+                        value={duty.hours}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            upsertDuty({
+                                ...duty,
+                                hours: stringToNativeType(
+                                    e.target.value
+                                ) as any,
+                            })
+                        }
+                    />
+                )}
             </>
             <>
                 <Form.Label>Category</Form.Label>
@@ -147,13 +153,20 @@ function DutyRow({
                     title="Enter what category these duties fit into"
                     as="select"
                     value={category}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        upsertDuty({
-                            ...duty,
-                            description: `${e.target.value}:${description}`,
-                        })
-                    }
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        // A "note" does not have any hours associated with it.
+                        const dutyCopy = { ...duty };
+                        const newCategory = e.target.value;
+                        if (newCategory === "note") {
+                            dutyCopy.hours = 0;
+                        }
+                        return upsertDuty({
+                            ...dutyCopy,
+                            description: `${newCategory}:${description}`,
+                        });
+                    }}
                 >
+                    <option value="note">Note</option>
                     <option value="meeting">Meetings</option>
                     <option value="prep">Preparation</option>
                     <option value="contact">Contact time</option>
@@ -193,6 +206,7 @@ export function DdahEditor(props: {
     assignments?: Assignment[];
     editableAssignment?: Boolean;
 }) {
+    const [instructionsVisible, setInstructionsVisible] = React.useState(true);
     const {
         ddah: ddahProps,
         setDdah,
@@ -214,12 +228,64 @@ export function DdahEditor(props: {
                 placeholder="Assignment..."
                 multiple
                 labelKey={(option: Assignment) =>
-                    `${option.position.position_code} for ${option.applicant.last_name}, ${option.applicant.first_name}`
+                    `${option.position.position_code} for ${option.applicant.first_name} ${option.applicant.last_name}`
                 }
                 selected={ddah.assignment == null ? [] : [ddah.assignment]}
                 options={assignments}
                 onChange={setAssignment}
             />
+        );
+    }
+
+    let instructions = (
+        <Button
+            variant="outline-info"
+            size="sm"
+            onClick={() => setInstructionsVisible(true)}
+            className="float-right"
+        >
+            Show Instructions
+        </Button>
+    );
+    if (instructionsVisible) {
+        instructions = (
+            <Alert
+                variant="info"
+                onClose={() => setInstructionsVisible(false)}
+                dismissible
+            >
+                <p>
+                    A DDAH describes all duties and the amount of time allocated
+                    to each duty. A DDAH should also include a breakdown of when
+                    assignments are expected to be due, how long it will take to
+                    mark them, and the expected turnaround time. This
+                    information should be included in the description of every{" "}
+                    <em>Marking/Grading</em> duty.
+                </p>
+                <p className="mb-1">
+                    A <em>Note</em> provides information that doesn't correspond
+                    to specific hours. Information that should be included as a{" "}
+                    <em>Note</em> include{" "}
+                </p>
+                <ul className="mb-0 mt-0">
+                    <li>
+                        The{" "}
+                        <em>
+                            Enrollment per TA Section at the time of the DDAH
+                        </em>
+                    </li>
+                    <li>The estimated enrollment in the course</li>
+                    <li>
+                        The tutorial category
+                        (discussion-based/skill-development/exam
+                        review/practical)
+                    </li>
+                    <li>
+                        Whether tutorials have 30-or-less students or more than
+                        30 students
+                    </li>
+                </ul>
+            </Alert>
         );
     }
 
@@ -252,55 +318,58 @@ export function DdahEditor(props: {
     }
 
     return (
-        <Form>
-            <DialogRow>
-                <React.Fragment>
-                    <Form.Label>Assignment</Form.Label>
-                    {assignmentNode}
-                </React.Fragment>
-            </DialogRow>
-            <h4>Duties</h4>
-            {duties.map((duty) => (
-                <DutyRow
-                    duty={duty}
-                    removeDuty={removeDuty}
-                    upsertDuty={upsertDuty}
-                    key={duty.order}
-                />
-            ))}
-            <DialogRow>
-                <Button
-                    variant="outline-info"
-                    onClick={() =>
-                        upsertDuty({
-                            description: "",
-                            hours: 0,
-                            order: nextOrder,
-                        })
-                    }
-                >
-                    <FaPlus className="add-duty-btn-icon" />
-                    Add Duty
-                </Button>
-            </DialogRow>
-            <DialogRow>
-                <>
-                    <span
-                        className={
-                            hoursMismatch ? "add-ddah-hours-mismatch" : ""
+        <React.Fragment>
+            {instructions}
+            <Form>
+                <DialogRow>
+                    <React.Fragment>
+                        <Form.Label>Assignment</Form.Label>
+                        {assignmentNode}
+                    </React.Fragment>
+                </DialogRow>
+                <h4>Duties</h4>
+                {duties.map((duty) => (
+                    <DutyRow
+                        duty={duty}
+                        removeDuty={removeDuty}
+                        upsertDuty={upsertDuty}
+                        key={duty.order}
+                    />
+                ))}
+                <DialogRow>
+                    <Button
+                        variant="outline-info"
+                        onClick={() =>
+                            upsertDuty({
+                                description: "",
+                                hours: 0,
+                                order: nextOrder,
+                            })
                         }
                     >
-                        {totalHours}
-                    </span>{" "}
-                    of {ddah.assignment ? ddah.assignment.hours : "?"} hours
-                    allocated{" "}
-                    {hoursMismatch
-                        ? `(${
-                              (ddah.assignment?.hours || 0) - totalHours
-                          } unassigned)`
-                        : ""}
-                </>
-            </DialogRow>
-        </Form>
+                        <FaPlus className="add-duty-btn-icon" />
+                        Add Duty
+                    </Button>
+                </DialogRow>
+                <DialogRow>
+                    <>
+                        <span
+                            className={
+                                hoursMismatch ? "add-ddah-hours-mismatch" : ""
+                            }
+                        >
+                            {totalHours}
+                        </span>{" "}
+                        of {ddah.assignment ? ddah.assignment.hours : "?"} hours
+                        allocated{" "}
+                        {hoursMismatch
+                            ? `(${
+                                  (ddah.assignment?.hours || 0) - totalHours
+                              } unassigned)`
+                            : ""}
+                    </>
+                </DialogRow>
+            </Form>
+        </React.Fragment>
     );
 }
