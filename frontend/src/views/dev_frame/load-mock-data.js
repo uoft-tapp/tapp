@@ -5,10 +5,9 @@ import {
     upsertAssignment,
     upsertPosition,
     upsertSession,
-    fetchSessions,
     upsertInstructor,
     upsertContractTemplate,
-    fetchContractTemplates,
+    fetchSessions,
     setActiveSession,
 } from "../../api/actions";
 
@@ -19,57 +18,27 @@ import {
 } from "../../libs/schema";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Button, Modal, Spinner, ProgressBar } from "react-bootstrap";
+import { Button, Modal, ProgressBar } from "react-bootstrap";
+import mockSessionData from "../../mock_data/session.json";
+import mockContractTemplate from "../../mock_data/contract_template.json";
+import mockInstructors from "../../mock_data/instructor.json";
 import mockApplicantData from "../../mock_data/applicant.json";
 import mockPositionData from "../../mock_data/position.json";
 import mockAssignmentData from "../../mock_data/assignment.json";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
-import {
-    Session,
-    Position,
-    Instructor,
-    Assignment,
-    ContractTemplate,
-    MinimalPosition,
-    MinimalInstructor,
-    MinimalAssignment,
-    Utorid,
-    Applicant,
-    MinimalApplicant,
-    MinimalDdah,
-    Ddah,
-    Duty,
-} from "../../api/defs/types";
 
 /**
- * A toggle switch for turning on and off the Mock API. An instance
- * of the Mock API is included in this component, and this component
- * takes no arguments.
+ * A button to automatically set up a mock session with contract_template and
+ * instructors, and upsert positions, applicants, and assignments from mock data
+ * JSON files in order.
  *
  * This component only renders when `process.env.REACT_APP_DEV_FEATURES` is truthy.
  *
  * @export
  * @returns {React.ElementType}
  */
-function LoadMockButton(
-    {
-        // users = [],
-        // activeUser = {},
-        // setActiveUser = ident,
-        // fetchUsers = ident,
-    }
-) {
-    // const [dropdownVisible, setDropdownVisible] = React.useState(false);
-
-    // React.useEffect(() => {
-    //     // Whenever the dropdown is open, fetch a list of all available users.
-    //     // This would normally not be a good idea, but since this button is only
-    //     // used in debug mode, it's okay.
-    //     if (dropdownVisible) {
-    //         fetchUsers();
-    //     }
-    // }, [dropdownVisible, fetchUsers]);
+function LoadMockButton() {
     const [disable, setDisable] = React.useState(false);
     const [inProgress, setInProgress] = React.useState(false);
     const [stage, setStage] = React.useState("");
@@ -82,37 +51,6 @@ function LoadMockButton(
     let applicants = [];
     let count;
     let total;
-    const mockSessionData = {
-        start_date: new Date("2020-01-1").toISOString(),
-        end_date: new Date("2021-12-31").toISOString(),
-        name: "Mock Session",
-        rate1: 50,
-    };
-    const mockContractTemplate = {
-        template_name: "Regular",
-        template_file: "default-template.html",
-    };
-
-    const mockInstructors = [
-        {
-            last_name: "Smith",
-            first_name: "Henry",
-            email: "hery.smith@utoronto.ca",
-            utorid: "smithh",
-        },
-        {
-            last_name: "Garcia",
-            first_name: "Emily",
-            email: "emily.garcia@utoronto.ca",
-            utorid: "garciae",
-        },
-        {
-            last_name: "Miller",
-            first_name: "Megan",
-            email: "megan.miller@utoronto.ca",
-            utorid: "millerm",
-        },
-    ];
 
     async function setupMockSession() {
         try {
