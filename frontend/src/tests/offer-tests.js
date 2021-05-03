@@ -520,7 +520,7 @@ export function offerEmailTests(api) {
         // For comparing the two hours
         let initialHours = assignment.hours;
 
-        resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/withdraw`
         );
         expect(resp).toHaveStatus("success");
@@ -531,7 +531,7 @@ export function offerEmailTests(api) {
         resp = await apiPOST(`/admin/assignments`, newAssignment);
         expect(resp).toHaveStatus("success");
 
-        var resp = await apiPOST(
+        resp = await apiPOST(
             `/admin/assignments/${assignment.id}/active_offer/create`
         );
         expect(resp).toHaveStatus("success");
@@ -554,17 +554,13 @@ export function offerEmailTests(api) {
             )
         ).data;
 
-        if (
-            !emailBody.includes(
-                `hours has changed from ${initialHours.toFixed(
-                    1
-                )} to ${newHours.toFixed(1)}`
-            )
-        ) {
+        const expected = `hours have changed from ${initialHours.toFixed(
+            1
+        )} to ${newHours.toFixed(1)}`;
+
+        if (!emailBody.includes(expected)) {
             throw new Error(
-                `Show diff in hours failed, expected "hours has changed from ${initialHours.toFixed(
-                    1
-                )} to ${newHours.toFixed(1)}"`
+                `Show diff in hours failed, expected "${expected}"`
             );
         }
     });
