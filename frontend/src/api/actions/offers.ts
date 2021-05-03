@@ -6,6 +6,7 @@ import {
     OFFER_EMAIL_SUCCESS,
     OFFER_NAG_SUCCESS,
     OFFER_WITHDRAW_SUCCESS,
+    FETCH_OFFERS_FOR_ASSIGNMENT_SUCCESS,
 } from "../constants";
 import { fetchError } from "./errors";
 import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
@@ -33,7 +34,31 @@ export const offerWithdrawSuccess = actionFactory<RawOffer>(
     OFFER_WITHDRAW_SUCCESS
 );
 
+export const fetchOffersForAssignmentSuccess = actionFactory<{
+    assignment_id: number;
+    offers: RawOffer[];
+}>(FETCH_OFFERS_FOR_ASSIGNMENT_SUCCESS);
+
 // dispatchers
+export const fetchOfferHistoryForAssignment = validatedApiDispatcher({
+    name: "fetchOfferHistoryForAssignment",
+    description:
+        "Fetch the history of all offers associated with an assignment",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (payload: HasId) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const { id: assignmentId } = payload;
+        const data = (await apiGET(
+            `/${role}/assignments/${assignmentId}/active_offer/history`
+        )) as RawOffer[];
+        dispatch(
+            fetchOffersForAssignmentSuccess({
+                assignment_id: assignmentId,
+                offers: data,
+            })
+        );
+    },
+});
 export const fetchActiveOfferForAssignment = validatedApiDispatcher({
     name: "fetchActiveOfferForAssignment",
     description: "Fetch an offer associated with an assignment",

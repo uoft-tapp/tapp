@@ -3,14 +3,93 @@ import { useSelector } from "react-redux";
 import { offerTableSelector } from "../offertable/actions";
 import {
     assignmentsSelector,
+    fetchOfferHistoryForAssignment,
     fetchWageChunksForAssignment,
 } from "../../../api/actions";
 import { Button, Modal, Alert, Spinner } from "react-bootstrap";
-import { WageChunk } from "../../../api/defs/types";
-import { formatDate } from "../../../libs/utils";
+import { Offer, WageChunk } from "../../../api/defs/types";
+import {
+    capitalize,
+    formatDate,
+    formatDateTime,
+    formatDownloadUrl,
+} from "../../../libs/utils";
 import { ActionButton } from "../../../components/action-buttons";
-import { FaSearchDollar } from "react-icons/fa";
+import { FaSearch, FaSearchDollar } from "react-icons/fa";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+
+function OfferHistoryDetails({ offers }: { offers: Offer[] }) {
+    if (offers.length === 0) {
+        return <span>No Offer</span>;
+    }
+    return (
+        <table className="offer-history-details-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Status</th>
+                    <th>Hours</th>
+                    <th>Emailed Date</th>
+                    <th>Accepted Date</th>
+                    <th>Rejected Date</th>
+                    <th>Withdrawn Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {(offers || []).map((offer, i) => {
+                    const url = `/public/contracts/${offer.url_token}.pdf`;
+                    return (
+                        <tr key={i}>
+                            <td>
+                                <Button
+                                    href={formatDownloadUrl(url)}
+                                    variant="light"
+                                    size="sm"
+                                    className="py-0"
+                                    title="Download offer PDF"
+                                >
+                                    <FaSearch />
+                                </Button>
+                            </td>
+                            <td className={`status ${offer.status}`}>
+                                {capitalize(offer.status)}
+                            </td>
+                            <td className="number">{offer.hours}</td>
+                            <td
+                                title={formatDateTime(
+                                    offer.emailed_date || undefined
+                                )}
+                            >
+                                {formatDate(offer.emailed_date || "")}
+                            </td>
+                            <td
+                                title={formatDateTime(
+                                    offer.accepted_date || undefined
+                                )}
+                            >
+                                {formatDate(offer.accepted_date || "")}
+                            </td>
+                            <td
+                                title={formatDateTime(
+                                    offer.rejected_date || undefined
+                                )}
+                            >
+                                {formatDate(offer.rejected_date || "")}
+                            </td>
+                            <td
+                                title={formatDateTime(
+                                    offer.withdrawn_date || undefined
+                                )}
+                            >
+                                {formatDate(offer.withdrawn_date || "")}
+                            </td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
+    );
+}
 
 function WagechunkDetails({ wageChunks }: { wageChunks: WageChunk[] }) {
     return (
@@ -40,20 +119,27 @@ function WagechunkDetails({ wageChunks }: { wageChunks: WageChunk[] }) {
 export function ConnectedAssignmentDetails({
     assignmentId,
 }: {
-    assignmentId: Number;
+    assignmentId: number;
 }) {
     const assignments = useSelector(assignmentsSelector);
     const assignment = assignments.find((a) => a.id === assignmentId);
+    const assignmentNotFound = !assignment;
+    const wageChunksNotFound = !assignment?.wage_chunks;
     const dispatch = useThunkDispatch();
 
     React.useEffect(() => {
-        if (assignment == null || assignment?.wage_chunks) {
-            // If the assignment already has wage chunks, we don't need to refetch them.
+        if (assignmentNotFound) {
             return;
         }
+        // If the assignment already has wage chunks, we don't need to refetch them.
+        if (wageChunksNotFound) {
+            dispatch(fetchWageChunksForAssignment({ id: assignmentId }));
+        }
 
-        dispatch(fetchWageChunksForAssignment(assignment));
-    }, [assignment, dispatch]);
+        // Always fetch the offer history, since details of the offers
+        // may have changed without the assignment changing.
+        dispatch(fetchOfferHistoryForAssignment({ id: assignmentId }));
+    }, [assignmentId, dispatch, assignmentNotFound, wageChunksNotFound]);
 
     if (!assignment) {
         return <div>No Assignment found with ID "{assignmentId}"</div>;
@@ -82,7 +168,11 @@ export function ConnectedAssignmentDetails({
                 </tr>
                 <tr>
                     <th>Offer Status</th>
-                    <td>{assignment.active_offer_status || "No Offer"}</td>
+                    <td className={`status ${assignment.active_offer_status}`}>
+                        {capitalize(
+                            assignment.active_offer_status || "No Offer"
+                        )}
+                    </td>
                 </tr>
                 <tr>
                     <th>Pay Description</th>
@@ -91,6 +181,20 @@ export function ConnectedAssignmentDetails({
                             <WagechunkDetails
                                 wageChunks={assignment.wage_chunks}
                             />
+                        ) : (
+                            <Spinner
+                                animation="border"
+                                size="sm"
+                                className="mr-1"
+                            />
+                        )}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Offer History</th>
+                    <td>
+                        {assignment.offers ? (
+                            <OfferHistoryDetails offers={assignment.offers} />
                         ) : (
                             <Spinner
                                 animation="border"
@@ -164,7 +268,7 @@ export function ConnectedViewAssignmentDetailsAction() {
             <Modal
                 show={dialogVisible}
                 onHide={() => setDialogVisible(false)}
-                size="lg"
+                size="xl"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Assignment Details</Modal.Title>
