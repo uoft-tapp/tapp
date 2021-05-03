@@ -35,12 +35,10 @@ class OfferService
     # is returned.
     def changes_from_previous
         previous =
-            Offer.where(assignment_id: 303).where(
+            Offer.where(assignment_id: @offer.assignment_id).where(
                 'created_at < ?',
                 @offer.created_at
-            ).order(withdrawn_date: :desc).limit(1)[
-                0
-            ]
+            ).order(withdrawn_date: :desc).first
         return nil if previous.nil?
 
         ret = []

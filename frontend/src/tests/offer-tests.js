@@ -560,7 +560,7 @@ export function offerEmailTests(api) {
 
         if (!emailBody.includes(expected)) {
             throw new Error(
-                `Show diff in hours failed, expected "${expected}"`
+                `Show diff in hours failed, expected "${expected}" to be contained in email body, but it wasn't`
             );
         }
     });
