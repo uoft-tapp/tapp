@@ -69,6 +69,7 @@ class Offer < ApplicationRecord
         end
     end
 end
+
 # == Schema Information
 #
 # Table name: offers
