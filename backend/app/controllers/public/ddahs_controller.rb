@@ -11,7 +11,7 @@ class Public::DdahsController < ActionController::Base
         return unless valid_ddah?(url_token: show_params[:id])
 
         # for PDF and HTML rendering, we start by rendering the ddah as an html document
-        rendered = get_contract_html(@ddah)
+        rendered = get_ddah_html(@ddah)
         if !show_params[:format].blank? &&
                show_params[:format].downcase == 'pdf'
             pdf_name =
@@ -70,7 +70,7 @@ class Public::DdahsController < ActionController::Base
         params.permit(:id, :format)
     end
 
-    def get_contract_html(ddah)
+    def get_ddah_html(ddah)
         contract_dir = Rails.root.join('app/views/ddahs/')
         template_file = "#{contract_dir}/ddah-template.html"
         # Verify that the template file is actually contained in the template directory

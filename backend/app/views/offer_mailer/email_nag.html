@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style></style>
+    </head>
+    <body>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        <p>This is reminder number {{ nag_count }}.</p>
+        <p>
+            Please accept or reject your offer for {{ position_code }} {{
+            position_title }} for {{ hours }} hours via the link below.<br />
+            <a href="https://{{ url }}">https://{{ url }}</a>
+        </p>
+
+        <p>Thanks!</p>
+    </body>
+</html>
