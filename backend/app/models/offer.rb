@@ -23,20 +23,6 @@ class Offer < ApplicationRecord
         !accepted? && !rejected? && !withdrawn?
     end
 
-    def set_status_message
-        case status.to_sym
-        when :pending
-            'You have not responded to this offer'
-        end
-    end
-
-    def diff(other)
-        check = %w[hours position_start_date position_end_date]
-        diff = {}
-        check.each { |k| diff[k] = other[k] if other[k] != self[k] }
-        diff
-    end
-
     private
 
     def populate_offer
@@ -83,6 +69,7 @@ class Offer < ApplicationRecord
         end
     end
 end
+
 # == Schema Information
 #
 # Table name: offers
