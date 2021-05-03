@@ -20,6 +20,7 @@ import {
     debugOnlyFetchUsers,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
+import { LoadMockButton } from "./load-mock-data";
 
 // We don't need SwaggerUI all the time, so load it lazily.
 const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
@@ -138,6 +139,7 @@ function DevFrame(props) {
                     <Navbar.Collapse className="justify-content-end">
                         <ConnectedActiveUserButton />
                         <ConnectedToggleMockApi />
+                        <LoadMockButton />
                     </Navbar.Collapse>
                 </Navbar>
             </div>
