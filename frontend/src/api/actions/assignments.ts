@@ -224,6 +224,10 @@ const _assignmentsSelector = createSelector(
     localStoreSelector,
     (state) => state._modelData
 );
+const _offersByAssignmentIdSelector = createSelector(
+    localStoreSelector,
+    (state) => state._offersByAssignmentId
+);
 /**
  * Get the current assignments. This selector is memoized and will only
  * be recomputed when assignments, applicants, or positions change. If wageChunks
@@ -235,8 +239,15 @@ export const assignmentsSelector = createSelector(
         applicantsSelector,
         positionsSelector,
         wageChunksByAssignmentSelector,
+        _offersByAssignmentIdSelector,
     ],
-    (assignments, applicants, positions, getWageChunksForAssignment) => {
+    (
+        assignments,
+        applicants,
+        positions,
+        getWageChunksForAssignment,
+        offersByAssignmentIdHash
+    ) => {
         if (assignments.length === 0) {
             return [];
         }
@@ -245,6 +256,7 @@ export const assignmentsSelector = createSelector(
         return assignments.map((assignment) => {
             const { position_id, applicant_id, ...rest } = assignment;
             const wage_chunks = getWageChunksForAssignment(assignment);
+            const offers = offersByAssignmentIdHash[assignment.id];
             return {
                 ...rest,
                 position: positionsById[position_id] || {},
@@ -254,6 +266,7 @@ export const assignmentsSelector = createSelector(
                 wage_chunks: wageChunksMatchAssignment(assignment, wage_chunks)
                     ? wage_chunks
                     : null,
+                offers,
             } as Assignment;
         });
     }

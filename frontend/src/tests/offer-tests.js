@@ -385,7 +385,7 @@ export function offersTests(api) {
  * @param {*} api
  */
 export function offerEmailTests(api) {
-    const { apiPOST, apiGET } = api;
+    const { apiPOST } = api;
     const MAILCATCHER_BASE_URL = "http://mailcatcher:1080";
 
     let applicant;

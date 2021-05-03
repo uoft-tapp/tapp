@@ -101,3 +101,40 @@ body,
     border: 1px solid #e5e5e5;
     border-bottom: none;
 }
+
+.offer-history-details-table th,
+.offer-history-details-table td {
+    padding-left: 1em;
+}
+.offer-history-details-table th {
+    text-align: center;
+}
+.offer-history-details-table th:first-child,
+.offer-history-details-table td:first-child {
+    padding-left: 0em;
+}
+.offer-history-details-table th {
+    font-size: smaller;
+    color: var(--gray);
+}
+.offer-history-details-table .number {
+    text-align: center;
+}
+/*.offer-history-details-table tbody tr:first-child .status {
+    background-color: green;
+}*/
+.status.provisional {
+    color: var(--purple);
+}
+.status.pending {
+    color: var(--teal);
+}
+.status.accepted {
+    color: var(--green);
+}
+.status.withdrawn {
+    color: var(--orange);
+}
+.status.rejected {
+    color: var(--red);
+}

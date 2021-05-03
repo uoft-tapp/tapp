@@ -68,6 +68,22 @@ export function formatDate(dateString: string): string {
 }
 
 /**
+ * Formats the input date string to be human readable
+ * Input string is of the form 2019-01-01T00:00:00.000Z
+ * Output string is of the form "2018-12-31, 7:00:00 p.m."
+ * @param {string} dateString
+ */
+export function formatDateTime<T extends string | null | undefined>(
+    dateString: T
+): T {
+    if (!dateString || dateString == null) {
+        return dateString;
+    }
+    const date = new Date(dateString!);
+    return date.toLocaleString("en-CA") as T;
+}
+
+/**
  * Format a url for downloading. In production, this is the
  * identity function. In development mode, this function replaces
  * port `8000` with `3000` so that non-json data can be downloaded from the
