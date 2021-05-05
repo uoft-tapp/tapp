@@ -6,4 +6,5 @@ export * from "./normalize-import";
 export * from "./validate";
 export * from "./prepare-spreadsheet";
 export * from "./prepare-minimal";
+export * from "./prepare-full";
 export * from "./normalize-ddah-import";
