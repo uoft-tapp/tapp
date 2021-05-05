@@ -29,6 +29,7 @@ import type {
     RequireSome,
 } from "../defs/types";
 import { positionsSelector } from "./positions";
+import { ExportFormat } from "../../libs/import-export";
 
 // actions
 const fetchPostingsSuccess = actionFactory<RawPosting[]>(
@@ -228,6 +229,33 @@ export const deletePostingPosition = validatedApiDispatcher({
             rawPostingPosition
         )) as RawPostingPosition;
         dispatch(deleteOnePostingPositionSuccess(data));
+    },
+});
+
+export const exportPosting = validatedApiDispatcher({
+    name: "exportPosting",
+    description: "Export a posting",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (
+        postingId: number,
+        formatter: (posting: Posting, exportFormat: ExportFormat) => File,
+        format: ExportFormat = "spreadsheet"
+    ) => async (dispatch, getState) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all applicants from the server in case things happened to be out of sync.
+        await Promise.all([dispatch(fetchPostings())]);
+        const postings = postingsSelector(getState());
+        const posting = postings.find((posting) => posting.id === postingId);
+
+        if (posting == null) {
+            throw new Error(`Could not find posting with id ${postingId}`);
+        }
+
+        return formatter(posting, format);
     },
 });
 

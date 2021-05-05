@@ -5,6 +5,7 @@ import {
     Ddah,
     Instructor,
     Position,
+    Posting,
     WageChunk,
 } from "../../api/defs/types";
 import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
@@ -248,6 +249,53 @@ export const prepareSpreadsheet = {
                     position.current_enrollment,
                     position.current_waitlisted,
                 ])
+            )
+        );
+    },
+    posting: function (posting: Posting) {
+        // Most of the information about the posting is exported in the first row of the spreadsheet.
+        // However, the PostingPositions take many rows. In the additional rows we fill cells with
+        // `null` so that they show up empty in the spreadsheet.
+        const firstItems = [
+            posting.name,
+            posting.open_date,
+            posting.close_date,
+        ];
+        const lastItems = [
+            posting.intro_text,
+            JSON.stringify(posting.custom_questions),
+        ];
+        const emptyFirstItems = [null, null, null];
+        const emptyLastItems = [null, null];
+        return spreadsheetUndefinedToNull(
+            ([
+                [
+                    "Name",
+                    "Open Date",
+                    "Close Date",
+                    "Position Code",
+                    "Num Positions",
+                    "Hours per Assignment",
+                    "Intro Text",
+                    "Custom Questions",
+                ],
+            ] as CellType[][]).concat(
+                Array.from(
+                    { length: Math.max(posting.posting_positions.length, 1) },
+                    (_, i) => {
+                        const first = i === 0 ? firstItems : emptyFirstItems;
+                        const last = i === 0 ? lastItems : emptyLastItems;
+                        const postingPosition = posting.posting_positions[i];
+
+                        return [
+                            ...first,
+                            postingPosition?.position?.position_code,
+                            postingPosition?.num_positions,
+                            postingPosition?.hours,
+                            ...last,
+                        ];
+                    }
+                )
             )
         );
     },

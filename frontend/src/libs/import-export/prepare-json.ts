@@ -21,6 +21,10 @@ import {
     Ddah,
     MinimalApplication,
     Application,
+    PostingPosition,
+    MinimalPostingPosition,
+    MinimalPosting,
+    Posting,
 } from "../../api/defs/types";
 
 /**
@@ -154,6 +158,27 @@ export const prepareMinimal = {
                 (instructor) => instructor.utorid
             ),
             contract_template: position.contract_template.template_name,
+        };
+    },
+    posting: function (posting: Posting): MinimalPosting {
+        return {
+            name: posting.name,
+            open_date: posting.open_date,
+            close_date: posting.close_date,
+            intro_text: posting.intro_text,
+            custom_questions: posting.custom_questions,
+            posting_positions: posting.posting_positions.map(
+                prepareMinimal.postingPosition
+            ),
+        };
+    },
+    postingPosition: function (
+        postingPosition: PostingPosition
+    ): MinimalPostingPosition {
+        return {
+            position_code: postingPosition.position.position_code,
+            num_positions: postingPosition.num_positions,
+            hours: postingPosition.hours,
         };
     },
     wageChunk: function (wageChunk: WageChunk): MinimalWageChunk {

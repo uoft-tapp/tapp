@@ -8,6 +8,7 @@ import type {
     Ddah,
     Instructor,
     Position,
+    Posting,
     Session,
 } from "../../api/defs/types";
 import type { ExportFormat } from "./data-to-file";
@@ -16,7 +17,7 @@ export type PrepareDataFunc<T> = (data: T[], dataFormat: ExportFormat) => File;
 type FilterFunc<T> = ((array: T[]) => T[]) | null;
 
 /**
- * Make a function that converts a list of applicants into a `File` object.
+ * Make a function that converts a list of applications into a `File` object.
  *
  * @export
  * @param {Applicant[]} applications
@@ -34,6 +35,27 @@ export function prepareApplicationData(
                 applications: applications.map((application) =>
                     prepareMinimal.application(application)
                 ),
+            }),
+        },
+        dataFormat,
+        "applications"
+    );
+}
+
+/**
+ * Make a function that converts a posting into a `File` object.
+ *
+ * @export
+ * @param {Posting} posting
+ * @param {"csv" | "json" | "xlsx"} dataFormat
+ * @returns
+ */
+export function preparePostingData(posting: Posting, dataFormat: ExportFormat) {
+    return dataToFile(
+        {
+            toSpreadsheet: () => prepareSpreadsheet.posting(posting),
+            toJson: () => ({
+                postings: [prepareMinimal.posting(posting)],
             }),
         },
         dataFormat,

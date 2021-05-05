@@ -45,13 +45,12 @@ export interface MinimalDdah {
 export interface MinimalPostingPosition
     extends Omit<NoId<PostingPosition>, "position" | "posting"> {
     position_code: string;
-    posting_name: string;
 }
 
 export interface MinimalPosting
     extends Omit<
         NoId<Posting>,
-        "posting_positions" | "applications" | "availability"
+        "posting_positions" | "applications" | "availability" | "url_token"
     > {
     posting_positions: MinimalPostingPosition[];
 }

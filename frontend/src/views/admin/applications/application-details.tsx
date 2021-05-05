@@ -48,6 +48,7 @@ export function ApplicationDetails({
         Survey.StylesManager.applyTheme("bootstrap");
         Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
         const survey = new Survey.Model(
+            // HTML questions are informational for survey takers. We don't need them when viewing survey responses
             removeHtmlQuestions(posting.custom_questions)
         );
         survey.showPreviewBeforeComplete = "showAnsweredQuestions";
