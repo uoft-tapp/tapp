@@ -135,7 +135,9 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             comments: PropTypes.string,
             program: PropTypes.string,
             department: PropTypes.string,
-            previous_uoft_experience: PropTypes.string,
+            previous_department_ta: PropTypes.bool,
+            previous_university_ta: PropTypes.bool,
+            previous_experience_summary: PropTypes.string,
             yip: PropTypes.number,
             annotation: PropTypes.string,
             position_preference: PropTypes.arrayOf(

@@ -29,11 +29,12 @@ class Api::V1::Admin::ApplicationsController < ApplicationController
             :session_id,
             :program,
             :department,
-            :previous_uoft_experience,
+            :previous_experience_summary,
             :yip,
             :annotation,
             :gpa,
-            :first_time_ta,
+            :previous_department_ta,
+            :previous_university_ta,
             :custom_question_answers
         )
     end

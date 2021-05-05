@@ -45,6 +45,10 @@ export function ApplicationDetails({
 }) {
     const survey = React.useMemo(() => {
         const posting = application.posting || { custom_questions: {} };
+        if (!posting.custom_questions) {
+            return null;
+        }
+
         Survey.StylesManager.applyTheme("bootstrap");
         Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
         const survey = new Survey.Model(
@@ -101,6 +105,24 @@ export function ApplicationDetails({
                     <tr>
                         <th>Year in Progress</th>
                         <td>{application.yip}</td>
+                    </tr>
+                    <tr>
+                        <th>Previous Experience</th>
+                        <td>
+                            {application.previous_department_ta != null
+                                ? application.previous_department_ta === true
+                                    ? "TAed for department; "
+                                    : "Has not TAed for department; "
+                                : null}
+                            {application.previous_university_ta != null
+                                ? application.previous_university_ta === true
+                                    ? "TAed for university; "
+                                    : "Has not TAed at this university; "
+                                : null}
+                            {application.previous_experience_summary
+                                ? `Experience Summary: ${application.previous_experience_summary}`
+                                : null}
+                        </td>
                     </tr>
                     <tr>
                         <th>Positions Applied For</th>
@@ -168,7 +190,7 @@ export function ApplicationDetails({
                         <tr className="custom-questions-row">
                             <th>Custom Questions</th>
                             <td>
-                                <Survey.Survey model={survey} />
+                                {survey && <Survey.Survey model={survey} />}
                             </td>
                         </tr>
                     )}

@@ -6,9 +6,10 @@ class DropExtraApplicationTables < ActiveRecord::Migration[6.1]
             t.string :department
             t.integer :yip
             t.string :annotation
-            t.boolean :first_time_ta
+            t.boolean :previous_department_ta
+            t.boolean :previous_university_ta
 
-            t.text :previous_uoft_experience
+            t.text :previous_experience_summary
             t.float :gpa
             t.json :custom_question_answers
         end

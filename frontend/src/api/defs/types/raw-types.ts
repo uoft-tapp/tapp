@@ -41,10 +41,11 @@ export interface RawApplication extends HasId {
     comments: string | null;
     program: string | null;
     department: string | null;
-    previous_uoft_experience: string | null;
+    previous_experience_summary: string | null;
     yip: number | null;
     gpa: number | null;
-    first_time_ta: boolean | null;
+    previous_department_ta: boolean | null;
+    previous_university_ta: boolean | null;
     custom_question_answers: unknown | null;
     annotation: string | null;
     documents: {

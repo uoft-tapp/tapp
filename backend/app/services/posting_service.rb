@@ -100,7 +100,9 @@ class PostingService
                 :comments,
                 :department,
                 :gpa,
-                :previous_uoft_experience,
+                :previous_experience_summary,
+                :previous_department_ta,
+                :previous_university_ta,
                 :program
             )
         # the year in progress is computed backwards from the date

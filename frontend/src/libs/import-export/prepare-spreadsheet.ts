@@ -168,7 +168,7 @@ export const prepareSpreadsheet = {
                     "GPA",
                     "Posting",
                     "Position Preferences",
-                    "Previous UofT Experience",
+                    "Previous Experience Summary",
                     "Comments",
                     "Documents",
                     "Custom Question Answers",
@@ -193,7 +193,7 @@ export const prepareSpreadsheet = {
                                 `${position_preference.preference_level}:${position_preference.position_code}`
                         )
                         .join("; "),
-                    application.previous_uoft_experience,
+                    application.previous_experience_summary,
                     application.comments,
                     application.documents
                         .map(

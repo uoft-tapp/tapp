@@ -120,26 +120,26 @@
             "elements": [
                 {
                     "type": "boolean",
-                    "name": "previously_ta_in_department",
-                    "title": "Have you had previous appointment(s) as a TA in this department?",
+                    "name": "previous_university_ta",
+                    "title": "Have you had previous appointment(s) as a TA at this university?",
                     "isRequired": true
                 },
                 {
                     "type": "boolean",
-                    "name": "previously_ta_in_other_department",
-                    "title": "Have you had previous appointment(s) as a TA in *other* departments at U of T?",
+                    "name": "previous_department_ta",
+                    "title": "Have you had previous appointment(s) as a TA in *this department*?",
                     "isRequired": true
                 },
                 {
                     "type": "boolean",
-                    "name": "previously_ta_in_other_university",
+                    "name": "previous_other_university_ta",
                     "title": "Have you had previous appointment(s) as a TA at another university?",
                     "isRequired": true
                 },
                 {
                     "type": "comment",
-                    "name": "previous_ta_summary",
-                    "visibleIf": "{previously_ta_in_department} = true or {previously_ta_in_other_department} = true or {previously_ta_in_other_university} = true",
+                    "name": "previous_experience_summary",
+                    "visibleIf": "{previous_department_ta} = true or {previous_university_ta} = true or {previous_other_university_ta} = true",
                     "title": "Please briefly describe your previous TA experience.",
                     "description": "If your experience is at U of T, you only need to list the course codes of courses you've TAed. If your experience is at another university, please include course titles along with other relevant information."
                 }
