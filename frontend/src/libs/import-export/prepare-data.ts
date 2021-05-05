@@ -59,7 +59,7 @@ export function preparePostingData(posting: Posting, dataFormat: ExportFormat) {
             }),
         },
         dataFormat,
-        "applications"
+        "postings"
     );
 }
 

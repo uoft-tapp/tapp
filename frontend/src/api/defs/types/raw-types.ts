@@ -114,7 +114,6 @@ export interface RawPosting extends HasId {
     close_date: string | null;
     availability: "auto" | "open" | "closed";
     custom_questions: { pages: { name: string; [key: string]: any }[] } | null;
-    posting_position_ids: number[];
     application_ids: number[];
     url_token: string;
 }

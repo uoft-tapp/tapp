@@ -15,6 +15,9 @@ import {
     ContractTemplate,
     Applicant,
     Ddah,
+    MinimalPosting,
+    Posting,
+    PostingPosition,
 } from "../../api/defs/types";
 
 /**
@@ -83,6 +86,14 @@ export interface PrepareFull {
         {
             id: number;
             assignments: Assignment[];
+        }
+    >;
+    posting: PrepareUpsertable<
+        MinimalPosting,
+        Posting,
+        {
+            id: number;
+            positions: Position[];
         }
     >;
 }
@@ -304,5 +315,53 @@ export const prepareFull: PrepareFull = {
             // We cannot import "signed" DDAHs, so the `status` is always null
             status: null,
         };
+    },
+    posting: function (minPosting: MinimalPosting, context?: any): any {
+        const { id, positions }: { id?: number; positions: Position[] } =
+            context || {};
+        if (!Array.isArray(positions)) {
+            throw new Error(
+                "You must pass a positions list to create a posting"
+            );
+        }
+        // We may or may not have an id. We lie to Typescript to keep it from complaining,
+        // since we create a posting without an id first and then update it to have an id
+        // if needed.
+        const ret: Posting = ({
+            name: minPosting.name,
+            applications: [],
+            availability: "auto",
+            open_date: minPosting.open_date,
+            close_date: minPosting.close_date,
+            custom_questions: minPosting.custom_questions,
+            intro_text: minPosting.intro_text,
+            url_token: "",
+            posting_positions: [],
+        } as unknown) as Posting;
+        let postingPositions: PostingPosition[] = minPosting.posting_positions.map(
+            (minPostingPosition) => {
+                const position = positions.find(
+                    (position) =>
+                        position.position_code ===
+                        minPostingPosition.position_code
+                );
+                if (position == null) {
+                    throw new Error(
+                        `Could not find position corresponding to "${minPostingPosition.position_code}"`
+                    );
+                }
+                return {
+                    hours: minPostingPosition.hours,
+                    num_positions: minPostingPosition.num_positions,
+                    position,
+                    posting: ret as Posting,
+                };
+            }
+        );
+        if (id != null) {
+            ret.id = id;
+        }
+        ret.posting_positions = postingPositions;
+        return ret;
     },
 };

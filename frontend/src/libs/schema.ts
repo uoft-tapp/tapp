@@ -56,6 +56,47 @@ export const applicantSchema: NormalizationSchema<
     baseName: "applicants",
 };
 
+export const postingSchema: NormalizationSchema<
+    [
+        "name",
+        "open_date",
+        "close_date",
+        "intro_text",
+        "custom_questions",
+        "position_code",
+        "num_positions",
+        "hours",
+        "posting_positions"
+    ]
+> = {
+    keys: [
+        "name",
+        "open_date",
+        "close_date",
+        "intro_text",
+        "custom_questions",
+        "position_code",
+        "num_positions",
+        "hours",
+        "posting_positions",
+    ],
+    keyMap: {
+        Name: "name",
+        "Open Date": "open_date",
+        "Close Date": "close_date",
+        "Intro Text": "intro_text",
+        "Custom Questions": "custom_questions",
+        "Position Code": "position_code",
+        "Num Positions": "num_positions",
+        "Hours per Assignment": "hours",
+        "Hours per Position": "hours",
+    },
+    requiredKeys: [],
+    primaryKey: "name",
+    dateColumns: ["open_date", "close_date"],
+    baseName: "postings",
+};
+
 export const positionSchema: NormalizationSchema<
     [
         "position_code",

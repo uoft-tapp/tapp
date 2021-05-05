@@ -172,7 +172,6 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             close_date: PropTypes.string,
             availability: PropTypes.oneOf(["auto", "open", "closed"]),
             custom_questions: PropTypes.any,
-            posting_position_ids: PropTypes.arrayOf(id),
             application_ids: PropTypes.arrayOf(id),
         }),
         posting_position: PropTypes.shape({
