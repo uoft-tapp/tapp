@@ -5,6 +5,32 @@ import { Application } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
 
+interface SurveyJsPage {
+    name: string;
+    elements: { name: string; type: string }[];
+}
+
+/**
+ * Strip any SurveyJs questions of type `html` from the question list.
+ * `html` questions are just descriptions without answers, so we
+ * normally don't show them.
+ *
+ * @param {*} custom_questions
+ * @returns
+ */
+function removeHtmlQuestions(custom_questions: any) {
+    if (!Array.isArray(custom_questions.pages)) {
+        return custom_questions;
+    }
+    const pages: SurveyJsPage[] = custom_questions.pages;
+    const filteredPages = pages.map((page) => ({
+        ...page,
+        elements: page.elements.filter((elm) => elm.type !== "html"),
+    }));
+
+    return { ...custom_questions, pages: filteredPages };
+}
+
 const PREFERENCE_LEVEL_TO_VARIANT: Record<number | string, string> = {
     3: "success",
     2: "primary",
@@ -21,7 +47,9 @@ export function ApplicationDetails({
         const posting = application.posting || { custom_questions: {} };
         Survey.StylesManager.applyTheme("bootstrap");
         Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-        const survey = new Survey.Model(posting.custom_questions);
+        const survey = new Survey.Model(
+            removeHtmlQuestions(posting.custom_questions)
+        );
         survey.showPreviewBeforeComplete = "showAnsweredQuestions";
         survey.showQuestionNumbers = "off";
         survey.questionsOnPageMode = "singlePage";

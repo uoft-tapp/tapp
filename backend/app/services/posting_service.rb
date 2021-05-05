@@ -13,6 +13,12 @@ class PostingService
     def survey
         fixed_survey =
             JSON.parse File.read(Rails.root.join('app', 'data', 'survey.json'))
+        position_description_template =
+            Liquid::Template.parse(
+                File.read(
+                    Rails.root.join('app', 'data', 'position_descriptions.html')
+                )
+            )
 
         # Set the global survey title
         fixed_survey['title'] = @posting.name
@@ -24,13 +30,29 @@ class PostingService
                 page['name'] == 'preferences_page'
             end
 
-        preferences_page['elements'][0]['rows'] = assemble_preferences_rows
+        preferences_question =
+            preferences_page['elements'].find do |elm|
+                elm['name'] == 'position_preferences'
+            end
+        preferences_question['rows'] = assemble_preferences_rows
+        position_descriptions =
+            preferences_page['elements'].find do |elm|
+                elm['name'] == 'position_descriptions'
+            end
+        position_descriptions['html'] = position_description_template.render position_description_subs
 
-        # Add any custom questions there may be
+        # Add any custom questions there may be.
+        # These should show up after all fixed questions but before the comments page.
         custom_questions = @posting.custom_questions
-        if custom_questions.respond_to? :dig
-            fixed_survey['pages'].concat custom_questions['pages']
-        end
+        custom_pages =
+            custom_questions.respond_to?(:dig) ? custom_questions['pages'] : []
+
+        comments_page, fixed_pages =
+            fixed_survey['pages'].partition do |page|
+                page['name'] == 'comments_page'
+            end
+
+        fixed_survey['pages'] = fixed_pages + custom_pages + comments_page
 
         fixed_survey
     end
@@ -158,6 +180,31 @@ class PostingService
     end
 
     private
+
+    # Assemble JSON that can be used to do the substitutions in a liquid template.
+    def position_description_subs
+        {
+            'positions' =>
+                PostingPosition.joins(:position).where(posting: @posting).pluck(
+                    'positions.position_code',
+                    'positions.position_title',
+                    'positions.duties',
+                    'positions.qualifications',
+                    'hours',
+                    'num_positions'
+                )
+                    .map do |(code, title, duties, qualifications, hours, num_positions)|
+                    {
+                        position_code: code,
+                        position_title: title,
+                        duties: duties,
+                        qualifications: qualifications,
+                        hours: hours,
+                        num_positions: num_positions
+                    }.stringify_keys
+                end
+        }
+    end
 
     # We need to use the `posting_positions` to create
     def assemble_preferences_rows

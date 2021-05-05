@@ -116,12 +116,49 @@
             ]
         },
         {
+            "name": "previous_experience_page",
+            "elements": [
+                {
+                    "type": "boolean",
+                    "name": "previously_ta_in_department",
+                    "title": "Have you had previous appointment(s) as a TA in this department?",
+                    "isRequired": true
+                },
+                {
+                    "type": "boolean",
+                    "name": "previously_ta_in_other_department",
+                    "title": "Have you had previous appointment(s) as a TA in *other* departments at U of T?",
+                    "isRequired": true
+                },
+                {
+                    "type": "boolean",
+                    "name": "previously_ta_in_other_university",
+                    "title": "Have you had previous appointment(s) as a TA at another university?",
+                    "isRequired": true
+                },
+                {
+                    "type": "comment",
+                    "name": "previous_ta_summary",
+                    "visibleIf": "{previously_ta_in_department} = true or {previously_ta_in_other_department} = true or {previously_ta_in_other_university} = true",
+                    "title": "Please briefly describe your previous TA experience.",
+                    "description": "If your experience is at U of T, you only need to list the course codes of courses you've TAed. If your experience is at another university, please include course titles along with other relevant information."
+                }
+            ],
+            "title": "Work Experience"
+        },
+        {
             "name": "preferences_page",
             "elements": [
                 {
+                    "type": "html",
+                    "name": "position_descriptions",
+                    "html": "<h5>Duties and Qualifications</h5>\n<p>Please find information below regarding the duties and qualifications for each position.</p>"
+                },
+                {
                     "type": "matrix",
                     "name": "position_preferences",
-                    "title": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark no more than 5 positions as High); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "title": "Position Preferences",
+                    "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark no more than 5 positions as High); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "cellType": "rating",
                     "columns": [
                         { "value": 3, "text": "High" },
@@ -133,6 +170,17 @@
                     "rows": [
                         { "text": "Example Course", "value": "EXAMPLE_COURSE" }
                     ]
+                }
+            ]
+        },
+        {
+            "name": "comments_page",
+            "elements": [
+                {
+                    "type": "comment",
+                    "name": "comments",
+                    "title": "Additional Comments",
+                    "description": "If there is anything you feel we should know, special arrangements/requests for work, etc., enter it below."
                 }
             ]
         }
