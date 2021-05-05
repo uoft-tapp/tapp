@@ -5,6 +5,32 @@ import { Application } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
 
+interface SurveyJsPage {
+    name: string;
+    elements: { name: string; type: string }[];
+}
+
+/**
+ * Strip any SurveyJs questions of type `html` from the question list.
+ * `html` questions are just descriptions without answers, so we
+ * normally don't show them.
+ *
+ * @param {*} custom_questions
+ * @returns
+ */
+function removeHtmlQuestions(custom_questions: any) {
+    if (!Array.isArray(custom_questions.pages)) {
+        return custom_questions;
+    }
+    const pages: SurveyJsPage[] = custom_questions.pages;
+    const filteredPages = pages.map((page) => ({
+        ...page,
+        elements: page.elements.filter((elm) => elm.type !== "html"),
+    }));
+
+    return { ...custom_questions, pages: filteredPages };
+}
+
 const PREFERENCE_LEVEL_TO_VARIANT: Record<number | string, string> = {
     3: "success",
     2: "primary",
@@ -19,9 +45,16 @@ export function ApplicationDetails({
 }) {
     const survey = React.useMemo(() => {
         const posting = application.posting || { custom_questions: {} };
+        if (!posting.custom_questions) {
+            return null;
+        }
+
         Survey.StylesManager.applyTheme("bootstrap");
         Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
-        const survey = new Survey.Model(posting.custom_questions);
+        const survey = new Survey.Model(
+            // HTML questions are informational for survey takers. We don't need them when viewing survey responses
+            removeHtmlQuestions(posting.custom_questions)
+        );
         survey.showPreviewBeforeComplete = "showAnsweredQuestions";
         survey.showQuestionNumbers = "off";
         survey.questionsOnPageMode = "singlePage";
@@ -72,6 +105,24 @@ export function ApplicationDetails({
                     <tr>
                         <th>Year in Progress</th>
                         <td>{application.yip}</td>
+                    </tr>
+                    <tr>
+                        <th>Previous Experience</th>
+                        <td>
+                            {application.previous_department_ta != null
+                                ? application.previous_department_ta === true
+                                    ? "TAed for department; "
+                                    : "Has not TAed for department; "
+                                : null}
+                            {application.previous_university_ta != null
+                                ? application.previous_university_ta === true
+                                    ? "TAed for university; "
+                                    : "Has not TAed at this university; "
+                                : null}
+                            {application.previous_experience_summary
+                                ? `Experience Summary: ${application.previous_experience_summary}`
+                                : null}
+                        </td>
                     </tr>
                     <tr>
                         <th>Positions Applied For</th>
@@ -139,7 +190,7 @@ export function ApplicationDetails({
                         <tr className="custom-questions-row">
                             <th>Custom Questions</th>
                             <td>
-                                <Survey.Survey model={survey} />
+                                {survey && <Survey.Survey model={survey} />}
                             </td>
                         </tr>
                     )}

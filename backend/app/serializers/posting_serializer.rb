@@ -8,13 +8,8 @@ class PostingSerializer < ActiveModel::Serializer
                :intro_text,
                :availability,
                :custom_questions,
-               :posting_position_ids,
                :application_ids,
                :url_token
-
-    def posting_position_ids
-        object.posting_positions.ids
-    end
 
     def application_ids
         object.applications.ids

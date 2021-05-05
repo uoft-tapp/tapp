@@ -56,8 +56,7 @@ export interface ActiveUser extends Omit<User, "id"> {
     active_role: UserRole;
 }
 
-export interface Posting
-    extends Omit<RawPosting, "posting_position_ids" | "application_ids"> {
+export interface Posting extends Omit<RawPosting, "application_ids"> {
     posting_positions: PostingPosition[];
     applications: Application[];
 }

@@ -29,6 +29,7 @@ import type {
     RequireSome,
 } from "../defs/types";
 import { positionsSelector } from "./positions";
+import { ExportFormat } from "../../libs/import-export";
 
 // actions
 const fetchPostingsSuccess = actionFactory<RawPosting[]>(
@@ -92,11 +93,21 @@ export const fetchPosting = validatedApiDispatcher({
     },
 });
 
+function prepPostingForApi(posting: Partial<Posting>): Partial<RawPosting> {
+    // eslint warns about unused variables by default. We want to ignore that warning in this case.
+    // eslint-disable-next-line
+    const [ret, _rest] = splitObjByProps(posting, [
+        "posting_positions",
+        "applications",
+    ]);
+    return ret;
+}
+
 export const upsertPosting = validatedApiDispatcher({
     name: "upsertPosting",
     description: "Add/insert posting",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<RawPosting>) => async (
+    dispatcher: (payload: Partial<RawPosting> | Partial<Posting>) => async (
         dispatch,
         getState
     ) => {
@@ -108,9 +119,33 @@ export const upsertPosting = validatedApiDispatcher({
         const { id: activeSessionId } = activeSession;
         const data = (await apiPOST(
             `/${role}/sessions/${activeSessionId}/postings`,
-            payload
+            prepPostingForApi(payload)
         )) as RawPosting;
         dispatch(upsertOnePostingSuccess(data));
+
+        // If there are posting_positions included with the posting, upsert them too
+        const posting_positions = (payload as Partial<Posting>)
+            .posting_positions;
+        if (Array.isArray(posting_positions)) {
+            const posting_id = data.id;
+            await Promise.all(
+                posting_positions.map((postingPosition) =>
+                    dispatch(
+                        upsertPostingPosition({
+                            ...postingPosition,
+                            // Since we may be upserting into a newly-created posting, the supplied data
+                            // might not have the posting id. Insert it just to be sure it's there.
+                            posting_id,
+                            posting: {
+                                ...postingPosition.posting,
+                                id: posting_id,
+                            },
+                        })
+                    )
+                )
+            );
+            // TODO: we currently don't check to see if there are any PostingPositions that we should delete.
+        }
         return data;
     },
 });
@@ -231,6 +266,33 @@ export const deletePostingPosition = validatedApiDispatcher({
     },
 });
 
+export const exportPosting = validatedApiDispatcher({
+    name: "exportPosting",
+    description: "Export a posting",
+    onErrorDispatch: (e) => fetchError(e.toString()),
+    dispatcher: (
+        postingId: number,
+        formatter: (posting: Posting, exportFormat: ExportFormat) => File,
+        format: ExportFormat = "spreadsheet"
+    ) => async (dispatch, getState) => {
+        if (!(formatter instanceof Function)) {
+            throw new Error(
+                `"formatter" must be a function when using the export action.`
+            );
+        }
+        // Re-fetch all applicants from the server in case things happened to be out of sync.
+        await Promise.all([dispatch(fetchPostings())]);
+        const postings = postingsSelector(getState());
+        const posting = postings.find((posting) => posting.id === postingId);
+
+        if (posting == null) {
+            throw new Error(`Could not find posting with id ${postingId}`);
+        }
+
+        return formatter(posting, format);
+    },
+});
+
 function isRawPostingPosition(
     obj: any
 ): obj is RequireSome<RawPostingPosition, "position_id" | "posting_id"> {
@@ -282,7 +344,6 @@ function combinePostingAndPostingPosition(
     // eslint-disable-next-line
     const [partialPosting, _postingRest] = splitObjByProps(rawPosting, [
         "application_ids",
-        "posting_position_ids",
     ]);
     const posting: Posting = {
         ...partialPosting,
