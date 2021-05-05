@@ -1,6 +1,6 @@
 import { dataToFile } from "./data-to-file";
 import { prepareSpreadsheet } from "./prepare-spreadsheet";
-import { prepareMinimal } from "./prepare-json";
+import { prepareMinimal } from "./prepare-minimal";
 import type {
     Applicant,
     Application,

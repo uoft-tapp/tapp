@@ -9,7 +9,7 @@ import {
     WageChunk,
 } from "../../api/defs/types";
 import { spreadsheetUndefinedToNull } from "../import-export/undefinedToNull";
-import { prepareMinimal } from "./prepare-json";
+import { prepareMinimal } from "./prepare-minimal";
 
 /**
  * Type of a spreadsheet cell
