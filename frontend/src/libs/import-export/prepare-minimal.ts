@@ -259,7 +259,8 @@ export const prepareMinimal = {
             gpa: application.gpa,
             program: application.program,
             yip: application.yip,
-            previous_experience_summary: application.previous_experience_summary,
+            previous_experience_summary:
+                application.previous_experience_summary,
             previous_department_ta: application.previous_department_ta,
             previous_university_ta: application.previous_university_ta,
             documents: application.documents,
