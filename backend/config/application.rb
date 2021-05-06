@@ -59,7 +59,7 @@ module Tapp
         email_port = ENV.fetch('EMAIL_PORT', 25).presence || 25
         config.action_mailer.raise_delivery_errors = true
         config.action_mailer.default_url_options = {
-            host: '${confit.base_url}'
+            host: config.base_url
         }
         config.action_mailer.perform_caching = true
         config.action_mailer.delivery_method = :smtp

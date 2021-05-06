@@ -273,7 +273,7 @@ export function postingTests(api) {
         });
     });
 
-    it.skip("Cannot create a posting_position with a position associated with a different session than the posting", async () => {
+    it("Cannot create a posting_position with a position associated with a different session than the posting", async () => {
         const newPosting = {
             name: "CSC500F TA",
             intro_text: "Posting for CSC500F",
@@ -368,7 +368,7 @@ export function postingTests(api) {
         ).toBeUndefined();
     });
 
-    it.skip("Deleting a posting also deletes all associated posting_positions", async () => {
+    it("Deleting a posting also deletes all associated posting_positions", async () => {
         // Recreate the posting_position because it has been deleted in the previous test case
         resp = await apiPOST(
             `/admin/postings/${posting.id}/posting_positions`,
