@@ -18,6 +18,8 @@ import {
     activeUserSelector,
     debugOnlySetActiveUser,
     debugOnlyFetchUsers,
+    sessionsSelector,
+    fetchSessions,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
 import { LoadMockButton } from "./load-mock-data";
@@ -120,6 +122,11 @@ const ConnectedToggleMockApi = connect(null, { setMockAPIState })(
     ToggleMockApi
 );
 
+const ConnectedLoadMockButton = connect(
+    (state) => ({ sessions: sessionsSelector(state) }),
+    { fetchSessions }
+)(LoadMockButton);
+
 function DevFrame(props) {
     return (
         <div id="dev-frame" className="bg-info">
@@ -139,7 +146,7 @@ function DevFrame(props) {
                     <Navbar.Collapse className="justify-content-end">
                         <ConnectedActiveUserButton />
                         <ConnectedToggleMockApi />
-                        <LoadMockButton />
+                        <ConnectedLoadMockButton />
                     </Navbar.Collapse>
                 </Navbar>
             </div>

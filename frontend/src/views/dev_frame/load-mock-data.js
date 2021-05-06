@@ -7,7 +7,6 @@ import {
     upsertSession,
     upsertInstructor,
     upsertContractTemplate,
-    fetchSessions,
     setActiveSession,
 } from "../../api/actions";
 
@@ -18,8 +17,7 @@ import {
 } from "../../libs/schema";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Button, Modal, ProgressBar } from "react-bootstrap";
-import mockSessionData from "../../mock_data/session.json";
+import { Button, Modal, ProgressBar, Dropdown } from "react-bootstrap";
 import mockContractTemplate from "../../mock_data/contract_template.json";
 import mockInstructors from "../../mock_data/instructor.json";
 import mockApplicantData from "../../mock_data/applicant.json";
@@ -27,6 +25,8 @@ import mockPositionData from "../../mock_data/position.json";
 import mockAssignmentData from "../../mock_data/assignment.json";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
+
+const ident = () => {};
 
 /**
  * A button to automatically set up a mock session with contract_template and
@@ -38,11 +38,13 @@ import { prepareFull } from "../../libs/import-export";
  * @export
  * @returns {React.ElementType}
  */
-function LoadMockButton() {
-    const [disable, setDisable] = React.useState(false);
+function LoadMockButton({ sessions = [], fetchSessions = ident }) {
+    const [targetSession, setTargetSession] = React.useState(null);
+    const [dropdownVisible, setDropdownVisible] = React.useState(false);
+    const [confirm, setConfirm] = React.useState(false);
     const [inProgress, setInProgress] = React.useState(false);
     const [stage, setStage] = React.useState("");
-    const [now, setNow] = React.useState(0);
+    const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
     let session;
@@ -52,154 +54,220 @@ function LoadMockButton() {
     let count;
     let total;
 
-    async function setupMockSession() {
-        try {
-            setStage("Session");
-
-            // create the mock session
-            session = await dispatch(upsertSession(mockSessionData));
-            await dispatch(setActiveSession(session));
-
-            setStage("Contract Template");
-            const currContractTemplate = await dispatch(
-                upsertContractTemplate(mockContractTemplate)
-            );
-            contractTemplates.push(currContractTemplate);
-            setNow(50);
-            // upsert any missing instructors
-            setStage("Instructors");
-            for (let instructor of mockInstructors) {
-                if (!instructors.some((i) => i.utorid === instructor.utorid)) {
-                    const newInstructor = await dispatch(
-                        upsertInstructor(instructor)
-                    );
-                    instructors.push(newInstructor);
-                }
-            }
-            setNow(100);
-        } catch (error) {
-            console.error(error);
-            return error;
+    React.useEffect(() => {
+        // Whenever the dropdown is open, fetch a list of all existing sessions.
+        // This would normally not be a good idea, but since this button is only
+        // used in debug mode, it's okay.
+        if (dropdownVisible) {
+            fetchSessions();
         }
+    }, [dropdownVisible, fetchSessions]);
+
+    async function setupMockSession() {
+        setStage("Session");
+        setProgress(0);
+
+        if (targetSession === null) {
+            // create the mock session
+            const mockSessionData = {
+                start_date: "2020/01/01",
+                end_date: "2021/12/31",
+                name: new Date().toLocaleString(),
+                rate1: 50,
+            };
+            session = await dispatch(upsertSession(mockSessionData));
+        } else {
+			// use the selected session
+            session = targetSession;
+        }
+
+        await dispatch(setActiveSession(session));
+
+        setProgress(100);
+    }
+
+    async function setupMockContractTemplate() {
+        setProgress(0);
+        setStage("Contract Template");
+        const contractTemplate = await dispatch(
+            upsertContractTemplate(mockContractTemplate)
+        );
+        contractTemplates.push(contractTemplate);
+        setProgress(100);
+    }
+
+    async function setupMockInstructors() {
+        setStage("Instructors");
+        setProgress(0);
+        for (let instructor of mockInstructors) {
+            if (!instructors.some((i) => i.utorid === instructor.utorid)) {
+                const newInstructor = await dispatch(
+                    upsertInstructor(instructor)
+                );
+                instructors.push(newInstructor);
+            }
+        }
+        setProgress(100);
     }
 
     async function setupMockPositions() {
-        try {
-            setStage("Positions");
-            setNow(0);
-            count = 0;
-            total = mockPositionData.length;
-            const data = normalizeImport(
-                {
-                    fileType: "json",
-                    data: mockPositionData,
-                },
-                positionSchema
-            ).map((p) =>
-                prepareFull.position(p, {
-                    instructors,
-                    contractTemplates,
-                })
-            );
-            for (let p of data) {
-                const position = await dispatch(upsertPosition(p));
-                positions.push(position);
-                count++;
-                setNow(Math.round((count / total) * 100));
-            }
-        } catch (error) {
-            console.error(error);
-            return error;
+        setStage("Positions");
+        setProgress(0);
+        count = 0;
+        total = mockPositionData.length;
+        const data = normalizeImport(
+            {
+                fileType: "json",
+                data: mockPositionData,
+            },
+            positionSchema
+        ).map((p) =>
+            prepareFull.position(p, {
+                instructors,
+                contractTemplates,
+            })
+        );
+        for (const p of data) {
+            const position = await dispatch(upsertPosition(p));
+            positions.push(position);
+            count++;
+            setProgress(Math.round((count / total) * 100));
         }
     }
 
     async function setupMockApplicants() {
-        try {
-            setStage("Applicants");
-            setNow(0);
-            count = 0;
-            total = mockApplicantData.length;
-            const data = normalizeImport(
-                {
-                    fileType: "json",
-                    data: mockApplicantData,
-                },
-                applicantSchema
-            );
-            for (let a of data) {
-                const applicant = await dispatch(upsertApplicant(a));
-                applicants.push(applicant);
-                count++;
-                setNow(Math.round((count / total) * 100));
-            }
-        } catch (error) {
-            console.error(error);
-            return error;
+        setStage("Applicants");
+        setProgress(0);
+        count = 0;
+        total = mockApplicantData.length;
+        const data = normalizeImport(
+            {
+                fileType: "json",
+                data: mockApplicantData,
+            },
+            applicantSchema
+        );
+        for (const a of data) {
+            const applicant = await dispatch(upsertApplicant(a));
+            applicants.push(applicant);
+            count++;
+            setProgress(Math.round((count / total) * 100));
         }
     }
 
     async function setupMockAssignments() {
-        try {
-            setStage("Assignments");
-            setNow(0);
-            count = 0;
-            total = mockAssignmentData.length;
-            const data = normalizeImport(
-                {
-                    fileType: "json",
-                    data: mockAssignmentData,
-                },
-                assignmentSchema
-            ).map((p) =>
-                prepareFull.assignment(p, {
-                    positions,
-                    applicants,
-                    session,
-                })
-            );
-            for (let a of data) {
-                await dispatch(upsertAssignment(a));
-                count++;
-                setNow(Math.round((count / total) * 100));
-            }
-        } catch (error) {
-            console.error(error);
-            return error;
+        setStage("Assignments");
+        setProgress(0);
+        count = 0;
+        total = mockAssignmentData.length;
+        const data = normalizeImport(
+            {
+                fileType: "json",
+                data: mockAssignmentData,
+            },
+            assignmentSchema
+        ).map((p) =>
+            prepareFull.assignment(p, {
+                positions,
+                applicants,
+                session,
+            })
+        );
+        for (const a of data) {
+            await dispatch(upsertAssignment(a));
+            count++;
+            setProgress(Math.round((count / total) * 100));
         }
     }
 
-    async function clickHandler() {
+    async function loadMock() {
         try {
-            const sessions = await dispatch(fetchSessions());
-            if (sessions.some((s) => s.name === mockSessionData.name)) {
-                setDisable(true);
-                return;
-            }
+            setConfirm(false);
             setInProgress(true);
+
             await setupMockSession();
+            await setupMockContractTemplate();
+            await setupMockInstructors();
             await setupMockPositions();
             await setupMockApplicants();
             await setupMockAssignments();
-            setInProgress(false);
         } catch (error) {
+            console.error(error);
+        } finally {
             setInProgress(false);
-            return;
+            setTargetSession(null);
         }
+    }
+
+    function onSelectHandler(i) {
+        if (i !== "new") {
+            setTargetSession(sessions[i]);
+        }
+        setConfirm(true);
     }
 
     return (
         <span
-            title={"One-click loads all mock data JSON files"}
+            title="One-click loads all mock data JSON files"
             className="mock-button"
         >
-            <Button onClick={clickHandler}>Load Mock</Button>
-            <Modal show={disable} onHide={() => setDisable(false)} size="md">
+            <Dropdown
+                onSelect={onSelectHandler}
+                onToggle={(desiredVisibility) =>
+                    setDropdownVisible(desiredVisibility)
+                }
+                show={dropdownVisible}
+                alignRight
+            >
+                <Dropdown.Toggle split variant="dark">
+                    Load Mock
+                </Dropdown.Toggle>
+                <Dropdown.Menu flip={true}>
+                    <Dropdown.Header>
+                        {sessions.length
+                            ? "Load to existing sessions"
+                            : "No existing sessions"}
+                    </Dropdown.Header>
+                    {(sessions || []).map((session, i) => (
+                        <Dropdown.Item key={i} eventKey={i}>
+                            {session.name}
+                        </Dropdown.Item>
+                    ))}
+                    <Dropdown.Divider />
+                    <Dropdown.Item eventKey="new"> Create New</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+
+            <Modal
+                show={confirm}
+                onHide={() => {
+                    setConfirm(false);
+                    setTargetSession(null);
+                }}
+                size="md"
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title>{"Mock session already exists"}</Modal.Title>
+                    <Modal.Title>Loading Mock</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {"Please delete the mock session first before reloading."}
+                    {targetSession === null
+                        ? "Are you sure to create a new session and load mock data?"
+                        : `Are you sure to load mock data into ${targetSession.name}?`}
                 </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setConfirm(false);
+                            setTargetSession(null);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={loadMock}>
+                        Confirm
+                    </Button>
+                </Modal.Footer>
             </Modal>
             <Modal show={inProgress} size="md">
                 <Modal.Header>
@@ -214,8 +282,8 @@ function LoadMockButton() {
                     }}
                 >
                     <ProgressBar
-                        now={now}
-                        label={`${now}%`}
+                        now={progress}
+                        label={`${progress}%`}
                         style={{ minWidth: "90%" }}
                     />
                 </Modal.Body>
