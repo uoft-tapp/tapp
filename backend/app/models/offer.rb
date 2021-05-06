@@ -33,7 +33,8 @@ class Offer < ApplicationRecord
         position = assignment.position
 
         # inherit attributes defined from the applicant and the position
-        self.attributes = attributes.merge(
+        self.attributes =
+            attributes.merge(
                 applicant.as_json(only: applicant_attrs),
                 position.as_json(only: position_attrs)
             )
@@ -51,7 +52,6 @@ class Offer < ApplicationRecord
         self.ta_coordinator_email =
             Rails.application.config.ta_coordinator_email
         self.ta_coordinator_name = Rails.application.config.ta_coordinator_name
-        self
     end
 
     def set_status_date
@@ -69,6 +69,7 @@ class Offer < ApplicationRecord
         end
     end
 end
+
 # == Schema Information
 #
 # Table name: offers

@@ -79,7 +79,7 @@ describe("API tests", () => {
     describe("reporting_tag tests", () => {
         reportingTagsTests({ apiGET, apiPOST });
     });
-    describe.skip("`/admin/applications` tests", () => {
+    describe("`/admin/applications` tests", () => {
         applicationsTests({ apiGET, apiPOST });
     });
     describe("unknown api route tests", () => {

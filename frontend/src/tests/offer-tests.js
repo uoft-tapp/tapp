@@ -515,6 +515,55 @@ export function offerEmailTests(api) {
         // The subject should contain the position code
         expect(newEmail.recipients[0]).toMatch(new RegExp(applicant.email));
     });
+
+    it("modify the assignment hours and indicate the change in the offer email.", async () => {
+        // For comparing the two hours
+        let initialHours = assignment.hours;
+
+        let resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/withdraw`
+        );
+        expect(resp).toHaveStatus("success");
+
+        let newAssignment = assignment;
+        let newHours = assignment.hours + 5;
+        newAssignment.hours = newHours;
+        resp = await apiPOST(`/admin/assignments`, newAssignment);
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/email`
+        );
+        expect(resp).toHaveStatus("success");
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const afterEmails = (
+            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+        ).data;
+        // Assume the email we just sent is at the end of the list
+        const newEmail = afterEmails[afterEmails.length - 1];
+
+        const emailBody = (
+            await axios.get(
+                `${MAILCATCHER_BASE_URL}/messages/${newEmail.id}.source`
+            )
+        ).data;
+
+        const expected = `hours have changed from ${initialHours.toFixed(
+            1
+        )} to ${newHours.toFixed(1)}`;
+
+        if (!emailBody.includes(expected)) {
+            throw new Error(
+                `Show diff in hours failed, expected "${expected}" to be contained in email body, but it wasn't`
+            );
+        }
+    });
 }
 
 /**

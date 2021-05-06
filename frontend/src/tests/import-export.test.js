@@ -385,6 +385,9 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
     expect(normalizedJsonDdahs).toMatchSnapshot();
 });
 
+it.todo("Import Postings from JSON/CSV/XLSX");
+it.todo("Export Postings to JSON/CSV/XLSX");
+
 it("Compute Instructors diff", () => {
     // modified instructor data used for computing the diff with initial objects
     const modifiedInstructorData = reduxStoreData.instructors.map(

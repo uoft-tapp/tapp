@@ -12,6 +12,7 @@ import type {
     RawDdah,
     RawDuty,
     RawInstructor,
+    RawOffer,
     RawPosition,
     RawPosting,
     RawPostingPosition,
@@ -21,6 +22,7 @@ import type {
 } from "./raw-types";
 
 export type Duty = RawDuty;
+export type Offer = RawOffer;
 export type WageChunk = Omit<RawWageChunk, "assignment_id">;
 export type ContractTemplate = RawContractTemplate;
 export type Instructor = RawInstructor;
@@ -39,7 +41,8 @@ export interface Assignment
     extends Omit<RawAssignment, "applicant_id" | "position_id"> {
     applicant: Applicant;
     position: Position;
-    wage_chunks: WageChunk[];
+    wage_chunks?: WageChunk[];
+    offers?: Offer[];
 }
 
 export interface Position
@@ -53,8 +56,7 @@ export interface ActiveUser extends Omit<User, "id"> {
     active_role: UserRole;
 }
 
-export interface Posting
-    extends Omit<RawPosting, "posting_position_ids" | "application_ids"> {
+export interface Posting extends Omit<RawPosting, "application_ids"> {
     posting_positions: PostingPosition[];
     applications: Application[];
 }

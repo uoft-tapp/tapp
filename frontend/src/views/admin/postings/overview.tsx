@@ -13,6 +13,7 @@ import { FaPlus } from "react-icons/fa";
 import { ConnectedPostingsList } from "./posting-list";
 import { ConnectedAddPostingDialog } from "./add-posting-dialog";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { ConnectedImportPostingAction } from "./import-export";
 
 function ConnectedPostingOverview() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
@@ -43,6 +44,7 @@ function ConnectedPostingOverview() {
                     New Posting
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
+                <ConnectedImportPostingAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (

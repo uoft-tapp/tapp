@@ -24,6 +24,21 @@ class Api::V1::Admin::PostingPositionsController < ApplicationController
     def create
         find_posting
         find_posting_position
+
+        # If @posting_position is non-nil, it is most likely from the same session.
+        # If it is nil, either it is brand new, or it doesn't belong to the current session.
+        # Either way, we look up the position to check that it belongs to the same session as the posting
+        position =
+            if @posting_position.nil?
+                Position.find_by(id: params[:position_id])
+            else
+                @posting_position.position
+            end
+        if !position.nil? && position.session_id != @posting.session_id
+            raise StandardError,
+                  'Cannot create a posting_position for a position and posting that belong to different sessions'
+        end
+
         upsert
         render_success @posting_position
     end

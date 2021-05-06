@@ -246,7 +246,7 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
                     return (
                         <li key={duty.order}>
                             <span className="ddah-duty-hours">
-                                {duty.hours}
+                                {category === "note" ? null : duty.hours}
                             </span>
                             <span
                                 className={`ddah-duty-category ${category}`}

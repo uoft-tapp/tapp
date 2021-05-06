@@ -19,6 +19,7 @@ import { useParams } from "react-router";
 import { ConnectedPostingDetailsView } from "./posting-details/details-view";
 import { Modal } from "react-bootstrap";
 import { FaLink } from "react-icons/fa";
+import { ConnectedExportPostingsAction } from "./import-export";
 
 function PostingLinkDialog({
     posting,
@@ -111,6 +112,7 @@ function ConnectedPostingDetails() {
                     Get Link to Posting
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
+                <ConnectedExportPostingsAction postingId={posting_id} />
             </ActionsList>
             <ContentArea>
                 {activeSession ? null : (

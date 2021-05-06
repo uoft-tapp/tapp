@@ -1,0 +1,30 @@
+<style>
+    dd {
+        margin-bottom: revert;
+        margin-left: revert;
+    }
+</style>
+<h5>Duties and Qualifications</h5>
+<p>
+    Please find information below regarding the duties and qualifications for
+    each position.
+</p>
+<dl>
+    {% for position in positions %}
+    <dt>
+        {{position.position_code}}{% if position.position_title %} ({{
+        position.position_title }}){% endif %}
+    </dt>
+    <dd>{{ position.num_positions }} positions at {{ position.hours }} hours</dd>
+    {% if position.duties %}
+    <dd>
+        <em>Duties:</em> {{ position.duties }}
+    </dd>
+    {% endif %}
+    {% if position.qualifications %}
+    <dd>
+        <em>Qualifications:</em> {{ position.qualifications }}
+    </dd>
+    {% endif %}
+    {% endfor %}
+</dl>

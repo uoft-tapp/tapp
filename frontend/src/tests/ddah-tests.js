@@ -304,7 +304,7 @@ export function ddahTests(api) {
     });
 
     // Ddah duty descriptions should start with
-    // "prep:", "training:", "meeting:", "contact:", "marking:", or "other:".
+    // "prep:", "training:", "meeting:", "contact:", "marking:", "other:", or "note:".
     // When uploading, basic variants are allowed and should be substituted
     // for the normalized version. For example, "Preparation: weekly sessions"
     // should become "prep:weekly sessions". Whitespace in front of the prefix

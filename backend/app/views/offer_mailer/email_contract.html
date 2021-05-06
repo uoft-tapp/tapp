@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style></style>
+    </head>
+    <body>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        {% if status_message %}
+        <p style="color: blue">
+            This is an email about an offer that was {{ status_message }}.
+        </p>
+        {% endif %}
+        <p>
+            We would like to offer you a position as a TA for
+            <em>
+                <span style="color: red">{{ position_code }}</span> {{
+                position_title }}</em
+            >
+            for {{ hours }} hours.
+        </p>
+        {% if changes_summary && changes_summary.length %}
+        <p>
+            This offer replaces a previous offer, and differs from the previous
+            offer in the following way:
+        </p>
+        <ul>
+            {% for change in changes_summary %}
+            <li>{{ change }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p>
+            Please click the link below to view your offer and accept or reject
+            it:<br />
+            <a href="https://{{ url }}">https://{{ url }}</a>
+        </p>
+
+        <p>Thanks!</p>
+    </body>
+</html>
