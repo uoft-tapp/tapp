@@ -77,7 +77,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
             };
             session = await dispatch(upsertSession(mockSessionData));
         } else {
-			// use the selected session
+            // use the selected session
             session = targetSession;
         }
 
