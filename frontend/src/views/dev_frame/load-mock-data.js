@@ -208,7 +208,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
 
     return (
         <span
-            title="Set which session you are loading the mock data into. Otherwise it creates a new session."
+            title="Set which session you are loading the mock data into. Otherwise it creates a new session to load."
             className="mock-button"
         >
             <Dropdown
