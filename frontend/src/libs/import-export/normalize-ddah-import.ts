@@ -38,12 +38,17 @@ export function normalizeDdahImports(
     if (data.fileType === "spreadsheet") {
         const unwrapped = data.data;
         // Get an upper bound for the maximum number of duties that the spreadsheet might have
-        const maxDuties = Math.round(
+        let maxDuties = Math.round(
             Math.max(
                 ...unwrapped.map((row: object) => Object.keys(row).length),
                 0
             ) / 2
         );
+        // If cells are blank, SheetJS does not import them. Therefore,
+        // the max number of cells found will be an under-count. This
+        // caused issue https://github.com/uoft-tapp/tapp/issues/575
+        // As an ugly hack, we just assume there's no more than 50 additional duties.
+        maxDuties += 50;
 
         // We need to generate a keymap for all the likely column names
         const keyMap: { [key: string]: string } = {
