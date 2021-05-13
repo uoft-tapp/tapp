@@ -385,6 +385,19 @@ it("Import Ddahs from JSON/CSV/XLSX", () => {
     expect(normalizedJsonDdahs).toMatchSnapshot();
 });
 
+it("Import Ddahs from JSON/CSV/XLSX with many duties", () => {
+    // import correct ddahs from XLSX
+    let normalizedSpreadsheetDdahs = normalizeDdahImports(
+        {
+            fileType: "spreadsheet",
+            data: parseSpreadsheet("ddahs_many_duties.xlsx"),
+        },
+        reduxStoreData.applicants,
+        false
+    );
+    expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
+});
+
 it.todo("Import Postings from JSON/CSV/XLSX");
 it.todo("Export Postings to JSON/CSV/XLSX");
 

@@ -35,7 +35,7 @@ export function AdminRoutes() {
                 <AdminInstructorsView />
             </Route>
             <Route exact path="/assignments_and_positions">
-                <Redirect to="/assignments_and_positions/positions" />
+                <Redirect to="/assignments_and_positions/assignments" />
             </Route>
             <Route exact path="/assignments_and_positions/positions">
                 <AdminPositionsView />

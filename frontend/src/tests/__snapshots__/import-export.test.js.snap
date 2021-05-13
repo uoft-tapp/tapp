@@ -154,6 +154,61 @@ Array [
 ]
 `;
 
+exports[`Import Ddahs from JSON/CSV/XLSX with many duties 1`] = `
+Array [
+  Object {
+    "applicant": "wilsonh",
+    "duties": Array [
+      Object {
+        "description": "one hour meeting",
+        "hours": 1,
+      },
+      Object {
+        "description": "two hour meeting",
+        "hours": 2,
+      },
+      Object {
+        "description": "three hours of stuff",
+        "hours": 3,
+      },
+      Object {
+        "description": "four hours Tutorial contact time, TUT 0101:  TUT  0602: T R 4-5",
+        "hours": 4,
+      },
+      Object {
+        "description": "prep: five hours",
+        "hours": 5,
+      },
+      Object {
+        "description": "Marking: 10 hours",
+        "hours": 10,
+      },
+      Object {
+        "description": "marking: fourteen hours",
+        "hours": 14,
+      },
+      Object {
+        "description": "contact:  fifteen hours",
+        "hours": 15,
+      },
+      Object {
+        "description": "Contact: 16 hours office hours to be scheduled in between May 10- June 14",
+        "hours": 16,
+      },
+      Object {
+        "description": "other18",
+        "hours": 18,
+      },
+      Object {
+        "description": "note: Estimated course enrollment: 170. Estimated enrollment per TA section 25. Estimated lowest enrollment in a tutorial 8. Skill development tutorials.",
+        "hours": 0,
+      },
+    ],
+    "position_code": "CSC135H1F",
+  },
+]
+`;
+
 exports[`Import Positions from JSON/CSV/XLSX 1`] = `
 Array [
   Object {
