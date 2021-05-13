@@ -393,6 +393,7 @@ it("Import Ddahs from JSON/CSV/XLSX with many duties", () => {
             data: parseSpreadsheet("ddahs_many_duties.xlsx"),
         },
         reduxStoreData.applicants,
+        false
     );
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
 });
