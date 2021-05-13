@@ -37,3 +37,8 @@ body,
 .logged-in-as-container label {
     margin-right: 0.5em;
 }
+
+.mock-button {
+	margin-left: 1em;
+	margin-right: 1em;
+}
