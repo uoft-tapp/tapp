@@ -8,6 +8,7 @@ import {
     upsertInstructor,
     upsertContractTemplate,
     setActiveSession,
+    positionsSelector,
 } from "../../api/actions";
 
 import {
@@ -25,6 +26,13 @@ import mockPositionData from "../../mock_data/position.json";
 import mockAssignmentData from "../../mock_data/assignment.json";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
+import {
+    Applicant,
+    ContractTemplate,
+    MinimalAssignment,
+    MinimalPosition,
+    Session,
+} from "../../api/defs/types";
 
 const ident = () => {};
 
@@ -32,14 +40,17 @@ const ident = () => {};
  * A button to automatically set up a mock session with contract_template and
  * instructors, and upsert positions, applicants, and assignments from mock data
  * JSON files in order.
- *
- * This component only renders when `process.env.REACT_APP_DEV_FEATURES` is truthy.
- *
- * @export
- * @returns {React.ElementType}
  */
-function LoadMockButton({ sessions = [], fetchSessions = ident }) {
-    const [targetSession, setTargetSession] = React.useState(null);
+export function SeedDataMenu({
+    sessions = [],
+    fetchSessions = ident,
+}: {
+    sessions?: Session[];
+    fetchSessions: Function;
+}) {
+    const [targetSession, setTargetSession] = React.useState<Session | null>(
+        null
+    );
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
     const [confirm, setConfirm] = React.useState(false);
     const [inProgress, setInProgress] = React.useState(false);
@@ -47,10 +58,10 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
     const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
-    let session;
-    let contractTemplates = [];
-    let positions = [];
-    let applicants = [];
+    let session: Session | null;
+    let contractTemplates: ContractTemplate[] = [];
+    let positions = useSelector(positionsSelector);
+    let applicants: Applicant[] = [];
     let count;
     let total;
 
@@ -63,7 +74,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         }
     }, [dropdownVisible, fetchSessions]);
 
-    async function setupMockSession() {
+    async function loadSession() {
         setStage("Session");
         setProgress(0);
 
@@ -72,7 +83,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
             const mockSessionData = {
                 start_date: "2020/01/01",
                 end_date: "2021/12/31",
-                name: new Date().toLocaleString(),
+                name: `Session ${new Date().toLocaleString()}`,
                 rate1: 50,
             };
             session = await dispatch(upsertSession(mockSessionData));
@@ -86,7 +97,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         setProgress(100);
     }
 
-    async function setupMockContractTemplate() {
+    async function loadContractTemplate() {
         setProgress(0);
         setStage("Contract Template");
         const contractTemplate = await dispatch(
@@ -96,11 +107,13 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         setProgress(100);
     }
 
-    async function setupMockInstructors() {
+    async function loadInstructors(limit = 1000) {
         setStage("Instructors");
         setProgress(0);
-        for (let instructor of mockInstructors) {
-            if (!instructors.some((i) => i.utorid === instructor.utorid)) {
+        for (let instructor of mockInstructors.slice(0, limit)) {
+            if (
+                !instructors.some((inst) => inst.utorid === instructor.utorid)
+            ) {
                 const newInstructor = await dispatch(
                     upsertInstructor(instructor)
                 );
@@ -110,32 +123,31 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         setProgress(100);
     }
 
-    async function setupMockPositions() {
+    async function loadPositions(limit = 1000) {
         setStage("Positions");
         setProgress(0);
         count = 0;
         total = mockPositionData.length;
-        const data = normalizeImport(
+        const data = (normalizeImport(
             {
                 fileType: "json",
                 data: mockPositionData,
             },
             positionSchema
-        ).map((p) =>
-            prepareFull.position(p, {
+        ) as MinimalPosition[]).map((position) =>
+            prepareFull.position(position, {
                 instructors,
                 contractTemplates,
             })
         );
-        for (const p of data) {
-            const position = await dispatch(upsertPosition(p));
-            positions.push(position);
+        for (const position of data.slice(0, limit)) {
+            await dispatch(upsertPosition(position));
             count++;
             setProgress(Math.round((count / total) * 100));
         }
     }
 
-    async function setupMockApplicants() {
+    async function loadApplicants(limit = 1000) {
         setStage("Applicants");
         setProgress(0);
         count = 0;
@@ -147,7 +159,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
             },
             applicantSchema
         );
-        for (const a of data) {
+        for (const a of data.slice(0, limit)) {
             const applicant = await dispatch(upsertApplicant(a));
             applicants.push(applicant);
             count++;
@@ -155,42 +167,48 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         }
     }
 
-    async function setupMockAssignments() {
+    async function loadAssignments(limit = 1000) {
         setStage("Assignments");
         setProgress(0);
+        if (!session) {
+            throw new Error("Need a valid session to continue");
+        }
         count = 0;
         total = mockAssignmentData.length;
-        const data = normalizeImport(
+        const data = (normalizeImport(
             {
                 fileType: "json",
                 data: mockAssignmentData,
             },
             assignmentSchema
-        ).map((p) =>
-            prepareFull.assignment(p, {
+        ) as MinimalAssignment[]).map((assignment) => {
+            if (!session) {
+                throw new Error("Need a valid session to continue");
+            }
+            return prepareFull.assignment(assignment, {
                 positions,
                 applicants,
                 session,
-            })
-        );
-        for (const a of data) {
+            });
+        });
+        for (const a of data.slice(0, limit)) {
             await dispatch(upsertAssignment(a));
             count++;
             setProgress(Math.round((count / total) * 100));
         }
     }
 
-    async function loadMock() {
+    async function loadAll() {
         try {
             setConfirm(false);
             setInProgress(true);
 
-            await setupMockSession();
-            await setupMockContractTemplate();
-            await setupMockInstructors();
-            await setupMockPositions();
-            await setupMockApplicants();
-            await setupMockAssignments();
+            await loadSession();
+            await loadContractTemplate();
+            await loadInstructors();
+            await loadPositions();
+            await loadApplicants();
+            await loadAssignments();
         } catch (error) {
             console.error(error);
         } finally {
@@ -199,16 +217,16 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         }
     }
 
-    function onSelectHandler(i) {
+    function onSelectHandler(i: string | null) {
         if (i !== "new") {
-            setTargetSession(sessions[i]);
+            setTargetSession(sessions[i as any]);
         }
         setConfirm(true);
     }
 
     return (
         <span
-            title="Set which session you are loading the mock data into. Otherwise it creates a new session to load."
+            title="Load seed data. If a new session is not specified, the active session is used."
             className="mock-button"
         >
             <Dropdown
@@ -220,7 +238,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
                 alignRight
             >
                 <Dropdown.Toggle split variant="dark">
-                    Load Mock
+                    Seed Data{" "}
                 </Dropdown.Toggle>
                 <Dropdown.Menu flip={true}>
                     <Dropdown.Header>
@@ -229,12 +247,14 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
                             : "No existing sessions"}
                     </Dropdown.Header>
                     {(sessions || []).map((session, i) => (
-                        <Dropdown.Item key={i} eventKey={i}>
+                        <Dropdown.Item key={i} eventKey={"" + i}>
                             {session.name}
                         </Dropdown.Item>
                     ))}
                     <Dropdown.Divider />
-                    <Dropdown.Item eventKey="new"> Create New</Dropdown.Item>
+                    <Dropdown.Item eventKey="new">
+                        Create New Session
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -244,7 +264,7 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
                     setConfirm(false);
                     setTargetSession(null);
                 }}
-                size="md"
+                size="lg"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Loading Mock</Modal.Title>
@@ -264,12 +284,12 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
                     >
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={loadMock}>
+                    <Button variant="primary" onClick={loadAll}>
                         Confirm
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Modal show={inProgress} size="md">
+            <Modal show={inProgress} size="lg">
                 <Modal.Header>
                     <Modal.Title>{`Upserting mock ${stage}`}</Modal.Title>
                 </Modal.Header>
@@ -291,5 +311,3 @@ function LoadMockButton({ sessions = [], fetchSessions = ident }) {
         </span>
     );
 }
-
-export { LoadMockButton };

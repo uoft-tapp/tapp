@@ -22,7 +22,7 @@ import {
     fetchSessions,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
-import { LoadMockButton } from "./load-mock-data";
+import { SeedDataMenu } from "./load-mock-data";
 
 // We don't need SwaggerUI all the time, so load it lazily.
 const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
@@ -125,7 +125,7 @@ const ConnectedToggleMockApi = connect(null, { setMockAPIState })(
 const ConnectedLoadMockButton = connect(
     (state) => ({ sessions: sessionsSelector(state) }),
     { fetchSessions }
-)(LoadMockButton);
+)(SeedDataMenu);
 
 function DevFrame(props) {
     return (
@@ -144,9 +144,9 @@ function DevFrame(props) {
                         </BootstrapNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
+                        <ConnectedLoadMockButton />
                         <ConnectedActiveUserButton />
                         <ConnectedToggleMockApi />
-                        <ConnectedLoadMockButton />
                     </Navbar.Collapse>
                 </Navbar>
             </div>
