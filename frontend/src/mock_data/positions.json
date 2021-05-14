@@ -21,7 +21,7 @@
         "start_date": "2020-05-28",
         "end_date": "2021-03-01",
         "instructors": ["smithh"],
-        "contract_template": "Regular"
+        "contract_template": "OTO"
     },
     {
         "position_code": "MAT355H1S",
@@ -101,7 +101,7 @@
         "start_date": "2020-05-05",
         "end_date": "2021-04-01",
         "instructors": ["millerm", "smithh"],
-        "contract_template": "Regular"
+        "contract_template": "OTO"
     },
     {
         "position_code": "CSC502",
