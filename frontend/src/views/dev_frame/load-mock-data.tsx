@@ -9,6 +9,8 @@ import {
     upsertContractTemplate,
     setActiveSession,
     positionsSelector,
+    activeSessionSelector,
+    debugOnlyUpsertUser,
 } from "../../api/actions";
 
 import {
@@ -19,11 +21,6 @@ import {
 import React from "react";
 import { useSelector } from "react-redux";
 import { Button, Modal, ProgressBar, Dropdown } from "react-bootstrap";
-import mockContractTemplate from "../../mock_data/contract_template.json";
-import mockInstructors from "../../mock_data/instructor.json";
-import mockApplicantData from "../../mock_data/applicant.json";
-import mockPositionData from "../../mock_data/position.json";
-import mockAssignmentData from "../../mock_data/assignment.json";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
@@ -33,6 +30,9 @@ import {
     MinimalPosition,
     Session,
 } from "../../api/defs/types";
+import { seedData } from "../../mock_data";
+
+type PromiseOrVoidFunction = (...args: any[]) => Promise<any> | void;
 
 const ident = () => {};
 
@@ -48,22 +48,71 @@ export function SeedDataMenu({
     sessions?: Session[];
     fetchSessions: Function;
 }) {
-    const [targetSession, setTargetSession] = React.useState<Session | null>(
-        null
-    );
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
-    const [confirm, setConfirm] = React.useState(false);
+    const [confirmDialogVisible, setConfirmDialogVisible] = React.useState(
+        false
+    );
+    const [seedAction, _setSeedAction] = React.useState<PromiseOrVoidFunction>(
+        () => ident
+    );
     const [inProgress, setInProgress] = React.useState(false);
     const [stage, setStage] = React.useState("");
     const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
+    const targetSession = useSelector(activeSessionSelector);
     let session: Session | null;
     let contractTemplates: ContractTemplate[] = [];
     let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
     let count;
     let total;
+
+    // If a function is passed to a `useSate` setter, it is evaluated.
+    // Since we want to set the state to a function, we need to wrap the setter,
+    // so that it does the right thing.
+    function setSeedAction(action: PromiseOrVoidFunction) {
+        _setSeedAction(() => action);
+    }
+
+    const seedActions = {
+        user: { name: `Users (${seedData.users.length})`, action: seedUsers },
+        session: { name: "Session (1)", action: seedSession },
+        contractTemplate: {
+            name: "Contract Templates (2)",
+            action: seedContractTemplate,
+        },
+        instructors10: {
+            name: "Instructors (10)",
+            action: () => seedInstructors(10),
+        },
+        instructors: {
+            name: `Instructors (${seedData.instructors.length})`,
+            action: seedInstructors,
+        },
+        position10: { name: "Positions (10)", action: () => seedPositions(10) },
+        position: {
+            name: `Positions (${seedData.positions.length})`,
+            action: seedPositions,
+        },
+        applicant10: {
+            name: "Applicants (10)",
+            action: () => seedApplicants(10),
+        },
+        applicant: {
+            name: `Applicants (${seedData.applicants.length})`,
+            action: seedApplicants,
+        },
+        assignment10: {
+            name: "Assignments (10)",
+            action: () => seedAssignments(10),
+        },
+        assignment: {
+            name: `Assignment (${seedData.assignments.length})`,
+            action: seedAssignments,
+        },
+        all: { name: "All Data", action: seedAll },
+    };
 
     React.useEffect(() => {
         // Whenever the dropdown is open, fetch a list of all existing sessions.
@@ -74,7 +123,7 @@ export function SeedDataMenu({
         }
     }, [dropdownVisible, fetchSessions]);
 
-    async function loadSession() {
+    async function seedSession() {
         setStage("Session");
         setProgress(0);
 
@@ -97,20 +146,33 @@ export function SeedDataMenu({
         setProgress(100);
     }
 
-    async function loadContractTemplate() {
+    async function seedUsers(limit = 1000) {
+        setProgress(0);
+        setStage("Users");
+        const users = seedData.users.slice(0, limit);
+        count = 0;
+        for (const user of users) {
+            await dispatch(debugOnlyUpsertUser(user));
+            count++;
+            setProgress(Math.round((count / users.length) * 100));
+        }
+        setProgress(100);
+    }
+
+    async function seedContractTemplate() {
         setProgress(0);
         setStage("Contract Template");
         const contractTemplate = await dispatch(
-            upsertContractTemplate(mockContractTemplate)
+            upsertContractTemplate(seedData.contractTemplates[0])
         );
         contractTemplates.push(contractTemplate);
         setProgress(100);
     }
 
-    async function loadInstructors(limit = 1000) {
+    async function seedInstructors(limit = 1000) {
         setStage("Instructors");
         setProgress(0);
-        for (let instructor of mockInstructors.slice(0, limit)) {
+        for (let instructor of seedData.instructors.slice(0, limit)) {
             if (
                 !instructors.some((inst) => inst.utorid === instructor.utorid)
             ) {
@@ -123,15 +185,15 @@ export function SeedDataMenu({
         setProgress(100);
     }
 
-    async function loadPositions(limit = 1000) {
+    async function seedPositions(limit = 1000) {
         setStage("Positions");
         setProgress(0);
         count = 0;
-        total = mockPositionData.length;
+        total = seedData.positions.length;
         const data = (normalizeImport(
             {
                 fileType: "json",
-                data: mockPositionData,
+                data: seedData.positions,
             },
             positionSchema
         ) as MinimalPosition[]).map((position) =>
@@ -147,15 +209,15 @@ export function SeedDataMenu({
         }
     }
 
-    async function loadApplicants(limit = 1000) {
+    async function seedApplicants(limit = 1000) {
         setStage("Applicants");
         setProgress(0);
         count = 0;
-        total = mockApplicantData.length;
+        total = seedData.applicants.length;
         const data = normalizeImport(
             {
                 fileType: "json",
-                data: mockApplicantData,
+                data: seedData.applicants,
             },
             applicantSchema
         );
@@ -167,18 +229,18 @@ export function SeedDataMenu({
         }
     }
 
-    async function loadAssignments(limit = 1000) {
+    async function seedAssignments(limit = 1000) {
         setStage("Assignments");
         setProgress(0);
         if (!session) {
             throw new Error("Need a valid session to continue");
         }
         count = 0;
-        total = mockAssignmentData.length;
+        total = seedData.assignments.length;
         const data = (normalizeImport(
             {
                 fileType: "json",
-                data: mockAssignmentData,
+                data: seedData.assignments,
             },
             assignmentSchema
         ) as MinimalAssignment[]).map((assignment) => {
@@ -198,30 +260,29 @@ export function SeedDataMenu({
         }
     }
 
-    async function loadAll() {
+    async function seedAll() {
         try {
-            setConfirm(false);
+            setConfirmDialogVisible(false);
             setInProgress(true);
 
-            await loadSession();
-            await loadContractTemplate();
-            await loadInstructors();
-            await loadPositions();
-            await loadApplicants();
-            await loadAssignments();
+            await seedSession();
+            await seedContractTemplate();
+            await seedInstructors();
+            await seedPositions();
+            await seedApplicants();
+            await seedAssignments();
         } catch (error) {
             console.error(error);
         } finally {
             setInProgress(false);
-            setTargetSession(null);
         }
     }
 
-    function onSelectHandler(i: string | null) {
-        if (i !== "new") {
-            setTargetSession(sessions[i as any]);
-        }
-        setConfirm(true);
+    function onSelectHandler(eventKey: string | null) {
+        setSeedAction(
+            seedActions[eventKey as keyof typeof seedActions]?.action || ident
+        );
+        setConfirmDialogVisible(true);
     }
 
     return (
@@ -242,53 +303,64 @@ export function SeedDataMenu({
                 </Dropdown.Toggle>
                 <Dropdown.Menu flip={true}>
                     <Dropdown.Header>
-                        {sessions.length
-                            ? "Load to existing sessions"
-                            : "No existing sessions"}
+                        Load seed data into current session
                     </Dropdown.Header>
-                    {(sessions || []).map((session, i) => (
-                        <Dropdown.Item key={i} eventKey={"" + i}>
-                            {session.name}
+                    {Object.keys(seedActions).map((key: string) => (
+                        <Dropdown.Item key={key} eventKey={key}>
+                            {seedActions[key as keyof typeof seedActions].name}
                         </Dropdown.Item>
                     ))}
-                    <Dropdown.Divider />
-                    <Dropdown.Item eventKey="new">
-                        Create New Session
-                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
             <Modal
-                show={confirm}
+                show={confirmDialogVisible}
                 onHide={() => {
-                    setConfirm(false);
-                    setTargetSession(null);
+                    setConfirmDialogVisible(false);
                 }}
                 size="lg"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Loading Mock</Modal.Title>
+                    <Modal.Title>Loading Seed Data</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {targetSession === null
-                        ? "Are you sure to create a new session and load mock data?"
-                        : `Are you sure to load mock data into ${targetSession.name}?`}
+                    {targetSession === null ? (
+                        "Are you sure to create a new session and load mock data?"
+                    ) : (
+                        <React.Fragment>
+                            Are you sure to load mock data into the session{" "}
+                            <b>{targetSession.name}</b>?
+                        </React.Fragment>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => {
-                            setConfirm(false);
-                            setTargetSession(null);
+                            setConfirmDialogVisible(false);
                         }}
                     >
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={loadAll}>
+                    <Button
+                        variant="primary"
+                        onClick={async () => {
+                            try {
+                                setConfirmDialogVisible(false);
+                                setInProgress(true);
+                                await seedAction();
+                            } catch (e) {
+                                console.log(e);
+                            } finally {
+                                setInProgress(false);
+                            }
+                        }}
+                    >
                         Confirm
                     </Button>
                 </Modal.Footer>
             </Modal>
+
             <Modal show={inProgress} size="lg">
                 <Modal.Header>
                     <Modal.Title>{`Upserting mock ${stage}`}</Modal.Title>

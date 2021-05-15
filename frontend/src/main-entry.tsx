@@ -24,7 +24,13 @@ export default function ConnectedApp() {
     useEffect(() => {
         // When the page is first loaded, we need to fetch all the data
         // associated with the page. This is done via a call to `initFromStage`.
-        dispatch(initFromStage("pageLoad"));
+        (async () => {
+            try {
+                await dispatch(initFromStage("pageLoad"));
+            } catch (e) {
+                console.log(e);
+            }
+        })();
     }, [dispatch]);
 
     let body = <div>Loading...</div>;
