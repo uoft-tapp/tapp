@@ -264,7 +264,7 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
             </ul>
             <div className="signature-area">
                 <div>
-                    Prepared by {getFirstInstructorsName(instructors)}{" "}
+                    Prepared by {getFormattedInstructorNameList(instructors)}{" "}
                     {ddah.emailed_date
                         ? ` on ${formatDate(ddah.emailed_date)}`
                         : ""}
@@ -345,11 +345,25 @@ export function ConnectedDdahEditorModal({
     );
 }
 
-function getFirstInstructorsName(instructors: Instructor[]): string {
+/**
+ * Return a formatted list of instructors, or `"(Unknown)"` if there are none listed.
+ */
+function getFormattedInstructorNameList(instructors: Instructor[]): string {
     if (instructors.length === 0) {
         return "(Unknown)";
     }
-    return `${instructors[0].first_name} ${instructors[0].last_name}`;
+    const names = instructors.map(
+        (instructor) => `${instructor.first_name} ${instructor.last_name}`
+    );
+    try {
+        const formatter = new (Intl as any).ListFormat("en", {
+            style: "long",
+            type: "conjunction",
+        });
+        return formatter.format(names);
+    } catch (e) {
+        return names.join(", ");
+    }
 }
 
 /**
