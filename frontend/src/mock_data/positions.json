@@ -1,0 +1,802 @@
+[
+    {
+        "position_code": "MAT647",
+        "hours_per_assignment": 117,
+        "start_date": "2020-07-24",
+        "end_date": "2021-03-05",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "hours_per_assignment": 91,
+        "start_date": "2020-06-13",
+        "end_date": "2021-04-13",
+        "instructors": ["smithh", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA985",
+        "hours_per_assignment": 21,
+        "start_date": "2020-05-28",
+        "end_date": "2021-03-01",
+        "instructors": ["smithh"],
+        "contract_template": "OTO"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "hours_per_assignment": 70,
+        "start_date": "2020-07-26",
+        "end_date": "2021-03-01",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "hours_per_assignment": 142,
+        "start_date": "2020-05-14",
+        "end_date": "2021-04-20",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC870",
+        "hours_per_assignment": 88,
+        "start_date": "2020-06-04",
+        "end_date": "2021-05-09",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "hours_per_assignment": 139,
+        "start_date": "2020-06-06",
+        "end_date": "2021-04-03",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC839",
+        "hours_per_assignment": 94,
+        "start_date": "2020-07-22",
+        "end_date": "2021-05-05",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA382",
+        "hours_per_assignment": 94,
+        "start_date": "2020-07-20",
+        "end_date": "2021-05-25",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "hours_per_assignment": 136,
+        "start_date": "2020-06-15",
+        "end_date": "2021-04-28",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC573",
+        "hours_per_assignment": 51,
+        "start_date": "2020-05-07",
+        "end_date": "2021-05-19",
+        "instructors": ["garciae", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "hours_per_assignment": 4,
+        "start_date": "2020-06-20",
+        "end_date": "2021-03-21",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "hours_per_assignment": 94,
+        "start_date": "2020-05-05",
+        "end_date": "2021-04-01",
+        "instructors": ["millerm", "smithh"],
+        "contract_template": "OTO"
+    },
+    {
+        "position_code": "CSC502",
+        "hours_per_assignment": 109,
+        "start_date": "2020-05-24",
+        "end_date": "2021-03-30",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "hours_per_assignment": 31,
+        "start_date": "2020-06-08",
+        "end_date": "2021-05-13",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "hours_per_assignment": 136,
+        "start_date": "2020-06-12",
+        "end_date": "2021-04-04",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC471",
+        "hours_per_assignment": 62,
+        "start_date": "2020-05-16",
+        "end_date": "2021-05-30",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA168H1S",
+        "hours_per_assignment": 26,
+        "start_date": "2020-07-12",
+        "end_date": "2021-03-22",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "hours_per_assignment": 105,
+        "start_date": "2020-07-07",
+        "end_date": "2021-05-04",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT918",
+        "hours_per_assignment": 75,
+        "start_date": "2020-06-30",
+        "end_date": "2021-05-19",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA617H1F",
+        "hours_per_assignment": 30,
+        "start_date": "2020-07-26",
+        "end_date": "2021-03-30",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "hours_per_assignment": 3,
+        "start_date": "2020-06-14",
+        "end_date": "2021-03-18",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "hours_per_assignment": 127,
+        "start_date": "2020-05-30",
+        "end_date": "2021-05-19",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA441H1S",
+        "hours_per_assignment": 136,
+        "start_date": "2020-07-02",
+        "end_date": "2021-03-05",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA386H1S",
+        "hours_per_assignment": 52,
+        "start_date": "2020-06-23",
+        "end_date": "2021-03-06",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "hours_per_assignment": 43,
+        "start_date": "2020-06-23",
+        "end_date": "2021-03-04",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA706H1F",
+        "hours_per_assignment": 52,
+        "start_date": "2020-06-28",
+        "end_date": "2021-03-31",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT620",
+        "hours_per_assignment": 107,
+        "start_date": "2020-06-09",
+        "end_date": "2021-03-15",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "hours_per_assignment": 133,
+        "start_date": "2020-05-23",
+        "end_date": "2021-05-30",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA666",
+        "hours_per_assignment": 103,
+        "start_date": "2020-06-14",
+        "end_date": "2021-03-24",
+        "instructors": ["garciae", "smithh", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "hours_per_assignment": 50,
+        "start_date": "2020-06-10",
+        "end_date": "2021-05-30",
+        "instructors": ["smithh", "garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "hours_per_assignment": 51,
+        "start_date": "2020-05-04",
+        "end_date": "2021-05-23",
+        "instructors": ["garciae", "smithh", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "hours_per_assignment": 92,
+        "start_date": "2020-06-03",
+        "end_date": "2021-05-12",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "hours_per_assignment": 107,
+        "start_date": "2020-05-27",
+        "end_date": "2021-03-08",
+        "instructors": ["millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "hours_per_assignment": 28,
+        "start_date": "2020-05-07",
+        "end_date": "2021-03-08",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA154H1F",
+        "hours_per_assignment": 139,
+        "start_date": "2020-07-06",
+        "end_date": "2021-03-24",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT280",
+        "hours_per_assignment": "",
+        "start_date": "2020-06-12",
+        "end_date": "2021-04-27",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC365",
+        "hours_per_assignment": 32,
+        "start_date": "2020-05-13",
+        "end_date": "2021-04-22",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA448H1S",
+        "hours_per_assignment": 34,
+        "start_date": "2020-05-25",
+        "end_date": "2021-04-21",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA485H1S",
+        "hours_per_assignment": 140,
+        "start_date": "2020-07-19",
+        "end_date": "2021-04-06",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "hours_per_assignment": 43,
+        "start_date": "2020-05-13",
+        "end_date": "2021-05-06",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "hours_per_assignment": 144,
+        "start_date": "2020-05-30",
+        "end_date": "2021-03-16",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "hours_per_assignment": 94,
+        "start_date": "2020-07-26",
+        "end_date": "2021-03-19",
+        "instructors": ["garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC311",
+        "hours_per_assignment": 131,
+        "start_date": "2020-05-10",
+        "end_date": "2021-03-01",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA793",
+        "hours_per_assignment": 62,
+        "start_date": "2020-07-04",
+        "end_date": "2021-03-09",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC299",
+        "hours_per_assignment": 67,
+        "start_date": "2020-05-24",
+        "end_date": "2021-05-01",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT971",
+        "hours_per_assignment": 67,
+        "start_date": "2020-07-01",
+        "end_date": "2021-03-25",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "hours_per_assignment": 124,
+        "start_date": "2020-06-20",
+        "end_date": "2021-04-03",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA456",
+        "hours_per_assignment": 126,
+        "start_date": "2020-05-12",
+        "end_date": "2021-05-12",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA148H1S",
+        "hours_per_assignment": 61,
+        "start_date": "2020-06-24",
+        "end_date": "2021-03-29",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA845H1F",
+        "hours_per_assignment": 136,
+        "start_date": "2020-06-22",
+        "end_date": "2021-05-27",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "hours_per_assignment": 22,
+        "start_date": "2020-06-26",
+        "end_date": "2021-04-28",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "hours_per_assignment": 137,
+        "start_date": "2020-05-29",
+        "end_date": "2021-05-12",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "hours_per_assignment": 103,
+        "start_date": "2020-06-29",
+        "end_date": "2021-04-09",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "hours_per_assignment": 115,
+        "start_date": "2020-06-25",
+        "end_date": "2021-05-03",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA139H1S",
+        "hours_per_assignment": 91,
+        "start_date": "2020-07-08",
+        "end_date": "2021-05-27",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA254H1F",
+        "hours_per_assignment": 55,
+        "start_date": "2020-05-10",
+        "end_date": "2021-03-29",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA566H1F",
+        "hours_per_assignment": 105,
+        "start_date": "2020-07-17",
+        "end_date": "2021-03-10",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "hours_per_assignment": 10,
+        "start_date": "2020-06-19",
+        "end_date": "2021-05-09",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA206",
+        "hours_per_assignment": 117,
+        "start_date": "2020-07-09",
+        "end_date": "2021-03-19",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "hours_per_assignment": 87,
+        "start_date": "2020-07-26",
+        "end_date": "2021-04-26",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "hours_per_assignment": 119,
+        "start_date": "2020-06-19",
+        "end_date": "2021-04-21",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA167H1F",
+        "hours_per_assignment": 106,
+        "start_date": "2020-07-12",
+        "end_date": "2021-03-31",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA292H1S",
+        "hours_per_assignment": 7,
+        "start_date": "2020-06-27",
+        "end_date": "2021-05-12",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "hours_per_assignment": 137,
+        "start_date": "2020-05-17",
+        "end_date": "2021-03-09",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "hours_per_assignment": 70,
+        "start_date": "2020-07-20",
+        "end_date": "2021-04-01",
+        "instructors": ["garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "hours_per_assignment": 7,
+        "start_date": "2020-06-29",
+        "end_date": "2021-05-21",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA882H1S",
+        "hours_per_assignment": 83,
+        "start_date": "2020-07-18",
+        "end_date": "2021-05-22",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT194",
+        "hours_per_assignment": 70,
+        "start_date": "2020-06-24",
+        "end_date": "2021-04-30",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT660",
+        "hours_per_assignment": 127,
+        "start_date": "2020-07-16",
+        "end_date": "2021-05-24",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC434",
+        "hours_per_assignment": 118,
+        "start_date": "2020-06-19",
+        "end_date": "2021-03-27",
+        "instructors": ["garciae", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA275",
+        "hours_per_assignment": 13,
+        "start_date": "2020-06-20",
+        "end_date": "2021-04-11",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "hours_per_assignment": 139,
+        "start_date": "2020-06-23",
+        "end_date": "2021-03-15",
+        "instructors": ["garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA337H1S",
+        "hours_per_assignment": 90,
+        "start_date": "2020-07-30",
+        "end_date": "2021-04-28",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA224H1F",
+        "hours_per_assignment": 6,
+        "start_date": "2020-05-20",
+        "end_date": "2021-03-11",
+        "instructors": ["garciae", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "hours_per_assignment": 59,
+        "start_date": "2020-06-18",
+        "end_date": "2021-03-24",
+        "instructors": ["garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "hours_per_assignment": 85,
+        "start_date": "2020-06-11",
+        "end_date": "2021-04-03",
+        "instructors": ["millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "hours_per_assignment": 53,
+        "start_date": "2020-07-26",
+        "end_date": "2021-05-06",
+        "instructors": ["millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT496",
+        "hours_per_assignment": 125,
+        "start_date": "2020-06-23",
+        "end_date": "2021-03-15",
+        "instructors": ["garciae", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA617",
+        "hours_per_assignment": 9,
+        "start_date": "2020-05-14",
+        "end_date": "2021-04-11",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "hours_per_assignment": 10,
+        "start_date": "2020-07-27",
+        "end_date": "2021-04-21",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA472H1S",
+        "hours_per_assignment": 17,
+        "start_date": "2020-05-17",
+        "end_date": "2021-05-27",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC359",
+        "hours_per_assignment": 61,
+        "start_date": "2020-06-28",
+        "end_date": "2021-04-01",
+        "instructors": ["garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC997",
+        "hours_per_assignment": 60,
+        "start_date": "2020-05-28",
+        "end_date": "2021-04-06",
+        "instructors": ["smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "hours_per_assignment": 59,
+        "start_date": "2020-05-01",
+        "end_date": "2021-05-11",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "hours_per_assignment": 144,
+        "start_date": "2020-05-17",
+        "end_date": "2021-05-14",
+        "instructors": ["garciae", "smithh", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA759H1S",
+        "hours_per_assignment": 15,
+        "start_date": "2020-05-11",
+        "end_date": "2021-05-03",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "STA768",
+        "hours_per_assignment": 112,
+        "start_date": "2020-06-21",
+        "end_date": "2021-04-07",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC361",
+        "hours_per_assignment": 72,
+        "start_date": "2020-05-14",
+        "end_date": "2021-05-11",
+        "instructors": ["millerm", "smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT336",
+        "hours_per_assignment": 10,
+        "start_date": "2020-07-16",
+        "end_date": "2021-04-19",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "hours_per_assignment": 143,
+        "start_date": "2020-05-13",
+        "end_date": "2021-04-15",
+        "instructors": ["smithh", "millerm", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "hours_per_assignment": "",
+        "start_date": "2020-07-13",
+        "end_date": "2021-05-20",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT897",
+        "hours_per_assignment": 101,
+        "start_date": "2020-07-27",
+        "end_date": "2021-04-29",
+        "instructors": ["garciae", "millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT493",
+        "hours_per_assignment": 88,
+        "start_date": "2020-05-25",
+        "end_date": "2021-04-05",
+        "instructors": ["smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT403",
+        "hours_per_assignment": 133,
+        "start_date": "2020-07-17",
+        "end_date": "2021-03-13",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "hours_per_assignment": 38,
+        "start_date": "2020-06-18",
+        "end_date": "2021-05-18",
+        "instructors": ["millerm", "smithh"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "hours_per_assignment": 125,
+        "start_date": "2020-07-07",
+        "end_date": "2021-04-23",
+        "instructors": ["millerm", "smithh", "garciae"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "hours_per_assignment": 71,
+        "start_date": "2020-06-13",
+        "end_date": "2021-04-02",
+        "instructors": ["garciae", "millerm"],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "hours_per_assignment": 48,
+        "start_date": "2020-06-24",
+        "end_date": "2021-05-14",
+        "instructors": [],
+        "contract_template": "Regular"
+    },
+    {
+        "position_code": "CSC924",
+        "hours_per_assignment": "",
+        "start_date": "2020-06-21",
+        "end_date": "2021-03-03",
+        "instructors": ["millerm", "garciae"],
+        "contract_template": "Regular"
+    }
+]

@@ -37,10 +37,15 @@ export const fetchSessions = validatedApiDispatcher({
     description: "Fetch sessions",
     onErrorDispatch: (e) => fetchError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
-        const role = activeRoleSelector(getState());
-        const data = (await apiGET(`/${role}/sessions`)) as RawSession[];
-        dispatch(fetchSessionsSuccess(data));
-        return data;
+        try {
+            const role = activeRoleSelector(getState());
+            const data = (await apiGET(`/${role}/sessions`)) as RawSession[];
+            dispatch(fetchSessionsSuccess(data));
+            return data;
+        } catch (e) {
+            dispatch(fetchSessionsSuccess([]));
+            return [];
+        }
     },
 });
 

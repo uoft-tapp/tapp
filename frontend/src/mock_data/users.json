@@ -1,0 +1,34 @@
+[
+    {
+        "utorid": "colliberr",
+        "roles": ["ta"]
+    },
+    {
+        "utorid": "fardoea",
+        "roles": ["ta"]
+    },
+    {
+        "utorid": "paternostera",
+        "roles": ["ta"]
+    },
+    {
+        "utorid": "vannozziih",
+        "roles": ["ta"]
+    },
+    {
+        "utorid": "garciae",
+        "roles": ["ta", "instructor"]
+    },
+    {
+        "utorid": "millerm",
+        "roles": ["ta", "instructor"]
+    },
+    {
+        "utorid": "pumfrettn",
+        "roles": ["ta", "instructor"]
+    },
+    {
+        "utorid": "lockhartl",
+        "roles": ["ta", "instructor"]
+    }
+]

@@ -1,0 +1,7002 @@
+[
+    {
+        "position_code": "MAT647",
+        "utorid": "colliberr",
+        "hours": 78,
+        "start_date": "2020/05/17",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "fardoea",
+        "hours": 121,
+        "start_date": "2020/05/29",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "paternostera",
+        "hours": 45,
+        "start_date": "2020/06/27",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "vannozziih",
+        "hours": 67,
+        "start_date": "2020/06/15",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "bottena",
+        "hours": 124,
+        "start_date": "2020/07/04",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "o'maraw",
+        "hours": 137,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "retallicka",
+        "hours": 33,
+        "start_date": "2020/05/22",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "piriso",
+        "hours": 27,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "marchettim",
+        "hours": 66,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "gillbardc",
+        "hours": 74,
+        "start_date": "2020/06/25",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "laisterw",
+        "hours": 127,
+        "start_date": "2020/07/07",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "vigneronl",
+        "hours": 145,
+        "start_date": "2020/05/08",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "ludgrovef",
+        "hours": 50,
+        "start_date": "2020/07/29",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "halmv",
+        "hours": 34,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/30"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "cassellsb",
+        "hours": 33,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "cureea",
+        "hours": 148,
+        "start_date": "2020/05/30",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "eastburyj",
+        "hours": 27,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/07"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "carnegief",
+        "hours": 24,
+        "start_date": "2020/06/12",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "towllc",
+        "hours": 112,
+        "start_date": "2020/05/01",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "lockittf",
+        "hours": 73,
+        "start_date": "2020/07/03",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "iacabuccie",
+        "hours": 81,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "rankcomr",
+        "hours": 71,
+        "start_date": "2020/06/27",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "lomasnyf",
+        "hours": 88,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "greaterexh",
+        "hours": 9,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "paszekr",
+        "hours": 93,
+        "start_date": "2020/05/22",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "probeyk",
+        "hours": 30,
+        "start_date": "2020/06/21",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "mordantib",
+        "hours": 60,
+        "start_date": "2020/05/12",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "rihanekc",
+        "hours": 23,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "rodrigueza",
+        "hours": 6,
+        "start_date": "2020/06/30",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "bernardtb",
+        "hours": 56,
+        "start_date": "2020/07/04",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "tejerom",
+        "hours": 117,
+        "start_date": "2020/05/15",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "jevonl",
+        "hours": 68,
+        "start_date": "2020/05/22",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "caisleyo",
+        "hours": 150,
+        "start_date": "2020/05/04",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "uccellia",
+        "hours": 72,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "kittert",
+        "hours": 37,
+        "start_date": "2020/06/15",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "barabischj",
+        "hours": 30,
+        "start_date": "2020/07/03",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "castanol",
+        "hours": 61,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "guslond",
+        "hours": 77,
+        "start_date": "2020/06/10",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "statem",
+        "hours": 112,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "vannonia",
+        "hours": 141,
+        "start_date": "2020/05/11",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "pumfrettt",
+        "hours": 95,
+        "start_date": "2020/07/28",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "littefairk",
+        "hours": 111,
+        "start_date": "2020/06/06",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "pidgeonc",
+        "hours": 102,
+        "start_date": "2020/06/14",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "cantosl",
+        "hours": 29,
+        "start_date": "2020/05/14",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "tremathacks",
+        "hours": 45,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "drakesh",
+        "hours": 63,
+        "start_date": "2020/06/15",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "giblingj",
+        "hours": 33,
+        "start_date": "2020/05/16",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "tottmank",
+        "hours": 50,
+        "start_date": "2020/07/01",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "clemowk",
+        "hours": 117,
+        "start_date": "2020/05/26",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "rigbyb",
+        "hours": 118,
+        "start_date": "2020/07/24",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "matthiesonr",
+        "hours": 25,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "raithbyk",
+        "hours": 55,
+        "start_date": "2020/06/08",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "sebertd",
+        "hours": 4,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "gibbing",
+        "hours": 91,
+        "start_date": "2020/06/03",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "hamssonc",
+        "hours": 112,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "fearfullr",
+        "hours": 13,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "vinauc",
+        "hours": 60,
+        "start_date": "2020/05/09",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "spottiswoodm",
+        "hours": 123,
+        "start_date": "2020/05/21",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "hofm",
+        "hours": 26,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "sanhamh",
+        "hours": 101,
+        "start_date": "2020/07/12",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "dewittl",
+        "hours": 149,
+        "start_date": "2020/05/30",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "knivetts",
+        "hours": 80,
+        "start_date": "2020/05/05",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "bedhamn",
+        "hours": 102,
+        "start_date": "2020/07/27",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "tommisp",
+        "hours": 46,
+        "start_date": "2020/05/06",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "papet",
+        "hours": 124,
+        "start_date": "2020/07/22",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "mearnsc",
+        "hours": 135,
+        "start_date": "2020/07/08",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "settera",
+        "hours": 12,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "seidf",
+        "hours": 63,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "wikec",
+        "hours": 137,
+        "start_date": "2020/05/19",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "hanej",
+        "hours": 147,
+        "start_date": "2020/06/28",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "heildr",
+        "hours": 5,
+        "start_date": "2020/07/08",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "querrardb",
+        "hours": 129,
+        "start_date": "2020/07/30",
+        "end_date": "2021/03/07"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "daccac",
+        "hours": 113,
+        "start_date": "2020/05/09",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "claesensh",
+        "hours": 19,
+        "start_date": "2020/06/05",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "tuffieldj",
+        "hours": 68,
+        "start_date": "2020/05/06",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "lorenced",
+        "hours": 13,
+        "start_date": "2020/05/20",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "baggalleyd",
+        "hours": 28,
+        "start_date": "2020/05/29",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "coonihanj",
+        "hours": 48,
+        "start_date": "2020/07/06",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "mutterj",
+        "hours": 52,
+        "start_date": "2020/07/03",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "fathers",
+        "hours": 40,
+        "start_date": "2020/06/22",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "spraggsr",
+        "hours": 81,
+        "start_date": "2020/05/16",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "rivitts",
+        "hours": 62,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "diters",
+        "hours": 135,
+        "start_date": "2020/05/12",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "barrym",
+        "hours": 19,
+        "start_date": "2020/07/13",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "adamovichc",
+        "hours": 41,
+        "start_date": "2020/06/12",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "domans",
+        "hours": 117,
+        "start_date": "2020/05/10",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "brownceyg",
+        "hours": 7,
+        "start_date": "2020/06/04",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "seatterw",
+        "hours": 131,
+        "start_date": "2020/05/16",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "fraynev",
+        "hours": 93,
+        "start_date": "2020/06/15",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "sharplessg",
+        "hours": 108,
+        "start_date": "2020/05/28",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "maddrelll",
+        "hours": 18,
+        "start_date": "2020/05/16",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "carlanr",
+        "hours": 134,
+        "start_date": "2020/07/22",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "philcottr",
+        "hours": 112,
+        "start_date": "2020/05/14",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "lachaizek",
+        "hours": 141,
+        "start_date": "2020/07/05",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "mccurdys",
+        "hours": 76,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "iacobuccii",
+        "hours": 13,
+        "start_date": "2020/05/22",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "thringr",
+        "hours": 142,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "gorettij",
+        "hours": 68,
+        "start_date": "2020/05/26",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "benazetc",
+        "hours": 116,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "franciottit",
+        "hours": 145,
+        "start_date": "2020/07/01",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "gandarr",
+        "hours": 107,
+        "start_date": "2020/05/13",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "chesleyb",
+        "hours": 66,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "lardiere",
+        "hours": 119,
+        "start_date": "2020/05/28",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "spacieb",
+        "hours": 24,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "domked",
+        "hours": 15,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "mazinr",
+        "hours": 26,
+        "start_date": "2020/05/12",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "tourotm",
+        "hours": 107,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "beaudryb",
+        "hours": 140,
+        "start_date": "2020/07/27",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "ellershawg",
+        "hours": 94,
+        "start_date": "2020/06/06",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "dooles",
+        "hours": 84,
+        "start_date": "2020/05/02",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "schurigh",
+        "hours": 117,
+        "start_date": "2020/06/14",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "apdellg",
+        "hours": 67,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "gaskenm",
+        "hours": 8,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "de gowem",
+        "hours": 111,
+        "start_date": "2020/07/08",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "christallg",
+        "hours": 106,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "tizardg",
+        "hours": 148,
+        "start_date": "2020/06/14",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "grahlmansg",
+        "hours": 2,
+        "start_date": "2020/07/18",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "versonc",
+        "hours": 7,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "morstattn",
+        "hours": 78,
+        "start_date": "2020/06/14",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "jakubowiczt",
+        "hours": 139,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "macekc",
+        "hours": 21,
+        "start_date": "2020/07/08",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "luckcockv",
+        "hours": 16,
+        "start_date": "2020/05/17",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "winspearb",
+        "hours": 78,
+        "start_date": "2020/06/23",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "cozensw",
+        "hours": 6,
+        "start_date": "2020/07/21",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "mckaguem",
+        "hours": 135,
+        "start_date": "2020/07/14",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "leithera",
+        "hours": 11,
+        "start_date": "2020/05/18",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "stabbinsg",
+        "hours": 37,
+        "start_date": "2020/06/17",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "mitrovicl",
+        "hours": 112,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "grammerg",
+        "hours": 102,
+        "start_date": "2020/07/24",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "trownsonn",
+        "hours": 3,
+        "start_date": "2020/06/26",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "wainera",
+        "hours": 5,
+        "start_date": "2020/05/05",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "jizhakic",
+        "hours": 117,
+        "start_date": "2020/06/21",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "wetherillj",
+        "hours": 65,
+        "start_date": "2020/05/20",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "nultyt",
+        "hours": 2,
+        "start_date": "2020/06/22",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "gennerichc",
+        "hours": 131,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "flowithl",
+        "hours": 18,
+        "start_date": "2020/07/23",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "collingtond",
+        "hours": 9,
+        "start_date": "2020/06/07",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "yellepd",
+        "hours": 80,
+        "start_date": "2020/07/29",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "fendd",
+        "hours": 26,
+        "start_date": "2020/06/25",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "andryushchenkop",
+        "hours": 98,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "whitingtonf",
+        "hours": 77,
+        "start_date": "2020/05/25",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "watsamd",
+        "hours": 132,
+        "start_date": "2020/05/06",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "meusd",
+        "hours": 132,
+        "start_date": "2020/05/23",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "chinge de halsj",
+        "hours": 72,
+        "start_date": "2020/06/28",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "killeleyk",
+        "hours": 67,
+        "start_date": "2020/05/21",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "gobelf",
+        "hours": 83,
+        "start_date": "2020/06/17",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "munsoni",
+        "hours": 146,
+        "start_date": "2020/06/18",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "lorantp",
+        "hours": 29,
+        "start_date": "2020/07/04",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "shureyf",
+        "hours": 70,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "duiguidg",
+        "hours": 69,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "dilgerq",
+        "hours": 107,
+        "start_date": "2020/05/28",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "bremens",
+        "hours": 123,
+        "start_date": "2020/05/24",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "renee",
+        "hours": 64,
+        "start_date": "2020/06/01",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "ricardeg",
+        "hours": 102,
+        "start_date": "2020/07/25",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "hacardc",
+        "hours": 144,
+        "start_date": "2020/07/07",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "shillabearj",
+        "hours": 74,
+        "start_date": "2020/06/08",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "barwackk",
+        "hours": 100,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/30"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "bedenhamd",
+        "hours": 4,
+        "start_date": "2020/05/21",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "fotherbya",
+        "hours": 12,
+        "start_date": "2020/06/29",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "pyecroftp",
+        "hours": 144,
+        "start_date": "2020/07/07",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "disleyg",
+        "hours": 143,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "crannah",
+        "hours": 138,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "idlec",
+        "hours": 67,
+        "start_date": "2020/05/30",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "windrams",
+        "hours": 113,
+        "start_date": "2020/06/25",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "ludwikiewicze",
+        "hours": 17,
+        "start_date": "2020/05/27",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "spurretd",
+        "hours": 118,
+        "start_date": "2020/05/15",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "van eedenv",
+        "hours": 131,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "de la felda",
+        "hours": 145,
+        "start_date": "2020/06/18",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "colgraver",
+        "hours": 148,
+        "start_date": "2020/06/23",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "blaslii",
+        "hours": 53,
+        "start_date": "2020/07/28",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "bravec",
+        "hours": 117,
+        "start_date": "2020/07/30",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "seggess",
+        "hours": 129,
+        "start_date": "2020/05/05",
+        "end_date": "2021/05/11"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "bateupk",
+        "hours": 11,
+        "start_date": "2020/06/29",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "musprattm",
+        "hours": 114,
+        "start_date": "2020/05/29",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "blackmuirk",
+        "hours": 147,
+        "start_date": "2020/07/16",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "agiusp",
+        "hours": 30,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "stebbind",
+        "hours": 121,
+        "start_date": "2020/07/05",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "daynterl",
+        "hours": 116,
+        "start_date": "2020/05/03",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "parsanda",
+        "hours": 120,
+        "start_date": "2020/06/15",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "nieldc",
+        "hours": 50,
+        "start_date": "2020/06/11",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "bloxhaml",
+        "hours": 102,
+        "start_date": "2020/07/13",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "merwec",
+        "hours": 60,
+        "start_date": "2020/06/28",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "titlowd",
+        "hours": 3,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "nockellsd",
+        "hours": 44,
+        "start_date": "2020/05/25",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "mcquilliamn",
+        "hours": 115,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "gumbf",
+        "hours": 5,
+        "start_date": "2020/06/03",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "wratesd",
+        "hours": 61,
+        "start_date": "2020/05/27",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "serleb",
+        "hours": 28,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "marcrofth",
+        "hours": 112,
+        "start_date": "2020/06/28",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "andreyn",
+        "hours": 107,
+        "start_date": "2020/07/10",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "brunnings",
+        "hours": 85,
+        "start_date": "2020/05/06",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "compsonb",
+        "hours": 30,
+        "start_date": "2020/05/30",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "robardetk",
+        "hours": 85,
+        "start_date": "2020/07/30",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "czajkab",
+        "hours": 141,
+        "start_date": "2020/06/26",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "silleya",
+        "hours": 5,
+        "start_date": "2020/07/15",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "conryk",
+        "hours": 41,
+        "start_date": "2020/07/28",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "maled",
+        "hours": 19,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "blants",
+        "hours": 21,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "sabbertony",
+        "hours": 134,
+        "start_date": "2020/05/12",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "kulvere",
+        "hours": 150,
+        "start_date": "2020/05/14",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "dopsons",
+        "hours": 8,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "hrinchishinc",
+        "hours": 115,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "ondrasekz",
+        "hours": 145,
+        "start_date": "2020/07/01",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "ebbenm",
+        "hours": 76,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "durringtonj",
+        "hours": 52,
+        "start_date": "2020/06/06",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "berrimanr",
+        "hours": 130,
+        "start_date": "2020/05/20",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "judda",
+        "hours": 8,
+        "start_date": "2020/06/24",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "izkovitzb",
+        "hours": 69,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "snoadd",
+        "hours": 17,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "canterr",
+        "hours": 85,
+        "start_date": "2020/07/12",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "mcfetridges",
+        "hours": 90,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "warryn",
+        "hours": 109,
+        "start_date": "2020/06/14",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "coskerryb",
+        "hours": 133,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "leheudeu",
+        "hours": 125,
+        "start_date": "2020/06/26",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "whitrodn",
+        "hours": 47,
+        "start_date": "2020/06/14",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "giabuzzis",
+        "hours": 80,
+        "start_date": "2020/05/02",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "gobertd",
+        "hours": 31,
+        "start_date": "2020/07/26",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "rosierk",
+        "hours": 141,
+        "start_date": "2020/07/01",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "leeminga",
+        "hours": 149,
+        "start_date": "2020/05/13",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "baalhamd",
+        "hours": 102,
+        "start_date": "2020/07/05",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "ranklinr",
+        "hours": 63,
+        "start_date": "2020/06/05",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "carlettic",
+        "hours": 81,
+        "start_date": "2020/05/07",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "duckerv",
+        "hours": 114,
+        "start_date": "2020/07/01",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "keepinl",
+        "hours": 56,
+        "start_date": "2020/05/22",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "margrettb",
+        "hours": 104,
+        "start_date": "2020/06/07",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "dowe",
+        "hours": 44,
+        "start_date": "2020/05/09",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "ludwikiewiczc",
+        "hours": 127,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "norsisterl",
+        "hours": 74,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "jirousekj",
+        "hours": 64,
+        "start_date": "2020/07/07",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "voasa",
+        "hours": 20,
+        "start_date": "2020/06/03",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "capozzik",
+        "hours": 66,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "spittlesi",
+        "hours": 81,
+        "start_date": "2020/05/27",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "paverd",
+        "hours": 10,
+        "start_date": "2020/06/04",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "fiorentinoe",
+        "hours": 60,
+        "start_date": "2020/05/17",
+        "end_date": "2021/03/07"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "naishr",
+        "hours": 13,
+        "start_date": "2020/05/02",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "gelsthorpeq",
+        "hours": 29,
+        "start_date": "2020/05/29",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "hayzerk",
+        "hours": 77,
+        "start_date": "2020/07/15",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "caldesb",
+        "hours": 138,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "trudgionb",
+        "hours": 70,
+        "start_date": "2020/05/13",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "cowndleym",
+        "hours": 132,
+        "start_date": "2020/05/21",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "reucastler",
+        "hours": 141,
+        "start_date": "2020/06/11",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "linfootm",
+        "hours": 91,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "pomroyr",
+        "hours": 93,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "gonoudem",
+        "hours": 69,
+        "start_date": "2020/07/22",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "shealsn",
+        "hours": 96,
+        "start_date": "2020/07/08",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "sheavillso",
+        "hours": 149,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "lampell",
+        "hours": 134,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "wurstf",
+        "hours": 21,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "inmanc",
+        "hours": 36,
+        "start_date": "2020/05/23",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "wherrettk",
+        "hours": 49,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "lukera",
+        "hours": 55,
+        "start_date": "2020/06/20",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "ellinsb",
+        "hours": 111,
+        "start_date": "2020/06/24",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "ferranj",
+        "hours": 125,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "damanth",
+        "hours": 39,
+        "start_date": "2020/07/22",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "spottiswoodf",
+        "hours": 54,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "prandyj",
+        "hours": 3,
+        "start_date": "2020/06/23",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "kinderb",
+        "hours": 71,
+        "start_date": "2020/06/29",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "delguah",
+        "hours": 41,
+        "start_date": "2020/06/03",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "gorringa",
+        "hours": 36,
+        "start_date": "2020/07/20",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "gladdenw",
+        "hours": 86,
+        "start_date": "2020/06/10",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "bonhommes",
+        "hours": 95,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "coupek",
+        "hours": 37,
+        "start_date": "2020/07/21",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "maccaughenc",
+        "hours": 98,
+        "start_date": "2020/05/12",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "rubrowc",
+        "hours": 78,
+        "start_date": "2020/06/28",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "beaulyl",
+        "hours": 99,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "scrammagef",
+        "hours": 130,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "warykt",
+        "hours": 37,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "corkillm",
+        "hours": 136,
+        "start_date": "2020/05/02",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "peplerl",
+        "hours": 44,
+        "start_date": "2020/06/27",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "staresmeared",
+        "hours": 150,
+        "start_date": "2020/06/07",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "seedhousee",
+        "hours": 112,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "rowlinsonl",
+        "hours": 18,
+        "start_date": "2020/06/03",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "ewinsx",
+        "hours": 22,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "ixort",
+        "hours": 18,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/30"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "mosenm",
+        "hours": 24,
+        "start_date": "2020/05/20",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "arnizf",
+        "hours": 19,
+        "start_date": "2020/07/15",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "sleemanr",
+        "hours": 94,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "fowlep",
+        "hours": 79,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "cicchilloc",
+        "hours": 35,
+        "start_date": "2020/07/10",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "klambtr",
+        "hours": 6,
+        "start_date": "2020/05/23",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "crammys",
+        "hours": 138,
+        "start_date": "2020/05/10",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "newsomen",
+        "hours": 86,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/06"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "benediktg",
+        "hours": 47,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "fossettn",
+        "hours": 147,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "wheadone",
+        "hours": 65,
+        "start_date": "2020/07/10",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "blakemani",
+        "hours": 108,
+        "start_date": "2020/07/01",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "vannarb",
+        "hours": 48,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "ivanishcheva",
+        "hours": 32,
+        "start_date": "2020/06/24",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "wansburyb",
+        "hours": 120,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "frisele",
+        "hours": 83,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "timberlakew",
+        "hours": 26,
+        "start_date": "2020/07/22",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "rounsefellk",
+        "hours": 66,
+        "start_date": "2020/06/09",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "shinnm",
+        "hours": 106,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "alennikovg",
+        "hours": 128,
+        "start_date": "2020/05/02",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "wernherl",
+        "hours": 94,
+        "start_date": "2020/07/06",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "spearettg",
+        "hours": 1,
+        "start_date": "2020/07/02",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "duchama",
+        "hours": 26,
+        "start_date": "2020/05/29",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "donawayb",
+        "hours": 16,
+        "start_date": "2020/05/13",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "levenw",
+        "hours": 1,
+        "start_date": "2020/06/21",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "windleyp",
+        "hours": 41,
+        "start_date": "2020/05/02",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "golling",
+        "hours": 14,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "jochenf",
+        "hours": 76,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "iacomoo",
+        "hours": 90,
+        "start_date": "2020/05/27",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "matchest",
+        "hours": 34,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "labdent",
+        "hours": 68,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "fressonm",
+        "hours": 87,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "heakerd",
+        "hours": 42,
+        "start_date": "2020/07/19",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "le febref",
+        "hours": 57,
+        "start_date": "2020/06/03",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "bloxsomef",
+        "hours": 19,
+        "start_date": "2020/05/30",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "alfonzol",
+        "hours": 126,
+        "start_date": "2020/06/04",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "dumbarl",
+        "hours": 1,
+        "start_date": "2020/07/13",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "cushs",
+        "hours": 44,
+        "start_date": "2020/06/03",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "kendellc",
+        "hours": 129,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "mussonk",
+        "hours": 119,
+        "start_date": "2020/06/21",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "salernos",
+        "hours": 142,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "oldroydec",
+        "hours": 77,
+        "start_date": "2020/07/29",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "longhurstb",
+        "hours": 48,
+        "start_date": "2020/07/10",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "perssei",
+        "hours": 107,
+        "start_date": "2020/05/19",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "duchesneb",
+        "hours": 101,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "faltine",
+        "hours": 44,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "chappelh",
+        "hours": 16,
+        "start_date": "2020/05/14",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "loudianes",
+        "hours": 47,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "ringa",
+        "hours": 145,
+        "start_date": "2020/05/25",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "fosdicka",
+        "hours": 65,
+        "start_date": "2020/06/28",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "ronchettib",
+        "hours": 94,
+        "start_date": "2020/06/01",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "coshn",
+        "hours": 59,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "lauxd",
+        "hours": 145,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "bauduind",
+        "hours": 25,
+        "start_date": "2020/06/26",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "bradbornee",
+        "hours": 14,
+        "start_date": "2020/06/23",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "entwistleg",
+        "hours": 32,
+        "start_date": "2020/07/29",
+        "end_date": "2021/05/11"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "saphs",
+        "hours": 4,
+        "start_date": "2020/06/15",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "rylek",
+        "hours": 150,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "giannoniz",
+        "hours": 111,
+        "start_date": "2020/06/10",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "restoricke",
+        "hours": 121,
+        "start_date": "2020/06/07",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "ainsleed",
+        "hours": 83,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "chickenb",
+        "hours": 36,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "croziers",
+        "hours": 22,
+        "start_date": "2020/06/21",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "ohrtmanna",
+        "hours": 126,
+        "start_date": "2020/06/22",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "bellwoodb",
+        "hours": 4,
+        "start_date": "2020/07/30",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "cooled",
+        "hours": 95,
+        "start_date": "2020/05/23",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "muggb",
+        "hours": 133,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "tweenf",
+        "hours": 75,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "pancoastm",
+        "hours": 30,
+        "start_date": "2020/05/18",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "rotherforthh",
+        "hours": 20,
+        "start_date": "2020/05/05",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "whittleseaa",
+        "hours": 126,
+        "start_date": "2020/06/20",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "soigouxc",
+        "hours": 141,
+        "start_date": "2020/06/07",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "azemarc",
+        "hours": 67,
+        "start_date": "2020/05/28",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "gligorijevici",
+        "hours": 5,
+        "start_date": "2020/06/11",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "libbism",
+        "hours": 8,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "huychef",
+        "hours": 117,
+        "start_date": "2020/05/20",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "effauntl",
+        "hours": 61,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "tunmorec",
+        "hours": 40,
+        "start_date": "2020/05/05",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "tampiong",
+        "hours": 20,
+        "start_date": "2020/07/10",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "layusk",
+        "hours": 85,
+        "start_date": "2020/07/19",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "cawdellm",
+        "hours": 105,
+        "start_date": "2020/06/17",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "lorrainem",
+        "hours": 141,
+        "start_date": "2020/06/30",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "soggeer",
+        "hours": 40,
+        "start_date": "2020/05/23",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "houltonp",
+        "hours": 102,
+        "start_date": "2020/06/27",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "rosenblumj",
+        "hours": 132,
+        "start_date": "2020/06/22",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "kibbyep",
+        "hours": 104,
+        "start_date": "2020/05/25",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "moxsteadr",
+        "hours": 47,
+        "start_date": "2020/05/02",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "kemeryg",
+        "hours": 139,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "lukianovl",
+        "hours": 7,
+        "start_date": "2020/06/17",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "haizeldenp",
+        "hours": 9,
+        "start_date": "2020/05/18",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "donisthorpem",
+        "hours": 97,
+        "start_date": "2020/06/03",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "stansbya",
+        "hours": 140,
+        "start_date": "2020/07/24",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "letrangem",
+        "hours": 70,
+        "start_date": "2020/07/19",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "grinovd",
+        "hours": 55,
+        "start_date": "2020/07/05",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "standevenb",
+        "hours": 101,
+        "start_date": "2020/06/13",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "ashbornet",
+        "hours": 133,
+        "start_date": "2020/06/21",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "treadgert",
+        "hours": 76,
+        "start_date": "2020/05/15",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "sutcliffp",
+        "hours": 4,
+        "start_date": "2020/05/20",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "oldalll",
+        "hours": 117,
+        "start_date": "2020/05/25",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "speeksg",
+        "hours": 15,
+        "start_date": "2020/06/10",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "finlans",
+        "hours": 40,
+        "start_date": "2020/06/21",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "de beauchempc",
+        "hours": 114,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "angellp",
+        "hours": 54,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "wherryp",
+        "hours": 77,
+        "start_date": "2020/06/03",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "bachelarm",
+        "hours": 93,
+        "start_date": "2020/06/03",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "ogelsbym",
+        "hours": 69,
+        "start_date": "2020/05/28",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "hargreavesl",
+        "hours": 47,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "biggenn",
+        "hours": 141,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "blazaa",
+        "hours": 133,
+        "start_date": "2020/06/05",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "crumptonl",
+        "hours": 60,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "privettr",
+        "hours": 83,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "suthworthr",
+        "hours": 63,
+        "start_date": "2020/06/30",
+        "end_date": "2021/03/07"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "rickettsj",
+        "hours": 24,
+        "start_date": "2020/06/21",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "ilyushkinl",
+        "hours": 76,
+        "start_date": "2020/06/26",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "mccormickc",
+        "hours": 55,
+        "start_date": "2020/05/21",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "crosid",
+        "hours": 128,
+        "start_date": "2020/07/05",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "jentgensj",
+        "hours": 95,
+        "start_date": "2020/05/03",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "ilchukz",
+        "hours": 74,
+        "start_date": "2020/05/13",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "idam",
+        "hours": 32,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "libbyw",
+        "hours": 110,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "drakardn",
+        "hours": 7,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "drayej",
+        "hours": 146,
+        "start_date": "2020/07/04",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "locheadk",
+        "hours": 49,
+        "start_date": "2020/07/20",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "mathevetb",
+        "hours": 112,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "mclenaghand",
+        "hours": 77,
+        "start_date": "2020/06/01",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "inderh",
+        "hours": 86,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "clapph",
+        "hours": 54,
+        "start_date": "2020/07/16",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "adriane",
+        "hours": 122,
+        "start_date": "2020/07/18",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "gaddesn",
+        "hours": 88,
+        "start_date": "2020/07/22",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "gobeauxr",
+        "hours": 125,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "arkilla",
+        "hours": 117,
+        "start_date": "2020/07/29",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "todarellod",
+        "hours": 6,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "worgt",
+        "hours": 124,
+        "start_date": "2020/05/11",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "dellitb",
+        "hours": 45,
+        "start_date": "2020/05/29",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "smuthb",
+        "hours": 32,
+        "start_date": "2020/05/25",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "woolhousek",
+        "hours": 73,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "woolliamsg",
+        "hours": 25,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "whatsonc",
+        "hours": 81,
+        "start_date": "2020/05/19",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "aggetth",
+        "hours": 91,
+        "start_date": "2020/05/06",
+        "end_date": "2021/05/06"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "bainese",
+        "hours": 46,
+        "start_date": "2020/05/03",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "kmieciakl",
+        "hours": 80,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "jeevest",
+        "hours": 89,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "fokerk",
+        "hours": 140,
+        "start_date": "2020/07/25",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "birniea",
+        "hours": 86,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "keohaned",
+        "hours": 63,
+        "start_date": "2020/07/19",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "kinnied",
+        "hours": 27,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "benniond",
+        "hours": 21,
+        "start_date": "2020/07/30",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "bullantr",
+        "hours": 125,
+        "start_date": "2020/06/15",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "nuschkes",
+        "hours": 24,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "laysonb",
+        "hours": 92,
+        "start_date": "2020/07/08",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "dyhousem",
+        "hours": 104,
+        "start_date": "2020/05/18",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "bennisonb",
+        "hours": 117,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "naired",
+        "hours": 76,
+        "start_date": "2020/05/26",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "kenewellg",
+        "hours": 105,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "girviny",
+        "hours": 82,
+        "start_date": "2020/06/29",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "skippd",
+        "hours": 4,
+        "start_date": "2020/05/14",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "mowerc",
+        "hours": 85,
+        "start_date": "2020/06/19",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "donnellj",
+        "hours": 23,
+        "start_date": "2020/06/19",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "alowayf",
+        "hours": 2,
+        "start_date": "2020/05/30",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "sillitow",
+        "hours": 119,
+        "start_date": "2020/06/20",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "pollockc",
+        "hours": 143,
+        "start_date": "2020/06/01",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "wakefieldl",
+        "hours": 80,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "juarat",
+        "hours": 139,
+        "start_date": "2020/05/23",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "karlef",
+        "hours": 80,
+        "start_date": "2020/06/06",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "ridelh",
+        "hours": 90,
+        "start_date": "2020/07/16",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "mcomishs",
+        "hours": 47,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "flannigank",
+        "hours": 52,
+        "start_date": "2020/05/14",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "cowndenl",
+        "hours": 52,
+        "start_date": "2020/05/06",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "kopeckad",
+        "hours": 47,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "phillimorea",
+        "hours": 125,
+        "start_date": "2020/05/28",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "ciabatteris",
+        "hours": 122,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "gressv",
+        "hours": 9,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "robardg",
+        "hours": 84,
+        "start_date": "2020/06/29",
+        "end_date": "2021/03/29"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "torrieu",
+        "hours": 141,
+        "start_date": "2020/06/18",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "bensent",
+        "hours": 14,
+        "start_date": "2020/05/11",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "sallowsl",
+        "hours": 28,
+        "start_date": "2020/05/28",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "smeuinf",
+        "hours": 25,
+        "start_date": "2020/07/06",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "tuffm",
+        "hours": 100,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "jaffad",
+        "hours": 99,
+        "start_date": "2020/07/19",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "chestlep",
+        "hours": 46,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "aldera",
+        "hours": 135,
+        "start_date": "2020/06/09",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "kensalls",
+        "hours": 121,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "goulbornek",
+        "hours": 34,
+        "start_date": "2020/06/03",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "de la yglesiasn",
+        "hours": 37,
+        "start_date": "2020/07/26",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "olivic",
+        "hours": 36,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "blazaf",
+        "hours": 136,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "kryzhovm",
+        "hours": 110,
+        "start_date": "2020/07/24",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "dyserta",
+        "hours": 82,
+        "start_date": "2020/05/29",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "iglesiasd",
+        "hours": 80,
+        "start_date": "2020/07/14",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "chislettj",
+        "hours": 81,
+        "start_date": "2020/07/06",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "bulcroftc",
+        "hours": 2,
+        "start_date": "2020/07/01",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "gabitesr",
+        "hours": 12,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "d'ambrogior",
+        "hours": 89,
+        "start_date": "2020/05/01",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "sextonj",
+        "hours": 38,
+        "start_date": "2020/07/27",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "schollickc",
+        "hours": 38,
+        "start_date": "2020/07/28",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "bremleys",
+        "hours": 127,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "muldownien",
+        "hours": 66,
+        "start_date": "2020/06/20",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "brunelc",
+        "hours": 15,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "reynardj",
+        "hours": 92,
+        "start_date": "2020/05/22",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "kernellr",
+        "hours": 72,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "mcgilmartinj",
+        "hours": 143,
+        "start_date": "2020/07/01",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "klimaszewskic",
+        "hours": 77,
+        "start_date": "2020/07/28",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "elizabethv",
+        "hours": 85,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "ledsonl",
+        "hours": 86,
+        "start_date": "2020/07/21",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "ourryg",
+        "hours": 63,
+        "start_date": "2020/06/30",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "mottinelliw",
+        "hours": 64,
+        "start_date": "2020/07/18",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "farhertyf",
+        "hours": 17,
+        "start_date": "2020/07/04",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "dowd",
+        "hours": 108,
+        "start_date": "2020/05/09",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "stoileg",
+        "hours": 65,
+        "start_date": "2020/07/01",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "bendtsena",
+        "hours": 72,
+        "start_date": "2020/06/20",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "casinm",
+        "hours": 104,
+        "start_date": "2020/05/19",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "itzakb",
+        "hours": 117,
+        "start_date": "2020/06/22",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "cassamr",
+        "hours": 92,
+        "start_date": "2020/06/15",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "benckj",
+        "hours": 37,
+        "start_date": "2020/05/04",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "mcilhonee",
+        "hours": 23,
+        "start_date": "2020/07/03",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "shovellerz",
+        "hours": 98,
+        "start_date": "2020/07/07",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "serginsonm",
+        "hours": 8,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "brambillo",
+        "hours": 28,
+        "start_date": "2020/07/21",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "beardshalln",
+        "hours": 100,
+        "start_date": "2020/07/13",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "peyes",
+        "hours": 98,
+        "start_date": "2020/06/27",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "permainx",
+        "hours": 7,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "priestnallu",
+        "hours": 105,
+        "start_date": "2020/07/27",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "mackrod",
+        "hours": 37,
+        "start_date": "2020/07/04",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "fransesl",
+        "hours": 37,
+        "start_date": "2020/06/18",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "darlastonb",
+        "hours": 100,
+        "start_date": "2020/05/17",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "rackamh",
+        "hours": 139,
+        "start_date": "2020/05/29",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "robertza",
+        "hours": 70,
+        "start_date": "2020/07/14",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "dowryb",
+        "hours": 100,
+        "start_date": "2020/06/21",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "lamartinet",
+        "hours": 12,
+        "start_date": "2020/05/07",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "mumbersond",
+        "hours": 40,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "kadwalliderr",
+        "hours": 53,
+        "start_date": "2020/06/19",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "cottilll",
+        "hours": 34,
+        "start_date": "2020/06/14",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "cramptong",
+        "hours": 41,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "lamblotl",
+        "hours": 131,
+        "start_date": "2020/07/03",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "doolande",
+        "hours": 141,
+        "start_date": "2020/05/12",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "hammerbergerh",
+        "hours": 124,
+        "start_date": "2020/05/27",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "edmeadsl",
+        "hours": 76,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "roadt",
+        "hours": 60,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "auting",
+        "hours": 80,
+        "start_date": "2020/06/30",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "maccaghana",
+        "hours": 24,
+        "start_date": "2020/05/01",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "de hoogez",
+        "hours": 58,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "buffink",
+        "hours": 12,
+        "start_date": "2020/07/12",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "wrankmorem",
+        "hours": 29,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "pedlera",
+        "hours": 41,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "blakeya",
+        "hours": 34,
+        "start_date": "2020/07/24",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "falconerb",
+        "hours": 25,
+        "start_date": "2020/05/27",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "johnseyt",
+        "hours": 125,
+        "start_date": "2020/06/25",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "windrossm",
+        "hours": 15,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "fuleph",
+        "hours": 113,
+        "start_date": "2020/06/17",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "readshawr",
+        "hours": 54,
+        "start_date": "2020/06/25",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "cuerdallr",
+        "hours": 121,
+        "start_date": "2020/05/04",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "legionm",
+        "hours": 116,
+        "start_date": "2020/06/18",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "huonicp",
+        "hours": 42,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "cardern",
+        "hours": 94,
+        "start_date": "2020/05/23",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "kempg",
+        "hours": 70,
+        "start_date": "2020/07/22",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "rayntona",
+        "hours": 53,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "mayella",
+        "hours": 102,
+        "start_date": "2020/06/05",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "yakubovicsl",
+        "hours": 42,
+        "start_date": "2020/07/04",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "basketfieldd",
+        "hours": 130,
+        "start_date": "2020/06/24",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "rozenbaumd",
+        "hours": 11,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "alvaradod",
+        "hours": 115,
+        "start_date": "2020/05/16",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "follinga",
+        "hours": 68,
+        "start_date": "2020/07/28",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "gettyl",
+        "hours": 4,
+        "start_date": "2020/05/30",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "neaveb",
+        "hours": 103,
+        "start_date": "2020/07/06",
+        "end_date": "2021/05/06"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "suttlingb",
+        "hours": 134,
+        "start_date": "2020/05/06",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "leiskw",
+        "hours": 10,
+        "start_date": "2020/05/25",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "anteckia",
+        "hours": 130,
+        "start_date": "2020/05/19",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "prandym",
+        "hours": 5,
+        "start_date": "2020/05/13",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "schubbertc",
+        "hours": 72,
+        "start_date": "2020/05/27",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "matsond",
+        "hours": 68,
+        "start_date": "2020/07/09",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "jeannardb",
+        "hours": 124,
+        "start_date": "2020/05/14",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "pritchitta",
+        "hours": 3,
+        "start_date": "2020/05/22",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "sijmonsr",
+        "hours": 8,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "ricec",
+        "hours": 13,
+        "start_date": "2020/06/07",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "elfesg",
+        "hours": 2,
+        "start_date": "2020/06/21",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "decourtl",
+        "hours": 123,
+        "start_date": "2020/07/14",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "skipm",
+        "hours": 13,
+        "start_date": "2020/05/26",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "verneya",
+        "hours": 126,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "crumpem",
+        "hours": 21,
+        "start_date": "2020/05/10",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "grinovr",
+        "hours": 18,
+        "start_date": "2020/07/06",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "rodellr",
+        "hours": 139,
+        "start_date": "2020/06/08",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "heinricie",
+        "hours": 32,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "mulkerrinso",
+        "hours": 87,
+        "start_date": "2020/06/13",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "braggg",
+        "hours": 42,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "sansamc",
+        "hours": 36,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "woodworths",
+        "hours": 74,
+        "start_date": "2020/05/11",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "cosgreaver",
+        "hours": 25,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "whelbandl",
+        "hours": 63,
+        "start_date": "2020/07/02",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "hovela",
+        "hours": 7,
+        "start_date": "2020/06/24",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "mobberleym",
+        "hours": 97,
+        "start_date": "2020/05/11",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "baudik",
+        "hours": 69,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "justune",
+        "hours": 1,
+        "start_date": "2020/06/21",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "liverk",
+        "hours": 129,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "riderg",
+        "hours": 71,
+        "start_date": "2020/06/07",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "ghelerdinid",
+        "hours": 69,
+        "start_date": "2020/05/25",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "markeys",
+        "hours": 47,
+        "start_date": "2020/06/02",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "dongallq",
+        "hours": 95,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "scaddono",
+        "hours": 113,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "oddyk",
+        "hours": 91,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "callfj",
+        "hours": 111,
+        "start_date": "2020/07/10",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "matfint",
+        "hours": 1,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "booelns",
+        "hours": 46,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "mathiassend",
+        "hours": 26,
+        "start_date": "2020/06/08",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "medlicotth",
+        "hours": 67,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "matiebep",
+        "hours": 55,
+        "start_date": "2020/05/15",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "lethabridgec",
+        "hours": 43,
+        "start_date": "2020/07/18",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "sainthillg",
+        "hours": 101,
+        "start_date": "2020/06/17",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "hatliffel",
+        "hours": 39,
+        "start_date": "2020/05/12",
+        "end_date": "2021/05/30"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "breconm",
+        "hours": 33,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "hinrichss",
+        "hours": 4,
+        "start_date": "2020/05/20",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "cuschieril",
+        "hours": 49,
+        "start_date": "2020/05/30",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "verrye",
+        "hours": 46,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "cashamh",
+        "hours": 127,
+        "start_date": "2020/05/12",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "estcotm",
+        "hours": 56,
+        "start_date": "2020/06/20",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "jagelsp",
+        "hours": 102,
+        "start_date": "2020/05/07",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "elldreda",
+        "hours": 143,
+        "start_date": "2020/06/21",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "canwellc",
+        "hours": 38,
+        "start_date": "2020/07/21",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "dockreyd",
+        "hours": 90,
+        "start_date": "2020/05/22",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "ashtonhurstb",
+        "hours": 85,
+        "start_date": "2020/07/08",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "marshfielda",
+        "hours": 117,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "parisok",
+        "hours": 88,
+        "start_date": "2020/05/16",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "mclugishs",
+        "hours": 25,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "sweetenhama",
+        "hours": 89,
+        "start_date": "2020/05/01",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "gloye",
+        "hours": 147,
+        "start_date": "2020/05/16",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "skeechs",
+        "hours": 1,
+        "start_date": "2020/05/19",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "giovannacc@is",
+        "hours": 148,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "mazdona",
+        "hours": 78,
+        "start_date": "2020/05/04",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "southards",
+        "hours": 94,
+        "start_date": "2020/07/24",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "attiwillt",
+        "hours": 104,
+        "start_date": "2020/05/23",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "pirrid",
+        "hours": 38,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "freebornec",
+        "hours": 94,
+        "start_date": "2020/06/16",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "danieloub",
+        "hours": 105,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "claybournej",
+        "hours": 42,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "mcquaidel",
+        "hours": 54,
+        "start_date": "2020/06/12",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "heathwoods",
+        "hours": 131,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "o'mearat",
+        "hours": 28,
+        "start_date": "2020/07/17",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "foadl",
+        "hours": 129,
+        "start_date": "2020/07/10",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "fishem",
+        "hours": 75,
+        "start_date": "2020/06/08",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "cussinse",
+        "hours": 106,
+        "start_date": "2020/05/28",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "forced",
+        "hours": 88,
+        "start_date": "2020/06/13",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "streightc",
+        "hours": 82,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "mclayf",
+        "hours": 6,
+        "start_date": "2020/05/15",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "ackeryk",
+        "hours": 97,
+        "start_date": "2020/05/31",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "bennett",
+        "hours": 65,
+        "start_date": "2020/07/03",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "loosleyo",
+        "hours": 110,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "garlettee",
+        "hours": 112,
+        "start_date": "2020/07/15",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "ollarenshawa",
+        "hours": 146,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "leifb",
+        "hours": 134,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "allmang",
+        "hours": 83,
+        "start_date": "2020/07/25",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "noorwooda",
+        "hours": 17,
+        "start_date": "2020/05/01",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "haytol",
+        "hours": 45,
+        "start_date": "2020/05/25",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "lamburnem",
+        "hours": 45,
+        "start_date": "2020/05/02",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "chesshyrer",
+        "hours": 23,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "ayrtont",
+        "hours": 19,
+        "start_date": "2020/07/16",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "skynnerb",
+        "hours": 91,
+        "start_date": "2020/05/31",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "charlong",
+        "hours": 89,
+        "start_date": "2020/06/03",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "barkel",
+        "hours": 83,
+        "start_date": "2020/07/13",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "mullards",
+        "hours": 62,
+        "start_date": "2020/06/20",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "haithb",
+        "hours": 1,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "rowthc",
+        "hours": 142,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "corkillj",
+        "hours": 86,
+        "start_date": "2020/05/17",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "jowlingm",
+        "hours": 18,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "steartw",
+        "hours": 86,
+        "start_date": "2020/05/12",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "sisselotm",
+        "hours": 43,
+        "start_date": "2020/06/02",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "nabbsf",
+        "hours": 32,
+        "start_date": "2020/06/08",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "labrenzd",
+        "hours": 101,
+        "start_date": "2020/06/19",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "karadzasr",
+        "hours": 17,
+        "start_date": "2020/05/09",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "sewardb",
+        "hours": 148,
+        "start_date": "2020/06/09",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "lucaa",
+        "hours": 1,
+        "start_date": "2020/06/09",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "tschirschkye",
+        "hours": 73,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "hagertyj",
+        "hours": 48,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "fewh",
+        "hours": 42,
+        "start_date": "2020/06/28",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "gillinow",
+        "hours": 38,
+        "start_date": "2020/07/20",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "mosedillj",
+        "hours": 39,
+        "start_date": "2020/06/18",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "dowdallf",
+        "hours": 72,
+        "start_date": "2020/07/20",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "rockwellf",
+        "hours": 145,
+        "start_date": "2020/06/30",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "bygreavesd",
+        "hours": 99,
+        "start_date": "2020/07/30",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "roubyg",
+        "hours": 74,
+        "start_date": "2020/05/28",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "bunkler",
+        "hours": 5,
+        "start_date": "2020/06/18",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "renshawd",
+        "hours": 126,
+        "start_date": "2020/05/16",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "learek",
+        "hours": 114,
+        "start_date": "2020/07/18",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "hindsbergj",
+        "hours": 34,
+        "start_date": "2020/07/08",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "grattena",
+        "hours": 78,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "mallabyt",
+        "hours": 80,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "carwardinew",
+        "hours": 87,
+        "start_date": "2020/05/19",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "mccloughlinr",
+        "hours": 75,
+        "start_date": "2020/05/03",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "blurtonb",
+        "hours": 145,
+        "start_date": "2020/05/07",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "gilliardt",
+        "hours": 112,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "bruinemannp",
+        "hours": 25,
+        "start_date": "2020/05/04",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "fitzroyc",
+        "hours": 90,
+        "start_date": "2020/07/28",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "philipsend",
+        "hours": 114,
+        "start_date": "2020/06/21",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "bourtond",
+        "hours": 144,
+        "start_date": "2020/06/24",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "muzzallk",
+        "hours": 66,
+        "start_date": "2020/05/10",
+        "end_date": "2021/05/06"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "vanlintc",
+        "hours": 7,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "cajklerv",
+        "hours": 17,
+        "start_date": "2020/07/01",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "delacourtg",
+        "hours": 115,
+        "start_date": "2020/07/17",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "blodgetk",
+        "hours": 77,
+        "start_date": "2020/07/07",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "milnerp",
+        "hours": 120,
+        "start_date": "2020/07/23",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "verog",
+        "hours": 63,
+        "start_date": "2020/06/15",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "smeev",
+        "hours": 150,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "delhaya",
+        "hours": 127,
+        "start_date": "2020/07/22",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "bendingd",
+        "hours": 48,
+        "start_date": "2020/05/02",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "torrejond",
+        "hours": 81,
+        "start_date": "2020/07/25",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "siviourc",
+        "hours": 106,
+        "start_date": "2020/06/20",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "petrulisl",
+        "hours": 59,
+        "start_date": "2020/05/27",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "maccarlichr",
+        "hours": 126,
+        "start_date": "2020/06/14",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "squibbest",
+        "hours": 84,
+        "start_date": "2020/05/02",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "gwatkinn",
+        "hours": 122,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "gennys",
+        "hours": 107,
+        "start_date": "2020/05/20",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "tugmand",
+        "hours": 30,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "jonket",
+        "hours": 55,
+        "start_date": "2020/06/11",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "arnowiczc",
+        "hours": 106,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "goncavesh",
+        "hours": 33,
+        "start_date": "2020/05/13",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "burnesss",
+        "hours": 53,
+        "start_date": "2020/06/02",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "larcieres",
+        "hours": 55,
+        "start_date": "2020/07/14",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "coutthartl",
+        "hours": 131,
+        "start_date": "2020/06/15",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "layeb",
+        "hours": 93,
+        "start_date": "2020/06/14",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "pitcherf",
+        "hours": 131,
+        "start_date": "2020/07/24",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "chastenetr",
+        "hours": 84,
+        "start_date": "2020/07/22",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "sainteaun",
+        "hours": 147,
+        "start_date": "2020/05/05",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "heinzelb",
+        "hours": 45,
+        "start_date": "2020/07/14",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "carderd",
+        "hours": 71,
+        "start_date": "2020/06/12",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "millierh",
+        "hours": 79,
+        "start_date": "2020/05/15",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "bodycoteg",
+        "hours": 65,
+        "start_date": "2020/05/04",
+        "end_date": "2021/03/29"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "brosettis",
+        "hours": 149,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "chedzoyj",
+        "hours": 17,
+        "start_date": "2020/06/11",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "malshera",
+        "hours": 90,
+        "start_date": "2020/07/07",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "lomasneyw",
+        "hours": 2,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "phillipl",
+        "hours": 112,
+        "start_date": "2020/06/23",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "garrolda",
+        "hours": 46,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/27"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "northe",
+        "hours": 141,
+        "start_date": "2020/07/28",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "gossopl",
+        "hours": 74,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "umplebyv",
+        "hours": 14,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "clashf",
+        "hours": 38,
+        "start_date": "2020/07/26",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "casewellw",
+        "hours": 18,
+        "start_date": "2020/06/28",
+        "end_date": "2021/05/11"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "alams",
+        "hours": 51,
+        "start_date": "2020/07/30",
+        "end_date": "2021/05/04"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "sorrillh",
+        "hours": 111,
+        "start_date": "2020/05/24",
+        "end_date": "2021/05/10"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "wrenna",
+        "hours": 63,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "sedgemondb",
+        "hours": 133,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "villaw",
+        "hours": 84,
+        "start_date": "2020/06/17",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "westmarlande",
+        "hours": 67,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "harriek",
+        "hours": 24,
+        "start_date": "2020/05/29",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "hobbertm",
+        "hours": 28,
+        "start_date": "2020/06/22",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "vereckerb",
+        "hours": 26,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "lotheanf",
+        "hours": 138,
+        "start_date": "2020/05/25",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "jovanovica",
+        "hours": 35,
+        "start_date": "2020/05/07",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "matyushonokl",
+        "hours": 114,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "lorraind",
+        "hours": 141,
+        "start_date": "2020/05/19",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "upfoldr",
+        "hours": 83,
+        "start_date": "2020/06/07",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "kollatsche",
+        "hours": 96,
+        "start_date": "2020/07/05",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "lefeavert",
+        "hours": 17,
+        "start_date": "2020/06/12",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "ruaneg",
+        "hours": 107,
+        "start_date": "2020/06/23",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "northedget",
+        "hours": 134,
+        "start_date": "2020/06/02",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "lockhartj",
+        "hours": 70,
+        "start_date": "2020/06/29",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "carlans",
+        "hours": 105,
+        "start_date": "2020/06/25",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "baxstaro",
+        "hours": 26,
+        "start_date": "2020/06/21",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "shutled",
+        "hours": 17,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "lamars",
+        "hours": 58,
+        "start_date": "2020/05/09",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "blawj",
+        "hours": 83,
+        "start_date": "2020/05/02",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "renardb",
+        "hours": 42,
+        "start_date": "2020/06/27",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "lindberghc",
+        "hours": 143,
+        "start_date": "2020/05/01",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "lancasterd",
+        "hours": 42,
+        "start_date": "2020/06/23",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "gentk",
+        "hours": 148,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "folcac",
+        "hours": 146,
+        "start_date": "2020/05/19",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "godains",
+        "hours": 85,
+        "start_date": "2020/07/16",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "longcasterv",
+        "hours": 119,
+        "start_date": "2020/05/18",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "oguss",
+        "hours": 81,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "mullinm",
+        "hours": 34,
+        "start_date": "2020/05/01",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "clowsern",
+        "hours": 123,
+        "start_date": "2020/05/19",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "petofih",
+        "hours": 130,
+        "start_date": "2020/05/15",
+        "end_date": "2021/04/17"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "barmbyd",
+        "hours": 61,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "lammengab",
+        "hours": 73,
+        "start_date": "2020/05/20",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "standbridger",
+        "hours": 106,
+        "start_date": "2020/06/22",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "lindstedtb",
+        "hours": 112,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "labony",
+        "hours": 80,
+        "start_date": "2020/07/05",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "dreyer",
+        "hours": 38,
+        "start_date": "2020/05/29",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "meakinm",
+        "hours": 130,
+        "start_date": "2020/07/16",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "basleyg",
+        "hours": 65,
+        "start_date": "2020/07/10",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "tearj",
+        "hours": 79,
+        "start_date": "2020/05/11",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "fantonc",
+        "hours": 96,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "jedrychowskig",
+        "hours": 15,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "doonicans",
+        "hours": 136,
+        "start_date": "2020/07/28",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "gillespier",
+        "hours": 141,
+        "start_date": "2020/06/14",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "gepheartb",
+        "hours": 33,
+        "start_date": "2020/07/16",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "cranhamc",
+        "hours": 42,
+        "start_date": "2020/07/26",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "yukhnevichj",
+        "hours": 38,
+        "start_date": "2020/06/01",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "eglinn",
+        "hours": 39,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "audasm",
+        "hours": 5,
+        "start_date": "2020/05/24",
+        "end_date": "2021/04/05"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "rosemanp",
+        "hours": 28,
+        "start_date": "2020/06/12",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "o'regank",
+        "hours": 103,
+        "start_date": "2020/07/02",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "tembridged",
+        "hours": 67,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "ginnalyc",
+        "hours": 125,
+        "start_date": "2020/06/07",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "crosfieldv",
+        "hours": 60,
+        "start_date": "2020/05/11",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "dumbartonl",
+        "hours": 55,
+        "start_date": "2020/05/16",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "dotsond",
+        "hours": 125,
+        "start_date": "2020/07/29",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "oxbeg",
+        "hours": 122,
+        "start_date": "2020/06/19",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "grisenthwaitec",
+        "hours": 93,
+        "start_date": "2020/05/23",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "haglintonr",
+        "hours": 30,
+        "start_date": "2020/07/22",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "agents",
+        "hours": 63,
+        "start_date": "2020/05/01",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "rissent",
+        "hours": 126,
+        "start_date": "2020/05/18",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "moorruda",
+        "hours": 147,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "golsthorpw",
+        "hours": 144,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "loxlyj",
+        "hours": 102,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "grimsdithd",
+        "hours": 96,
+        "start_date": "2020/06/05",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "marlenw",
+        "hours": 82,
+        "start_date": "2020/06/02",
+        "end_date": "2021/05/06"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "fleotef",
+        "hours": 48,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "heddec",
+        "hours": 59,
+        "start_date": "2020/05/20",
+        "end_date": "2021/03/04"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "vanichkinh",
+        "hours": 121,
+        "start_date": "2020/07/10",
+        "end_date": "2021/03/11"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "maccheynel",
+        "hours": 37,
+        "start_date": "2020/05/13",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "radmorec",
+        "hours": 121,
+        "start_date": "2020/06/24",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "jellimans",
+        "hours": 38,
+        "start_date": "2020/07/26",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "primeb",
+        "hours": 125,
+        "start_date": "2020/07/24",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "tuxellb",
+        "hours": 105,
+        "start_date": "2020/05/02",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "corkanf",
+        "hours": 1,
+        "start_date": "2020/07/07",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "croyserd",
+        "hours": 52,
+        "start_date": "2020/07/11",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "beumantw",
+        "hours": 35,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "lamminamr",
+        "hours": 22,
+        "start_date": "2020/07/09",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "pedricka",
+        "hours": 68,
+        "start_date": "2020/07/11",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "moizerm",
+        "hours": 27,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "bonnyl",
+        "hours": 4,
+        "start_date": "2020/05/05",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "goldesf",
+        "hours": 141,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "cantwellp",
+        "hours": 94,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "harnella",
+        "hours": 58,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "schaffelb",
+        "hours": 111,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "beavand",
+        "hours": 95,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "grabertb",
+        "hours": 38,
+        "start_date": "2020/06/27",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "kolakovicv",
+        "hours": 51,
+        "start_date": "2020/07/24",
+        "end_date": "2021/04/19"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "borthen",
+        "hours": 65,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "davidsena",
+        "hours": 30,
+        "start_date": "2020/07/13",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "courtliffm",
+        "hours": 74,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "cradockk",
+        "hours": 102,
+        "start_date": "2020/07/09",
+        "end_date": "2021/05/11"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "dinckeg",
+        "hours": 128,
+        "start_date": "2020/06/02",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "boskellc",
+        "hours": 140,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "woodesona",
+        "hours": 122,
+        "start_date": "2020/06/07",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "gwynnl",
+        "hours": 128,
+        "start_date": "2020/07/02",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "le barred",
+        "hours": 78,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "siwardt",
+        "hours": 86,
+        "start_date": "2020/06/07",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "mcdowallt",
+        "hours": 144,
+        "start_date": "2020/05/15",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "guyotw",
+        "hours": 76,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "matelaitisp",
+        "hours": 61,
+        "start_date": "2020/07/10",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "inoldi",
+        "hours": 88,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "lowries",
+        "hours": 150,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "cheetamw",
+        "hours": 100,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/03"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "amyesd",
+        "hours": 77,
+        "start_date": "2020/07/08",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "skateg",
+        "hours": 139,
+        "start_date": "2020/07/23",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "raffont",
+        "hours": 24,
+        "start_date": "2020/06/18",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "shapcotek",
+        "hours": 79,
+        "start_date": "2020/06/10",
+        "end_date": "2021/03/09"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "nurdind",
+        "hours": 147,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "moodiec",
+        "hours": 56,
+        "start_date": "2020/06/29",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "spearmane",
+        "hours": 22,
+        "start_date": "2020/05/07",
+        "end_date": "2021/05/13"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "dunthornd",
+        "hours": 90,
+        "start_date": "2020/05/10",
+        "end_date": "2021/03/15"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "vigrassd",
+        "hours": 37,
+        "start_date": "2020/06/16",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "jugginsa",
+        "hours": 70,
+        "start_date": "2020/05/14",
+        "end_date": "2021/05/20"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "lanawaym",
+        "hours": 38,
+        "start_date": "2020/06/25",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "ruminj",
+        "hours": 142,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "mcspirronj",
+        "hours": 135,
+        "start_date": "2020/07/11",
+        "end_date": "2021/04/23"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "bunneye",
+        "hours": 138,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "danate",
+        "hours": 46,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/31"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "exrolm",
+        "hours": 52,
+        "start_date": "2020/05/24",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "woodroughe",
+        "hours": 96,
+        "start_date": "2020/07/17",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "myhillf",
+        "hours": 60,
+        "start_date": "2020/05/21",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "rulfn",
+        "hours": 21,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "davidsohnj",
+        "hours": 129,
+        "start_date": "2020/06/01",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "nuttone",
+        "hours": 108,
+        "start_date": "2020/05/13",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "grundd",
+        "hours": 52,
+        "start_date": "2020/05/24",
+        "end_date": "2021/04/25"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "triplett",
+        "hours": 75,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/18"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "ankerss",
+        "hours": 13,
+        "start_date": "2020/06/02",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "bownh",
+        "hours": 4,
+        "start_date": "2020/06/28",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "clementsg",
+        "hours": 27,
+        "start_date": "2020/06/07",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "sarrellj",
+        "hours": 118,
+        "start_date": "2020/06/17",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "mcgettiganh",
+        "hours": 132,
+        "start_date": "2020/07/17",
+        "end_date": "2021/04/22"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "wernhero",
+        "hours": 46,
+        "start_date": "2020/07/20",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "rahillf",
+        "hours": 123,
+        "start_date": "2020/05/31",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "norewoodb",
+        "hours": 30,
+        "start_date": "2020/07/09",
+        "end_date": "2021/03/08"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "measenf",
+        "hours": 129,
+        "start_date": "2020/07/03",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "grinawayc",
+        "hours": 132,
+        "start_date": "2020/06/08",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "dowlesb",
+        "hours": 125,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "spenceleyc",
+        "hours": 27,
+        "start_date": "2020/06/22",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "howeyy",
+        "hours": 30,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "blythn",
+        "hours": 112,
+        "start_date": "2020/05/27",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "collimorec",
+        "hours": 117,
+        "start_date": "2020/06/24",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "gallonem",
+        "hours": 65,
+        "start_date": "2020/05/19",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "keverna",
+        "hours": 150,
+        "start_date": "2020/06/09",
+        "end_date": "2021/04/15"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "peyroi",
+        "hours": 150,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "dewirel",
+        "hours": 15,
+        "start_date": "2020/05/29",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "stellmanc",
+        "hours": 133,
+        "start_date": "2020/07/28",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "caughtr",
+        "hours": 146,
+        "start_date": "2020/05/15",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "grillsf",
+        "hours": 124,
+        "start_date": "2020/07/22",
+        "end_date": "2021/03/25"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "siebx",
+        "hours": 137,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "bollonb",
+        "hours": 110,
+        "start_date": "2020/07/18",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "ghironw",
+        "hours": 111,
+        "start_date": "2020/07/10",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "fraylingl",
+        "hours": 93,
+        "start_date": "2020/06/28",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "wyren",
+        "hours": 123,
+        "start_date": "2020/07/02",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "kenninghamk",
+        "hours": 120,
+        "start_date": "2020/06/11",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "grisek",
+        "hours": 37,
+        "start_date": "2020/06/08",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "stainsonm",
+        "hours": 117,
+        "start_date": "2020/06/12",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "verrillr",
+        "hours": 130,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "tompkinso",
+        "hours": 35,
+        "start_date": "2020/07/25",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "meacha",
+        "hours": 38,
+        "start_date": "2020/05/26",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "jobkec",
+        "hours": 138,
+        "start_date": "2020/05/13",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "mccartu",
+        "hours": 49,
+        "start_date": "2020/07/01",
+        "end_date": "2021/05/07"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "truesdalee",
+        "hours": 69,
+        "start_date": "2020/07/02",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "hughlins",
+        "hours": 148,
+        "start_date": "2020/07/27",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "biffinw",
+        "hours": 100,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "collymorec",
+        "hours": 100,
+        "start_date": "2020/07/12",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "digwoodj",
+        "hours": 38,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "flemyngo",
+        "hours": 33,
+        "start_date": "2020/05/24",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "confaitj",
+        "hours": 98,
+        "start_date": "2020/06/16",
+        "end_date": "2021/05/09"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "brazerd",
+        "hours": 81,
+        "start_date": "2020/05/03",
+        "end_date": "2021/03/10"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "dwinek",
+        "hours": 39,
+        "start_date": "2020/07/05",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "gilhespya",
+        "hours": 92,
+        "start_date": "2020/06/09",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "seegert",
+        "hours": 14,
+        "start_date": "2020/06/06",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "castendam",
+        "hours": 148,
+        "start_date": "2020/06/15",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "moormanl",
+        "hours": 20,
+        "start_date": "2020/05/12",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "priseg",
+        "hours": 71,
+        "start_date": "2020/05/17",
+        "end_date": "2021/05/15"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "hugina",
+        "hours": 77,
+        "start_date": "2020/07/14",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "brockiem",
+        "hours": 150,
+        "start_date": "2020/07/21",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "dunwoodym",
+        "hours": 72,
+        "start_date": "2020/06/04",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "dinjesc",
+        "hours": 111,
+        "start_date": "2020/05/04",
+        "end_date": "2021/05/22"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "cansdalel",
+        "hours": 150,
+        "start_date": "2020/05/24",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "clisti",
+        "hours": 78,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "robackf",
+        "hours": 23,
+        "start_date": "2020/06/03",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "gailw",
+        "hours": 5,
+        "start_date": "2020/05/18",
+        "end_date": "2021/05/08"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "farlandk",
+        "hours": 148,
+        "start_date": "2020/05/12",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "largane",
+        "hours": 2,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/04"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "dudleyb",
+        "hours": 86,
+        "start_date": "2020/06/13",
+        "end_date": "2021/04/09"
+    },
+    {
+        "position_code": "MAT647",
+        "utorid": "bowickt",
+        "hours": 83,
+        "start_date": "2020/06/22",
+        "end_date": "2021/03/01"
+    },
+    {
+        "position_code": "MAT301H1S",
+        "utorid": "pawnsfordt",
+        "hours": 127,
+        "start_date": "2020/06/07",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "STA985",
+        "utorid": "maffyi",
+        "hours": 115,
+        "start_date": "2020/07/30",
+        "end_date": "2021/05/28"
+    },
+    {
+        "position_code": "MAT355H1S",
+        "utorid": "jozefc",
+        "hours": 134,
+        "start_date": "2020/07/04",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "CSC288H1F",
+        "utorid": "wildf",
+        "hours": 98,
+        "start_date": "2020/06/28",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC870",
+        "utorid": "gamblesh",
+        "hours": 129,
+        "start_date": "2020/07/18",
+        "end_date": "2021/05/17"
+    },
+    {
+        "position_code": "MAT921H1S",
+        "utorid": "fehnerso",
+        "hours": 97,
+        "start_date": "2020/06/16",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "CSC839",
+        "utorid": "wintourz",
+        "hours": 5,
+        "start_date": "2020/07/05",
+        "end_date": "2021/04/14"
+    },
+    {
+        "position_code": "STA382",
+        "utorid": "thomaseng",
+        "hours": 130,
+        "start_date": "2020/06/06",
+        "end_date": "2021/05/19"
+    },
+    {
+        "position_code": "CSC756H1S",
+        "utorid": "crowleyd",
+        "hours": 121,
+        "start_date": "2020/07/03",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "CSC573",
+        "utorid": "tokes",
+        "hours": 78,
+        "start_date": "2020/07/02",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "CSC329H1S",
+        "utorid": "lambardm",
+        "hours": 107,
+        "start_date": "2020/07/29",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "MAT147H1F",
+        "utorid": "georgea",
+        "hours": 58,
+        "start_date": "2020/06/19",
+        "end_date": "2021/04/29"
+    },
+    {
+        "position_code": "CSC502",
+        "utorid": "bernardeaun",
+        "hours": 149,
+        "start_date": "2020/05/30",
+        "end_date": "2021/04/28"
+    },
+    {
+        "position_code": "CSC564H1F",
+        "utorid": "riolfol",
+        "hours": 17,
+        "start_date": "2020/07/23",
+        "end_date": "2021/04/21"
+    },
+    {
+        "position_code": "MAT209H1S",
+        "utorid": "redfernw",
+        "hours": 100,
+        "start_date": "2020/05/23",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "CSC471",
+        "utorid": "terreng",
+        "hours": 20,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "STA168H1S",
+        "utorid": "blofeldd",
+        "hours": 22,
+        "start_date": "2020/05/09",
+        "end_date": "2021/03/20"
+    },
+    {
+        "position_code": "MAT910H1S",
+        "utorid": "swateridgec",
+        "hours": 96,
+        "start_date": "2020/05/08",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "MAT918",
+        "utorid": "abrahamsenl",
+        "hours": 45,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "STA617H1F",
+        "utorid": "pittse",
+        "hours": 93,
+        "start_date": "2020/05/11",
+        "end_date": "2021/05/30"
+    },
+    {
+        "position_code": "MAT330H1F",
+        "utorid": "mccloyn",
+        "hours": 128,
+        "start_date": "2020/07/21",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "MAT235H1S",
+        "utorid": "valdes",
+        "hours": 68,
+        "start_date": "2020/07/09",
+        "end_date": "2021/04/13"
+    },
+    {
+        "position_code": "STA441H1S",
+        "utorid": "goslinh",
+        "hours": 92,
+        "start_date": "2020/05/02",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "STA386H1S",
+        "utorid": "hallidays",
+        "hours": 103,
+        "start_date": "2020/06/01",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT361H1S",
+        "utorid": "lies",
+        "hours": 110,
+        "start_date": "2020/07/13",
+        "end_date": "2021/05/16"
+    },
+    {
+        "position_code": "STA706H1F",
+        "utorid": "luggart",
+        "hours": 8,
+        "start_date": "2020/07/21",
+        "end_date": "2021/05/24"
+    },
+    {
+        "position_code": "MAT620",
+        "utorid": "vannerg",
+        "hours": 13,
+        "start_date": "2020/06/24",
+        "end_date": "2021/04/02"
+    },
+    {
+        "position_code": "MAT172H1S",
+        "utorid": "da costap",
+        "hours": 30,
+        "start_date": "2020/07/25",
+        "end_date": "2021/05/26"
+    },
+    {
+        "position_code": "STA666",
+        "utorid": "guises",
+        "hours": 49,
+        "start_date": "2020/05/14",
+        "end_date": "2021/03/21"
+    },
+    {
+        "position_code": "MAT120H1F",
+        "utorid": "hynden",
+        "hours": 76,
+        "start_date": "2020/06/28",
+        "end_date": "2021/04/06"
+    },
+    {
+        "position_code": "CSC876H1S",
+        "utorid": "warburtonb",
+        "hours": 105,
+        "start_date": "2020/05/28",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "MAT917H1S",
+        "utorid": "travissg",
+        "hours": 146,
+        "start_date": "2020/05/11",
+        "end_date": "2021/03/27"
+    },
+    {
+        "position_code": "CSC221H1F",
+        "utorid": "dwirea",
+        "hours": 97,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "MAT558H1S",
+        "utorid": "brownc",
+        "hours": 117,
+        "start_date": "2020/07/18",
+        "end_date": "2021/03/13"
+    },
+    {
+        "position_code": "STA154H1F",
+        "utorid": "jankowskia",
+        "hours": 102,
+        "start_date": "2020/07/19",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "MAT280",
+        "utorid": "lenoxa",
+        "hours": 8,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC365",
+        "utorid": "sirmona",
+        "hours": 104,
+        "start_date": "2020/05/17",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "STA448H1S",
+        "utorid": "kobusc",
+        "hours": 11,
+        "start_date": "2020/07/09",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "STA485H1S",
+        "utorid": "mckainr",
+        "hours": 70,
+        "start_date": "2020/07/13",
+        "end_date": "2021/05/27"
+    },
+    {
+        "position_code": "MAT575H1S",
+        "utorid": "diackr",
+        "hours": 106,
+        "start_date": "2020/06/30",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "CSC398H1F",
+        "utorid": "presnaila",
+        "hours": 82,
+        "start_date": "2020/05/14",
+        "end_date": "2021/05/25"
+    },
+    {
+        "position_code": "MAT554H1S",
+        "utorid": "henfrel",
+        "hours": 84,
+        "start_date": "2020/05/13",
+        "end_date": "2021/05/23"
+    },
+    {
+        "position_code": "CSC311",
+        "utorid": "theseirad",
+        "hours": 147,
+        "start_date": "2020/07/06",
+        "end_date": "2021/03/19"
+    },
+    {
+        "position_code": "STA793",
+        "utorid": "tersaya",
+        "hours": 99,
+        "start_date": "2020/06/15",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "CSC299",
+        "utorid": "de malcharm",
+        "hours": 27,
+        "start_date": "2020/07/06",
+        "end_date": "2021/04/20"
+    },
+    {
+        "position_code": "MAT971",
+        "utorid": "leerf",
+        "hours": 48,
+        "start_date": "2020/07/12",
+        "end_date": "2021/03/05"
+    },
+    {
+        "position_code": "CSC390H1S",
+        "utorid": "doudneyd",
+        "hours": 29,
+        "start_date": "2020/07/29",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "STA456",
+        "utorid": "locketti",
+        "hours": 45,
+        "start_date": "2020/05/04",
+        "end_date": "2021/05/02"
+    },
+    {
+        "position_code": "STA148H1S",
+        "utorid": "mccluinc",
+        "hours": 2,
+        "start_date": "2020/05/20",
+        "end_date": "2021/04/12"
+    },
+    {
+        "position_code": "STA845H1F",
+        "utorid": "dossetterg",
+        "hours": 87,
+        "start_date": "2020/05/17",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "CSC618H1F",
+        "utorid": "bossomp",
+        "hours": 138,
+        "start_date": "2020/05/08",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC211H1S",
+        "utorid": "summerlyl",
+        "hours": 38,
+        "start_date": "2020/06/30",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "CSC218H1S",
+        "utorid": "iacopinid",
+        "hours": 31,
+        "start_date": "2020/06/27",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "CSC561H1S",
+        "utorid": "recherta",
+        "hours": 87,
+        "start_date": "2020/07/17",
+        "end_date": "2021/03/06"
+    },
+    {
+        "position_code": "STA139H1S",
+        "utorid": "greatbankl",
+        "hours": 136,
+        "start_date": "2020/06/27",
+        "end_date": "2021/04/08"
+    },
+    {
+        "position_code": "STA254H1F",
+        "utorid": "clossl",
+        "hours": 44,
+        "start_date": "2020/05/26",
+        "end_date": "2021/03/14"
+    },
+    {
+        "position_code": "STA566H1F",
+        "utorid": "carmanl",
+        "hours": 8,
+        "start_date": "2020/07/19",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "MAT454H1F",
+        "utorid": "mccartank",
+        "hours": 28,
+        "start_date": "2020/07/19",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "STA206",
+        "utorid": "raspinl",
+        "hours": 108,
+        "start_date": "2020/05/22",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "CSC135H1S",
+        "utorid": "d'aguannos",
+        "hours": 52,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC504H1F",
+        "utorid": "bellewa",
+        "hours": 137,
+        "start_date": "2020/06/17",
+        "end_date": "2021/05/29"
+    },
+    {
+        "position_code": "STA167H1F",
+        "utorid": "haberghams",
+        "hours": 65,
+        "start_date": "2020/05/29",
+        "end_date": "2021/05/14"
+    },
+    {
+        "position_code": "STA292H1S",
+        "utorid": "scamelk",
+        "hours": 11,
+        "start_date": "2020/05/26",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC719H1S",
+        "utorid": "wasons",
+        "hours": 34,
+        "start_date": "2020/05/03",
+        "end_date": "2021/04/03"
+    },
+    {
+        "position_code": "MAT106H1F",
+        "utorid": "hewertsona",
+        "hours": 2,
+        "start_date": "2020/06/13",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC839H1S",
+        "utorid": "jakelu",
+        "hours": 57,
+        "start_date": "2020/06/13",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "STA882H1S",
+        "utorid": "maddraj",
+        "hours": 30,
+        "start_date": "2020/05/15",
+        "end_date": "2021/04/01"
+    },
+    {
+        "position_code": "MAT194",
+        "utorid": "o'fearguisem",
+        "hours": 126,
+        "start_date": "2020/06/26",
+        "end_date": "2021/03/28"
+    },
+    {
+        "position_code": "MAT660",
+        "utorid": "barthotj",
+        "hours": 11,
+        "start_date": "2020/07/03",
+        "end_date": "2021/03/16"
+    },
+    {
+        "position_code": "CSC434",
+        "utorid": "tybaltn",
+        "hours": 119,
+        "start_date": "2020/06/25",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA275",
+        "utorid": "strippi",
+        "hours": 115,
+        "start_date": "2020/06/11",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "CSC622H1S",
+        "utorid": "clerem",
+        "hours": 49,
+        "start_date": "2020/05/17",
+        "end_date": "2021/03/12"
+    },
+    {
+        "position_code": "STA337H1S",
+        "utorid": "kerssc",
+        "hours": 147,
+        "start_date": "2020/07/09",
+        "end_date": "2021/03/30"
+    },
+    {
+        "position_code": "STA224H1F",
+        "utorid": "wynchl",
+        "hours": 115,
+        "start_date": "2020/07/12",
+        "end_date": "2021/05/12"
+    },
+    {
+        "position_code": "CSC941H1S",
+        "utorid": "longmuirj",
+        "hours": 41,
+        "start_date": "2020/07/03",
+        "end_date": "2021/04/26"
+    },
+    {
+        "position_code": "CSC829H1S",
+        "utorid": "mongern",
+        "hours": 87,
+        "start_date": "2020/05/10",
+        "end_date": "2021/04/30"
+    },
+    {
+        "position_code": "CSC725H1S",
+        "utorid": "franssenl",
+        "hours": 113,
+        "start_date": "2020/05/26",
+        "end_date": "2021/03/07"
+    },
+    {
+        "position_code": "MAT496",
+        "utorid": "blanpeinb",
+        "hours": 143,
+        "start_date": "2020/05/25",
+        "end_date": "2021/03/18"
+    },
+    {
+        "position_code": "STA617",
+        "utorid": "swiresm",
+        "hours": 90,
+        "start_date": "2020/07/11",
+        "end_date": "2021/03/22"
+    },
+    {
+        "position_code": "CSC677H1F",
+        "utorid": "bielfeldtj",
+        "hours": 139,
+        "start_date": "2020/07/27",
+        "end_date": "2021/03/23"
+    },
+    {
+        "position_code": "STA472H1S",
+        "utorid": "byarsh",
+        "hours": 8,
+        "start_date": "2020/07/08",
+        "end_date": "2021/03/26"
+    },
+    {
+        "position_code": "CSC359",
+        "utorid": "sommerlingc",
+        "hours": 94,
+        "start_date": "2020/05/02",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "CSC997",
+        "utorid": "norreyp",
+        "hours": 88,
+        "start_date": "2020/07/01",
+        "end_date": "2021/03/24"
+    },
+    {
+        "position_code": "MAT969H1S",
+        "utorid": "buiee",
+        "hours": 41,
+        "start_date": "2020/05/14",
+        "end_date": "2021/03/02"
+    },
+    {
+        "position_code": "CSC486H1F",
+        "utorid": "pimlockm",
+        "hours": 94,
+        "start_date": "2020/06/10",
+        "end_date": "2021/04/24"
+    },
+    {
+        "position_code": "STA759H1S",
+        "utorid": "conquestg",
+        "hours": 81,
+        "start_date": "2020/06/04",
+        "end_date": "2021/05/01"
+    },
+    {
+        "position_code": "STA768",
+        "utorid": "stubbsg",
+        "hours": 12,
+        "start_date": "2020/05/17",
+        "end_date": "2021/04/07"
+    },
+    {
+        "position_code": "CSC361",
+        "utorid": "locarnof",
+        "hours": 34,
+        "start_date": "2020/06/11",
+        "end_date": "2021/05/18"
+    },
+    {
+        "position_code": "MAT336",
+        "utorid": "grosvenerb",
+        "hours": 100,
+        "start_date": "2020/05/28",
+        "end_date": "2021/05/05"
+    },
+    {
+        "position_code": "CSC960H1S",
+        "utorid": "castaniea",
+        "hours": 52,
+        "start_date": "2020/06/14",
+        "end_date": "2021/04/16"
+    },
+    {
+        "position_code": "CSC151H1S",
+        "utorid": "wollacottw",
+        "hours": 75,
+        "start_date": "2020/05/01",
+        "end_date": "2021/05/21"
+    },
+    {
+        "position_code": "MAT897",
+        "utorid": "callowaym",
+        "hours": 62,
+        "start_date": "2020/06/13",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "MAT493",
+        "utorid": "ehratg",
+        "hours": 22,
+        "start_date": "2020/05/22",
+        "end_date": "2021/04/11"
+    },
+    {
+        "position_code": "MAT403",
+        "utorid": "collisonc",
+        "hours": 112,
+        "start_date": null,
+        "end_date": null
+    },
+    {
+        "position_code": "CSC766H1S",
+        "utorid": "tassele",
+        "hours": 15,
+        "start_date": "2020/05/05",
+        "end_date": "2021/03/17"
+    },
+    {
+        "position_code": "MAT760H1S",
+        "utorid": "terbruggenj",
+        "hours": 135,
+        "start_date": "2020/07/15",
+        "end_date": "2021/03/29"
+    },
+    {
+        "position_code": "CSC778H1S",
+        "utorid": "ferrelih",
+        "hours": 144,
+        "start_date": "2020/07/14",
+        "end_date": "2021/05/03"
+    },
+    {
+        "position_code": "CSC276H1S",
+        "utorid": "moodiem",
+        "hours": 9,
+        "start_date": "2020/05/01",
+        "end_date": "2021/04/10"
+    },
+    {
+        "position_code": "CSC924",
+        "utorid": "cysterp",
+        "hours": 33,
+        "start_date": "2020/05/07",
+        "end_date": "2021/05/17"
+    }
+]

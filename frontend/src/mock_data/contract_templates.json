@@ -1,0 +1,10 @@
+[
+    {
+        "template_name": "Regular",
+        "template_file": "default-template.html"
+    },
+    {
+        "template_name": "OTO",
+        "template_file": "default-template.html"
+    }
+]

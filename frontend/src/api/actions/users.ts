@@ -37,7 +37,7 @@ export const fetchActiveUser = validatedApiDispatcher({
         // a safe operation for any type, so we force TypeScript to stop complaining
         // by passing in `currentRole!`
         if (data.roles && !data.roles.includes(currentRole!)) {
-            dispatch(setActiveUserRole(data.roles[0]));
+            await dispatch(setActiveUserRole(data.roles[0]));
         }
         return data;
     },
@@ -91,6 +91,16 @@ export const debugOnlyFetchUsers = validatedApiDispatcher({
     dispatcher: () => async (dispatch) => {
         const data = (await apiGET(`/debug/users`)) as User[];
         dispatch(fetchUsersSuccess(data));
+    },
+});
+
+export const debugOnlyUpsertUser = validatedApiDispatcher({
+    name: "debugOnlyUpsertUser",
+    description: "Upsert a user",
+    onErrorDispatch: (e) => upsertError(e.toString()),
+    dispatcher: (user: User | Omit<User, "id">) => async (dispatch) => {
+        const data = (await apiPOST(`/debug/users`, user)) as User;
+        return dispatch(upsertUserSuccess(data));
     },
 });
 
