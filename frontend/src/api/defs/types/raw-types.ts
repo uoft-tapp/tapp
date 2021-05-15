@@ -108,6 +108,16 @@ export interface RawDdah extends HasId {
     duties: RawDuty[];
 }
 
+export interface RawDdahDetails {
+    approved_date: string | null;
+    accepted_date: string | null;
+    revised_date: string | null;
+    emailed_date: string | null;
+    position_code: string;
+    position_title: string | null;
+    status: "acknowledged" | "unacknowledged";
+}
+
 export interface RawPosting extends HasId {
     name: string;
     intro_text: string | null;
