@@ -22,12 +22,8 @@ import {
     fetchSessions,
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
-<<<<<<< HEAD
-import { LoadMockButton } from "./load-mock-data";
-=======
 import { SeedDataMenu } from "./load-mock-data";
 import { ErrorBoundary } from "react-error-boundary";
->>>>>>> upstream/master
 
 // We don't need SwaggerUI all the time, so load it lazily.
 const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
@@ -130,11 +126,7 @@ const ConnectedToggleMockApi = connect(null, { setMockAPIState })(
 const ConnectedLoadMockButton = connect(
     (state) => ({ sessions: sessionsSelector(state) }),
     { fetchSessions }
-<<<<<<< HEAD
-)(LoadMockButton);
-=======
 )(SeedDataMenu);
->>>>>>> upstream/master
 
 function DevFrame(props) {
     return (
