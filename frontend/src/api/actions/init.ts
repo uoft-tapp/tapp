@@ -193,7 +193,12 @@ export function initFromStage(
         }
 
         if (shouldRunStage("fetchInstructors")) {
-            asyncActions.push(dispatch(fetchInstructors()));
+            // Even though we eventually catch all the errors when we await the asyncActions,
+            // sometimes an error is thrown before we have a chance to await it. React,
+            // in dev mode, watches for any uncaught errors in promises and will refuse to
+            // render the interface if there are any. For that reason, we set this promise
+            // up with a catch block right away.
+            asyncActions.push(dispatch(fetchInstructors()).catch(console.log));
         }
 
         if (shouldRunStage("fetchSessions")) {

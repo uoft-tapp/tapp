@@ -10,6 +10,7 @@ import {
     setActiveSession,
     positionsSelector,
     activeSessionSelector,
+    debugOnlyUpsertUser,
 } from "../../api/actions";
 
 import {
@@ -75,6 +76,7 @@ export function SeedDataMenu({
     }
 
     const seedActions = {
+        user: { name: `Users (${seedData.users.length})`, action: seedUsers },
         session: { name: "Session (1)", action: seedSession },
         contractTemplate: {
             name: "Contract Templates (2)",
@@ -141,6 +143,19 @@ export function SeedDataMenu({
 
         await dispatch(setActiveSession(session));
 
+        setProgress(100);
+    }
+
+    async function seedUsers(limit = 1000) {
+        setProgress(0);
+        setStage("Users");
+        const users = seedData.users.slice(0, limit);
+        count = 0;
+        for (const user of users) {
+            await dispatch(debugOnlyUpsertUser(user));
+            count++;
+            setProgress(Math.round((count / users.length) * 100));
+        }
         setProgress(100);
     }
 
@@ -266,11 +281,6 @@ export function SeedDataMenu({
     function onSelectHandler(eventKey: string | null) {
         setSeedAction(
             seedActions[eventKey as keyof typeof seedActions]?.action || ident
-        );
-        console.log(
-            "doing event",
-            eventKey,
-            seedActions[eventKey as keyof typeof seedActions]?.action
         );
         setConfirmDialogVisible(true);
     }
