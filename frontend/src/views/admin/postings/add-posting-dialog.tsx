@@ -66,7 +66,7 @@ export function ConnectedAddPostingDialog({
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>Add Session</Modal.Title>
+                <Modal.Title>Add Posting</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <PostingEditor
