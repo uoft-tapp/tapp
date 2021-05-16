@@ -50,9 +50,9 @@ class DdahMailer < ActionMailer::Base
         @ta_coordinator_email = Rails.application.config.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
         @url =
-            "#{Rails.application.config.base_url}/public/ddahs/#{
+            "#{Rails.application.config.base_url}/#/public/ddahs/#{
                 ddah.url_token
-            }/view"
+            }"
 
         @subs = {
             ddah: @ddah,

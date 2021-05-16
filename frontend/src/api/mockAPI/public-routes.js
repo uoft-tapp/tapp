@@ -16,6 +16,13 @@ export const publicRoutes = {
             summary: "View a ddah with an accept dialog",
             returns: wrappedPropTypes.any,
         }),
+        "/public/ddahs/:token/details": documentCallback({
+            func: () => {
+                throw new Error("Not implemented in Mock API");
+            },
+            summary: "Get JSON information about a DDAH",
+            returns: wrappedPropTypes.any,
+        }),
         "/public/contracts/:token": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
@@ -54,7 +61,7 @@ export const publicRoutes = {
         }),
     },
     post: {
-        "/public/ddahs/:ddah_id/accept": documentCallback({
+        "/public/ddahs/:token/accept": documentCallback({
             func: () => {
                 throw new Error("Not implemented in Mock API");
             },

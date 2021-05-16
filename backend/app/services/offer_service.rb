@@ -21,9 +21,9 @@ class OfferService
             ta_coordinator_email: @offer.ta_coordinator_email,
             # TODO:  This seems too hard-coded.  Is there another way to get the route?
             url:
-                "#{Rails.application.config.base_url}/public/contracts/#{
+                "#{Rails.application.config.base_url}/#/public/contracts/#{
                     @offer.url_token
-                }/view",
+                }",
             nag_count: @offer.nag_count,
             status_message: status_message,
             changes_summary: changes_from_previous

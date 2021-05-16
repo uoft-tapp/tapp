@@ -252,6 +252,7 @@ Rails
             end
             resources :ddahs, format: nil, only: %i[show] do
                 get :view, format: false, to: 'ddahs#view'
+                get :details, format: false, to: 'ddahs#details'
                 post :accept, format: false, to: 'ddahs#accept'
             end
             resources :postings, only: %i[show] do
