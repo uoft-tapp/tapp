@@ -14,7 +14,7 @@ import Scrollbar from "react-scrollbars-custom";
 import "./filter-table.css";
 import { AutoSizer } from "react-virtualized";
 import { FixedSizeList } from "react-window";
-
+import { ScrollState } from "react-scrollbars-custom/dist/types/types";
 /**
  * A ReactTable that can be filtered and sorted. If a `setSelected`
  * function is passed in, checkboxes will be shown next to each row
@@ -53,7 +53,7 @@ export function AdvancedFilterTable(
         columns: any[];
         data: any[];
         filterable?: boolean | null;
-        selected?: any[];
+        selected?: number[];
         setSelected?: Function;
     }
 ) {
@@ -151,7 +151,11 @@ export function AdvancedFilterTable(
         [table]
     );
 
-    const handleScroll = ({ scrollTop, scrollLeft }: any) => {
+    const handleScroll = (
+        ...args: Array<ScrollState | React.UIEvent<HTMLDivElement>>
+    ) => {
+        const [currState] = args as ScrollState[];
+        const { scrollTop, scrollLeft } = currState;
         if (listScrollRef.current) {
             listScrollRef.current.scrollTo(scrollTop);
         }
@@ -193,6 +197,8 @@ export function AdvancedFilterTable(
                             width,
                             table.totalColumnsWidth
                         );
+                        if (table.totalColumnsWidth >= width) {
+                        }
 
                         return (
                             <div
@@ -204,6 +210,7 @@ export function AdvancedFilterTable(
                                 }}
                             >
                                 <Scrollbar
+                                    scrollbarWidth={30}
                                     style={{
                                         width: width,
                                         height: height,
