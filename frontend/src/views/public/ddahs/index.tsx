@@ -155,8 +155,7 @@ export function DdahView() {
                             </Button>
                         </div>
                     </form>
-                    <div className="admonishment">
-                    </div>
+                    <div className="admonishment"></div>
                 </div>
                 <div className="contract-view">
                     <iframe
