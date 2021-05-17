@@ -255,8 +255,8 @@ However, it will not survive a computer reset.
 
 ### Navigating into the containers from the command line
 
-Currently, we define three services under docker-compose: frontend, backend, and
-db. If you would like to interact with any of the containers from the command
+Currently, we define three services under docker-compose: `frontend`, `backend`, and
+`db`. If you would like to interact with any of the containers from the command
 line, you can do so by invoking:
 
 ```
