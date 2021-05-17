@@ -28,18 +28,15 @@ import {
  */
 export function ApplicantCell(props: {
     column: { Header: string };
-    row: { original: Assignment; _original?: Assignment };
-    upsertApplicant: (payload: {
-        [p: string]: Applicant[keyof Applicant];
-        id: number;
-    }) => Promise<RawApplicant>;
+    row: { original: Assignment };
+    upsertApplicant: (payload: Partial<Applicant>) => Promise<RawApplicant>;
     value: string;
-    field: string;
+    field: keyof Applicant;
     editable: boolean;
 }) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertApplicant, field, editable } = props;
-    const applicant = props.row.original || props.row._original;
+    const applicant = props.row.original;
 
     async function onChange(newVal: Applicant[keyof Applicant]) {
         const applicantId = applicant.applicant.id;
@@ -65,12 +62,8 @@ export function ApplicantCell(props: {
  * @param {*} { original }
  * @returns
  */
-export function StatusCell({
-    row,
-}: {
-    row: { original: RawAssignment; _original?: RawAssignment };
-}) {
-    const original = row.original || row._original;
+export function StatusCell({ row }: { row: { original: RawAssignment } }) {
+    const original = row.original;
     const formattedStatus = capitalize(original.active_offer_status || "");
     const activeOfferUrlToken = original.active_offer_url_token;
 
@@ -106,18 +99,15 @@ export function StatusCell({
  */
 export function AssignmentCell(props: {
     column: { Header: string };
-    row: { original: Assignment; _original?: Assignment };
-    upsertAssignment: (payload: {
-        [p: string]: Assignment[keyof Assignment];
-        id: number;
-    }) => Promise<RawAssignment>;
+    row: { original: Assignment };
+    upsertAssignment: (payload: Partial<Assignment>) => Promise<RawAssignment>;
     value: string;
-    field: string;
+    field: keyof Assignment;
     editable: boolean;
 }) {
     const title = `Edit ${"" + props.column.Header}`;
     const { upsertAssignment, field, editable = true } = props;
-    const assignment = props.row.original || props.row._original;
+    const assignment = props.row.original;
     const active_offer_status = assignment.active_offer_status;
 
     async function onChange(newVal: Assignment[keyof Assignment]) {
@@ -167,18 +157,17 @@ export function ConnectedOfferTable(props: { editable?: boolean }) {
     // are generated on-the-fly, memoize the result so we don't trigger unneeded re-renders.
     const columns = React.useMemo(() => {
         // Bind an `ApplicantCell` to a particular field
-        function generateApplicantCell(field: string) {
+        function generateApplicantCell(field: keyof Applicant) {
             return (props: {
                 column: { Header: string };
-                row: { original: Assignment; _original?: Assignment };
+                row: { original: Assignment };
                 value: string;
             }) => (
                 <ApplicantCell
                     field={field}
-                    upsertApplicant={(args: {
-                        [p: string]: Applicant[keyof Applicant];
-                        id: number;
-                    }) => dispatch(upsertApplicant(args))}
+                    upsertApplicant={(applicant: Partial<Applicant>) =>
+                        dispatch(upsertApplicant(applicant))
+                    }
                     editable={editable}
                     {...props}
                 />
@@ -186,18 +175,17 @@ export function ConnectedOfferTable(props: { editable?: boolean }) {
         }
 
         // Bind an `AssignmentCell` to a particular field
-        function generateAssignmentCell(field: string) {
+        function generateAssignmentCell(field: keyof Assignment) {
             return (props: {
                 column: { Header: string };
-                row: { original: Assignment; _original?: Assignment };
+                row: { original: Assignment };
                 value: string;
             }) => (
                 <AssignmentCell
                     field={field}
-                    upsertAssignment={(args: {
-                        [p: string]: Assignment[keyof Assignment];
-                        id: number;
-                    }) => dispatch(upsertAssignment(args))}
+                    upsertAssignment={(assignment: Partial<Assignment>) =>
+                        dispatch(upsertAssignment(assignment))
+                    }
                     editable={editable}
                     {...props}
                 />
