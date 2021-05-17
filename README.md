@@ -434,3 +434,9 @@ git push
 ```
 
 This should resolve the issue
+
+5. If you want to restart with a clear database run
+
+```
+docker-compose run backend rake db:drop
+```
