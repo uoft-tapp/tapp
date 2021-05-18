@@ -23,9 +23,7 @@ class DdahMailer < ActionMailer::Base
                 # by calling format.html/format.text we can use our own templates
                 # in place of the rails erd's.
                 format.html { render inline: html }
-                format.text do
-                    render plain: HtmlToPlainText.plain_text(html)
-                end
+                format.text { render plain: HtmlToPlainText.plain_text(html) }
             end
         rescue Net::SMTPFatalError => e
             raise StandardError, "Error when #{debug_message} (#{e})"
@@ -49,7 +47,8 @@ class DdahMailer < ActionMailer::Base
         @position_title = ddah.assignment.position.position_title
         @ta_coordinator_email = Rails.application.config.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
-        # Note, we are using the `/hash` route proxying (instead of `#` hash) to avoid issues with Shibboleth authentication
+        # Note, we are using the `/hash` route proxying (instead of `#` hash)
+        # to avoid issues with Shibboleth authentication
         # See details in routes.rb
         @url =
             "#{Rails.application.config.base_url}/hash/public/ddahs/#{

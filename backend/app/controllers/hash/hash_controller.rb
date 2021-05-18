@@ -6,7 +6,7 @@ class Hash::HashController < ApplicationController
     # /hash/*path
     # This function redirects urls from `/hash/*path` to `/#/*path`. It is needed
     # to preserve redirection functionality via shibboleth. URL hashes are used
-    # in the frontend for routing. However, since URL hashes are not passed to the server, 
+    # in the frontend for routing. However, since URL hashes are not passed to the server,
     # they are lost. By changing the URL hash to an actual URL, we are able to preserve it
     # during authentication.
     def index
@@ -24,7 +24,7 @@ class Hash::HashController < ApplicationController
                     redirect_url
                 }'\"
                 </head>
-                <body>Redirecting to 
+                <body>Redirecting to
                     <a href=\"#{redirect_url}\">#{redirect_url}</a>
                 </body></html>",
             content_type: 'text/html'
@@ -36,7 +36,7 @@ class Hash::HashController < ApplicationController
     def find_hash
         raw_hash = params['path']
         # we want the first character of the hash to always be `/`
-        raw_hash = raw_hash.sub(%r{^([^\/])}, '/\1')
+        raw_hash = raw_hash.sub(%r{^([^/])}, '/\1')
         @hash = raw_hash
     end
 end
