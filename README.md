@@ -17,6 +17,7 @@ We use Travis CI for our continuous integration pipeline. As of right now, we ha
 2. Rubocop linting tests for our back end
 3. Frontend unit tests
 ```
+
 Sometimes Travis CI may fail due to high loads of tasks to finish. In this case, wait until all previous tasks are finished and then push to trigger travis CI again.
 
 ### Issues
@@ -350,10 +351,9 @@ We use Jest as our frontend testing suite. Our tests are located under `frontend
 
 Some useful tips or reminders:
 
-- Using `it.skip` can skip specific test cases
-- Using `describe.skip` can skip specific test sections
-- Never manally edit snapshot files located under `frontend\src\tests\__snapshots__`
-
+-   Using `it.skip` can skip specific test cases
+-   Using `describe.skip` can skip specific test sections
+-   Never manally edit snapshot files located under `frontend\src\tests\__snapshots__`
 
 ## API Documentation
 
@@ -440,3 +440,102 @@ This should resolve the issue
 ```
 docker-compose run backend rake db:drop
 ```
+
+### Shibboleth
+
+Shibboleth is the university's single sign-on. When configured correctly,
+the utorid, as determined by Shibboleth will be passed to Rails.
+
+Set up Shibboleth following the university's [instructions](http://sites.utoronto.ca/security/projects/shibboleth.htm).
+
+`<Sessions ...>` should be something like
+
+```xml
+<Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+          checkAddress="false" handlerSSL="true" cookieProps="https">
+
+    <!--
+    Configures SSO for a default IdP. To properly allow for >1 IdP, remove
+    entityID property and adjust discoveryURL to point to discovery service.
+    You can also override entityID on /Login query string, or in RequestMap/htaccess.
+    -->
+    <SSO entityID="https://idpz.utorauth.utoronto.ca/shibboleth">
+      SAML2
+    </SSO>
+
+    <!-- SAML and local-only logout. -->
+    <Logout>SAML2 Local</Logout>
+
+    <!-- Administrative logout. -->
+    <LogoutInitiator type="Admin" Location="/Logout/Admin" acl="127.0.0.1 ::1" />
+
+    <!-- Extension service that generates "approximate" metadata based on SP configuration. -->
+    <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+
+    <!-- Status reporting service. -->
+    <Handler type="Status" Location="/Status" acl="127.0.0.1 ::1"/>
+
+    <!-- Session diagnostic service. -->
+    <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+
+    <!-- JSON feed of discovery information. -->
+    <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+</Sessions>
+```
+
+and the university's attribute mapper should be downloaded and included
+
+```xml
+<AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map-UofT-template.xml"/>
+```
+
+In order to set the `HTTP_X_FORWARDED_USER` and `HTTP_X_FORWARDED_MAIL` header variables, add
+`RequestHeader set X-Forwarded-User %{utorid}e` and `RequestHeader set X-Forwarded-Mail %{mail}e` to your
+Apache config. For example, a virtual hosts configuration that accesses TAPP on port 3022 might look like:
+
+```
+<VirtualHost _default_:443>
+  ServerAdmin requests@math.toronto.edu
+  DocumentRoot /var/www/html
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+  SSLEngine on
+
+  <FilesMatch "\.(cgi|shtml|phtml|php)$">
+                  SSLOptions +StdEnvVars
+  </FilesMatch>
+  <Directory /usr/lib/cgi-bin>
+                  SSLOptions +StdEnvVars
+  </Directory>
+
+  SSLProtocol all -SSLv2 -SSLv3
+  SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
+  SSLHonorCipherOrder on
+  SSLCertificateFile      /etc/letsencrypt/live/tapp.math.{toronto.edu,utoronto.ca}/cert.pem
+  SSLCertificateKeyFile   /etc/letsencrypt/live/tapp.math.{toronto.edu,utoronto.ca}/privkey.pem
+  SSLCertificateChainFile /etc/letsencrypt/live/tapp.math.{toronto.edu,utoronto.ca}/fullchain.pem
+  # Docker proxy configuration
+  ProxyPreserveHost On
+  ProxyPass / http://0.0.0.0:3022/
+  ProxyPassReverse / http://0.0.0.0:3022/
+  RequestHeader set X-Forwarded-User %{utorid}e
+  RequestHeader set X-Forwarded-Mail %{mail}e
+  UseCanonicalName On
+  UseCanonicalPhysicalPort On
+  <Location />
+    AuthType shibboleth
+    ShibRequestSetting requireSession On
+    Require valid-user
+  </Location>
+</VirtualHost>
+```
+
+#### Authentication and Hash Routing
+
+URL hashes are never sent to the server. Shibboleth authentication works by routing a user to
+a login page and then automatically routing them back when they are authenticated. This re-routing
+will lose a URL hash (if there is one), since the hash is never sent to the server. To work around
+this, a Rails proxy route `/hash` has been set up which reroutes to a URL hash. For example `tapp.com/hash/foo/bar`
+will reroute to `tapp.com/#/foo/bar` after successful authentication. Thus, the Rails hash-route proxy
+can be used for URLs that you expect pre-authenticated users to try and access.

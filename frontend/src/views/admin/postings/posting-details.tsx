@@ -31,7 +31,9 @@ function PostingLinkDialog({
     onHide: Function;
 }) {
     const url = new URL(window.location.origin);
-    url.hash = `/public/postings/${posting.url_token}`;
+    // We use `pathname` instead of `hash` here to work around routing
+    // issues for pre-authenticated users.
+    url.pathname = `/hash/public/postings/${posting.url_token}`;
 
     return (
         <Modal show={visible} onHide={onHide} size="lg">
