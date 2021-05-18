@@ -49,8 +49,10 @@ class DdahMailer < ActionMailer::Base
         @position_title = ddah.assignment.position.position_title
         @ta_coordinator_email = Rails.application.config.ta_coordinator_email
         # TODO:  This seems too hard-coded.  Is there another way to get the route?
+        # Note, we are using the `/hash` route proxying (instead of `#` hash) to avoid issues with Shibboleth authentication
+        # See details in routes.rb
         @url =
-            "#{Rails.application.config.base_url}/#/public/ddahs/#{
+            "#{Rails.application.config.base_url}/hash/public/ddahs/#{
                 ddah.url_token
             }"
 

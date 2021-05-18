@@ -20,8 +20,10 @@ class OfferService
             position_title: @offer.position_title,
             ta_coordinator_email: @offer.ta_coordinator_email,
             # TODO:  This seems too hard-coded.  Is there another way to get the route?
+            # Note, we are using the `/hash` route proxying (instead of `#` hash) to avoid issues with Shibboleth authentication
+            # See details in routes.rb
             url:
-                "#{Rails.application.config.base_url}/#/public/contracts/#{
+                "#{Rails.application.config.base_url}/hash/public/contracts/#{
                     @offer.url_token
                 }",
             nag_count: @offer.nag_count,
