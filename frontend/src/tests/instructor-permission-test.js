@@ -475,7 +475,12 @@ export function instructorsPermissionTests(api) {
         await restoreDefaultUser();
     });
 
-    it.todo("fetch Ddahs");
+    it("fetch Ddahs", async () => {
+        await switchToInstructorOnlyUser();
+        resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+    });
+
     it.todo("fetch Ddahs a position associated with self");
     it.todo("fetch Ddahs an assignment associated with self");
     it.todo("cannot fetch Ddahs for assignment not associated with self");

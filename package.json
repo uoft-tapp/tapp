@@ -31,5 +31,8 @@
             "react-app",
             "react-app/jest"
         ]
+    },
+    "scripts": {
+        "test": "./tests/run-unit-tests.sh"
     }
 }
