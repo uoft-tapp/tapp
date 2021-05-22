@@ -43,6 +43,28 @@ class Public::DdahsController < ActionController::Base
         render_success {}
     end
 
+    # /public/ddahs/<ddah_id>/details
+    def details
+        return unless valid_ddah?(url_token: params[:ddah_id])
+
+        render_success(
+            {
+                approved_date: @ddah.approved_date,
+                accepted_date: @ddah.accepted_date,
+                revised_date: @ddah.revised_date,
+                emailed_date: @ddah.emailed_date,
+                position_code: @ddah.assignment.position.position_code,
+                position_title: @ddah.assignment.position.position_title,
+                status:
+                    if @ddah.accepted_date.blank?
+                        'unacknowledged'
+                    else
+                        'acknowledged'
+                    end
+            }
+        )
+    end
+
     # /public/ddahs/<ddah_id>/view
     def view
         return unless valid_ddah?(url_token: params[:ddah_id])

@@ -252,12 +252,22 @@ Rails
             end
             resources :ddahs, format: nil, only: %i[show] do
                 get :view, format: false, to: 'ddahs#view'
+                get :details, format: false, to: 'ddahs#details'
                 post :accept, format: false, to: 'ddahs#accept'
             end
             resources :postings, only: %i[show] do
                 post :submit, to: 'postings#submit'
             end
             resources :files, only: %i[show]
+        end
+
+        # We proxy URL hashes through `/hash` so that they can be preserved during
+        # Shibboleth authentication. For example, if you try to shibboleth-authenticated
+        # `tapp.com#/my/route`, after authentication, you will be redirected to `tapp.com`,
+        # with the `#/my/route` being lost. Instead, authenticate `tapp.com/hash/my/route`,
+        # which will redirect to `tapp.com/#/my/route` after authentication is complete.
+        namespace :hash, format: false do
+            get '/*path', to: "hash#index"
         end
 
         # Catch all other route requests and deliver a standard error payload.
