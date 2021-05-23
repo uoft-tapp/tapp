@@ -33,6 +33,33 @@ export function instructorsPermissionTests(api) {
         expect(respSwitchToInstOnlyUser).toHaveStatus("success");
     }
 
+    async function createDDAH() {
+        const assignments = databaseSeeder.seededData.assignments;
+        const newDdah = {
+            assignment_id: assignments[0].id,
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "marking:Marking the midterm",
+                },
+                {
+                    order: 1,
+                    hours: 4,
+                    description: "training:Initial training",
+                },
+                {
+                    order: 3,
+                    hours: 40,
+                    description: "contact:Running tutorials",
+                },
+            ],
+        };
+
+        const respCreateDDAH = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(respCreateDDAH).toHaveStatus("success");
+    }
+
     /**
      * Restores the active user to the default user (the user logged during test setup in beforeAll).
      *
@@ -476,9 +503,18 @@ export function instructorsPermissionTests(api) {
     });
 
     it("fetch Ddahs", async () => {
+        const instructorObject = {
+            first_name: 'Jane',
+            last_name: 'Smith',
+            email: 'jane.smith@gmail.com',
+            utorid: instructorUser.utorid
+        };
+        await apiPOST(`/admin/instructors`, instructorObject);
+
         await switchToInstructorOnlyUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+        let resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
         expect(resp).toHaveStatus("success");
+        expect(resp.payload).toHaveLength(0)
     });
 
     it.todo("fetch Ddahs a position associated with self");

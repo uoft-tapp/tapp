@@ -33,6 +33,6 @@
         ]
     },
     "scripts": {
-        "test": "./tests/run-unit-tests.sh"
+        "test": "sudo ./tests/run-unit-tests.sh"
     }
 }
