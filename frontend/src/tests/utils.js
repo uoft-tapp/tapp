@@ -175,7 +175,7 @@ function _ensurePath(path) {
  * @returns
  */
 export async function apiGET(url, omitPrefix = false) {
-    url = omitPrefix ? _ensurePath(url) : API_URL + _ensurePath(url);
+    url = omitPrefix ? API_URL + _ensurePath(url) : _ensurePath(url);
     let resp = null;
     try {
         resp = await axios.get(url);
@@ -202,7 +202,7 @@ export async function apiGET(url, omitPrefix = false) {
  * @returns
  */
 export async function apiPOST(url, body = {}, omitPrefix = false) {
-    url = omitPrefix ? _ensurePath(url) : API_URL + _ensurePath(url);
+    url = omitPrefix ? API_URL + _ensurePath(url) : _ensurePath(url);
     let resp = null;
     try {
         resp = await axios.post(url, body);
