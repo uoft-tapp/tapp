@@ -1,15 +1,47 @@
-import { it, beforeAll } from "./utils";
+import {
+    it,
+    beforeAll,
+    checkPropTypes,
+    postingPropTypes,
+    surveyPropTypes,
+} from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
+    let session;
+
+    const posting = {
+        name: "CSC209F TA",
+        intro_text: "Testing posting for CSC209F",
+        open_date: "2021/04/01",
+        close_date: "2021/05/01",
+        availability: "open",
+    };
+
     beforeAll(async () => {
         await databaseSeeder.seed({ apiGET, apiPOST });
+        session = databaseSeeder.seededData.session;
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
     describe("Public route tests", () => {
-        it.todo("Get survey.js posting data through public route");
+        it("Get survey.js posting data through public route", async () => {
+            // make a new posting and update <posting> to include the id of the posting
+            let resp = await apiPOST("/public/postings", {
+                ...posting,
+                session_id: session.id,
+            });
+            expect(resp).toHaveStatus("success");
+            checkPropTypes(postingPropTypes, resp.payload);
+            expect(resp.payload.id).not.toBeNull();
+            Object.assign(posting, resp.payload);
+
+            // read survey.js posting data
+            resp = await apiGET(`/public/postings/${posting.id}`);
+            expect(resp).toHaveStatus("success");
+            checkPropTypes(surveyPropTypes, resp.payload);
+        });
         it.todo(
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
