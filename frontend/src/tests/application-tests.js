@@ -28,7 +28,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     describe("Public route tests", () => {
         it("Get survey.js posting data through public route", async () => {
             // make a new posting and update <posting> to include the id of the posting
-            let resp = await apiPOST("/public/postings", {
+            let resp = await apiPOST("/admin/postings", {
                 ...posting,
                 session_id: session.id,
             });
@@ -38,10 +38,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
             Object.assign(posting, resp.payload);
 
             // read survey.js posting data
-            resp = await apiGET(`/public/postings/${posting.id}`);
+            resp = await apiGET(`/public/postings/${posting.id}`, true);
             expect(resp).toHaveStatus("success");
             checkPropTypes(surveyPropTypes, resp.payload);
         });
+
+        // broken up into 2 tests: applicant & application(not yet implemented in the backend)
         it.todo(
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
