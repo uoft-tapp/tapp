@@ -1,4 +1,4 @@
-import { it, beforeAll } from "./utils";
+import { it, beforeAll, expect } from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
@@ -9,11 +9,71 @@ export function applicationsTests({ apiGET, apiPOST }) {
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
     describe("Public route tests", () => {
+        beforeAll(async () => {
+            await databaseSeeder.seed({ apiGET, apiPOST });
+            session = databaseSeeder.seededData.session;
+        }, 30000);
+
+        const survey = {
+            name: "CSC494F TA",
+            intro_text: "TA posting for CSC494F",
+            open_date: "2021/01/01",
+            close_date: "2021/05/01",
+            availability: "auto",
+            custom_questions: {
+                pages: [
+                    {
+                        name: "page1",
+                        elements: [
+                            {
+                                type: "text",
+                                name: "question1",
+                                answer: "answer1"
+                            },
+                            {
+                                type: "text",
+                                name: "question2",
+                                answer: "answer2"
+                            },
+                        ],
+                    },
+                    {
+                        name: "page2",
+                        elements: [
+                            {
+                                type: "text",
+                                name: "question3",
+                                answer: "answer3"
+                            },
+                            {
+                                type: "text",
+                                name: "question4",
+                                answer: "answer4"
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+
         it.todo("Get survey.js posting data through public route");
+
         it.todo(
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
-        it.todo("Can submit survey.js data via the public postings route");
+
+        // Route: POST '/public/postings/' 
+        it("Can submit survey.js data via the public postings route", async () => {
+            let resp = await apiPOST(`/public/postings/${token}/submit`, {
+                ...survey, 
+                session_id: session.id
+            })
+
+            expect(resp).toHaveStatus("success");
+        });
+
+
         it.todo(
             "When submitting survey.js data an applicant and application are automatically created they don't exist"
         );
