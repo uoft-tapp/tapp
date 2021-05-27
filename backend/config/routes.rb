@@ -261,6 +261,15 @@ Rails
             resources :files, only: %i[show]
         end
 
+        # We proxy URL hashes through `/hash` so that they can be preserved during
+        # Shibboleth authentication. For example, if you try to shibboleth-authenticated
+        # `tapp.com#/my/route`, after authentication, you will be redirected to `tapp.com`,
+        # with the `#/my/route` being lost. Instead, authenticate `tapp.com/hash/my/route`,
+        # which will redirect to `tapp.com/#/my/route` after authentication is complete.
+        namespace :hash, format: false do
+            get '/*path', to: "hash#index"
+        end
+
         # Catch all other route requests and deliver a standard error payload.
         # Routes that are inaccessible due to lacking permission also end up here.
         #

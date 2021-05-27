@@ -26,4 +26,11 @@ module.exports = function (app) {
             changeOrigin: true,
         })
     );
+    app.use(
+        "/hash",
+        createProxyMiddleware({
+            target: "http://backend:3000",
+            changeOrigin: true,
+        })
+    );
 };
