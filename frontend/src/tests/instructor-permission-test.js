@@ -33,10 +33,42 @@ export function instructorsPermissionTests(api) {
         expect(respSwitchToInstOnlyUser).toHaveStatus("success");
     }
 
-    async function createDDAH() {
-        const assignments = databaseSeeder.seededData.assignments;
+    /**
+     * Restores the active user to the default user (the user logged during test setup in beforeAll).
+     *
+     * @returns {Promise<void>}
+     */
+    async function restoreDefaultUser() {
+        let respSwitchBackUser = await apiPOST(
+            `/debug/active_user`,
+            defaultUser
+        );
+        expect(respSwitchBackUser).toHaveStatus("success");
+    }
+
+        /**
+     * TODO: write comment.
+     * 
+     *
+     * @returns {Promise<void>}
+     */
+    async function createDDAH(intsructorId) {
+        // We first need to update position to include our instructor
+        const existingPosition = databaseSeeder.seededData.positions[0];
+        const updatedPosition = {
+            ...existingPosition,
+            instructor_ids: [...existingPosition.instructor_ids, intsructorId],
+        }
+        const respUpdatePosition = await apiPOST(`/admin/positions`, updatedPosition);
+        expect(respUpdatePosition).toHaveStatus("success");
+        
+        // We then proceed to create a DDAh for that position
+        switchToInstructorOnlyUser()
+        const assignments = await apiGET(`/admin/sessions/${session.id}/assignments`);
+        expect(assignments).toHaveStatus("success");
+        expect(assignments.payload.length).toBeGreaterThan(0);
         const newDdah = {
-            assignment_id: assignments[0].id,
+            assignment_id: assignments.payload[0].id,
             duties: [
                 {
                     order: 2,
@@ -56,21 +88,9 @@ export function instructorsPermissionTests(api) {
             ],
         };
 
+        restoreDefaultUser()
         const respCreateDDAH = await apiPOST(`/admin/ddahs`, newDdah);
         expect(respCreateDDAH).toHaveStatus("success");
-    }
-
-    /**
-     * Restores the active user to the default user (the user logged during test setup in beforeAll).
-     *
-     * @returns {Promise<void>}
-     */
-    async function restoreDefaultUser() {
-        let respSwitchBackUser = await apiPOST(
-            `/debug/active_user`,
-            defaultUser
-        );
-        expect(respSwitchBackUser).toHaveStatus("success");
     }
 
     beforeAll(async () => {
@@ -510,11 +530,12 @@ export function instructorsPermissionTests(api) {
             utorid: instructorUser.utorid
         };
         await apiPOST(`/admin/instructors`, instructorObject);
+        await createDDAH();
 
         await switchToInstructorOnlyUser();
         let resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
         expect(resp).toHaveStatus("success");
-        expect(resp.payload).toHaveLength(0)
+        expect(resp.payload).toHaveLength(1)
     });
 
     it.todo("fetch Ddahs a position associated with self");
