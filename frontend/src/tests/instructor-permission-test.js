@@ -47,10 +47,13 @@ export function instructorsPermissionTests(api) {
     }
 
     /**
-     * TODO: write comment.
+     * Updates a position to include instructor with <instructorId> and
+     * creates a DDAH for one of the assignments realted to that
+     * instructor.
      *
+     * @param instructorId: int - the unique Id of an instructor
      *
-     * @returns {Promise<void>}
+     * @returns {Promise<Ddah>}
      */
     async function createDDAH(instructorId) {
         // We first need to update position to include our instructor
@@ -65,7 +68,7 @@ export function instructorsPermissionTests(api) {
         );
         expect(positionResponse).toHaveStatus("success");
 
-        // We then proceed to create a DDAh for that position
+        // We then proceed to create a DDAH for that position
         // Switch to instructor user so we only have assignments for that instructor
         await switchToInstructorOnlyUser();
         const assignments = await apiGET(
