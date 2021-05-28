@@ -31,8 +31,5 @@
             "react-app",
             "react-app/jest"
         ]
-    },
-    "scripts": {
-        "test": "sudo ./tests/run-unit-tests.sh"
     }
 }
