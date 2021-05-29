@@ -1,14 +1,18 @@
-import { it, beforeAll, expect } from "./utils";
+import { it, beforeAll, expect, checkPropTypes, postingPropTypes } from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
     let posting;
+    let resp;
+
     const postingData = {
         name: "2021 Summer Posting",
         intro_text: "Intro text for posting",
         open_date: new Date("2021/05/01").toISOString(),
+        // open_date: "2021/05/01"
         close_date:  new Date("2021/08/31").toISOString(),
+        // close_date: "2021/08/31"
         availability: "auto",
     };
 
@@ -37,7 +41,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     describe("Public route tests", () => {
 
         beforeAll(async () => {
-            await databaseSeeder.seed(api);
+            await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
         });
     
@@ -50,7 +54,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it("Can submit survey.js data via the public postings route", async () => {
             resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
-                posting2
+                postingData
             );
             expect(resp).toHaveStatus("success");
             checkPropTypes(postingPropTypes, resp.payload);
