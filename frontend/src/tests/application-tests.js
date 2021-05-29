@@ -2,74 +2,62 @@ import { it, beforeAll, expect } from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
-    beforeAll(async () => {
-        await databaseSeeder.seed({ apiGET, apiPOST });
-    }, 30000);
+    let session;
+    let posting;
+    const postingData = {
+        name: "2021 Summer Posting",
+        intro_text: "Intro text for posting",
+        open_date: new Date("2021/05/01").toISOString(),
+        close_date:  new Date("2021/08/31").toISOString(),
+        availability: "auto",
+    };
+
+    const surveyData = {
+        "utorid": "defaultactive",
+        "first_name": "Albus",
+        "last_name": "Dumbledore",
+        "email": "test@test.ca",
+        "phone": "1234567890",
+        "student_number": "1234567890",
+        "program": "other",
+        "program-Comment": "somerole",
+        "program_start": "2021-01-01",
+        "department": "cs",
+        "previous_university_ta": true,
+        "previous_department_ta": false,
+        "previous_other_university_ta": false,
+        "previous_experience_summary": "n/a",
+        "position_preferences": 3,
+        "comments": "some additional comments"
+    };
+
 
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
     describe("Public route tests", () => {
+
         beforeAll(async () => {
-            await databaseSeeder.seed({ apiGET, apiPOST });
+            await databaseSeeder.seed(api);
             session = databaseSeeder.seededData.session;
-        }, 30000);
-
-        const survey = {
-            name: "CSC494F TA",
-            intro_text: "TA posting for CSC494F",
-            open_date: "2021/01/01",
-            close_date: "2021/05/01",
-            availability: "auto",
-            custom_questions: {
-                pages: [
-                    {
-                        name: "page1",
-                        elements: [
-                            {
-                                type: "text",
-                                name: "question1",
-                                answer: "answer1"
-                            },
-                            {
-                                type: "text",
-                                name: "question2",
-                                answer: "answer2"
-                            },
-                        ],
-                    },
-                    {
-                        name: "page2",
-                        elements: [
-                            {
-                                type: "text",
-                                name: "question3",
-                                answer: "answer3"
-                            },
-                            {
-                                type: "text",
-                                name: "question4",
-                                answer: "answer4"
-                            },
-                        ],
-                    },
-                ],
-            },
-        };
-
-
+        });
+    
         it.todo("Get survey.js posting data through public route");
-
         it.todo(
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
 
-        // Route: POST '/public/postings/' 
+        // TODO 
         it("Can submit survey.js data via the public postings route", async () => {
-            let resp = await apiPOST(`/public/postings/${token}/submit`, {
-                ...survey, 
-                session_id: session.id
-            })
+            resp = await apiPOST(
+                `/admin/sessions/${session.id}/postings`,
+                posting2
+            );
+            expect(resp).toHaveStatus("success");
+            checkPropTypes(postingPropTypes, resp.payload);
+            expect(resp.payload.id).not.toBeNull();
+            Object.assign(posting, resp.payload);
 
+            resp = await apiPOST(`/public/postings/${posting.url_token}/submit`, surveyData)
             expect(resp).toHaveStatus("success");
         });
 
