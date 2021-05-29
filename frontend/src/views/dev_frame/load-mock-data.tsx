@@ -11,6 +11,7 @@ import {
     positionsSelector,
     activeSessionSelector,
     debugOnlyUpsertUser,
+    contractTemplatesSelector,
 } from "../../api/actions";
 
 import {
@@ -25,7 +26,6 @@ import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
     Applicant,
-    ContractTemplate,
     MinimalAssignment,
     MinimalPosition,
     Session,
@@ -61,12 +61,11 @@ export function SeedDataMenu({
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
     const targetSession = useSelector(activeSessionSelector);
+    const contractTemplates = useSelector(contractTemplatesSelector);
     let session: Session | null;
-    let contractTemplates: ContractTemplate[] = [];
     let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
     let count;
-    let total;
 
     // If a function is passed to a `useSate` setter, it is evaluated.
     // Since we want to set the state to a function, we need to wrap the setter,
@@ -123,6 +122,27 @@ export function SeedDataMenu({
         }
     }, [dropdownVisible, fetchSessions]);
 
+    async function progressDispatch(
+        dispatchAction: Function,
+        dispatchArray: any[],
+        batchSize: number,
+        progressCallback: (a: number) => void
+    ) {
+        const total = dispatchArray.length;
+        let curr = 0;
+        while (curr < total) {
+            await Promise.all(
+                dispatchArray
+                    .slice(curr, curr + batchSize)
+                    .map(async (e: any) => {
+                        await dispatch(dispatchAction(e));
+                    })
+            );
+            progressCallback(((curr + batchSize) / total) * 100);
+            curr += batchSize;
+        }
+    }
+
     async function seedSession() {
         setStage("Session");
         setProgress(0);
@@ -160,12 +180,15 @@ export function SeedDataMenu({
     }
 
     async function seedContractTemplate() {
-        setProgress(0);
         setStage("Contract Template");
-        const contractTemplate = await dispatch(
-            upsertContractTemplate(seedData.contractTemplates[0])
-        );
-        contractTemplates.push(contractTemplate);
+        setProgress(0);
+        for (const contractTemplate of seedData.contractTemplates) {
+            const newContractTemplate = await dispatch(
+                upsertContractTemplate(contractTemplate)
+            );
+            contractTemplates.push(newContractTemplate);
+        }
+
         setProgress(100);
     }
 
@@ -188,8 +211,6 @@ export function SeedDataMenu({
     async function seedPositions(limit = 1000) {
         setStage("Positions");
         setProgress(0);
-        count = 0;
-        total = seedData.positions.length;
         const data = (normalizeImport(
             {
                 fileType: "json",
@@ -202,18 +223,17 @@ export function SeedDataMenu({
                 contractTemplates,
             })
         );
-        for (const position of data.slice(0, limit)) {
-            await dispatch(upsertPosition(position));
-            count++;
-            setProgress(Math.round((count / total) * 100));
-        }
+        await progressDispatch(
+            upsertPosition,
+            data.slice(0, limit),
+            10,
+            setProgress
+        );
     }
 
     async function seedApplicants(limit = 1000) {
         setStage("Applicants");
         setProgress(0);
-        count = 0;
-        total = seedData.applicants.length;
         const data = normalizeImport(
             {
                 fileType: "json",
@@ -221,12 +241,13 @@ export function SeedDataMenu({
             },
             applicantSchema
         );
-        for (const a of data.slice(0, limit)) {
-            const applicant = await dispatch(upsertApplicant(a));
-            applicants.push(applicant);
-            count++;
-            setProgress(Math.round((count / total) * 100));
-        }
+
+        await progressDispatch(
+            upsertApplicant,
+            data.slice(0, limit),
+            10,
+            setProgress
+        );
     }
 
     async function seedAssignments(limit = 1000) {
@@ -235,8 +256,6 @@ export function SeedDataMenu({
         if (!session) {
             throw new Error("Need a valid session to continue");
         }
-        count = 0;
-        total = seedData.assignments.length;
         const data = (normalizeImport(
             {
                 fileType: "json",
@@ -253,29 +272,22 @@ export function SeedDataMenu({
                 session,
             });
         });
-        for (const a of data.slice(0, limit)) {
-            await dispatch(upsertAssignment(a));
-            count++;
-            setProgress(Math.round((count / total) * 100));
-        }
+
+        await progressDispatch(
+            upsertAssignment,
+            data.slice(0, limit),
+            10,
+            setProgress
+        );
     }
 
     async function seedAll() {
-        try {
-            setConfirmDialogVisible(false);
-            setInProgress(true);
-
-            await seedSession();
-            await seedContractTemplate();
-            await seedInstructors();
-            await seedPositions();
-            await seedApplicants();
-            await seedAssignments();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setInProgress(false);
-        }
+        await seedSession();
+        await seedContractTemplate();
+        await seedInstructors();
+        await seedPositions();
+        await seedApplicants();
+        await seedAssignments();
     }
 
     function onSelectHandler(eventKey: string | null) {
@@ -375,7 +387,7 @@ export function SeedDataMenu({
                 >
                     <ProgressBar
                         now={progress}
-                        label={`${progress}%`}
+                        label={`${Math.round(progress)}%`}
                         style={{ minWidth: "90%" }}
                     />
                 </Modal.Body>
