@@ -62,20 +62,15 @@ export function instructorsPermissionTests(api) {
             ...existingPosition,
             instructor_ids: [...existingPosition.instructor_ids, instructorId],
         };
-        const positionResponse = await apiPOST(
-            `/admin/positions`,
-            positionWithInstructor
-        );
-        expect(positionResponse).toHaveStatus("success");
+        let resp = await apiPOST(`/admin/positions`, positionWithInstructor);
+        expect(resp).toHaveStatus("success");
 
         // We then proceed to create a DDAH for that position
-        const assignments = await apiGET(
-            `/instructor/sessions/${session.id}/assignments`
-        );
-        expect(assignments).toHaveStatus("success");
-        expect(assignments.payload.length).toBeGreaterThan(0);
+        resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.length).toBeGreaterThan(0);
         const newDdah = {
-            assignment_id: assignments.payload[0].id,
+            assignment_id: resp.payload[0].id,
             duties: [
                 {
                     order: 2,
@@ -95,9 +90,9 @@ export function instructorsPermissionTests(api) {
             ],
         };
 
-        const ddahResponse = await apiPOST(`/admin/ddahs`, newDdah);
-        expect(ddahResponse).toHaveStatus("success");
-        return ddahResponse.payload;
+        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        return resp.payload;
     }
 
     beforeAll(async () => {
@@ -538,13 +533,13 @@ export function instructorsPermissionTests(api) {
             email: "jane.smith@gmail.com",
             utorid: instructorUser.utorid,
         };
-        let response = await apiPOST(`/admin/instructors`, newInstructor);
-        expect(response).toHaveStatus("success");
+        let resp = await apiPOST(`/admin/instructors`, newInstructor);
+        expect(resp).toHaveStatus("success");
 
         // Get newly created instructor and create a DDAH for them
-        response = await apiGET(`/admin/instructors`);
-        expect(response).toHaveStatus("success");
-        const instructorId = response.payload.find(
+        resp = await apiGET(`/admin/instructors`);
+        expect(resp).toHaveStatus("success");
+        const instructorId = resp.payload.find(
             (instructor) => instructor.utorid === instructorUser.utorid
         )?.id;
         expect(instructorId).toBeDefined();
@@ -552,10 +547,10 @@ export function instructorsPermissionTests(api) {
 
         // Test the DDAH is fetched properly
         await switchToInstructorOnlyUser();
-        response = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
-        expect(response).toHaveStatus("success");
-        expect(response.payload).toHaveLength(1);
-        expect(response.payload[0]).toStrictEqual(newDDAH);
+        resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toHaveLength(1);
+        expect(resp.payload[0]).toStrictEqual(newDDAH);
     });
 
     it.todo("fetch Ddahs a position associated with self");
