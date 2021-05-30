@@ -160,6 +160,7 @@ export { expect, test, it, describe, beforeAll };
 
 /** URL prefix for making API calls from inside a docker image */
 export const API_URL = "http://backend:3000/api/v1";
+const URL = "http://backend:3000";
 
 // Ensure that `path` starts with a `/`
 function _ensurePath(path) {
@@ -174,8 +175,8 @@ function _ensurePath(path) {
  * @param {string} url The api un-prefixed url route (e.g. "/sessions")
  * @returns
  */
-export async function apiGET(url) {
-    url = API_URL + _ensurePath(url);
+export async function apiGET(url, omitPrefix = false) {
+    url = omitPrefix ? URL + _ensurePath(url) : API_URL + _ensurePath(url);
     let resp = null;
     try {
         resp = await axios.get(url);
@@ -201,8 +202,8 @@ export async function apiGET(url) {
  * @param {object} body The body of the post request -- `JSON.stringify` will be called on this object.
  * @returns
  */
-export async function apiPOST(url, body = {}) {
-    url = API_URL + _ensurePath(url);
+export async function apiPOST(url, body = {}, omitPrefix = false) {
+    url = omitPrefix ? URL + _ensurePath(url) : API_URL + _ensurePath(url);
     let resp = null;
     try {
         resp = await axios.post(url, body);
