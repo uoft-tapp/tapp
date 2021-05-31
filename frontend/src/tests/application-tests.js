@@ -3,10 +3,9 @@ import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
-    let posting = {};
-    let resp = {};
     let position;
-    let contractTemplate;
+    let posting = {};
+    let resp;
 
     const postingData = {
         name: "2021 Summer Posting",
@@ -29,10 +28,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
             position = databaseSeeder.seededData.position;
-            contractTemplate = databaseSeeder.seededData.contractTemplate;
-            console.log(session)
-            console.log(position)
-            console.log(contractTemplate)
         });
     
         it.todo("Get survey.js posting data through public route");
@@ -40,18 +35,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
 
-        // TODO
         it("Can submit survey.js data via the public postings route", async () => {
+            //Post a new posting
             resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
                 postingData
             );
-            console.log(resp.payload)
-            console.log(posting)
             expect(resp).toHaveStatus("success");
             Object.assign(posting, resp.payload);
             checkPropTypes(postingPropTypes, posting);
-
             expect(posting.id).not.toBeNull();
 
             //Set position for posting
@@ -61,31 +53,32 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
             Object.assign(postingPos, resp.payload);
-            
+
             //Create and submit survey.js data
-            const position_code = position.position_code;
             const surveyData = {
-                "utorid": "smithh",
-                "student_number": "1111111111",
-                "first_name": "jin",
-                "last_name": "chun",
-                "email": "test@test.ca",
-                "phone": "1111111111",
-                "program": "M",
-                "program_start": "2021-05-21",
-                "department": "cs",
-                "previous_university_ta": true,
-                "previous_department_ta": true,
-                "previous_other_university_ta": false,
-                "previous_experience_summary": "n/a",
-                "position_preferences": {
-                  [position_code]: 3,
-                },
-                "comments": "n/a"
+                answers: {
+                    "utorid": "defaultactive",
+                    "student_number": "1111111111",
+                    "first_name": "jin",
+                    "last_name": "chun",
+                    "email": "test@test.ca",
+                    "phone": "1111111111",
+                    "program": "M",
+                    "program_start": "2021-05-21",
+                    "department": "cs",
+                    "previous_university_ta": true,
+                    "previous_department_ta": true,
+                    "previous_other_university_ta": false,
+                    "previous_experience_summary": "some previous experience",
+                    "position_preferences": {
+                    [position.position_code]: 3,
+                    },
+                    "comments": "some additional comments"
+                }
             }
-            console.log(surveyData)
+
             //Submit survey.js data
-            resp = await apiPOST(`/public/postings/${posting.url_token}/submit`, surveyData)
+            resp = await apiPOST(`/public/postings/${posting.url_token}/submit`, surveyData, true)
             expect(resp).toHaveStatus("success");
         });
 
