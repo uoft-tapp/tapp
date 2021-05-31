@@ -22,6 +22,7 @@ export function instructorsPermissionTests(api) {
     // eslint-disable-next-line
     const { apiGET, apiPOST } = api;
     let session = null;
+    let assignment;
     let instructorUser;
     let defaultUser;
     let existingContractTemplateId;
@@ -76,8 +77,9 @@ export function instructorsPermissionTests(api) {
         resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.length).toBeGreaterThan(0);
+        assignment = resp.payload[0];
         const newDdah = {
-            assignment_id: resp.payload[0].id,
+            assignment_id: assignment.id,
             duties: [
                 {
                     order: 2,
@@ -532,7 +534,11 @@ export function instructorsPermissionTests(api) {
     });
 
     describe("Ddah permissions", () => {
-        let newDDAH;
+        let position;
+        let instructor;
+        let ddah;
+        
+        
 
         beforeAll(async () => {
             // If a user is not in Instructors table, it is not considered an instructor
@@ -549,11 +555,16 @@ export function instructorsPermissionTests(api) {
             // Get newly created instructor and create a DDAH for them
             resp = await apiGET(`/admin/instructors`);
             expect(resp).toHaveStatus("success");
-            const instructorId = resp.payload.find(
+            instructor = resp.payload.find(
                 (instructor) => instructor.utorid === instructorUser.utorid
-            )?.id;
-            expect(instructorId).toBeDefined();
-            newDDAH = await createDdahWithFixedDuties(instructorId);
+            );
+            expect(instructor).toBeDefined();
+            ddah = await createDdahWithFixedDuties(instructor.id);
+            
+            // Fetch the position realted to the instructor
+            resp = await apiGET(`/admin/sessions/${session.id}/positions`);
+            position = resp.payload.find(position => position.instructor_ids.find(id => id === instructor.id));
+            expect(position).toBeDefined();
         });
 
         it("fetch Ddahs", async () => {
@@ -563,7 +574,7 @@ export function instructorsPermissionTests(api) {
             );
             expect(resp).toHaveStatus("success");
             expect(resp.payload).toHaveLength(1);
-            expect(resp.payload[0]).toStrictEqual(newDDAH);
+            expect(resp.payload[0]).toStrictEqual(ddah);
         });
 
         // Not too sure what this test should be testing,
@@ -572,10 +583,10 @@ export function instructorsPermissionTests(api) {
 
         it("fetch Ddahs an assignment associated with self", async () => {
             await switchToInstructorOnlyUser();
-            const ddahToSearch = { assignment_id: newDDAH.assignment_id };
+            const ddahToSearch = { assignment_id: ddah.assignment_id };
             const resp = await apiPOST(`/instructor/ddahs`, ddahToSearch);
             expect(resp).toHaveStatus("success");
-            expect(resp.payload).toStrictEqual(newDDAH);
+            expect(resp.payload).toStrictEqual(ddah);
         });
 
         it("cannot fetch Ddahs for assignment not associated with self", async () => {
@@ -599,65 +610,51 @@ export function instructorsPermissionTests(api) {
             );
         });
 
-        it.todo("create a Ddah for an assignment associated with self");
+        it("create a Ddah for an assignment associated with self", async () => {
+            // Create another assignment (with no DDAH)
+            // for position associated with the instructor
+            await restoreDefaultUser();
+            
+            console.log(position);
+            console.log(instructor.id);
+            const newAssignment = {
+                note: "",
+                applicant_id: databaseSeeder.seededData.applicant.id,
+                position_id: position.id,
+                start_date: "2019-09-02T00:00:00.000Z",
+                end_date: "2019-12-31T00:00:00.000Z",
+            };
+            let resp = await apiPOST("/admin/assignments", newAssignment);
+            console.log(resp);
+            expect(resp).toHaveStatus("success");
+            const emptyAssignment = resp.payload;
 
-        // it("create a Ddah for an assignment associated with self", async() => {
-        //     await restoreDefaultUser();
-        //     const applicant = databaseSeeder.seededData.applicant;
-        //     const contractTemplate = databaseSeeder.seededData.contractTemplate;
-        //     // create a new position to assign
-        //     const newPositionData = {
-        //         position_code: "CSC100F",
-        //         position_title: "Basic Computer Science",
-        //         hours_per_assignment: 70,
-        //         start_date: "2019/09/09",
-        //         end_date: "2019/12/31",
-        //         contract_template_id: contractTemplate.id,
-        //     };
-
-        //     const { payload: newPosition } = await apiPOST(
-        //         `/admin/sessions/${session.id}/positions`,
-        //         newPositionData
-        //     );
-
-        //     // create new assignment
-        //     const newAssignmentData = {
-        //         note: "",
-        //         position_id: newPosition.id,
-        //         applicant_id: applicant.id,
-        //         start_date: "2019-09-02T00:00:00.000Z",
-        //         end_date: "2019-12-31T00:00:00.000Z",
-        //     };
-        //     let resp = await apiPOST("/admin/assignments", newAssignmentData);;
-
-        //     await switchToInstructorOnlyUser();
-        //     resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
-        //     expect(resp).toHaveStatus("success");
-        //     console.log(resp);
-        //     const ddahToCreate = {
-        //         assignment_id: resp.payload[0].id,
-        //         duties: [
-        //             {
-        //                 order: 1,
-        //                 hours: 10,
-        //                 description: "workshops:Facilitating workshops",
-        //             },
-        //             {
-        //                 order: 2,
-        //                 hours: 50,
-        //                 description: "lectures:Lecture support",
-        //             },
-        //         ],
-        //     };
-        //     resp = await apiPOST(`/instructor/ddahs`, ddahToCreate);
-        //     expect(resp).toHaveStatus("success");
-        //     expect(resp.payload).toStrictEqual(ddahToCreate);
-        //     resp = await apiGET(
-        //         `/instructor/sessions/${session.id}/ddahs`
-        //     );
-        //     expect(resp).toHaveStatus("success");
-        //     expect(resp.payload).toHaveLength(2);
-        // });
+            await switchToInstructorOnlyUser();
+            const ddahToCreate = {
+                assignment_id: emptyAssignment.id,
+                duties: [
+                    {
+                        order: 1,
+                        hours: 20,
+                        description: "workshops:Facilitating workshops",
+                    },
+                    {
+                        order: 2,
+                        hours: 50,
+                        description: "lectures:Lecture support",
+                    },
+                ],
+            };
+            // WHY DOES THIS FAIL?
+            resp = await apiPOST(`/instructor/ddahs`, ddahToCreate);
+            expect(resp).toHaveStatus("success");
+            expect(resp.payload).toStrictEqual(ddahToCreate);
+            resp = await apiGET(
+                `/instructor/sessions/${session.id}/ddahs`
+            );
+            expect(resp).toHaveStatus("success");
+            expect(resp.payload).toHaveLength(2);
+        });
 
         it.todo("update a Ddah for an assignment associated with self");
         it.todo(
