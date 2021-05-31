@@ -9,6 +9,7 @@ import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
+    let surveyPrefill;
 
     const posting = {
         name: "CSC209F TA",
@@ -38,15 +39,19 @@ export function applicationsTests({ apiGET, apiPOST }) {
             Object.assign(posting, resp.payload);
 
             // read survey.js posting data
-            resp = await apiGET(`/public/postings/${posting.id}`, true);
+            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
             expect(resp).toHaveStatus("success");
             checkPropTypes(surveyPropTypes, resp.payload);
+            surveyPrefill = resp.payload["prefilled_data"];
         });
 
         // broken up into 2 tests: applicant & application(not yet implemented in the backend)
-        it.todo(
-            "Survey.js posting data is pre-filled based on prior applicant/application data"
-        );
+
+        // expect(surveyPrefill.utorid).toEqual("smithh");
+        it.todo("Survey.js posting data is pre-filled based on prior applicant");
+
+        it.todo("Survey.js posting data is pre-filled based on prior application");
+
         it.todo("Can submit survey.js data via the public postings route");
         it.todo(
             "When submitting survey.js data an applicant and application are automatically created they don't exist"
