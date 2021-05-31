@@ -46,6 +46,55 @@ export function instructorsPermissionTests(api) {
         expect(respSwitchBackUser).toHaveStatus("success");
     }
 
+    /**
+     * Updates a position to include instructor with `instructorId` and
+     * creates a DDAH for one of the assignments realted to that
+     * instructor.
+     *
+     * @param instructorId: int - the unique Id of an instructor
+     *
+     * @returns {Promise<Ddah>}
+     */
+    async function createDdahWithFixedDuties(instructorId) {
+        // We first need to update position to include our instructor
+        const existingPosition = databaseSeeder.seededData.positions[0];
+        const positionWithInstructor = {
+            ...existingPosition,
+            instructor_ids: [...existingPosition.instructor_ids, instructorId],
+        };
+        let resp = await apiPOST(`/admin/positions`, positionWithInstructor);
+        expect(resp).toHaveStatus("success");
+
+        // We then proceed to create a DDAH for that position
+        resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload.length).toBeGreaterThan(0);
+        const newDdah = {
+            assignment_id: resp.payload[0].id,
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "marking:Marking the midterm",
+                },
+                {
+                    order: 1,
+                    hours: 4,
+                    description: "training:Initial training",
+                },
+                {
+                    order: 3,
+                    hours: 40,
+                    description: "contact:Running tutorials",
+                },
+            ],
+        };
+
+        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        return resp.payload;
+    }
+
     beforeAll(async () => {
         await databaseSeeder.seed(api);
         await databaseSeeder.seedForInstructors(api);
@@ -475,7 +524,35 @@ export function instructorsPermissionTests(api) {
         await restoreDefaultUser();
     });
 
-    it.todo("fetch Ddahs");
+    it("fetch Ddahs", async () => {
+        // If a user is not in Instructors table, it is not considered an instructor
+        // for the purpose of fetching DDAHs - so we create one
+        const newInstructor = {
+            first_name: "Jane",
+            last_name: "Smith",
+            email: "jane.smith@gmail.com",
+            utorid: instructorUser.utorid,
+        };
+        let resp = await apiPOST(`/admin/instructors`, newInstructor);
+        expect(resp).toHaveStatus("success");
+
+        // Get newly created instructor and create a DDAH for them
+        resp = await apiGET(`/admin/instructors`);
+        expect(resp).toHaveStatus("success");
+        const instructorId = resp.payload.find(
+            (instructor) => instructor.utorid === instructorUser.utorid
+        )?.id;
+        expect(instructorId).toBeDefined();
+        const newDDAH = await createDdahWithFixedDuties(instructorId);
+
+        // Test the DDAH is fetched properly
+        await switchToInstructorOnlyUser();
+        resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload).toHaveLength(1);
+        expect(resp.payload[0]).toStrictEqual(newDDAH);
+    });
+
     it.todo("fetch Ddahs a position associated with self");
     it.todo("fetch Ddahs an assignment associated with self");
     it.todo("cannot fetch Ddahs for assignment not associated with self");
