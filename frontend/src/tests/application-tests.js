@@ -1,4 +1,10 @@
-import { it, beforeAll, expect, checkPropTypes, postingPropTypes } from "./utils";
+import {
+    it,
+    beforeAll,
+    expect,
+    checkPropTypes,
+    postingPropTypes,
+} from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
@@ -11,7 +17,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         name: "2021 Summer Posting",
         intro_text: "Intro text for posting",
         open_date: new Date("2021/05/01").toISOString(),
-        close_date:  new Date("2021/08/31").toISOString(),
+        close_date: new Date("2021/08/31").toISOString(),
         availability: "auto",
     };
 
@@ -23,13 +29,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
     describe("Public route tests", () => {
-
         beforeAll(async () => {
             await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
             position = databaseSeeder.seededData.position;
         });
-    
+
         it.todo("Get survey.js posting data through public route");
         it.todo(
             "Survey.js posting data is pre-filled based on prior applicant/application data"
@@ -57,28 +62,32 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //Create and submit survey.js data
             const surveyData = {
                 answers: {
-                    "utorid": "defaultactive",
-                    "student_number": "1111111111",
-                    "first_name": "jin",
-                    "last_name": "chun",
-                    "email": "test@test.ca",
-                    "phone": "1111111111",
-                    "program": "M",
-                    "program_start": "2021-05-21",
-                    "department": "cs",
-                    "previous_university_ta": true,
-                    "previous_department_ta": true,
-                    "previous_other_university_ta": false,
-                    "previous_experience_summary": "some previous experience",
-                    "position_preferences": {
-                    [position.position_code]: 3,
+                    utorid: "defaultactive",
+                    student_number: "1111111111",
+                    first_name: "jin",
+                    last_name: "chun",
+                    email: "test@test.ca",
+                    phone: "1111111111",
+                    program: "M",
+                    program_start: "2021-05-21",
+                    department: "cs",
+                    previous_university_ta: true,
+                    previous_department_ta: true,
+                    previous_other_university_ta: false,
+                    previous_experience_summary: "some previous experience",
+                    position_preferences: {
+                        [position.position_code]: 3,
                     },
-                    "comments": "some additional comments"
-                }
-            }
+                    comments: "some additional comments",
+                },
+            };
 
             //Submit survey.js data
-            resp = await apiPOST(`/public/postings/${posting.url_token}/submit`, surveyData, true)
+            resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                surveyData,
+                true
+            );
             expect(resp).toHaveStatus("success");
         });
 
