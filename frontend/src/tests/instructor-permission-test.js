@@ -1,4 +1,11 @@
-import { it, expect, beforeAll, checkPropTypes, errorPropTypes } from "./utils";
+import {
+    it,
+    expect,
+    beforeAll,
+    describe,
+    checkPropTypes,
+    errorPropTypes,
+} from "./utils";
 import { databaseSeeder } from "./setup";
 
 /**
@@ -524,43 +531,143 @@ export function instructorsPermissionTests(api) {
         await restoreDefaultUser();
     });
 
-    it("fetch Ddahs", async () => {
-        // If a user is not in Instructors table, it is not considered an instructor
-        // for the purpose of fetching DDAHs - so we create one
-        const newInstructor = {
-            first_name: "Jane",
-            last_name: "Smith",
-            email: "jane.smith@gmail.com",
-            utorid: instructorUser.utorid,
-        };
-        let resp = await apiPOST(`/admin/instructors`, newInstructor);
-        expect(resp).toHaveStatus("success");
+    describe("Ddah permissions", () => {
+        let newDDAH;
 
-        // Get newly created instructor and create a DDAH for them
-        resp = await apiGET(`/admin/instructors`);
-        expect(resp).toHaveStatus("success");
-        const instructorId = resp.payload.find(
-            (instructor) => instructor.utorid === instructorUser.utorid
-        )?.id;
-        expect(instructorId).toBeDefined();
-        const newDDAH = await createDdahWithFixedDuties(instructorId);
+        beforeAll(async () => {
+            // If a user is not in Instructors table, it is not considered an instructor
+            // for the purpose of fetching DDAHs - so we create one
+            const newInstructor = {
+                first_name: "Jane",
+                last_name: "Smith",
+                email: "jane.smith@gmail.com",
+                utorid: instructorUser.utorid,
+            };
+            let resp = await apiPOST(`/admin/instructors`, newInstructor);
+            expect(resp).toHaveStatus("success");
 
-        // Test the DDAH is fetched properly
-        await switchToInstructorOnlyUser();
-        resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
-        expect(resp).toHaveStatus("success");
-        expect(resp.payload).toHaveLength(1);
-        expect(resp.payload[0]).toStrictEqual(newDDAH);
+            // Get newly created instructor and create a DDAH for them
+            resp = await apiGET(`/admin/instructors`);
+            expect(resp).toHaveStatus("success");
+            const instructorId = resp.payload.find(
+                (instructor) => instructor.utorid === instructorUser.utorid
+            )?.id;
+            expect(instructorId).toBeDefined();
+            newDDAH = await createDdahWithFixedDuties(instructorId);
+        });
+
+        it("fetch Ddahs", async () => {
+            await switchToInstructorOnlyUser();
+            const resp = await apiGET(
+                `/instructor/sessions/${session.id}/ddahs`
+            );
+            expect(resp).toHaveStatus("success");
+            expect(resp.payload).toHaveLength(1);
+            expect(resp.payload[0]).toStrictEqual(newDDAH);
+        });
+
+        // Not too sure what this test should be testing,
+        // I couldn't find a route for fetching DDAhs per position?
+        it.todo("fetch Ddahs a position associated with self");
+
+        it("fetch Ddahs an assignment associated with self", async () => {
+            await switchToInstructorOnlyUser();
+            const ddahToSearch = { assignment_id: newDDAH.assignment_id };
+            const resp = await apiPOST(`/instructor/ddahs`, ddahToSearch);
+            expect(resp).toHaveStatus("success");
+            expect(resp.payload).toStrictEqual(newDDAH);
+        });
+
+        it("cannot fetch Ddahs for assignment not associated with self", async () => {
+            // Create a new DDAH for a different instructor
+            await restoreDefaultUser();
+            let resp = await apiGET(`admin/instructors`);
+            const millermInstructor = resp.payload.find(
+                (instructor) => instructor.utorid === "millerm"
+            );
+            const foreignDdah = await createDdahWithFixedDuties(
+                millermInstructor.id
+            );
+
+            // Assignment for that DDAH should not be accessible by our instructor
+            await switchToInstructorOnlyUser();
+            const ddahToSearch = { assignment_id: foreignDdah.assignment_id };
+            resp = await apiPOST(`/instructor/ddahs`, ddahToSearch);
+            expect(resp).toHaveStatus("error");
+            expect(resp.message).toEqual(
+                "Cannot create a DDAH without an assignment_id OR improper permissions to access/create a DDAH"
+            );
+        });
+
+        it.todo("create a Ddah for an assignment associated with self");
+
+        // it("create a Ddah for an assignment associated with self", async() => {
+        //     await restoreDefaultUser();
+        //     const applicant = databaseSeeder.seededData.applicant;
+        //     const contractTemplate = databaseSeeder.seededData.contractTemplate;
+        //     // create a new position to assign
+        //     const newPositionData = {
+        //         position_code: "CSC100F",
+        //         position_title: "Basic Computer Science",
+        //         hours_per_assignment: 70,
+        //         start_date: "2019/09/09",
+        //         end_date: "2019/12/31",
+        //         contract_template_id: contractTemplate.id,
+        //     };
+
+        //     const { payload: newPosition } = await apiPOST(
+        //         `/admin/sessions/${session.id}/positions`,
+        //         newPositionData
+        //     );
+
+        //     // create new assignment
+        //     const newAssignmentData = {
+        //         note: "",
+        //         position_id: newPosition.id,
+        //         applicant_id: applicant.id,
+        //         start_date: "2019-09-02T00:00:00.000Z",
+        //         end_date: "2019-12-31T00:00:00.000Z",
+        //     };
+        //     let resp = await apiPOST("/admin/assignments", newAssignmentData);;
+
+        //     await switchToInstructorOnlyUser();
+        //     resp = await apiGET(`/instructor/sessions/${session.id}/assignments`);
+        //     expect(resp).toHaveStatus("success");
+        //     console.log(resp);
+        //     const ddahToCreate = {
+        //         assignment_id: resp.payload[0].id,
+        //         duties: [
+        //             {
+        //                 order: 1,
+        //                 hours: 10,
+        //                 description: "workshops:Facilitating workshops",
+        //             },
+        //             {
+        //                 order: 2,
+        //                 hours: 50,
+        //                 description: "lectures:Lecture support",
+        //             },
+        //         ],
+        //     };
+        //     resp = await apiPOST(`/instructor/ddahs`, ddahToCreate);
+        //     expect(resp).toHaveStatus("success");
+        //     expect(resp.payload).toStrictEqual(ddahToCreate);
+        //     resp = await apiGET(
+        //         `/instructor/sessions/${session.id}/ddahs`
+        //     );
+        //     expect(resp).toHaveStatus("success");
+        //     expect(resp.payload).toHaveLength(2);
+        // });
+
+        it.todo("update a Ddah for an assignment associated with self");
+        it.todo(
+            "cannot set approved_date/accepted_date/revised_date/emailed_date/signature for a Ddah associated with self"
+        );
+        it.todo(
+            "cannot create a Ddah for an assignment not associated with self"
+        );
+        it.todo(
+            "cannot update a Ddah for an assignment not associated with self"
+        );
     });
-
-    it.todo("fetch Ddahs a position associated with self");
-    it.todo("fetch Ddahs an assignment associated with self");
-    it.todo("cannot fetch Ddahs for assignment not associated with self");
-    it.todo("create a Ddah for an assignment associated with self");
-    it.todo("update a Ddah for an assignment associated with self");
-    it.todo(
-        "cannot set approved_date/accepted_date/revised_date/emailed_ate/signature for a Ddah associated with self"
-    );
-    it.todo("cannot create a Ddah for an assignment not associated with self");
-    it.todo("cannot update a Ddah for an assignment not associated with self");
 }
