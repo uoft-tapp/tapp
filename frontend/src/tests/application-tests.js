@@ -3,38 +3,23 @@ import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
-    let posting;
-    let resp;
+    let posting = {};
+    let resp = {};
+    let position;
+    let contractTemplate;
 
     const postingData = {
         name: "2021 Summer Posting",
         intro_text: "Intro text for posting",
         open_date: new Date("2021/05/01").toISOString(),
-        // open_date: "2021/05/01"
         close_date:  new Date("2021/08/31").toISOString(),
-        // close_date: "2021/08/31"
         availability: "auto",
     };
 
-    const surveyData = {
-        "utorid": "defaultactive",
-        "first_name": "Albus",
-        "last_name": "Dumbledore",
-        "email": "test@test.ca",
-        "phone": "1234567890",
-        "student_number": "1234567890",
-        "program": "other",
-        "program-Comment": "somerole",
-        "program_start": "2021-01-01",
-        "department": "cs",
-        "previous_university_ta": true,
-        "previous_department_ta": false,
-        "previous_other_university_ta": false,
-        "previous_experience_summary": "n/a",
-        "position_preferences": 3,
-        "comments": "some additional comments"
+    const postingPos = {
+        hours: 20,
+        num_positions: 1,
     };
-
 
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
@@ -43,6 +28,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
         beforeAll(async () => {
             await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
+            position = databaseSeeder.seededData.position;
+            contractTemplate = databaseSeeder.seededData.contractTemplate;
+            console.log(session)
+            console.log(position)
+            console.log(contractTemplate)
         });
     
         it.todo("Get survey.js posting data through public route");
@@ -50,21 +40,54 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
 
-        // TODO 
+        // TODO
         it("Can submit survey.js data via the public postings route", async () => {
             resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
                 postingData
             );
+            console.log(resp.payload)
+            console.log(posting)
             expect(resp).toHaveStatus("success");
-            checkPropTypes(postingPropTypes, resp.payload);
-            expect(resp.payload.id).not.toBeNull();
             Object.assign(posting, resp.payload);
+            checkPropTypes(postingPropTypes, posting);
 
+            expect(posting.id).not.toBeNull();
+
+            //Set position for posting
+            resp = await apiPOST(
+                `/admin/postings/${posting.id}/posting_positions`,
+                { ...postingPos, position_id: position.id }
+            );
+            expect(resp).toHaveStatus("success");
+            Object.assign(postingPos, resp.payload);
+            
+            //Create and submit survey.js data
+            const position_code = position.position_code;
+            const surveyData = {
+                "utorid": "smithh",
+                "student_number": "1111111111",
+                "first_name": "jin",
+                "last_name": "chun",
+                "email": "test@test.ca",
+                "phone": "1111111111",
+                "program": "M",
+                "program_start": "2021-05-21",
+                "department": "cs",
+                "previous_university_ta": true,
+                "previous_department_ta": true,
+                "previous_other_university_ta": false,
+                "previous_experience_summary": "n/a",
+                "position_preferences": {
+                  [position_code]: 3,
+                },
+                "comments": "n/a"
+            }
+            console.log(surveyData)
+            //Submit survey.js data
             resp = await apiPOST(`/public/postings/${posting.url_token}/submit`, surveyData)
             expect(resp).toHaveStatus("success");
         });
-
 
         it.todo(
             "When submitting survey.js data an applicant and application are automatically created they don't exist"
