@@ -3,7 +3,8 @@ import {
     beforeAll,
     checkPropTypes,
     postingPropTypes,
-    surveyPropTypes, expect
+    surveyPropTypes,
+    expect,
 } from "./utils";
 import { databaseSeeder } from "./setup";
 
@@ -18,11 +19,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
         intro_text: "Testing posting for CSC209F",
         open_date: "2021/04/01",
         close_date: "2021/05/01",
-        availability: "open"
+        availability: "open",
     };
 
     const applicantPermissions = {
-        roles: ["ta"]
+        roles: ["ta"],
     };
 
     beforeAll(async () => {
@@ -45,7 +46,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // make a new posting and update <posting> to include the id of the posting
             let resp = await apiPOST("/admin/postings", {
                 ...posting,
-                session_id: session.id
+                session_id: session.id,
             });
             expect(resp).toHaveStatus("success");
             checkPropTypes(postingPropTypes, resp.payload);
@@ -76,23 +77,33 @@ export function applicationsTests({ apiGET, apiPOST }) {
         // broken up into 2 tests: applicant & application(not yet implemented in the backend)
         it("Survey.js posting data is pre-filled based on prior applicant", async () => {
             // this test depends on the previous test on the terms of surveyPrefill variable
-            const prefilled = ["utorid", "student_number", "first_name", "last_name", "email", "phone"];
+            const prefilled = [
+                "utorid",
+                "student_number",
+                "first_name",
+                "last_name",
+                "email",
+                "phone",
+            ];
             for (let prefilledKey of prefilled) {
                 // check if every applicant information is in the prefilled data
                 expect(surveyPrefill[prefilledKey]).toBeDefined();
 
                 // check if the applicant prefill information is correct
-                expect(surveyPrefill[prefilledKey]).toEqual(applicant[prefilledKey]);
+                expect(surveyPrefill[prefilledKey]).toEqual(
+                    applicant[prefilledKey]
+                );
             }
         });
 
-        it.todo("Survey.js posting data is pre-filled based on prior application");
+        it.todo(
+            "Survey.js posting data is pre-filled based on prior application"
+        );
 
         it.todo("Can submit survey.js data via the public postings route");
 
-        it.todo(
-            "When submitting survey.js data an applicant and application are automatically created they don't exist"
-        );
+        it("When submitting survey.js data an applicant and application are automatically created they don't exist", async () => {});
+
         it.todo(
             "When submitting survey.js data an applicant and application are updated if they already exist"
         );
