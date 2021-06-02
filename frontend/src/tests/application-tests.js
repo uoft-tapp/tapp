@@ -3,11 +3,11 @@ import {
     beforeAll,
     checkPropTypes,
     postingPropTypes,
-    surveyPropTypes, expect,
+    surveyPropTypes, expect
 } from "./utils";
-import {databaseSeeder} from "./setup";
+import { databaseSeeder } from "./setup";
 
-export function applicationsTests({apiGET, apiPOST}) {
+export function applicationsTests({ apiGET, apiPOST }) {
     let session;
     let surveyPrefill;
     let applicant;
@@ -18,15 +18,15 @@ export function applicationsTests({apiGET, apiPOST}) {
         intro_text: "Testing posting for CSC209F",
         open_date: "2021/04/01",
         close_date: "2021/05/01",
-        availability: "open",
+        availability: "open"
     };
 
     const applicantPermissions = {
         roles: ["ta"]
-    }
+    };
 
     beforeAll(async () => {
-        await databaseSeeder.seed({apiGET, apiPOST});
+        await databaseSeeder.seed({ apiGET, apiPOST });
         session = databaseSeeder.seededData.session;
         applicant = databaseSeeder.seededData.applicant;
         applicantPermissions.utorid = applicant.utorid;
@@ -45,7 +45,7 @@ export function applicationsTests({apiGET, apiPOST}) {
             // make a new posting and update <posting> to include the id of the posting
             let resp = await apiPOST("/admin/postings", {
                 ...posting,
-                session_id: session.id,
+                session_id: session.id
             });
             expect(resp).toHaveStatus("success");
             checkPropTypes(postingPropTypes, resp.payload);
