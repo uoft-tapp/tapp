@@ -32,6 +32,8 @@ class DdahService
                                                                    :description
                                                                ]
                         end
+                        puts "\n\nRAILS_CONTROLLER:"
+                        puts duty.inspect
                         duty
                     end
             end
@@ -45,6 +47,8 @@ class DdahService
                 @ddah.accepted_date = nil
                 @ddah.signature = nil
             end
+            puts "\n\nRAILS_CONTROLLER DDAH:"
+            puts @ddah.duties.as_json(only: %i[description hours])
 
             @ddah.save!
         end
@@ -77,6 +81,8 @@ class DdahService
     end
 
     def self.normalize_duty_desc(desc)
+        puts "\n\n\n\n\n\n\XXXXXXX"
+        puts desc
         case desc
         when /^\s*note.{0,15}?:/i
             trim_replace(desc, $LAST_MATCH_INFO.to_s, 'note:')
@@ -103,10 +109,14 @@ class DdahService
         def trim_replace(orig, prefix, desired_prefix)
             # If the prefix is already the desired prefix and it's not followed
             # by a space, we're all good
+            puts "PREFIX: #{prefix}"
+            puts "DESIRED_ PREFIX: #{desired_prefix}"
+            puts "REGEX: #{!Regexp.new("^#{prefix}\\s")}"
             if prefix == desired_prefix && !Regexp.new("^#{prefix}\\s")
                 return orig
             end
 
+            puts "CHANGED TO #{desired_prefix}#{orig.sub(Regexp.new("^#{prefix}"), '').strip}"
             "#{desired_prefix}#{orig.sub(Regexp.new("^#{prefix}"), '').strip}"
         end
     end

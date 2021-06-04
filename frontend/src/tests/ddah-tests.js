@@ -306,12 +306,105 @@ export function ddahTests(api) {
     // Ddah duty descriptions should start with
     // "prep:", "training:", "meeting:", "contact:", "marking:", "other:", or "note:".
     // When uploading, basic variants are allowed and should be substituted
-    // for the normalized version. For example, "Preparation: weekly sessions"
-    // should become "prep:weekly sessions". Whitespace in front of the prefix
+    // for the normalized version. Whitespace in front of the prefix
     // and before and after the prefix's ":" should be trimmed.
-    it.todo("The prefix of a DDAH duty descriptions is normalized");
-    it.todo("Can change the prefix of a DDAH duty's description");
-    it.todo("Colons `:` are allowed in a DDAH duty's description");
+    it.each([
+        ['Preparation: weekly sessions', 'prep:weekly sessions'],
+        ['Trainings :   TA training', 'training:TA training'],
+        ['Meetings:weekly meetings', 'meeting:weekly meetings'],
+        ['Contact :Tutorials', 'contact:Tutorials'],
+        ['Marking: test Marking', 'marking:test Marking'],
+        ['Other things: additional responsibilities', 'other:additional responsibilities'],
+        ['No category', 'other:No category'],
+        ['Notes: test the notes', 'note:test the notes'],
+    ])( "Description '%s' of a DDAH duty is normalized to be '%s'", async (description, expectedDescription) => {
+        // Delete previous DDAH and create a new one
+        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/delete`);
+        expect(resp).toHaveStatus("success");
+        const assignment_id = ddah.assignment_id;
+        const newDdah = {
+            assignment_id,
+            duties: [
+                {
+                    order: 1,
+                    hours: 200,
+                    description: description,
+                },
+            ],
+        };
+        resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+
+        // Saving new ddah on success, but before checking the prefix
+        // makes each test case independent
+        ddah = resp.payload
+
+        expect(resp.payload?.duties).toStrictEqual([{
+            order: 1,
+            hours: 200,
+            description: expectedDescription
+        }]);
+    });
+
+    it("Can change the prefix of a DDAH duty's description", async () => {
+        const newDdah = {
+            ...ddah,
+            duties: [
+                {
+                    order: 1,
+                    hours: 200,
+                    description: 'No category',
+                },
+            ],
+        };
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload?.duties).toStrictEqual([{
+            order: 1,
+            hours: 200,
+            description: 'other:No category',
+        }]);
+
+        const ddahWithUpdatedPrefix = {
+            ...ddah,
+            duties: [
+                {
+                    order: 1,
+                    hours: 200,
+                    description: 'marking:No category',
+                },
+            ],
+        };
+        resp = await apiPOST(`/admin/ddahs`, ddahWithUpdatedPrefix);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload?.duties).toStrictEqual([{
+            order: 1,
+            hours: 200,
+            description: 'marking:No category',
+        }]);
+
+        ddah = resp.payload;
+    }); 
+
+    it("Colons `:` are allowed in a DDAH duty's description", async () => {
+        const newDdah = {
+            ...ddah,
+            duties: [
+                {
+                    order: 1,
+                    hours: 200,
+                    description: 'marking:Marking tests: T2, T3',
+                },
+            ],
+        };
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+        expect(resp.payload?.duties).toStrictEqual([{
+            order: 1,
+            hours: 200,
+            description: 'marking:Marking tests: T2, T3',
+        }]);
+    });
 }
 
 /**
@@ -414,5 +507,57 @@ export function ddahsEmailAndDownloadTests(api) {
 
     // For this test, it is sufficient to only check the HTML version,
     // which can be downloaded by leaving off the `.pdf` suffix from the public route.
-    it.todo("Downloaded ddah includes all duties (from all categories)");
+    it("Downloaded ddah includes all duties (from all categories)", async () => {
+        const ddahWithAllDutyTypes = {
+            assignment_id: assignments[0].id,
+            duties: [
+                {
+                    order: 2,
+                    hours: 25,
+                    description: "marking:Marking the test",
+                },
+                {
+                    order: 1,
+                    hours: 4,
+                    description: "training:TA training",
+                },
+                {
+                    order: 3,
+                    hours: 40,
+                    description: "contact:Tutorials",
+                },
+                {
+                    order: 5,
+                    hours: 40,
+                    description: "note:Some note",
+                },
+                {
+                    order: 6,
+                    hours: 40,
+                    description: "meeting:Weekly meetings",
+                },
+                {
+                    order: 7,
+                    hours: 40,
+                    description: "prep:Assignment prep",
+                },
+                {
+                    order: 4,
+                    hours: 40,
+                    description: "other:Other duties",
+                },
+            ],
+        };
+
+        let resp = await apiPOST(`/admin/ddahs`, ddahWithAllDutyTypes);
+        expect(resp).toHaveStatus("success");
+
+        const ddahHtml = (
+            await axios.get(
+                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}`
+            )
+        ).data;
+
+        expect(ddahHtml).toMatchSnapshot();
+    });
 }
