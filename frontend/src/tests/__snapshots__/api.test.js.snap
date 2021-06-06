@@ -138,12 +138,12 @@ exports[`API tests DDAH tests email and download Downloaded ddah includes all du
                 <tr>
                     <th>Position:</th>
                     <td>
-                        MAT136H1F Calculus II
+                        CSC135H1F Computer Fun
                     </td>
                 </tr>
                 <tr>
                     <th>Supervisor(s):</th>
-                    <td>Emily Garcia &lt;emily.garcia@utoronto.ca&gt; and Henry Smith &lt;hery.smith@utoronto.ca&gt;</td>
+                    <td>Henry Smith &lt;hery.smith@utoronto.ca&gt;</td>
                 </tr>
             </table>
             <h3 class=\\"i\\">Notes</h3>
@@ -158,7 +158,7 @@ exports[`API tests DDAH tests email and download Downloaded ddah includes all du
                 <tbody>
                     
                     <tr>
-                        <th class=\\"hours\\">40.0 <span class=\\"i\\">hours</span></th>
+                        <th class=\\"hours\\">4.0 <span class=\\"i\\">hours</span></th>
                         <td>
                             Weekly meetings
                         </td>
@@ -169,7 +169,7 @@ exports[`API tests DDAH tests email and download Downloaded ddah includes all du
                 <tbody>
                     
                     <tr>
-                        <th class=\\"hours\\">40.0 <span class=\\"i\\">hours</span></th>
+                        <th class=\\"hours\\">4.0 <span class=\\"i\\">hours</span></th>
                         <td>
                             Assignment prep
                         </td>
@@ -213,7 +213,7 @@ exports[`API tests DDAH tests email and download Downloaded ddah includes all du
                 <tbody>
                     
                     <tr>
-                        <th class=\\"hours\\">40.0 <span class=\\"i\\">hours</span></th>
+                        <th class=\\"hours\\">10.0 <span class=\\"i\\">hours</span></th>
                         <td>
                             Other duties
                         </td>
@@ -222,7 +222,7 @@ exports[`API tests DDAH tests email and download Downloaded ddah includes all du
                 </tbody>
             </table>
             <p>
-                Total hours: <span class=\\"emphcolor\\">229.0</span>.
+                Total hours: <span class=\\"emphcolor\\">105.0</span>.
             </p>
         </div>
         <div class=\\"letter-foot applicant\\">

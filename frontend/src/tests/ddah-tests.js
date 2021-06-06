@@ -523,7 +523,10 @@ export function ddahsEmailAndDownloadTests(api) {
     // which can be downloaded by leaving off the `.pdf` suffix from the public route.
     it("Downloaded ddah includes all duties (from all categories)", async () => {
         const ddahWithAllDutyTypes = {
-            assignment_id: assignments[0].id,
+            // Sometimes the order of instructors displayed is different
+            // Assignment #4 only has one instructor, so we choose that one
+            // to focus on testing what really matters - duties rendered
+            assignment_id: assignments[3].id,
             duties: [
                 {
                     order: 2,
@@ -542,22 +545,22 @@ export function ddahsEmailAndDownloadTests(api) {
                 },
                 {
                     order: 5,
-                    hours: 40,
+                    hours: 18,
                     description: "note:Some note",
                 },
                 {
                     order: 6,
-                    hours: 40,
+                    hours: 4,
                     description: "meeting:Weekly meetings",
                 },
                 {
                     order: 7,
-                    hours: 40,
+                    hours: 4,
                     description: "prep:Assignment prep",
                 },
                 {
                     order: 4,
-                    hours: 40,
+                    hours: 10,
                     description: "other:Other duties",
                 },
             ],
@@ -568,7 +571,7 @@ export function ddahsEmailAndDownloadTests(api) {
 
         const ddahHtml = (
             await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}`
+                `${BACKEND_BASE_URL}/public/ddahs/${resp.payload.url_token}`
             )
         ).data;
 
