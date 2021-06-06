@@ -9,6 +9,7 @@ import {
     upsertContractTemplate,
     setActiveSession,
     positionsSelector,
+    applicantsSelector,
     activeSessionSelector,
     debugOnlyUpsertUser,
     contractTemplatesSelector,
@@ -25,7 +26,6 @@ import { Button, Modal, ProgressBar, Dropdown } from "react-bootstrap";
 import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
-    Applicant,
     MinimalAssignment,
     MinimalPosition,
     Session,
@@ -62,10 +62,8 @@ export function SeedDataMenu({
     const instructors = useSelector(instructorsSelector);
     const targetSession = useSelector(activeSessionSelector);
     const contractTemplates = useSelector(contractTemplatesSelector);
-    let session: Session | null;
     let positions = useSelector(positionsSelector);
-    let applicants: Applicant[] = [];
-    let count;
+    let applicants = useSelector(applicantsSelector);
 
     // If a function is passed to a `useSate` setter, it is evaluated.
     // Since we want to set the state to a function, we need to wrap the setter,
@@ -148,20 +146,18 @@ export function SeedDataMenu({
         setProgress(0);
 
         if (targetSession === null) {
-            // create the mock session
+            // no active session, create the mock session
             const mockSessionData = {
                 start_date: "2020/01/01",
                 end_date: "2021/12/31",
                 name: `Session ${new Date().toLocaleString()}`,
                 rate1: 50,
             };
-            session = await dispatch(upsertSession(mockSessionData));
+            const currSession = await dispatch(upsertSession(mockSessionData));
+            await dispatch(setActiveSession(currSession));
         } else {
-            // use the selected session
-            session = targetSession;
+            // already exist active session, maybe add another session?
         }
-
-        await dispatch(setActiveSession(session));
 
         setProgress(100);
     }
@@ -169,14 +165,8 @@ export function SeedDataMenu({
     async function seedUsers(limit = 1000) {
         setProgress(0);
         setStage("Users");
-        const users = seedData.users.slice(0, limit);
-        count = 0;
-        for (const user of users) {
-            await dispatch(debugOnlyUpsertUser(user));
-            count++;
-            setProgress(Math.round((count / users.length) * 100));
-        }
-        setProgress(100);
+		const users = seedData.users.slice(0, limit);
+		await progressDispatch(debugOnlyUpsertUser, users, 10, setProgress);
     }
 
     async function seedContractTemplate() {
@@ -214,7 +204,7 @@ export function SeedDataMenu({
         const data = (normalizeImport(
             {
                 fileType: "json",
-                data: seedData.positions,
+                data: seedData.positions.slice(0, limit),
             },
             positionSchema
         ) as MinimalPosition[]).map((position) =>
@@ -223,12 +213,7 @@ export function SeedDataMenu({
                 contractTemplates,
             })
         );
-        await progressDispatch(
-            upsertPosition,
-            data.slice(0, limit),
-            10,
-            setProgress
-        );
+        await progressDispatch(upsertPosition, data, 10, setProgress);
     }
 
     async function seedApplicants(limit = 1000) {
@@ -237,48 +222,38 @@ export function SeedDataMenu({
         const data = normalizeImport(
             {
                 fileType: "json",
-                data: seedData.applicants,
+                data: seedData.applicants.slice(0, limit),
             },
             applicantSchema
         );
 
-        await progressDispatch(
-            upsertApplicant,
-            data.slice(0, limit),
-            10,
-            setProgress
-        );
+        await progressDispatch(upsertApplicant, data, 10, setProgress);
     }
 
     async function seedAssignments(limit = 1000) {
         setStage("Assignments");
         setProgress(0);
-        if (!session) {
+        if (!targetSession) {
             throw new Error("Need a valid session to continue");
         }
         const data = (normalizeImport(
             {
                 fileType: "json",
-                data: seedData.assignments,
+                data: seedData.assignments.slice(0, limit),
             },
             assignmentSchema
         ) as MinimalAssignment[]).map((assignment) => {
-            if (!session) {
+            if (!targetSession) {
                 throw new Error("Need a valid session to continue");
             }
             return prepareFull.assignment(assignment, {
                 positions,
                 applicants,
-                session,
+                session: targetSession,
             });
         });
 
-        await progressDispatch(
-            upsertAssignment,
-            data.slice(0, limit),
-            10,
-            setProgress
-        );
+        await progressDispatch(upsertAssignment, data, 10, setProgress);
     }
 
     async function seedAll() {

@@ -145,7 +145,6 @@ function DevFrame(props) {
                         </BootstrapNavLink>
                     </Nav>
                     <Navbar.Collapse className="justify-content-end">
-                        <ConnectedLoadMockButton />
                         <ConnectedActiveUserButton />
                         <ConnectedToggleMockApi />
                         <ConnectedLoadMockButton />
