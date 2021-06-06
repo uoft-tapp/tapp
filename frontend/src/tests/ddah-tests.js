@@ -309,42 +309,50 @@ export function ddahTests(api) {
     // for the normalized version. Whitespace in front of the prefix
     // and before and after the prefix's ":" should be trimmed.
     it.each([
-        ['Preparation: weekly sessions', 'prep:weekly sessions'],
-        ['Trainings :   TA training', 'training:TA training'],
-        ['Meetings:weekly meetings', 'meeting:weekly meetings'],
-        ['Contact :Tutorials', 'contact:Tutorials'],
-        ['Marking: test Marking', 'marking:test Marking'],
-        ['Other things: additional responsibilities', 'other:additional responsibilities'],
-        ['No category', 'other:No category'],
-        ['Notes: test the notes', 'note:test the notes'],
-    ])( "Description '%s' of a DDAH duty is normalized to be '%s'", async (description, expectedDescription) => {
-        // Delete previous DDAH and create a new one
-        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/delete`);
-        expect(resp).toHaveStatus("success");
-        const assignment_id = ddah.assignment_id;
-        const newDdah = {
-            assignment_id,
-            duties: [
+        ["Preparation: weekly sessions", "prep:weekly sessions"],
+        ["Trainings :   TA training", "training:TA training"],
+        ["Meetings:weekly meetings", "meeting:weekly meetings"],
+        ["Contact :Tutorials", "contact:Tutorials"],
+        ["Marking: test Marking", "marking:test Marking"],
+        [
+            "Other things: additional responsibilities",
+            "other:additional responsibilities",
+        ],
+        ["No category", "other:No category"],
+        ["Notes: test the notes", "note:test the notes"],
+    ])(
+        "Description '%s' of a DDAH duty is normalized to be '%s'",
+        async (description, expectedDescription) => {
+            // Delete previous DDAH and create a new one
+            let resp = await apiPOST(`/admin/ddahs/${ddah.id}/delete`);
+            expect(resp).toHaveStatus("success");
+            const assignment_id = ddah.assignment_id;
+            const newDdah = {
+                assignment_id,
+                duties: [
+                    {
+                        order: 1,
+                        hours: 200,
+                        description: description,
+                    },
+                ],
+            };
+            resp = await apiPOST(`/admin/ddahs`, newDdah);
+            expect(resp).toHaveStatus("success");
+
+            // Saving new ddah on success, but before checking the prefix
+            // makes each test case independent
+            ddah = resp.payload;
+
+            expect(resp.payload?.duties).toStrictEqual([
                 {
                     order: 1,
                     hours: 200,
-                    description: description,
+                    description: expectedDescription,
                 },
-            ],
-        };
-        resp = await apiPOST(`/admin/ddahs`, newDdah);
-        expect(resp).toHaveStatus("success");
-
-        // Saving new ddah on success, but before checking the prefix
-        // makes each test case independent
-        ddah = resp.payload
-
-        expect(resp.payload?.duties).toStrictEqual([{
-            order: 1,
-            hours: 200,
-            description: expectedDescription
-        }]);
-    });
+            ]);
+        }
+    );
 
     it("Can change the prefix of a DDAH duty's description", async () => {
         const newDdah = {
@@ -353,17 +361,19 @@ export function ddahTests(api) {
                 {
                     order: 1,
                     hours: 200,
-                    description: 'No category',
+                    description: "No category",
                 },
             ],
         };
         let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
-        expect(resp.payload?.duties).toStrictEqual([{
-            order: 1,
-            hours: 200,
-            description: 'other:No category',
-        }]);
+        expect(resp.payload?.duties).toStrictEqual([
+            {
+                order: 1,
+                hours: 200,
+                description: "other:No category",
+            },
+        ]);
 
         const ddahWithUpdatedPrefix = {
             ...ddah,
@@ -371,20 +381,22 @@ export function ddahTests(api) {
                 {
                     order: 1,
                     hours: 200,
-                    description: 'marking:No category',
+                    description: "marking:No category",
                 },
             ],
         };
         resp = await apiPOST(`/admin/ddahs`, ddahWithUpdatedPrefix);
         expect(resp).toHaveStatus("success");
-        expect(resp.payload?.duties).toStrictEqual([{
-            order: 1,
-            hours: 200,
-            description: 'marking:No category',
-        }]);
+        expect(resp.payload?.duties).toStrictEqual([
+            {
+                order: 1,
+                hours: 200,
+                description: "marking:No category",
+            },
+        ]);
 
         ddah = resp.payload;
-    }); 
+    });
 
     it("Colons `:` are allowed in a DDAH duty's description", async () => {
         const newDdah = {
@@ -393,17 +405,19 @@ export function ddahTests(api) {
                 {
                     order: 1,
                     hours: 200,
-                    description: 'marking:Marking tests: T2, T3',
+                    description: "marking:Marking tests: T2, T3",
                 },
             ],
         };
         let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
-        expect(resp.payload?.duties).toStrictEqual([{
-            order: 1,
-            hours: 200,
-            description: 'marking:Marking tests: T2, T3',
-        }]);
+        expect(resp.payload?.duties).toStrictEqual([
+            {
+                order: 1,
+                hours: 200,
+                description: "marking:Marking tests: T2, T3",
+            },
+        ]);
     });
 }
 
