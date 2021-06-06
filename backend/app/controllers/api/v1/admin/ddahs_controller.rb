@@ -134,9 +134,6 @@ class Api::V1::Admin::DdahsController < ApplicationController
             object: @ddah,
             condition:
                 proc do
-                    puts "\n\nINSIDE UPDATE"
-                    puts @ddah.duties
-                    puts params
                     service = DdahService.new(params: params, ddah: @ddah)
                     service.update!
                 end
