@@ -12,6 +12,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let position;
     let posting = {};
     let resp;
+    let admin;
+
+    const taOnlyUser = {
+        utorid: "matthewc",
+        roles: ["ta"],
+    };
 
     const postingData = {
         name: "2021 Summer Posting",
@@ -21,11 +27,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
         availability: "auto",
     };
 
-    const postingPos = {
-        hours: 20,
-        num_positions: 1,
-    };
-
     // These tests set data through the `/public/postings` route,
     // but read data through the `/api/v1/admin` route.
     describe("Public route tests", () => {
@@ -33,6 +34,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
             position = databaseSeeder.seededData.position;
+            resp = await apiGET(`/debug/active_user`);
+            expect(resp).toHaveStatus("success");
+            admin = {
+                utorid: resp.payload.utorid,
+                roles: resp.payload.roles,
+            };
         });
 
         it.todo("Get survey.js posting data through public route");
@@ -41,7 +48,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         );
 
         it("Can submit survey.js data via the public postings route", async () => {
-            //Post a new posting
+            //Create a new posting
             resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
                 postingData
@@ -54,24 +61,30 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //Set position for posting
             resp = await apiPOST(
                 `/admin/postings/${posting.id}/posting_positions`,
-                { ...postingPos, position_id: position.id }
+                { hours: 20, num_positions: 2, position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
-            Object.assign(postingPos, resp.payload);
+
+            //Create and switch to a ta only user
+            resp = await apiPOST("/debug/users", taOnlyUser);
+            expect(resp).toHaveStatus("success");
+            resp = await apiPOST("/debug/active_user", taOnlyUser);
+            expect(resp).toHaveStatus("success");
 
             //Create and submit survey.js data
             const surveyData = {
                 answers: {
-                    utorid: "defaultactive",
-                    student_number: "1111111111",
-                    first_name: "jin",
-                    last_name: "chun",
+                    utorid: "matthewc",
+                    student_number: "1000123456",
+                    first_name: "Matthew",
+                    last_name: "Cambell",
                     email: "test@test.ca",
-                    phone: "1111111111",
+                    phone: "6471234567",
                     program: "M",
-                    program_start: "2021-05-21",
+                    program_start: "2017-09-05",
                     department: "cs",
                     previous_university_ta: true,
+                    some_entry: false,
                     previous_department_ta: true,
                     previous_other_university_ta: false,
                     previous_experience_summary: "some previous experience",
@@ -89,6 +102,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
+            console.log("After submission: ");
+            console.log(resp.payload);
+            let submissionData = resp.payload;
+
+            //re-ask for data via another route to verify by
+            console.log("The URL: " + posting.url_token);
+            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
+            expect(resp).toHaveStatus("success");
+            console.log("Getting survey data: ");
+            console.log(resp.payload);
+            expect(resp.payload.prefilled_data).toEqual(submissionData);
         });
 
         it.todo(
