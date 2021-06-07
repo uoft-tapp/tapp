@@ -122,7 +122,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
             Object.assign(postingPosition, resp.payload);
 
-            // create a new user (ensures that the applicant and application don't exist)
+            // create a new user
             resp = await apiPOST("/debug/users", newUser);
             expect(resp).toHaveStatus("success");
             Object.assign(newUser, resp.payload);
@@ -130,10 +130,18 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //check if new user is successfully created
             resp = await apiGET("/debug/users");
             expect(resp).toHaveStatus("success");
-            const foundUser = resp.payload.find(
+            let foundUser = resp.payload.find(
                 (user) => user.utorid === newUser.utorid
             );
             expect(foundUser).toBeDefined();
+
+            // ensure that the user is not an applicant
+            resp = await apiGET("/admin/applicants");
+            console.log(resp);
+            foundUser = resp.payload.find(
+                (user) => user.utorid === newUser.utorid
+            );
+            expect(foundUser).not.toBeDefined();
 
             // switch to the new user
             resp = await apiPOST("/debug/active_user", newUser);
@@ -159,12 +167,29 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 surveyjsSubmission,
                 true
             );
+            expect(resp).toHaveStatus("success");
+            const applicationResp = resp;
 
             // switch back to default (i.e. with admin role) user
             resp = await apiPOST("/debug/active_user", defaultUser);
             expect(resp).toHaveStatus("success");
 
-            // todo: check db if new applicant and application has been created
+            // check db if new applicant and application has been created
+            resp = await apiGET("/admin/applicants");
+            console.log(resp);
+            foundUser = resp.payload.find(
+                (user) => user.utorid === newUser.utorid
+            );
+            expect(foundUser).toBeDefined();
+
+            resp = await apiGET(`/admin/sessions/${session.id}/applications`);
+            console.log(resp);
+            const foundApplication = resp.payload.find(
+                (application) =>
+                    application.id === applicationResp.id &&
+                    application.applicant_id === applicationResp.id
+            );
+            expect(foundApplication).toBeDefined();
         });
 
         it.todo(
