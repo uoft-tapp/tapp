@@ -13,6 +13,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let posting = {};
     let resp;
     let admin;
+    let surveyData;
 
     const taOnlyUser = {
         utorid: "matthewc",
@@ -72,7 +73,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
 
             //Create and submit survey.js data
-            const surveyData = {
+            surveyData = {
                 answers: {
                     utorid: "matthewc",
                     student_number: "1000123456",
@@ -102,16 +103,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
-            console.log("After submission: ");
-            console.log(resp.payload);
             let submissionData = resp.payload;
 
             //re-ask for data via another route to verify by
-            console.log("The URL: " + posting.url_token);
             resp = await apiGET(`/public/postings/${posting.url_token}`, true);
             expect(resp).toHaveStatus("success");
-            console.log("Getting survey data: ");
-            console.log(resp.payload);
             expect(resp.payload.prefilled_data).toEqual(submissionData);
         });
 
@@ -121,12 +117,16 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.todo(
             "When submitting survey.js data an applicant and application are updated if they already exist"
         );
-        it.todo(
-            "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
-        );
-        it.todo(
-            "When submitting survey.js data cannot add a position_preference for a position not listed in the posting"
-        );
+        it("Even if a different utorid is submitted via survey.js data the active_user's utorid is used", async () => {});
+        it("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
+            surveyData.answers.position_preferences.CSC400 = 4;
+            resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                surveyData,
+                true
+            );
+            expect(resp).toHaveStatus("error");
+        });
         it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
