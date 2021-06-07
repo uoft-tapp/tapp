@@ -69,8 +69,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //Create and switch to a ta only user
             resp = await apiPOST("/debug/users", taOnlyUser);
             expect(resp).toHaveStatus("success");
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
 
             //Create and submit survey.js data
             surveyData = {
@@ -103,12 +101,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
-            let submissionData = resp.payload;
 
-            //re-ask for data via another route to verify by
-            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
-            expect(resp).toHaveStatus("success");
-            expect(resp.payload.prefilled_data).toEqual(submissionData);
+            // Further verfication will happen in test cases concerning application data 
         });
 
         it.todo(
@@ -117,16 +111,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.todo(
             "When submitting survey.js data an applicant and application are updated if they already exist"
         );
-        it("Even if a different utorid is submitted via survey.js data the active_user's utorid is used", async () => {});
-        // it("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
-        //     surveyData.answers.position_preferences.CSC400 = 4;
-        //     resp = await apiPOST(
-        //         `/public/postings/${posting.url_token}/submit`,
-        //         surveyData,
-        //         true
-        //     );
-        //     expect(resp).toHaveStatus("error");
-        // });
+        it.todo(
+            "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
+        );
         it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
