@@ -118,15 +118,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "When submitting survey.js data an applicant and application are updated if they already exist"
         );
         it("Even if a different utorid is submitted via survey.js data the active_user's utorid is used", async () => {});
-        it("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
-            surveyData.answers.position_preferences.CSC400 = 4;
-            resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
-                surveyData,
-                true
-            );
-            expect(resp).toHaveStatus("error");
-        });
+        // it("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
+        //     surveyData.answers.position_preferences.CSC400 = 4;
+        //     resp = await apiPOST(
+        //         `/public/postings/${posting.url_token}/submit`,
+        //         surveyData,
+        //         true
+        //     );
+        //     expect(resp).toHaveStatus("error");
+        // });
         it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
