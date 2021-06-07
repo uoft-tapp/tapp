@@ -137,7 +137,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // ensure that the user is not an applicant
             resp = await apiGET("/admin/applicants");
-            console.log(resp);
             foundUser = resp.payload.find(
                 (user) => user.utorid === newUser.utorid
             );
@@ -151,9 +150,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // assume posting submission is tested (previous test)
             const surveyjsSubmission = {
                 answers: {
-                    utorid: "johnd",
-                    first_name: "John",
-                    last_name: "D",
+                    utorid: "greenb",
+                    first_name: "Green",
+                    last_name: "Bee",
                     email: "testemail@utoronto.ca",
                     phone: "6471111111",
                     student_number: "1002345678",
@@ -168,7 +167,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
-            const applicationResp = resp;
 
             // switch back to default (i.e. with admin role) user
             resp = await apiPOST("/debug/active_user", defaultUser);
@@ -176,18 +174,18 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // check db if new applicant and application has been created
             resp = await apiGET("/admin/applicants");
-            console.log(resp);
+
             foundUser = resp.payload.find(
                 (user) => user.utorid === newUser.utorid
             );
             expect(foundUser).toBeDefined();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
-            console.log(resp);
+
             const foundApplication = resp.payload.find(
                 (application) =>
-                    application.id === applicationResp.id &&
-                    application.applicant_id === applicationResp.id
+                    application.applicant_id === foundUser.id &&
+                    application.posting_id === posting.id
             );
             expect(foundApplication).toBeDefined();
         });
