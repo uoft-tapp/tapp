@@ -102,7 +102,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Further verfication will happen in test cases concerning application data 
+            // Further verfication will happen in test cases concerning application data
         });
 
         it.todo(
