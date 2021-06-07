@@ -9,10 +9,10 @@ import {
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
-    let session;
-    let surveyPrefill;
-    let applicant;
-    let prevUser;
+    let session, surveyPrefill, applicant, position;
+    let defaultUser;
+    let resp;
+    const HIGH_PREFERENCE = 3;
 
     const posting = {
         name: "CSC209F TA",
@@ -22,20 +22,26 @@ export function applicationsTests({ apiGET, apiPOST }) {
         availability: "open",
     };
 
-    const applicantPermissions = {
+    const postingPosition = {
+        num_positions: 10,
+        hours: 68,
+    };
+
+    const newUser = {
         roles: ["ta"],
+        utorid: "greenb",
     };
 
     beforeAll(async () => {
         await databaseSeeder.seed({ apiGET, apiPOST });
         session = databaseSeeder.seededData.session;
         applicant = databaseSeeder.seededData.applicant;
-        applicantPermissions.utorid = applicant.utorid;
+        position = databaseSeeder.seededData.position;
 
         // get the current active user
         let resp = await apiGET("/debug/active_user");
         expect(resp).toHaveStatus("success");
-        prevUser = resp.payload;
+        defaultUser = resp.payload;
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
@@ -44,7 +50,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it("Get survey.js posting data through public route", async () => {
             // make sure the user has admin permissions before this post request
             // make a new posting and update <posting> to include the id of the posting
-            let resp = await apiPOST("/admin/postings", {
+            resp = await apiPOST("/admin/postings", {
                 ...posting,
                 session_id: session.id,
             });
@@ -55,12 +61,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // make sure the user is the seeded applicant before this get request for the purposes of the next test
             // create a user for the applicant to make sure they exist before changing the default user to applicant
-            resp = await apiPOST("/debug/users", applicantPermissions);
+            const applicantAsUser = {
+                roles: ["ta"],
+            };
+            applicantAsUser.utorid = applicant.utorid;
+
+            resp = await apiPOST("/debug/users", applicantAsUser);
             expect(resp).toHaveStatus("success");
-            Object.assign(applicantPermissions, resp.payload);
+            Object.assign(applicantAsUser, resp.payload);
 
             // set the default user to the applicant
-            resp = await apiPOST("/debug/active_user", applicantPermissions);
+            resp = await apiPOST("/debug/active_user", applicantAsUser);
             expect(resp).toHaveStatus("success");
 
             // read survey.js posting data
@@ -70,7 +81,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             surveyPrefill = resp.payload["prefilled_data"];
 
             // restore the default user
-            resp = await apiPOST("/debug/active_user", prevUser);
+            resp = await apiPOST("/debug/active_user", defaultUser);
             expect(resp).toHaveStatus("success");
         });
 
@@ -102,7 +113,59 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
         it.todo("Can submit survey.js data via the public postings route");
 
-        it("When submitting survey.js data an applicant and application are automatically created they don't exist", async () => {});
+        it("When submitting survey.js data an applicant and application are automatically created they don't exist", async () => {
+            // link seeded position to the posting (todo: remove after merged with previous test)
+            resp = await apiPOST(
+                `/admin/postings/${posting.id}/posting_positions`,
+                { ...postingPosition, position_id: position.id }
+            );
+            expect(resp).toHaveStatus("success");
+            Object.assign(postingPosition, resp.payload);
+
+            // create a new user (ensures that the applicant and application don't exist)
+            resp = await apiPOST("/debug/users", newUser);
+            expect(resp).toHaveStatus("success");
+            Object.assign(newUser, resp.payload);
+
+            //check if new user is successfully created
+            resp = await apiGET("/debug/users");
+            expect(resp).toHaveStatus("success");
+            const foundUser = resp.payload.find(
+                (user) => user.utorid === newUser.utorid
+            );
+            expect(foundUser).toBeDefined();
+
+            // switch to the new user
+            resp = await apiPOST("/debug/active_user", newUser);
+            expect(resp).toHaveStatus("success");
+
+            // submit an application to the posting
+            // assume posting submission is tested (previous test)
+            const surveyjsSubmission = {
+                answers: {
+                    utorid: "johnd",
+                    first_name: "John",
+                    last_name: "D",
+                    email: "testemail@utoronto.ca",
+                    phone: "6471111111",
+                    student_number: "1002345678",
+                    position_preferences: {
+                        [position.position_code]: HIGH_PREFERENCE,
+                    },
+                },
+            };
+            resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                surveyjsSubmission,
+                true
+            );
+
+            // switch back to default (i.e. with admin role) user
+            resp = await apiPOST("/debug/active_user", defaultUser);
+            expect(resp).toHaveStatus("success");
+
+            // todo: check db if new applicant and application has been created
+        });
 
         it.todo(
             "When submitting survey.js data an applicant and application are updated if they already exist"
