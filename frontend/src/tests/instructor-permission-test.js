@@ -642,9 +642,54 @@ export function instructorsPermissionTests(api) {
             expect(resp.payload).toEqual(expect.objectContaining(updatedDdah));
         });
 
-        it(
-            "cannot set approved_date/accepted_date/revised_date/emailed_date/signature for a Ddah associated with self"
-        ); // still a success, but does not change the underlying data
+        // This test indeed fails 0w0
+        it.skip("cannot set approved_date/accepted_date/revised_date/emailed_date/signature for a Ddah associated with self", async () => {
+            // Fetch the first assignment associated with our instructor
+            let resp = await apiGET(
+                `/instructor/sessions/${session.id}/assignments`
+            );
+            expect(resp).toHaveStatus("success");
+            const assignment_id = resp.payload[0].id;
+
+            // Fetch the DDAH related to that assignment
+            resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+            expect(resp).toHaveStatus("success");
+            const originalDdah = resp.payload.find(
+                (ddah) => ddah.assignment_id === assignment_id
+            );
+
+            // Update the DDAH and check it was updated correctly
+            const ddahWithRestrictedFields = {
+                assignment_id,
+                duties: [
+                    {
+                        order: 1,
+                        hours: 40,
+                        description: "marking:Test Marking",
+                    },
+                    {
+                        order: 2,
+                        hours: 30,
+                        description: "other:Additional duties",
+                    },
+                ],
+                approved_date: new Date().toISOString(),
+                accepted_date: "2020-09-02T00:00:00.000Z",
+                revised_date: "2020-09-01T00:00:00.000Z",
+                emailed_date: "2020-08-28T00:00:00.000Z",
+                signature: "Harry Potter",
+            };
+            resp = await apiPOST(`/instructor/ddahs`, ddahWithRestrictedFields);
+            expect(resp).toHaveStatus("success");
+            //expect(resp.payload).toEqual(expect.objectContaining(originalDdah));
+
+            resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+            expect(resp).toHaveStatus("success");
+            const newDdah = resp.payload.find(
+                (ddah) => ddah.assignment_id === assignment_id
+            );
+            expect(newDdah).toEqual(expect.objectContaining(originalDdah));
+        }); // still a success, but does not change the underlying data
         it.todo(
             "cannot create a Ddah for an assignment not associated with self"
         );
