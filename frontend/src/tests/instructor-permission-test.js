@@ -477,7 +477,7 @@ export function instructorsPermissionTests(api) {
         await restoreDefaultUser();
     });
 
-    describe.only("Ddah permissions", () => {
+    describe("Ddah permissions", () => {
         let position;
         let instructor;
         let assignment;
