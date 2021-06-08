@@ -115,6 +115,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
         );
         it.todo(
+            "When submitting survey.js data cannot add a position_preference for a position not listed in the posting"
+        );
+        it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
         it.todo(
