@@ -66,6 +66,12 @@ class DatabaseSeeder {
                     email: "megan.miller@utoronto.ca",
                     utorid: "millerm",
                 },
+                {
+                    last_name: "Lucas",
+                    first_name: "George",
+                    email: "george.lucas@utoronto.ca",
+                    utorid: "lucasg",
+                },
             ],
             applicants: [
                 {
@@ -147,6 +153,22 @@ class DatabaseSeeder {
                     instructor_ids: [],
                     instructor_utorids: [],
                 },
+                {
+                    position_code: "CSC555Y1",
+                    position_title: "Computer Networks",
+                    hours_per_assignment: 70,
+                    contract_template_id: null,
+                    instructor_ids: [],
+                    instructor_utorids: ["lucasg", "millerm"],
+                },
+                {
+                    position_code: "ECO101H1F",
+                    position_title: "Microeconomics",
+                    hours_per_assignment: 50,
+                    contract_template_id: null,
+                    instructor_ids: [],
+                    instructor_utorids: ["millerm"],
+                },
             ],
             assignments: [
                 {
@@ -172,6 +194,58 @@ class DatabaseSeeder {
                 {
                     position_code: "MAT235H1F",
                     applicant_utorid: "weasleyr",
+                },
+                {
+                    ddah_seed_id: 1,
+                    position_code: "CSC555Y1",
+                    applicant_utorid: "molinat",
+                },
+                {
+                    ddah_seed_id: 2,
+                    position_code: "ECO101H1F",
+                    applicant_utorid: "brownd",
+                },
+            ],
+            ddahs: [
+                {
+                    assignment_seed_id: 1,
+                    duties: [
+                        {
+                            order: 2,
+                            hours: 18,
+                            description: "marking:Marking midterms",
+                        },
+                        {
+                            order: 1,
+                            hours: 2,
+                            description: "training:Initial TA training",
+                        },
+                        {
+                            order: 3,
+                            hours: 50,
+                            description: "contact:Tutorials",
+                        },
+                    ],
+                },
+                {
+                    assignment_seed_id: 2,
+                    duties: [
+                        {
+                            order: 2,
+                            hours: 18,
+                            description: "marking:Marking midterms",
+                        },
+                        {
+                            order: 1,
+                            hours: 2,
+                            description: "training:Initial TA training",
+                        },
+                        {
+                            order: 3,
+                            hours: 50,
+                            description: "contact:Tutorials",
+                        },
+                    ],
                 },
             ],
         };
@@ -400,6 +474,9 @@ async function seedDatabaseForInstructors(
     }
 
     // Assignment
+    // We will keep track of the inserted assignments for the purpose
+    // of creating DDAHs for some of them later
+    const processedAssignments = [];
     for (const assignment of seeded.assignments) {
         // The seed data is written in terms of position codes
         // and applicant utorids, so we need to mangle the data
@@ -431,5 +508,37 @@ async function seedDatabaseForInstructors(
         resp = await apiPOST(`/admin/assignments`, assignment);
         expect(resp).toHaveStatus("success");
         Object.assign(assignment, resp.payload);
+        processedAssignments.push(assignment);
+    }
+
+    // DDAH
+    for (const ddah of seeded.ddahs) {
+        // assignment_seed_id in ddahs should correspond to ddah_seed_id in assignments
+        if (!ddah.assignment_seed_id) {
+            throw new Error(
+                `Inconsistency in seed data: could not create ddah without assignment_seed_id`
+            );
+        }
+
+        // The seed data is written in terms of position codes
+        // and applicant utorids, since unique applicant can apply to
+        // at most one position
+        const { id: assignment_id } =
+            processedAssignments.find(
+                (assignment) =>
+                    assignment.ddah_seed_id === ddah.assignment_seed_id
+            ) || {};
+        if (!assignment_id) {
+            throw new Error(
+                `Inconsistency in seed data: could not find assignment with ddah_seed_id ${ddah.assignment_seed_id}`
+            );
+        }
+
+        const newDdah = {
+            ...ddah,
+            assignment_id,
+        };
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
     }
 }
