@@ -72,6 +72,12 @@ class DatabaseSeeder {
                     email: "george.lucas@utoronto.ca",
                     utorid: "lucasg",
                 },
+                {
+                    last_name: "Bellford",
+                    first_name: "Jordan",
+                    email: "jordan.bell@utoronto.ca",
+                    utorid: "belljo",
+                },
             ],
             applicants: [
                 {
@@ -167,7 +173,7 @@ class DatabaseSeeder {
                     hours_per_assignment: 50,
                     contract_template_id: null,
                     instructor_ids: [],
-                    instructor_utorids: ["millerm"],
+                    instructor_utorids: ["millerm", "belljo"],
                 },
             ],
             assignments: [
