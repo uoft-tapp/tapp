@@ -561,7 +561,7 @@ export function ddahsEmailAndDownloadTests(api) {
                 {
                     order: 4,
                     hours: 10,
-                    description: "other:Other duties",
+                    description: "other:Other responsibilities",
                 },
             ],
         };
@@ -574,7 +574,12 @@ export function ddahsEmailAndDownloadTests(api) {
                 `${BACKEND_BASE_URL}/public/ddahs/${resp.payload.url_token}`
             )
         ).data;
-
-        expect(ddahHtml).toMatchSnapshot();
+        
+        const expectedStrings = ["Training", "Marking/Grading", "Contact Time", "Preparation", "Meetings", "Notes", "Other duties"];
+        
+        for (const expectedString of expectedStrings) {
+            expect(ddahHtml).toEqual(expect.stringContaining(expectedString));
+        }
+        
     });
 }
