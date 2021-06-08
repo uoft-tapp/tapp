@@ -67,7 +67,7 @@ export function ddahTests(api) {
             ],
         };
 
-        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        const resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.duties.length).toEqual(newDdah.duties.length);
         expect(computeTotalHoursForDdah(resp.payload)).toEqual(
@@ -79,13 +79,13 @@ export function ddahTests(api) {
     });
 
     it("get a ddah", async () => {
-        let resp = await apiGET(`/admin/ddahs/${ddah.id}`);
+        const resp = await apiGET(`/admin/ddahs/${ddah.id}`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(ddah);
     });
 
     it("get all ddahs associated with a session", async () => {
-        let resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
+        const resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp).toHaveStatus("success");
         // Originally only one ddah is seeded
         expect(resp.payload.length).toEqual(1);
@@ -176,7 +176,7 @@ export function ddahTests(api) {
             ],
         };
 
-        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        const resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.id).toEqual(ddah.id);
         expect(computeTotalHoursForDdah(resp.payload)).toEqual(100);
@@ -189,7 +189,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.approved_date).toBeFalsy();
 
-        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
+        const resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.approved_date).toBeTruthy();
 
@@ -201,7 +201,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.emailed_date).toBeFalsy();
 
-        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
+        const resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.emailed_date).toBeTruthy();
 
@@ -210,7 +210,7 @@ export function ddahTests(api) {
     });
 
     it("get ddah from assignment route", async () => {
-        let resp = await apiGET(
+        const resp = await apiGET(
             `/admin/assignments/${ddah.assignment_id}/ddah`
         );
         expect(resp).toHaveStatus("success");
@@ -229,7 +229,7 @@ export function ddahTests(api) {
                 },
             ],
         };
-        let resp = await apiPOST(
+        const resp = await apiPOST(
             `/admin/assignments/${newAssignment.id}/ddah`,
             newDdah
         );
@@ -409,7 +409,7 @@ export function ddahTests(api) {
                 },
             ],
         };
-        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        const resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         expect(resp.payload?.duties).toStrictEqual([
             {
@@ -513,7 +513,7 @@ export function ddahsEmailAndDownloadTests(api) {
     });
 
     it("can download pdf versions ddah signature list", async () => {
-        let resp = await apiGET(
+        const resp = await apiGET(
             `/admin/sessions/${session.id}/ddahs/accepted_list.pdf`
         );
         expect(resp).toHaveStatus("success");
@@ -566,7 +566,7 @@ export function ddahsEmailAndDownloadTests(api) {
             ],
         };
 
-        let resp = await apiPOST(`/admin/ddahs`, ddahWithAllDutyTypes);
+        const resp = await apiPOST(`/admin/ddahs`, ddahWithAllDutyTypes);
         expect(resp).toHaveStatus("success");
 
         const ddahHtml = (
