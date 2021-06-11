@@ -10,10 +10,10 @@ import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session, surveyPrefill, applicant, position;
-    let defaultUser;
+    let defaultUser, foundUser, originalApplication;
     let resp;
     const HIGH_PREFERENCE = 3;
-
+    const OK_PREFERENCE = 1;
     const posting = {
         name: "CSC209F TA",
         intro_text: "Testing posting for CSC209F",
@@ -130,7 +130,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //check if new user is successfully created
             resp = await apiGET("/debug/users");
             expect(resp).toHaveStatus("success");
-            let foundUser = resp.payload.find(
+            foundUser = resp.payload.find(
                 (user) => user.utorid === newUser.utorid
             );
             expect(foundUser).toBeDefined();
@@ -182,17 +182,87 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
 
+            //assumes that the applicant and posting are primary keys for an application
+            originalApplication = resp.payload.find(
+                (application) =>
+                    application.applicant_id === foundUser.id &&
+                    application.posting_id === posting.id
+            );
+            expect(originalApplication).toBeDefined();
+        });
+        it.todo(
+            "500 tests: do not link position preferences, and not sumit position"
+        );
+        it("When submitting survey.js data an applicant and application are updated if they already exist", async () => {
+            // switch to the new user
+            resp = await apiPOST("/debug/active_user", newUser);
+            expect(resp).toHaveStatus("success");
+
+            // submit an updated application to the posting
+            const applicantInfo = {
+                utorid: "greenb",
+                first_name: "Not Green",
+                last_name: "And not Bee",
+                email: "testemail2@utoronto.ca",
+                phone: "6472111111",
+                student_number: "1012345678",
+            };
+            const otherSurveyInfo = {
+                position_preferences: {
+                    [position.position_code]: OK_PREFERENCE,
+                },
+            };
+            const surveyjsSubmission = {
+                answers: {
+                    ...applicantInfo,
+                    ...otherSurveyInfo,
+                },
+            };
+            resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                surveyjsSubmission,
+                true
+            );
+            expect(resp).toHaveStatus("success");
+
+            // switch back to default (i.e. with admin role) user
+            resp = await apiPOST("/debug/active_user", defaultUser);
+            expect(resp).toHaveStatus("success");
+
+            // check db if new applicant and application has been updated
+            resp = await apiGET("/admin/applicants");
+
+            foundUser = resp.payload.find(
+                (user) => user.utorid === newUser.utorid
+            );
+            expect(foundUser).toBeDefined();
+
+            // assumes "/admin/applicants" routes works as expected
+            expect(foundUser).toMatchObject(
+                expect.objectContaining(applicantInfo)
+            );
+
+            resp = await apiGET(`/admin/sessions/${session.id}/applications`);
+
+            //assumes that the applicant and posting are primary keys for an application
             const foundApplication = resp.payload.find(
                 (application) =>
                     application.applicant_id === foundUser.id &&
                     application.posting_id === posting.id
             );
-            expect(foundApplication).toBeDefined();
-        });
 
-        it.todo(
-            "When submitting survey.js data an applicant and application are updated if they already exist"
-        );
+            // make sure that only the parts that were updated change
+            Object.assign(originalApplication, {
+                // should match otherSurveyInfo
+                position_preferences: [
+                    {
+                        position_id: position.id,
+                        preference_level: OK_PREFERENCE,
+                    },
+                ],
+            });
+            expect(foundApplication).toEqual(originalApplication);
+        });
         it.todo(
             "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
         );
