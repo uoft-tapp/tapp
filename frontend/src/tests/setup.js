@@ -73,7 +73,7 @@ class DatabaseSeeder {
                     utorid: "lucasg",
                 },
                 {
-                    last_name: "Bellford",
+                    last_name: "Bell",
                     first_name: "Jordan",
                     email: "jordan.bell@utoronto.ca",
                     utorid: "belljo",
@@ -202,19 +202,19 @@ class DatabaseSeeder {
                     applicant_utorid: "weasleyr",
                 },
                 {
-                    ddah_seed_id: 1,
+                    _ddah_seed_id: 1,
                     position_code: "CSC555Y1",
                     applicant_utorid: "molinat",
                 },
                 {
-                    ddah_seed_id: 2,
+                    _ddah_seed_id: 2,
                     position_code: "ECO101H1F",
                     applicant_utorid: "brownd",
                 },
             ],
             ddahs: [
                 {
-                    assignment_seed_id: 1,
+                    _assignment_seed_id: 1,
                     duties: [
                         {
                             order: 2,
@@ -234,7 +234,7 @@ class DatabaseSeeder {
                     ],
                 },
                 {
-                    assignment_seed_id: 2,
+                    _assignment_seed_id: 2,
                     duties: [
                         {
                             order: 2,
@@ -519,10 +519,10 @@ async function seedDatabaseForInstructors(
 
     // DDAH
     for (const ddah of seeded.ddahs) {
-        // assignment_seed_id in ddahs should correspond to ddah_seed_id in assignments
-        if (!ddah.assignment_seed_id) {
+        // _assignment_seed_id in ddahs should correspond to _ddah_seed_id in assignments
+        if (!ddah._assignment_seed_id) {
             throw new Error(
-                `Inconsistency in seed data: could not create ddah without assignment_seed_id`
+                `Inconsistency in seed data: could not create ddah without _assignment_seed_id`
             );
         }
 
@@ -532,11 +532,11 @@ async function seedDatabaseForInstructors(
         const { id: assignment_id } =
             processedAssignments.find(
                 (assignment) =>
-                    assignment.ddah_seed_id === ddah.assignment_seed_id
+                    assignment._ddah_seed_id === ddah._assignment_seed_id
             ) || {};
         if (!assignment_id) {
             throw new Error(
-                `Inconsistency in seed data: could not find assignment with ddah_seed_id ${ddah.assignment_seed_id}`
+                `Inconsistency in seed data: could not find assignment with _ddah_seed_id ${ddah._assignment_seed_id}`
             );
         }
 

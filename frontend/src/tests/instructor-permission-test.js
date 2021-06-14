@@ -26,7 +26,7 @@ export function instructorsPermissionTests(api) {
      * @returns {Promise<void>}
      */
     async function switchToInstructorOnlyUser() {
-        const respSwitchToInstOnlyUser = await apiPOST(
+        let respSwitchToInstOnlyUser = await apiPOST(
             `/debug/active_user`,
             instructorUser
         );
@@ -39,7 +39,7 @@ export function instructorsPermissionTests(api) {
      * @returns {Promise<void>}
      */
     async function restoreDefaultUser() {
-        const respSwitchBackUser = await apiPOST(
+        let respSwitchBackUser = await apiPOST(
             `/debug/active_user`,
             defaultUser
         );
@@ -189,10 +189,10 @@ export function instructorsPermissionTests(api) {
 
     it("can't update instructors except for self (i.e. active user)", async () => {
         // we use the default user's admin privilege here to fetch an unrelated instructor
-        const respFetchInst = await apiGET(`/instructor/instructors`);
+        let respFetchInst = await apiGET(`/instructor/instructors`);
         expect(respFetchInst).toHaveStatus("success");
 
-        const respFetchDefaultUser = await apiGET(`/instructor/active_user`);
+        let respFetchDefaultUser = await apiGET(`/instructor/active_user`);
         expect(respFetchDefaultUser).toHaveStatus("success");
         const defaultUser = respFetchDefaultUser.payload;
 
@@ -203,7 +203,7 @@ export function instructorsPermissionTests(api) {
         // instructor does not have permission to update other instructors' information
         // in this example, the instructor-only-user should not have permission to update the default user's information
         await switchToInstructorOnlyUser();
-        const respInvalidRouteWithSession = await apiPOST(
+        let respInvalidRouteWithSession = await apiPOST(
             `/instructor/instructors`,
             defaultUserWithUpdatedInformation
         );
@@ -213,7 +213,7 @@ export function instructorsPermissionTests(api) {
         await restoreDefaultUser();
 
         // instructors have permission to modify their own information
-        const respModDefaultUser = await apiPOST(
+        let respModDefaultUser = await apiPOST(
             `/instructor/instructors`,
             defaultUserWithUpdatedInformation
         );
@@ -225,7 +225,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch sessions", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET("/instructor/sessions");
+        let resp = await apiGET("/instructor/sessions");
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
@@ -266,9 +266,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch positions", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET(
-            `/instructor/sessions/${session.id}/positions`
-        );
+        let resp = await apiGET(`/instructor/sessions/${session.id}/positions`);
         expect(resp).toHaveStatus("success");
 
         await restoreDefaultUser();
@@ -362,7 +360,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch contract templates", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/instructor/sessions/${session.id}/contract_templates`
         );
         expect(resp).toHaveStatus("success");
@@ -396,7 +394,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch applicants", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/instructor/sessions/${session.id}/applicants`
         );
         expect(resp).toHaveStatus("success");
@@ -443,7 +441,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch assignments", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/instructor/sessions/${session.id}/applicants`
         );
         expect(resp).toHaveStatus("success");
@@ -469,7 +467,7 @@ export function instructorsPermissionTests(api) {
 
     it("fetch applications", async () => {
         await switchToInstructorOnlyUser();
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/instructor/sessions/${session.id}/applications`
         );
         expect(resp).toHaveStatus("success");
@@ -504,7 +502,6 @@ export function instructorsPermissionTests(api) {
             // Create another assignment (with no DDAH)
             // for position associated with our instructor
             const newAssignment = {
-                note: "",
                 applicant_id: databaseSeeder.seededData.applicant.id,
                 position_id: position.id,
                 start_date: "2019-09-02T00:00:00.000Z",
@@ -512,10 +509,13 @@ export function instructorsPermissionTests(api) {
             };
             resp = await apiPOST("/admin/assignments", newAssignment);
             expect(resp).toHaveStatus("success");
+            expect(resp.payload).toBeDefined();
             assignment = resp.payload;
 
             // Fetch the position related to other instructor
             resp = await apiGET(`/admin/instructors`);
+            expect(resp).toHaveStatus('success');
+            expect(resp.payload).toBeDefined();
             const otherInstructor = resp.payload.find(
                 (instructor) =>
                     instructor.utorid ===
@@ -561,7 +561,8 @@ export function instructorsPermissionTests(api) {
             const sortedSeededDuties = databaseSeeder.seededData.ddahs[0].duties.sort(
                 (first, second) => first.order - second.order
             );
-            expect(resp.payload[0].duties).toEqual(sortedSeededDuties);
+            const firstDdah = resp.payload[0];
+            expect(firstDdah.duties).toEqual(sortedSeededDuties);
         });
 
         it("create a Ddah for an assignment associated with self", async () => {
@@ -676,9 +677,6 @@ export function instructorsPermissionTests(api) {
             };
             let resp = await apiPOST(`/instructor/ddahs`, ddahToCreate);
             expect(resp).toHaveStatus("error");
-            expect(resp.message).toStrictEqual(
-                "Cannot create a DDAH without an assignment_id OR improper permissions to access/create a DDAH"
-            );
         });
 
         it("cannot update a Ddah for an assignment not associated with self", async () => {
@@ -697,7 +695,6 @@ export function instructorsPermissionTests(api) {
             };
             let resp = await apiPOST(`/admin/ddahs`, ddahToCreate);
             expect(resp).toHaveStatus("success");
-            expect(resp.payload.duties).toStrictEqual(ddahToCreate.duties);
 
             // Then we try to update the existing DDAH with our instructor
             await switchToInstructorOnlyUser();
@@ -714,9 +711,6 @@ export function instructorsPermissionTests(api) {
             };
             resp = await apiPOST(`/instructor/ddahs`, ddahToUpdate);
             expect(resp).toHaveStatus("error");
-            expect(resp.message).toStrictEqual(
-                "Cannot create a DDAH without an assignment_id OR improper permissions to access/create a DDAH"
-            );
         });
     });
 }
