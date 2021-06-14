@@ -479,7 +479,7 @@ export function instructorsPermissionTests(api) {
         let position;
         let instructor;
         let assignment;
-        let foreignAssignment;
+        let assignmentInstructorCantAccess;
 
         beforeAll(async () => {
             await restoreDefaultUser();
@@ -539,7 +539,7 @@ export function instructorsPermissionTests(api) {
             };
             resp = await apiPOST("/admin/assignments", otherAssignment);
             expect(resp).toHaveStatus("success");
-            foreignAssignment = resp.payload;
+            assignmentInstructorCantAccess = resp.payload;
         });
 
         beforeEach(async () => {
@@ -666,7 +666,7 @@ export function instructorsPermissionTests(api) {
         it("cannot create a Ddah for an assignment not associated with self", async () => {
             const ddahToCreate = {
                 // This assignment has no DDAH initially
-                assignment_id: foreignAssignment.id,
+                assignment_id: assignmentInstructorCantAccess.id,
                 duties: [
                     {
                         order: 1,
@@ -684,7 +684,7 @@ export function instructorsPermissionTests(api) {
             // associated with another instructor
             await restoreDefaultUser();
             const ddahToCreate = {
-                assignment_id: foreignAssignment.id,
+                assignment_id: assignmentInstructorCantAccess.id,
                 duties: [
                     {
                         order: 1,
@@ -700,7 +700,7 @@ export function instructorsPermissionTests(api) {
             await switchToInstructorOnlyUser();
             const ddahToUpdate = {
                 // This assignment has a DDAH initially
-                assignment_id: foreignAssignment.id,
+                assignment_id: assignmentInstructorCantAccess.id,
                 duties: [
                     {
                         order: 1,
