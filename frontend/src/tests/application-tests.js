@@ -33,7 +33,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     };
 
     /**
-     * Switches the current active user to a user with only the instructor role.
+     * Switches the current active user to the seededData.applicant in the seeder.
      * This function uses debug route to achieve user switching.
      *
      * @returns {Promise<void>}
@@ -44,7 +44,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     }
 
     /**
-     * Switches the current active user to a user with only the instructor role.
+     * Switches the current active user to a user with only the ta role.
      * This function uses debug route to achieve user switching.
      *
      * @returns {Promise<void>}
