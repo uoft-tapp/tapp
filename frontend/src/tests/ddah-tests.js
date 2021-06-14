@@ -67,7 +67,7 @@ export function ddahTests(api) {
             ],
         };
 
-        const resp = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.duties.length).toEqual(newDdah.duties.length);
         expect(computeTotalHoursForDdah(resp.payload)).toEqual(
@@ -79,13 +79,13 @@ export function ddahTests(api) {
     });
 
     it("get a ddah", async () => {
-        const resp = await apiGET(`/admin/ddahs/${ddah.id}`);
+        let resp = await apiGET(`/admin/ddahs/${ddah.id}`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload).toMatchObject(ddah);
     });
 
     it("get all ddahs associated with a session", async () => {
-        const resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
+        let resp = await apiGET(`/admin/sessions/${session.id}/ddahs`);
         expect(resp).toHaveStatus("success");
         // Originally only one ddah is seeded
         expect(resp.payload.length).toEqual(1);
@@ -176,7 +176,7 @@ export function ddahTests(api) {
             ],
         };
 
-        const resp = await apiPOST(`/admin/ddahs`, newDdah);
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.id).toEqual(ddah.id);
         expect(computeTotalHoursForDdah(resp.payload)).toEqual(100);
@@ -189,7 +189,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.approved_date).toBeFalsy();
 
-        const resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
+        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/approve`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.approved_date).toBeTruthy();
 
@@ -201,7 +201,7 @@ export function ddahTests(api) {
         // Make sure that the DDAH we have already inserted has not been approved
         expect(ddah.emailed_date).toBeFalsy();
 
-        const resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
+        let resp = await apiPOST(`/admin/ddahs/${ddah.id}/email`);
         expect(resp).toHaveStatus("success");
         expect(resp.payload.emailed_date).toBeTruthy();
 
@@ -210,7 +210,7 @@ export function ddahTests(api) {
     });
 
     it("get ddah from assignment route", async () => {
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/admin/assignments/${ddah.assignment_id}/ddah`
         );
         expect(resp).toHaveStatus("success");
@@ -229,7 +229,7 @@ export function ddahTests(api) {
                 },
             ],
         };
-        const resp = await apiPOST(
+        let resp = await apiPOST(
             `/admin/assignments/${newAssignment.id}/ddah`,
             newDdah
         );
@@ -513,7 +513,7 @@ export function ddahsEmailAndDownloadTests(api) {
     });
 
     it("can download pdf versions ddah signature list", async () => {
-        const resp = await apiGET(
+        let resp = await apiGET(
             `/admin/sessions/${session.id}/ddahs/accepted_list.pdf`
         );
         expect(resp).toHaveStatus("success");
@@ -531,37 +531,37 @@ export function ddahsEmailAndDownloadTests(api) {
                 {
                     order: 2,
                     hours: 25,
-                    description: "marking:Marking the test",
+                    description: "marking:Unique description - marking",
                 },
                 {
                     order: 1,
                     hours: 4,
-                    description: "training:TA training",
+                    description: "training:Unique description - training",
                 },
                 {
                     order: 3,
                     hours: 40,
-                    description: "contact:Tutorials",
+                    description: "contact:Unique description - contact",
                 },
                 {
                     order: 5,
                     hours: 18,
-                    description: "note:Some note",
+                    description: "note:Unique description - note",
                 },
                 {
                     order: 6,
                     hours: 4,
-                    description: "meeting:Weekly meetings",
+                    description: "meeting:Unique description - meeting",
                 },
                 {
                     order: 7,
                     hours: 4,
-                    description: "prep:Assignment prep",
+                    description: "prep:Unique description - prep",
                 },
                 {
                     order: 4,
                     hours: 10,
-                    description: "other:Other responsibilities",
+                    description: "other:Unique description - other",
                 },
             ],
         };
@@ -576,13 +576,13 @@ export function ddahsEmailAndDownloadTests(api) {
         ).data;
 
         const expectedStrings = [
-            "Training",
-            "Marking/Grading",
-            "Contact Time",
-            "Preparation",
-            "Meetings",
-            "Notes",
-            "Other duties",
+            "Unique description - training",
+            "Unique description - marking",
+            "Unique description - contact",
+            "Unique description - note",
+            "Unique description - prep",
+            "Unique description - other",
+            "Unique description - meeting",
         ];
 
         for (const expectedString of expectedStrings) {
