@@ -11,9 +11,9 @@ import { databaseSeeder } from "./setup";
 export function applicationsTests({ apiGET, apiPOST }) {
     let session, surveyPrefill, applicant, position;
     let defaultUser, foundUser, originalApplication;
-    let resp;
     const HIGH_PREFERENCE = 3;
     const OK_PREFERENCE = 1;
+    const applicantAsUser = {};
     const posting = {
         name: "CSC209F TA",
         intro_text: "Testing posting for CSC209F",
@@ -32,6 +32,41 @@ export function applicationsTests({ apiGET, apiPOST }) {
         utorid: "greenb",
     };
 
+    /**
+     * Switches the current active user to a user with only the instructor role.
+     * This function uses debug route to achieve user switching.
+     *
+     * @returns {Promise<void>}
+     */
+    async function switchToApplicantUser() {
+        let resp = await apiPOST(`/debug/active_user`, applicantAsUser);
+        expect(resp).toHaveStatus("success");
+    }
+
+    /**
+     * Switches the current active user to a user with only the instructor role.
+     * This function uses debug route to achieve user switching.
+     *
+     * @returns {Promise<void>}
+     */
+    async function switchToNewUser() {
+        let resp = await apiPOST(`/debug/active_user`, newUser);
+        expect(resp).toHaveStatus("success");
+    }
+
+    /**
+     * Restores the active user to the default user (the user logged during test setup in beforeAll).
+     *
+     * @returns {Promise<void>}
+     */
+    async function restoreDefaultUser() {
+        let respSwitchBackUser = await apiPOST(
+            `/debug/active_user`,
+            defaultUser
+        );
+        expect(respSwitchBackUser).toHaveStatus("success");
+    }
+
     beforeAll(async () => {
         await databaseSeeder.seed({ apiGET, apiPOST });
         session = databaseSeeder.seededData.session;
@@ -42,6 +77,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
         let resp = await apiGET("/debug/active_user");
         expect(resp).toHaveStatus("success");
         defaultUser = resp.payload;
+
+        // Making sure the user is the seeded applicant before this get request for the purposes of the next test
+        // Created a user for the applicant to make sure they exist before changing the default user to applicant
+        Object.assign(applicantAsUser, {
+            utorid: applicant.utorid,
+            roles: ["ta"],
+        });
+
+        resp = await apiPOST("/debug/users", applicantAsUser);
+        expect(resp).toHaveStatus("success");
+        Object.assign(applicantAsUser, resp.payload);
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
@@ -50,7 +96,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it("Get survey.js posting data through public route", async () => {
             // make sure the user has admin permissions before this post request
             // make a new posting and update <posting> to include the id of the posting
-            resp = await apiPOST("/admin/postings", {
+            let resp = await apiPOST("/admin/postings", {
                 ...posting,
                 session_id: session.id,
             });
@@ -59,20 +105,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp.payload.id).not.toBeNull();
             Object.assign(posting, resp.payload);
 
-            // make sure the user is the seeded applicant before this get request for the purposes of the next test
-            // create a user for the applicant to make sure they exist before changing the default user to applicant
-            const applicantAsUser = {
-                roles: ["ta"],
-            };
-            applicantAsUser.utorid = applicant.utorid;
-
-            resp = await apiPOST("/debug/users", applicantAsUser);
-            expect(resp).toHaveStatus("success");
-            Object.assign(applicantAsUser, resp.payload);
-
-            // set the default user to the applicant
-            resp = await apiPOST("/debug/active_user", applicantAsUser);
-            expect(resp).toHaveStatus("success");
+            await switchToApplicantUser();
 
             // read survey.js posting data
             resp = await apiGET(`/public/postings/${posting.url_token}`, true);
@@ -80,26 +113,20 @@ export function applicationsTests({ apiGET, apiPOST }) {
             checkPropTypes(surveyPropTypes, resp.payload);
             surveyPrefill = resp.payload["prefilled_data"];
 
-            // restore the default user
-            resp = await apiPOST("/debug/active_user", defaultUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
         });
 
         // broken up into 2 tests: applicant & application(not yet implemented in the backend)
         it("Survey.js posting data is pre-filled based on prior applicant", async () => {
             // this test depends on the previous test on the terms of surveyPrefill variable
-            const prefilled = [
+            for (const prefilledKey of [
                 "utorid",
                 "student_number",
                 "first_name",
                 "last_name",
                 "email",
                 "phone",
-            ];
-            for (let prefilledKey of prefilled) {
-                // check if every applicant information is in the prefilled data
-                expect(surveyPrefill[prefilledKey]).toBeDefined();
-
+            ]) {
                 // check if the applicant prefill information is correct
                 expect(surveyPrefill[prefilledKey]).toEqual(
                     applicant[prefilledKey]
@@ -114,8 +141,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.todo("Can submit survey.js data via the public postings route");
 
         it("When submitting survey.js data an applicant and application are automatically created they don't exist", async () => {
-            // link seeded position to the posting (todo: remove after merged with previous test)
-            resp = await apiPOST(
+            // link seeded position to the posting (TODO: remove after merged with previous test)
+            let resp = await apiPOST(
                 `/admin/postings/${posting.id}/posting_positions`,
                 { ...postingPosition, position_id: position.id }
             );
@@ -127,14 +154,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
             Object.assign(newUser, resp.payload);
 
-            //check if new user is successfully created
-            resp = await apiGET("/debug/users");
-            expect(resp).toHaveStatus("success");
-            foundUser = resp.payload.find(
-                (user) => user.utorid === newUser.utorid
-            );
-            expect(foundUser).toBeDefined();
-
             // ensure that the user is not an applicant
             resp = await apiGET("/admin/applicants");
             foundUser = resp.payload.find(
@@ -142,9 +161,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(foundUser).not.toBeDefined();
 
-            // switch to the new user
-            resp = await apiPOST("/debug/active_user", newUser);
-            expect(resp).toHaveStatus("success");
+            await switchToNewUser();
 
             // submit an application to the posting
             // assume posting submission is tested (previous test)
@@ -168,9 +185,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // switch back to default (i.e. with admin role) user
-            resp = await apiPOST("/debug/active_user", defaultUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             // check db if new applicant and application has been created
             resp = await apiGET("/admin/applicants");
@@ -191,19 +206,21 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(originalApplication).toBeDefined();
         });
         it.todo(
-            "500 tests: do not link position preferences, and not sumit position"
+            "Submitting an application for a posting that does not have any positions responds in error (not internal" +
+                " server error test)"
+        );
+        it.todo(
+            "Submitting an application without position preferences responds in an error (not an internal server" +
+                " error test)"
         );
         it("When submitting survey.js data an applicant and application are updated if they already exist", async () => {
-            // switch to the new user
-            resp = await apiPOST("/debug/active_user", newUser);
-            expect(resp).toHaveStatus("success");
+            await switchToNewUser();
 
             // submit an updated application to the posting
             const applicantInfo = {
                 utorid: "greenb",
                 first_name: "Not Green",
                 last_name: "And not Bee",
-                email: "testemail2@utoronto.ca",
                 phone: "6472111111",
                 student_number: "1012345678",
             };
@@ -218,16 +235,14 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     ...otherSurveyInfo,
                 },
             };
-            resp = await apiPOST(
+            let resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyjsSubmission,
                 true
             );
             expect(resp).toHaveStatus("success");
 
-            // switch back to default (i.e. with admin role) user
-            resp = await apiPOST("/debug/active_user", defaultUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             // check db if new applicant and application has been updated
             resp = await apiGET("/admin/applicants");
@@ -236,7 +251,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 (user) => user.utorid === newUser.utorid
             );
             expect(foundUser).toBeDefined();
-
+            applicantInfo.email = "testemail@utoronto.ca";
             // assumes "/admin/applicants" routes works as expected
             expect(foundUser).toMatchObject(
                 expect.objectContaining(applicantInfo)
