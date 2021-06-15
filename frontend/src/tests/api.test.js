@@ -115,8 +115,6 @@ describe("API tests", () => {
 });
 
 describe("Mock API tests", () => {
-    const { apiGET, apiPOST } = mockAPI;
-
     it("Seed the database", async () => {
         await databaseSeeder.seed(mockAPI);
         await databaseSeeder.verifySeed(mockAPI);
@@ -147,8 +145,5 @@ describe("Mock API tests", () => {
     });
     describe("User permissions tests", () => {
         userPermissionsTests(mockAPI);
-    });
-    describe("DDAH tests", () => {
-        ddahTests({ apiGET, apiPOST });
     });
 });
