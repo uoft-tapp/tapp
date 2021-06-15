@@ -4,13 +4,35 @@ import { apiGET, apiPOST } from "../../../libs/api-utils";
 import * as Survey from "survey-react";
 //import "survey-react/survey.css";
 import "./survey.css";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import { Alert, Button, Modal, Spinner } from "react-bootstrap";
 
 // XXX This is a temporary function to make all questions optional during debugging
 function stripIsRequired(obj: any) {
     let json = JSON.stringify(obj);
     json = json.replaceAll(`"isRequired":true`, `"isRequired":false`);
     return JSON.parse(json);
+}
+
+/**
+ * Determine whether a survey.js survey has has at least one
+ * position preference available. (Surveys that don't have any position
+ * preferences available to be selected are considered invalid.)
+ *
+ * @param {*} surveyJson
+ * @returns {boolean}
+ */
+function validSurvey(surveyJson: any): boolean {
+    for (const page of surveyJson?.pages || []) {
+        for (const item of page?.elements || []) {
+            if (
+                item.name === "position_preferences" &&
+                item?.rows?.length > 0
+            ) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 export function PostingView() {
@@ -24,6 +46,9 @@ export function PostingView() {
     const [submitDialogVisible, setSubmitDialogVisible] = React.useState(false);
     const [hasSubmitted, setHasSubmitted] = React.useState(false);
     const [waiting, setWaiting] = React.useState(false);
+    const [submissionError, setSubmissionError] = React.useState<string | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (url_token == null) {
@@ -35,7 +60,8 @@ export function PostingView() {
                     survey: any;
                     prefilled_data: any;
                 } = await apiGET(`/public/postings/${url_token}`, true);
-                setSurveyJson(stripIsRequired(details.survey));
+                //setSurveyJson(stripIsRequired(details.survey));
+                setSurveyJson(details.survey);
                 setSurveyPrefilledData(details.prefilled_data);
             } catch (e) {
                 console.warn(e);
@@ -83,6 +109,15 @@ export function PostingView() {
         return <React.Fragment>Loading...</React.Fragment>;
     }
 
+    if (!validSurvey(surveyJson)) {
+        return (
+            <Alert variant="warning">
+                There are not positions that can be applied for at this time. An
+                administrator may update this posting in the future.
+            </Alert>
+        );
+    }
+
     async function confirmClicked() {
         console.log("Submitting data", surveyData);
         try {
@@ -96,8 +131,10 @@ export function PostingView() {
             survey.doComplete();
             setSurveyData(surveyPrefilledData);
             setSubmitDialogVisible(false);
+            setSubmissionError(null);
         } catch (e) {
             console.warn(e);
+            setSubmissionError("Could not submit application.");
         } finally {
             setWaiting(false);
         }
@@ -107,6 +144,7 @@ export function PostingView() {
         survey.data = surveyData || survey.data;
         setHasSubmitted(false);
         setSubmitDialogVisible(false);
+        setSubmissionError(null);
     }
 
     return (
@@ -117,7 +155,15 @@ export function PostingView() {
                     <Modal.Title>Submit Application</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to submit this TA application?
+                    {submissionError ? (
+                        <Alert variant="danger">
+                            <b>Error:</b> {submissionError} Please review your
+                            answers and make sure all questions are answered
+                            appropriately.
+                        </Alert>
+                    ) : (
+                        "Are you sure you want to submit this TA application?"
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -126,7 +172,10 @@ export function PostingView() {
                     >
                         Cancel
                     </Button>
-                    <Button onClick={confirmClicked}>
+                    <Button
+                        onClick={confirmClicked}
+                        disabled={!!submissionError}
+                    >
                         {waiting ? (
                             <span className="spinner-surround">
                                 <Spinner animation="border" size="sm" />
