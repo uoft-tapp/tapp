@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style>
+            th {
+                text-align: left;
+                font-size: small;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        <p>
+            Thank you for applying to {{ posting_name }}. Your application was
+            received on {{ updated_date | date: "%b %d, %Y at %I:%M %p" }}
+            Toronto time.
+        </p>
+        <h4>
+            Please find a brief summary of your application below.
+            <em
+                >Note: this is only a summary and may not include all
+                information you provided</em
+            >
+        </h4>
+        <table>
+            <tbody>
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ last_name }}</td>
+                </tr>
+                <tr>
+                    <th>UTORid</th>
+                    <td>{{ utorid }}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ phone }}</td>
+                </tr>
+                <tr>
+                    <th>Student Number</th>
+                    <td>{{ student_number }}</td>
+                </tr>
+                <tr>
+                    <th>Program</th>
+                    <td>{{ program }}</td>
+                </tr>
+                <tr>
+                    <th>Department</th>
+                    <td>{{ department }}</td>
+                </tr>
+                <tr>
+                    <th>Previous TA experience in department</th>
+                    <td>{{ previous_department_ta }}</td>
+                </tr>
+                <tr>
+                    <th>Previous TA experience in university</th>
+                    <td>{{ previous_university_ta }}</td>
+                </tr>
+                <tr>
+                    <th>Previous experience summary</th>
+                    <td>{{ previous_experience_summary }}</td>
+                </tr>
+                <tr>
+                    <th>Additional Comments</th>
+                    <td>{{ comments }}</td>
+                </tr>
+                <tr>
+                    <th>Preferences</th>
+                    {% assign preference_hash = "None,Low,Medium,High,Preference
+                    Against" | split: "," %}
+                    <td>
+                        <ul>
+                            {% for preference in position_preferences %}
+                            <li>
+                                {{ preference.position_code }}: {{
+                                preference_hash[preference.preference_level] }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            If you need to update or change any information, you may do so by
+            resubmitting your application. However, please note that if you
+            resubmit your application,
+            <em>your new answers will replace all previous answers</em>.
+        </p>
+
+        <p>Thanks!</p>
+    </body>
+</html>

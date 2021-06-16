@@ -1,6 +1,7 @@
 {
     "title": "",
     "showProgressBar": "top",
+    "completedHtml": "<h2>Thank you for submitting your application. A confirmation has been sent to your email.</h2><p>If you need to update any information, you may refresh the page and resubmit your answers. <em>Please note that any resubmitted answers will override all previous answers.</em></p>",
     "pages": [
         {
             "name": "profile_page",
@@ -158,7 +159,8 @@
                     "type": "matrix",
                     "name": "position_preferences",
                     "title": "Position Preferences",
-                    "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark no more than 5 positions as High); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
+                    "isRequired": true,
                     "cellType": "rating",
                     "columns": [
                         { "value": 3, "text": "High" },

@@ -2,7 +2,7 @@
 
 class PostingService
     include TransactionHandler
-    attr_reader :posting
+    attr_reader :posting, :application
 
     def initialize(params: nil, posting: nil)
         @params = params
@@ -39,7 +39,8 @@ class PostingService
             preferences_page['elements'].find do |elm|
                 elm['name'] == 'position_descriptions'
             end
-        position_descriptions['html'] = position_description_template.render position_description_subs
+        position_descriptions['html'] =
+            position_description_template.render position_description_subs
 
         # Add any custom questions there may be.
         # These should show up after all fixed questions but before the comments page.
@@ -116,6 +117,13 @@ class PostingService
 
         # Create the position preferences
         position_preferences_hash = rest[:position_preferences]
+        if !(position_preferences_hash.is_a? Hash) &&
+               !position_preferences_hash.nil?
+            raise StandardError,
+                  "Unknown format of position_preferences: '#{
+                      position_preferences_hash
+                  }'"
+        end
         rest.except!(:position_preferences)
         # Find the position_id and position_code of all items listed
         # in `position_preferences`. However, take special care to limit
@@ -176,9 +184,9 @@ class PostingService
         end
         # Saving attachments cannot happen inside of a transaction.
         # See https://github.com/rails/rails/issues/41903
-        application = @applicant.applications.find_by(posting: @posting)
-        application.documents.purge
-        application.documents.attach files_for_active_storage
+        @application = @applicant.applications.find_by(posting: @posting)
+        @application.documents.purge
+        @application.documents.attach files_for_active_storage
     end
 
     private

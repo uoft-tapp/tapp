@@ -13,14 +13,12 @@ class Public::PostingsController < ActionController::Base
         active_user = ActiveUserService.active_user request
         posting_service = PostingService.new(posting: @posting)
 
-        render json: {
-            status: 'success',
-            payload: {
+        render_success(
+            {
                 survey: posting_service.survey,
-                prefilled_data:
-                           posting_service.prefill(user: active_user)
+                prefilled_data: posting_service.prefill(user: active_user)
             }
-        }
+        )
     end
 
     # /public/postings/<id>/submit
@@ -34,10 +32,11 @@ class Public::PostingsController < ActionController::Base
         )
         posting_service.save_answers!
 
-        render json: {
-            status: 'success',
-            payload: posting_service.prefill(user: active_user)
-        }
+        PostingMailer.email_application_confirmation(posting_service.application)
+            .deliver_now!
+        render_success posting_service.prefill(user: active_user)
+    rescue StandardError => e
+        render_error(message: 'Error submitting application', error: e)
     end
 
     private
