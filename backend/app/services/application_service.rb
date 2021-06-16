@@ -25,7 +25,7 @@ class ApplicationService
             # When resubmitting application, it's possible the application didn't change,
             # but instead the applicant information changed. We look for the most recent
             # updated date in that case.
-            updated_date: [@application.updated_at, @applicant.updated_at].max,
+            updated_date: [@application.updated_at, @applicant.updated_at].max.in_time_zone("Eastern Time (US & Canada)"),
             program: @application.program,
             department: @application.department,
             previous_department_ta: @application.previous_department_ta,

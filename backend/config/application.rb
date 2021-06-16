@@ -53,8 +53,6 @@ module Tapp
             ENV.fetch('TA_COORDINATOR_EMAIL', 'tacoord@unknown.com').presence ||
                 'tacoord@unknown.com'
 
-        config.time_zone = "Eastern Time (US & Canada)"
-
         # email configuration
         email_server =
             ENV.fetch('EMAIL_SERVER', 'localhost').presence || 'localhost'
