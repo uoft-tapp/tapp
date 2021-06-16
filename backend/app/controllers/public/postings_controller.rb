@@ -32,6 +32,8 @@ class Public::PostingsController < ActionController::Base
         )
         posting_service.save_answers!
 
+        PostingMailer.email_application_confirmation(posting_service.application)
+            .deliver_now!
         render_success posting_service.prefill(user: active_user)
     rescue StandardError => e
         render_error(message: 'Error submitting application', error: e)

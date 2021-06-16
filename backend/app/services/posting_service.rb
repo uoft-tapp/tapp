@@ -2,7 +2,7 @@
 
 class PostingService
     include TransactionHandler
-    attr_reader :posting
+    attr_reader :posting, :application
 
     def initialize(params: nil, posting: nil)
         @params = params
@@ -118,7 +118,7 @@ class PostingService
         # Create the position preferences
         position_preferences_hash = rest[:position_preferences]
         if !(position_preferences_hash.is_a? Hash) &&
-               !(position_preferences_hash.nil?)
+               !position_preferences_hash.nil?
             raise StandardError,
                   "Unknown format of position_preferences: '#{
                       position_preferences_hash
@@ -184,9 +184,9 @@ class PostingService
         end
         # Saving attachments cannot happen inside of a transaction.
         # See https://github.com/rails/rails/issues/41903
-        application = @applicant.applications.find_by(posting: @posting)
-        application.documents.purge
-        application.documents.attach files_for_active_storage
+        @application = @applicant.applications.find_by(posting: @posting)
+        @application.documents.purge
+        @application.documents.attach files_for_active_storage
     end
 
     private
