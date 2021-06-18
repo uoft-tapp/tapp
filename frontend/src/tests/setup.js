@@ -202,19 +202,19 @@ class DatabaseSeeder {
                     applicant_utorid: "weasleyr",
                 },
                 {
-                    _ddah_seed_id: 1,
+                    _temp_id: 1,
                     position_code: "CSC555Y1",
                     applicant_utorid: "molinat",
                 },
                 {
-                    _ddah_seed_id: 2,
+                    _temp_id: 2,
                     position_code: "ECO101H1F",
                     applicant_utorid: "brownd",
                 },
             ],
             ddahs: [
                 {
-                    _assignment_seed_id: 1,
+                    _temp_id: 1,
                     duties: [
                         {
                             order: 2,
@@ -234,7 +234,7 @@ class DatabaseSeeder {
                     ],
                 },
                 {
-                    _assignment_seed_id: 2,
+                    _temp_id: 2,
                     duties: [
                         {
                             order: 2,
@@ -519,10 +519,10 @@ async function seedDatabaseForInstructors(
 
     // DDAH
     for (const ddah of seeded.ddahs) {
-        // _assignment_seed_id in ddahs should correspond to _ddah_seed_id in assignments
-        if (!ddah._assignment_seed_id) {
+        // _temp_id in ddahs should correspond to _temp_id in assignments
+        if (!ddah._temp_id) {
             throw new Error(
-                `Inconsistency in seed data: could not create ddah without _assignment_seed_id`
+                `Inconsistency in seed data: could not create ddah without _temp_id`
             );
         }
 
@@ -532,11 +532,11 @@ async function seedDatabaseForInstructors(
         const { id: assignment_id } =
             processedAssignments.find(
                 (assignment) =>
-                    assignment._ddah_seed_id === ddah._assignment_seed_id
+                    assignment._temp_id === ddah._temp_id
             ) || {};
         if (!assignment_id) {
             throw new Error(
-                `Inconsistency in seed data: could not find assignment with _ddah_seed_id ${ddah._assignment_seed_id}`
+                `Inconsistency in seed data: could not find assignment with _temp_id ${ddah._temp_id}`
             );
         }
 
@@ -546,5 +546,18 @@ async function seedDatabaseForInstructors(
         };
         let resp = await apiPOST(`/admin/ddahs`, newDdah);
         expect(resp).toHaveStatus("success");
+    }
+
+    // Cleanup
+    for (const assignment of seeded.assignments) {
+        if (assignment._temp_id) {
+            const {temp_id, ...cleanAssignment } = assignment;
+            Object.assign(assignment, cleanAssignment);
+        }
+    }
+
+    for (const ddah of seeded.ddahs) {
+        const {temp_id, ...cleanDdah } = ddah;
+        Object.assign(ddah, cleanDdah);
     }
 }
