@@ -117,16 +117,7 @@ class Api::V1::Admin::DdahsController < ApplicationController
     def ddah_params
         params.slice(
             :assignment_id,
-            :approved_date,
-            :accepted_date,
-            :revised_date,
-            :emailed_date,
-            :signature
         ).permit!
-    end
-
-    def duty_params
-        params.slice(:duties).permit(duties: %i[order hours description])
     end
 
     def update

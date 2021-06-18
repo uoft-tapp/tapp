@@ -123,7 +123,6 @@ class DdahService
             :assignment_id,
             :approved_date,
             :accepted_date,
-            :revised_date,
             :emailed_date,
             :signature
         ).permit!
