@@ -65,7 +65,8 @@ class PostingService
         applicant = Applicant.find_by(utorid: utorid)
         return { utorid: utorid } unless applicant
 
-        {
+        # This is the basic data we can get if the applicant already exists
+        data = {
             utorid: utorid,
             student_number: applicant.student_number,
             first_name: applicant.first_name,
@@ -73,6 +74,62 @@ class PostingService
             email: applicant.email,
             phone: applicant.phone
         }
+
+        existing_application = Application.find_by(posting: @posting)
+        if existing_application
+            application_service =
+                ApplicationService.new application: existing_application
+            data.merge! application_service.prefilled_data
+        else
+            # Find out if they have previous contracts in the database.
+            # This will tell us information about whether the applicant has been previously employed
+            offer_history =
+                Assignment.joins(:applicant, :offers, :position).where(
+                    applicant: applicant, "offers.status": 'accepted'
+                ).order("offers.position_start_date": :ASC).pluck(
+                    :"positions.position_code",
+                    :"offers.hours",
+                    :"offers.position_start_date",
+                    :"offers.position_end_date"
+                )
+            if !offer_history.blank?
+                data[:previous_department_ta] = true
+                data[:previous_university_ta] = true
+                # Technically we cannot infer this, but if they've TAed for the department
+                # before, we don't care about other history
+                data[:previous_other_university_ta] = false
+                data[:previous_experience_summary] =
+                    offer_history.map { |(course, hours, start_date, end_date)|
+                        "#{course} (#{hours} hours) from #{
+                            start_date.strftime('%b %Y')
+                        } to #{end_date.strftime('%b %Y')}"
+                    }.join '; '
+            end
+
+            # Some information rarely changes from application to application.
+            # For example, the program of study/department/program start.
+            # We retrieve this information from the most recently completed application
+            # if it's available.
+            last_application =
+                Application.joins(:applicant).where(applicant: applicant).order(
+                    updated_at: :DESC
+                ).first
+            application_service =
+                ApplicationService.new application: last_application
+            last_application_data = application_service.prefilled_data
+            if last_application_data[:department]
+                data[:department] = last_application_data[:department]
+            end
+            if last_application_data[:program]
+                data[:program] = last_application_data[:program]
+            end
+            if last_application_data[:program_start]
+                data[:program_start] =
+                    last_application_data[:program_start]
+            end
+        end
+
+        data
     end
 
     # Splits a Survey.js response object into the required pieces
