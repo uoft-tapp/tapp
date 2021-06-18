@@ -27,7 +27,7 @@ class ApplicationService
                 'previous_experience_summary',
                 'gpa',
                 'comments'
-            ).select { |k, v| !v.nil? }
+            ).compact
         data.merge! application_data
 
         # Custom question answers are stored as a JSON blob in the database. We unpack them if there are any

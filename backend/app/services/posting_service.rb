@@ -92,18 +92,19 @@ class PostingService
                     :"offers.position_start_date",
                     :"offers.position_end_date"
                 )
-            if !offer_history.blank?
+            unless offer_history.blank?
                 data[:previous_department_ta] = true
                 data[:previous_university_ta] = true
                 # Technically we cannot infer this, but if they've TAed for the department
                 # before, we don't care about other history
                 data[:previous_other_university_ta] = false
                 data[:previous_experience_summary] =
-                    offer_history.map { |(course, hours, start_date, end_date)|
+                    offer_history
+                        .map do |(course, hours, start_date, end_date)|
                         "#{course} (#{hours} hours) from #{
                             start_date.strftime('%b %Y')
                         } to #{end_date.strftime('%b %Y')}"
-                    }.join '; '
+                    end.join '; '
             end
 
             # Some information rarely changes from application to application.
@@ -124,8 +125,7 @@ class PostingService
                 data[:program] = last_application_data[:program]
             end
             if last_application_data[:program_start]
-                data[:program_start] =
-                    last_application_data[:program_start]
+                data[:program_start] = last_application_data[:program_start]
             end
         end
 
