@@ -476,28 +476,12 @@ export function instructorsPermissionTests(api) {
     });
 
     describe("Ddah permissions", () => {
-        let position;
-        let instructor;
+        let position = databaseSeeder.seededData.positions[3];
         let assignment;
         let assignmentInstructorCantAccess;
 
         beforeAll(async () => {
             await restoreDefaultUser();
-
-            // Get our instructor
-            let resp = await apiGET(`/admin/instructors`);
-            expect(resp).toHaveStatus("success");
-            instructor = resp.payload.find(
-                (instructor) => instructor.utorid === instructorUser.utorid
-            );
-            expect(instructor).toBeDefined();
-
-            // Fetch the position related to our instructor
-            resp = await apiGET(`/admin/sessions/${session.id}/positions`);
-            position = resp.payload.find((position) =>
-                position.instructor_ids.find((id) => id === instructor.id)
-            );
-            expect(position).toBeDefined();
 
             // Create another assignment (with no DDAH)
             // for position associated with our instructor
@@ -507,29 +491,14 @@ export function instructorsPermissionTests(api) {
                 start_date: "2019-09-02T00:00:00.000Z",
                 end_date: "2019-12-31T00:00:00.000Z",
             };
-            resp = await apiPOST("/admin/assignments", newAssignment);
+            let resp = await apiPOST("/admin/assignments", newAssignment);
             expect(resp).toHaveStatus("success");
             expect(resp.payload).toBeDefined();
             assignment = resp.payload;
 
-            // Fetch the position related to other instructor
-            resp = await apiGET(`/admin/instructors`);
-            expect(resp).toHaveStatus('success');
-            expect(resp.payload).toBeDefined();
-            const otherInstructor = resp.payload.find(
-                (instructor) =>
-                    instructor.utorid ===
-                    databaseSeeder.seededData.instructors[4].utorid
-            );
-            expect(otherInstructor).toBeDefined();
-            resp = await apiGET(`/admin/sessions/${session.id}/positions`);
-            const otherPosition = resp.payload.find((position) =>
-                position.instructor_ids.find((id) => id === otherInstructor.id)
-            );
-            expect(otherPosition).toBeDefined();
-
             // Create another assignment (with no DDAH)
             // for position associated with other instructor
+            const otherPosition = databaseSeeder.seededData.positions[4];
             const otherAssignment = {
                 note: "",
                 applicant_id: databaseSeeder.seededData.applicant.id,
@@ -621,7 +590,7 @@ export function instructorsPermissionTests(api) {
             expect(resp.payload).toEqual(expect.objectContaining(updatedDdah));
         });
 
-        // This test indeed fails and allows to set these fields 0w0
+        // This test indeed fails and allows to set these fields, see Issue #608
         it.skip("cannot set approved_date/accepted_date/revised_date/emailed_date/signature for a Ddah associated with self", async () => {
             // Fetch the DDAH related to instructor's assignment
             let resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
@@ -656,12 +625,13 @@ export function instructorsPermissionTests(api) {
             expect(resp.payload).toEqual(expect.objectContaining(originalDdah));
 
             resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
+            // still a success, but does not change the underlying data
             expect(resp).toHaveStatus("success");
             const newDdah = resp.payload.find(
                 (ddah) => ddah.assignment_id === assignment.id
             );
             expect(newDdah).toEqual(expect.objectContaining(originalDdah));
-        }); // still a success, but does not change the underlying data
+        });
 
         it("cannot create a Ddah for an assignment not associated with self", async () => {
             const ddahToCreate = {
