@@ -12,7 +12,8 @@ class DdahService
     def update!
         start_transaction_and_rollback_on_exception do
             @ddah.update!(ddah_params)
-            if duty_params[:duties] && @ddah.duties # Save the old duties to detect if they get changed
+            if duty_params[:duties] && @ddah.duties
+                # Save the old duties to detect if they get changed
                 old_duties = @ddah.duties.as_json(only: %i[description hours])
 
                 # if we specified duties, delete the old ones and add the new ones
@@ -22,7 +23,10 @@ class DdahService
             if duty_params[:duties]
                 @ddah.duties_attributes =
                     duty_params[:duties].map do |duty|
-                        if duty[:description] # to start with the appropriate prefixes whenever duties are updated.
+                        if duty[:description]
+                            # make sure all duties descriptions are normalized
+                            # to start with the appropriate prefixes whenever duties are updated.
+
                             duty[:description] =
                                 self.class.normalize_duty_desc duty[
                                                                    :description

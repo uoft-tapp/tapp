@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class Api::V1::Admin::DdahsController < ApplicationController # GET /sessions/:session_id/ddahs
+class Api::V1::Admin::DdahsController < ApplicationController
+    # GET /sessions/:session_id/ddahs
     def index
         render_success Ddah.by_session(params[:session_id])
     end
@@ -32,18 +33,25 @@ class Api::V1::Admin::DdahsController < ApplicationController # GET /sessions/:s
 
     # GET /assignments/:id/ddah
     def show_by_assignment
+        # Because we are being routed through `/assignments`, the param is :id
+        # and not :assignment_id
         assignment = Assignment.find(params[:id])
         render_success assignment.ddah
     end
 
     # POST /assignments/:id/ddah
     def upsert_by_assignment
+        # We'll mangle the `params` variable in place and fall back to the
+        # usual `create` function
+        # Because we are being routed through `/assignments`, the param is :id
+        # and not :assignment_id
         params[:assignment_id] = params[:id]
         create
     end
 
     # POST /ddahs
     def create
+        # look up the DDAH first by assignment ID, otherwise, create a new DDAH
         @ddah =
             if params[:assignment_id]
                 Assignment.find_by(id: params[:assignment_id]).ddah ||
@@ -80,10 +88,11 @@ class Api::V1::Admin::DdahsController < ApplicationController # GET /sessions/:s
     def delete
         find_ddah
         render_on_condition(
-            object: @ddah,
-            condition: proc { @ddah.destroy! },
-            error_message: "Could not delete ddah '#{@ddah.id}'."
-        )
+          object: @ddah,
+          condition: proc { @ddah.destroy! },
+          error_message:
+            "Could not delete ddah '#{@ddah.id}'."
+      )
     end
 
     # POST /ddahs/:ddah_id/email
@@ -125,9 +134,11 @@ class Api::V1::Admin::DdahsController < ApplicationController # GET /sessions/:s
         template_file = "#{contract_dir}/ddah-signature-list.html"
 
         # Verify that the template file is actually contained in the template directory
-        unless Pathname.new(template_file).realdirpath.to_s.starts_with?(
-                   contract_dir.to_s
-               )
+        unless Pathname
+                   .new(template_file)
+                   .realdirpath
+                   .to_s
+                   .starts_with?(contract_dir.to_s)
             raise StandardError, "Invalid contract path #{template_file}"
         end
 
@@ -150,17 +161,19 @@ class Api::V1::Admin::DdahsController < ApplicationController # GET /sessions/:s
     # Prepare a hash to be used by a Liquid
     # template based on the ddahs list
     def ddah_signature_list_substitutions(ddahs)
-        ddahs.map do |x|
-            {
-                position_code: x.assignment.position.position_code,
-                hours: x.hours,
-                first_name: x.assignment.applicant.first_name,
-                last_name: x.assignment.applicant.last_name,
-                signature: x.signature,
-                signed_date: x.accepted_date
-            }
-        end.sort_by do |x|
-            [x[:position_code], x[:last_name], x[:first_name]]
-        end.as_json.map(&:stringify_keys)
-    end # look up the DDAH first by assignment ID, otherwise, create a new DDAH
+        ddahs
+            .map do |x|
+                {
+                    position_code: x.assignment.position.position_code,
+                    hours: x.hours,
+                    first_name: x.assignment.applicant.first_name,
+                    last_name: x.assignment.applicant.last_name,
+                    signature: x.signature,
+                    signed_date: x.accepted_date
+                }
+            end
+            .sort_by { |x| [x[:position_code], x[:last_name], x[:first_name]] }
+            .as_json
+            .map(&:stringify_keys)
+    end
 end

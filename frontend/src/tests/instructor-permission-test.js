@@ -629,9 +629,7 @@ export function instructorsPermissionTests(api) {
                 ...originalDdah,
                 duties: updatedDuties,
             };
-            expect(resp.payload).toEqual(
-                expect.objectContaining(originalDdahWithUpdatedDuties)
-            );
+            expect(resp.payload).toEqual(originalDdahWithUpdatedDuties);
         });
 
         it("cannot create a Ddah for an assignment not associated with self", async () => {
