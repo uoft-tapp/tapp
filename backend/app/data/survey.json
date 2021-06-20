@@ -142,7 +142,7 @@
                     "name": "previous_experience_summary",
                     "visibleIf": "{previous_department_ta} = true or {previous_university_ta} = true or {previous_other_university_ta} = true",
                     "title": "Please briefly describe your previous TA experience.",
-                    "description": "If your experience is at U of T, you only need to list the course codes of courses you've TAed. If your experience is at another university, please include course titles along with other relevant information."
+                    "description": "If your experience is at U of T, you only need to list the course codes of courses you've TAed and the total number of hours you TAed. If your experience is at another university, please include course titles along with other relevant information."
                 }
             ],
             "title": "Work Experience"

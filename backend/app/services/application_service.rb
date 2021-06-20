@@ -9,6 +9,44 @@ class ApplicationService
         @applicant = @application ? @application.applicant : nil
     end
 
+    # Return the "prefilled data" associated with this application. This is the data that
+    # can be prefilled when an application re-fills out an application
+    def prefilled_data
+        data = {}
+        return data if @application.blank?
+
+        # Grab the non-nil attributes from the application that we want to return.
+        # Some attributes, like `annotation`, are private, and shouldn't be returned.
+        application_data =
+            @application.attributes.slice(
+                'program',
+                'department',
+                'yip',
+                'previous_department_ta',
+                'previous_university_ta',
+                'previous_experience_summary',
+                'gpa',
+                'comments'
+            ).compact
+        data.merge! application_data
+
+        # Custom question answers are stored as a JSON blob in the database. We unpack them if there are any
+        if @application.custom_question_answers
+            data.merge! @application.custom_question_answers
+        end
+
+        # Position-preferences must be reconstructed from the database. Surveyjs expects
+        # an object { [course_code]: preference_level }
+        position_preferences = {}
+        position_preferences_subs.each do |preference|
+            position_preferences[preference['position_code']] =
+                preference['preference_level']
+        end
+        data[:position_preferences] = position_preferences
+
+        data.symbolize_keys!
+    end
+
     # Generate JSON subsitutisions that can be used in a liquit template
     def subs
         {
