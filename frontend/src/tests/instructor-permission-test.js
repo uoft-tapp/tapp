@@ -590,7 +590,7 @@ export function instructorsPermissionTests(api) {
             expect(resp.payload).toEqual(expect.objectContaining(updatedDdah));
         });
 
-        // This test indeed fails and allows to set these fields, see Issue #608
+        // This test indeed fails and allows to set these fields, check Issue #608
         it.skip("cannot set approved_date/accepted_date/revised_date/emailed_date/signature for a Ddah associated with self", async () => {
             // Fetch the DDAH related to instructor's assignment
             let resp = await apiGET(`/instructor/sessions/${session.id}/ddahs`);
