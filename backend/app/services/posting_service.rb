@@ -118,15 +118,11 @@ class PostingService
             application_service =
                 ApplicationService.new application: last_application
             last_application_data = application_service.prefilled_data
-            if last_application_data[:department]
-                data[:department] = last_application_data[:department]
-            end
-            if last_application_data[:program]
-                data[:program] = last_application_data[:program]
-            end
-            if last_application_data[:program_start]
-                data[:program_start] = last_application_data[:program_start]
-            end
+            data.merge! last_application_data.slice(
+                            :department,
+                            :program,
+                            :program_start
+                        ).compact
         end
 
         data
