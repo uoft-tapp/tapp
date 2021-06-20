@@ -84,6 +84,10 @@
     box-shadow: 0px 3px 8px -3px rgba(167, 182, 194, 0.5);
     user-select: none;
 }
+.thead {
+    /* Needed so we can override the horizontal scroll position */
+    overflow: hidden;
+}
 .th {
     display: flex !important;
     text-align: center;
