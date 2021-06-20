@@ -5,9 +5,9 @@ class Api::V1::Instructor::DdahsController < ApplicationController
 
     # GET /sessions/:session_id/ddahs
     def index
-        render_success Ddah
-                           .by_session(params[:session_id])
-                           .by_instructor(@active_instructor.id)
+        render_success Ddah.by_session(params[:session_id]).by_instructor(
+                           @active_instructor.id
+                       )
     end
 
     # GET /ddahs/:ddah_id
@@ -78,9 +78,7 @@ class Api::V1::Instructor::DdahsController < ApplicationController
     end
 
     def ddah_params
-        params.slice(
-            :assignment_id,
-        ).permit!
+        params.slice(:assignment_id).permit!
     end
 
     def update
