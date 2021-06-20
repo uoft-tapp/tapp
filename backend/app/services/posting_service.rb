@@ -21,7 +21,17 @@ class PostingService
             )
 
         # Set the global survey title
-        fixed_survey['title'] = @posting.name
+        availability_desc =
+            if @posting.open_date.year == @posting.close_date.year
+                "Available from #{@posting.open_date.strftime('%b %d')} to #{
+                    @posting.close_date.strftime('%b %d, %Y')
+                }"
+            else
+                "Available from #{
+                    @posting.open_date.strftime('%b %d, %Y')
+                } to #{@posting.close_date.strftime('%b %d, %Y')}"
+            end
+        fixed_survey['title'] = "#{@posting.name} (#{availability_desc})"
         fixed_survey['description'] = @posting.intro_text
 
         # Find the preferences page and set a preference for each PostingPosition
@@ -75,7 +85,8 @@ class PostingService
             phone: applicant.phone
         }
 
-        existing_application = Application.find_by(posting: @posting)
+        existing_application =
+            Application.find_by(posting: @posting, applicant: applicant)
         if existing_application
             application_service =
                 ApplicationService.new application: existing_application

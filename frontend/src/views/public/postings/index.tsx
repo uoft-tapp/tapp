@@ -6,13 +6,6 @@ import * as Survey from "survey-react";
 import "./survey.css";
 import { Alert, Button, Modal, Spinner } from "react-bootstrap";
 
-// XXX This is a temporary function to make all questions optional during debugging
-function stripIsRequired(obj: any) {
-    let json = JSON.stringify(obj);
-    json = json.replaceAll(`"isRequired":true`, `"isRequired":false`);
-    return JSON.parse(json);
-}
-
 /**
  * Determine whether a survey.js survey has has at least one
  * position preference available. (Surveys that don't have any position
@@ -49,6 +42,7 @@ export function PostingView() {
     const [submissionError, setSubmissionError] = React.useState<string | null>(
         null
     );
+    const [applicationOpen, setApplicationOpen] = React.useState(true);
 
     React.useEffect(() => {
         if (url_token == null) {
@@ -59,16 +53,17 @@ export function PostingView() {
                 const details: {
                     survey: any;
                     prefilled_data: any;
+                    open_status: boolean;
                 } = await apiGET(`/public/postings/${url_token}`, true);
-                //setSurveyJson(stripIsRequired(details.survey));
                 setSurveyJson(details.survey);
                 setSurveyPrefilledData(details.prefilled_data);
+                setApplicationOpen(details.open_status);
             } catch (e) {
                 console.warn(e);
             }
         }
         fetchSurvey();
-    }, [url_token, setSurveyJson, setSurveyPrefilledData]);
+    }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
     const survey = React.useMemo(() => {
         Survey.StylesManager.applyTheme("bootstrap");
@@ -155,6 +150,13 @@ export function PostingView() {
                     <Modal.Title>Submit Application</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {!applicationOpen ? (
+                        <Alert variant="warning">
+                            The application window is currently not open. Any
+                            applications submitted outside of the application
+                            window may not be considered.
+                        </Alert>
+                    ) : null}
                     {submissionError ? (
                         <Alert variant="danger">
                             <b>Error:</b> {submissionError} Please review your

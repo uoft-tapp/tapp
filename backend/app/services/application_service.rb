@@ -32,7 +32,7 @@ class ApplicationService
 
         # Custom question answers are stored as a JSON blob in the database. We unpack them if there are any
         if @application.custom_question_answers
-            data.merge! @application.custom_question_answers
+            data.merge! @application.custom_question_answers.except('utorid')
         end
 
         # Position-preferences must be reconstructed from the database. Surveyjs expects
