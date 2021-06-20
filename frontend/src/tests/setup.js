@@ -531,8 +531,7 @@ async function seedDatabaseForInstructors(
         // at most one position
         const { id: assignment_id } =
             processedAssignments.find(
-                (assignment) =>
-                    assignment._temp_id === ddah._temp_id
+                (assignment) => assignment._temp_id === ddah._temp_id
             ) || {};
         if (!assignment_id) {
             throw new Error(
@@ -551,13 +550,13 @@ async function seedDatabaseForInstructors(
     // Cleanup
     for (const assignment of seeded.assignments) {
         if (assignment._temp_id) {
-            const {temp_id, ...cleanAssignment } = assignment;
+            const { temp_id, ...cleanAssignment } = assignment;
             Object.assign(assignment, cleanAssignment);
         }
     }
 
     for (const ddah of seeded.ddahs) {
-        const {temp_id, ...cleanDdah } = ddah;
+        const { temp_id, ...cleanDdah } = ddah;
         Object.assign(ddah, cleanDdah);
     }
 }
