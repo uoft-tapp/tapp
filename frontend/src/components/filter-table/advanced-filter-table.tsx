@@ -157,7 +157,6 @@ export function AdvancedFilterTable({
                 scrollRef.current.scrollTo(scrollTop);
             }
             if (headerScrollRef.current) {
-                console.log("scrolling", scrollLeft);
                 headerScrollRef.current.scrollTo({ left: scrollLeft });
             }
         },
