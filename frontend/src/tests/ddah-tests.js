@@ -285,7 +285,7 @@ export function ddahTests(api) {
         let signedDdah = resp.payload;
         expect(signedDdah.signature).toEqual("My Sig");
         expect(signedDdah.accepted_date).toBeTruthy();
-
+        console.log("before:", signedDdah);
         // Updating a signed DDAH should remove the signature
         resp = await apiPOST(`/admin/ddahs`, {
             id: signedDdah.id,
@@ -300,6 +300,7 @@ export function ddahTests(api) {
         });
         expect(resp).toHaveStatus("success");
         signedDdah = resp.payload;
+        console.log(signedDdah);
         expect(signedDdah.signature).toBeFalsy();
         expect(signedDdah.accepted_date).toBeFalsy();
         expect(signedDdah.revised_date).toBeTruthy();
