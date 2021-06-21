@@ -100,6 +100,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
         resp = await apiPOST("/debug/users", userCreatedFromApplicant);
         expect(resp).toHaveStatus("success");
         Object.assign(userCreatedFromApplicant, resp.payload);
+
+        // Create a new user with TA permissions
+        resp = await apiPOST("/debug/users", userWithTaPermissions);
+        expect(resp).toHaveStatus("success");
+        Object.assign(userWithTaPermissions, resp.payload);
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
@@ -152,13 +157,94 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
         it.todo("Can submit survey.js data via the public postings route");
 
-        it.todo(
-            "Submitting an application for a posting that does not have any positions responds in error (not internal" +
-                " server error test)"
-        );
-        it.todo(
-            "Submitting an application without position preferences responds in an error (not an internal server" +
-                " error test)"
+        it.skip(
+            "Submitting an application for a posting that does not have any positions or position preferences" +
+                " responds in error",
+            async () => {
+                // Create a new posting
+                const posting = {
+                    name: "CSC343F TA",
+                    intro_text: "Testing posting for CSC343F",
+                    open_date: "2021/04/01",
+                    close_date: "2021/05/01",
+                    availability: "open",
+                };
+                let resp = await apiPOST("/admin/postings", {
+                    ...posting,
+                    session_id: session.id,
+                });
+                expect(resp).toHaveStatus("success");
+                checkPropTypes(postingPropTypes, resp.payload);
+                expect(resp.payload.id).not.toBeNull();
+                Object.assign(posting, resp.payload);
+
+                await switchToTaUser();
+
+                // Submit an application without linking a position to the posting
+
+                // ISSUE: Even though we should not be able to submit an application without a position linked to
+                // it, this POST request successfully creates an application with position_preferences being an
+                // empty object.
+
+                const correctApplication = {
+                    answers: {
+                        ...applicantInfo,
+                        position_preferences: {
+                            [position.position_code]: HIGH_PREFERENCE,
+                        },
+                    },
+                };
+
+                resp = await apiPOST(
+                    `/public/postings/${posting.url_token}/submit`,
+                    correctApplication,
+                    true
+                );
+                expect(resp).toHaveStatus("error");
+
+                await restoreDefaultUser();
+
+                // Link seeded position to the new posting
+                const postingPosition = {
+                    num_positions: 10,
+                    hours: 68,
+                };
+                resp = await apiPOST(
+                    `/admin/postings/${posting.id}/posting_positions`,
+                    { ...postingPosition, position_id: position.id }
+                );
+                expect(resp).toHaveStatus("success");
+                Object.assign(postingPosition, resp.payload);
+
+                // Submit an application without position_preferences
+                const applicationWithoutPositionPref = {
+                    answers: {
+                        ...applicantInfo,
+                    },
+                };
+                resp = await apiPOST(
+                    `/public/postings/${posting.url_token}/submit`,
+                    applicationWithoutPositionPref,
+                    true
+                );
+                expect(resp).toHaveStatus("error");
+
+                // Submit an application in an incorrect matter: all the data is in the original object and not in
+                // the <answers> prop
+                const noAnswersApplication = {
+                    ...applicantInfo,
+                    position_preferences: {
+                        [position.position_code]: HIGH_PREFERENCE,
+                    },
+                };
+                resp = await apiPOST(
+                    `/public/postings/${posting.url_token}/submit`,
+                    noAnswersApplication,
+                    true
+                );
+                expect(resp).toHaveStatus("error");
+                await restoreDefaultUser();
+            }
         );
 
         it(
@@ -172,11 +258,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 );
                 expect(resp).toHaveStatus("success");
                 Object.assign(postingPosition, resp.payload);
-
-                // Create a new user with TA permissions
-                resp = await apiPOST("/debug/users", userWithTaPermissions);
-                expect(resp).toHaveStatus("success");
-                Object.assign(userWithTaPermissions, resp.payload);
 
                 // Ensure that the new user is not an applicant
                 resp = await apiGET("/admin/applicants");
