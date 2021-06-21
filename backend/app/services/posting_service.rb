@@ -2,7 +2,7 @@
 
 class PostingService
     include TransactionHandler
-    attr_reader :posting
+    attr_reader :posting, :application
 
     def initialize(params: nil, posting: nil)
         @params = params
@@ -21,7 +21,17 @@ class PostingService
             )
 
         # Set the global survey title
-        fixed_survey['title'] = @posting.name
+        availability_desc =
+            if @posting.open_date.year == @posting.close_date.year
+                "Available from #{@posting.open_date.strftime('%b %d')} to #{
+                    @posting.close_date.strftime('%b %d, %Y')
+                }"
+            else
+                "Available from #{
+                    @posting.open_date.strftime('%b %d, %Y')
+                } to #{@posting.close_date.strftime('%b %d, %Y')}"
+            end
+        fixed_survey['title'] = "#{@posting.name} (#{availability_desc})"
         fixed_survey['description'] = @posting.intro_text
 
         # Find the preferences page and set a preference for each PostingPosition
@@ -39,7 +49,8 @@ class PostingService
             preferences_page['elements'].find do |elm|
                 elm['name'] == 'position_descriptions'
             end
-        position_descriptions['html'] = position_description_template.render position_description_subs
+        position_descriptions['html'] =
+            position_description_template.render position_description_subs
 
         # Add any custom questions there may be.
         # These should show up after all fixed questions but before the comments page.
@@ -64,7 +75,8 @@ class PostingService
         applicant = Applicant.find_by(utorid: utorid)
         return { utorid: utorid } unless applicant
 
-        {
+        # This is the basic data we can get if the applicant already exists
+        data = {
             utorid: utorid,
             student_number: applicant.student_number,
             first_name: applicant.first_name,
@@ -72,6 +84,59 @@ class PostingService
             email: applicant.email,
             phone: applicant.phone
         }
+
+        existing_application =
+            Application.find_by(posting: @posting, applicant: applicant)
+        if existing_application
+            application_service =
+                ApplicationService.new application: existing_application
+            data.merge! application_service.prefilled_data
+        else
+            # Find out if they have previous contracts in the database.
+            # This will tell us information about whether the applicant has been previously employed
+            offer_history =
+                Assignment.joins(:applicant, :offers, :position).where(
+                    applicant: applicant, "offers.status": 'accepted'
+                ).order("offers.position_start_date": :ASC).pluck(
+                    :"positions.position_code",
+                    :"offers.hours",
+                    :"offers.position_start_date",
+                    :"offers.position_end_date"
+                )
+            unless offer_history.blank?
+                data[:previous_department_ta] = true
+                data[:previous_university_ta] = true
+                # Technically we cannot infer this, but if they've TAed for the department
+                # before, we don't care about other history
+                data[:previous_other_university_ta] = false
+                data[:previous_experience_summary] =
+                    offer_history
+                        .map do |(course, hours, start_date, end_date)|
+                        "#{course} (#{hours} hours) from #{
+                            start_date.strftime('%b %Y')
+                        } to #{end_date.strftime('%b %Y')}"
+                    end.join '; '
+            end
+
+            # Some information rarely changes from application to application.
+            # For example, the program of study/department/program start.
+            # We retrieve this information from the most recently completed application
+            # if it's available.
+            last_application =
+                Application.joins(:applicant).where(applicant: applicant).order(
+                    updated_at: :DESC
+                ).first
+            application_service =
+                ApplicationService.new application: last_application
+            last_application_data = application_service.prefilled_data
+            data.merge! last_application_data.slice(
+                            :department,
+                            :program,
+                            :program_start
+                        ).compact
+        end
+
+        data
     end
 
     # Splits a Survey.js response object into the required pieces
@@ -116,6 +181,13 @@ class PostingService
 
         # Create the position preferences
         position_preferences_hash = rest[:position_preferences]
+        if !(position_preferences_hash.is_a? Hash) &&
+               !position_preferences_hash.nil?
+            raise StandardError,
+                  "Unknown format of position_preferences: '#{
+                      position_preferences_hash
+                  }'"
+        end
         rest.except!(:position_preferences)
         # Find the position_id and position_code of all items listed
         # in `position_preferences`. However, take special care to limit
@@ -176,9 +248,9 @@ class PostingService
         end
         # Saving attachments cannot happen inside of a transaction.
         # See https://github.com/rails/rails/issues/41903
-        application = @applicant.applications.find_by(posting: @posting)
-        application.documents.purge
-        application.documents.attach files_for_active_storage
+        @application = @applicant.applications.find_by(posting: @posting)
+        @application.documents.purge
+        @application.documents.attach files_for_active_storage
     end
 
     private
