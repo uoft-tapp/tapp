@@ -278,6 +278,7 @@ export function ddahTests(api) {
             { signature: "My Sig" },
             true
         );
+        
         expect(resp).toHaveStatus("success");
         // Get the signed DDAH since it is not returned from public route
         resp = await apiGET(`/admin/assignments/${newAssignment.id}/ddah`);
@@ -285,22 +286,20 @@ export function ddahTests(api) {
         let signedDdah = resp.payload;
         expect(signedDdah.signature).toEqual("My Sig");
         expect(signedDdah.accepted_date).toBeTruthy();
-        console.log("before:", signedDdah);
         // Updating a signed DDAH should remove the signature
         resp = await apiPOST(`/admin/ddahs`, {
             id: signedDdah.id,
             duties: [
                 ...ddah.duties,
                 {
-                    order: 10,
-                    description: "meeting:Hot-pocket eating contest",
+                    order: 11,
+                    description: "meeting:Hot-pocket eating contest 2.0",
                     hours: 6,
                 },
             ],
         });
         expect(resp).toHaveStatus("success");
         signedDdah = resp.payload;
-        console.log(signedDdah);
         expect(signedDdah.signature).toBeFalsy();
         expect(signedDdah.accepted_date).toBeFalsy();
         expect(signedDdah.revised_date).toBeTruthy();
