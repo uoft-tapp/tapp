@@ -259,7 +259,9 @@ class PostingService
     def position_description_subs
         {
             'positions' =>
-                PostingPosition.joins(:position).where(posting: @posting).pluck(
+                PostingPosition.joins(:position).where(posting: @posting).order(
+                    :'positions.position_code'
+                ).pluck(
                     'positions.position_code',
                     'positions.position_title',
                     'positions.duties',
@@ -282,10 +284,10 @@ class PostingService
 
     # We need to use the `posting_positions` to create
     def assemble_preferences_rows
-        PostingPosition.joins(:position).where(posting: @posting).pluck(
-            'positions.position_code',
-            'positions.position_title'
-        ).map do |(code, title)|
+        PostingPosition.joins(:position).where(posting: @posting).order(
+            :'positions.position_code'
+        ).pluck('positions.position_code', 'positions.position_title')
+            .map do |(code, title)|
             { text: (title.blank? ? code : "#{code} - #{title}"), value: code }
         end
     end
