@@ -183,7 +183,7 @@ export function PostingView() {
                                 <Spinner animation="border" size="sm" />
                             </span>
                         ) : null}
-                        submit
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>
