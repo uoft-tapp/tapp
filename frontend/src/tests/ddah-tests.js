@@ -278,7 +278,7 @@ export function ddahTests(api) {
             { signature: "My Sig" },
             true
         );
-        
+
         expect(resp).toHaveStatus("success");
         // Get the signed DDAH since it is not returned from public route
         resp = await apiGET(`/admin/assignments/${newAssignment.id}/ddah`);
