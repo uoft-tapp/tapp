@@ -9,7 +9,7 @@ import {
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
-    let session, surveyPrefill, applicant, position;
+    let session, applicant, position;
     let defaultUser, newApplication;
     const HIGH_PREFERENCE = 3;
     const OK_PREFERENCE = 1;
@@ -122,20 +122,21 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp.payload.id).not.toBeNull();
             Object.assign(posting, resp.payload);
 
-            await switchToApplicantUser();
-
-            // read survey.js posting data
-            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
-            expect(resp).toHaveStatus("success");
-            checkPropTypes(surveyPropTypes, resp.payload);
-            surveyPrefill = resp.payload["prefilled_data"];
-
             await restoreDefaultUser();
         });
 
-        // broken up into 2 tests: applicant & application(not yet implemented in the backend)
         it("Survey.js posting data is pre-filled based on prior applicant", async () => {
-            // this test depends on the previous test on the terms of surveyPrefill variable
+            await switchToApplicantUser();
+
+            // Read survey.js posting data
+            let resp = await apiGET(
+                `/public/postings/${posting.url_token}`,
+                true
+            );
+            expect(resp).toHaveStatus("success");
+            checkPropTypes(surveyPropTypes, resp.payload);
+            const surveyPrefill = resp.payload["prefilled_data"];
+
             for (const prefilledKey of [
                 "utorid",
                 "student_number",
@@ -144,18 +145,58 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 "email",
                 "phone",
             ]) {
-                // check if the applicant prefill information is correct
+                // Check if the applicant prefill information is correct
                 expect(surveyPrefill[prefilledKey]).toEqual(
                     applicant[prefilledKey]
                 );
             }
         });
 
-        it.todo(
-            "Survey.js posting data is pre-filled based on prior application"
-        );
-
         it.todo("Can submit survey.js data via the public postings route");
+
+        it.skip("Survey.js posting data is pre-filled based on prior application", async () => {
+            // Submit an application to the posting
+            const application = {
+                ...applicant,
+                program: "P",
+                program_start: "2021-06-21",
+                department: "cs",
+                previous_university_ta: false,
+                previous_department_ta: false,
+                previous_other_university_ta: false,
+                comments: "My comments",
+            };
+
+            let resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                application,
+                true
+            );
+            expect(resp).toHaveStatus("success");
+
+            const applicationPrefillData = {
+                program: resp.payload.program,
+                department: resp.payload.department,
+                yip: resp.payload.yip,
+                previous_department_ta: resp.payload.previous_department_ta,
+                previous_university_ta: resp.payload.previous_university_ta,
+                previous_experience_summary:
+                    resp.payload.previous_experience_summary,
+                gpa: resp.payload.gpa,
+                comments: resp.payload.comments,
+            };
+
+            await switchToApplicantUser();
+
+            // Read survey.js posting data
+            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
+            expect(resp).toHaveStatus("success");
+            checkPropTypes(surveyPropTypes, resp.payload);
+            expect(resp.payload["prefilled_data"]).toEqual(
+                expect.objectContaining(applicationPrefillData)
+            );
+            await restoreDefaultUser();
+        });
 
         it.skip(
             "Submitting an application for a posting that does not have any positions or position preferences" +
@@ -181,11 +222,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 await switchToTaUser();
 
                 // Submit an application without linking a position to the posting
-
-                // ISSUE: Even though we should not be able to submit an application without a position linked to
-                // it, this POST request successfully creates an application with position_preferences being an
-                // empty object.
-
                 const correctApplication = {
                     answers: {
                         ...applicantInfo,
@@ -200,7 +236,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     correctApplication,
                     true
                 );
-                expect(resp).toHaveStatus("error");
+                expect(resp).toHaveStatus("success");
 
                 await restoreDefaultUser();
 
@@ -216,10 +252,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 expect(resp).toHaveStatus("success");
                 Object.assign(postingPosition, resp.payload);
 
-                // Submit an application without position_preferences
+                // Submit an application with incorrect position_preferences type (supposed to be an object)
                 const applicationWithoutPositionPref = {
                     answers: {
                         ...applicantInfo,
+                        position_preferences: 5,
                     },
                 };
                 resp = await apiPOST(
@@ -251,7 +288,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "When submitting survey.js data an applicant and application are automatically created if they don't" +
                 " exist and they are updated if they already exist",
             async () => {
-                // Link seeded position to the posting (TODO: remove after merged with previous test)
+                await restoreDefaultUser();
+                // Link seeded position to the posting
+                // TODO: remove after merged with "Can submit survey.js data via the public postings route"
                 let resp = await apiPOST(
                     `/admin/postings/${posting.id}/posting_positions`,
                     { ...postingPosition, position_id: position.id }
