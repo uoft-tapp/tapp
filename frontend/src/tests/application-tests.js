@@ -32,15 +32,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
         utorid: "greenb",
     };
 
-    const applicantInfo = {
-        utorid: "greenb",
-        first_name: "Green",
-        last_name: "Bee",
-        email: "testemail@utoronto.ca",
-        phone: "6471111111",
-        student_number: "1002345678",
-    };
-
     /**
      * Switches the current active user to the seededData.applicant in the seeder.
      * This function uses debug route to achieve user switching.
@@ -150,6 +141,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     applicant[prefilledKey]
                 );
             }
+            await restoreDefaultUser();
         });
 
         it.todo("Can submit survey.js data via the public postings route");
@@ -198,7 +190,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await restoreDefaultUser();
         });
 
-        it.skip(
+        it(
             "Submitting an application for a posting that does not have any positions or position preferences" +
                 " responds in error",
             async () => {
@@ -219,12 +211,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 expect(resp.payload.id).not.toBeNull();
                 Object.assign(posting, resp.payload);
 
-                await switchToTaUser();
+                await switchToApplicantUser();
 
                 // Submit an application without linking a position to the posting
                 const correctApplication = {
                     answers: {
-                        ...applicantInfo,
+                        ...applicant,
                         position_preferences: {
                             [position.position_code]: HIGH_PREFERENCE,
                         },
@@ -252,10 +244,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 expect(resp).toHaveStatus("success");
                 Object.assign(postingPosition, resp.payload);
 
+                await switchToApplicantUser();
+
                 // Submit an application with incorrect position_preferences type (supposed to be an object)
                 const applicationWithoutPositionPref = {
                     answers: {
-                        ...applicantInfo,
+                        ...applicant,
                         position_preferences: 5,
                     },
                 };
@@ -269,7 +263,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 // Submit an application in an incorrect matter: all the data is in the original object and not in
                 // the <answers> prop
                 const noAnswersApplication = {
-                    ...applicantInfo,
+                    ...applicant,
                     position_preferences: {
                         [position.position_code]: HIGH_PREFERENCE,
                     },
@@ -308,11 +302,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
                 // Assume the new user was successfully created
                 await switchToTaUser();
-
                 // Submit an application to the posting, assuming application submission is tested
                 const firstApplication = {
                     answers: {
-                        ...applicantInfo,
+                        utorid: "greenb",
+                        first_name: "Green",
+                        last_name: "Bee",
+                        email: "testemail@utoronto.ca",
+                        phone: "6471111111",
+                        student_number: "1002345678",
                         position_preferences: {
                             [position.position_code]: HIGH_PREFERENCE,
                         },
