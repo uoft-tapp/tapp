@@ -2,13 +2,8 @@ import { it, beforeAll } from "./utils";
 import { databaseSeeder } from "./setup";
 
 export function applicationsTests({ apiGET, apiPOST }) {
-    let session, applicant, position;
-
     beforeAll(async () => {
         await databaseSeeder.seed({ apiGET, apiPOST });
-        session = databaseSeeder.seededData.session;
-        applicant = databaseSeeder.seededData.applicant;
-        position = databaseSeeder.seededData.position;
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
