@@ -120,9 +120,29 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.todo(
             "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
         );
-        it.todo(
-            "When submitting survey.js data cannot add a position_preference for a position not listed in the posting"
-        );
+        it.skip("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
+            //Add illegal position's preference
+            surveyData.answers.position_preferences = {
+                ...position_preferences,
+                MAT102: 3,
+            };
+
+            //Switch to a ta only user
+            resp = await apiPOST("/debug/active_user", taOnlyUser);
+            expect(resp).toHaveStatus("success");
+
+            //Submit survey.js data
+            resp = await apiPOST(
+                `/public/postings/${posting.url_token}/submit`,
+                surveyData,
+                true
+            );
+            expect(resp).toHaveStatus("error");
+
+            //Switch back to default admin
+            resp = await apiPOST("/debug/active_user", admin);
+            expect(resp).toHaveStatus("success");
+        });
         it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
