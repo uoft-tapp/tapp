@@ -123,7 +123,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.skip("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
             //Add illegal position's preference
             surveyData.answers.position_preferences = {
-                ...position_preferences,
+                ...surveyData.answers.position_preferences,
                 MAT102: 3,
             };
 
