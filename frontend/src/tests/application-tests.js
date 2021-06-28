@@ -69,6 +69,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
             //Create and switch to a ta only user
             resp = await apiPOST("/debug/users", taOnlyUser);
             expect(resp).toHaveStatus("success");
+            resp = await apiPOST("/debug/active_user", taOnlyUser);
+            expect(resp).toHaveStatus("success");
 
             //Create and submit survey.js data
             surveyData = {
@@ -100,6 +102,10 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 surveyData,
                 true
             );
+            expect(resp).toHaveStatus("success");
+            
+            //Switch back to default admin
+            resp = await apiPOST("/debug/active_user", admin);
             expect(resp).toHaveStatus("success");
 
             // Further verfication will happen in test cases concerning application data
