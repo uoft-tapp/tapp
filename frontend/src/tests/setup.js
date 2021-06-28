@@ -66,6 +66,18 @@ class DatabaseSeeder {
                     email: "megan.miller@utoronto.ca",
                     utorid: "millerm",
                 },
+                {
+                    last_name: "Lucas",
+                    first_name: "George",
+                    email: "george.lucas@utoronto.ca",
+                    utorid: "lucasg",
+                },
+                {
+                    last_name: "Bell",
+                    first_name: "Jordan",
+                    email: "jordan.bell@utoronto.ca",
+                    utorid: "belljo",
+                },
             ],
             applicants: [
                 {
@@ -147,6 +159,22 @@ class DatabaseSeeder {
                     instructor_ids: [],
                     instructor_utorids: [],
                 },
+                {
+                    position_code: "CSC555Y1",
+                    position_title: "Computer Networks",
+                    hours_per_assignment: 70,
+                    contract_template_id: null,
+                    instructor_ids: [],
+                    instructor_utorids: ["lucasg", "millerm"],
+                },
+                {
+                    position_code: "ECO101H1F",
+                    position_title: "Microeconomics",
+                    hours_per_assignment: 50,
+                    contract_template_id: null,
+                    instructor_ids: [],
+                    instructor_utorids: ["millerm", "belljo"],
+                },
             ],
             assignments: [
                 {
@@ -172,6 +200,58 @@ class DatabaseSeeder {
                 {
                     position_code: "MAT235H1F",
                     applicant_utorid: "weasleyr",
+                },
+                {
+                    _temp_id: 1,
+                    position_code: "CSC555Y1",
+                    applicant_utorid: "molinat",
+                },
+                {
+                    _temp_id: 2,
+                    position_code: "ECO101H1F",
+                    applicant_utorid: "brownd",
+                },
+            ],
+            ddahs: [
+                {
+                    _temp_id: 1,
+                    duties: [
+                        {
+                            order: 2,
+                            hours: 18,
+                            description: "marking:Marking midterms",
+                        },
+                        {
+                            order: 1,
+                            hours: 2,
+                            description: "training:Initial TA training",
+                        },
+                        {
+                            order: 3,
+                            hours: 50,
+                            description: "contact:Tutorials",
+                        },
+                    ],
+                },
+                {
+                    _temp_id: 2,
+                    duties: [
+                        {
+                            order: 2,
+                            hours: 18,
+                            description: "marking:Marking midterms",
+                        },
+                        {
+                            order: 1,
+                            hours: 2,
+                            description: "training:Initial TA training",
+                        },
+                        {
+                            order: 3,
+                            hours: 50,
+                            description: "contact:Tutorials",
+                        },
+                    ],
                 },
             ],
         };
@@ -400,6 +480,9 @@ async function seedDatabaseForInstructors(
     }
 
     // Assignment
+    // We will keep track of the inserted assignments for the purpose
+    // of creating DDAHs for some of them later
+    const processedAssignments = [];
     for (const assignment of seeded.assignments) {
         // The seed data is written in terms of position codes
         // and applicant utorids, so we need to mangle the data
@@ -431,5 +514,49 @@ async function seedDatabaseForInstructors(
         resp = await apiPOST(`/admin/assignments`, assignment);
         expect(resp).toHaveStatus("success");
         Object.assign(assignment, resp.payload);
+        processedAssignments.push(assignment);
+    }
+
+    // DDAH
+    for (const ddah of seeded.ddahs) {
+        // _temp_id in ddahs should correspond to _temp_id in assignments
+        if (!ddah._temp_id) {
+            throw new Error(
+                `Inconsistency in seed data: could not create ddah without _temp_id`
+            );
+        }
+
+        // The seed data is written in terms of position codes
+        // and applicant utorids, since unique applicant can apply to
+        // at most one position
+        const { id: assignment_id } =
+            processedAssignments.find(
+                (assignment) => assignment._temp_id === ddah._temp_id
+            ) || {};
+        if (!assignment_id) {
+            throw new Error(
+                `Inconsistency in seed data: could not find assignment with _temp_id ${ddah._temp_id}`
+            );
+        }
+
+        const newDdah = {
+            ...ddah,
+            assignment_id,
+        };
+        let resp = await apiPOST(`/admin/ddahs`, newDdah);
+        expect(resp).toHaveStatus("success");
+    }
+
+    // Cleanup
+    for (const assignment of seeded.assignments) {
+        if (assignment._temp_id) {
+            const { temp_id, ...cleanAssignment } = assignment;
+            Object.assign(assignment, cleanAssignment);
+        }
+    }
+
+    for (const ddah of seeded.ddahs) {
+        const { temp_id, ...cleanDdah } = ddah;
+        Object.assign(ddah, cleanDdah);
     }
 }

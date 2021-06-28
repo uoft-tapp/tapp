@@ -9,7 +9,8 @@ class PostingSerializer < ActiveModel::Serializer
                :availability,
                :custom_questions,
                :application_ids,
-               :url_token
+               :url_token,
+               :open_status
 
     def application_ids
         object.applications.ids

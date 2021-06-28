@@ -135,9 +135,4 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Can submit and retrieve attachments for an updated application"
         );
     });
-
-    describe("Admin route tests", () => {
-        it.todo("Create an application");
-        it.todo("Update an application");
-    });
 }
