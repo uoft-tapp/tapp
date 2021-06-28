@@ -29,7 +29,7 @@ export function ConnectedPostingsList({ editable = true }) {
         );
     }
 
-    // props.original contains the row data for this particular session
+    // props.original contains the row data for this particular posting
     function CellDetailsButton({ row }: Cell<Posting>) {
         const posting = row?.original || {};
         return (
@@ -42,6 +42,11 @@ export function ConnectedPostingsList({ editable = true }) {
                 </Link>
             </div>
         );
+    }
+    function CellAvailability({ row }: Cell<Posting>) {
+        const posting = row?.original || {};
+        const status = posting.open_status ? "Open" : "Closed";
+        return `${status} (${posting.availability})`;
     }
     const DEFAULT_COLUMNS: (Column<Posting> & {
         className?: string;
@@ -72,7 +77,8 @@ export function ConnectedPostingsList({ editable = true }) {
         },
         {
             Header: generateHeaderCell("Availability"),
-            accessor: "availability",
+            id: "availability",
+            Cell: CellAvailability,
         },
     ];
 

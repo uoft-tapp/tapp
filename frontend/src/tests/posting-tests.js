@@ -380,4 +380,6 @@ export function postingTests(api) {
         resp = await apiGET(`/admin/postings/${posting.id}`);
         expect(resp).toHaveStatus("error");
     });
+
+    it.todo("Confirmation email sent after submitting a posting");
 }

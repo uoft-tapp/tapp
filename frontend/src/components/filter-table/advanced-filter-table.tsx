@@ -103,6 +103,7 @@ export function AdvancedFilterTable({
     );
     const { isHiddenRowsSelected } = table;
     const scrollRef = React.useRef<FixedSizeList>(null);
+    const headerScrollRef = React.useRef<HTMLDivElement>(null);
 
     // If we do not set the `"custom"` filter method, it won't be called.
     React.useEffect(() => {
@@ -150,13 +151,16 @@ export function AdvancedFilterTable({
 
     const handleScroll = React.useCallback(
         ({ target }) => {
-            const { scrollTop } = target;
+            const { scrollTop, scrollLeft } = target;
 
             if (scrollRef.current) {
                 scrollRef.current.scrollTo(scrollTop);
             }
+            if (headerScrollRef.current) {
+                headerScrollRef.current.scrollTo({ left: scrollLeft });
+            }
         },
-        [scrollRef]
+        [scrollRef, headerScrollRef]
     );
 
     return (
@@ -171,7 +175,7 @@ export function AdvancedFilterTable({
                 {...table.getTableProps()}
                 className="table table-bordered table-sm"
             >
-                <div className="thead">
+                <div className="thead" ref={headerScrollRef}>
                     {table.headerGroups.map((headerGroup) => (
                         <div
                             {...headerGroup.getHeaderGroupProps()}

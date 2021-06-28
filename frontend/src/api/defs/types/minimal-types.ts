@@ -50,7 +50,11 @@ export interface MinimalPostingPosition
 export interface MinimalPosting
     extends Omit<
         NoId<Posting>,
-        "posting_positions" | "applications" | "availability" | "url_token"
+        | "posting_positions"
+        | "applications"
+        | "availability"
+        | "url_token"
+        | "open_status"
     > {
     posting_positions: MinimalPostingPosition[];
 }

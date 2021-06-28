@@ -127,6 +127,7 @@ export interface RawPosting extends HasId {
     custom_questions: { pages: { name: string; [key: string]: any }[] } | null;
     application_ids: number[];
     url_token: string;
+    open_status: boolean;
 }
 
 export interface RawPostingPosition {

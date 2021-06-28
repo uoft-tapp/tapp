@@ -17,7 +17,7 @@ import { MissingActiveSessionWarning } from "../../../components/sessions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { useParams } from "react-router";
 import { ConnectedPostingDetailsView } from "./posting-details/details-view";
-import { Modal } from "react-bootstrap";
+import { Alert, Modal } from "react-bootstrap";
 import { FaLink } from "react-icons/fa";
 import { ConnectedExportPostingsAction } from "./import-export";
 
@@ -35,12 +35,23 @@ function PostingLinkDialog({
     // issues for pre-authenticated users.
     url.pathname = `/hash/public/postings/${posting.url_token}`;
 
+    let warning = null;
+    if (posting.posting_positions.length === 0) {
+        warning = (
+            <Alert variant="warning">
+                This posting has no associated positions, which means applicants
+                cannot currently complete an application.
+            </Alert>
+        );
+    }
+
     return (
         <Modal show={visible} onHide={onHide} size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>Posting URL</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                {warning}
                 <p>
                     You can distribute the following link to give access to the
                     posting <em>{posting.name}</em>
@@ -103,6 +114,16 @@ function ConnectedPostingDetails() {
         );
     }
 
+    let warning = null;
+    if (posting.posting_positions.length === 0) {
+        warning = (
+            <Alert variant="warning">
+                This posting has no associated positions, which means applicants
+                cannot currently complete an application.
+            </Alert>
+        );
+    }
+
     return (
         <div className="page-body">
             <ActionsList>
@@ -120,6 +141,7 @@ function ConnectedPostingDetails() {
                 {activeSession ? null : (
                     <MissingActiveSessionWarning extraText="To view, modify, or create postings, you must select a session." />
                 )}
+                {warning}
                 <ConnectedPostingDetailsView posting={posting} />
             </ContentArea>
             <PostingLinkDialog
