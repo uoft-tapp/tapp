@@ -103,7 +103,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
-            
+
             //Switch back to default admin
             resp = await apiPOST("/debug/active_user", admin);
             expect(resp).toHaveStatus("success");
