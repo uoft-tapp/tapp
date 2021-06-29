@@ -95,6 +95,18 @@
                             "text": "Engineering"
                         },
                         {
+                            "value": "astro",
+                            "text": "Astronomy and Astrophysics"
+                        },
+                        {
+                            "value": "chem",
+                            "text": "Chemistry"
+                        },
+                        {
+                            "value": "biophys",
+                            "text": "Medical Biophysics"
+                        },
+                        {
                             "value": "phys",
                             "text": "Physics"
                         },
