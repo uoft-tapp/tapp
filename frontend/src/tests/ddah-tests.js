@@ -272,27 +272,28 @@ export function ddahTests(api) {
         expect(resp).toHaveStatus("success");
         expect(resp.payload.approved_date).toBeFalsy();
 
-        // Updating a signed DDAH should remove the signature
-        resp = await apiPOST(`/admin/ddahs`, ddah);
+        // Sign the DDAH
+        resp = await apiPOST(
+            `/public/ddahs/${ddah.url_token}/accept`,
+            { signature: "My Sig" },
+            true
+        );
+
         expect(resp).toHaveStatus("success");
-        ddah = resp.payload;
-        resp = await apiPOST(`/admin/ddahs`, {
-            ...ddah,
-            signature: "My Sig",
-            accepted_date: new Date(),
-        });
+        // Get the signed DDAH since it is not returned from public route
+        resp = await apiGET(`/admin/assignments/${newAssignment.id}/ddah`);
         expect(resp).toHaveStatus("success");
         let signedDdah = resp.payload;
         expect(signedDdah.signature).toEqual("My Sig");
         expect(signedDdah.accepted_date).toBeTruthy();
-        // Update the list of duties
+        // Updating a signed DDAH should remove the signature
         resp = await apiPOST(`/admin/ddahs`, {
             id: signedDdah.id,
             duties: [
                 ...ddah.duties,
                 {
-                    order: 10,
-                    description: "meeting:Hot-pocket eating contest",
+                    order: 11,
+                    description: "meeting:Hot-pocket eating contest 2.0",
                     hours: 6,
                 },
             ],

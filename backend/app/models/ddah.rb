@@ -2,7 +2,7 @@
 
 class Ddah < ApplicationRecord
     belongs_to :assignment
-    has_many :duties, dependent: :destroy
+    has_many :duties, -> { order(:order) }, dependent: :destroy
     accepts_nested_attributes_for :duties
 
     has_secure_token :url_token
