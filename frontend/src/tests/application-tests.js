@@ -12,7 +12,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let position;
     let posting = {};
     let resp;
-    let admin;
+    let adminUser;
     let surveyData;
 
     const taOnlyUser = {
@@ -37,10 +37,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             position = databaseSeeder.seededData.position;
             resp = await apiGET(`/debug/active_user`);
             expect(resp).toHaveStatus("success");
-            admin = {
-                utorid: resp.payload.utorid,
-                roles: resp.payload.roles,
-            };
+            adminUser = resp.payload;
         });
 
         it.todo("Get survey.js posting data through public route");
@@ -49,7 +46,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         );
 
         it("Can submit survey.js data via the public postings route", async () => {
-            //Create a new posting
+            // Create a new posting
             resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
                 postingData
@@ -59,20 +56,20 @@ export function applicationsTests({ apiGET, apiPOST }) {
             checkPropTypes(postingPropTypes, posting);
             expect(posting.id).not.toBeNull();
 
-            //Set position for posting
+            // Set position for posting
             resp = await apiPOST(
                 `/admin/postings/${posting.id}/posting_positions`,
-                { hours: 20, num_positions: 2, position_id: position.id }
+                { position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
 
-            //Create and switch to a ta only user
+            // Create and switch to a ta only user
             resp = await apiPOST("/debug/users", taOnlyUser);
             expect(resp).toHaveStatus("success");
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            //Create and submit survey.js data
+            // Create and submit survey.js data
             surveyData = {
                 answers: {
                     utorid: "matthewc",
@@ -96,7 +93,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             };
 
-            //Submit survey.js data
+            // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyData,
@@ -104,8 +101,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            //Switch back to default admin
-            resp = await apiPOST("/debug/active_user", admin);
+            // Switch back to default admin
+            resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
             // Further verfication will happen in test cases concerning application data
@@ -121,17 +118,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Even if a different utorid is submitted via survey.js data the active_user's utorid is used"
         );
         it.skip("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
-            //Add illegal position's preference
+            // Add illegal position's preference
             surveyData.answers.position_preferences = {
                 ...surveyData.answers.position_preferences,
                 MAT102: 3,
             };
 
-            //Switch to a ta only user
+            // Switch to a ta only user
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            //Submit survey.js data
+            // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyData,
@@ -139,8 +136,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("error");
 
-            //Switch back to default admin
-            resp = await apiPOST("/debug/active_user", admin);
+            // Switch back to default admin
+            resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
         });
         it.todo(
