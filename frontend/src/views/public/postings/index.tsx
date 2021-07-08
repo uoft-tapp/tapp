@@ -28,6 +28,104 @@ function validSurvey(surveyJson: any): boolean {
     return false;
 }
 
+function ConfirmDialog({
+    submitDialogVisible,
+    hideDialogAndResetData,
+    applicationOpen,
+    submissionError,
+    confirmClicked,
+    waiting,
+}: {
+    submitDialogVisible: boolean;
+    hideDialogAndResetData: (...args: any[]) => any;
+    applicationOpen: boolean;
+    submissionError: string | null;
+    confirmClicked: (...args: any[]) => any;
+    waiting: boolean;
+}) {
+    const [sessionTimeout, setSessionTimeout] = React.useState(false);
+    React.useEffect(() => {
+        // If it takes a long time for the user to fill out the posting, their shibboleth
+        // session might have timed out. To test for this, we make a dummy call to the backed right
+        // when the confirm dialog becomes visible. If the call fails, it means the session has timed out.
+        if (submitDialogVisible) {
+            apiGET(`/active_user`)
+                .then((resp: any) => {
+                    if (!resp.utorid) {
+                        throw new Error(
+                            "Failed to get an authenticated response from the server"
+                        );
+                    }
+                })
+                .catch(() => {
+                    setSessionTimeout(true);
+                });
+        } else {
+            setSessionTimeout(false);
+        }
+    }, [submitDialogVisible, setSessionTimeout]);
+
+    return (
+        <Modal show={submitDialogVisible} onHide={hideDialogAndResetData}>
+            <Modal.Header closeButton>
+                <Modal.Title>Submit Application</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {!applicationOpen ? (
+                    <Alert variant="warning">
+                        The application window is currently not open. Any
+                        applications submitted outside of the application window
+                        may not be considered.
+                    </Alert>
+                ) : null}
+                {sessionTimeout && (
+                    <Alert variant="danger">
+                        <b>Error:</b> Your session has timed out. Please refresh
+                        the browser and try again. (Your answers have not been
+                        saved, but you may copy-and-paste them to another
+                        document before refreshing.)
+                    </Alert>
+                )}
+                {submissionError ? (
+                    <Alert variant="danger">
+                        <b>Error:</b> {submissionError} Please review your
+                        answers and make sure all questions are answered
+                        appropriately.
+                        <p className="mb-1">
+                            If all your answers look correct, try
+                        </p>
+                        <ul className="mt-1">
+                            <li>
+                                Refreshing the browser and trying to submit
+                                again.
+                            </li>
+                            <li>
+                                Submitting your application via Firefox or
+                                Chrome.
+                            </li>
+                        </ul>
+                    </Alert>
+                ) : (
+                    "Are you sure you want to submit this TA application?"
+                )}
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={hideDialogAndResetData}>
+                    Cancel
+                </Button>
+                <Button onClick={confirmClicked} disabled={!!submissionError}>
+                    {waiting ? (
+                        <span className="spinner-surround">
+                            <Spinner animation="border" size="sm" />
+                        </span>
+                    ) : null}
+                    Submit
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
 export function PostingView() {
     const params = useParams<{ url_token?: string } | null>();
     const url_token = params?.url_token;
@@ -145,48 +243,14 @@ export function PostingView() {
     return (
         <React.Fragment>
             <Survey.Survey model={survey} />
-            <Modal show={submitDialogVisible} onHide={hideDialogAndResetData}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Submit Application</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {!applicationOpen ? (
-                        <Alert variant="warning">
-                            The application window is currently not open. Any
-                            applications submitted outside of the application
-                            window may not be considered.
-                        </Alert>
-                    ) : null}
-                    {submissionError ? (
-                        <Alert variant="danger">
-                            <b>Error:</b> {submissionError} Please review your
-                            answers and make sure all questions are answered
-                            appropriately.
-                        </Alert>
-                    ) : (
-                        "Are you sure you want to submit this TA application?"
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={hideDialogAndResetData}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={confirmClicked}
-                        disabled={!!submissionError}
-                    >
-                        {waiting ? (
-                            <span className="spinner-surround">
-                                <Spinner animation="border" size="sm" />
-                            </span>
-                        ) : null}
-                        Submit
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ConfirmDialog
+                submitDialogVisible={submitDialogVisible}
+                hideDialogAndResetData={hideDialogAndResetData}
+                applicationOpen={applicationOpen}
+                submissionError={submissionError}
+                confirmClicked={confirmClicked}
+                waiting={waiting}
+            />
         </React.Fragment>
     );
 }
