@@ -119,14 +119,7 @@ class DdahService
     end
 
     def ddah_params
-        @params.slice(
-            :assignment_id,
-            :approved_date,
-            :accepted_date,
-            :revised_date,
-            :emailed_date,
-            :signature
-        ).permit!
+        @params.slice(:assignment_id).permit!
     end
 
     def duty_params
