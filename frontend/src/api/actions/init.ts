@@ -97,7 +97,7 @@ export function initFromStage(
     stage: InitStages,
     options = { startAfterStage: false }
 ): ThunkAction<Promise<void>, RootState, void, AnyAction> {
-    const startAfterStage = +!!options.startAfterStage;
+    const startAfterStage = options.startAfterStage ? 1 : 0;
 
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };

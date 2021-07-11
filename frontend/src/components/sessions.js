@@ -5,12 +5,8 @@ import {
     activeSessionSelector,
     upsertSession,
     deleteSession,
+    initFromStage,
     setActiveSession,
-    fetchApplicantsSuccess,
-    fetchAssignmentsSuccess,
-    fetchContractTemplatesSuccess,
-    fetchApplicationsSuccess,
-    fetchPositionsSuccess,
 } from "../api/actions";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
@@ -140,16 +136,10 @@ export function ConnectedSessionsList(props) {
                 show={!!sessionToDelete}
                 onHide={() => setSessionToDelete(null)}
                 onDelete={async () => {
-                    if (sessionToDelete === activeSession) {
-                        await Promise.all([
-                            dispatch(setActiveSession(null)),
-                            dispatch(fetchApplicantsSuccess([])),
-                            dispatch(fetchAssignmentsSuccess([])),
-                            dispatch(fetchContractTemplatesSuccess([])),
-                            dispatch(fetchApplicationsSuccess([])),
-                            dispatch(fetchPositionsSuccess([])),
-                        ]);
-                    }
+                    await dispatch(setActiveSession(null));
+                    // if (sessionToDelete === activeSession) {
+                    //     await dispatch(initFromStage("setActiveSession"));
+                    // }
                     await dispatch(deleteSession(sessionToDelete));
                     setSessionToDelete(null);
                 }}

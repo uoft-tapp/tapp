@@ -116,7 +116,7 @@ export const setActiveSession = validatedApiDispatcher({
         // passing in null will unset the active session
         if (payload == null) {
             dispatch(setActiveSessionAction(null));
-            return;
+            return; // TODO: is this return warranted assuming we want to really unset current session? we need to clear state somewhere
         }
         if ((currentActiveSession || { id: null }).id === payload.id) {
             return;
