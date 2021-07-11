@@ -11,7 +11,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let session;
     let position;
     let posting = {};
-    let resp;
     let adminUser;
     let surveyData;
 
@@ -35,7 +34,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await databaseSeeder.seed({ apiGET, apiPOST });
             session = databaseSeeder.seededData.session;
             position = databaseSeeder.seededData.position;
-            resp = await apiGET(`/debug/active_user`);
+            let resp = await apiGET(`/debug/active_user`);
             expect(resp).toHaveStatus("success");
             adminUser = resp.payload;
         });
@@ -47,7 +46,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
         it("Can submit survey.js data via the public postings route", async () => {
             // Create a new posting
-            resp = await apiPOST(
+            let resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
                 postingData
             );
@@ -125,7 +124,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             };
 
             // Switch to a ta only user
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
+            let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
             // Submit survey.js data
