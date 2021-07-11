@@ -11,7 +11,7 @@ import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { sessionsReducer } from "../reducers/sessions";
 import { activeRoleSelector } from "./users";
-import { initFromStage } from "./init";
+import { clearSessionDependentData, initFromStage } from "./init";
 import type { RawSession, Session } from "../defs/types";
 
 // actions
@@ -116,7 +116,9 @@ export const setActiveSession = validatedApiDispatcher({
         // passing in null will unset the active session
         if (payload == null) {
             dispatch(setActiveSessionAction(null));
-            return; // TODO: is this return warranted assuming we want to really unset current session? we need to clear state somewhere
+            // TODO: is this return warranted assuming we want to really unset current session? we need to clear state somewhere
+            dispatch(clearSessionDependentData());
+            return; 
         }
         if ((currentActiveSession || { id: null }).id === payload.id) {
             return;

@@ -5,7 +5,6 @@ import {
     activeSessionSelector,
     upsertSession,
     deleteSession,
-    initFromStage,
     setActiveSession,
 } from "../api/actions";
 import { Alert, Modal, Button } from "react-bootstrap";
@@ -136,10 +135,9 @@ export function ConnectedSessionsList(props) {
                 show={!!sessionToDelete}
                 onHide={() => setSessionToDelete(null)}
                 onDelete={async () => {
-                    await dispatch(setActiveSession(null));
-                    // if (sessionToDelete === activeSession) {
-                    //     await dispatch(initFromStage("setActiveSession"));
-                    // }
+                    if (sessionToDelete === activeSession) {
+                        await dispatch(setActiveSession(null));
+                    }
                     await dispatch(deleteSession(sessionToDelete));
                     setSessionToDelete(null);
                 }}
