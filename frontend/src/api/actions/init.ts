@@ -253,12 +253,17 @@ export function initFromStage(
     };
 }
 
-export function clearSessionDependentData(): ThunkAction<Promise<void>, RootState, void, AnyAction> {
+export function clearSessionDependentData(): ThunkAction<
+    Promise<void>,
+    RootState,
+    void,
+    AnyAction
+> {
     return async (dispatch, getState) => {
         dispatch(fetchApplicantsSuccess([]));
         dispatch(fetchAssignmentsSuccess([]));
         dispatch(fetchContractTemplatesSuccess([]));
         dispatch(fetchApplicationsSuccess([]));
         dispatch(fetchPositionsSuccess([]));
-    }
+    };
 }
