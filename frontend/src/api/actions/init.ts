@@ -229,7 +229,7 @@ export function initFromStage(
             // Before fetching session-related data, the existing data
             // should be cleared. It will be re-fetched via the appropriate routes,
             // but clearing now will prevent excess re-renders as data streams in.
-            dispatch(clearSessionDependentData());
+            await dispatch(clearSessionDependentData());
 
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
