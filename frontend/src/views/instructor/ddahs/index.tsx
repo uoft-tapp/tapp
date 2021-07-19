@@ -13,10 +13,7 @@ import { ConnectedAddDdahDialog } from "../../admin/ddahs/add-ddah-dialog";
 
 export function InstructorDDAHsView() {
     const activeSession = true;
-    const selectedDdahs: any = [];
-    const setImportInProgress = null;
     const addDialogVisible = false;
-    const importInProgress = false;
     const setAddDialogVisible = () => console.log("Sth");
     const position = {
         id: 1661,
