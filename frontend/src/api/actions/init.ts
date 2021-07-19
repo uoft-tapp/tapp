@@ -253,13 +253,20 @@ export function initFromStage(
     };
 }
 
+/**
+ * Clear all session-specific store data: applicants, assignments,
+ * contract templates, applications, and positions.
+ *
+ * @export
+ * @returns an async function that handles all the API calls.
+ */
 export function clearSessionDependentData(): ThunkAction<
     Promise<void>,
     RootState,
     void,
     AnyAction
 > {
-    return async (dispatch, getState) => {
+    return async (dispatch) => {
         dispatch(fetchApplicantsSuccess([]));
         dispatch(fetchAssignmentsSuccess([]));
         dispatch(fetchContractTemplatesSuccess([]));
