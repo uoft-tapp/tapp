@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Duty } from "../../../api/defs/types";
 import {
@@ -13,7 +13,6 @@ import { ConnectedAddDdahDialog } from "../../admin/ddahs/add-ddah-dialog";
 
 export function InstructorDDAHsView() {
     const activeSession = true;
-    const [activeEdit, setActiveEdit] = useState(true);
     const selectedDdahs: any = [];
     const setImportInProgress = null;
     const addDialogVisible = false;
@@ -76,80 +75,40 @@ export function InstructorDDAHsView() {
 
     function OptionDropdown(selectedOption = "") {
         // TODO: refactor this neatly
-        enum DUTY_VALUES {
-            MARKING = "marking",
-            CONTACT = "contact",
-            PREP = "prep",
-            MEETING = "meeting",
-            TRAINING = "training",
-            OTHER = "other",
-        }
-
         return (
-            <select name="duties" id="duty-select">
+            <select
+                name="duties"
+                id="duty-select"
+                defaultValue={selectedOption}
+            >
                 <option value="">None</option>
-                <option
-                    value="marking"
-                    selected={selectedOption == DUTY_VALUES.MARKING}
-                >
-                    Marking
-                </option>
-                <option
-                    value="contact"
-                    selected={selectedOption == DUTY_VALUES.CONTACT}
-                >
-                    Contact
-                </option>
-                <option
-                    value="prep"
-                    selected={selectedOption == DUTY_VALUES.PREP}
-                >
-                    Preparation
-                </option>
-                <option
-                    value="meeting"
-                    selected={selectedOption == DUTY_VALUES.MEETING}
-                >
-                    Meeting
-                </option>
-                <option
-                    value="training"
-                    selected={selectedOption == DUTY_VALUES.TRAINING}
-                >
-                    Training
-                </option>
-                <option
-                    value="other"
-                    selected={selectedOption == DUTY_VALUES.OTHER}
-                >
-                    Other
-                </option>
+                <option value="marking">Marking</option>
+                <option value="contact">Contact</option>
+                <option value="prep">Preparation</option>
+                <option value="meeting">Meeting</option>
+                <option value="training">Training</option>
+                <option value="other">Other</option>
             </select>
         );
     }
 
+    const activeEdit = true;
     return (
         <div className="page-body">
             <ActionsList>
                 <ActionHeader>Available Actions</ActionHeader>
                 <ActionButton
                     icon={<FaEdit />}
-                    onClick={() => {
-                        setActiveEdit(true);
-                        console.log("Edit DDAH Template");
-                    }}
+                    onClick={() => console.log("edit")}
                     disabled={!activeSession}
-                    className={'nav-link' + activeEdit ? 'active' : ''}
+                    className={"nav-link" + activeEdit ? "active" : ""}
                 >
                     Edit DDAH Template
                 </ActionButton>
                 <ActionButton
-                    onClick={() => {
-                        setActiveEdit(false);
-                        console.log(" Assign tasks");
-                    }}
+                    onClick={() => console.log("assign")}
                     disabled={!activeSession}
-                    className={'nav-link' + activeEdit ? '' : 'active'}
+                    className={"nav-link" + activeEdit ? "" : "active"}
                 >
                     Assign tasks
                 </ActionButton>
@@ -187,6 +146,21 @@ export function InstructorDDAHsView() {
                         {
                             Header: "Hours",
                             accessor: "hours",
+                            Footer: (info: { rows: any[] }) => {
+                                // Only calculate total hours if rows change
+                                console.log(info);
+                                const total = React.useMemo(
+                                    () =>
+                                        info.rows.reduce(
+                                            (sum, row) =>
+                                                row.values.hours + sum,
+                                            0
+                                        ),
+                                    [info.rows]
+                                );
+
+                                return <>Total: {total}</>;
+                            },
                         },
                     ]}
                     data={ddah.duties}
