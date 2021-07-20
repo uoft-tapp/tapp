@@ -74,6 +74,13 @@
                     "name": "program_start",
                     "title": "When did you start your current program? (If you switched from a Masters to PhD program, please indicate official start of your PhD program.)",
                     "isRequired": true,
+                    "requiredErrorText": "Incorrect date format. Please specify the date as YYYY-MM-DD.",
+                    "validators": [
+                        {
+                            "type": "regex",
+                            "regex": "\\d\\d\\d\\d-\\d\\d-\\d\\d"
+                        }
+                    ],
                     "inputType": "date"
                 },
                 {
@@ -93,6 +100,18 @@
                         {
                             "value": "engr",
                             "text": "Engineering"
+                        },
+                        {
+                            "value": "astro",
+                            "text": "Astronomy and Astrophysics"
+                        },
+                        {
+                            "value": "chem",
+                            "text": "Chemistry"
+                        },
+                        {
+                            "value": "biophys",
+                            "text": "Medical Biophysics"
                         },
                         {
                             "value": "phys",

@@ -30,6 +30,7 @@ export interface RowData {
     total_hours: number | null;
     status: string | null;
     recent_activity_date: string | null;
+    emailed_date: string | null;
     issues: string | null;
     issue_code: "hours_mismatch" | "missing" | null;
 }
@@ -430,6 +431,7 @@ export function ConnectedDdahsTable() {
                 total_hours: ddah.total_hours,
                 status: ddah.status || "unsent",
                 recent_activity_date: getRecentActivityDate(ddah),
+                emailed_date: formatDate(ddah.emailed_date || ""),
                 approved: ddah.approved_date ? "Approved" : "",
                 readable_status: getReadableStatus(ddah),
                 issues: ddahIssues(ddah),
@@ -465,6 +467,7 @@ export function ConnectedDdahsTable() {
             total_hours: null,
             status: null,
             recent_activity_date: null,
+            emailed_date: null,
             issues: "Missing DDAH",
             issue_code: "missing",
         });
@@ -506,6 +509,10 @@ export function ConnectedDdahsTable() {
         {
             Header: generateHeaderCell("Recent Activity"),
             accessor: "recent_activity_date",
+        },
+        {
+            Header: generateHeaderCell("Emailed"),
+            accessor: "emailed_date",
         },
         {
             Header: generateHeaderCell("Approved"),

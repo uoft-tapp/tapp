@@ -2,3 +2,21 @@
     color: red;
     font-weight: bold;
 }
+/* In a type="rating" question, the difference between bootstrap's 
+.btn-secondary and .btn-secondary.active is hard to see, so we force
+the active button to be bright. */
+.sv_qstn .btn-secondary.active {
+    background-color: var(--primary) !important;
+}
+
+.sv_main.sv_main .sv-boolean__switch {
+    background-color: var(--primary) !important;
+}
+
+.table.sv_q_matrix thead th, .table.sv_q_matrix thead td {
+    position: sticky;
+    top: 0;
+    border-top: 0;
+    z-index: 1;
+    background: white;
+}
