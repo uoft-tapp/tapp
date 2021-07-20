@@ -8,15 +8,15 @@ import {
 } from "./utils";
 import { databaseSeeder } from "./setup";
 
-export function applicationsTests({ apiGET, apiPOST }) {
-    let session, applicant, position;
-    let adminUser, newApplication;
-    let surveyData;
+const HIGH_PREFERENCE = 3;
+const LOW_PREFERENCE = 1;
 
-    const HIGH_PREFERENCE = 3;
-    const OK_PREFERENCE = 1;
+export function applicationsTests({ apiGET, apiPOST }) {
+    let session, applicant, position; // retrieved from seeder
+    let adminUser;
+    let surveyData;
     const userCreatedFromApplicant = {};
-    const posting = {
+    const postingData = {
         name: "CSC209F TA",
         intro_text: "Testing posting for CSC209F",
         open_date: "2021/04/01",
@@ -34,41 +34,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
         utorid: "greenb",
     };
 
-    const taOnlyUser = {
-        utorid: "matthewc",
-        roles: ["ta"],
-    };
-
-    const postingData = {
-        name: "2021 Summer Posting",
-        intro_text: "Intro text for posting",
-        open_date: new Date("2021/05/01").toISOString(),
-        close_date: new Date("2021/08/31").toISOString(),
-        availability: "auto",
-    };
-
     /**
-     * Switches the current active user to the seededData.applicant in the seeder.
+     * Switches the current active user to the user given
      * This function uses debug route to achieve user switching.
      *
+     * @param user user to switch to in the debug route
      * @returns {Promise<void>}
      */
-    async function switchToApplicantUser() {
-        let resp = await apiPOST(
-            `/debug/active_user`,
-            userCreatedFromApplicant
-        );
-        expect(resp).toHaveStatus("success");
-    }
-
-    /**
-     * Switches the current active user to a user with only the ta role.
-     * This function uses debug route to achieve user switching.
-     *
-     * @returns {Promise<void>}
-     */
-    async function switchToTaUser() {
-        let resp = await apiPOST(`/debug/active_user`, userWithTaPermissions);
+    async function switchToUser(user) {
+        let resp = await apiPOST(`/debug/active_user`, user);
         expect(resp).toHaveStatus("success");
     }
 
@@ -117,23 +91,23 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // Make sure the user has admin permissions before this post request
             // Make a new posting and update <posting> to include the id of the posting
             let resp = await apiPOST("/admin/postings", {
-                ...posting,
+                ...postingData,
                 session_id: session.id,
             });
             expect(resp).toHaveStatus("success");
             checkPropTypes(postingPropTypes, resp.payload);
             expect(resp.payload.id).not.toBeNull();
-            Object.assign(posting, resp.payload);
+            Object.assign(postingData, resp.payload);
 
             await restoreDefaultUser();
         });
 
         it("Survey.js posting data is pre-filled based on prior applicant", async () => {
-            await switchToApplicantUser();
+            await switchToUser(userCreatedFromApplicant);
 
             // Read survey.js posting data
             let resp = await apiGET(
-                `/public/postings/${posting.url_token}`,
+                `/public/postings/${postingData.url_token}`,
                 true
             );
             expect(resp).toHaveStatus("success");
@@ -163,22 +137,27 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 postingData
             );
             expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
+            Object.assign(postingData, resp.payload);
+            checkPropTypes(postingPropTypes, postingData);
+            expect(postingData.id).not.toBeNull();
 
             // Set position for posting
             resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
+                `/admin/postings/${postingData.id}/posting_positions`,
                 { position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
+            Object.assign(postingPosition, resp.payload);
+
+            const taOnlyUser = {
+                utorid: "matthewc",
+                roles: ["ta"],
+            };
 
             // Create and switch to a ta only user
             resp = await apiPOST("/debug/users", taOnlyUser);
             expect(resp).toHaveStatus("success");
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(taOnlyUser);
 
             // Create and submit survey.js data
             surveyData = {
@@ -206,7 +185,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Submit survey.js data
             resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyData,
                 true
             );
@@ -215,6 +194,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
+
+            await restoreDefaultUser();
 
             // Further verfication will happen in test cases concerning application data
         });
@@ -233,7 +214,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             };
 
             let resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+                `/public/postings/${postingData.url_token}/submit`,
                 application,
                 true
             );
@@ -251,10 +232,13 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 comments: resp.payload.comments,
             };
 
-            await switchToApplicantUser();
+            await switchToUser(userCreatedFromApplicant);
 
             // Read survey.js posting data
-            resp = await apiGET(`/public/postings/${posting.url_token}`, true);
+            resp = await apiGET(
+                `/public/postings/${postingData.url_token}`,
+                true
+            );
             expect(resp).toHaveStatus("success");
             checkPropTypes(surveyPropTypes, resp.payload);
             expect(resp.payload["prefilled_data"]).toEqual(
@@ -284,7 +268,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 expect(resp.payload.id).not.toBeNull();
                 Object.assign(posting, resp.payload);
 
-                await switchToApplicantUser();
+                await switchToUser(userCreatedFromApplicant);
 
                 // Submit an application without linking a position to the posting
                 const correctApplication = {
@@ -317,7 +301,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 expect(resp).toHaveStatus("success");
                 Object.assign(postingPosition, resp.payload);
 
-                await switchToApplicantUser();
+                await switchToUser(userCreatedFromApplicant);
 
                 // Submit an application with incorrect position_preferences type (supposed to be an object)
                 const applicationWithoutPositionPref = {
@@ -358,13 +342,19 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 MAT102: 3,
             };
 
+            // Assume this user has been created in the debug route
+            const taOnlyUser = {
+                utorid: "matthewc",
+                roles: ["ta"],
+            };
+
             // Switch to a ta only user
             let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
             // Submit survey.js data
             resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyData,
                 true
             );
@@ -380,25 +370,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 " exist and they are updated if they already exist",
             async () => {
                 await restoreDefaultUser();
-                // Link seeded position to the posting
-                // TODO: remove after merged with "Can submit survey.js data via the public postings route"
-                let resp = await apiPOST(
-                    `/admin/postings/${posting.id}/posting_positions`,
-                    { ...postingPosition, position_id: position.id }
-                );
-                expect(resp).toHaveStatus("success");
-                Object.assign(postingPosition, resp.payload);
 
                 // Ensure that the new user is not an applicant
-                resp = await apiGET("/admin/applicants");
+                let resp = await apiGET("/admin/applicants");
                 const applicant = resp.payload.find(
                     (applicant) =>
                         applicant.utorid === userWithTaPermissions.utorid
                 );
                 expect(applicant).not.toBeDefined();
 
-                // Assume the new user was successfully created
-                await switchToTaUser();
+                await switchToUser(userWithTaPermissions);
+
                 // Submit an application to the posting, assuming application submission is tested
                 const firstApplication = {
                     answers: {
@@ -414,7 +396,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     },
                 };
                 resp = await apiPOST(
-                    `/public/postings/${posting.url_token}/submit`,
+                    `/public/postings/${postingData.url_token}/submit`,
                     firstApplication,
                     true
                 );
@@ -435,14 +417,14 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 );
 
                 // Assumes that the applicant and posting are primary keys for an application
-                newApplication = resp.payload.find(
+                const newApplication = resp.payload.find(
                     (application) =>
                         application.applicant_id === newApplicant.id &&
-                        application.posting_id === posting.id
+                        application.posting_id === postingData.id
                 );
                 expect(newApplication).toBeDefined();
 
-                await switchToTaUser();
+                await switchToUser(userWithTaPermissions);
 
                 // From this point, "new" keyword refers to the information that we are manually updating and
                 // "updated" keyword refers to information we have received after resubmission of the application and
@@ -453,7 +435,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 const newPositionPreference = [
                     {
                         position_id: position.id,
-                        preference_level: OK_PREFERENCE,
+                        preference_level: LOW_PREFERENCE,
                     },
                 ];
 
@@ -467,7 +449,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     },
                 };
                 resp = await apiPOST(
-                    `/public/postings/${posting.url_token}/submit`,
+                    `/public/postings/${postingData.url_token}/submit`,
                     surveyjsSubmission,
                     true
                 );
@@ -504,7 +486,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 const updatedApplication = resp.payload.find(
                     (application) =>
                         application.applicant_id === updatedApplicant.id &&
-                        application.posting_id === posting.id
+                        application.posting_id === postingData.id
                 );
                 const {
                     position_preferences: updatedPositionPreferences,
