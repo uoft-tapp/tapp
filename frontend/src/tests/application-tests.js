@@ -112,7 +112,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
             checkPropTypes(surveyPropTypes, resp.payload);
-            const surveyPrefill = resp.payload["prefilled_data"];
+            const surveyPrefill = resp.payload.prefilled_data;
 
             for (const prefilledKey of [
                 "utorid",
@@ -219,17 +219,18 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
+            const submittedData = resp.payload;
 
             const applicationPrefillData = {
-                program: resp.payload.program,
-                department: resp.payload.department,
-                yip: resp.payload.yip,
-                previous_department_ta: resp.payload.previous_department_ta,
-                previous_university_ta: resp.payload.previous_university_ta,
+                program: submittedData.program,
+                department: submittedData.department,
+                yip: submittedData.yip,
+                previous_department_ta: submittedData.previous_department_ta,
+                previous_university_ta: submittedData.previous_university_ta,
                 previous_experience_summary:
-                    resp.payload.previous_experience_summary,
-                gpa: resp.payload.gpa,
-                comments: resp.payload.comments,
+                    submittedData.previous_experience_summary,
+                gpa: submittedData.gpa,
+                comments: submittedData.comments,
             };
 
             await switchToUser(userCreatedFromApplicant);
@@ -270,7 +271,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
                 await switchToUser(userCreatedFromApplicant);
 
-                // Submit an application without linking a position to the posting
+                // Submit an application to a posting that has no positions
                 const correctApplication = {
                     answers: {
                         ...applicant,
@@ -490,14 +491,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 );
                 const {
                     position_preferences: updatedPositionPreferences,
-                    // ...otherApplicationFields // see written issue below
+                    // ...otherApplicationFields // see issue #629
                 } = updatedApplication;
                 expect(newPositionPreference).toEqual(
                     updatedPositionPreferences
                 );
-                // ISSUE: <otherApplicationFields.custom_questions> does not include utorid whereas custom questions
-                // in the application that was automatically created (i.e. newApplication.custom_questions) includes
-                // utorid
+                // See issue #629
                 // expect(newApplication).toMatchObject(
                 //     expect.objectContaining(otherApplicationFields)
                 // );
