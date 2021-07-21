@@ -56,6 +56,22 @@ export function applicationsTests({ apiGET, apiPOST }) {
         expect(respSwitchBackUser).toHaveStatus("success");
     }
 
+    /**
+     * Add a new posting (requires active_user to have admin permissions)
+     * @param postingData posting to be added
+     * @param {{id: number}} session session to add to (must have an `id` attribute)
+     * @returns
+     */
+    async function addPosting(postingData, session) {
+        const posting = {
+            ...postingData,
+            session_id: session.id,
+        };
+        let resp = await apiPOST("/admin/postings", posting);
+        expect(resp).toHaveStatus("success");
+        return resp.payload;
+    }
+
     beforeAll(async () => {
         await databaseSeeder.seed({ apiGET, apiPOST });
         session = databaseSeeder.seededData.session;
@@ -90,14 +106,21 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it("Get survey.js posting data through public route", async () => {
             // Make sure the user has admin permissions before this post request
             // Make a new posting and update <posting> to include the id of the posting
-            let resp = await apiPOST("/admin/postings", {
-                ...postingData,
-                session_id: session.id,
-            });
+            const respPostingData = await addPosting(postingData, session);
+            checkPropTypes(postingPropTypes, respPostingData);
+            expect(respPostingData.id).not.toBeNull();
+            console.log(respPostingData);
+            Object.assign(postingData, respPostingData);
+
+            await switchToUser(userCreatedFromApplicant);
+
+            // Read survey.js posting data
+            let resp = await apiGET(
+                `/public/postings/${postingData.url_token}`,
+                true
+            );
             expect(resp).toHaveStatus("success");
-            checkPropTypes(postingPropTypes, resp.payload);
-            expect(resp.payload.id).not.toBeNull();
-            Object.assign(postingData, resp.payload);
+            checkPropTypes(surveyPropTypes, resp.payload);
 
             await restoreDefaultUser();
         });
@@ -260,42 +283,38 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     close_date: "2021/05/01",
                     availability: "open",
                 };
-                let resp = await apiPOST("/admin/postings", {
-                    ...posting,
-                    session_id: session.id,
-                });
-                expect(resp).toHaveStatus("success");
-                checkPropTypes(postingPropTypes, resp.payload);
-                expect(resp.payload.id).not.toBeNull();
-                Object.assign(posting, resp.payload);
-
-                await switchToUser(userCreatedFromApplicant);
+                const respPostingData = await addPosting(posting, session);
+                Object.assign(posting, respPostingData);
 
                 // Submit an application to a posting that has no positions
-                const correctApplication = {
-                    answers: {
-                        ...applicant,
-                        position_preferences: {
-                            [position.position_code]: HIGH_PREFERENCE,
-                        },
-                    },
-                };
-
-                resp = await apiPOST(
-                    `/public/postings/${posting.url_token}/submit`,
-                    correctApplication,
-                    true
-                );
-                expect(resp).toHaveStatus("success");
-
-                await restoreDefaultUser();
+                // See issue #630
+                // await switchToUser(userCreatedFromApplicant);
+                //
+                // const correctApplication = {
+                //     answers: {
+                //         ...applicant,
+                //         position_preferences: {
+                //             [position.position_code]: HIGH_PREFERENCE,
+                //         },
+                //     },
+                // };
+                //
+                // let resp = await apiPOST(
+                //     `/public/postings/${posting.url_token}/submit`,
+                //     correctApplication,
+                //     true
+                // );
+                // console.log(resp);
+                // expect(resp).toHaveStatus("error");
+                //
+                // await restoreDefaultUser();
 
                 // Link seeded position to the new posting
                 const postingPosition = {
                     num_positions: 10,
                     hours: 68,
                 };
-                resp = await apiPOST(
+                let resp = await apiPOST(
                     `/admin/postings/${posting.id}/posting_positions`,
                     { ...postingPosition, position_id: position.id }
                 );
