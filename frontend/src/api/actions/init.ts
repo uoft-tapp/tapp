@@ -97,7 +97,7 @@ export function initFromStage(
     stage: InitStages,
     options = { startAfterStage: false }
 ): ThunkAction<Promise<void>, RootState, void, AnyAction> {
-    const startAfterStage = +!!options.startAfterStage;
+    const startAfterStage = options.startAfterStage ? 1 : 0;
 
     return async (dispatch, getState) => {
         const parsedGlobals = { mockAPI: null, activeSession: null };
@@ -181,12 +181,8 @@ export function initFromStage(
         if (shouldRunStage("setActiveUserRole")) {
             // When the role is changed, data should be cleared immediately.
             // It will be re-fetched via the appropriate routes.
-            dispatch(fetchApplicantsSuccess([]));
-            dispatch(fetchAssignmentsSuccess([]));
-            dispatch(fetchContractTemplatesSuccess([]));
-            dispatch(fetchApplicationsSuccess([]));
+            dispatch(clearSessionDependentData());
             dispatch(fetchInstructorsSuccess([]));
-            dispatch(fetchPositionsSuccess([]));
 
             const activeRole = activeRoleSelector(getState());
             await dispatch(setActiveUserRole(activeRole, { skipInit: true }));
@@ -233,11 +229,7 @@ export function initFromStage(
             // Before fetching session-related data, the existing data
             // should be cleared. It will be re-fetched via the appropriate routes,
             // but clearing now will prevent excess re-renders as data streams in.
-            dispatch(fetchApplicantsSuccess([]));
-            dispatch(fetchAssignmentsSuccess([]));
-            dispatch(fetchContractTemplatesSuccess([]));
-            dispatch(fetchApplicationsSuccess([]));
-            dispatch(fetchPositionsSuccess([]));
+            await dispatch(clearSessionDependentData());
 
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
@@ -258,5 +250,27 @@ export function initFromStage(
 
         // Wait for async actions dispatched earlier to complete.
         await Promise.all(asyncActions);
+    };
+}
+
+/**
+ * Clear all session-specific store data: applicants, assignments,
+ * contract templates, applications, and positions.
+ *
+ * @export
+ * @returns an async function that handles all the API calls.
+ */
+export function clearSessionDependentData(): ThunkAction<
+    Promise<void>,
+    RootState,
+    void,
+    AnyAction
+> {
+    return async (dispatch) => {
+        dispatch(fetchApplicantsSuccess([]));
+        dispatch(fetchAssignmentsSuccess([]));
+        dispatch(fetchContractTemplatesSuccess([]));
+        dispatch(fetchApplicationsSuccess([]));
+        dispatch(fetchPositionsSuccess([]));
     };
 }
