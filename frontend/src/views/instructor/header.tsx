@@ -1,54 +1,38 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { positionsSelector } from "../../api/actions/positions";
 import { Header } from "../../components/header";
 import {
     ConnectedActiveSessionDisplay,
     ConnectedActiveUserDisplay,
 } from "../common/header-components";
 
-export const routes = [
-    {
-        route: "/tapp",
-        name: "Course Admin",
-        description: "Administrate TAs in your courses",
-        subroutes: [
-            {
-                route: "/positions",
-                name: "Courses & Positions",
-                description: "View your courses and positions",
-            },
-            {
-                route: "/assignments",
-                name: "TA Information",
-                description: "View information about your TAs",
-            },
-            {
-                route: "/ddahs",
-                name: "DDAHs",
-                description: "Manage your TAs' DDAH forms",
-            },
-        ],
-    },
-    {
-        route: "/applications",
-        name: "Applications",
-        description: "View information about TAs applying to your course",
-        subroutes: [
-            {
-                route: "/statistics",
-                name: "Statistics",
-                description: "See statistics about accepted/rejected contracts",
-            },
-        ],
-    },
-];
-
 /**
- * Header showing the routes that a user with `role=admin`
+ * Header showing the routes that a user with `role=instructor`
  * can see.
  *
  * @returns
  */
 export function InstructorHeader() {
+    const positions = useSelector(positionsSelector);
+    const routes = positions.map((position) => ({
+        route: `/${position.id}`,
+        name: `${position.position_code} ${position.position_title}` || `Position #${position.id}`,
+        description: `View information about position ${position.position_code} ${position.position_title}`,
+        subroutes: [
+            {
+                route: `/assignments`,
+                name: `TA Information`,
+                description: `View information about your TAs`,
+            },
+            {
+                route: `/ddahs`,
+                name: `DDAHs`,
+                description: `Manage your TAs' DDAH forms`,
+            },
+        ],
+    }));
+    console.log("routes", routes)
     return (
         <Header
             routes={routes}

@@ -52,7 +52,7 @@ export function Header(props) {
     let match = useRouteMatch("/:mainRoute/:subRoute?") || {
         params: { mainRoute: "tapp" },
     };
-    const { mainRoute } = match.params;
+    const { mainRoute, subRoute } = match.params;
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
@@ -88,7 +88,7 @@ export function Header(props) {
                 );
             })
         );
-
+            console.log(mainRoute, subRoute)
     return (
         <div className="header-container">
             <div className="header-nav">

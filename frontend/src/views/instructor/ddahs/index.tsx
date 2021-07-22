@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import React from "react";
+import { FaEdit, FaUsers } from "react-icons/fa";
 import { Duty } from "../../../api/defs/types";
 import {
     ActionButton,
@@ -8,13 +8,12 @@ import {
 } from "../../../components/action-buttons";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { ContentArea } from "../../../components/layout";
-import { MissingActiveSessionWarning } from "../../../components/sessions";
-import { ConnectedAddDdahDialog } from "../../admin/ddahs/add-ddah-dialog";
+// import { ConnectedAddDdahDialog } from "../../admin/ddahs/add-ddah-dialog";
 
 export function InstructorDDAHsView() {
-    const activeSession = true;
-    const addDialogVisible = false;
-    const setAddDialogVisible = () => console.log("Sth");
+    // const addDialogVisible = false;
+    // const setAddDialogVisible = () => console.log("Sth");
+    // const [s, setA] = React.useState(true);
     const position = {
         id: 1661,
         position_code: "MAT136H1F",
@@ -71,7 +70,8 @@ export function InstructorDDAHsView() {
     };
 
     function OptionDropdown(selectedOption = "") {
-        // TODO: refactor this neatly
+        // TODO: either turn this into anonymous function or refactor into a select component
+        // TODO: add a handler to value of select
         return (
             <select
                 name="duties"
@@ -97,29 +97,19 @@ export function InstructorDDAHsView() {
                 <ActionButton
                     icon={<FaEdit />}
                     onClick={() => console.log("edit")}
-                    disabled={!activeSession}
                     className={"nav-link" + activeEdit ? "active" : ""}
                 >
                     Edit DDAH Template
                 </ActionButton>
                 <ActionButton
+                    icon={<FaUsers />}
                     onClick={() => console.log("assign")}
-                    disabled={!activeSession}
                     className={"nav-link" + activeEdit ? "" : "active"}
                 >
                     Assign tasks
                 </ActionButton>
             </ActionsList>
             <ContentArea>
-                {activeSession ? null : (
-                    <MissingActiveSessionWarning extraText="To view or modify DDAHs, you must select a session." />
-                )}
-                <ConnectedAddDdahDialog
-                    show={addDialogVisible}
-                    onHide={() => {
-                        setAddDialogVisible();
-                    }}
-                />
                 <h2>{position.position_code} DDAH Template</h2>
                 <AdvancedFilterTable
                     columns={[
@@ -129,6 +119,7 @@ export function InstructorDDAHsView() {
                                 row.description.substring(
                                     row.description.indexOf(":") + 1
                                 ),
+                            Footer: 'Add task'
                         },
                         {
                             Header: "Category",

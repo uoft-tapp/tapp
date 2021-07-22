@@ -13,10 +13,10 @@ export function InstructorRoutes() {
             <Route exact path="/tapp">
                 <InstructorLanding />
             </Route>
-            <Route exact path="/tapp/positions">
-                <InstructorPositionsView />
+            <Route path="/tapp/:positionId">
+                <Redirect to="/tapp/:positionId/assignments" />
             </Route>
-            <Route exact path="/tapp/assignments">
+            <Route path="/tapp/:positionId/assignments">
                 <InstructorAssignmentsView />
             </Route>
             <Route exact path="/tapp/ddahs">
