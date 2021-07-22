@@ -109,7 +109,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
             const respPostingData = await addPosting(postingData, session);
             checkPropTypes(postingPropTypes, respPostingData);
             expect(respPostingData.id).not.toBeNull();
-            console.log(respPostingData);
             Object.assign(postingData, respPostingData);
 
             await switchToUser(userCreatedFromApplicant);
@@ -304,7 +303,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 //     correctApplication,
                 //     true
                 // );
-                // console.log(resp);
                 // expect(resp).toHaveStatus("error");
                 //
                 // await restoreDefaultUser();
