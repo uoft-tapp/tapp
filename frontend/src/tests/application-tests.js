@@ -285,7 +285,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 const respPostingData = await addPosting(posting, session);
                 Object.assign(posting, respPostingData);
 
-                // Submit an application to a posting that has no positions
+                // Submit a position preference for a position_code that isn't
+                // associated with the current application
                 // See issue #630
                 // await switchToUser(userCreatedFromApplicant);
                 //
