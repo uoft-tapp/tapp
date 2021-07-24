@@ -9,19 +9,13 @@ export function InstructorRoutes() {
             <Route exact path="/">
                 <InstructorLanding />
             </Route>
-            <Route
-                path="/:positionId"
-                render={({match}) => {
-                    const positionId = match.params.positionId;
-                    return <Redirect to={`/${positionId}/assignments`} />;
-                }}
-            />
             <Route path="/:positionId/assignments">
                 <InstructorAssignmentsView />
             </Route>
-            <Route exact path="/tapp/ddahs">
+            <Route path="/:positionId/ddahs">
                 Not Implemented
             </Route>
+            <Redirect from='/:positionId' to='/:positionId/assignments' />;
         </Switch>
     );
 }
