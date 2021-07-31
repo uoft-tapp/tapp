@@ -19,6 +19,7 @@ import { FaSearch } from "react-icons/fa";
 import { Button, Modal } from "react-bootstrap";
 import { ApplicationDetails } from "./application-details";
 import { EditableCell } from "../../../components/editable-cell";
+import { formatDate, formatDateTime } from "../../../libs/utils";
 
 export function ConnectedApplicationsList() {
     const applicants = useSelector(applicationsSelector) as Application[];
@@ -151,6 +152,15 @@ export function ConnectedApplicationsList() {
             Header: generateHeaderCell("Phone"),
             accessor: "applicant.phone",
             Cell: generateApplicantCell("phone"),
+        },
+        {
+            Header: generateHeaderCell("Submitted"),
+            accessor: "submission_date",
+            Cell: (row: any) => {
+                const date = formatDate(row.value) || "";
+                const fullDate = formatDateTime(row.value) || "";
+                return <div title={fullDate}>{date}</div>;
+            },
         },
     ];
 

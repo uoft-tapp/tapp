@@ -272,6 +272,7 @@ export const prepareMinimal = {
                     preference_level: position_preference.preference_level,
                 })
             ),
+            submission_date: application.submission_date,
         });
     },
     ddah: function (ddah: Ddah): MinimalDdah {
