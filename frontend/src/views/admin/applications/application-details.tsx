@@ -4,6 +4,7 @@ import { FaDownload } from "react-icons/fa";
 import { Application } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
+import { formatDateTime } from "../../../libs/utils";
 
 interface SurveyJsPage {
     name: string;
@@ -185,6 +186,10 @@ export function ApplicationDetails({
                     <tr>
                         <th>Additional Comments</th>
                         <td>{application.comments}</td>
+                    </tr>
+                    <tr>
+                        <th>Submission Date</th>
+                        <td>{formatDateTime(application.submission_date)}</td>
                     </tr>
                     {application.posting?.custom_questions && (
                         <tr className="custom-questions-row">
