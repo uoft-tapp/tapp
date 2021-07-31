@@ -55,6 +55,7 @@ export interface RawApplication extends HasId {
         url_token: string;
     }[];
     position_preferences: { position_id: number; preference_level: number }[];
+    submission_date: string;
 }
 
 export interface RawAssignment extends HasId {

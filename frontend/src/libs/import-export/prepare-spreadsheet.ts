@@ -172,6 +172,7 @@ export const prepareSpreadsheet = {
                     "Comments",
                     "Documents",
                     "Custom Question Answers",
+                    "Submission Date",
                 ],
             ] as CellType[][]).concat(
                 minApps.map((application) => [
@@ -206,6 +207,7 @@ export const prepareSpreadsheet = {
                     application.custom_question_answers
                         ? JSON.stringify(application.custom_question_answers)
                         : null,
+                    application.submission_date,
                 ])
             )
         );
