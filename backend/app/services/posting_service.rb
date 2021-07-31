@@ -193,6 +193,7 @@ class PostingService
         # in `position_preferences`. However, take special care to limit
         # to only positions that are actually associated with this posting
         # through a PostingPosition
+        valid_position_codes = []
         position_preferences_attributes =
             if position_preferences_hash
                 PostingPosition.joins(:position).where(
@@ -200,6 +201,9 @@ class PostingService
                     posting: @posting
                 ).pluck('position.id', 'position.position_code')
                     .map do |(position_id, position_code)|
+                    # We need to keep track of the valid position codes so that we can error if a
+                    # user has submitted an invalid code
+                    valid_position_codes.push position_code
                     {
                         position_id: position_id,
                         preference_level:
@@ -212,6 +216,19 @@ class PostingService
             else
                 []
             end
+
+        # `valid_position_codes` now contains
+        # a list of all position pereferences that were submitted and are valid for
+        # this posting. We want to error if we received any position preferences
+        # that weren't valid for this posting.
+        invalid_position_preferences =
+            position_preferences_hash.keys - valid_position_codes
+        unless invalid_position_preferences.empty?
+            raise StandardError,
+                  "Cannot set preferences for the following positions: '#{
+                      invalid_position_preferences
+                  }'"
+        end
 
         # Extract all the file upload questions
         @file_upload_answers = rest
