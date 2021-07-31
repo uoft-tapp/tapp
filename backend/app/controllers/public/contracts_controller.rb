@@ -135,6 +135,9 @@ class Public::ContractsController < ActionController::Base
             hours: offer.hours,
             installments: offer.installments,
             signature: offer.signature,
+            date:
+                offer.emailed_date&.in_time_zone('Eastern Time (US & Canada)')
+                    &.to_date,
             accepted_date: offer.accepted_date,
             withdrawn_date: offer.withdrawn_date,
             rejected_date: offer.rejected_date,
