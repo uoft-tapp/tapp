@@ -522,7 +522,7 @@ export function instructorsPermissionTests(api) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Only one DDAH is intially seeded for this instructor
+            // Only one DDAH is initially seeded for this instructor
             expect(resp.payload).toHaveLength(1);
 
             // We get duties returned sorted in ascending order, so
@@ -562,16 +562,9 @@ export function instructorsPermissionTests(api) {
         });
 
         it("update a Ddah for an assignment associated with self", async () => {
-            // Fetch the first assignment associated with our instructor
-            let resp = await apiGET(
-                `/instructor/sessions/${session.id}/assignments`
-            );
-            expect(resp).toHaveStatus("success");
-            const assignment_id = resp.payload[0].id;
-
             // Update the DDAH and check it was updated correctly
             const updatedDdah = {
-                assignment_id,
+                assignment_id: assignment.id,
                 duties: [
                     {
                         order: 1,
@@ -585,7 +578,7 @@ export function instructorsPermissionTests(api) {
                     },
                 ],
             };
-            resp = await apiPOST(`/instructor/ddahs`, updatedDdah);
+            let resp = await apiPOST(`/instructor/ddahs`, updatedDdah);
             expect(resp).toHaveStatus("success");
             expect(resp.payload).toEqual(expect.objectContaining(updatedDdah));
         });

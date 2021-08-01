@@ -1,6 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { sessionsSelector, upsertSession, deleteSession } from "../api/actions";
+import {
+    sessionsSelector,
+    activeSessionSelector,
+    upsertSession,
+    deleteSession,
+    setActiveSession,
+} from "../api/actions";
 import { Alert, Modal, Button } from "react-bootstrap";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
@@ -43,6 +49,7 @@ export function ConnectedSessionsList(props) {
     const { inDeleteMode = false } = props;
     const [sessionToDelete, setSessionToDelete] = React.useState(null);
     const sessions = useSelector(sessionsSelector);
+    const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
     function _upsertSession(session) {
@@ -128,6 +135,9 @@ export function ConnectedSessionsList(props) {
                 show={!!sessionToDelete}
                 onHide={() => setSessionToDelete(null)}
                 onDelete={async () => {
+                    if (sessionToDelete === activeSession) {
+                        await dispatch(setActiveSession(null));
+                    }
                     await dispatch(deleteSession(sessionToDelete));
                     setSessionToDelete(null);
                 }}

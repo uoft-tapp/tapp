@@ -15,7 +15,8 @@ class ApplicationSerializer < ActiveModel::Serializer
                :custom_question_answers,
                :annotation,
                :documents,
-               :position_preferences
+               :position_preferences,
+               :submission_date
 
     def documents
         object.documents.blobs.map do |blob|
@@ -35,5 +36,9 @@ class ApplicationSerializer < ActiveModel::Serializer
                 preference_level: position_preference.preference_level
             }
         end
+    end
+
+    def submission_date
+        object.created_at.in_time_zone('Eastern Time (US & Canada)')
     end
 end
