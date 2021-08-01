@@ -24,6 +24,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
         availability: "open",
     };
 
+    // PF => Position Preference
+    const postingDataForPFTests = {
+        name: "CSC343F TA",
+        intro_text: "Testing posting for CSC343F",
+        open_date: "2021/04/01",
+        close_date: "2021/05/01",
+        availability: "open",
+    };
+
     const postingPosition = {
         num_positions: 10,
         hours: 68,
@@ -98,6 +107,13 @@ export function applicationsTests({ apiGET, apiPOST }) {
         resp = await apiPOST("/debug/users", userWithTaPermissions);
         expect(resp).toHaveStatus("success");
         Object.assign(userWithTaPermissions, resp.payload);
+
+        // Create a new posting for PF tests
+        const respPostingData = await addPosting(
+            postingDataForPFTests,
+            session
+        );
+        Object.assign(postingDataForPFTests, respPostingData);
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
@@ -270,118 +286,100 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await restoreDefaultUser();
         });
 
-        it(
-            "Submitting an application for a posting that does not have any positions or position preferences" +
-                " responds in error",
+        it.skip(
+            "When submitting survey.js data cannot add a position_preference for a position not listed in the" +
+                " posting",
             async () => {
-                // Create a new posting
-                const posting = {
-                    name: "CSC343F TA",
-                    intro_text: "Testing posting for CSC343F",
-                    open_date: "2021/04/01",
-                    close_date: "2021/05/01",
-                    availability: "open",
-                };
-                const respPostingData = await addPosting(posting, session);
-                Object.assign(posting, respPostingData);
-
                 // Submit a position preference for a position_code that isn't
                 // associated with the current application
-                // See issue #630
-                // await switchToUser(userCreatedFromApplicant);
-                //
-                // const correctApplication = {
-                //     answers: {
-                //         ...applicant,
-                //         position_preferences: {
-                //             [position.position_code]: HIGH_PREFERENCE,
-                //         },
-                //     },
-                // };
-                //
-                // let resp = await apiPOST(
-                //     `/public/postings/${posting.url_token}/submit`,
-                //     correctApplication,
-                //     true
-                // );
-                // expect(resp).toHaveStatus("error");
-                //
-                // await restoreDefaultUser();
-
-                // Link seeded position to the new posting
-                const postingPosition = {
-                    num_positions: 10,
-                    hours: 68,
-                };
-                let resp = await apiPOST(
-                    `/admin/postings/${posting.id}/posting_positions`,
-                    { ...postingPosition, position_id: position.id }
-                );
-                expect(resp).toHaveStatus("success");
-                Object.assign(postingPosition, resp.payload);
-
+                // See issue #621
                 await switchToUser(userCreatedFromApplicant);
 
-                // Submit an application with incorrect position_preferences type (supposed to be an object)
-                const applicationWithoutPositionPref = {
+                // PF ==> Position Preference
+                const applicationExistentPF = {
                     answers: {
                         ...applicant,
-                        position_preferences: 5,
+                        position_preferences: {
+                            // position that already exists but isn't associated
+                            // with the current application
+                            [position.position_code]: HIGH_PREFERENCE,
+                        },
                     },
                 };
-                resp = await apiPOST(
-                    `/public/postings/${posting.url_token}/submit`,
-                    applicationWithoutPositionPref,
+
+                let resp = await apiPOST(
+                    `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                    applicationExistentPF,
                     true
                 );
                 expect(resp).toHaveStatus("error");
 
-                // Submit an application in an incorrect matter: all the data is in the original object and not in
-                // the <answers> prop
-                const noAnswersApplication = {
-                    ...applicant,
-                    position_preferences: {
-                        [position.position_code]: HIGH_PREFERENCE,
+                const applicationNonExistentPF = {
+                    answers: {
+                        ...applicant,
+                        position_preferences: {
+                            // position that already exists but isn't associated
+                            // with the current application
+                            DNE101: HIGH_PREFERENCE,
+                        },
                     },
                 };
+
                 resp = await apiPOST(
-                    `/public/postings/${posting.url_token}/submit`,
-                    noAnswersApplication,
+                    `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                    applicationNonExistentPF,
                     true
                 );
                 expect(resp).toHaveStatus("error");
+
                 await restoreDefaultUser();
             }
         );
 
-        it.skip("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
-            // Add illegal position's preference
-            surveyData.answers.position_preferences = {
-                ...surveyData.answers.position_preferences,
-                MAT102: 3,
+        it("When submitting survey.js data in an incorrect matter, submission fails with error", async () => {
+            // Link seeded position to the new posting
+            const postingPosition = {
+                num_positions: 10,
+                hours: 68,
             };
-
-            // Assume this user has been created in the debug route
-            const taOnlyUser = {
-                utorid: "matthewc",
-                roles: ["ta"],
-            };
-
-            // Switch to a ta only user
-            let resp = await apiPOST("/debug/active_user", taOnlyUser);
+            let resp = await apiPOST(
+                `/admin/postings/${postingDataForPFTests.id}/posting_positions`,
+                { ...postingPosition, position_id: position.id }
+            );
             expect(resp).toHaveStatus("success");
+            Object.assign(postingPosition, resp.payload);
 
-            // Submit survey.js data
+            await switchToUser(userCreatedFromApplicant);
+
+            // Submit an application with incorrect position_preferences type (supposed to be an object)
+            const applicationWithoutPositionPref = {
+                answers: {
+                    ...applicant,
+                    position_preferences: 5,
+                },
+            };
             resp = await apiPOST(
-                `/public/postings/${postingData.url_token}/submit`,
-                surveyData,
+                `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                applicationWithoutPositionPref,
                 true
             );
             expect(resp).toHaveStatus("error");
 
-            // Switch back to default admin
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            // Submit an application in an incorrect matter: all the data is in the original object and not in
+            // the <answers> prop
+            const noAnswersApplication = {
+                ...applicant,
+                position_preferences: {
+                    [position.position_code]: HIGH_PREFERENCE,
+                },
+            };
+            resp = await apiPOST(
+                `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                noAnswersApplication,
+                true
+            );
+            expect(resp).toHaveStatus("error");
+            await restoreDefaultUser();
         });
 
         it(
