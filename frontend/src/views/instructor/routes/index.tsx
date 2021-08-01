@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { InstructorPositionsView } from "../positions";
 import { InstructorAssignmentsView } from "../assignments";
 import { Landing as InstructorLanding } from "../landing";
-import { InstructorDdahsView } from "../ddahs";
+//import { InstructorDdahsView } from "../ddahs";
 
 export function InstructorRoutes() {
     return (
@@ -21,7 +21,10 @@ export function InstructorRoutes() {
                 <InstructorAssignmentsView />
             </Route>
             <Route exact path="/tapp/ddahs">
-                <InstructorDdahsView />
+                {
+                    //<InstructorDdahsView />
+                }
+                Not Implemented
             </Route>
         </Switch>
     );
