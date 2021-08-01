@@ -1,10 +1,10 @@
 import { Button, Modal } from "react-bootstrap";
 import React from "react";
-import { ddahIssues, getReadableStatus } from "../ddah-table";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Ddah } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
 import { generateHeaderCell } from "../../../components/table-utils";
+import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
 
 const ddahModalColumn = [
     {
