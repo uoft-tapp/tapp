@@ -17,7 +17,9 @@ export function InstructorHeader() {
     const positions = useSelector(positionsSelector);
     const routes = positions.map((position) => ({
         route: `/${position.id}`,
-        name: `${position.position_code} ${position.position_title}` || `Position #${position.id}`,
+        name:
+            `${position.position_code} ${position.position_title}` ||
+            `Position #${position.id}`,
         description: `View information about position ${position.position_code} ${position.position_title}`,
         subroutes: [
             {
@@ -32,7 +34,7 @@ export function InstructorHeader() {
             },
         ],
     }));
-    console.log("routes", routes)
+    console.log("routes", routes);
     return (
         <Header
             routes={routes}

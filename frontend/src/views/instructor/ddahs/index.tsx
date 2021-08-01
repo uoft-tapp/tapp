@@ -8,12 +8,8 @@ import {
 } from "../../../components/action-buttons";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { ContentArea } from "../../../components/layout";
-// import { ConnectedAddDdahDialog } from "../../admin/ddahs/add-ddah-dialog";
 
 export function InstructorDDAHsView() {
-    // const addDialogVisible = false;
-    // const setAddDialogVisible = () => console.log("Sth");
-    // const [s, setA] = React.useState(true);
     const position = {
         id: 1661,
         position_code: "MAT136H1F",
@@ -119,7 +115,7 @@ export function InstructorDDAHsView() {
                                 row.description.substring(
                                     row.description.indexOf(":") + 1
                                 ),
-                            Footer: 'Add task'
+                            Footer: "Add task",
                         },
                         {
                             Header: "Category",
