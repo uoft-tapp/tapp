@@ -34,7 +34,7 @@ export function InstructorHeader() {
             },
         ],
     }));
-    console.log("routes", routes);
+
     return (
         <Header
             routes={routes}
