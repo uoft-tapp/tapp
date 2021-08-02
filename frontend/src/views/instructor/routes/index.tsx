@@ -5,6 +5,7 @@ import { Landing as InstructorLanding } from "../landing";
 import { InstructorDdahsView } from "../ddahs";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { setActivePositionId } from "../store/actions";
+import { InstructorSessionsView } from "../sessions";
 
 /**
  * React component that will update the active position id in the
@@ -36,11 +37,14 @@ export function InstructorRoutes() {
                 <UpdateActivePosition />
                 <InstructorDdahsView />
             </Route>
+            <Route exact path="/sessions/details">
+                <InstructorSessionsView />
+            </Route>
             <Redirect
                 from="/positions/:position_id"
                 to="/positions/:position_id/assignments"
             />
-            ;
+            <Redirect from="/sessions" to="/sessions/details" />
         </Switch>
     );
 }
