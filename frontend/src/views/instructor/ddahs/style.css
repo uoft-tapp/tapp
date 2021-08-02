@@ -1,0 +1,41 @@
+.instructor-ddah-preview-container .position-summary th {
+    padding-right: 0.5em;
+    padding-left: 1em;
+    text-align: right;
+}
+.instructor-ddah-preview-container h6 {
+    background-color: rgb(227, 246, 248);
+    padding: 2px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+.instructor-ddah-preview-container h4 {
+    font-style: italic;
+}
+.instructor-ddah-preview-container ul {
+    margin: 0px;
+}
+.instructor-ddah-preview-container li {
+    list-style: none;
+}
+.instructor-ddah-preview-container .no-duties {
+    color: rgb(170, 170, 170);
+    font-style: italic;
+    margin-left: 5em;
+}
+.instructor-ddah-preview-container .duty-hours {
+    display: inline-block;
+    width: 5em;
+    color: var(--red);
+}
+.instructor-ddah-preview-container .duty-hours:after {
+    content: " hours";
+    font-style: italic;
+    color: initial;
+}
+
+.instructor-ddah-preview-container .add-duty {
+    margin-left: 1em;
+    align-self: center;
+    font-style: italic;
+}
