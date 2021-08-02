@@ -1,31 +1,21 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { InstructorPositionsView } from "../positions";
 import { InstructorAssignmentsView } from "../assignments";
 import { Landing as InstructorLanding } from "../landing";
-//import { InstructorDdahsView } from "../ddahs";
 
 export function InstructorRoutes() {
     return (
         <Switch>
             <Route exact path="/">
-                <Redirect to="/tapp" />
-            </Route>
-            <Route exact path="/tapp">
                 <InstructorLanding />
             </Route>
-            <Route exact path="/tapp/positions">
-                <InstructorPositionsView />
-            </Route>
-            <Route exact path="/tapp/assignments">
+            <Route path="/:positionId/assignments">
                 <InstructorAssignmentsView />
             </Route>
-            <Route exact path="/tapp/ddahs">
-                {
-                    //<InstructorDdahsView />
-                }
-                Not Implemented
+            <Route path="/:positionId/ddahs">
+                <div>Not implemented yet</div>
             </Route>
+            <Redirect from="/:positionId" to="/:positionId/assignments" />;
         </Switch>
     );
 }
