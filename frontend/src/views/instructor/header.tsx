@@ -16,10 +16,8 @@ import {
 export function InstructorHeader() {
     const positions = useSelector(positionsSelector);
     const routes = positions.map((position) => ({
-        route: `/${position.id}`,
-        name:
-            `${position.position_code} ${position.position_title}` ||
-            `Position #${position.id}`,
+        route: `/positions/${position.id}`,
+        name: `${position.position_code}`,
         description: `View information about position ${position.position_code} ${position.position_title}`,
         subroutes: [
             {
