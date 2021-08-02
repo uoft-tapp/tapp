@@ -36,7 +36,7 @@ export function ContractView() {
     React.useEffect(() => {
         async function fetchOffer() {
             try {
-                const details = await apiGET(
+                const details: RawOffer | null = await apiGET(
                     `/public/contracts/${url_token}/details`,
                     true
                 );

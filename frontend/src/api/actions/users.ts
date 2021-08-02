@@ -60,7 +60,7 @@ export const fetchUsers = validatedApiDispatcher({
     onErrorDispatch: (e) => upsertError(e.toString()),
     dispatcher: () => async (dispatch, getState) => {
         const role = activeRoleSelector(getState());
-        const data = await apiGET(`/${role}/users`);
+        const data = (await apiGET(`/${role}/users`)) as User[];
         dispatch(fetchUsersSuccess(data));
         return data;
     },
