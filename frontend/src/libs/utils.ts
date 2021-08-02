@@ -1,5 +1,6 @@
 import React from "react";
 import { shallowEqual } from "react-redux";
+import { Session } from "../api/defs/types";
 
 /**
  * Compare the two input strings.
@@ -154,4 +155,35 @@ export function useDebounce(value: any, delay: number) {
     );
 
     return debouncedValue;
+}
+
+/**
+ * Given a list of sessions, use a heuristic to pick the "current"
+ * session. If the session dates of all sessions are too far from the current
+ * date, `null` is returned.
+ */
+export function guessActiveSession(sessions: Session[]): Session | null {
+    // If there is a session whose start date is less than a month away,
+    // pick that session. This takes precedence over a session that we're "in"
+    // because if we're near the end of a session, we're probably interested in the
+    // upcoming TAs rather than the current TAs.
+    const oneMonth: number = +new Date("2020-02-01") - +new Date("2020-01-01");
+    const now = +new Date();
+    for (const session of sessions) {
+        const sessionStart = +new Date(session.start_date);
+        const diff = sessionStart - now;
+        if (diff < oneMonth && diff >= 0) {
+            return session;
+        }
+    }
+    // Next, we check if we're in a current session or have passed it by at most a month
+    for (const session of sessions) {
+        const sessionStart = +new Date(session.start_date);
+        const sessionEnd = +new Date(session.end_date);
+        if (now <= sessionEnd + oneMonth && now >= sessionStart) {
+            return session;
+        }
+    }
+
+    return null;
 }
