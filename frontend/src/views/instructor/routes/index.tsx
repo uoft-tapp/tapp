@@ -13,7 +13,7 @@ export function InstructorRoutes() {
                 <InstructorAssignmentsView />
             </Route>
             <Route path="/:positionId/ddahs">
-                <div>Not implemented</div>
+                <div>Not implemented yet</div>
             </Route>
             <Redirect from="/:positionId" to="/:positionId/assignments" />;
         </Switch>
