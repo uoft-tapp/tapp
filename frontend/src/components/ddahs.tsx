@@ -8,7 +8,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { stringToNativeType } from "../libs/urls";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
-import { splitDutyDescription } from "../libs/utils";
+import { splitDutyDescription } from "../libs/ddah-utils";
 
 const DEFAULT_COLUMNS = [
     {

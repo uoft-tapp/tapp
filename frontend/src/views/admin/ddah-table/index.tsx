@@ -12,11 +12,7 @@ import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import {
-    formatDate,
-    formatDownloadUrl,
-    splitDutyDescription,
-} from "../../../libs/utils";
+import { formatDate, formatDownloadUrl } from "../../../libs/utils";
 import { DdahEditor } from "../../../components/ddahs";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
@@ -25,6 +21,7 @@ import {
     ddahIssues,
     getReadableStatus,
     getRecentActivityDate,
+    splitDutyDescription,
 } from "./../../../libs/ddah-utils";
 
 export interface RowData {
