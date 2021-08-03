@@ -32,10 +32,12 @@ export interface RowData {
  */
 export function ConnectedTAsTable({
     position_id,
-    onView,
+    onViewDDAH,
+    onCreateDDAH,
 }: {
     position_id: number;
-    onView?: (ddah_id: number) => any;
+    onViewDDAH?: (ddah: Ddah | null) => any;
+    onCreateDDAH?: (assignment_id: number) => any;
 }) {
     const allAssignments = useSelector(assignmentsSelector);
     const allDdahs = useSelector(ddahsSelector);
@@ -51,7 +53,6 @@ export function ConnectedTAsTable({
     const data = assignments.map((assignment) => {
         const ddah =
             ddahs.find((ddah) => ddah.assignment.id === assignment.id) || null;
-            console.log(ddah);
         return {
             id: assignment.id,
             last_name: assignment.applicant.last_name,
@@ -71,8 +72,8 @@ export function ConnectedTAsTable({
         row: { original: RowData };
     }): JSX.Element | null {
         const original = row.original;
-        if (original.id != null) {
-            const ddah_id = original.id;
+        if (original.ddah != null) {
+            const ddah = original.ddah;
             // We are a real DDAH, so we want to view
             return (
                 <Button
@@ -81,8 +82,8 @@ export function ConnectedTAsTable({
                     title={`View or Edit DDAH for ${original.first_name} ${original.last_name}`}
                     className="py-0"
                     onClick={() => {
-                        if (onView) {
-                            onView(ddah_id);
+                        if (onViewDDAH) {
+                            onViewDDAH(ddah);
                         }
                     }}
                 >
@@ -90,7 +91,21 @@ export function ConnectedTAsTable({
                 </Button>
             );
         }
-        return null;
+        return (
+            <Button
+                variant="light"
+                size="sm"
+                title={`Create DDAH for ${original.first_name} ${original.last_name}`}
+                className="py-0"
+                onClick={() => {
+                    if (onCreateDDAH) {
+                        onCreateDDAH(original.id || -1);
+                    }
+                }}
+            >
+                Create
+            </Button>
+        );
     }
 
     const columns = [
@@ -106,7 +121,7 @@ export function ConnectedTAsTable({
         },
         {
             Header: generateHeaderCell("Status"),
-            accessor: "status",
+            accessor: "readable_status",
         },
         {
             Header: generateHeaderCell("DDAH"),
