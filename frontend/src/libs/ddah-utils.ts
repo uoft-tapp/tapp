@@ -21,7 +21,7 @@ export function ddahIssues(ddah: Ddah) {
  * @param {Pick<Ddah, "status">} ddah
  * @returns
  */
-export function getReadableStatus(ddah: Pick<Ddah, "status">) {
+export function getReadableDDAHStatus(ddah: Pick<Ddah, "status">) {
     switch (ddah.status) {
         case "accepted":
             return "Accepted";

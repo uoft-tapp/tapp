@@ -1,6 +1,6 @@
 import React from "react";
 import { shallowEqual } from "react-redux";
-import { Session } from "../api/defs/types";
+import { Assignment, Session } from "../api/defs/types";
 
 /**
  * Compare the two input strings.
@@ -186,4 +186,14 @@ export function guessActiveSession(sessions: Session[]): Session | null {
     }
 
     return null;
+}
+
+export function getReadableAssignmentStatus(assignment: Pick<Assignment, "active_offer_status">) {
+    // TODO: confirm wording to be easier for the instructor
+    switch (assignment.active_offer_status) {
+        case "accepted":
+            return "Assigned";
+        default:
+            return capitalize(assignment.active_offer_status);
+    }
 }

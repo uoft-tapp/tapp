@@ -19,7 +19,7 @@ import { AdvancedFilterTable } from "../../../components/filter-table/advanced-f
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import {
     ddahIssues,
-    getReadableStatus,
+    getReadableDDAHStatus,
     getRecentActivityDate,
     splitDutyDescription,
 } from "./../../../libs/ddah-utils";
@@ -56,7 +56,7 @@ export function StatusCell({
     if (original.id == null) {
         return null as any;
     }
-    const readableStatus = getReadableStatus(original as Pick<Ddah, "status">);
+    const readableStatus = getReadableDDAHStatus(original as Pick<Ddah, "status">);
     switch ((original as Pick<Ddah, "status">).status) {
         case "accepted":
             return (
@@ -377,7 +377,7 @@ export function ConnectedDdahsTable() {
                 recent_activity_date: getRecentActivityDate(ddah),
                 emailed_date: formatDate(ddah.emailed_date || ""),
                 approved: ddah.approved_date ? "Approved" : "",
-                readable_status: getReadableStatus(ddah),
+                readable_status: getReadableDDAHStatus(ddah),
                 issues: ddahIssues(ddah),
                 issue_code: ddahIssues(ddah) ? "hours_mismatch" : null,
             } as RowData)

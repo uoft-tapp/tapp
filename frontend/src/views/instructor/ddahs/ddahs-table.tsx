@@ -6,7 +6,7 @@ import { assignmentsSelector } from "../../../api/actions";
 import { ddahsSelector } from "../../../api/actions/ddahs";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../components/table-utils";
-import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
+import { ddahIssues, getReadableDDAHStatus } from "../../../libs/ddah-utils";
 import { formatDate } from "../../../libs/utils";
 
 export interface RowData {
@@ -87,7 +87,7 @@ export function ConnectedDdahsTable({
                 status: ddah.status || "unsent",
                 emailed_date: formatDate(ddah.emailed_date || ""),
                 approved: ddah.approved_date ? "Approved" : "",
-                readable_status: getReadableStatus(ddah),
+                readable_status: getReadableDDAHStatus(ddah),
                 issues: ddahIssues(ddah),
                 issue_code: ddahIssues(ddah) ? "hours_mismatch" : null,
             } as RowData)

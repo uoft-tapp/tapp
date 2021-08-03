@@ -4,7 +4,7 @@ import { AdvancedFilterTable } from "../../../components/filter-table/advanced-f
 import { Ddah } from "../../../api/defs/types";
 import { compareString } from "../../../libs/utils";
 import { generateHeaderCell } from "../../../components/table-utils";
-import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
+import { ddahIssues, getReadableDDAHStatus } from "../../../libs/ddah-utils";
 
 const ddahModalColumn = [
     {
@@ -84,7 +84,7 @@ export function DdahConfirmationDialog(props: {
             last_name: ddah.assignment.applicant.last_name,
             first_name: ddah.assignment.applicant.first_name,
             total_hours: ddah.total_hours,
-            status: getReadableStatus(ddah),
+            status: getReadableDDAHStatus(ddah),
             issue: ddahIssue,
         } as ConfirmationDdahRowData;
     });
