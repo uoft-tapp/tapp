@@ -233,7 +233,11 @@ Rails
                         resources :instructors, only: %i[index create]
 
                         # DDAHs
-                        resources :ddahs, only: %i[show create]
+                        resources :ddahs, only: %i[show create] do
+                            member do
+                                post :email
+                            end
+                        end
                     end
                 end
 

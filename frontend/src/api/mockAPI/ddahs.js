@@ -208,6 +208,7 @@ export const ddahsRoutes = {
             },
             summary: "Email a DDAH",
             returns: docApiPropTypes.ddah,
+            roles: ["instructor"],
         }),
         "/assignments/:assignment_id/ddah": documentCallback({
             func: (data, params, body) => {
