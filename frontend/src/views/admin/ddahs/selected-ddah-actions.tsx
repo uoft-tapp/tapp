@@ -22,7 +22,7 @@ export function EmailDdahsButtonWithDialog({
         );
     }
 
-    function confirmOfferCreate() {
+    function confirm() {
         if (selectedDdahs?.length > 1) {
             setShowConfirmation(true);
         } else {
@@ -34,7 +34,7 @@ export function EmailDdahsButtonWithDialog({
         <React.Fragment>
             <ActionButton
                 icon={FaMailBulk}
-                onClick={confirmOfferCreate}
+                onClick={confirm}
                 disabled={selectedDdahs.length === 0}
                 title={"Email selected DDAHs"}
             >

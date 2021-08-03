@@ -45,6 +45,19 @@ class Api::V1::Instructor::DdahsController < ApplicationController
         update
     end
 
+    # POST /ddahs/:ddah_id/email
+    def email
+        find_ddah
+
+        DdahMailer.email_ddah(@ddah).deliver_now!
+
+        unless @ddah.emailed_date
+            @ddah.email
+            @ddah.save!
+        end
+        render_success @ddah
+    end
+
     private
 
     def validate_instructor

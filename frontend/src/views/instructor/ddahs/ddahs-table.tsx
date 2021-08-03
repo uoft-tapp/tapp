@@ -1,13 +1,21 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { FaCheck, FaPlus, FaRegCalendar, FaSearch } from "react-icons/fa";
+import {
+    FaCheck,
+    FaPaperPlane,
+    FaPlus,
+    FaRegCalendar,
+    FaSearch,
+} from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { assignmentsSelector } from "../../../api/actions";
 import { ddahsSelector } from "../../../api/actions/ddahs";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { ddahIssues, getReadableStatus } from "../../../libs/ddah-utils";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { formatDate } from "../../../libs/utils";
+import { setDdahForEmailIds } from "../store/actions";
 
 export interface RowData {
     id?: number;
@@ -28,7 +36,7 @@ export interface RowData {
  * @param {{ original: RowData }} { original }
  * @returns {React.ReactNode}
  */
-function IssuesCell({
+export function IssuesCell({
     row,
 }: {
     row: { original: RowData };
@@ -59,10 +67,12 @@ export function ConnectedDdahsTable({
     position_id,
     onView,
     onCreate,
+    onEmail,
 }: {
     position_id: number;
     onView?: (ddah_id: number) => any;
     onCreate?: (assignment_id: number) => any;
+    onEmail?: () => any;
 }) {
     const allAssignments = useSelector(assignmentsSelector);
     const allDdahs = useSelector(ddahsSelector);
@@ -72,6 +82,7 @@ export function ConnectedDdahsTable({
     const assignments = allAssignments.filter(
         (assignment) => assignment.position.id === position_id
     );
+    const dispatch = useThunkDispatch();
 
     // The omni-search doesn't work on nested properties, so we need to flatten
     // the data we display before sending it to the table.
@@ -202,6 +213,39 @@ export function ConnectedDdahsTable({
         {
             Header: generateHeaderCell("Emailed"),
             accessor: "emailed_date",
+            Cell: ({
+                value,
+                row,
+            }: {
+                value: string;
+                row: { original: RowData };
+            }) => {
+                const data = row.original;
+                if (!data.id) {
+                    // In this case, the row doesn't correspond to an existing DDAH
+                    return null;
+                }
+                return (
+                    <React.Fragment>
+                        {value}
+                        <Button
+                            variant="light"
+                            size="sm"
+                            className="py-0 mx-1 float-right"
+                            title="Email DDAH"
+                            onClick={() => {
+                                if (!data.id || !onEmail) {
+                                    return;
+                                }
+                                dispatch(setDdahForEmailIds([data.id]));
+                                onEmail();
+                            }}
+                        >
+                            <FaPaperPlane />
+                        </Button>
+                    </React.Fragment>
+                );
+            },
         },
         {
             Header: generateHeaderCell("Approved"),
