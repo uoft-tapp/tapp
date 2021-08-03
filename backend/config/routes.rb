@@ -222,6 +222,13 @@ Rails
                             resources :ddahs, only: %i[index]
                         end
 
+                        # Assignments
+                        resources :assignments, only: %i[] do
+                            resources :wage_chunks,
+                                      controller: :assignment_wage_chunks,
+                                      only: %i[index]
+                        end
+
                         # Instructors
                         resources :instructors, only: %i[index create]
 

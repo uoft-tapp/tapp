@@ -111,6 +111,7 @@ export const ddahsRoutes = {
             },
             summary: "Find a DDAH associated with a specific assignment.",
             returns: docApiPropTypes.ddah,
+            roles: ["instructor"],
         }),
     },
     post: {
