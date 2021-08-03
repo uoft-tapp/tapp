@@ -266,7 +266,6 @@ export function DdahPreviewModal({
     React.useEffect(() => {
         // Whenever the input DDAH changes, we want to reset the duties to
         // its duties. This happens after a save/etc.
-        console.log("CCC", ddah, receivedDuties);
         if (ddah != null) {
             setDuties(receivedDuties);
         }

@@ -14,7 +14,6 @@ import { DdahPreviewModal } from "./ddah-editor";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { activePositionSelector, setDdahForEmailIds } from "../store/actions";
 import {
-    ConnectedDownloadPositionDdahTemplatesAction,
     ConnectedExportDdahsAction,
     ConnectedImportDdahsAction,
 } from "../../admin/ddahs/import-export";
@@ -85,7 +84,6 @@ export function InstructorDdahsView() {
     const formattedSessionName = `${activeSession.name} (${formatDate(
         activeSession.start_date
     )} to ${formatDate(activeSession.end_date)})`;
-    console.log("PREVIEW DDAH", previewDdah);
 
     return (
         <div className="page-body">
