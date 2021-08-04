@@ -6,6 +6,10 @@ import {
     postingPropTypes,
 } from "./utils";
 import { databaseSeeder } from "./setup";
+import axios from "axios";
+
+// Use md5sum of files and compare them
+
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
     let position;
@@ -17,6 +21,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     const path = require("path");
     const http = require("http");
     const BACKEND_BASE_URL = "http://backend:3000";
+    const md5 = require("md5");
 
     const taOnlyUser = {
         utorid: "matthewc",
@@ -227,35 +232,35 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Write the retrieved txt data to a file and verify
-            const stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.txt")
-            );
-            http.get(
-                `${BACKEND_BASE_URL}/public/files/${url_token}`,
-                (response) => {
-                    response.pipe(stream);
-                    response.on("end", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.txt"
-                                )
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.txt"
-                                )
-                            )
-                        );
-                    });
-                }
-            );
-            // Delete reproduced file containing retrieved txt data
-            fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.txt"));
+            // // Write the retrieved txt data to a file and verify
+            // const stream = fs.createWriteStream(
+            //     path.resolve(__dirname, "./image-data/returned.txt")
+            // );
+            // http.get(
+            //     `${BACKEND_BASE_URL}/public/files/${url_token}`,
+            //     (response) => {
+            //         response.pipe(stream);
+            //         response.on("end", () => {
+            //             expect(
+            //                 fs.readFileSync(
+            //                     path.resolve(
+            //                         __dirname,
+            //                         "./image-data/dummy.txt"
+            //                     )
+            //                 )
+            //             ).toEqual(
+            //                 fs.readFileSync(
+            //                     path.resolve(
+            //                         __dirname,
+            //                         "./image-data/returned.txt"
+            //                     )
+            //                 )
+            //             );
+            //         });
+            //     }
+            // );
+            // // Delete reproduced file containing retrieved txt data
+            // fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.txt"));
         });
         it.todo(
             "Can submit and retrieve attachments for an updated application"
@@ -341,41 +346,53 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
+            const jpg = await axios.get(
+                `${BACKEND_BASE_URL}/public/files/${url_token}`
+            );
+            console.log(jpg);
+            console.log("MD5 " + md5(jpg));
+
+            expect(md5(jpg)).toEqual(md5());
+
+            fs.readFile("example.txt", function (err, buf) {
+                expect(md5(jpg).toEqual(md5(buf)));
+            });
+
             // Write the retrieved jpg data to a file and verify
-            const stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.jpg")
-            );
-            http.get(
-                `${BACKEND_BASE_URL}/public/files/${url_token}`,
-                (response) => {
-                    response.pipe(stream);
-                    response.on("end", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.jpg"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.jpg"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        );
-                    });
-                }
-            );
+            // const stream = fs.createWriteStream(
+            //     path.resolve(__dirname, "./image-data/returned.jpg")
+            // );
+            // http.get(
+            //     `${BACKEND_BASE_URL}/public/files/${url_token}`,
+            //     (response) => {
+            //         response.pipe(stream);
+            //         response.on("end", () => {
+            //             expect(
+            //                 fs.readFileSync(
+            //                     path.resolve(
+            //                         __dirname,
+            //                         "./image-data/dummy.jpg"
+            //                     ),
+            //                     {
+            //                         encoding: "base64",
+            //                     }
+            //                 )
+            //             ).toEqual(
+            //                 fs.readFileSync(
+            //                     path.resolve(
+            //                         __dirname,
+            //                         "./image-data/returned.jpg"
+            //                     ),
+            //                     {
+            //                         encoding: "base64",
+            //                     }
+            //                 )
+            //             );
+            //         });
+            //     }
+            // );
             // Delete reproduced file containing retrieved jpg data
-            fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.jpg"));
+            // fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.jpg"));
         });
 
         it.skip("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
@@ -409,7 +426,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     encoding: "base64",
                 }
             );
-            // console.log(str);
             let content = "data:application/pdf;base64," + str;
 
             let surveyWithTranscript = {
