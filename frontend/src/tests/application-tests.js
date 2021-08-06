@@ -336,7 +336,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             }
         );
 
-        it("When submitting survey.js data in an incorrect matter, submission fails with error", async () => {
+        it("Submitting an application with incorrect position_preferences type results in error", async () => {
             // Link seeded position to the new posting
             const postingPosition = {
                 num_positions: 10,
@@ -352,7 +352,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await switchToUser(userCreatedFromApplicant);
 
             // Submit an application with incorrect position_preferences type (supposed to be an object)
-            const applicationWithoutPositionPref = {
+            const applicationWithIncorrectPFType = {
                 answers: {
                     ...applicant,
                     position_preferences: 5,
@@ -360,13 +360,26 @@ export function applicationsTests({ apiGET, apiPOST }) {
             };
             resp = await apiPOST(
                 `/public/postings/${postingDataForPFTests.url_token}/submit`,
-                applicationWithoutPositionPref,
+                applicationWithIncorrectPFType,
                 true
             );
             expect(resp).toHaveStatus("error");
 
-            // Submit an application in an incorrect matter: all the data is in the original object and not in
-            // the <answers> prop
+            await restoreDefaultUser();
+        });
+
+        it("Cannot submit an application without the answers", async () => {
+            await switchToUser(userCreatedFromApplicant);
+
+            // Submit an empty object
+            let resp = await apiPOST(
+                `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                {},
+                true
+            );
+            expect(resp).toHaveStatus("error");
+
+            // all the data is in the original object and not in the <answers> prop
             const noAnswersApplication = {
                 ...applicant,
                 position_preferences: {
@@ -379,6 +392,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("error");
+
             await restoreDefaultUser();
         });
 
