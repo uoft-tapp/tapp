@@ -27,7 +27,7 @@ export function InstructorRoutes() {
     return (
         <Switch>
             <Route exact path="/">
-                <InstructorLanding />
+                <Redirect from="/" to="/sessions/details" />
             </Route>
             <Route path="/positions/:position_id/assignments">
                 <UpdateActivePosition />

@@ -52,7 +52,7 @@ export function InstructorSessionsView() {
                 <p>
                     Below is a list of all sessions where you are listed as an
                     instructor. Select a session to see <i>positions</i>{" "}
-                    (courses) that you are an instructor for.
+                    (courses) that you are/were an instructor for.
                 </p>
                 {sessions.length === 0 ? (
                     <h4>You are not listed as an instructor for any session</h4>
