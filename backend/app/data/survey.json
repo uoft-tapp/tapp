@@ -1,7 +1,6 @@
 {
-    "title": "",
-    "showProgressBar": "top",
     "completedHtml": "<h2>Thank you for submitting your application. A confirmation has been sent to your email.</h2><p>If you need to update any information, you may refresh the page and resubmit your answers. <em>Please note that any resubmitted answers will override all previous answers.</em></p>",
+    "title": "",
     "pages": [
         {
             "name": "profile_page",
@@ -22,8 +21,8 @@
                     "type": "text",
                     "name": "email",
                     "title": "Email",
-                    "inputType": "email",
-                    "isRequired": true
+                    "isRequired": true,
+                    "inputType": "email"
                 },
                 {
                     "type": "text",
@@ -125,6 +124,16 @@
                     "hasOther": true
                 },
                 {
+                    "type": "text",
+                    "name": "gpa",
+                    "visibleIf": "{program} = 'U'",
+                    "title": "What is your cumulative GPA? (On a 4 point scale)",
+                    "isRequired": true,
+                    "inputType": "number",
+                    "min": "0",
+                    "max": "4"
+                },
+                {
                     "type": "file",
                     "name": "transcripts",
                     "visibleIf": "{program} = 'U'",
@@ -180,16 +189,33 @@
                     "title": "Position Preferences",
                     "description": "Please rank your preferences for the available positions. High is your indicates your most preferred positions (please mark *no more than 5 positions as High*); Medium indicates positions you are strongly interested in but are not your top choice; Low indicates positions you are willing to TA. Marking N/A is equivalent to not marking a position.",
                     "isRequired": true,
-                    "cellType": "rating",
                     "columns": [
-                        { "value": 3, "text": "High" },
-                        { "value": 2, "text": "Medium" },
-                        { "value": 1, "text": "Low" },
-                        { "value": 0, "text": "N/A" },
-                        { "value": -1, "text": "Strong Preference Against" }
+                        {
+                            "value": 3,
+                            "text": "High"
+                        },
+                        {
+                            "value": 2,
+                            "text": "Medium"
+                        },
+                        {
+                            "value": 1,
+                            "text": "Low"
+                        },
+                        {
+                            "value": 0,
+                            "text": "N/A"
+                        },
+                        {
+                            "value": -1,
+                            "text": "Strong Preference Against"
+                        }
                     ],
                     "rows": [
-                        { "text": "Example Course", "value": "EXAMPLE_COURSE" }
+                        {
+                            "value": "EXAMPLE_COURSE",
+                            "text": "Example Course"
+                        }
                     ]
                 }
             ]
@@ -205,5 +231,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "showProgressBar": "top"
 }
