@@ -120,6 +120,9 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+.details-col.centered {
+    text-align: center;
+}
 .hidden-row-warning {
     box-shadow: inset 0px -3px 8px -6px rgba(167, 182, 194, 0.5);
     text-align: center;

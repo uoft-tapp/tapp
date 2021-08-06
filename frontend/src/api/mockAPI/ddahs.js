@@ -111,6 +111,7 @@ export const ddahsRoutes = {
             },
             summary: "Find a DDAH associated with a specific assignment.",
             returns: docApiPropTypes.ddah,
+            roles: ["instructor"],
         }),
     },
     post: {
@@ -207,6 +208,7 @@ export const ddahsRoutes = {
             },
             summary: "Email a DDAH",
             returns: docApiPropTypes.ddah,
+            roles: ["instructor"],
         }),
         "/assignments/:assignment_id/ddah": documentCallback({
             func: (data, params, body) => {

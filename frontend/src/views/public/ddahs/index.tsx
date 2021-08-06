@@ -32,7 +32,7 @@ export function DdahView() {
     React.useEffect(() => {
         async function fetchOffer() {
             try {
-                const details = await apiGET(
+                const details: RawDdahDetails | null = await apiGET(
                     `/public/ddahs/${url_token}/details`,
                     true
                 );

@@ -253,21 +253,34 @@ export const assignmentsSelector = createSelector(
         }
         const applicantsById = arrayToHash(applicants);
         const positionsById = arrayToHash(positions);
-        return assignments.map((assignment) => {
-            const { position_id, applicant_id, ...rest } = assignment;
-            const wage_chunks = getWageChunksForAssignment(assignment);
-            const offers = offersByAssignmentIdHash[assignment.id];
-            return {
-                ...rest,
-                position: positionsById[position_id] || {},
-                applicant: applicantsById[applicant_id] || {},
-                // Only return wage chunks if they match the current assignment. This
-                // ensures stale (previously-loaded) wage chunks don't get served.
-                wage_chunks: wageChunksMatchAssignment(assignment, wage_chunks)
-                    ? wage_chunks
-                    : null,
-                offers,
-            } as Assignment;
-        });
+        return (
+            assignments
+                .map((assignment) => {
+                    const { position_id, applicant_id, ...rest } = assignment;
+                    const wage_chunks = getWageChunksForAssignment(assignment);
+                    const offers = offersByAssignmentIdHash[assignment.id];
+                    return {
+                        ...rest,
+                        position: positionsById[position_id] || {},
+                        applicant: applicantsById[applicant_id] || {},
+                        // Only return wage chunks if they match the current assignment. This
+                        // ensures stale (previously-loaded) wage chunks don't get served.
+                        wage_chunks: wageChunksMatchAssignment(
+                            assignment,
+                            wage_chunks
+                        )
+                            ? wage_chunks
+                            : null,
+                        offers,
+                    } as Assignment;
+                })
+                // There could be a race condition where the assignments are loaded before applicants and positions.
+                // We filter out any assignments that don't have a corresponding applicant and position.
+                .filter(
+                    (assignment) =>
+                        assignment.position.id != null &&
+                        assignment.applicant.id != null
+                )
+        );
     }
 );

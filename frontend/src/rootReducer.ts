@@ -18,6 +18,7 @@ import {
 import { usersReducer } from "./api/reducers/users";
 import ddahsTableReducer from "./views/admin/ddah-table/reducers";
 import positionsTableReducer from "./views/admin/positions/reducers";
+import instructorUIReducer from "./views/instructor/store/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -51,6 +52,7 @@ const reducer = combineReducers({
         ddahsTable: ddahsTableReducer,
         positionsTable: positionsTableReducer,
         globals: globalReducer,
+        instructor: instructorUIReducer,
     }),
 });
 
