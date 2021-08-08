@@ -6,17 +6,26 @@ import { formatDate } from "../../../libs/utils";
 import { assignmentsSelector } from "../../../api/actions";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Assignment } from "../../../api/defs/types";
+import { ddahsSelector } from "../../../api/actions/ddahs";
 
 export function InstructorAssignmentsTable() {
     const activePosition = useSelector(activePositionSelector);
     const allAssignments = useSelector(assignmentsSelector);
-    const positions = useMemo(
-        () =>
-            allAssignments.filter(
-                (assignment) => assignment.position.id === activePosition?.id
-            ),
-        [activePosition, allAssignments]
-    );
+    const allDDAHs = useSelector(ddahsSelector);
+    const rowData = useMemo(() => {
+        const currentAssignments = allAssignments.filter(
+            (assignment) => assignment.position.id === activePosition?.id
+        );
+
+        const assignmentsWithDDAH = currentAssignments.map((assignment) => ({
+            ...assignment,
+            ddah:
+                allDDAHs.find((ddah) => ddah.assignment.id === assignment.id) ||
+                null,
+        }));
+
+        return assignmentsWithDDAH;
+    }, [activePosition, allAssignments, allDDAHs]);
 
     if (!activePosition) {
         return <h4>No position currently selected</h4>;
@@ -30,6 +39,10 @@ export function InstructorAssignmentsTable() {
         {
             Header: "First Name",
             accessor: "applicant.first_name",
+        },
+        {
+            Header: "UTORid",
+            accessor: "applicant.utorid",
         },
         {
             Header: "Email",
@@ -84,7 +97,7 @@ export function InstructorAssignmentsTable() {
         <AdvancedFilterTable
             filterable={true}
             columns={columns}
-            data={positions}
+            data={rowData}
         />
     );
 }
