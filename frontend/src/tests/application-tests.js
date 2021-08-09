@@ -154,7 +154,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         it.todo(
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
-        it.skip("Can submit and retrieve attachments for a new application", async () => {
+        it("Can submit and retrieve attachments for a new application", async () => {
             // Create a new posting
             let resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
@@ -228,42 +228,26 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // Get application's url_token
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
-            console.log(url_token);
 
             // Switching back to taonlyuser
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
             // // Write the retrieved txt data to a file and verify
-            // const stream = fs.createWriteStream(
-            //     path.resolve(__dirname, "./image-data/returned.txt")
-            // );
-            // http.get(
-            //     `${BACKEND_BASE_URL}/public/files/${url_token}`,
-            //     (response) => {
-            //         response.pipe(stream);
-            //         response.on("end", () => {
-            //             expect(
-            //                 fs.readFileSync(
-            //                     path.resolve(
-            //                         __dirname,
-            //                         "./image-data/dummy.txt"
-            //                     )
-            //                 )
-            //             ).toEqual(
-            //                 fs.readFileSync(
-            //                     path.resolve(
-            //                         __dirname,
-            //                         "./image-data/returned.txt"
-            //                     )
-            //                 )
-            //             );
-            //         });
-            //     }
-            // );
-            // // Delete reproduced file containing retrieved txt data
-            // fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.txt"));
-        });
+  	axios.request({
+	    responseType: 'arraybuffer',
+	    url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
+	    method: 'get',
+	    headers: {
+	            'Content-Type': 'text/plain',
+	        },
+	}).then((result) => {
+	    let retrievedData = new Uint8Array(result.data);
+	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.txt'));
+	    expect(md5(retrievedData)).toEqual(md5(originalData));
+	});
+	
+	});
         it.todo(
             "Can submit and retrieve attachments for an updated application"
         );
@@ -584,7 +568,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 	});
 });
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
-        it("Can submit and retrieve attachments for some custom questions", async () => {
+        it.skip("Can submit and retrieve attachments for some custom questions", async () => {
             // Create a new posting with additional custom questions
             postingData.custom_questions = {
                 title: "Title1",
