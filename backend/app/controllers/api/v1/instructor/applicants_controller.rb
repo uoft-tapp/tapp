@@ -11,15 +11,18 @@ class Api::V1::Instructor::ApplicantsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
-        # Find the IDs of all instructors that are associated with the same positions we are
-        position_ids =
-            active_instructor.positions.where(session_id: params[:session_id])
-                .pluck(:id).uniq
-        applicant_ids =
-            Assignment.distinct.where(position_id: position_ids).pluck(
-                :applicant_id
-            ).uniq
-
-        render_success Applicant.order(:id).find(applicant_ids)
+        # An instructor should not have access to the applicant's phone number;
+        # Since ActiveModelSerializers cannot have different serializers for different routes
+        # https://github.com/rails-api/active_model_serializers/issues/2186
+        # we set the sensitive data to `nil` before sending it to the serializer.
+        # We are not calling .save! on these object, so it is okay to directly override private
+        # fields with `nil`.
+        render_success(
+            active_instructor.applicants_by_session(params[:session_id])
+                .map do |applicant|
+                applicant.phone = nil
+                applicant
+            end
+        )
     end
 end

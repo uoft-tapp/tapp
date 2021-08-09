@@ -260,11 +260,18 @@ export const ddahsSelector = createSelector(
             return [];
         }
         const assignmentsHash = arrayToHash(assignments);
-        return ddahs.map(({ assignment_id, ...rest }) => ({
-            ...rest,
-            status: computeDdahStatus(rest),
-            total_hours: computeDdahHours(rest),
-            assignment: assignmentsHash[assignment_id] || {},
-        })) as Ddah[];
+        return (
+            ddahs
+                .map(({ assignment_id, ...rest }) => ({
+                    ...rest,
+                    status: computeDdahStatus(rest),
+                    total_hours: computeDdahHours(rest),
+                    assignment: assignmentsHash[assignment_id] || {},
+                }))
+                // If the DDAHs are loaded before the assignments, we may have a mismatch here.
+                // We filter out any ddahs without assignments (they will be updated when
+                // assignments become available.)
+                .filter((ddah) => ddah.assignment.id != null) as Ddah[]
+        );
     }
 );

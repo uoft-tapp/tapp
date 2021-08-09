@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { expect } from "./utils";
+import { apiGET, expect } from "./utils";
 import { recursiveDeleteProp } from "../api/mockAPI/utils";
 
 class DatabaseSeeder {
@@ -512,6 +512,21 @@ async function seedDatabaseForInstructors(
             applicant_id,
         });
         resp = await apiPOST(`/admin/assignments`, assignment);
+        expect(resp).toHaveStatus("success");
+        Object.assign(assignment, resp.payload);
+        // Instructors cannot see an assignment unless there is a Pending/Accepted
+        // active_offer. So, make one for each assignment.
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/create`
+        );
+        expect(resp).toHaveStatus("success");
+        resp = await apiPOST(
+            `/admin/assignments/${assignment.id}/active_offer/accept`
+        );
+        expect(resp).toHaveStatus("success");
+        // The assignment's active_offer_status has changed, so we need
+        // to re-fetch it.
+        resp = await apiGET(`/admin/assignments/${assignment.id}`);
         expect(resp).toHaveStatus("success");
         Object.assign(assignment, resp.payload);
         processedAssignments.push(assignment);

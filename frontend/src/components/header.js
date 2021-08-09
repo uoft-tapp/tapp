@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, Navbar } from "react-bootstrap";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { NavLink, useLocation, useRouteMatch } from "react-router-dom";
 
 import "./components.css";
 
@@ -53,6 +53,7 @@ export function Header(props) {
         params: { mainRoute: "tapp" },
     };
     const { mainRoute } = match.params;
+    const fullRoute = useLocation().pathname;
 
     if (routes.length === 0) {
         return <div>No Routes in Header</div>;
@@ -72,7 +73,11 @@ export function Header(props) {
 
     // filters the routes to include only the current route, then maps all of that route's subroutes to BootstrapNavItems
     const availableSubroutes = routes
-        .filter((route) => route.route.substring(1) === mainRoute)
+        .filter(
+            (route) =>
+                route.route.substring(1) === mainRoute ||
+                fullRoute.startsWith(route.route)
+        )
         .map((route) =>
             (route.subroutes || []).map((subroute) => {
                 const fullroute = `${route.route}${subroute.route}`;

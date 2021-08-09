@@ -12,15 +12,17 @@ import { FaCheck, FaSearch, FaEdit, FaDownload } from "react-icons/fa";
 
 import "./styles.css";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import {
-    formatDate,
-    formatDownloadUrl,
-    splitDutyDescription,
-} from "../../../libs/utils";
+import { formatDate, formatDownloadUrl } from "../../../libs/utils";
 import { DdahEditor } from "../../../components/ddahs";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import {
+    ddahIssues,
+    getReadableStatus,
+    getRecentActivityDate,
+    splitDutyDescription,
+} from "./../../../libs/ddah-utils";
 
 export interface RowData {
     id?: number;
@@ -33,49 +35,6 @@ export interface RowData {
     emailed_date: string | null;
     issues: string | null;
     issue_code: "hours_mismatch" | "missing" | null;
-}
-
-/**
- * Determine if there are issues with `ddah` and
- * return a human-readable string specifying the issues
- *
- * @param {Ddah} ddah
- * @returns
- */
-export function ddahIssues(ddah: Ddah) {
-    if (ddah.total_hours !== ddah.assignment.hours) {
-        return `Hours Mismatch (${ddah.total_hours} vs. ${ddah.assignment.hours})`;
-    }
-    return null;
-}
-
-export function getReadableStatus(ddah: Pick<Ddah, "status">) {
-    switch (ddah.status) {
-        case "accepted":
-            return "Accepted";
-        case "emailed":
-            return "Pending";
-        default:
-            return "Unsent";
-    }
-}
-
-function getRecentActivityDate(ddah: Ddah) {
-    const recentActivityDate = (Math.max.apply as (...values: any[]) => number)(
-        null,
-        [
-            ddah.accepted_date,
-            ddah.approved_date,
-            ddah.emailed_date,
-            ddah.revised_date,
-        ]
-            .filter((date) => date)
-            .map((date) => new Date(date || 0))
-    );
-    if (recentActivityDate <= 0) {
-        return null;
-    }
-    return formatDate(new Date(recentActivityDate).toISOString());
 }
 
 /**
@@ -382,21 +341,6 @@ export function ConnectedDdahsTable() {
     const [previewVisible, setPreviewVisible] = React.useState<Boolean>(false);
     const [editVisible, setEditVisible] = React.useState<Boolean>(false);
     const [previewDdah, setPreviewDdah] = React.useState<Ddah | null>(null);
-
-    // It is possible that things needed to construct the DDAH are loaded out of order.
-    // E.g., the position or assignment data hasn't come back from the API
-    // even though the DDAH data has. In this case, we want to fail gracefully until
-    // the data arrives (by showing an empty list of DDAHs).
-    if (
-        ddahs.some(
-            (ddah) =>
-                ddah.assignment == null ||
-                ddah.assignment.applicant == null ||
-                ddah.assignment.position == null
-        )
-    ) {
-        ddahs = [];
-    }
 
     function setSelected(ids: number[]) {
         // If a row is missing an id, `null` will be used in place of that id.

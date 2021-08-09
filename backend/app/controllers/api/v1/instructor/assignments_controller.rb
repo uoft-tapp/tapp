@@ -11,12 +11,33 @@ class Api::V1::Instructor::AssignmentsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
-        # Find the IDs of all instructors that are associated with the same positions we are
-        position_ids =
-            active_instructor.positions.where(session_id: params[:session_id])
-                .pluck(:id).uniq
-        render_success Assignment.distinct.order(:id).where(
-                           position_id: position_ids
-                       )
+        render_success(
+            active_instructor.assignments_by_session(params[:session_id])
+                .map do |assignment|
+                override_instance_method(
+                    # Instructors aren't allowed to see the nag count of an assignment,
+                    # so we override it with `nil`. Since `.save!` is never called on this object,
+                    # so it's okay to manipluate it.
+                    assignment,
+                    :active_offer_nag_count,
+                    nil
+                )
+            end
+        )
     end
+end
+
+# Override an instance method to always return `value`
+# Code modified from https://stackoverflow.com/questions/135995/is-it-possible-to-define-a-ruby-singleton-method-using-a-block
+def override_instance_method(obj, method_name, value)
+    metaclass =
+        class << obj
+            self
+        end
+
+    metaclass.send :define_method, method_name do
+        value
+    end
+
+    obj
 end

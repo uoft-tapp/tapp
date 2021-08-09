@@ -172,6 +172,7 @@ export const prepareSpreadsheet = {
                     "Comments",
                     "Documents",
                     "Custom Question Answers",
+                    "Submission Date",
                 ],
             ] as CellType[][]).concat(
                 minApps.map((application) => [
@@ -206,6 +207,7 @@ export const prepareSpreadsheet = {
                     application.custom_question_answers
                         ? JSON.stringify(application.custom_question_answers)
                         : null,
+                    application.submission_date,
                 ])
             )
         );
@@ -397,8 +399,8 @@ export const prepareSpreadsheet = {
                     assignment.contract_template,
                     assignment.contract_override_pdf,
                     assignment.active_offer_status,
-                    null,
                     assignment.active_offer_recent_activity_date,
+                    null,
                     ...formatWageChunksToList(assignment.wage_chunks),
                 ])
             )

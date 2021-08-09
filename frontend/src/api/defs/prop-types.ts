@@ -140,6 +140,7 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             previous_experience_summary: PropTypes.string,
             yip: PropTypes.number,
             annotation: PropTypes.string,
+            submission_date: PropTypes.string,
             position_preference: PropTypes.arrayOf(
                 PropTypes.shape({
                     preference_level: PropTypes.number,
