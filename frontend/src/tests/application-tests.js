@@ -24,8 +24,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
         availability: "open",
     };
 
-    // PF => Position Preference
-    const postingDataForPFTests = {
+    // PP => Position Preference
+    const postingDataForPPTests = {
         name: "CSC343F TA",
         intro_text: "Testing posting for CSC343F",
         open_date: "2021/04/01",
@@ -108,12 +108,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
         expect(resp).toHaveStatus("success");
         Object.assign(userWithTaPermissions, resp.payload);
 
-        // Create a new posting for PF tests
+        // Create a new posting for PP tests
         const respPostingData = await addPosting(
-            postingDataForPFTests,
+            postingDataForPPTests,
             session
         );
-        Object.assign(postingDataForPFTests, respPostingData);
+        Object.assign(postingDataForPPTests, respPostingData);
     }, 30000);
 
     // These tests set data through the `/public/postings` route,
@@ -286,17 +286,16 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await restoreDefaultUser();
         });
 
-        it.skip(
+        it(
             "When submitting survey.js data cannot add a position_preference for a position not listed in the" +
                 " posting",
             async () => {
                 // Submit a position preference for a position_code that isn't
                 // associated with the current application
-                // See issue #621
                 await switchToUser(userCreatedFromApplicant);
 
-                // PF ==> Position Preference
-                const applicationExistentPF = {
+                // PP ==> Position Preference
+                const applicationExistentPP = {
                     answers: {
                         ...applicant,
                         position_preferences: {
@@ -308,13 +307,13 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 };
 
                 let resp = await apiPOST(
-                    `/public/postings/${postingDataForPFTests.url_token}/submit`,
-                    applicationExistentPF,
+                    `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                    applicationExistentPP,
                     true
                 );
                 expect(resp).toHaveStatus("error");
 
-                const applicationNonExistentPF = {
+                const applicationNonExistentPP = {
                     answers: {
                         ...applicant,
                         position_preferences: {
@@ -326,8 +325,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 };
 
                 resp = await apiPOST(
-                    `/public/postings/${postingDataForPFTests.url_token}/submit`,
-                    applicationNonExistentPF,
+                    `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                    applicationNonExistentPP,
                     true
                 );
                 expect(resp).toHaveStatus("error");
@@ -343,7 +342,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 hours: 68,
             };
             let resp = await apiPOST(
-                `/admin/postings/${postingDataForPFTests.id}/posting_positions`,
+                `/admin/postings/${postingDataForPPTests.id}/posting_positions`,
                 { ...postingPosition, position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
@@ -352,15 +351,15 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await switchToUser(userCreatedFromApplicant);
 
             // Submit an application with incorrect position_preferences type (supposed to be an object)
-            const applicationWithIncorrectPFType = {
+            const applicationWithIncorrectPPType = {
                 answers: {
                     ...applicant,
                     position_preferences: 5,
                 },
             };
             resp = await apiPOST(
-                `/public/postings/${postingDataForPFTests.url_token}/submit`,
-                applicationWithIncorrectPFType,
+                `/public/postings/${postingDataForPPTests.url_token}/submit`,
+                applicationWithIncorrectPPType,
                 true
             );
             expect(resp).toHaveStatus("error");
@@ -373,7 +372,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Submit an empty object
             let resp = await apiPOST(
-                `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                `/public/postings/${postingDataForPPTests.url_token}/submit`,
                 {},
                 true
             );
@@ -387,7 +386,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             };
             resp = await apiPOST(
-                `/public/postings/${postingDataForPFTests.url_token}/submit`,
+                `/public/postings/${postingDataForPPTests.url_token}/submit`,
                 noAnswersApplication,
                 true
             );
