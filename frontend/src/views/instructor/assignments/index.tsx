@@ -4,7 +4,10 @@ import { ContentArea } from "../../../components/layout";
 import { InstructorAssignmentsTable } from "./assignments-table";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
-import { activeSessionSelector, assignmentsSelector } from "../../../api/actions";
+import {
+    activeSessionSelector,
+    assignmentsSelector,
+} from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
 import { ConnectedExportAssignmentsAction } from "./import-export";
 import { ddahsSelector, upsertDdah } from "../../../api/actions/ddahs";
