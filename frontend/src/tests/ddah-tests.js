@@ -547,7 +547,7 @@ export function ddahsEmailAndDownloadTests(api) {
                 },
                 {
                     order: 5,
-                    hours: 18,
+                    hours: 0,
                     description: "note:Unique description - note",
                 },
                 {
