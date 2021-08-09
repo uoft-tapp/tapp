@@ -7,12 +7,42 @@ import { assignmentsSelector } from "../../../api/actions";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { Assignment } from "../../../api/defs/types";
 import { ddahsSelector } from "../../../api/actions/ddahs";
+import { Button } from "react-bootstrap";
 
-export function InstructorAssignmentsTable() {
+interface RowData {
+    id: number;
+    applicant: {
+        first_name: string | null;
+        last_name: string | null;
+        utorid: string;
+        email: string | null;
+    };
+    ddah: {
+        id?: number;
+        assignment: {
+            id: number;
+        };
+    } | null;
+    hours: number;
+    active_offer_status: string | null;
+    active_offer_recent_activity_date: string | null;
+}
+
+export function InstructorAssignmentsTable({
+    position_id,
+    onView,
+    onCreate,
+    onEmail,
+}: {
+    position_id: number;
+    onView?: (ddah_id: number) => any;
+    onCreate?: (assignment_id: number) => any;
+    onEmail?: () => any;
+}) {
     const activePosition = useSelector(activePositionSelector);
     const allAssignments = useSelector(assignmentsSelector);
     const allDDAHs = useSelector(ddahsSelector);
-    const rowData = useMemo(() => {
+    const rowData: RowData[] = useMemo(() => {
         const currentAssignments = allAssignments.filter(
             (assignment) => assignment.position.id === activePosition?.id
         );
@@ -29,6 +59,49 @@ export function InstructorAssignmentsTable() {
 
     if (!activePosition) {
         return <h4>No position currently selected</h4>;
+    }
+
+    function ViewOrCreateCell({
+        row,
+    }: {
+        row: { original: RowData };
+    }): JSX.Element | null {
+        const original = row.original;
+        if (original.ddah?.id != null) {
+            const ddah_id = original.ddah.id;
+            // We are a real DDAH, so we want to view
+            return (
+                <Button
+                    variant="light"
+                    size="sm"
+                    title={`View or Edit DDAH for ${original.applicant.first_name} ${original.applicant.last_name}`}
+                    className="py-0"
+                    style={{ minWidth: "60px" }}
+                    onClick={() => {
+                        if (onView) {
+                            onView(ddah_id);
+                        }
+                    }}
+                >
+                    View
+                </Button>
+            );
+        }
+        return (
+            <Button
+                variant="light"
+                size="sm"
+                title={`Create DDAH for ${original.applicant.first_name} ${original.applicant.last_name}`}
+                className="py-0"
+                onClick={() => {
+                    if (onCreate) {
+                        onCreate(original.id);
+                    }
+                }}
+            >
+                Create
+            </Button>
+        );
     }
 
     const columns = [
@@ -84,6 +157,14 @@ export function InstructorAssignmentsTable() {
                     ? null
                     : data.active_offer_status,
             Cell: StatusCell,
+        },
+        {
+            Header: "DDAH",
+            Cell: ViewOrCreateCell,
+            id: "add_or_edit",
+            maxWidth: 70,
+            resizable: false,
+            className: "details-col centered",
         },
         {
             Header: "Recent Activity",
