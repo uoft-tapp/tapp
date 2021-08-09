@@ -20,10 +20,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let adminUser;
     let surveyData;
 
-//    const fs = require("fs");
-//    const path = require("path");
     const BACKEND_BASE_URL = "http://backend:3000";
-//    const md5 = require("md5");
 
     const taOnlyUser = {
         utorid: "matthewc",
