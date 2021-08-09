@@ -7,6 +7,9 @@ import {
 } from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
+import fs from "fs";
+import path from "path";
+import md5 from "md5";
 
 // Use md5sum of files and compare them
 
@@ -17,11 +20,10 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let adminUser;
     let surveyData;
 
-    const fs = require("fs");
-    const path = require("path");
-    const http = require("http");
+//    const fs = require("fs");
+//    const path = require("path");
     const BACKEND_BASE_URL = "http://backend:3000";
-    const md5 = require("md5");
+//    const md5 = require("md5");
 
     const taOnlyUser = {
         utorid: "matthewc",
@@ -346,53 +348,18 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            const jpg = await axios.get(
-                `${BACKEND_BASE_URL}/public/files/${url_token}`
-            );
-            console.log(jpg);
-            console.log("MD5 " + md5(jpg));
-
-            expect(md5(jpg)).toEqual(md5());
-
-            fs.readFile("example.txt", function (err, buf) {
-                expect(md5(jpg).toEqual(md5(buf)));
-            });
-
-            // Write the retrieved jpg data to a file and verify
-            // const stream = fs.createWriteStream(
-            //     path.resolve(__dirname, "./image-data/returned.jpg")
-            // );
-            // http.get(
-            //     `${BACKEND_BASE_URL}/public/files/${url_token}`,
-            //     (response) => {
-            //         response.pipe(stream);
-            //         response.on("end", () => {
-            //             expect(
-            //                 fs.readFileSync(
-            //                     path.resolve(
-            //                         __dirname,
-            //                         "./image-data/dummy.jpg"
-            //                     ),
-            //                     {
-            //                         encoding: "base64",
-            //                     }
-            //                 )
-            //             ).toEqual(
-            //                 fs.readFileSync(
-            //                     path.resolve(
-            //                         __dirname,
-            //                         "./image-data/returned.jpg"
-            //                     ),
-            //                     {
-            //                         encoding: "base64",
-            //                     }
-            //                 )
-            //             );
-            //         });
-            //     }
-            // );
-            // Delete reproduced file containing retrieved jpg data
-            // fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.jpg"));
+            axios.request({
+		      responseType: 'arraybuffer',
+		      url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
+		      method: 'get',
+		      headers: {
+			          'Content-Type': 'image/jpeg',
+			        },
+	    }).then((result) => {
+		    let retrievedData = new Uint8Array(result.data);
+		    let originalData = fs.readFileSync(path.resolve(__dirname, "./image-data/dummy.jpg"));
+		    expect(md5(retrievedData)).toEqual(md5(originalData));
+	    });
         });
 
         it.skip("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
@@ -475,42 +442,19 @@ export function applicationsTests({ apiGET, apiPOST }) {
             console.log(url_token);
 
             // Write the retrieved PDF data to a file and verify
-            const stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.pdf")
-            );
-            await http.get(
-                `${BACKEND_BASE_URL}/public/files/${url_token}`,
-                (response) => {
-                    response.pipe(stream);
-                    response.on("finish", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.pdf"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.pdf"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        );
-                    });
-                }
-            );
-
-            // Delete reproduced file containing retrieved pdf data
-            fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.pdf"));
-        });
+    	    axios.request({
+	        responseType: 'arraybuffer',
+	        url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
+	        method: 'get',
+	        headers: {
+		        'Content-Type': 'application/pdf',
+		    },
+	    }).then((result) => {
+	        let retrievedData = new Uint8Array(result.data);
+	        let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.pdf'));
+	        expect(md5(retrievedData)).toEqual(md5(originalData));
+	    });
+	});
 
         it.skip("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
             // Create a new posting
@@ -587,7 +531,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             };
 
-            console.log(surveyWithTranscript);
 
             // Submit survey.js data
             resp = await apiPOST(
@@ -606,80 +549,40 @@ export function applicationsTests({ apiGET, apiPOST }) {
             console.log(resp.payload[0]);
             let pdf_url_token = resp.payload[0].documents[0].url_token;
             let jpg_url_token = resp.payload[0].documents[1].url_token;
-            console.log(pdf_url_token);
-            console.log(jpg_url_token);
 
             // Write the retrieved pdf data to a file and verify
-            let pdf_stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.pdf")
-            );
-            http.get(
-                `${BACKEND_BASE_URL}/public/files/${pdf_url_token}`,
-                (response) => {
-                    response.pipe(pdf_stream);
-                    response.on("finish", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.pdf"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.pdf"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        );
-                    });
-                }
-            );
-
-            // Write the retrieved jpg data to a file and verify
-            let jpg_stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.jpg")
-            );
-            http.get(
-                `${BACKEND_BASE_URL}/public/files/${jpg_url_token}`,
-                (response) => {
-                    response.pipe(jpg_stream);
-                    response.on("finish", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.jpg"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.jpg"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        );
-                    });
-                }
-            );
-
-            fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.jpg"));
-            fs.unlinkSync(path.resolve(__dirname, "./image-data/returned.pdf"));
-        });
+    axios.request({
+	    responseType: 'arraybuffer',
+	    url: `${BACKEND_BASE_URL}/public/files/${pdf_url_token}`,
+	    method: 'get',
+	    headers: {
+		            'Content-Type': 'application/pdf',
+		        },
+}).then((result) => {
+	    let retrievedData = new Uint8Array(result.data);
+	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.pdf'));
+	    console.log("pdf");
+	console.log(md5(retrievedData));
+	console.log(md5(originalData));
+	    expect(md5(retrievedData)).toEqual(md5(originalData));
+});
+	    // Write the retrieved jpg data to a file and verify
+       	axios.request({
+	    responseType: 'arraybuffer',
+	    url: `${BACKEND_BASE_URL}/public/files/${jpg_url_token}`,
+	    method: 'get',
+	    headers: {
+	            'Content-Type': 'image/jpeg',
+	        },
+	}).then((result) => {
+	    let retrievedData = new Uint8Array(result.data);
+	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.jpg'));
+		console.log("jpg");
+		console.log(md5(retrievedData));
+		console.log(md5(originalData));
+	    expect(md5(retrievedData)).toEqual(md5(originalData));
+	});
+});
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
         it("Can submit and retrieve attachments for some custom questions", async () => {
             // Create a new posting with additional custom questions
@@ -782,38 +685,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
 
             // Write the retrieved txt data to a file and verify
-            const stream = fs.createWriteStream(
-                path.resolve(__dirname, "./image-data/returned.txt")
-            );
-            await http.get(
-                `${BACKEND_BASE_URL}/public/files/${url_token}`,
-                (response) => {
-                    response.pipe(stream);
-                    response.on("finish", () => {
-                        expect(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/dummy.txt"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        ).toEqual(
-                            fs.readFileSync(
-                                path.resolve(
-                                    __dirname,
-                                    "./image-data/returned.txt"
-                                ),
-                                {
-                                    encoding: "base64",
-                                }
-                            )
-                        );
-                    });
-                }
-            );
-        });
+axios.request({
+    responseType: 'arraybuffer',
+    url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
+    method: 'get',
+    headers: {
+            'Content-Type': 'text/plain',
+        },
+}).then((result) => {
+    let retrievedData = new Uint8Array(result.data);
+    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.txt'));
+    expect(md5(retrievedData)).toEqual(md5(originalData));
+});});
     });
 }
