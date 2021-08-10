@@ -11,16 +11,60 @@ import fs from "fs";
 import path from "path";
 import md5 from "md5";
 
-// Use md5sum of files and compare them
-
 export function applicationsTests({ apiGET, apiPOST }) {
     let session;
     let position;
     let posting = {};
     let adminUser;
-    let surveyData;
 
     const BACKEND_BASE_URL = "http://backend:3000";
+
+    // Returns hashes rather than expecting their equality as possible fail is untracable back to the test case 
+    async function getMD5Hashes(url_token, file_type) {
+        let content_type;
+        switch (file_type) {
+            case "txt":
+                content_type = "text/plain";
+            case "pdf":
+                content_type = "application/pdf";
+            case "jpg":
+                content_type = "image/jpeg";
+        }
+
+        let resp = await axios.get(
+            `${BACKEND_BASE_URL}/public/files/${url_token}`,
+            {
+                responseType: "arraybuffer",
+                headers: {
+                    "Content-Type": content_type,
+                },
+            }
+        );
+        let retrievedData = new Uint8Array(resp.data);
+        let originalData = fs.readFileSync(
+            path.resolve(__dirname, `./image-data/dummy.${file_type}`)
+        );
+        return [md5(retrievedData), md5(originalData)]
+    }
+
+    let surveyWithoutTranscript = {
+        answers: {
+            utorid: "smithh",
+            first_name: "matthew",
+            last_name: "chun",
+            email: "wef@test.ca",
+            phone: "6472222222",
+            student_number: "10000000",
+            program: "U",
+            program_start: "2021-07-01",
+            department: "cs",
+            previous_university_ta: false,
+            previous_department_ta: true,
+            previous_other_university_ta: false,
+            previous_experience_summary: "n/a",
+            comments: "n/a",
+        },
+    };
 
     const taOnlyUser = {
         utorid: "matthewc",
@@ -48,6 +92,10 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // Create taonlyuser
             resp = await apiPOST("/debug/users", taOnlyUser);
             expect(resp).toHaveStatus("success");
+
+            surveyWithoutTranscript.answers.position_preferences = {
+                [position.position_code]: 3,
+            };
         });
 
         it.todo("Get survey.js posting data through public route");
@@ -55,7 +103,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "Survey.js posting data is pre-filled based on prior applicant/application data"
         );
 
-        it.skip("Can submit survey.js data via the public postings route", async () => {
+        it("Can submit survey.js data via the public postings route", async () => {
             // Create a new posting
             let resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
@@ -73,38 +121,14 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
+            // Switch to a ta only user
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
-
-            // Create and submit survey.js data
-            surveyData = {
-                answers: {
-                    utorid: "matthewc",
-                    student_number: "1000123456",
-                    first_name: "Matthew",
-                    last_name: "Cambell",
-                    email: "test@test.ca",
-                    phone: "6471234567",
-                    program: "M",
-                    program_start: "2017-09-05",
-                    department: "cs",
-                    previous_university_ta: true,
-                    some_entry: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "some previous experience",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "some additional comments",
-                },
-            };
 
             // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
-                surveyData,
+                surveyWithoutTranscript,
                 true
             );
             expect(resp).toHaveStatus("success");
@@ -127,8 +151,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
         );
         it.skip("When submitting survey.js data cannot add a position_preference for a position not listed in the posting", async () => {
             // Add illegal position's preference
-            surveyData.answers.position_preferences = {
-                ...surveyData.answers.position_preferences,
+            let illegalSurvey = {
+                ...surveyWithoutTranscript,
+            };
+            illegalSurvey.answers.position_preferences = {
+                ...surveyWithoutTranscript.answers.position_preferences,
                 MAT102: 3,
             };
 
@@ -139,7 +166,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
-                surveyData,
+                illegalSurvey,
                 true
             );
             expect(resp).toHaveStatus("error");
@@ -152,65 +179,29 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
         it("Can submit and retrieve attachments for a new application", async () => {
-            // Create a new posting
-            let resp = await apiPOST(
-                `/admin/sessions/${session.id}/postings`,
-                postingData
-            );
-            expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
-
-            // Set position for posting
-            resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
-                { position_id: position.id }
-            );
+            let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
-            // Create and submit survey.js data after encoding in base64
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.txt"),
                 {
                     encoding: "base64",
                 }
             );
-            let content_str = "data:text/plain;base64," + str;
+            let txt_str = "data:text/plain;base64," + str;
+            
+            // Attach text file
             let surveyWithTranscript = {
-                answers: {
-                    utorid: "smithh",
-                    first_name: "matthew",
-                    last_name: "chun",
-                    email: "wef@test.ca",
-                    phone: "6472222222",
-                    student_number: "10000000",
-                    program: "U",
-                    program_start: "2021-07-01",
-                    department: "cs",
-                    transcripts: [
-                        {
-                            name: "dummy.txt",
-                            type: "text/plain",
-                            content: content_str,
-                        },
-                    ],
-                    previous_university_ta: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "n/a",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "n/a",
-                },
+                ...surveyWithoutTranscript,
             };
+            surveyWithTranscript.answers.transcripts = [
+                {
+                    name: "dummy.txt",
+                    type: "text/plain",
+                    content: txt_str,
+                },
+            ];
 
-            // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyWithTranscript,
@@ -218,97 +209,48 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
-            // Get application's url_token
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            // Switching back to taonlyuser
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // // Write the retrieved txt data to a file and verify
-  	axios.request({
-	    responseType: 'arraybuffer',
-	    url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
-	    method: 'get',
-	    headers: {
-	            'Content-Type': 'text/plain',
-	        },
-	}).then((result) => {
-	    let retrievedData = new Uint8Array(result.data);
-	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.txt'));
-	    expect(md5(retrievedData)).toEqual(md5(originalData));
-	});
-	
-	});
+            let hashes = getMD5Hashes(url_token, "txt");
+            expect(hashes[0]).toEqual(hashes[1])
+        });
+
         it.todo(
             "Can submit and retrieve attachments for an updated application"
         );
 
-        it.skip("Can submit a jpg/png file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
-            // Create a new posting
-            let resp = await apiPOST(
-                `/admin/sessions/${session.id}/postings`,
-                postingData
-            );
-            expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
-
-            // Set position for posting
-            resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
-                { position_id: position.id }
-            );
+        it("Can submit a jpg/png file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
+            let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
-            // Create and submit survey.js data after base64 encoding transcript
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.jpg"),
                 {
                     encoding: "base64",
                 }
             );
-            let content_str = "data:image/jpeg;base64," + str;
+            let jpg_str = "data:image/jpeg;base64," + str;
+
             let surveyWithTranscript = {
-                answers: {
-                    utorid: "smithh",
-                    first_name: "matthew",
-                    last_name: "chun",
-                    email: "wef@test.ca",
-                    phone: "6472222222",
-                    student_number: "10000000",
-                    program: "U",
-                    program_start: "2021-07-01",
-                    department: "cs",
-                    transcripts: [
-                        {
-                            name: "dummy.jpg",
-                            type: "image/jpeg",
-                            content: content_str,
-                        },
-                    ],
-                    previous_university_ta: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "n/a",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "n/a",
-                },
+                ...surveyWithoutTranscript,
             };
 
-            // Submit survey.js data
+            // Attach jpg file
+            surveyWithTranscript.answers.transcripts = [
+                {
+                    name: "dummy.jpg",
+                    type: "image/jpeg",
+                    content: jpg_str,
+                },
+            ];
+
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyWithTranscript,
@@ -316,96 +258,44 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
-            // Get application's url_token
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
-            // console.log(url_token);
 
-            // Switching back to taonlyuser
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            axios.request({
-		      responseType: 'arraybuffer',
-		      url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
-		      method: 'get',
-		      headers: {
-			          'Content-Type': 'image/jpeg',
-			        },
-	    }).then((result) => {
-		    let retrievedData = new Uint8Array(result.data);
-		    let originalData = fs.readFileSync(path.resolve(__dirname, "./image-data/dummy.jpg"));
-		    expect(md5(retrievedData)).toEqual(md5(originalData));
-	    });
+            let hashes = getMD5Hashes(url_token, "jpg");
+            expect(hashes[0]).toEqual(hashes[1])
         });
 
-        it.skip("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
-            // Create a new posting
-            let resp = await apiPOST(
-                `/admin/sessions/${session.id}/postings`,
-                postingData
-            );
-            expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
-
-            // Set position for posting
-            resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
-                { position_id: position.id }
-            );
+        it("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
+            let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
-            resp = await apiPOST("/debug/users", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
-            // Create and submit survey.js data
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.pdf"),
                 {
                     encoding: "base64",
                 }
             );
-            let content = "data:application/pdf;base64," + str;
+            let content_str = "data:application/pdf;base64," + str;
 
             let surveyWithTranscript = {
-                answers: {
-                    utorid: "smithh",
-                    first_name: "matthew",
-                    last_name: "chun",
-                    email: "wef@test.ca",
-                    phone: "6472222222",
-                    student_number: "10000000",
-                    program: "U",
-                    program_start: "2021-07-01",
-                    department: "cs",
-                    transcripts: [
-                        {
-                            name: "dummy.pdf",
-                            type: "application/pdf",
-                            content: content,
-                        },
-                    ],
-                    previous_university_ta: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "n/a",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "n/a",
-                },
+                ...surveyWithoutTranscript,
             };
 
-            // Submit survey.js data
+            // Attach pdf file
+            surveyWithTranscript.answers.transcripts = [
+                {
+                    name: "dummy.pdf",
+                    type: "application/pdf",
+                    content: content_str,
+                },
+            ];
+
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyWithTranscript,
@@ -413,55 +303,20 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
-            // Get application's url_token
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
-            console.log(url_token);
 
-            // Write the retrieved PDF data to a file and verify
-    	    axios.request({
-	        responseType: 'arraybuffer',
-	        url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
-	        method: 'get',
-	        headers: {
-		        'Content-Type': 'application/pdf',
-		    },
-	    }).then((result) => {
-	        let retrievedData = new Uint8Array(result.data);
-	        let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.pdf'));
-	        expect(md5(retrievedData)).toEqual(md5(originalData));
-	    });
-	});
+            let hashes = getMD5Hashes(url_token, "pdf");
+            expect(hashes[0]).toEqual(hashes[1])
+        });
 
-        it.skip("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
-            // Create a new posting
-            let resp = await apiPOST(
-                `/admin/sessions/${session.id}/postings`,
-                postingData
-            );
-            expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
-
-            // Set position for posting
-            resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
-                { position_id: position.id }
-            );
+        it("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
+            let resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
-            resp = await apiPOST("/debug/users", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
-            // Create and submit survey.js data
             let pdf_str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.pdf"),
                 {
@@ -479,41 +334,23 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let contentJPG = "data:image/jpeg;base64," + jpg_str;
 
             let surveyWithTranscript = {
-                answers: {
-                    utorid: "smithh",
-                    first_name: "matthew",
-                    last_name: "chun",
-                    email: "wef@test.ca",
-                    phone: "6472222222",
-                    student_number: "10000000",
-                    program: "U",
-                    program_start: "2021-07-01",
-                    department: "cs",
-                    transcripts: [
-                        {
-                            name: "dummy.pdf",
-                            type: "application/pdf",
-                            content: contentPDF,
-                        },
-                        {
-                            name: "dummy.jpg",
-                            type: "image/jpeg",
-                            content: contentJPG,
-                        },
-                    ],
-                    previous_university_ta: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "n/a",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "n/a",
-                },
+                ...surveyWithoutTranscript,
             };
 
+            // Attach multiple transcript files 
+            surveyWithTranscript.answers.transcripts = [
+                {
+                    name: "dummy.pdf",
+                    type: "application/pdf",
+                    content: contentPDF,
+                },
+                {
+                    name: "dummy.jpg",
+                    type: "image/jpeg",
+                    content: contentJPG,
+                },
+            ];
 
-            // Submit survey.js data
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyWithTranscript,
@@ -521,53 +358,32 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
-            // Get application's pdf and jpg url_tokens
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
-            console.log(resp.payload[0]);
             let pdf_url_token = resp.payload[0].documents[0].url_token;
             let jpg_url_token = resp.payload[0].documents[1].url_token;
 
-            // Write the retrieved pdf data to a file and verify
-    axios.request({
-	    responseType: 'arraybuffer',
-	    url: `${BACKEND_BASE_URL}/public/files/${pdf_url_token}`,
-	    method: 'get',
-	    headers: {
-		            'Content-Type': 'application/pdf',
-		        },
-}).then((result) => {
-	    let retrievedData = new Uint8Array(result.data);
-	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.pdf'));
-	    console.log("pdf");
-	console.log(md5(retrievedData));
-	console.log(md5(originalData));
-	    expect(md5(retrievedData)).toEqual(md5(originalData));
-});
-	    // Write the retrieved jpg data to a file and verify
-       	axios.request({
-	    responseType: 'arraybuffer',
-	    url: `${BACKEND_BASE_URL}/public/files/${jpg_url_token}`,
-	    method: 'get',
-	    headers: {
-	            'Content-Type': 'image/jpeg',
-	        },
-	}).then((result) => {
-	    let retrievedData = new Uint8Array(result.data);
-	    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.jpg'));
-		console.log("jpg");
-		console.log(md5(retrievedData));
-		console.log(md5(originalData));
-	    expect(md5(retrievedData)).toEqual(md5(originalData));
-	});
-});
+            let hashes = getMD5Hashes(pdf_url_token, "pdf");
+            expect(hashes[0]).toEqual(hashes[1])
+
+            hashes = getMD5Hashes(jpg_url_token, "jpg");
+            expect(hashes[0]).toEqual(hashes[1])
+        });
+
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
-        it.skip("Can submit and retrieve attachments for some custom questions", async () => {
-            // Create a new posting with additional custom questions
-            postingData.custom_questions = {
+        it("Can submit and retrieve attachments for some custom questions", async () => {
+            // Create a new posting with a custom question requiring file attachment
+            let postingWithCustomQuestion = {
+                name: "2021 Spring Posting",
+                intro_text: "Intro text for spring posting",
+                open_date: new Date("2021/01/05").toISOString(),
+                close_date: new Date("2021/04/31").toISOString(),
+                availability: "auto",
+            };
+
+            postingWithCustomQuestion.custom_questions = {
                 title: "Title1",
                 description: "description1",
                 pages: [
@@ -577,7 +393,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                             {
                                 type: "file",
                                 name: "question1",
-                                title: "this is a file question",
+                                title: "This is a file question",
                                 maxSize: 0,
                             },
                         ],
@@ -587,21 +403,19 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             let resp = await apiPOST(
                 `/admin/sessions/${session.id}/postings`,
-                postingData
+                postingWithCustomQuestion
             );
             expect(resp).toHaveStatus("success");
             Object.assign(posting, resp.payload);
             checkPropTypes(postingPropTypes, posting);
             expect(posting.id).not.toBeNull();
 
-            // Set position for posting
             resp = await apiPOST(
                 `/admin/postings/${posting.id}/posting_positions`,
                 { position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
 
-            // Create and switch to a ta only user
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
@@ -612,38 +426,23 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     encoding: "base64",
                 }
             );
-
             let content_str = "data:text/plain;base64," + str;
             let surveyWithTranscript = {
-                answers: {
-                    utorid: "smithh",
-                    first_name: "matthew",
-                    last_name: "chun",
-                    email: "wef@test.ca",
-                    phone: "6472222222",
-                    student_number: "10000000",
-                    program: "P",
-                    program_start: "2021-07-01",
-                    department: "cs",
-                    question1: [
-                        {
-                            name: "dummy.txt",
-                            type: "text/plain",
-                            content: "data:text/plain;base64," + content_str,
-                        },
-                    ],
-                    previous_university_ta: false,
-                    previous_department_ta: true,
-                    previous_other_university_ta: false,
-                    previous_experience_summary: "n/a",
-                    position_preferences: {
-                        [position.position_code]: 3,
-                    },
-                    comments: "n/a",
-                },
+                ...surveyWithoutTranscript,
             };
 
-            // Submit survey.js data
+            // Attach as an answer to custom question
+            surveyWithTranscript.answers.question1 = [
+                {
+                    name: "dummy.txt",
+                    type: "text/plain",
+                    content: "data:text/plain;base64," + content_str,
+                },
+            ];
+            surveyWithTranscript.answers.position_preferences = {
+                [position.position_code]: 3,
+            };
+
             resp = await apiPOST(
                 `/public/postings/${posting.url_token}/submit`,
                 surveyWithTranscript,
@@ -651,32 +450,17 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
             resp = await apiPOST("/debug/active_user", adminUser);
             expect(resp).toHaveStatus("success");
 
-            // Get application's url_token
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
-            console.log(resp.payload[0]);
             let url_token = resp.payload[0].documents[0].url_token;
-            console.log(url_token);
 
-            // Switching back to taonlyuser
             resp = await apiPOST("/debug/active_user", taOnlyUser);
             expect(resp).toHaveStatus("success");
 
-            // Write the retrieved txt data to a file and verify
-axios.request({
-    responseType: 'arraybuffer',
-    url: `${BACKEND_BASE_URL}/public/files/${url_token}`,
-    method: 'get',
-    headers: {
-            'Content-Type': 'text/plain',
-        },
-}).then((result) => {
-    let retrievedData = new Uint8Array(result.data);
-    let originalData = fs.readFileSync(path.resolve(__dirname, './image-data/dummy.txt'));
-    expect(md5(retrievedData)).toEqual(md5(originalData));
-});});
+            let hashes = getMD5Hashes(url_token, "txt");
+            expect(hashes[0]).toEqual(hashes[1])
+        });
     });
 }
