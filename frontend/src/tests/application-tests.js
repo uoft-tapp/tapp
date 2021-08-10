@@ -19,7 +19,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
     const BACKEND_BASE_URL = "http://backend:3000";
 
-    // Returns hashes rather than expecting their equality as possible fail is untracable back to the test case 
+    // Returns hashes rather than expecting their equality as possible fail is untracable back to the test case
     async function getMD5Hashes(url_token, file_type) {
         let content_type;
         switch (file_type) {
@@ -44,7 +44,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         let originalData = fs.readFileSync(
             path.resolve(__dirname, `./image-data/dummy.${file_type}`)
         );
-        return [md5(retrievedData), md5(originalData)]
+        return [md5(retrievedData), md5(originalData)];
     }
 
     let surveyWithoutTranscript = {
@@ -189,7 +189,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 }
             );
             let txt_str = "data:text/plain;base64," + str;
-            
+
             // Attach text file
             let surveyWithTranscript = {
                 ...surveyWithoutTranscript,
@@ -219,7 +219,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
 
             let hashes = getMD5Hashes(url_token, "txt");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it.todo(
@@ -268,7 +268,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
 
             let hashes = getMD5Hashes(url_token, "jpg");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
@@ -310,7 +310,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let url_token = resp.payload[0].documents[0].url_token;
 
             let hashes = getMD5Hashes(url_token, "pdf");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
@@ -337,7 +337,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 ...surveyWithoutTranscript,
             };
 
-            // Attach multiple transcript files 
+            // Attach multiple transcript files
             surveyWithTranscript.answers.transcripts = [
                 {
                     name: "dummy.pdf",
@@ -366,10 +366,10 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let jpg_url_token = resp.payload[0].documents[1].url_token;
 
             let hashes = getMD5Hashes(pdf_url_token, "pdf");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
 
             hashes = getMD5Hashes(jpg_url_token, "jpg");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
         });
 
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
@@ -460,7 +460,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
 
             let hashes = getMD5Hashes(url_token, "txt");
-            expect(hashes[0]).toEqual(hashes[1])
+            expect(hashes[0]).toEqual(hashes[1]);
         });
     });
 }
