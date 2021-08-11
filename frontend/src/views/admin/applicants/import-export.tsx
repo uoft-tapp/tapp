@@ -156,7 +156,7 @@ export function ConnectedImportInstructorAction() {
                     {modifiedDiffSpec.length > 0 && (
                         <Alert variant="info">
                             <span className="mb-1">
-                                The following instructors will be{" "}
+                                The following applicants will be{" "}
                                 <strong>modified</strong>
                             </span>
                             <ApplicantsDiffList
