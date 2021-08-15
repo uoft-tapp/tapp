@@ -20,14 +20,13 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let session, applicant, position; // retrieved from seeder
     let adminUser;
 
-
     /**
      * Returns hashes of both the original file submitted and retrieved file from database
      * We don't test their equality here as possible fail is untracable back to the test case
      *
      * @param url_token the token associated with the submitted document file
      * @param file_type the document file type; can be "txt", "pdf", or "jpg".
-     * @returns MD5 hashes of the two files 
+     * @returns MD5 hashes of the two files
      */
     async function getMD5Hashes(url_token, file_type) {
         let content_type;
@@ -400,7 +399,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("error");
-            
+
             await restoreDefaultUser();
         });
 
