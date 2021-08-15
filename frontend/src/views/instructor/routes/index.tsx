@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch, useParams } from "react-router-dom";
 import { InstructorAssignmentsView } from "../assignments";
-import { Landing as InstructorLanding } from "../landing";
 import { InstructorDdahsView } from "../ddahs";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { setActivePositionId } from "../store/actions";
@@ -27,7 +26,7 @@ export function InstructorRoutes() {
     return (
         <Switch>
             <Route exact path="/">
-                <InstructorLanding />
+                <Redirect from="/" to="/sessions/details" />
             </Route>
             <Route path="/positions/:position_id/assignments">
                 <UpdateActivePosition />

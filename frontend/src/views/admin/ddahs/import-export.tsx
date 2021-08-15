@@ -363,7 +363,7 @@ const DialogContent = React.memo(function DialogContent({
                     {newItems.length > 0 && (
                         <Alert variant="primary">
                             <span className="mb-1">
-                                The following applicants will be{" "}
+                                The following DDAHs will be{" "}
                                 <strong>added</strong>
                             </span>
                             <DdahsList ddahs={newItems} />
@@ -372,7 +372,7 @@ const DialogContent = React.memo(function DialogContent({
                     {modifiedDiffSpec.length > 0 && (
                         <Alert variant="info">
                             <span className="mb-1">
-                                The following instructors will be{" "}
+                                The following DDAHs will be{" "}
                                 <strong>modified</strong>
                             </span>
                             <DdahsDiffList modifiedDdahs={modifiedDiffSpec} />
