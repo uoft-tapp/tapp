@@ -409,13 +409,6 @@ it("Import Postings from JSON/CSV/XLSX", () => {
         false
     );
     expect(postings).toMatchSnapshot();
-    // import correct positions from JSON
-    const normalizedJsonPositions = normalizeImport(
-        {
-            fileType: "json",
-            data: importObjectJSONs.positions,
-        },
-    );
     expect(normalizedJsonPositions).toMatchSnapshot();
     // Importing a posting with invalid dates should throw error
     expect(() =>
