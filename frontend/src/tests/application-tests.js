@@ -14,12 +14,12 @@ import md5 from "md5";
 
 const HIGH_PREFERENCE = 3;
 const LOW_PREFERENCE = 1;
+const BACKEND_BASE_URL = "http://backend:3000";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session, applicant, position; // retrieved from seeder
     let adminUser;
 
-    const BACKEND_BASE_URL = "http://backend:3000";
 
     /**
      * Returns hashes of both the original file submitted and retrieved file from database
@@ -56,24 +56,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
         return [md5(retrievedData), md5(originalData)];
     }
 
-    let surveyWithoutTranscript = {
-        answers: {
-            utorid: "smithh",
-            first_name: "matthew",
-            last_name: "chun",
-            email: "wef@test.ca",
-            phone: "6472222222",
-            student_number: "10000000",
-            program: "U",
-            program_start: "2021-07-01",
-            department: "cs",
-            previous_university_ta: false,
-            previous_department_ta: true,
-            previous_other_university_ta: false,
-            previous_experience_summary: "n/a",
-            comments: "n/a",
-        },
-    }
     let surveyData;
     const userCreatedFromApplicant = {};
     const postingData = {
@@ -91,7 +73,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         open_date: "2021/04/01",
         close_date: "2021/05/01",
         availability: "open",
-    };/.
+    };
 
     const postingPosition = {
         num_positions: 10,
@@ -197,13 +179,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
             adminUser = resp.payload;
-            // Create taonlyuser
-            resp = await apiPOST("/debug/users", taOnlyUser);
-            expect(resp).toHaveStatus("success");
 
-            surveyWithoutTranscript.answers.position_preferences = {
-                [position.position_code]: 3,
-            };
             checkPropTypes(surveyPropTypes, resp.payload);
 
             await restoreDefaultUser();
@@ -234,6 +210,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     applicant[prefilledKey]
                 );
             }
+
             await restoreDefaultUser();
         });
 
@@ -260,24 +237,40 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 utorid: "matthewc",
                 roles: ["ta"],
             };
-
             await switchToUser(taOnlyUser);
 
+            // Create and submit survey.js data
+            surveyData = {
+                answers: {
+                    utorid: "matthewc",
+                    student_number: "1000123456",
+                    first_name: "Matthew",
+                    last_name: "Cambell",
+                    email: "test@test.ca",
+                    phone: "6471234567",
+                    program: "M",
+                    program_start: "2017-09-05",
+                    department: "cs",
+                    previous_university_ta: true,
+                    some_entry: false,
+                    previous_department_ta: true,
+                    previous_other_university_ta: false,
+                    previous_experience_summary: "some previous experience",
+                    position_preferences: {
+                        [position.position_code]: 3,
+                    },
+                    comments: "some additional comments",
+                },
+            };
             // Submit survey.js data
             resp = await apiPOST(
-
                 `/public/postings/${postingData.url_token}/submit`,
                 surveyData,
                 true
             );
             expect(resp).toHaveStatus("success");
 
-            // Switch back to default admin
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
-
             await restoreDefaultUser();
-
             // Further verfication will happen in test cases concerning application data
         });
 
@@ -326,6 +319,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp.payload["prefilled_data"]).toEqual(
                 expect.objectContaining(applicationPrefillData)
             );
+
             await restoreDefaultUser();
         });
 
@@ -406,7 +400,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("error");
-
+            
             await restoreDefaultUser();
         });
 
@@ -581,8 +575,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             "When submitting survey.js data attached files are stored on disk rather than as base64 strings in the database"
         );
         it("Can submit and retrieve attachments for a new application", async () => {
-            let resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions);
 
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.txt"),
@@ -594,7 +587,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             // Attach text file
             let surveyWithTranscript = {
-                ...surveyWithoutTranscript,
+                ...surveyData,
             };
             surveyWithTranscript.answers.transcripts = [
                 {
@@ -611,14 +604,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions);
 
             let hashes = getMD5Hashes(url_token, "txt");
             expect(hashes[0]).toEqual(hashes[1]);
@@ -629,8 +620,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
         );
 
         it("Can submit a jpg/png file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
-            let resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions);
 
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.jpg"),
@@ -641,7 +631,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let jpg_str = "data:image/jpeg;base64," + str;
 
             let surveyWithTranscript = {
-                ...surveyWithoutTranscript,
+                ...surveyData,
             };
 
             // Attach jpg file
@@ -660,23 +650,18 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions);
 
             let hashes = getMD5Hashes(url_token, "jpg");
             expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
-            let resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
             let str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.pdf"),
                 {
@@ -686,7 +671,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let content_str = "data:application/pdf;base64," + str;
 
             let surveyWithTranscript = {
-                ...surveyWithoutTranscript,
+                ...surveyData,
             };
 
             // Attach pdf file
@@ -705,8 +690,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
@@ -736,7 +720,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let contentJPG = "data:image/jpeg;base64," + jpg_str;
 
             let surveyWithTranscript = {
-                ...surveyWithoutTranscript,
+                ...surveyData,
             };
 
             // Attach multiple transcript files
@@ -760,8 +744,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let pdf_url_token = resp.payload[0].documents[0].url_token;
@@ -830,7 +813,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             let content_str = "data:text/plain;base64," + str;
             let surveyWithTranscript = {
-                ...surveyWithoutTranscript,
+                ...surveyData,
             };
 
             // Attach as an answer to custom question
@@ -852,8 +835,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", adminUser);
-            expect(resp).toHaveStatus("success");
+            await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
