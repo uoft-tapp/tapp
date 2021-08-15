@@ -398,7 +398,44 @@ it("Import Ddahs from JSON/CSV/XLSX with many duties", () => {
     expect(normalizedSpreadsheetDdahs).toMatchSnapshot();
 });
 
-it.todo("Import Postings from JSON/CSV/XLSX");
+it("Import Postings from JSON/CSV/XLSX", () => {
+    // import correct positions from XLSX
+    let postings = normalizeImport(
+        {
+            fileType: "spreadsheet",
+            data: parseSpreadsheet("postings_correct.xlsx"),
+        },
+        positionSchema,
+        false
+    );
+    expect(postings).toMatchSnapshot();
+    // import correct positions from JSON
+    const normalizedJsonPositions = normalizeImport(
+        {
+            fileType: "json",
+            data: importObjectJSONs.positions,
+        },
+    );
+    expect(normalizedJsonPositions).toMatchSnapshot();
+    // Importing a posting with invalid dates should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("postings_invalid_date.xlsx"),
+            },
+        )
+    ).toThrow(Error);
+    // Importing a posting with missing keys should throw error
+    expect(() =>
+        normalizeImport(
+            {
+                fileType: "spreadsheet",
+                data: parseSpreadsheet("postings_missing_keys.xlsx"),
+            },
+        )
+    ).toThrow(Error);
+});
 it.todo("Export Postings to JSON/CSV/XLSX");
 
 it("Compute Instructors diff", () => {
