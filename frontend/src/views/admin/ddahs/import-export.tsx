@@ -353,8 +353,7 @@ const DialogContent = React.memo(function DialogContent({
         if (newItems.length === 0 && modifiedDiffSpec.length === 0) {
             dialogContent = (
                 <Alert variant="warning">
-                    No difference between imported applicants and those already
-                    on the system.
+                    No difference between imported and existing DDAHs.
                 </Alert>
             );
         } else {
