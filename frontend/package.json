@@ -26,6 +26,7 @@
         "bootstrap": "^4.5.3",
         "chrono-node": "^2.1.10",
         "classnames": "^2.2.6",
+        "date-input-polyfill": "^2.14.0",
         "file-saver": "^2.0.5",
         "fuzzyset": "^1.0.6",
         "jszip": "^3.5.0",
