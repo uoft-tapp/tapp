@@ -1,6 +1,6 @@
 import React from "react";
 import { HasId } from "../api/defs/types";
-import { formatDate } from "../libs/utils";
+import { formatDate, formatMoney } from "../libs/utils";
 import { EditableField } from "./edit-field-widgets";
 
 export type EditableType =
@@ -25,7 +25,8 @@ export type EditableType =
     | "text"
     | "time"
     | "url"
-    | "week";
+    | "week"
+    | "money";
 
 /**
  * A cell that renders editable applicant information. `upsert` is called when the value is edited.
@@ -70,6 +71,7 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
 }): React.ReactElement {
     const title = `Edit ${"" + column.Header}`;
     const isDate = type === "date";
+    const isMoney = type === "money";
 
     async function onChange(newVal: string | number | null) {
         const id = (row.original || (row as any)._original).id;
@@ -81,6 +83,12 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
     }
 
     const formattedValue = isDate ? ("" + value).slice(0, 10) : value || "";
+    let displayedValue = isDate ? formatDate("" + value) : value;
+
+    if (isMoney) {
+        displayedValue = value != null ? formatMoney("" + value) : "";
+        type = "number";
+    }
 
     return (
         <EditableField
@@ -90,7 +98,7 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
             editable={editable}
             type={type}
         >
-            {isDate ? formatDate("" + value) : value}
+            {displayedValue}
         </EditableField>
     );
 }

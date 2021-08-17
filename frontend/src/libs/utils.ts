@@ -187,3 +187,14 @@ export function guessActiveSession(sessions: Session[]): Session | null {
 
     return null;
 }
+
+/**
+ * Formats the input "number" string to 2 decimal places.
+ * @param {string} moneyString
+ */
+export function formatMoney(moneyString: string): string {
+    if (!moneyString) {
+        return moneyString;
+    }
+    return parseFloat(moneyString).toFixed(2);
+}
