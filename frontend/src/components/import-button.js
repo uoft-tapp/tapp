@@ -49,12 +49,12 @@ export function ImportDialog({
     const withLabelReset = (actionHandler) => () => {
         setFileInputLabel(DEFAULT_LABEL);
         actionHandler();
-    }
+    };
 
     const withFileContentsReset = (actionHandler) => () => {
         setFileContents(null);
         actionHandler();
-    }
+    };
 
     // When we are processing we want to set a spinner button
     // in the dialog as well as communicate to our parent
@@ -182,7 +182,10 @@ export function ImportDialog({
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={withFileContentsReset(withLabelReset(onCancel))}>
+                <Button
+                    variant="secondary"
+                    onClick={withFileContentsReset(withLabelReset(onCancel))}
+                >
                     Cancel
                 </Button>
                 <Button variant="primary" onClick={_onConfirm}>
