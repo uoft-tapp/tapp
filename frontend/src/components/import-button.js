@@ -46,8 +46,13 @@ export function ImportDialog({
 
     let formElement = null;
 
-    const withLabelReset = (actionHandler) => async () => {
+    const withLabelReset = (actionHandler) => () => {
         setFileInputLabel(DEFAULT_LABEL);
+        actionHandler();
+    }
+
+    const withFileContentsReset = (actionHandler) => () => {
+        setFileContents(null);
         actionHandler();
     }
 
@@ -177,7 +182,7 @@ export function ImportDialog({
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={withLabelReset(onCancel)}>
+                <Button variant="secondary" onClick={withFileContentsReset(withLabelReset(onCancel))}>
                     Cancel
                 </Button>
                 <Button variant="primary" onClick={_onConfirm}>

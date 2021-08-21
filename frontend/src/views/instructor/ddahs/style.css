@@ -39,3 +39,37 @@
     align-self: center;
     font-style: italic;
 }
+
+.instructor-ddah-import-duties-diff-list .duty-created {
+    list-style-type: "\2713";
+}
+
+.instructor-ddah-import-duties-diff-list .duty-created:after {
+    content: " (new)";
+    color: green;
+    font-weight: bold;
+}
+
+.instructor-ddah-import-duties-diff-list .duty-updated {
+    list-style-type: "\270F";
+    padding-left: 2px;
+}
+
+.instructor-ddah-import-duties-diff-list .duty-updated:after {
+    content: " (updated)";
+    color: orange;
+}
+
+.instructor-ddah-import-duties-diff-list .duty-deleted {
+    list-style-type: "\2717";
+}
+
+.instructor-ddah-import-duties-diff-list .duty-deleted:after {
+    color: red;
+    content: " (deleted)";
+    font-weight: bold;
+}
+
+.instructor-ddah-import-duties-diff-list .duty-unchanged {
+    color:grey;
+}

@@ -88,29 +88,28 @@ function dutiesDiffList(changes: DutyDiff[]) {
                 switch (status) {
                     case DiffType.Unchanged:
                         return (
-                            <li>
-                                {oldDuty!.description} - {oldDuty!.hours}
+                            <li className="duty-unchanged">
+                                {oldDuty!.description} - {oldDuty!.hours}h
                             </li>
                         );
                     case DiffType.Updated:
                         return (
-                            <li>
-                                {oldDuty!.description} - {oldDuty!.hours}{" "}
-                                <FaArrowRight /> {newDuty!.description} -{" "}
-                                {newDuty!.hours}{" "}
+                            <li className="duty-updated">
+                                {oldDuty!.description} - {oldDuty!.hours}h{" "}
+                                <FaArrowRight />
+                                {newDuty!.hours}h
                             </li>
                         );
                     case DiffType.Created:
                         return (
-                            <li>
-                                {newDuty!.description} - {newDuty!.hours} (new)
+                            <li className="duty-created">
+                                {newDuty!.description} - {newDuty!.hours}h
                             </li>
                         );
                     case DiffType.Deleted:
                         return (
-                            <li>
-                                {oldDuty!.description} - {oldDuty!.hours}{" "}
-                                (deleted)
+                            <li className="duty-deleted">
+                                {oldDuty!.description} - {oldDuty!.hours}h
                             </li>
                         );
                     default:
@@ -128,11 +127,13 @@ function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
                 <li>
                     DDAH for {applicant.first_name} {applicant.last_name} (
                     {applicant.utorid})
-                    {duties.map((duty) => (
-                        <li>
-                            {duty.description} - {duty.hours}
-                        </li>
-                    ))}
+                    <ul>
+                        {duties.map((duty) => (
+                            <li>
+                                {duty.description} - {duty.hours}h
+                            </li>
+                        ))}
+                    </ul>
                 </li>
             ))}
         </ul>
@@ -141,7 +142,7 @@ function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
 
 function DdahsDiffList({ ddahUpdates }: { ddahUpdates: DdahUpdate[] }) {
     return (
-        <ul>
+        <ul className="instructor-ddah-import-duties-diff-list">
             {ddahUpdates.map(({ oldDdah, updatedDdah }) => {
                 const dutiesDiff = getDutiesDiff(
                     oldDdah.duties,
@@ -253,10 +254,7 @@ export function InstructorImportDdahsAction({
     return (
         <ImportActionButton
             onConfirm={onConfirm}
-            onFileChange={(content: any) => {
-                console.log(content);
-                setFileContent(content);
-            }}
+            onFileChange={setFileContent}
             dialogContent={
                 <DialogContent
                     processingError={processingError}
