@@ -253,17 +253,21 @@ export function InstructorImportDdahsAction({
     return (
         <ImportActionButton
             onConfirm={onConfirm}
-            onFileChange={setFileContent}
+            onFileChange={(content: any) => {
+                console.log(content);
+                setFileContent(content);
+            }}
             dialogContent={
                 <DialogContent
                     processingError={processingError}
                     newDdahs={newDdahs}
                     ddahUpdates={ddahUpdates}
+                    fileLoaded={!!diffed && !inProgress}
                 />
             }
             setInProgress={setInProgress}
             disabled={disabled}
-        />
+        ></ImportActionButton>
     );
 }
 
@@ -271,13 +275,20 @@ const DialogContent = React.memo(function DialogContent({
     processingError,
     newDdahs,
     ddahUpdates,
+    fileLoaded,
 }: {
     processingError: string | null;
     newDdahs: (Ddah | Omit<Ddah, "id">)[];
     ddahUpdates: DdahUpdate[];
+    fileLoaded: boolean;
 }) {
     if (processingError) {
         return <Alert variant="danger">{"" + processingError}</Alert>;
+    }
+
+    if (!fileLoaded) {
+        console.log("Clear!");
+        return <p>No data loaded.</p>;
     }
 
     if (newDdahs.length === 0 && ddahUpdates.length === 0) {
