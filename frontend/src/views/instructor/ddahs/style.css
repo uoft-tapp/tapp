@@ -73,3 +73,7 @@
 .instructor-ddah-import-duties-diff-list .duty-unchanged {
     color: grey;
 }
+
+.instructor-ddah-import-new-ddah-duties-list li {
+    list-style-type: "\2713";
+}

@@ -123,13 +123,13 @@ function dutiesDiffList(changes: DutyDiff[]) {
 function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
     return (
         <ul>
-            {ddahs.map(({ assignment: { applicant }, duties }) => (
+            {ddahs.map(({ assignment: { applicant }, duties }, i) => (
                 <li>
                     DDAH for {applicant.first_name} {applicant.last_name} (
                     {applicant.utorid})
-                    <ul>
+                    <ul className="instructor-ddah-import-new-ddah-duties-list">
                         {duties.map((duty) => (
-                            <li>
+                            <li key={`ddah-new-${i}`}>
                                 {duty.description} - {duty.hours}h
                             </li>
                         ))}
@@ -143,7 +143,7 @@ function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
 function DdahsDiffList({ ddahUpdates }: { ddahUpdates: DdahUpdate[] }) {
     return (
         <ul className="instructor-ddah-import-duties-diff-list">
-            {ddahUpdates.map(({ oldDdah, updatedDdah }) => {
+            {ddahUpdates.map(({ oldDdah, updatedDdah }, i) => {
                 const dutiesDiff = getDutiesDiff(
                     oldDdah.duties,
                     updatedDdah.duties
@@ -154,7 +154,7 @@ function DdahsDiffList({ ddahUpdates }: { ddahUpdates: DdahUpdate[] }) {
                     },
                 } = updatedDdah;
                 return (
-                    <li>
+                    <li key={`ddah-diff-${i}`}>
                         DDAH for {first_name} {last_name} ({utorid})
                         {dutiesDiffList(dutiesDiff)}
                     </li>
@@ -285,7 +285,6 @@ const DialogContent = React.memo(function DialogContent({
     }
 
     if (!fileLoaded) {
-        console.log("Clear!");
         return <p>No data loaded.</p>;
     }
 
