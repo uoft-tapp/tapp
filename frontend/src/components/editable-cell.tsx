@@ -70,8 +70,6 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
     editable?: boolean;
 }): React.ReactElement {
     const title = `Edit ${"" + column.Header}`;
-    const isDate = type === "date";
-    const isMoney = type === "money";
 
     async function onChange(newVal: string | number | null) {
         const id = (row.original || (row as any)._original).id;
@@ -82,23 +80,35 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
         }
     }
 
-    const formattedValue = isDate ? ("" + value).slice(0, 10) : value || "";
-    let displayedValue = isDate ? formatDate("" + value) : value;
+    // gets passed down to the input element in the EditFieldDialog
+    let inputDialogValue;
+    // gets displayed on the field
+    let displayValue;
 
-    if (isMoney) {
-        displayedValue = value != null ? formatMoney("" + value) : "";
-        type = "number";
+    switch (type) {
+        case "date":
+            displayValue = formatDate("" + value);
+            inputDialogValue = ("" + value).slice(0, 10);
+            break;
+        case "money":
+            displayValue = value != null ? formatMoney("" + value) : "";
+            inputDialogValue = value || "";
+            break;
+        default:
+            displayValue = value || "";
+            inputDialogValue = value || "";
+            break;
     }
 
     return (
         <EditableField
             title={title}
-            value={formattedValue}
+            value={inputDialogValue}
             onChange={onChange}
             editable={editable}
             type={type}
         >
-            {displayedValue}
+            {displayValue}
         </EditableField>
     );
 }
