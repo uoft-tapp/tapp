@@ -74,7 +74,7 @@ class Api::V1::Instructor::DdahsController < ApplicationController
 
         # look up the DDAH first by assignment ID, otherwise, create a new DDAH
         if params[:assignment_id]
-            assignment = Assignment.find_by(id: params[:assignment_id])
+            assignment = Assignment.find_by!(id: params[:assignment_id])
             if assignment.accessible_by_instructor(@active_instructor.id)
                 @ddah = assignment.ddah || Ddah.new(ddah_params)
             end
