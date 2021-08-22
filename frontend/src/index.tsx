@@ -5,6 +5,7 @@ import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import DynamicEntryRouter from "./dynamic-entry-router";
 import configureStore from "./store";
+import "date-input-polyfill";
 
 const { store, persistor } = configureStore();
 
