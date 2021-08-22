@@ -17,7 +17,7 @@ class WageChunkFormattingService
                 start_date = I18n.l chunk[:start_date].to_date, format: :long
                 end_date = I18n.l chunk[:end_date].to_date, format: :long
                 hours = chunk[:hours]
-                rate = '%.2f' % chunk[:rate]
+                rate = format('%.2f', chunk[:rate])
 
                 "#{hours} hours at $#{rate}/hour from #{start_date} to #{
                     end_date
