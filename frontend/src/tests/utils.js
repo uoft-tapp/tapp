@@ -3,6 +3,8 @@ import XLSX from "xlsx";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
+import md5 from "md5";
+
 // eslint-disable-next-line
 const { expect, test, it, describe, beforeAll } = global;
 
@@ -36,6 +38,44 @@ expect.extend({
             };
         }
     },
+    // toEqualOriginalFile(received) {
+    //     if (received == null) {
+    //         throw new Error(
+    //             "Cannot check equality of a file that does not exist"
+    //         );
+    //     }
+    //     let resp = await axios.get(
+    //         `http://backend:3000/public/files/${received.url_token}`,
+    //         {
+    //             responseType: "arraybuffer",
+    //             headers: {
+    //                 "Content-Type": received.type,
+    //             },
+    //         }
+    //     );
+    //     let retrievedData = new Uint8Array(resp.data);
+    //     let originalData = fs.readFileSync(
+    //         path.resolve(__dirname, `./image-data/${received.name}`)
+    //     );
+    //     const pass = this.equals(md5(originalData), md5(retrievedData))
+    //     if (pass) {
+    //         return {
+    //             message: () =>
+    //                 `Expected ${this.utils.printReceived(
+    //                     received
+    //                 )} `,
+    //             pass: true,
+    //         };
+    //     } else {
+    //         return {
+    //             message: () =>
+    //                 `Expected ${this.utils.printReceived(
+    //                     received
+    //                 )} to equal file ${this.utils.printExpected(argument)}`,
+    //             pass: false,
+    //         };
+    //     }
+    // },
     toHaveStatus(received, argument) {
         if (received == null) {
             throw new Error(
@@ -46,7 +86,7 @@ expect.extend({
             return {
                 pass: true,
                 message: () =>
-                    `expected API response to not have ${this.utils.printExpected(
+                    `Expected API response to not have ${this.utils.printExpected(
                         {
                             status: argument,
                         }
@@ -56,7 +96,7 @@ expect.extend({
             return {
                 pass: false,
                 message: () =>
-                    `expected API response to have ${this.utils.printExpected({
+                    `Expected API response to have ${this.utils.printExpected({
                         status: argument,
                     })} but received ${this.utils.printReceived(received)}`,
             };
@@ -70,7 +110,7 @@ expect.extend({
             return {
                 pass: true,
                 message: () =>
-                    `expected object response to not have key ${this.utils.printExpected(
+                    `Expected object response to not have key ${this.utils.printExpected(
                         argument
                     )} but it does.`,
             };
@@ -78,7 +118,7 @@ expect.extend({
             return {
                 pass: false,
                 message: () =>
-                    `expected object to have key ${this.utils.printExpected(
+                    `Expected object to have key ${this.utils.printExpected(
                         argument
                     )} but only has keys ${this.utils.printReceived(
                         Object.keys(received)
@@ -105,7 +145,7 @@ expect.extend({
                 return {
                     pass: true,
                     message: () =>
-                        `expected ${this.utils.printExpected(
+                        `Expected ${this.utils.printExpected(
                             argument.name
                         )} type to not have attributes ${this.utils.printExpected(
                             argument.attributes
@@ -115,7 +155,7 @@ expect.extend({
                 return {
                     pass: false,
                     message: () =>
-                        `expected ${this.utils.printExpected(
+                        `Expected ${this.utils.printExpected(
                             argument.name
                         )} type to have attributes ${this.utils.printExpected(
                             expectedProperties
@@ -131,7 +171,7 @@ expect.extend({
             return {
                 pass: false,
                 message: () =>
-                    `expected type definition for ${this.utils.printExpected(
+                    `Expected type definition for ${this.utils.printExpected(
                         argument
                     )} but only have type definitions for ${this.utils.printReceived(
                         Object.keys(received)
@@ -165,6 +205,48 @@ const URL = "http://backend:3000";
 // Ensure that `path` starts with a `/`
 function _ensurePath(path) {
     return path.startsWith("/") ? path : "/" + path;
+}
+
+
+
+
+export async function equalsOriginalFile(received) {
+    if (received == null) {
+        throw new Error(
+            "Cannot check equality of a file that does not exist"
+        );
+    }
+    let resp = await axios.get(
+        `http://backend:3000/public/files/${received.url_token}`,
+        {
+            responseType: "arraybuffer",
+            headers: {
+                "Content-Type": received.type,
+            },
+        }
+    );
+    let retrievedData = new Uint8Array(resp.data);
+    let originalData = fs.readFileSync(
+        path.resolve(__dirname, `./image-data/${received.name}`)
+    );
+    const pass = this.equals(md5(originalData), md5(retrievedData))
+    if (pass) {
+        return {
+            message: () =>
+                `Expected ${this.utils.printReceived(
+                    received
+                )} `,
+            pass: true,
+        };
+    } else {
+        return {
+            message: () =>
+                `Expected ${this.utils.printReceived(
+                    received
+                )} to equal file ${this.utils.printExpected(argument)}`,
+            pass: false,
+        };
+    }
 }
 
 /**

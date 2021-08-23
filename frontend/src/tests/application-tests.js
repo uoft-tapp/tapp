@@ -20,41 +20,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
     let session, applicant, position; // retrieved from seeder
     let adminUser;
 
-    /**
-     * Returns hashes of both the original file submitted and retrieved file from database
-     * We don't test their equality here as possible fail is untracable back to the test case
-     *
-     * @param url_token the token associated with the submitted document file
-     * @param file_type the document file type; can be "txt", "pdf", or "jpg".
-     * @returns MD5 hashes of the two files
-     */
-    async function getMD5Hashes(url_token, file_type) {
-        let content_type;
-        switch (file_type) {
-            case "txt":
-                content_type = "text/plain";
-            case "pdf":
-                content_type = "application/pdf";
-            case "jpg":
-                content_type = "image/jpeg";
-        }
-
-        let resp = await axios.get(
-            `${BACKEND_BASE_URL}/public/files/${url_token}`,
-            {
-                responseType: "arraybuffer",
-                headers: {
-                    "Content-Type": content_type,
-                },
-            }
-        );
-        let retrievedData = new Uint8Array(resp.data);
-        let originalData = fs.readFileSync(
-            path.resolve(__dirname, `./image-data/dummy.${file_type}`)
-        );
-        return [md5(retrievedData), md5(originalData)];
-    }
-
     let surveyData;
     const userCreatedFromApplicant = {};
     const postingData = {
@@ -232,11 +197,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
             Object.assign(postingPosition, resp.payload);
 
-            const taOnlyUser = {
-                utorid: "matthewc",
-                roles: ["ta"],
-            };
-            await switchToUser(taOnlyUser);
+            await switchToUser(userWithTaPermissions);
 
             // Create and submit survey.js data
             surveyData = {
@@ -609,9 +570,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let url_token = resp.payload[0].documents[0].url_token;
 
             await switchToUser(userWithTaPermissions);
-
-            let hashes = getMD5Hashes(url_token, "txt");
-            expect(hashes[0]).toEqual(hashes[1]);
+            let file = {
+                url_token: url_token,
+                name: "dummy.txt",
+                type: "text/plain"
+            }
+            expect(file).toEqualOriginalFile()
         });
 
         it.todo(
@@ -656,8 +620,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             await switchToUser(userWithTaPermissions);
 
-            let hashes = getMD5Hashes(url_token, "jpg");
-            expect(hashes[0]).toEqual(hashes[1]);
+            // let hashes = getMD5Hashes(url_token, "jpg");
+            // expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
@@ -694,13 +658,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            let hashes = getMD5Hashes(url_token, "pdf");
-            expect(hashes[0]).toEqual(hashes[1]);
+            // let hashes = await getMD5Hashes(url_token, "pdf");
+            // expect(hashes[0]).toEqual(hashes[1]);
         });
 
         it("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
-            let resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions)
 
             let pdf_str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.pdf"),
@@ -749,11 +712,11 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let pdf_url_token = resp.payload[0].documents[0].url_token;
             let jpg_url_token = resp.payload[0].documents[1].url_token;
 
-            let hashes = getMD5Hashes(pdf_url_token, "pdf");
-            expect(hashes[0]).toEqual(hashes[1]);
+            // let hashes = getMD5Hashes(pdf_url_token, "pdf");
+            // expect(hashes[0]).toEqual(hashes[1]);
 
-            hashes = getMD5Hashes(jpg_url_token, "jpg");
-            expect(hashes[0]).toEqual(hashes[1]);
+            // hashes = getMD5Hashes(jpg_url_token, "jpg");
+            // expect(hashes[0]).toEqual(hashes[1]);
         });
 
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
@@ -800,8 +763,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             );
             expect(resp).toHaveStatus("success");
 
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
+            await switchToUser(userWithTaPermissions)
 
             // Create and submit survey.js data after base64 encoding transcript
             let str = fs.readFileSync(
@@ -839,11 +801,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            resp = await apiPOST("/debug/active_user", taOnlyUser);
-            expect(resp).toHaveStatus("success");
-
-            let hashes = getMD5Hashes(url_token, "txt");
-            expect(hashes[0]).toEqual(hashes[1]);
+            await switchToUser(userWithTaPermissions)
+            // let hashes = getMD5Hashes(url_token, "txt");
+            // expect(hashes[0]).toEqual(hashes[1]);
         });
     });
 
