@@ -53,6 +53,7 @@ export function ImportDialog({
 
     const withFileContentsReset = (actionHandler) => () => {
         setFileContents(null);
+        setFileArrayBuffer(null)
         actionHandler();
     };
 
@@ -184,7 +185,7 @@ export function ImportDialog({
             <Modal.Footer>
                 <Button
                     variant="secondary"
-                    onClick={withFileContentsReset(withLabelReset(onCancel))}
+                    onClick={withLabelReset(withFileContentsReset(onCancel))}
                 >
                     Cancel
                 </Button>

@@ -41,7 +41,7 @@
 }
 
 .instructor-ddah-import-duties-diff-list .duty-created {
-    list-style-type: "\2713";
+    list-style-type: "✓";
 }
 
 .instructor-ddah-import-duties-diff-list .duty-created:after {
@@ -51,7 +51,7 @@
 }
 
 .instructor-ddah-import-duties-diff-list .duty-updated {
-    list-style-type: "\270F";
+    list-style-type: "✏";
     padding-left: 2px;
 }
 
@@ -61,7 +61,7 @@
 }
 
 .instructor-ddah-import-duties-diff-list .duty-deleted {
-    list-style-type: "\2717";
+    list-style-type: "✗";
 }
 
 .instructor-ddah-import-duties-diff-list .duty-deleted:after {

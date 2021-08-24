@@ -1,6 +1,5 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
-import { FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { assignmentsSelector, applicantsSelector } from "../../../api/actions";
 import { ddahsSelector, upsertDdahs } from "../../../api/actions/ddahs";
@@ -10,6 +9,7 @@ import {
     Applicant,
     MinimalDdah,
     RawDuty,
+    Duty,
 } from "../../../api/defs/types";
 import { ImportActionButton } from "../../../components/import-button";
 import { DiffSpec, diffImport, getChanged } from "../../../libs/diffs";
@@ -23,10 +23,7 @@ enum DiffType {
     Deleted = "DELETED",
 }
 
-type MinimalDuty = {
-    description: string;
-    hours: number;
-};
+type MinimalDuty = Omit<Duty, "order">;
 
 interface DdahUpdate {
     updatedDdah: Ddah;
@@ -39,7 +36,7 @@ interface DutyDiff {
     status: DiffType;
 }
 
-function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]) {
+function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]): DutyDiff[] {
     let changes: DutyDiff[] = [];
     let dutiesChanged = false;
 
@@ -81,7 +78,7 @@ function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]) {
     return dutiesChanged ? changes : [];
 }
 
-function dutiesDiffList(changes: DutyDiff[]) {
+function DutiesDiffList({ changes }: { changes: DutyDiff[] }) {
     return (
         <ul>
             {changes.map(({ oldDuty, newDuty, status }) => {
@@ -95,8 +92,8 @@ function dutiesDiffList(changes: DutyDiff[]) {
                     case DiffType.Updated:
                         return (
                             <li className="duty-updated">
-                                {oldDuty!.description} - {oldDuty!.hours}h{" "}
-                                <FaArrowRight />
+                                {oldDuty!.description} - {oldDuty!.hours}h
+                                {" ➞ "}
                                 {newDuty!.hours}h
                             </li>
                         );
@@ -113,7 +110,7 @@ function dutiesDiffList(changes: DutyDiff[]) {
                             </li>
                         );
                     default:
-                        return null;
+                        return null as never;
                 }
             })}
         </ul>
@@ -148,15 +145,13 @@ function DdahsDiffList({ ddahUpdates }: { ddahUpdates: DdahUpdate[] }) {
                     oldDdah.duties,
                     updatedDdah.duties
                 );
-                const {
-                    assignment: {
-                        applicant: { first_name, last_name, utorid },
-                    },
-                } = updatedDdah;
+                const { assignment } = updatedDdah;
+                const { applicant } = assignment;
+                const { first_name, last_name, utorid } = applicant;
                 return (
                     <li key={`ddah-diff-${i}`}>
                         DDAH for {first_name} {last_name} ({utorid})
-                        {dutiesDiffList(dutiesDiff)}
+                        <DutiesDiffList changes={dutiesDiff} />
                     </li>
                 );
             })}
@@ -260,7 +255,7 @@ export function InstructorImportDdahsAction({
                     processingError={processingError}
                     newDdahs={newDdahs}
                     ddahUpdates={ddahUpdates}
-                    fileLoaded={!!diffed && !inProgress}
+                    fileLoaded={!!diffed}
                 />
             }
             setInProgress={setInProgress}
@@ -297,7 +292,7 @@ const DialogContent = React.memo(function DialogContent({
     }
 
     return (
-        <>
+        <React.Fragment>
             {newDdahs.length > 0 && (
                 <Alert variant="primary">
                     <span className="mb-1">
@@ -314,6 +309,6 @@ const DialogContent = React.memo(function DialogContent({
                     <DdahsDiffList ddahUpdates={ddahUpdates} />
                 </Alert>
             )}
-        </>
+        </React.Fragment>
     );
 });
