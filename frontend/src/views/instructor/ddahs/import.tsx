@@ -48,7 +48,7 @@ function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]): DutyDiff[] {
                 oldDuty.description === newDuty.description &&
                 oldDuty.hours === newDuty.hours
             ) {
-                changes.push({ oldDuty, newDuty, status: DiffType.Unchanged });
+                changes.push({ oldDuty, status: DiffType.Unchanged });
                 newDuties.splice(index, 1);
                 oldDutyDeleted = false;
             } else if (
