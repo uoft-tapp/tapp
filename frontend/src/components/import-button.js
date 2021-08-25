@@ -53,7 +53,7 @@ export function ImportDialog({
 
     const withFileContentsReset = (actionHandler) => () => {
         setFileContents(null);
-        setFileArrayBuffer(null)
+        setFileArrayBuffer(null);
         actionHandler();
     };
 
