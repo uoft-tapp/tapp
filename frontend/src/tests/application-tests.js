@@ -7,19 +7,15 @@ import {
     expect,
 } from "./utils";
 import { databaseSeeder } from "./setup";
-import axios from "axios";
 import fs from "fs";
 import path from "path";
-import md5 from "md5";
 
 const HIGH_PREFERENCE = 3;
 const LOW_PREFERENCE = 1;
-const BACKEND_BASE_URL = "http://backend:3000";
 
 export function applicationsTests({ apiGET, apiPOST }) {
     let session, applicant, position; // retrieved from seeder
     let adminUser;
-    let posting = {};
     let surveyData;
     const userCreatedFromApplicant = {};
     const postingData = {
