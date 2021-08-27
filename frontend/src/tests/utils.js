@@ -4,6 +4,8 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 import md5 from "md5";
+import fs from "fs";
+import path from "path";
 
 // eslint-disable-next-line
 const { expect, test, it, describe, beforeAll } = global;
@@ -38,44 +40,6 @@ expect.extend({
             };
         }
     },
-    // toEqualOriginalFile(received) {
-    //     if (received == null) {
-    //         throw new Error(
-    //             "Cannot check equality of a file that does not exist"
-    //         );
-    //     }
-    //     let resp = await axios.get(
-    //         `http://backend:3000/public/files/${received.url_token}`,
-    //         {
-    //             responseType: "arraybuffer",
-    //             headers: {
-    //                 "Content-Type": received.type,
-    //             },
-    //         }
-    //     );
-    //     let retrievedData = new Uint8Array(resp.data);
-    //     let originalData = fs.readFileSync(
-    //         path.resolve(__dirname, `./image-data/${received.name}`)
-    //     );
-    //     const pass = this.equals(md5(originalData), md5(retrievedData))
-    //     if (pass) {
-    //         return {
-    //             message: () =>
-    //                 `Expected ${this.utils.printReceived(
-    //                     received
-    //                 )} `,
-    //             pass: true,
-    //         };
-    //     } else {
-    //         return {
-    //             message: () =>
-    //                 `Expected ${this.utils.printReceived(
-    //                     received
-    //                 )} to equal file ${this.utils.printExpected(argument)}`,
-    //             pass: false,
-    //         };
-    //     }
-    // },
     toHaveStatus(received, argument) {
         if (received == null) {
             throw new Error(
@@ -194,6 +158,44 @@ expect.extend({
             };
         }
     },
+    async toEqualOriginalFile(received) {
+        if (received == null) {
+            throw new Error(
+                "Cannot check equality of a file that does not exist"
+            );
+        }
+        let resp = await axios.get(
+            `http://backend:3000/public/files/${received.url_token}`,
+            {
+                responseType: "arraybuffer",
+                headers: {
+                    "Content-Type": received.type,
+                },
+            }
+        );
+        let retrievedData = new Uint8Array(resp.data);
+        let originalData = fs.readFileSync(
+            path.resolve(__dirname, `./image-data/${received.name}`)
+        );
+        const pass = this.equals(md5(originalData), md5(retrievedData));
+        if (pass) {
+            return {
+                message: () =>
+                    `Expected retrieved attachment to not equal original ${this.utils.printReceived(
+                        received.name
+                    )}`,
+                pass: true,
+            };
+        } else {
+            return {
+                message: () =>
+                    `Expected retrieved attachment to equal original ${this.utils.printReceived(
+                        received.name
+                    )}`,
+                pass: false,
+            };
+        }
+    },
 });
 
 export { expect, test, it, describe, beforeAll };
@@ -205,48 +207,6 @@ const URL = "http://backend:3000";
 // Ensure that `path` starts with a `/`
 function _ensurePath(path) {
     return path.startsWith("/") ? path : "/" + path;
-}
-
-
-
-
-export async function equalsOriginalFile(received) {
-    if (received == null) {
-        throw new Error(
-            "Cannot check equality of a file that does not exist"
-        );
-    }
-    let resp = await axios.get(
-        `http://backend:3000/public/files/${received.url_token}`,
-        {
-            responseType: "arraybuffer",
-            headers: {
-                "Content-Type": received.type,
-            },
-        }
-    );
-    let retrievedData = new Uint8Array(resp.data);
-    let originalData = fs.readFileSync(
-        path.resolve(__dirname, `./image-data/${received.name}`)
-    );
-    const pass = this.equals(md5(originalData), md5(retrievedData))
-    if (pass) {
-        return {
-            message: () =>
-                `Expected ${this.utils.printReceived(
-                    received
-                )} `,
-            pass: true,
-        };
-    } else {
-        return {
-            message: () =>
-                `Expected ${this.utils.printReceived(
-                    received
-                )} to equal file ${this.utils.printExpected(argument)}`,
-            pass: false,
-        };
-    }
 }
 
 /**

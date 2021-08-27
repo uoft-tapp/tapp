@@ -19,7 +19,7 @@ const BACKEND_BASE_URL = "http://backend:3000";
 export function applicationsTests({ apiGET, apiPOST }) {
     let session, applicant, position; // retrieved from seeder
     let adminUser;
-
+    let posting = {};
     let surveyData;
     const userCreatedFromApplicant = {};
     const postingData = {
@@ -142,8 +142,6 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 true
             );
             expect(resp).toHaveStatus("success");
-            adminUser = resp.payload;
-
             checkPropTypes(surveyPropTypes, resp.payload);
 
             await restoreDefaultUser();
@@ -197,7 +195,14 @@ export function applicationsTests({ apiGET, apiPOST }) {
             expect(resp).toHaveStatus("success");
             Object.assign(postingPosition, resp.payload);
 
-            await switchToUser(userWithTaPermissions);
+            // await switchToUser(userWithTaPermissions);
+            const taOnlyUser = {
+                utorid: "matthewc",
+                roles: ["ta"],
+            };
+            resp = await apiPOST("/debug/users", taOnlyUser);
+            expect(resp).toHaveStatus("success");
+            await switchToUser(taOnlyUser);
 
             // Create and submit survey.js data
             surveyData = {
@@ -557,8 +562,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             ];
 
-            resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+            let resp = await apiPOST(
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyWithTranscript,
                 true
             );
@@ -573,9 +578,9 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let file = {
                 url_token: url_token,
                 name: "dummy.txt",
-                type: "text/plain"
-            }
-            expect(file).toEqualOriginalFile()
+                type: "text/plain",
+            };
+            await expect(file).toEqualOriginalFile();
         });
 
         it.todo(
@@ -606,8 +611,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             ];
 
-            resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+            let resp = await apiPOST(
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyWithTranscript,
                 true
             );
@@ -620,8 +625,12 @@ export function applicationsTests({ apiGET, apiPOST }) {
 
             await switchToUser(userWithTaPermissions);
 
-            // let hashes = getMD5Hashes(url_token, "jpg");
-            // expect(hashes[0]).toEqual(hashes[1]);
+            let file = {
+                url_token: url_token,
+                name: "dummy.jpg",
+                type: "image/jpeg",
+            };
+            await expect(file).toEqualOriginalFile();
         });
 
         it("Can submit a pdf file as a 'transcript' for an application; the resulting file can be retrieved", async () => {
@@ -646,8 +655,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             ];
 
-            resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+            let resp = await apiPOST(
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyWithTranscript,
                 true
             );
@@ -658,13 +667,16 @@ export function applicationsTests({ apiGET, apiPOST }) {
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
             let url_token = resp.payload[0].documents[0].url_token;
 
-            // let hashes = await getMD5Hashes(url_token, "pdf");
-            // expect(hashes[0]).toEqual(hashes[1]);
+            await switchToUser(userWithTaPermissions);
+            let file = {
+                url_token: url_token,
+                name: "dummy.pdf",
+                type: "application/pdf",
+            };
+            await expect(file).toEqualOriginalFile();
         });
 
         it("Can submit and retrieve multiple files as a 'transcript' for an application", async () => {
-            await switchToUser(userWithTaPermissions)
-
             let pdf_str = fs.readFileSync(
                 path.resolve(__dirname, "./image-data/dummy.pdf"),
                 {
@@ -699,8 +711,8 @@ export function applicationsTests({ apiGET, apiPOST }) {
                 },
             ];
 
-            resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+            let resp = await apiPOST(
+                `/public/postings/${postingData.url_token}/submit`,
                 surveyWithTranscript,
                 true
             );
@@ -712,16 +724,28 @@ export function applicationsTests({ apiGET, apiPOST }) {
             let pdf_url_token = resp.payload[0].documents[0].url_token;
             let jpg_url_token = resp.payload[0].documents[1].url_token;
 
-            // let hashes = getMD5Hashes(pdf_url_token, "pdf");
-            // expect(hashes[0]).toEqual(hashes[1]);
+            await switchToUser(userWithTaPermissions);
 
-            // hashes = getMD5Hashes(jpg_url_token, "jpg");
-            // expect(hashes[0]).toEqual(hashes[1]);
+            let pdfFile = {
+                url_token: pdf_url_token,
+                name: "dummy.pdf",
+                type: "application/pdf",
+            };
+            await expect(pdfFile).toEqualOriginalFile();
+
+            let jpgFile = {
+                url_token: jpg_url_token,
+                name: "dummy.jpg",
+                type: "image/jpeg",
+            };
+            await expect(jpgFile).toEqualOriginalFile();
         });
 
         // This is to test for a possible regression related to https://github.com/rails/rails/issues/41903
         it("Can submit and retrieve attachments for some custom questions", async () => {
             // Create a new posting with a custom question requiring file attachment
+            await restoreDefaultUser();
+
             let postingWithCustomQuestion = {
                 name: "2021 Spring Posting",
                 intro_text: "Intro text for spring posting",
@@ -747,23 +771,21 @@ export function applicationsTests({ apiGET, apiPOST }) {
                     },
                 ],
             };
+            const respPostingData = await addPosting(
+                postingWithCustomQuestion,
+                session
+            );
+            Object.assign(postingWithCustomQuestion, respPostingData);
+            checkPropTypes(postingPropTypes, postingWithCustomQuestion);
+            expect(postingWithCustomQuestion.id).not.toBeNull();
 
             let resp = await apiPOST(
-                `/admin/sessions/${session.id}/postings`,
-                postingWithCustomQuestion
-            );
-            expect(resp).toHaveStatus("success");
-            Object.assign(posting, resp.payload);
-            checkPropTypes(postingPropTypes, posting);
-            expect(posting.id).not.toBeNull();
-
-            resp = await apiPOST(
-                `/admin/postings/${posting.id}/posting_positions`,
+                `/admin/postings/${postingWithCustomQuestion.id}/posting_positions`,
                 { position_id: position.id }
             );
             expect(resp).toHaveStatus("success");
 
-            await switchToUser(userWithTaPermissions)
+            await switchToUser(userWithTaPermissions);
 
             // Create and submit survey.js data after base64 encoding transcript
             let str = fs.readFileSync(
@@ -790,7 +812,7 @@ export function applicationsTests({ apiGET, apiPOST }) {
             };
 
             resp = await apiPOST(
-                `/public/postings/${posting.url_token}/submit`,
+                `/public/postings/${postingWithCustomQuestion.url_token}/submit`,
                 surveyWithTranscript,
                 true
             );
@@ -799,11 +821,16 @@ export function applicationsTests({ apiGET, apiPOST }) {
             await restoreDefaultUser();
 
             resp = await apiGET(`/admin/sessions/${session.id}/applications`);
-            let url_token = resp.payload[0].documents[0].url_token;
+            let url_token = resp.payload[0].documents[2].url_token;
 
-            await switchToUser(userWithTaPermissions)
-            // let hashes = getMD5Hashes(url_token, "txt");
-            // expect(hashes[0]).toEqual(hashes[1]);
+            await switchToUser(userWithTaPermissions);
+
+            let file = {
+                url_token: url_token,
+                name: "dummy.txt",
+                type: "text/plain",
+            };
+            await expect(file).toEqualOriginalFile();
         });
     });
 
