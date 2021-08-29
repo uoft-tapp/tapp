@@ -1,6 +1,6 @@
 import React from "react";
 import { HasId } from "../api/defs/types";
-import { formatDate } from "../libs/utils";
+import { formatDate, formatMoney } from "../libs/utils";
 import { EditableField } from "./edit-field-widgets";
 
 export type EditableType =
@@ -25,7 +25,8 @@ export type EditableType =
     | "text"
     | "time"
     | "url"
-    | "week";
+    | "week"
+    | "money";
 
 /**
  * A cell that renders editable applicant information. `upsert` is called when the value is edited.
@@ -69,7 +70,6 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
     editable?: boolean;
 }): React.ReactElement {
     const title = `Edit ${"" + column.Header}`;
-    const isDate = type === "date";
 
     async function onChange(newVal: string | number | null) {
         const id = (row.original || (row as any)._original).id;
@@ -80,17 +80,35 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
         }
     }
 
-    const formattedValue = isDate ? ("" + value).slice(0, 10) : value || "";
+    // gets passed down to the input element in the EditFieldDialog
+    let inputDialogValue;
+    // gets displayed on the field
+    let displayValue;
+
+    switch (type) {
+        case "date":
+            displayValue = formatDate("" + value);
+            inputDialogValue = ("" + value).slice(0, 10);
+            break;
+        case "money":
+            displayValue = value != null ? formatMoney("" + value) : "";
+            inputDialogValue = value || "";
+            break;
+        default:
+            displayValue = value || "";
+            inputDialogValue = value || "";
+            break;
+    }
 
     return (
         <EditableField
             title={title}
-            value={formattedValue}
+            value={inputDialogValue}
             onChange={onChange}
             editable={editable}
             type={type}
         >
-            {isDate ? formatDate("" + value) : value}
+            {displayValue}
         </EditableField>
     );
 }

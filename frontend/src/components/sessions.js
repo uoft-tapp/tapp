@@ -112,13 +112,13 @@ export function ConnectedSessionsList(props) {
             Header: generateHeaderCell("Rate (Pre-January)"),
             accessor: "rate1",
             className: "number-cell",
-            Cell: generateCell("rate1", "number"),
+            Cell: generateCell("rate1", "money"),
         },
         {
             Header: generateHeaderCell("Rate (Post-January)"),
             accessor: "rate2",
             className: "number-cell",
-            Cell: generateCell("rate2", "number"),
+            Cell: generateCell("rate2", "money"),
         },
     ];
 
