@@ -32,6 +32,10 @@ export function InstructorAssignmentsTable() {
             accessor: "applicant.first_name",
         },
         {
+            Header: "UTORid",
+            accessor: "applicant.utorid",
+        },
+        {
             Header: "Email",
             accessor: "applicant.email",
             Cell: ({
