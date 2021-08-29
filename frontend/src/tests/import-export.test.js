@@ -105,9 +105,8 @@ describe("Import/export library functionality", () => {
 
     it("Export Instructors to JSON/CSV/XLSX", () => {
         // prepare instructor spreadsheet
-        const instructorSpreadsheet = prepareSpreadsheet.instructor(
-            instructorData
-        );
+        const instructorSpreadsheet =
+            prepareSpreadsheet.instructor(instructorData);
         expect(instructorSpreadsheet).toMatchSnapshot();
 
         // prepare instructor json
@@ -138,9 +137,8 @@ describe("Import/export library functionality", () => {
 
     it("Export Applicants to JSON/CSV/XLSX", () => {
         // prepare applicant spreadsheet
-        const applicantSpreadsheet = prepareSpreadsheet.applicant(
-            applicantData
-        );
+        const applicantSpreadsheet =
+            prepareSpreadsheet.applicant(applicantData);
         expect(applicantSpreadsheet).toMatchSnapshot();
 
         // prepare applicant json
@@ -160,9 +158,8 @@ describe("Import/export library functionality", () => {
 
     it("Export Assignments to JSON/CSV/XLSX", () => {
         // prepare assignment spreadsheet
-        const assignmentSpreadsheet = prepareSpreadsheet.assignment(
-            assignmentData
-        );
+        const assignmentSpreadsheet =
+            prepareSpreadsheet.assignment(assignmentData);
         expect(assignmentSpreadsheet).toMatchSnapshot();
 
         // prepare assignment json
