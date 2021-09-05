@@ -40,10 +40,10 @@ function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]): DutyDiff[] {
     let changes: DutyDiff[] = [];
     let dutiesChanged = false;
 
-    oldDuties.forEach((oldDuty) => {
+    for (const oldDuty of oldDuties) {
         let oldDutyDeleted = true;
 
-        newDuties.forEach((newDuty, index) => {
+        for (const [index, newDuty] of newDuties.entries()) {
             if (
                 oldDuty.description === newDuty.description &&
                 oldDuty.hours === newDuty.hours
@@ -60,59 +60,62 @@ function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]): DutyDiff[] {
                 oldDutyDeleted = false;
                 dutiesChanged = true;
             }
-        });
+        }
 
         // If we did not find old duties to match the new one - mark it as created
         if (oldDutyDeleted) {
             changes.push({ oldDuty, status: DiffType.Deleted });
             dutiesChanged = true;
         }
-    });
+    }
 
     // The new duties that are left were just created - add them
-    newDuties.forEach((duty) =>
-        changes.push({ newDuty: duty, status: DiffType.Created })
+    changes = changes.concat(
+        newDuties.map((duty) => ({ newDuty: duty, status: DiffType.Created }))
     );
 
     // Do not return changes if everything is unchanged
     return dutiesChanged ? changes : [];
 }
 
+function DutyItem({ oldDuty, newDuty, status }: DutyDiff) {
+    switch (status) {
+        case DiffType.Unchanged:
+            return (
+                <li className="duty-unchanged">
+                    {oldDuty!.description} - {oldDuty!.hours}h
+                </li>
+            );
+        case DiffType.Updated:
+            return (
+                <li className="duty-updated">
+                    {oldDuty!.description} - {oldDuty!.hours}h{" ➞ "}
+                    {newDuty!.hours}h
+                </li>
+            );
+        case DiffType.Created:
+            return (
+                <li className="duty-created">
+                    {newDuty!.description} - {newDuty!.hours}h
+                </li>
+            );
+        case DiffType.Deleted:
+            return (
+                <li className="duty-deleted">
+                    {oldDuty!.description} - {oldDuty!.hours}h
+                </li>
+            );
+        default:
+            return null as never;
+    }
+}
+
 function DutiesDiffList({ changes }: { changes: DutyDiff[] }) {
     return (
         <ul>
-            {changes.map(({ oldDuty, newDuty, status }) => {
-                switch (status) {
-                    case DiffType.Unchanged:
-                        return (
-                            <li className="duty-unchanged">
-                                {oldDuty!.description} - {oldDuty!.hours}h
-                            </li>
-                        );
-                    case DiffType.Updated:
-                        return (
-                            <li className="duty-updated">
-                                {oldDuty!.description} - {oldDuty!.hours}h
-                                {" ➞ "}
-                                {newDuty!.hours}h
-                            </li>
-                        );
-                    case DiffType.Created:
-                        return (
-                            <li className="duty-created">
-                                {newDuty!.description} - {newDuty!.hours}h
-                            </li>
-                        );
-                    case DiffType.Deleted:
-                        return (
-                            <li className="duty-deleted">
-                                {oldDuty!.description} - {oldDuty!.hours}h
-                            </li>
-                        );
-                    default:
-                        return null as never;
-                }
-            })}
+            {changes.map(({ oldDuty, newDuty, status }) => (
+                <DutyItem oldDuty={oldDuty} newDuty={newDuty} status={status} />
+            ))}
         </ul>
     );
 }
@@ -126,8 +129,9 @@ function DdahsList({ ddahs }: { ddahs: Omit<Ddah, "id">[] }) {
                     {applicant.utorid})
                     <ul className="instructor-ddah-import-new-ddah-duties-list">
                         {duties.map((duty) => (
-                            <li key={`ddah-new-${i}`}>
-                                {duty.description} - {duty.hours}h
+                            <li key={i}>
+                                <span>{duty.description}</span> -{" "}
+                                <span>{duty.hours}h</span>
                             </li>
                         ))}
                     </ul>
