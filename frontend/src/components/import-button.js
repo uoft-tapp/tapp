@@ -44,6 +44,19 @@ export function ImportDialog({
     const [fileContents, setFileContents] = React.useState(null);
     const [inProgress, _setInProgress] = React.useState(false);
 
+    let formElement = null;
+
+    const withLabelReset = (actionHandler) => () => {
+        setFileInputLabel(DEFAULT_LABEL);
+        actionHandler();
+    };
+
+    const withFileContentsReset = (actionHandler) => () => {
+        setFileContents(null);
+        setFileArrayBuffer(null);
+        actionHandler();
+    };
+
     // When we are processing we want to set a spinner button
     // in the dialog as well as communicate to our parent
     // that we are in the midst of processing. Therefore, we
@@ -68,7 +81,7 @@ export function ImportDialog({
         if (onFileChange instanceof Function) {
             onFileChange(fileContents);
         }
-    }, [fileContents, onFileChange]);
+    }, [fileContents, onFileChange, formElement]);
 
     // Wrap the <input type="file" /> in an effect that parses the file
     React.useEffect(() => {
@@ -170,7 +183,10 @@ export function ImportDialog({
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={onCancel}>
+                <Button
+                    variant="secondary"
+                    onClick={withLabelReset(withFileContentsReset(onCancel))}
+                >
                     Cancel
                 </Button>
                 <Button variant="primary" onClick={_onConfirm}>
