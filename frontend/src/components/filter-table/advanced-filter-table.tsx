@@ -25,22 +25,6 @@ import "./filter-table.css";
  * Note: `selected` is a list of ids (the `id` property on members of the `data` array).
  * Rows matching something in `selected` will be highlighted. This property can be used
  * without passing the `setSelected` function.
- *
- * @export
- * @param {({
- *     columns: any[];
- *     data: any[];
- *     filterable?: boolean | null;
- *     selected?: any[];
- *     setSelected?: Function;
- * })} {
- *     columns,
- *     data,
- *     filterable = null,
- *     selected,
- *     setSelected,
- * }
- * @returns
  */
 export function AdvancedFilterTable({
     columns,

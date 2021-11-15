@@ -18,24 +18,29 @@ export function SortableHeader<T extends object>({
     if (column.isSorted) {
         if (column.isSortedDesc) {
             sortIcon = (
-                <div className="column-sort-icon">
+                <div
+                    className="column-sort-icon"
+                    {...column.getSortByToggleProps()}
+                >
                     <FaSortAlphaUp className="ml-2 text-secondary" />
                 </div>
             );
         } else {
             sortIcon = (
-                <div className="column-sort-icon">
+                <div
+                    className="column-sort-icon"
+                    {...column.getSortByToggleProps()}
+                >
                     <FaSortAlphaDown className="ml-2 text-secondary" />
                 </div>
             );
         }
     }
     return (
-        <div
-            className="th"
-            {...column.getHeaderProps(column.getSortByToggleProps())}
-        >
-            <div className="table-header">{column.render("Header")}</div>
+        <div className="th" {...column.getHeaderProps()}>
+            <div className="table-header" {...column.getSortByToggleProps()}>
+                {column.render("Header")}
+            </div>
             {sortIcon}
             <div
                 {...column.getResizerProps()}
