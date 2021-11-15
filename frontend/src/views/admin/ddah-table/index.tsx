@@ -135,8 +135,8 @@ export function DdahPreviewModal({
     onEdit = () => {},
 }: {
     ddah: Ddah | null;
-    show: Boolean;
-    onHide?: Function;
+    show: boolean;
+    onHide?: (...params: any[]) => void;
     onApprove?: Function;
     onEdit?: Function;
 }): React.ReactElement {
@@ -247,8 +247,8 @@ export function ConnectedDdahEditorModal({
     onHide = () => {},
 }: {
     ddah: Ddah | null;
-    show: Boolean;
-    onHide?: Function;
+    show: boolean;
+    onHide?: (...params: any[]) => void;
 }): React.ReactElement {
     const [inProgress, setInProgress] = React.useState(false);
     const dispatch = useThunkDispatch();
@@ -338,8 +338,8 @@ export function ConnectedDdahsTable() {
     const selected = useSelector(ddahTableSelector).selectedDdahIds;
     const dispatch = useThunkDispatch();
 
-    const [previewVisible, setPreviewVisible] = React.useState<Boolean>(false);
-    const [editVisible, setEditVisible] = React.useState<Boolean>(false);
+    const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
+    const [editVisible, setEditVisible] = React.useState<boolean>(false);
     const [previewDdah, setPreviewDdah] = React.useState<Ddah | null>(null);
 
     function setSelected(ids: number[]) {

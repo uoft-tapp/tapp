@@ -28,7 +28,7 @@ function PostingLinkDialog({
 }: {
     posting: Posting;
     visible: boolean;
-    onHide: Function;
+    onHide: (...args: any[]) => void;
 }) {
     const url = new URL(window.location.origin);
     // We use `pathname` instead of `hash` here to work around routing

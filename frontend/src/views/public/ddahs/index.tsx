@@ -55,6 +55,7 @@ export function DdahView() {
         setWaiting(true);
         await submitDecision();
         setWaiting(false);
+        // @ts-ignore
         window.location.reload(true);
     }
 

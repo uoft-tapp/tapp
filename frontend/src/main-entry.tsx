@@ -27,7 +27,7 @@ export default function ConnectedApp() {
         (async () => {
             try {
                 await dispatch(initFromStage("pageLoad"));
-            } catch (e) {
+            } catch (e: any) {
                 console.log(e);
             }
         })();

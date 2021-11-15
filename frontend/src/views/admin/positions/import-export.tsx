@@ -139,7 +139,7 @@ export function ConnectedImportPositionsAction({
             });
 
             setDiffed(newDiff);
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }

@@ -170,7 +170,7 @@ export function ConnectedImportPostingAction({
                     })
                 )
             );
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }

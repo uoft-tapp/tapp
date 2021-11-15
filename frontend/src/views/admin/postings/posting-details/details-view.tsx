@@ -57,7 +57,7 @@ function validateJson(json: string) {
             message:
                 'Expected the root of the JSON object to be `{ "pages": [...] }`',
         };
-    } catch (e) {
+    } catch (e: any) {
         return {
             valid: false,
             message:

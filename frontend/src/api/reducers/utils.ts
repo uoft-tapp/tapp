@@ -171,7 +171,7 @@ function _localStoreSelector<T>(
             localState = localState[dir];
         }
         return localState;
-    } catch (e) {
+    } catch (e: any) {
         // eslint-disable-next-line
         console.error(
             "Searching",

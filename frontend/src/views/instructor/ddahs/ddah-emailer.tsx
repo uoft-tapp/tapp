@@ -34,7 +34,7 @@ export function DdahEmailModal({
     show,
     onHide: _onHide = () => {},
 }: {
-    show: Boolean;
+    show: boolean;
     onHide?: Function;
 }): React.ReactElement {
     const [inProgress, setInProgress] = React.useState(false);

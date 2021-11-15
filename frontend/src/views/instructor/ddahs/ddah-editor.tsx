@@ -245,7 +245,7 @@ export function DdahPreviewModal({
     forceEditMode = false,
 }: {
     ddah: Omit<Ddah, "id"> | null;
-    show: Boolean;
+    show: boolean;
     onHide?: Function;
     onEdit?: Function;
     forceEditMode?: boolean;

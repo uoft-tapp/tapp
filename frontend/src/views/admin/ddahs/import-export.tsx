@@ -139,7 +139,7 @@ export function ConnectedImportDdahsAction({
             const newDiff = diffImport.ddahs(data, { ddahs, assignments });
 
             setDiffed(newDiff);
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }

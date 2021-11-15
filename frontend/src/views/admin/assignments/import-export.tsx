@@ -13,6 +13,7 @@ import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
+    ExportFormat,
     normalizeImport,
     prepareAssignmentDataFactory,
 } from "../../../libs/import-export";
@@ -20,10 +21,11 @@ import {
     AssignmentsList,
     AssignmentsDiffList,
 } from "../../../components/assignments-list";
-import { diffImport, getChanged } from "../../../libs/diffs";
+import { diffImport, DiffSpec, getChanged } from "../../../libs/diffs";
 import { offerTableSelector } from "../offertable/actions";
 import { assignmentSchema } from "../../../libs/schema";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { Assignment, MinimalAssignment } from "../../../api/defs/types";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -35,10 +37,15 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 export function ConnectedExportAssignmentsAction({
     disabled = false,
     setExportInProgress = null,
+}: {
+    disabled: boolean;
+    setExportInProgress: Function | null;
 }) {
     const dispatch = useThunkDispatch();
     const session = useSelector(activeSessionSelector);
-    const [exportType, setExportType] = React.useState(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
 
     const setInProgress = React.useCallback(
@@ -51,11 +58,14 @@ export function ConnectedExportAssignmentsAction({
     );
 
     React.useEffect(() => {
-        if (!exportType) {
+        if (!exportType || !session) {
             return;
         }
 
         async function doExport() {
+            if (!session || !exportType) {
+                return;
+            }
             // Having an export type of `null` means we're ready to export again,
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
@@ -86,16 +96,29 @@ export function ConnectedExportAssignmentsAction({
         doExport().catch(console.error);
     }, [exportType, dispatch, session, selectedAssignmentIds, setInProgress]);
 
-    function onClick(option) {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 
     return <ExportActionButton onClick={onClick} disabled={disabled} />;
 }
 
+/**
+ *
+ *
+ * @export
+ * @param {*} {
+ *     disabled = false,
+ *     setImportInProgress: null | Function,
+ * }
+ * @returns
+ */
 export function ConnectedImportAssignmentsAction({
     disabled = false,
     setImportInProgress = null,
+}: {
+    disabled: boolean;
+    setImportInProgress: Function | null;
 }) {
     const dispatch = useThunkDispatch();
     const assignments = useSelector(assignmentsSelector);
@@ -103,11 +126,13 @@ export function ConnectedImportAssignmentsAction({
     const positions = useSelector(positionsSelector);
     const session = useSelector(activeSessionSelector);
     const [fileContent, setFileContent] = React.useState(null);
-    const [diffed, setDiffed] = React.useState(null);
+    const [diffed, setDiffed] = React.useState<
+        DiffSpec<MinimalAssignment, Assignment>[] | null
+    >(null);
     const [processingError, setProcessingError] = React.useState(null);
     const [inProgress, _setInProgress] = React.useState(false);
 
-    function setInProgress(state) {
+    function setInProgress(state: any) {
         _setInProgress(state);
         if (typeof setImportInProgress === "function") {
             setImportInProgress(state);
@@ -127,14 +152,17 @@ export function ConnectedImportAssignmentsAction({
     React.useEffect(() => {
         // If we have no file or we are currently in the middle of processing another file,
         // do nothing.
-        if (!fileContent || inProgress) {
+        if (!fileContent || !session || inProgress) {
             return;
         }
         try {
             setProcessingError(null);
 
             // normalize the data coming from the file
-            let data = normalizeImport(fileContent, assignmentSchema);
+            let data = normalizeImport(
+                fileContent,
+                assignmentSchema
+            ) as MinimalAssignment[];
             // If data is coming from a spreadsheet, we need to make sure the
             // `hours` field is coerced to a number
             for (const item of data) {
@@ -152,13 +180,16 @@ export function ConnectedImportAssignmentsAction({
             });
 
             setDiffed(newDiff);
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }
     }, [fileContent, assignments, positions, applicants, session, inProgress]);
 
     async function onConfirm() {
+        if (!diffed) {
+            return;
+        }
         const changedPositions = getChanged(diffed);
         await dispatch(upsertAssignments(changedPositions));
         setFileContent(null);
@@ -183,6 +214,9 @@ export function ConnectedImportAssignmentsAction({
 const DialogContent = React.memo(function DialogContent({
     diffed,
     processingError,
+}: {
+    diffed: DiffSpec<MinimalAssignment, Assignment>[] | null;
+    processingError: string | null;
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {

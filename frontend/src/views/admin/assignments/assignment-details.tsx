@@ -218,7 +218,7 @@ export function ConnectedViewAssignmentDetailsAction() {
     const selectedAssignments = assignments.filter((assignment) =>
         selectedAssignmentIds.includes(assignment.id)
     );
-    const [dialogVisible, setDialogVisible] = React.useState<Boolean>(false);
+    const [dialogVisible, setDialogVisible] = React.useState<boolean>(false);
 
     // We want to show the assignment details in a predictable order, so sort
     // by position code and then last, first

@@ -224,7 +224,7 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
                 // as real errors
                 const ret = await dispatch(dispatcher(...args));
                 return ret;
-            } catch (e) {
+            } catch (e: any) {
                 console.warn("API Error", e);
                 if (onErrorDispatch) {
                     if (onErrorDispatch instanceof Function) {

@@ -42,7 +42,7 @@ export const fetchSessions = validatedApiDispatcher({
             const data = (await apiGET(`/${role}/sessions`)) as RawSession[];
             dispatch(fetchSessionsSuccess(data));
             return data;
-        } catch (e) {
+        } catch (e: any) {
             dispatch(fetchSessionsSuccess([]));
             return [];
         }

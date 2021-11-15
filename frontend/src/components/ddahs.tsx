@@ -204,7 +204,7 @@ export function DdahEditor(props: {
     ddah: PartialDdah;
     setDdah: Function;
     assignments?: Assignment[];
-    editableAssignment?: Boolean;
+    editableAssignment?: boolean;
 }) {
     const [instructionsVisible, setInstructionsVisible] = React.useState(true);
     const {
