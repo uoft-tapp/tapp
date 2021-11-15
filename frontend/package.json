@@ -70,11 +70,16 @@
             "react-app/jest"
         ]
     },
+    "jest": {
+        "transformIgnorePatterns": [
+            "/node_modules/(?!(node-fetch|fetch-blob))"
+        ]
+    },
     "browserslist": [],
     "devDependencies": {
         "axios": "^0.21.1",
         "http-proxy-middleware": "^1.1.0",
-        "redux-devtools-extension": "^2.13.8",
-        "typescript-json-schema": "^0.50.0"
+        "redux-devtools-extension": "^2.13.9",
+        "typescript-json-schema": "^0.51.0"
     }
 }
