@@ -103,34 +103,33 @@ export const setActiveSession = validatedApiDispatcher({
     name: "setActiveSession",
     description: "Set the active session",
     onErrorDispatch: (e) => apiError(e.toString()),
-    dispatcher: (
-        payload: Session | null,
-        options: { skipInit?: boolean } = {}
-    ) => async (dispatch, getState) => {
-        const { skipInit } = options;
-        const state = getState();
-        const currentActiveSession = activeSessionSelector(state);
-        if (currentActiveSession === payload) {
-            return;
-        }
-        // passing in null will unset the active session
-        if (payload == null) {
-            dispatch(setActiveSessionAction(null));
-            dispatch(clearSessionDependentData());
-            return;
-        }
-        if ((currentActiveSession || { id: null }).id === payload.id) {
-            return;
-        }
-        // If we made it here, the activeSession is changing.
-        dispatch(setActiveSessionAction(payload));
-        // Make sure all tasks we depend on get run
-        if (!skipInit) {
-            await dispatch(
-                initFromStage("setActiveSession", { startAfterStage: true })
-            );
-        }
-    },
+    dispatcher:
+        (payload: Session | null, options: { skipInit?: boolean } = {}) =>
+        async (dispatch, getState) => {
+            const { skipInit } = options;
+            const state = getState();
+            const currentActiveSession = activeSessionSelector(state);
+            if (currentActiveSession === payload) {
+                return;
+            }
+            // passing in null will unset the active session
+            if (payload == null) {
+                dispatch(setActiveSessionAction(null));
+                dispatch(clearSessionDependentData());
+                return;
+            }
+            if ((currentActiveSession || { id: null }).id === payload.id) {
+                return;
+            }
+            // If we made it here, the activeSession is changing.
+            dispatch(setActiveSessionAction(payload));
+            // Make sure all tasks we depend on get run
+            if (!skipInit) {
+                await dispatch(
+                    initFromStage("setActiveSession", { startAfterStage: true })
+                );
+            }
+        },
 });
 
 // selectors

@@ -8,18 +8,16 @@ export const setGlobals = validatedApiDispatcher({
     name: "setGlobals",
     description: "Sets global variables",
     onErrorDispatch: (e) => apiError(e.toString()),
-    dispatcher: (payload: Record<string, any>) => async (
-        dispatch,
-        getState
-    ) => {
-        const globals = { ...globalsSelector(getState()), ...payload };
+    dispatcher:
+        (payload: Record<string, any>) => async (dispatch, getState) => {
+            const globals = { ...globalsSelector(getState()), ...payload };
 
-        // Store the globals in the URL
-        await dispatch(setGlobalsInUrl(globals));
+            // Store the globals in the URL
+            await dispatch(setGlobalsInUrl(globals));
 
-        // Now store the globals in the Redux store
-        dispatch({ type: "SET_GLOBALS", payload: globals });
-    },
+            // Now store the globals in the Redux store
+            dispatch({ type: "SET_GLOBALS", payload: globals });
+        },
 });
 
 /**
@@ -52,16 +50,18 @@ export const setMockAPIState = validatedApiDispatcher({
     name: "setMockAPIState",
     description: "Activates or deactivates the mockAPI",
     onErrorDispatch: (e) => apiError(e.toString()),
-    dispatcher: (
-        payload: boolean,
-        options: { skipInit?: boolean } = { skipInit: false }
-    ) => async (dispatch) => {
-        await dispatch(setGlobals({ mockAPI: payload }));
+    dispatcher:
+        (
+            payload: boolean,
+            options: { skipInit?: boolean } = { skipInit: false }
+        ) =>
+        async (dispatch) => {
+            await dispatch(setGlobals({ mockAPI: payload }));
 
-        if (!options.skipInit) {
-            await dispatch(initFromStage("toggleMockAPI"));
-        }
-    },
+            if (!options.skipInit) {
+                await dispatch(initFromStage("toggleMockAPI"));
+            }
+        },
 });
 
 export const globalsSelector = (state: RootState): Record<string, any> => {

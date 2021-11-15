@@ -93,25 +93,23 @@ export const upsertApplication = validatedApiDispatcher({
     name: "upsertApplication",
     description: "Add/insert application",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<Application>) => async (
-        dispatch,
-        getState
-    ) => {
-        const role = activeRoleSelector(getState());
-        const activeSession = activeSessionSelector(getState());
-        if (activeSession == null) {
-            throw new Error(
-                "Cannot upsert Applications without an active session"
-            );
-        }
-        const { id: activeSessionId } = activeSession;
-        const data = (await apiPOST(
-            `/${role}/sessions/${activeSessionId}/applications`,
-            prepApplicationForApi(payload)
-        )) as RawApplication;
-        dispatch(upsertOneApplicationSuccess(data));
-        return data;
-    },
+    dispatcher:
+        (payload: Partial<Application>) => async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const activeSession = activeSessionSelector(getState());
+            if (activeSession == null) {
+                throw new Error(
+                    "Cannot upsert Applications without an active session"
+                );
+            }
+            const { id: activeSessionId } = activeSession;
+            const data = (await apiPOST(
+                `/${role}/sessions/${activeSessionId}/applications`,
+                prepApplicationForApi(payload)
+            )) as RawApplication;
+            dispatch(upsertOneApplicationSuccess(data));
+            return data;
+        },
 });
 
 export const deleteApplication = validatedApiDispatcher({
@@ -139,25 +137,27 @@ export const exportApplications = validatedApiDispatcher({
     name: "exportApplications",
     description: "Export applications",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        formatter: PrepareDataFunc<Application>,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all applicants from the server in case things happened to be out of sync.
-        await Promise.all([
-            dispatch(fetchApplicants()),
-            dispatch(fetchPostings()),
-            dispatch(fetchApplications()),
-        ]);
-        const applications = applicationsSelector(getState());
+    dispatcher:
+        (
+            formatter: PrepareDataFunc<Application>,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all applicants from the server in case things happened to be out of sync.
+            await Promise.all([
+                dispatch(fetchApplicants()),
+                dispatch(fetchPostings()),
+                dispatch(fetchApplications()),
+            ]);
+            const applications = applicationsSelector(getState());
 
-        return formatter(applications, format);
-    },
+            return formatter(applications, format);
+        },
 });
 
 // selectors
@@ -195,7 +195,7 @@ export const applicationsSelector = createSelector(
         // `position_preferences` to corresponding `position` object.
         return applications.map(
             ({ posting_id, applicant_id, position_preferences, ...rest }) =>
-                (({
+                ({
                     ...rest,
                     applicant: applicantsById[applicant_id] || {},
                     posting:
@@ -208,7 +208,7 @@ export const applicationsSelector = createSelector(
                             preference_level,
                         }))
                         .filter((x) => x.position != null),
-                } as unknown) as Application)
+                } as unknown as Application)
         );
     }
 );

@@ -12,8 +12,7 @@ const DEFAULT_POSITION = {
     position_title: "",
     hours_per_assignment: 0,
     contract_template: {},
-    duties:
-        "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+    duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: [],
 };
 

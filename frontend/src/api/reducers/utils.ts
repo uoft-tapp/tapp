@@ -134,7 +134,7 @@ export function createReducer<State>(
 
     // add _storePath to the initial state and to the
     // new reducer
-    ((initialState as unknown) as TaggedState<unknown>)._storePath = _storePath;
+    (initialState as unknown as TaggedState<unknown>)._storePath = _storePath;
     const reducer = _origCreateReducer(
         initialState,
         handlers as any
@@ -142,9 +142,9 @@ export function createReducer<State>(
     reducer._storePath = _storePath;
 
     // For convenience, attach a local store selector to the reducer
-    reducer._localStoreSelector = (createLocalStoreSelector<State>(
+    reducer._localStoreSelector = createLocalStoreSelector<State>(
         _storePath
-    ) as unknown) as Selector<State, State>;
+    ) as unknown as Selector<State, State>;
 
     return reducer;
 }
@@ -243,7 +243,7 @@ export function combineReducers<T extends TaggedReducersMapObject<S>, S>(
     const newReducer = _origCombineReducers(model as any);
     (newReducer as any)._storePath = { pushToPath };
 
-    return (newReducer as unknown) as TaggedReducer<
-        { [K in keyof T]: ReturnType<T[K]> }
-    >;
+    return newReducer as unknown as TaggedReducer<{
+        [K in keyof T]: ReturnType<T[K]>;
+    }>;
 }

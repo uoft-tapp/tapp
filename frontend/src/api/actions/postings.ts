@@ -107,47 +107,48 @@ export const upsertPosting = validatedApiDispatcher({
     name: "upsertPosting",
     description: "Add/insert posting",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<RawPosting> | Partial<Posting>) => async (
-        dispatch,
-        getState
-    ) => {
-        const role = activeRoleSelector(getState());
-        const activeSession = getState().model.sessions.activeSession;
-        if (activeSession == null) {
-            throw new Error("Cannot fetch Postings without an active session");
-        }
-        const { id: activeSessionId } = activeSession;
-        const data = (await apiPOST(
-            `/${role}/sessions/${activeSessionId}/postings`,
-            prepPostingForApi(payload)
-        )) as RawPosting;
-        dispatch(upsertOnePostingSuccess(data));
+    dispatcher:
+        (payload: Partial<RawPosting> | Partial<Posting>) =>
+        async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const activeSession = getState().model.sessions.activeSession;
+            if (activeSession == null) {
+                throw new Error(
+                    "Cannot fetch Postings without an active session"
+                );
+            }
+            const { id: activeSessionId } = activeSession;
+            const data = (await apiPOST(
+                `/${role}/sessions/${activeSessionId}/postings`,
+                prepPostingForApi(payload)
+            )) as RawPosting;
+            dispatch(upsertOnePostingSuccess(data));
 
-        // If there are posting_positions included with the posting, upsert them too
-        const posting_positions = (payload as Partial<Posting>)
-            .posting_positions;
-        if (Array.isArray(posting_positions)) {
-            const posting_id = data.id;
-            await Promise.all(
-                posting_positions.map((postingPosition) =>
-                    dispatch(
-                        upsertPostingPosition({
-                            ...postingPosition,
-                            // Since we may be upserting into a newly-created posting, the supplied data
-                            // might not have the posting id. Insert it just to be sure it's there.
-                            posting_id,
-                            posting: {
-                                ...postingPosition.posting,
-                                id: posting_id,
-                            },
-                        })
+            // If there are posting_positions included with the posting, upsert them too
+            const posting_positions = (payload as Partial<Posting>)
+                .posting_positions;
+            if (Array.isArray(posting_positions)) {
+                const posting_id = data.id;
+                await Promise.all(
+                    posting_positions.map((postingPosition) =>
+                        dispatch(
+                            upsertPostingPosition({
+                                ...postingPosition,
+                                // Since we may be upserting into a newly-created posting, the supplied data
+                                // might not have the posting id. Insert it just to be sure it's there.
+                                posting_id,
+                                posting: {
+                                    ...postingPosition.posting,
+                                    id: posting_id,
+                                },
+                            })
+                        )
                     )
-                )
-            );
-            // TODO: we currently don't check to see if there are any PostingPositions that we should delete.
-        }
-        return data;
-    },
+                );
+                // TODO: we currently don't check to see if there are any PostingPositions that we should delete.
+            }
+            return data;
+        },
 });
 
 export const deletePosting = validatedApiDispatcher({
@@ -231,66 +232,74 @@ export const upsertPostingPosition = validatedApiDispatcher({
     name: "upsertPostingPosition",
     description: "Add/insert posting_position",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (
-        payload:
-            | RequireSome<RawPostingPosition, "position_id" | "posting_id">
-            | RequireSome<PostingPosition, "position" | "posting">
-    ) => async (dispatch, getState) => {
-        const rawPostingPosition = prepPostingPositionForApi(payload);
-        const role = activeRoleSelector(getState());
-        const data = (await apiPOST(
-            `/${role}/posting_positions`,
-            rawPostingPosition
-        )) as RawPostingPosition;
-        dispatch(upsertOnePostingPositionSuccess(data));
-        return data;
-    },
+    dispatcher:
+        (
+            payload:
+                | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+                | RequireSome<PostingPosition, "position" | "posting">
+        ) =>
+        async (dispatch, getState) => {
+            const rawPostingPosition = prepPostingPositionForApi(payload);
+            const role = activeRoleSelector(getState());
+            const data = (await apiPOST(
+                `/${role}/posting_positions`,
+                rawPostingPosition
+            )) as RawPostingPosition;
+            dispatch(upsertOnePostingPositionSuccess(data));
+            return data;
+        },
 });
 
 export const deletePostingPosition = validatedApiDispatcher({
     name: "deletePostingPosition",
     description: "Delete posting_position",
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (
-        payload:
-            | RequireSome<RawPostingPosition, "position_id" | "posting_id">
-            | RequireSome<PostingPosition, "position" | "posting">
-    ) => async (dispatch, getState) => {
-        const rawPostingPosition = prepPostingPositionForApi(payload);
-        const role = activeRoleSelector(getState());
-        const data = (await apiPOST(
-            `/${role}/posting_positions/delete`,
-            rawPostingPosition
-        )) as RawPostingPosition;
-        dispatch(deleteOnePostingPositionSuccess(data));
-    },
+    dispatcher:
+        (
+            payload:
+                | RequireSome<RawPostingPosition, "position_id" | "posting_id">
+                | RequireSome<PostingPosition, "position" | "posting">
+        ) =>
+        async (dispatch, getState) => {
+            const rawPostingPosition = prepPostingPositionForApi(payload);
+            const role = activeRoleSelector(getState());
+            const data = (await apiPOST(
+                `/${role}/posting_positions/delete`,
+                rawPostingPosition
+            )) as RawPostingPosition;
+            dispatch(deleteOnePostingPositionSuccess(data));
+        },
 });
 
 export const exportPosting = validatedApiDispatcher({
     name: "exportPosting",
     description: "Export a posting",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        postingId: number,
-        formatter: (posting: Posting, exportFormat: ExportFormat) => File,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
+    dispatcher:
+        (
+            postingId: number,
+            formatter: (posting: Posting, exportFormat: ExportFormat) => File,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all applicants from the server in case things happened to be out of sync.
+            await Promise.all([dispatch(fetchPostings())]);
+            const postings = postingsSelector(getState());
+            const posting = postings.find(
+                (posting) => posting.id === postingId
             );
-        }
-        // Re-fetch all applicants from the server in case things happened to be out of sync.
-        await Promise.all([dispatch(fetchPostings())]);
-        const postings = postingsSelector(getState());
-        const posting = postings.find((posting) => posting.id === postingId);
 
-        if (posting == null) {
-            throw new Error(`Could not find posting with id ${postingId}`);
-        }
+            if (posting == null) {
+                throw new Error(`Could not find posting with id ${postingId}`);
+            }
 
-        return formatter(posting, format);
-    },
+            return formatter(posting, format);
+        },
 });
 
 function isRawPostingPosition(
@@ -361,13 +370,10 @@ function combinePostingAndPostingPosition(
             positionsMap.has(rawPostingPosition.position_id)
         )
         .map<PostingPosition>((rawPostingPosition) => {
-            const [
-                partialPostingPosition,
-                rest,
-            ] = splitObjByProps(rawPostingPosition, [
-                "position_id",
-                "posting_id",
-            ]);
+            const [partialPostingPosition, rest] = splitObjByProps(
+                rawPostingPosition,
+                ["position_id", "posting_id"]
+            );
             return {
                 ...partialPostingPosition,
                 position: positionsMap.get(rest.position_id)!,

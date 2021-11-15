@@ -67,28 +67,29 @@ export const upsertApplicant = validatedApiDispatcher({
     name: "upsertApplicant",
     description: "Add/insert applicant",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (
-        payload: Partial<Applicant>,
-        bySession: boolean = true
-    ) => async (dispatch, getState) => {
-        const role = activeRoleSelector(getState());
-        let data: RawApplicant;
-        if (bySession) {
-            const activeSession = activeSessionSelector(getState());
-            if (activeSession == null) {
-                throw new Error("Cannot fetch DDAHs without an active session");
+    dispatcher:
+        (payload: Partial<Applicant>, bySession: boolean = true) =>
+        async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            let data: RawApplicant;
+            if (bySession) {
+                const activeSession = activeSessionSelector(getState());
+                if (activeSession == null) {
+                    throw new Error(
+                        "Cannot fetch DDAHs without an active session"
+                    );
+                }
+                const { id: activeSessionId } = activeSession;
+                data = await apiPOST(
+                    `/${role}/sessions/${activeSessionId}/applicants`,
+                    payload
+                );
+            } else {
+                data = await apiPOST(`/${role}/applicants`, payload);
             }
-            const { id: activeSessionId } = activeSession;
-            data = await apiPOST(
-                `/${role}/sessions/${activeSessionId}/applicants`,
-                payload
-            );
-        } else {
-            data = await apiPOST(`/${role}/applicants`, payload);
-        }
-        dispatch(upsertOneApplicantSuccess(data));
-        return data;
-    },
+            dispatch(upsertOneApplicantSuccess(data));
+            return data;
+        },
 });
 
 export const deleteApplicant = validatedApiDispatcher({
@@ -110,21 +111,23 @@ export const exportApplicants = validatedApiDispatcher({
     name: "exportApplicants",
     description: "Export applicants",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        formatter: PrepareDataFunc<Applicant>,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all applicants from the server in case things happened to be out of sync.
-        await dispatch(fetchApplicants());
-        const applicants = applicantsSelector(getState());
+    dispatcher:
+        (
+            formatter: PrepareDataFunc<Applicant>,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all applicants from the server in case things happened to be out of sync.
+            await dispatch(fetchApplicants());
+            const applicants = applicantsSelector(getState());
 
-        return formatter(applicants, format);
-    },
+            return formatter(applicants, format);
+        },
 });
 
 export const upsertApplicants = validatedApiDispatcher({

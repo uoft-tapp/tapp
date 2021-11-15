@@ -38,8 +38,7 @@ const BLANK_POSITION: Partial<Position> = {
     position_code: "",
     position_title: "",
     hours_per_assignment: 0,
-    duties:
-        "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+    duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
     instructors: [],
 };
 

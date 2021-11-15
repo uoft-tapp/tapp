@@ -875,8 +875,7 @@ export const mockData = {
             position_code: "CSC100H1S",
             position_title: "Computers for Humans",
             hours_per_assignment: 100,
-            duties:
-                "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+            duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
             contract_template_id: 1,
             start_date: "2021-01-01T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",
@@ -887,8 +886,7 @@ export const mockData = {
             position_code: "MAT137Y1Y",
             position_title: "Calculus!",
             hours_per_assignment: 250,
-            duties:
-                "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
+            duties: "Some combination of marking, invigilating, tutorials, office hours, and the help centre.",
             contract_template_id: 1,
             start_date: "2019-09-02T00:00:00.000Z",
             end_date: "2020-04-03T00:00:00.000Z",

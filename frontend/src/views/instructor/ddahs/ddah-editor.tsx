@@ -372,14 +372,16 @@ export function DdahPreviewModal({
                     />
                 </ul>
                 <h4>Duties</h4>
-                {([
-                    "meeting",
-                    "prep",
-                    "contact",
-                    "marking",
-                    "training",
-                    "other",
-                ] as Category[]).map((category) => (
+                {(
+                    [
+                        "meeting",
+                        "prep",
+                        "contact",
+                        "marking",
+                        "training",
+                        "other",
+                    ] as Category[]
+                ).map((category) => (
                     <React.Fragment key={category}>
                         <h6>{categoryInformation[category].title}</h6>
                         {editing && categoryInformation[category].helpText && (

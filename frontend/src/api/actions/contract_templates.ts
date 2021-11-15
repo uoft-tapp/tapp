@@ -59,23 +59,21 @@ export const upsertContractTemplate = validatedApiDispatcher({
     name: "upsertContractTemplate",
     description: "Add/insert contract_template",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<ContractTemplate>) => async (
-        dispatch,
-        getState
-    ) => {
-        const role = activeRoleSelector(getState());
-        const activeSession = activeSessionSelector(getState());
-        if (activeSession == null) {
-            throw MissingActiveSessionError;
-        }
-        const { id: activeSessionId } = activeSession;
-        const data = (await apiPOST(
-            `/${role}/sessions/${activeSessionId}/contract_templates`,
-            payload
-        )) as RawContractTemplate;
-        dispatch(upsertOneContractTemplateSuccess(data));
-        return data;
-    },
+    dispatcher:
+        (payload: Partial<ContractTemplate>) => async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const activeSession = activeSessionSelector(getState());
+            if (activeSession == null) {
+                throw MissingActiveSessionError;
+            }
+            const { id: activeSessionId } = activeSession;
+            const data = (await apiPOST(
+                `/${role}/sessions/${activeSessionId}/contract_templates`,
+                payload
+            )) as RawContractTemplate;
+            dispatch(upsertOneContractTemplateSuccess(data));
+            return data;
+        },
 });
 
 export const deleteContractTemplate = validatedApiDispatcher({

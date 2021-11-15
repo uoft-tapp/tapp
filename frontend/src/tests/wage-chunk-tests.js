@@ -13,12 +13,8 @@ import { databaseSeeder } from "./setup";
 // eslint-disable-next-line
 export function wageChunksTests(api) {
     const { apiGET, apiPOST } = api;
-    const {
-        applicant,
-        assignment,
-        contractTemplate,
-        session,
-    } = databaseSeeder.seededData;
+    const { applicant, assignment, contractTemplate, session } =
+        databaseSeeder.seededData;
 
     let originalWageChunk, newWageChunk;
 

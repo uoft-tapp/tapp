@@ -495,9 +495,10 @@ for (let i = 0; i < 10; ++i) {
 base64abc.push("+");
 base64abc.push("/");
 */
-const base64abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(
-    ""
-);
+const base64abc =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".split(
+        ""
+    );
 
 // This constant can also be computed with the following algorithm:
 const l = 256,

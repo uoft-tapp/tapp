@@ -75,9 +75,8 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
             4
         )
     );
-    const [customQuestionsVisible, setCustomQuestionsVisible] = React.useState(
-        false
-    );
+    const [customQuestionsVisible, setCustomQuestionsVisible] =
+        React.useState(false);
     const customQuestionsValid = validateJson(customQuestions);
     const posting_id = posting.id;
     const positions = useSelector(positionsSelector);
@@ -85,31 +84,28 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         const postingPositions = posting.posting_positions;
         // We want a row for every position; since we are only looking at a single
         // posting, the position ids form a unique set of ids.
-        const tableData = positions.map(
-            (position): PostingPositionRow => {
-                const postingPosition = postingPositions.find(
-                    (postingPosition) =>
-                        postingPosition.position.id === position.id
-                );
-                const overrideData: Partial<PostingPositionRow> = {};
-                if (postingPosition) {
-                    overrideData.hours = postingPosition.hours;
-                    overrideData.num_positions = postingPosition.num_positions;
-                    overrideData.true_posting_position = true;
-                }
-                return {
-                    id: position.id,
-                    position_id: position.id,
-                    hours: position.hours_per_assignment,
-                    num_positions: position.desired_num_assignments,
-                    posting_id: posting_id || 0,
-                    position_code: position.position_code,
-                    position_title: position.position_title || "",
-                    true_posting_position: false,
-                    ...overrideData,
-                };
+        const tableData = positions.map((position): PostingPositionRow => {
+            const postingPosition = postingPositions.find(
+                (postingPosition) => postingPosition.position.id === position.id
+            );
+            const overrideData: Partial<PostingPositionRow> = {};
+            if (postingPosition) {
+                overrideData.hours = postingPosition.hours;
+                overrideData.num_positions = postingPosition.num_positions;
+                overrideData.true_posting_position = true;
             }
-        );
+            return {
+                id: position.id,
+                position_id: position.id,
+                hours: position.hours_per_assignment,
+                num_positions: position.desired_num_assignments,
+                posting_id: posting_id || 0,
+                position_code: position.position_code,
+                position_title: position.position_title || "",
+                true_posting_position: false,
+                ...overrideData,
+            };
+        });
         const selected = tableData
             .filter((row) => row.true_posting_position)
             .map((row) => row.id);
@@ -177,9 +173,11 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                     })
                 );
 
-            const promises = (removedPostingPositions.map((postingPosition) =>
-                dispatch(deletePostingPosition(postingPosition))
-            ) as any[]).concat(
+            const promises = (
+                removedPostingPositions.map((postingPosition) =>
+                    dispatch(deletePostingPosition(postingPosition))
+                ) as any[]
+            ).concat(
                 newPostingPositions.map((postingPosition) =>
                     dispatch(upsertPostingPosition(postingPosition))
                 )
