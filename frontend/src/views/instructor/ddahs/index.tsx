@@ -13,14 +13,12 @@ import { ddahsSelector, upsertDdah } from "../../../api/actions/ddahs";
 import { DdahPreviewModal } from "./ddah-editor";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { activePositionSelector, setDdahForEmailIds } from "../store/actions";
-import {
-    ConnectedExportDdahsAction,
-    ConnectedImportDdahsAction,
-} from "../../admin/ddahs/import-export";
+import { ConnectedExportDdahsAction } from "../../admin/ddahs/import-export";
 import { setSelectedRows as setSelectedDdahs } from "../../admin/ddah-table/actions";
 import { formatDate } from "../../../libs/utils";
 import { DdahEmailModal } from "./ddah-emailer";
 import { FaMailBulk } from "react-icons/fa";
+import { InstructorImportDdahsAction } from "./import";
 
 export function InstructorDdahsView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -100,7 +98,7 @@ export function InstructorDdahsView() {
                     Email DDAHs
                 </ActionButton>
                 <ActionHeader>Import/Export</ActionHeader>
-                <ConnectedImportDdahsAction disabled={!activeSession} />
+                <InstructorImportDdahsAction disabled={!activeSession} />
                 <ConnectedExportDdahsAction disabled={!activeSession} />
             </ActionsList>
             <ContentArea>
