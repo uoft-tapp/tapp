@@ -146,14 +146,16 @@ export const diffImport = {
                         )}" → "${("" + newVal).slice(0, 10)}"`;
                     }
                     if (prop === "instructors") {
-                        const oldInstructors = diffImport.instructorsListFromField(
-                            oldVal as any[],
-                            { instructors }
-                        );
-                        const newInstructors = diffImport.instructorsListFromField(
-                            newVal as any[],
-                            { instructors }
-                        );
+                        const oldInstructors =
+                            diffImport.instructorsListFromField(
+                                oldVal as any[],
+                                { instructors }
+                            );
+                        const newInstructors =
+                            diffImport.instructorsListFromField(
+                                newVal as any[],
+                                { instructors }
+                            );
                         ret.changes[prop] = `${oldInstructors
                             .map((x) => `${x.last_name}, ${x.first_name}`)
                             .join("; ")} → ${newInstructors

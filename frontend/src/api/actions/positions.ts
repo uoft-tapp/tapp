@@ -132,21 +132,23 @@ export const exportPositions = validatedApiDispatcher({
     name: "exportPositions",
     description: "Export positions",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        formatter: PrepareDataFunc<Position>,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all positions from the server in case things happened to be out of sync.
-        await dispatch(fetchPositions());
-        const positions = positionsSelector(getState());
+    dispatcher:
+        (
+            formatter: PrepareDataFunc<Position>,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all positions from the server in case things happened to be out of sync.
+            await dispatch(fetchPositions());
+            const positions = positionsSelector(getState());
 
-        return formatter(positions, format);
-    },
+            return formatter(positions, format);
+        },
 });
 
 export const upsertPositions = validatedApiDispatcher({

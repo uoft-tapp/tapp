@@ -56,9 +56,8 @@ export function ConnectedAddApplicantDialog(props: {
     onHide?: (...args: any) => any;
 }) {
     const { show, onHide = () => {} } = props;
-    const [newApplicant, setNewApplicant] = React.useState<Partial<Applicant>>(
-        BLANK_APPLICANT
-    );
+    const [newApplicant, setNewApplicant] =
+        React.useState<Partial<Applicant>>(BLANK_APPLICANT);
     const [inProgress, setInProgress] = React.useState(false);
 
     const applicants = useSelector(applicantsSelector) as Applicant[];

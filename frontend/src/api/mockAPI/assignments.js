@@ -268,9 +268,8 @@ class ActiveOffer extends MockAPIController {
             position
         );
 
-        const { start_date, end_date } = wageChunkArrayToStartAndEndDates(
-            wageChunks
-        );
+        const { start_date, end_date } =
+            wageChunkArrayToStartAndEndDates(wageChunks);
 
         const offer = {
             accepted_date: null,

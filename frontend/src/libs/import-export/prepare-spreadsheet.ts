@@ -114,9 +114,9 @@ function formatWageChunksToList(
 export const prepareSpreadsheet = {
     instructor: function (instructors: Instructor[]) {
         return spreadsheetUndefinedToNull(
-            ([
-                ["Last Name", "First Name", "UTORid", "email"],
-            ] as CellType[][]).concat(
+            (
+                [["Last Name", "First Name", "UTORid", "email"]] as CellType[][]
+            ).concat(
                 instructors.map((instructor) => [
                     instructor.last_name,
                     instructor.first_name,
@@ -128,16 +128,18 @@ export const prepareSpreadsheet = {
     },
     applicant: function (applicants: Applicant[]) {
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Last Name",
-                    "First Name",
-                    "UTORid",
-                    "Student Number",
-                    "email",
-                    "Phone",
-                ],
-            ] as CellType[][]).concat(
+                    [
+                        "Last Name",
+                        "First Name",
+                        "UTORid",
+                        "Student Number",
+                        "email",
+                        "Phone",
+                    ],
+                ] as CellType[][]
+            ).concat(
                 applicants.map((applicant) => [
                     applicant.last_name,
                     applicant.first_name,
@@ -153,28 +155,30 @@ export const prepareSpreadsheet = {
         const minApps = applications.map(prepareMinimal.application);
         const baseUrl = document.location.origin;
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Last Name",
-                    "First Name",
-                    "UTORid",
-                    "Student Number",
-                    "email",
-                    "Phone",
-                    "Annotation",
-                    "Department",
-                    "Program",
-                    "YIP",
-                    "GPA",
-                    "Posting",
-                    "Position Preferences",
-                    "Previous Experience Summary",
-                    "Comments",
-                    "Documents",
-                    "Custom Question Answers",
-                    "Submission Date",
-                ],
-            ] as CellType[][]).concat(
+                    [
+                        "Last Name",
+                        "First Name",
+                        "UTORid",
+                        "Student Number",
+                        "email",
+                        "Phone",
+                        "Annotation",
+                        "Department",
+                        "Program",
+                        "YIP",
+                        "GPA",
+                        "Posting",
+                        "Position Preferences",
+                        "Previous Experience Summary",
+                        "Comments",
+                        "Documents",
+                        "Custom Question Answers",
+                        "Submission Date",
+                    ],
+                ] as CellType[][]
+            ).concat(
                 minApps.map((application) => [
                     application.last_name,
                     application.first_name,
@@ -214,22 +218,24 @@ export const prepareSpreadsheet = {
     },
     position: function (positions: Position[]) {
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Position Code",
-                    "Position Title",
-                    "Start Date",
-                    "End Date",
-                    "Hours Per Assignment",
-                    "Number of Assignments",
-                    "Contract Template",
-                    "Instructors",
-                    "Duties",
-                    "Qualifications",
-                    "Current Enrollment",
-                    "Current Waitlist",
-                ],
-            ] as CellType[][]).concat(
+                    [
+                        "Position Code",
+                        "Position Title",
+                        "Start Date",
+                        "End Date",
+                        "Hours Per Assignment",
+                        "Number of Assignments",
+                        "Contract Template",
+                        "Instructors",
+                        "Duties",
+                        "Qualifications",
+                        "Current Enrollment",
+                        "Current Waitlist",
+                    ],
+                ] as CellType[][]
+            ).concat(
                 positions.map((position) => [
                     position.position_code,
                     position.position_title,
@@ -270,18 +276,20 @@ export const prepareSpreadsheet = {
         const emptyFirstItems = [null, null, null];
         const emptyLastItems = [null, null];
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Name",
-                    "Open Date",
-                    "Close Date",
-                    "Position Code",
-                    "Num Positions",
-                    "Hours per Assignment",
-                    "Intro Text",
-                    "Custom Questions",
-                ],
-            ] as CellType[][]).concat(
+                    [
+                        "Name",
+                        "Open Date",
+                        "Close Date",
+                        "Position Code",
+                        "Num Positions",
+                        "Hours per Assignment",
+                        "Intro Text",
+                        "Custom Questions",
+                    ],
+                ] as CellType[][]
+            ).concat(
                 Array.from(
                     { length: Math.max(posting.posting_positions.length, 1) },
                     (_, i) => {
@@ -316,17 +324,19 @@ export const prepareSpreadsheet = {
         });
 
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Position",
-                    "Last Name",
-                    "First Name",
-                    "email",
-                    "Assignment Hours",
-                    "Offer Status",
-                    "",
-                ].concat(dutyHeaders),
-            ] as CellType[][]).concat(
+                    [
+                        "Position",
+                        "Last Name",
+                        "First Name",
+                        "email",
+                        "Assignment Hours",
+                        "Offer Status",
+                        "",
+                    ].concat(dutyHeaders),
+                ] as CellType[][]
+            ).concat(
                 ddahs.map((ddah) =>
                     [
                         ddah.assignment.position.position_code,
@@ -368,25 +378,27 @@ export const prepareSpreadsheet = {
             })),
         }));
         return spreadsheetUndefinedToNull(
-            ([
+            (
                 [
-                    "Last Name",
-                    "First Name",
-                    "UTORid",
-                    "Email",
-                    "Position Code",
-                    "Start Date",
-                    "End Date",
-                    "Hours",
-                    "Contract Template",
-                    "Contract Override PDF",
-                    "Offer Status",
-                    "Recent Activity Date",
-                    "",
-                    "Number of Pay Periods",
-                    ...createPayPeriodHeaders(assignmentsForSpreadsheet),
-                ],
-            ] as CellType[][]).concat(
+                    [
+                        "Last Name",
+                        "First Name",
+                        "UTORid",
+                        "Email",
+                        "Position Code",
+                        "Start Date",
+                        "End Date",
+                        "Hours",
+                        "Contract Template",
+                        "Contract Override PDF",
+                        "Offer Status",
+                        "Recent Activity Date",
+                        "",
+                        "Number of Pay Periods",
+                        ...createPayPeriodHeaders(assignmentsForSpreadsheet),
+                    ],
+                ] as CellType[][]
+            ).concat(
                 assignmentsForSpreadsheet.map((assignment) => [
                     assignment.last_name,
                     assignment.first_name,

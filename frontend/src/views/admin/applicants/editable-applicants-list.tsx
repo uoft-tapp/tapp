@@ -50,10 +50,8 @@ function ConfirmDeleteDialog(props: {
 export function ConnectedApplicantsList({ inDeleteMode = false }) {
     const applicants = useSelector(applicantsSelector) as Applicant[];
     const assignments = useSelector(assignmentsSelector) as Assignment[];
-    const [
-        applicantToDelete,
-        setApplicantToDelete,
-    ] = React.useState<Applicant | null>(null);
+    const [applicantToDelete, setApplicantToDelete] =
+        React.useState<Applicant | null>(null);
     const dispatch = useThunkDispatch();
 
     const assignmentsHash: { [key: string]: boolean } = {};

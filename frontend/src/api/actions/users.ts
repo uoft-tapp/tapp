@@ -70,17 +70,18 @@ export const setActiveUserRole = validatedApiDispatcher({
     name: "setActiveUserRole",
     description: "Sets the role of the active user",
     onErrorDispatch: (e) => deleteError(e.toString()),
-    dispatcher: (
-        payload: UserRole | null,
-        options: { skipInit?: boolean } = {}
-    ) => async (dispatch) => {
-        dispatch(setActiveUserRoleSuccess(payload));
-        if (!options.skipInit) {
-            await dispatch(
-                initFromStage("setActiveUserRole", { startAfterStage: true })
-            );
-        }
-    },
+    dispatcher:
+        (payload: UserRole | null, options: { skipInit?: boolean } = {}) =>
+        async (dispatch) => {
+            dispatch(setActiveUserRoleSuccess(payload));
+            if (!options.skipInit) {
+                await dispatch(
+                    initFromStage("setActiveUserRole", {
+                        startAfterStage: true,
+                    })
+                );
+            }
+        },
 });
 
 export const debugOnlyFetchUsers = validatedApiDispatcher({
@@ -109,21 +110,24 @@ export const debugOnlySetActiveUser = validatedApiDispatcher({
     description:
         "Sets the active user (i.e. fakes the 'logged on' user); available only in debug mode",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (user, options: { skipInit?: boolean } = {}) => async (
-        dispatch
-    ) => {
-        const data = (await apiPOST(`/debug/active_user`, user)) as ActiveUser;
-        dispatch(fetchActiveUserSuccess(data));
-        // The new user we switch to might not have the same roles as the previous user.
-        // Default to the highest-authority role available, which is the first in the list.
-        dispatch(setActiveUserRoleSuccess(data.roles[0]));
+    dispatcher:
+        (user, options: { skipInit?: boolean } = {}) =>
+        async (dispatch) => {
+            const data = (await apiPOST(
+                `/debug/active_user`,
+                user
+            )) as ActiveUser;
+            dispatch(fetchActiveUserSuccess(data));
+            // The new user we switch to might not have the same roles as the previous user.
+            // Default to the highest-authority role available, which is the first in the list.
+            dispatch(setActiveUserRoleSuccess(data.roles[0]));
 
-        // After the active user has been set, we need to re-download (almost) all data
-        // with the permissions of the new active user.
-        if (!options.skipInit) {
-            await dispatch(initFromStage("setActiveUser"));
-        }
-    },
+            // After the active user has been set, we need to re-download (almost) all data
+            // with the permissions of the new active user.
+            if (!options.skipInit) {
+                await dispatch(initFromStage("setActiveUser"));
+            }
+        },
 });
 
 // selectors

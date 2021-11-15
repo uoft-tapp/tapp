@@ -40,8 +40,7 @@ export function dataToFile(
             [XLSX.write(workbook, { type: "array", bookType })],
             `${fileName}.${bookType}`,
             {
-                type:
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             }
         );
         return file;

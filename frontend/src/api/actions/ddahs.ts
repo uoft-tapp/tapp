@@ -145,21 +145,20 @@ export const exportDdahs = validatedApiDispatcher({
     name: "exportDdahs",
     description: "Export DDAHs",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (formatter, format = "spreadsheet") => async (
-        dispatch,
-        getState
-    ) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all assignments from the server in case things happened to be out of sync.
-        await dispatch(fetchDdahs());
-        const ddahs = ddahsSelector(getState());
+    dispatcher:
+        (formatter, format = "spreadsheet") =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all assignments from the server in case things happened to be out of sync.
+            await dispatch(fetchDdahs());
+            const ddahs = ddahsSelector(getState());
 
-        return formatter(ddahs, format);
-    },
+            return formatter(ddahs, format);
+        },
 });
 
 export const upsertDdahs = validatedApiDispatcher({

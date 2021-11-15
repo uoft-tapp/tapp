@@ -27,10 +27,9 @@ export function InstructorDdahsView() {
     const dispatch = useThunkDispatch();
     const activePosition = useSelector(activePositionSelector);
 
-    const [previewVisible, setPreviewVisible] = React.useState<Boolean>(false);
-    const [newDialogVisible, setNewDialogVisible] = React.useState<Boolean>(
-        false
-    );
+    const [previewVisible, setPreviewVisible] = React.useState<boolean>(false);
+    const [newDialogVisible, setNewDialogVisible] =
+        React.useState<boolean>(false);
     const [_previewDdah, _setPreviewDdah] = React.useState<Omit<
         Ddah,
         "id"

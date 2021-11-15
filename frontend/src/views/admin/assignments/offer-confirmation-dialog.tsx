@@ -60,15 +60,8 @@ export function OfferConfirmationDialog(props: {
     body: string;
     confirmation: string;
 }) {
-    const {
-        data,
-        visible,
-        setVisible,
-        callback,
-        title,
-        body,
-        confirmation,
-    } = props;
+    const { data, visible, setVisible, callback, title, body, confirmation } =
+        props;
 
     const [inProgress, setInProgress] = React.useState(false);
 

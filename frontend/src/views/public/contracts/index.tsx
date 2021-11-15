@@ -21,10 +21,8 @@ export function ContractView() {
         null
     );
     const [signature, setSignature] = React.useState("");
-    const [
-        confirmationDialogVisible,
-        setConfirmationDialogVisible,
-    ] = React.useState(false);
+    const [confirmationDialogVisible, setConfirmationDialogVisible] =
+        React.useState(false);
     const [waiting, setWaiting] = React.useState(false);
 
     // If the offer's status has been set to accepted/rejected/withdrawn,
@@ -59,6 +57,7 @@ export function ContractView() {
         setWaiting(true);
         await submitDecision();
         setWaiting(false);
+        // @ts-ignore
         window.location.reload(true);
     }
 

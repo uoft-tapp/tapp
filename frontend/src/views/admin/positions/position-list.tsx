@@ -215,10 +215,8 @@ export function ConnectedPositionsList({
 }) {
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
-    const [
-        positionToDelete,
-        setPositionToDelete,
-    ] = React.useState<Position | null>(null);
+    const [positionToDelete, setPositionToDelete] =
+        React.useState<Position | null>(null);
     const dispatch = useThunkDispatch();
 
     async function _upsertPosition(position: Partial<Position> & HasId) {

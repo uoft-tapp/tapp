@@ -10,10 +10,9 @@ matrix:
     - name: "Code Formatting Tests"
       language: node_js
       node_js:
-        - "10"
+        - "14"
       cache: npm
       before_script:
-        # ESLint version is restricted to version 6.1.0 as per issue 209
         - npm ci
       script:
         # allow these tests to fail for now...

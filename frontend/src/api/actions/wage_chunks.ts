@@ -52,22 +52,21 @@ export const upsertWageChunksForAssignment = validatedApiDispatcher({
     name: "upsertWageChunksForAssignment",
     description: "Fetch wage chunks associated with an assignment",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        assignment: Assignment | RawAssignment,
-        payload: WageChunk[]
-    ) => async (dispatch, getState) => {
-        const role = activeRoleSelector(getState());
-        // When we fetch wage chunks for an assignment, we only get the wage chunks for that particular assignment
-        const { id: assignmentId } = assignment;
-        const data = (await apiPOST(
-            `/${role}/assignments/${assignmentId}/wage_chunks`,
-            payload
-        )) as RawWageChunk[];
-        dispatch(upsertWageChunksForAssignmentSuccess(data));
-        // After we update a wage chunk, we should refetch the assignment to make sure
-        // there isn't stale data
-        await dispatch(fetchAssignment(assignment));
-    },
+    dispatcher:
+        (assignment: Assignment | RawAssignment, payload: WageChunk[]) =>
+        async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            // When we fetch wage chunks for an assignment, we only get the wage chunks for that particular assignment
+            const { id: assignmentId } = assignment;
+            const data = (await apiPOST(
+                `/${role}/assignments/${assignmentId}/wage_chunks`,
+                payload
+            )) as RawWageChunk[];
+            dispatch(upsertWageChunksForAssignmentSuccess(data));
+            // After we update a wage chunk, we should refetch the assignment to make sure
+            // there isn't stale data
+            await dispatch(fetchAssignment(assignment));
+        },
 });
 
 export const upsertWageChunk = validatedApiDispatcher({

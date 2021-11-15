@@ -233,7 +233,7 @@ export function InstructorImportDdahsAction({
             setNewDdahs(newDdahs);
             setDdahUpdates(ddahUpdates);
             setDiffed(newDiff);
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }

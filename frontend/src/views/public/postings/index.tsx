@@ -130,9 +130,8 @@ export function PostingView() {
     const params = useParams<{ url_token?: string } | null>();
     const url_token = params?.url_token;
     const [surveyJson, setSurveyJson] = React.useState<any>(null);
-    const [surveyPrefilledData, setSurveyPrefilledData] = React.useState<any>(
-        null
-    );
+    const [surveyPrefilledData, setSurveyPrefilledData] =
+        React.useState<any>(null);
     const [surveyData, setSurveyData] = React.useState<any>(null);
     const [submitDialogVisible, setSubmitDialogVisible] = React.useState(false);
     const [hasSubmitted, setHasSubmitted] = React.useState(false);

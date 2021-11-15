@@ -49,9 +49,8 @@ export function SeedDataMenu({
     fetchSessions: Function;
 }) {
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
-    const [confirmDialogVisible, setConfirmDialogVisible] = React.useState(
-        false
-    );
+    const [confirmDialogVisible, setConfirmDialogVisible] =
+        React.useState(false);
     const [seedAction, _setSeedAction] = React.useState<PromiseOrVoidFunction>(
         () => ident
     );
@@ -190,13 +189,15 @@ export function SeedDataMenu({
         setProgress(0);
         count = 0;
         total = seedData.positions.length;
-        const data = (normalizeImport(
-            {
-                fileType: "json",
-                data: seedData.positions,
-            },
-            positionSchema
-        ) as MinimalPosition[]).map((position) =>
+        const data = (
+            normalizeImport(
+                {
+                    fileType: "json",
+                    data: seedData.positions,
+                },
+                positionSchema
+            ) as MinimalPosition[]
+        ).map((position) =>
             prepareFull.position(position, {
                 instructors,
                 contractTemplates,
@@ -237,13 +238,15 @@ export function SeedDataMenu({
         }
         count = 0;
         total = seedData.assignments.length;
-        const data = (normalizeImport(
-            {
-                fileType: "json",
-                data: seedData.assignments,
-            },
-            assignmentSchema
-        ) as MinimalAssignment[]).map((assignment) => {
+        const data = (
+            normalizeImport(
+                {
+                    fileType: "json",
+                    data: seedData.assignments,
+                },
+                assignmentSchema
+            ) as MinimalAssignment[]
+        ).map((assignment) => {
             if (!session) {
                 throw new Error("Need a valid session to continue");
             }

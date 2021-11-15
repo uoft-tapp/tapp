@@ -104,9 +104,8 @@ export function ConnectedOfferActionButtons({
         );
     }
 
-    const actionPermitted: Partial<
-        Record<keyof typeof OfferTest, boolean>
-    > = {};
+    const actionPermitted: Partial<Record<keyof typeof OfferTest, boolean>> =
+        {};
     for (const key of Object.keys(OfferTest) as (keyof typeof OfferTest)[]) {
         actionPermitted[key] =
             selectedAssignments.length !== 0 &&

@@ -19,7 +19,7 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
     const [fileInputLabel, setFileInputLabel] = React.useState(
         "Select an HTML template file."
     );
-    const [dialogOpen, setDialogOpen] = React.useState<Boolean>(false);
+    const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
     const [inProgress, setInProgress] = React.useState(false);
 
     async function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {

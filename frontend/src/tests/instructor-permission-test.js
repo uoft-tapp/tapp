@@ -410,11 +410,9 @@ export function instructorsPermissionTests(api) {
                 "instructor_permission_test_cant_update_applicant_test_first_name",
             last_name:
                 "instructor_permission_test_cant_update_applicant_test_last_name",
-            email:
-                "instructor_permission_test_cant_update_applicant_test@test.com",
+            email: "instructor_permission_test_cant_update_applicant_test@test.com",
             phone: "1111111111",
-            utorid:
-                "instructor_permission_test_cant_update_applicant_test_utorid",
+            utorid: "instructor_permission_test_cant_update_applicant_test_utorid",
             student_number: "1111111",
         };
 
@@ -527,9 +525,10 @@ export function instructorsPermissionTests(api) {
 
             // We get duties returned sorted in ascending order, so
             // we need to sort the seeded ones before comparing
-            const sortedSeededDuties = databaseSeeder.seededData.ddahs[0].duties.sort(
-                (first, second) => first.order - second.order
-            );
+            const sortedSeededDuties =
+                databaseSeeder.seededData.ddahs[0].duties.sort(
+                    (first, second) => first.order - second.order
+                );
             const firstDdah = resp.payload[0];
             expect(firstDdah.duties).toEqual(sortedSeededDuties);
         });

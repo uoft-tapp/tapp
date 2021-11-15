@@ -26,10 +26,8 @@ export function ConnectedApplicationsList() {
     const assignments = useSelector(assignmentsSelector) as Assignment[];
     const dispatch = useThunkDispatch();
     // If `shownApplication` is non-null, a dialog will be displayed with its details.
-    const [
-        shownApplication,
-        setShownApplication,
-    ] = React.useState<Application | null>(null);
+    const [shownApplication, setShownApplication] =
+        React.useState<Application | null>(null);
 
     const assignmentsHash: { [key: string]: boolean } = {};
     for (const assignment of assignments) {

@@ -58,18 +58,16 @@ export const upsertInstructor = validatedApiDispatcher({
     name: "upsertInstructor",
     description: "Add/insert instructor",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<Instructor>) => async (
-        dispatch,
-        getState
-    ) => {
-        const role = activeRoleSelector(getState());
-        const data = (await apiPOST(
-            `/${role}/instructors`,
-            payload
-        )) as RawInstructor;
-        dispatch(upsertOneInstructorSuccess(data));
-        return data;
-    },
+    dispatcher:
+        (payload: Partial<Instructor>) => async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            const data = (await apiPOST(
+                `/${role}/instructors`,
+                payload
+            )) as RawInstructor;
+            dispatch(upsertOneInstructorSuccess(data));
+            return data;
+        },
 });
 
 export const deleteInstructor = validatedApiDispatcher({
@@ -90,21 +88,23 @@ export const exportInstructors = validatedApiDispatcher({
     name: "exportInstructors",
     description: "Export instructors",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        formatter: PrepareDataFunc<Instructor>,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all instructors from the server in case things happened to be out of sync.
-        await dispatch(fetchInstructors());
-        const instructors = instructorsSelector(getState());
+    dispatcher:
+        (
+            formatter: PrepareDataFunc<Instructor>,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all instructors from the server in case things happened to be out of sync.
+            await dispatch(fetchInstructors());
+            const instructors = instructorsSelector(getState());
 
-        return formatter(instructors, format);
-    },
+            return formatter(instructors, format);
+        },
 });
 
 export const upsertInstructors = validatedApiDispatcher({

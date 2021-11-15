@@ -99,27 +99,25 @@ export const upsertAssignment = validatedApiDispatcher({
     name: "upsertAssignment",
     description: "Add/insert assignment",
     onErrorDispatch: (e) => upsertError(e.toString()),
-    dispatcher: (payload: Partial<Assignment>) => async (
-        dispatch,
-        getState
-    ) => {
-        const role = activeRoleSelector(getState());
-        let data = (await apiPOST(
-            `/${role}/assignments`,
-            prepForApi(payload)
-        )) as RawAssignment;
-        dispatch(upsertOneAssignmentSuccess(data));
-        if (payload.wage_chunks) {
-            await dispatch(
-                upsertWageChunksForAssignment(data, payload.wage_chunks)
-            );
-            // The wage chunks could have changed the number of "hours" for the assignment.
-            // Refetch it to make sure the data isn't stale.
-            data = await dispatch(fetchAssignment(data));
-        }
-        dispatch(upsertOneAssignmentSuccess(data));
-        return data;
-    },
+    dispatcher:
+        (payload: Partial<Assignment>) => async (dispatch, getState) => {
+            const role = activeRoleSelector(getState());
+            let data = (await apiPOST(
+                `/${role}/assignments`,
+                prepForApi(payload)
+            )) as RawAssignment;
+            dispatch(upsertOneAssignmentSuccess(data));
+            if (payload.wage_chunks) {
+                await dispatch(
+                    upsertWageChunksForAssignment(data, payload.wage_chunks)
+                );
+                // The wage chunks could have changed the number of "hours" for the assignment.
+                // Refetch it to make sure the data isn't stale.
+                data = await dispatch(fetchAssignment(data));
+            }
+            dispatch(upsertOneAssignmentSuccess(data));
+            return data;
+        },
 });
 
 export const deleteAssignment = validatedApiDispatcher({
@@ -140,34 +138,36 @@ export const exportAssignments = validatedApiDispatcher({
     name: "exportAssignments",
     description: "Export assignments",
     onErrorDispatch: (e) => fetchError(e.toString()),
-    dispatcher: (
-        formatter: PrepareDataFunc<Assignment>,
-        format: ExportFormat = "spreadsheet"
-    ) => async (dispatch, getState) => {
-        if (!(formatter instanceof Function)) {
-            throw new Error(
-                `"formatter" must be a function when using the export action.`
-            );
-        }
-        // Re-fetch all assignments from the server in case things happened to be out of sync.
-        await dispatch(fetchAssignments());
-        const assignments = assignmentsSelector(getState());
+    dispatcher:
+        (
+            formatter: PrepareDataFunc<Assignment>,
+            format: ExportFormat = "spreadsheet"
+        ) =>
+        async (dispatch, getState) => {
+            if (!(formatter instanceof Function)) {
+                throw new Error(
+                    `"formatter" must be a function when using the export action.`
+                );
+            }
+            // Re-fetch all assignments from the server in case things happened to be out of sync.
+            await dispatch(fetchAssignments());
+            const assignments = assignmentsSelector(getState());
 
-        // Normally, wage chunk information is not fetched with an assignment. This information
-        // must be fetched separately.
-        const wageChunkPromises = assignments.map((assignment) =>
-            dispatch(fetchWageChunksForAssignment(assignment))
-        );
-        await Promise.all(wageChunkPromises);
-        // Attach the wage chunk information to each assignment
-        for (const assignment of assignments) {
-            assignment.wage_chunks = wageChunksByAssignmentSelector(getState())(
-                assignment
+            // Normally, wage chunk information is not fetched with an assignment. This information
+            // must be fetched separately.
+            const wageChunkPromises = assignments.map((assignment) =>
+                dispatch(fetchWageChunksForAssignment(assignment))
             );
-        }
+            await Promise.all(wageChunkPromises);
+            // Attach the wage chunk information to each assignment
+            for (const assignment of assignments) {
+                assignment.wage_chunks = wageChunksByAssignmentSelector(
+                    getState()
+                )(assignment);
+            }
 
-        return formatter(assignments, format);
-    },
+            return formatter(assignments, format);
+        },
 });
 
 export const upsertAssignments = validatedApiDispatcher({

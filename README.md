@@ -112,7 +112,7 @@ adding a new position would always fail.
 
 These instructions will get a copy of the project up and running on your
 local machine for development and testing purposes. Currently, the entire app
-(using React/Redux, Ruby 2.5.1 and a Postgres database) is dockerized.
+(using React/Redux, Ruby and a Postgres database) is dockerized.
 
 ### Prerequisties
 

@@ -327,7 +327,7 @@ export const prepareFull: PrepareFull = {
         // We may or may not have an id. We lie to Typescript to keep it from complaining,
         // since we create a posting without an id first and then update it to have an id
         // if needed.
-        const ret: Posting = ({
+        const ret: Posting = {
             name: minPosting.name,
             applications: [],
             availability: "auto",
@@ -337,9 +337,9 @@ export const prepareFull: PrepareFull = {
             intro_text: minPosting.intro_text,
             url_token: "",
             posting_positions: [],
-        } as unknown) as Posting;
-        let postingPositions: PostingPosition[] = minPosting.posting_positions.map(
-            (minPostingPosition) => {
+        } as unknown as Posting;
+        let postingPositions: PostingPosition[] =
+            minPosting.posting_positions.map((minPostingPosition) => {
                 const position = positions.find(
                     (position) =>
                         position.position_code ===
@@ -356,8 +356,7 @@ export const prepareFull: PrepareFull = {
                     position,
                     posting: ret as Posting,
                 };
-            }
-        );
+            });
         if (id != null) {
             ret.id = id;
         }

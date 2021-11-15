@@ -42,7 +42,7 @@ function ConfirmDeleteDialog(props) {
  * in to customize columns/cell renderers.
  *
  * @export
- * @param {{columns?: object[], inDeleteMode?: Boolean}} props
+ * @param {{columns?: object[], inDeleteMode?: boolean}} props
  * @returns
  */
 export function ConnectedSessionsList(props) {

@@ -11,7 +11,12 @@ import { mockAPI } from "../api/mockAPI";
 
 const BASE_PATH = "/app/src/api/defs/types/";
 const TYPES_FILE = "raw-types.ts";
-const COMPLIER_OPTIONS = { strictNullChecks: true };
+const COMPLIER_OPTIONS = {
+    strictNullChecks: true,
+    // Without this, TJS may error due to incorrect @types/... files. We don't care about those.
+    // We only care about the consistency of our internal types.
+    skipLibCheck: true,
+};
 
 describe("Documentation tests", () => {
     it("All attributes from types reported by the backend are included in the typescript types", async () => {
