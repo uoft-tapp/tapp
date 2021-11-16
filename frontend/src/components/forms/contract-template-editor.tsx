@@ -6,6 +6,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
+import { ContractTemplate } from "../../api/defs/types";
 
 const DEFAULT_CONTRACT_TEMPLATE = {
     template_name: "",
@@ -19,7 +20,11 @@ const DEFAULT_CONTRACT_TEMPLATE = {
  * @param {{contractTemplate: object, availableTemplates: object[], setContractTemplate: function}} props
  * @returns
  */
-export function ContractTemplateEditor(props) {
+export function ContractTemplateEditor(props: {
+    contractTemplate: Partial<ContractTemplate>;
+    setContractTemplate: (contractTemplate: Partial<ContractTemplate>) => any;
+    availableTemplates: { template_file: string }[];
+}) {
     const {
         contractTemplate: contractTemplateProp,
         setContractTemplate,
@@ -31,7 +36,7 @@ export function ContractTemplateEditor(props) {
     };
 
     // update the selected template_file; this comes with side effects
-    function setTemplateFile(templates) {
+    function setTemplateFile(templates: string[]) {
         const templateFile = templates[templates.length - 1] || "";
         setContractTemplate({
             ...contractTemplate,
@@ -62,7 +67,6 @@ export function ContractTemplateEditor(props) {
                         ignoreDiacritics={true}
                         placeholder="File name..."
                         multiple
-                        labelKey={(option) => `${option}`}
                         selected={
                             !contractTemplate.template_file
                                 ? []
@@ -70,6 +74,14 @@ export function ContractTemplateEditor(props) {
                         }
                         options={availableTemplates.map((x) => x.template_file)}
                         onChange={setTemplateFile}
+                        {
+                            // XXX For some reason the typeahead types seem to be incorrect here;
+                            // they disallow the `labelKey` attr, but it works just fine.
+                            // So, we trick typescript into allow the attr.
+                            ...({
+                                labelKey: (option: any) => `${option}`,
+                            } as any)
+                        }
                     />
                 </React.Fragment>
             </DialogRow>

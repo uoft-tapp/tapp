@@ -12,10 +12,23 @@ import { FaSearch } from "react-icons/fa";
 import { Button, Modal, Alert, Spinner } from "react-bootstrap";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { CellProps } from "react-table";
+import { ContractTemplate } from "../../../api/defs/types";
 
-function TemplatePreviewDialog({ show, onClose, template_id }) {
+function TemplatePreviewDialog({
+    show,
+    onClose,
+    template_id,
+}: {
+    show: boolean;
+    onClose: (...args: any[]) => void;
+    template_id: number | null;
+}) {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [cachedPreview, setCachedPreview] = React.useState({
+    const [cachedPreview, setCachedPreview] = React.useState<{
+        id: number | null;
+        content: string | null;
+    }>({
         id: null,
         content: null,
     });
@@ -26,7 +39,7 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
             // Don't try to load an invalid template
             template_id == null ||
             // Don't reload a template that we've already loaded
-            template_id === cachedPreview.template_id
+            template_id === cachedPreview.id
         ) {
             setIsLoading(false);
             return;
@@ -39,9 +52,12 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
                 setCachedPreview({ id: template_id, content });
             })
             .finally(() => setIsLoading(false));
-    }, [template_id, setIsLoading, cachedPreview.template_id, dispatch]);
+    }, [template_id, setIsLoading, cachedPreview.id, dispatch]);
 
     async function downloadClicked() {
+        if (template_id == null) {
+            return;
+        }
         const file = await dispatch(downloadContractTemplate(template_id));
         FileSaver.saveAs(file);
     }
@@ -72,11 +88,15 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
                 {template_id != null && !isLoading && (
                     <iframe
                         style={{
-                            boder: "1px solid black",
+                            border: "1px solid black",
                             width: "100%",
                             flexGrow: 1,
                         }}
-                        srcDoc={isLoading ? null : cachedPreview.content}
+                        srcDoc={
+                            isLoading
+                                ? undefined
+                                : cachedPreview.content || undefined
+                        }
                         title="Contract template preview"
                     />
                 )}
@@ -100,7 +120,9 @@ function TemplatePreviewDialog({ show, onClose, template_id }) {
 
 export function ConnectedContractTemplateList() {
     const [previewVisible, setPreviewVisible] = React.useState(false);
-    const [previewingTemplate, setPreviewingTemplate] = React.useState(null);
+    const [previewingTemplate, setPreviewingTemplate] = React.useState<
+        number | null
+    >(null);
     const contractTemplates = useSelector(contractTemplatesSelector);
     const columns = [
         { Header: "Template Name", accessor: "template_name", width: 200 },
@@ -112,8 +134,8 @@ export function ConnectedContractTemplateList() {
         },
     ];
 
-    function TemplateFileCell({ row }) {
-        const rowData = row.original || row._original;
+    function TemplateFileCell({ row }: CellProps<ContractTemplate>) {
+        const rowData = row.original;
         const template_id = rowData.id;
         const template_file = rowData.template_file;
 
@@ -133,7 +155,7 @@ export function ConnectedContractTemplateList() {
         );
     }
 
-    function previewClicked(template_id) {
+    function previewClicked(template_id: number) {
         setPreviewingTemplate(template_id);
         setPreviewVisible(true);
     }

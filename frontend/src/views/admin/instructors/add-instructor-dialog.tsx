@@ -4,6 +4,7 @@ import { InstructorEditor } from "../../../components/instructors";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { upsertInstructor, instructorsSelector } from "../../../api/actions";
 import { strip } from "../../../libs/utils";
+import { Instructor } from "../../../api/defs/types";
 
 const BLANK_INSTRUCTOR = {
     first_name: "",
@@ -19,8 +20,14 @@ const BLANK_INSTRUCTOR = {
  * @param {object} instructor
  * @param {object[]} instructors
  */
-function getConficts(instructor, instructors) {
-    const ret = { delayShow: "", immediateShow: "" };
+function getConflicts(
+    instructor: Partial<Instructor>,
+    instructors: Instructor[]
+) {
+    const ret: { delayShow: string; immediateShow: React.ReactNode } = {
+        delayShow: "",
+        immediateShow: "",
+    };
     if (
         !strip(instructor.utorid) ||
         !strip(instructor.first_name) ||
@@ -45,9 +52,15 @@ function getConficts(instructor, instructors) {
     return ret;
 }
 
-function AddInstructorDialog(props) {
+function AddInstructorDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => void;
+    instructors: Instructor[];
+    upsertInstructor: (instructor: Partial<Instructor>) => any;
+}) {
     const { show, onHide = () => {}, instructors, upsertInstructor } = props;
-    const [newInstructor, setNewInstructor] = React.useState(BLANK_INSTRUCTOR);
+    const [newInstructor, setNewInstructor] =
+        React.useState<Partial<Instructor>>(BLANK_INSTRUCTOR);
 
     React.useEffect(() => {
         if (!show) {
@@ -61,7 +74,7 @@ function AddInstructorDialog(props) {
         onHide();
     }
 
-    const conflicts = getConficts(newInstructor, instructors);
+    const conflicts = getConflicts(newInstructor, instructors);
 
     return (
         <Modal show={show} onHide={onHide}>

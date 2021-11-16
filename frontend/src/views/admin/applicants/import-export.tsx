@@ -12,6 +12,8 @@ import { Alert } from "react-bootstrap";
 import {
     prepareApplicantData,
     normalizeImport,
+    ExportFormat,
+    DataFormat,
 } from "../../../libs/import-export";
 import { diffImport, getChanged, DiffSpec } from "../../../libs/diffs";
 import { Applicant, MinimalApplicant } from "../../../api/defs/types";
@@ -31,9 +33,9 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  */
 export function ConnectedExportApplicantsAction() {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState<
-        "spreadsheet" | "json" | null
-    >(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -58,7 +60,7 @@ export function ConnectedExportApplicantsAction() {
         doExport().catch(console.error);
     }, [exportType, dispatch]);
 
-    function onClick(option: "spreadsheet" | "json") {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 
@@ -68,10 +70,9 @@ export function ConnectedExportApplicantsAction() {
 export function ConnectedImportInstructorAction() {
     const dispatch = useThunkDispatch();
     const applicants = useSelector(applicantsSelector);
-    const [fileContent, setFileContent] = React.useState<{
-        fileType: "json" | "spreadsheet";
-        data: any;
-    } | null>(null);
+    const [fileContent, setFileContent] = React.useState<DataFormat | null>(
+        null
+    );
     const [diffed, setDiffed] = React.useState<
         DiffSpec<MinimalApplicant, Applicant>[] | null
     >(null);

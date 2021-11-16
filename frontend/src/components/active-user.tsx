@@ -1,15 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Badge, Dropdown } from "react-bootstrap";
-import { apiPropTypes } from "../api/defs/prop-types";
+import { User, UserRole } from "../api/defs/types";
 
-export function ActiveUserDisplay(props) {
+const DEFAULT_USER: Omit<User, "id"> = { utorid: "<noid>", roles: [] };
+
+export function ActiveUserDisplay(props: {
+    activeUser?: User;
+    activeRole?: UserRole | null;
+    setActiveUserRole: (role: UserRole) => any;
+}) {
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
-    const {
-        activeUser = { utorid: "<noid>", roles: [] },
-        activeRole,
-        setActiveUserRole,
-    } = props;
+    const { activeUser = DEFAULT_USER, activeRole, setActiveUserRole } = props;
 
     const roles = activeUser.roles;
     const label = !activeRole ? (
@@ -18,7 +19,7 @@ export function ActiveUserDisplay(props) {
         <span className="text-primary mr-2">{activeRole}</span>
     );
 
-    const isActiveRole = (role) => {
+    const isActiveRole = (role: UserRole) => {
         return activeRole === role;
     };
     return (
@@ -27,7 +28,10 @@ export function ActiveUserDisplay(props) {
             {" as"}
             <Dropdown
                 onSelect={(i) => {
-                    setActiveUserRole(roles[i]);
+                    if (i == null) {
+                        return;
+                    }
+                    setActiveUserRole(roles[+i]);
                 }}
                 onToggle={(desiredVisibility) =>
                     setDropdownVisible(desiredVisibility)
@@ -53,8 +57,3 @@ export function ActiveUserDisplay(props) {
         </Badge>
     );
 }
-ActiveUserDisplay.propTypes = {
-    activeUser: apiPropTypes.user,
-    activeRole: PropTypes.string,
-    setActiveUserRole: PropTypes.func.isRequired,
-};

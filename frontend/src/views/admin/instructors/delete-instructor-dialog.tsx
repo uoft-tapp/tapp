@@ -1,7 +1,13 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+import { Instructor } from "../../../api/defs/types";
 
-export function DeleteInstructorDialog(props) {
+export function DeleteInstructorDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => void;
+    onDelete: (...args: any[]) => any;
+    instructor: Instructor | null;
+}) {
     const { show, onHide, onDelete, instructor } = props;
     if (!instructor) {
         // This check ensures that the instructor object exists before trying to access instructor.last_name

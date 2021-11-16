@@ -14,7 +14,13 @@ import PropTypes from "prop-types";
  * @param {component} props.listRenderer
  * @param {function(list[object], string): list[object]} props.filterFunc
  */
-export function FilteredList(props) {
+export function FilteredList<T, R extends React.ReactPropTypes>(
+    props: {
+        data: T[];
+        filterFunc: (dat: T[], query: string) => T[];
+        listRenderer: React.FunctionComponent<{ data: T[] } & R>;
+    } & R
+) {
     const { data, listRenderer, filterFunc, ...rest } = props;
     const Renderer = listRenderer;
     const [query, setQuery] = useState("");
@@ -28,7 +34,7 @@ export function FilteredList(props) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
-            <Renderer data={filteredData} {...rest} />
+            <Renderer data={filteredData} {...(rest as any)} />
         </div>
     );
 }

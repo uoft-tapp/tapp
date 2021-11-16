@@ -2,7 +2,10 @@ import React from "react";
 import FileSaver from "file-saver";
 import { activeSessionSelector, exportAssignments } from "../../../api/actions";
 import { ExportActionButton } from "../../../components/export-button";
-import { prepareAssignmentDataFactory } from "../../../libs/import-export";
+import {
+    ExportFormat,
+    prepareAssignmentDataFactory,
+} from "../../../libs/import-export";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
@@ -92,9 +95,9 @@ function jsonOutputForPosition(position: Position) {
  */
 export function ConnectedExportAssignmentsAction() {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState<
-        "spreadsheet" | "json" | null
-    >(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
     const session = useSelector(activeSessionSelector);
     const activePosition = useSelector(activePositionSelector);
 
@@ -146,7 +149,7 @@ export function ConnectedExportAssignmentsAction() {
         doExport().catch(console.error);
     }, [exportType, dispatch, activePosition, session]);
 
-    function onClick(option: "spreadsheet" | "json") {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 

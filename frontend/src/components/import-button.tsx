@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import XLSX from "xlsx";
 import {
     Button,
@@ -12,6 +11,13 @@ import {
 } from "react-bootstrap";
 import { ActionButton } from "./action-buttons";
 import { FaUpload } from "react-icons/fa";
+import { DataFormat } from "../libs/import-export";
+
+interface ImportButtonProps {
+    onFileChange: (file: DataFormat | null) => any;
+    onConfirm: (file: DataFormat | null) => any;
+    dialogContent: React.ReactElement;
+}
 
 const DEFAULT_LABEL = "Select a spreadsheet, CSV, or JSON file.";
 
@@ -38,20 +44,29 @@ export function ImportDialog({
     onFileChange,
     setInProgress: parentSetInProgress,
     label = DEFAULT_LABEL,
+}: ImportButtonProps & {
+    dialogOpen: boolean;
+    onCancel: Function;
+    onClose: (...args: any[]) => void;
+    setInProgress: Function;
+    label?: string;
 }) {
     const [fileInputLabel, setFileInputLabel] = React.useState(label);
-    const [fileArrayBuffer, setFileArrayBuffer] = React.useState(null);
-    const [fileContents, setFileContents] = React.useState(null);
+    const [fileArrayBuffer, setFileArrayBuffer] =
+        React.useState<ArrayBuffer | null>(null);
+    const [fileContents, setFileContents] = React.useState<DataFormat | null>(
+        null
+    );
     const [inProgress, _setInProgress] = React.useState(false);
 
     let formElement = null;
 
-    const withLabelReset = (actionHandler) => () => {
+    const withLabelReset = (actionHandler: typeof onCancel) => () => {
         setFileInputLabel(DEFAULT_LABEL);
         actionHandler();
     };
 
-    const withFileContentsReset = (actionHandler) => () => {
+    const withFileContentsReset = (actionHandler: typeof onCancel) => () => {
         setFileContents(null);
         setFileArrayBuffer(null);
         actionHandler();
@@ -62,7 +77,7 @@ export function ImportDialog({
     // that we are in the midst of processing. Therefore, we
     // call both the internal `setInProgress` function as well
     // as the one from our parent.
-    function setInProgress(val) {
+    function setInProgress(val: boolean) {
         _setInProgress(val);
         if (typeof parentSetInProgress === "function") {
             parentSetInProgress(val);
@@ -117,12 +132,24 @@ export function ImportDialog({
         );
     }, [fileArrayBuffer, fileInputLabel]);
 
-    function _onFileChange(event) {
+    function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        if (!event.target || !event.target.files) {
+            return;
+        }
         const file = event.target.files[0];
         setFileInputLabel(file.name);
 
         const reader = new FileReader();
-        reader.onload = (e) => setFileArrayBuffer(e.target.result);
+        reader.onload = (e) => {
+            if (!e.target || typeof e.target.result === "string") {
+                console.warn(
+                    "File of unexpected type",
+                    typeof e.target?.result
+                );
+                return;
+            }
+            setFileArrayBuffer(e.target.result);
+        };
         reader.readAsArrayBuffer(file);
     }
 
@@ -203,7 +230,7 @@ export function ImportDialog({
  * When clicked, a dialog is opened where a user can select a file to import.
  *
  * @param onFileChange - function called when a file is selected. Do any processing or validation in response to this callback.
- * @param dialgoContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
+ * @param dialogContent - Content of the dialog to be show. Can be a preview of the data or a validation message.
  * @param onConfirm - Called when the "Confirm" button is pressed. Can be an async function. If so, a spinner will be displayed between the time "Confirm" is pressed and the time `onConfirm` finishes executing.
  */
 export function ImportButton({
@@ -211,7 +238,7 @@ export function ImportButton({
     dialogContent,
     onConfirm,
     setInProgress,
-}) {
+}: ImportButtonProps & { setInProgress: Function; disabled?: boolean }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -226,7 +253,7 @@ export function ImportButton({
         handleClose();
     }
 
-    async function _onConfirm(...args) {
+    async function _onConfirm(...args: [DataFormat | null]) {
         await onConfirm(...args);
         setDialogOpen(false);
     }
@@ -247,10 +274,6 @@ export function ImportButton({
     );
 }
 
-ImportButton.propTypes = {
-    uploadFunc: PropTypes.func,
-};
-
 /**
  * Renders an dropdown import button component that imports data from file.
  * When clicked, a dialog is opened where a user can select a file to import.
@@ -265,7 +288,7 @@ export function ImportActionButton({
     onConfirm,
     setInProgress,
     disabled = false,
-}) {
+}: ImportButtonProps & { setInProgress: Function; disabled?: boolean }) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -280,7 +303,7 @@ export function ImportActionButton({
         handleClose();
     }
 
-    async function _onConfirm(...args) {
+    async function _onConfirm(...args: [DataFormat | null]) {
         await onConfirm(...args);
         setDialogOpen(false);
     }
@@ -306,7 +329,3 @@ export function ImportActionButton({
         </>
     );
 }
-
-ImportButton.propTypes = {
-    uploadFunc: PropTypes.func,
-};

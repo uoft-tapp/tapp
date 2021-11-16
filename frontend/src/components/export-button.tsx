@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Dropdown, ButtonGroup } from "react-bootstrap";
 import { ActionMenuButton, ActionButton } from "./action-buttons";
 import { FaDownload } from "react-icons/fa";
+import { ExportFormat } from "../libs/import-export";
 
 /**
  * Export button that offers the ability to export as Spreadsheet/CSV/JSON.
@@ -12,17 +13,19 @@ import { FaDownload } from "react-icons/fa";
  * @param {*} props
  * @returns
  */
-export function ExportButton(props) {
+export function ExportButton(props: {
+    onClick?: (format: ExportFormat) => any;
+}) {
     const { onClick: clickCallback } = props;
 
-    function onClick(option) {
-        if (clickCallback) {
+    function onClick(option: ExportFormat | null) {
+        if (clickCallback && option != null) {
             clickCallback(option);
         }
     }
 
     return (
-        <Dropdown as={ButtonGroup} onSelect={onClick}>
+        <Dropdown as={ButtonGroup} onSelect={onClick as any}>
             <Button onClick={() => onClick("spreadsheet")}>Export</Button>
             <Dropdown.Toggle split id="dropdown-split-basic" />
             <Dropdown.Menu>
@@ -47,10 +50,13 @@ ExportButton.propTypes = {
  * @param {*} props
  * @returns
  */
-export function ExportActionButton(props) {
+export function ExportActionButton(props: {
+    onClick?: (format: ExportFormat) => any;
+    disabled?: boolean;
+}) {
     const { onClick: clickCallback, disabled = false } = props;
 
-    function onClick(option) {
+    function onClick(option: ExportFormat) {
         if (clickCallback) {
             clickCallback(option);
         }

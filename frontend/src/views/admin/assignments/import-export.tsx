@@ -13,6 +13,7 @@ import { ExportActionButton } from "../../../components/export-button";
 import { ImportActionButton } from "../../../components/import-button";
 import { Alert } from "react-bootstrap";
 import {
+    DataFormat,
     ExportFormat,
     normalizeImport,
     prepareAssignmentDataFactory,
@@ -125,7 +126,9 @@ export function ConnectedImportAssignmentsAction({
     const applicants = useSelector(applicantsSelector);
     const positions = useSelector(positionsSelector);
     const session = useSelector(activeSessionSelector);
-    const [fileContent, setFileContent] = React.useState(null);
+    const [fileContent, setFileContent] = React.useState<DataFormat | null>(
+        null
+    );
     const [diffed, setDiffed] = React.useState<
         DiffSpec<MinimalAssignment, Assignment>[] | null
     >(null);

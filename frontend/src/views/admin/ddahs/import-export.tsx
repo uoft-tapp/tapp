@@ -11,6 +11,7 @@ import {
     prepareSpreadsheet,
     prepareDdahDataFactory,
     normalizeDdahImports,
+    ExportFormat,
 } from "../../../libs/import-export";
 import { diffImport, getChanged, DiffSpec } from "../../../libs/diffs";
 import {
@@ -40,9 +41,9 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  */
 export function ConnectedExportDdahsAction({ disabled = false }) {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState<
-        "spreadsheet" | "json" | null
-    >(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     const { selectedDdahIds } = useSelector<any, { selectedDdahIds: Number[] }>(
         ddahTableSelector
@@ -80,7 +81,7 @@ export function ConnectedExportDdahsAction({ disabled = false }) {
         doExport().catch(console.error);
     }, [exportType, dispatch, selectedDdahIds]);
 
-    function onClick(option: "spreadsheet" | "json") {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 

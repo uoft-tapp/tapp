@@ -12,10 +12,20 @@ import { FaTimes, FaTrash } from "react-icons/fa";
 import { generateHeaderCell } from "./table-utils";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
-import { EditableCell } from "./editable-cell";
+import { EditableCell, EditableType } from "./editable-cell";
+import { PropsForElement, Session } from "../api/defs/types";
 
-function ConfirmDeleteDialog(props) {
-    const { show, onHide, onDelete, session } = props;
+function ConfirmDeleteDialog({
+    show,
+    onHide,
+    onDelete,
+    session,
+}: {
+    show: boolean;
+    onHide: (...args: any[]) => void;
+    onDelete: (...args: any[]) => void;
+    session: Session | null;
+}) {
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
@@ -45,19 +55,23 @@ function ConfirmDeleteDialog(props) {
  * @param {{columns?: object[], inDeleteMode?: boolean}} props
  * @returns
  */
-export function ConnectedSessionsList(props) {
+export function ConnectedSessionsList(props: {
+    inDeleteMode?: boolean;
+    columns?: any[];
+}) {
     const { inDeleteMode = false } = props;
-    const [sessionToDelete, setSessionToDelete] = React.useState(null);
+    const [sessionToDelete, setSessionToDelete] =
+        React.useState<Session | null>(null);
     const sessions = useSelector(sessionsSelector);
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
-    function _upsertSession(session) {
+    function _upsertSession(session: Session) {
         return dispatch(upsertSession(session));
     }
 
-    function generateCell(field, type) {
-        return (props) => (
+    function generateCell(field: keyof Session, type?: EditableType) {
+        return (props: PropsForElement<EditableType>) => (
             <EditableCell
                 field={field}
                 upsert={_upsertSession}
@@ -68,7 +82,7 @@ export function ConnectedSessionsList(props) {
     }
 
     // props.original contains the row data for this particular session
-    function CellDeleteButton({ row }) {
+    function CellDeleteButton({ row }: { row: { original: Session } }) {
         const session = row?.original || {};
         return (
             <div className="delete-button-container">
@@ -137,6 +151,9 @@ export function ConnectedSessionsList(props) {
                 onDelete={async () => {
                     if (sessionToDelete === activeSession) {
                         await dispatch(setActiveSession(null));
+                    }
+                    if (!sessionToDelete) {
+                        return;
                     }
                     await dispatch(deleteSession(sessionToDelete));
                     setSessionToDelete(null);

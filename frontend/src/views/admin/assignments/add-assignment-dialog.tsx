@@ -8,29 +8,51 @@ import {
     assignmentsSelector,
     upsertAssignment,
 } from "../../../api/actions";
-import { AssignmentEditor } from "../../../components/forms/assignment-editor";
+import {
+    AssignmentEditor,
+    NullableAssignment,
+} from "../../../components/forms/assignment-editor";
+import {
+    Applicant,
+    Assignment,
+    Position,
+    RawAssignment,
+} from "../../../api/defs/types";
 
-function getConflicts(assignment, assignments = []) {
-    const ret = { delayShow: "", immediateShow: "" };
-    if (!strip(assignment.position_id) || !strip(assignment.applicant_id)) {
+function getConflicts(
+    assignment: Partial<NullableAssignment>,
+    assignments: Assignment[] = []
+) {
+    const ret: { delayShow: string; immediateShow: React.ReactNode } = {
+        delayShow: "",
+        immediateShow: "",
+    };
+    if (
+        !strip((assignment as RawAssignment).position_id) ||
+        !strip((assignment as RawAssignment).applicant_id)
+    ) {
         ret.delayShow = "A position and applicant is required";
     }
     const matchingAssignment = assignments.find(
         (x) =>
             strip((x.position || {}).id) ===
-                strip((assignment.position || {}).id) &&
+                strip(((assignment as Assignment).position || {}).id) &&
             strip((x.applicant || {}).id) ===
-                strip((assignment.applicant || {}).id)
+                strip(((assignment as Assignment).applicant || {}).id)
     );
     if (matchingAssignment) {
         ret.immediateShow = (
             <p>
                 Another assignment exists with{" "}
                 <b>
-                    applicant={assignment.applicant.first_name}{" "}
-                    {assignment.applicant.last_name}
+                    applicant={(assignment as Assignment).applicant?.first_name}{" "}
+                    {(assignment as Assignment).applicant?.last_name}
                 </b>{" "}
-                and <b>position={assignment.position.position_code}</b>
+                and{" "}
+                <b>
+                    position=
+                    {(assignment as Assignment).position?.position_code}
+                </b>
             </p>
         );
     }
@@ -42,9 +64,16 @@ const BLANK_ASSIGNMENT = {
     applicant: { id: null },
     position_id: -1,
     applicant_id: -1,
-};
+} as unknown as NullableAssignment;
 
-export function AddAssignmentDialog(props) {
+export function AddAssignmentDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => void;
+    positions: Position[];
+    applicants: Applicant[];
+    assignments: Assignment[];
+    upsertAssignment: (assignment: Partial<Assignment>) => any;
+}) {
     const {
         show,
         onHide,
@@ -53,7 +82,10 @@ export function AddAssignmentDialog(props) {
         assignments,
         upsertAssignment,
     } = props;
-    const [newAssignment, setNewAssignment] = React.useState(BLANK_ASSIGNMENT);
+    const [newAssignment, setNewAssignment] =
+        React.useState<NullableAssignment>(
+            BLANK_ASSIGNMENT as NullableAssignment
+        );
     const [inProgress, setInProgress] = React.useState(false);
 
     React.useEffect(() => {
@@ -66,7 +98,7 @@ export function AddAssignmentDialog(props) {
     async function createAssignment() {
         setInProgress(true);
         try {
-            await upsertAssignment(newAssignment);
+            await upsertAssignment(newAssignment as Partial<Assignment>);
         } finally {
             setInProgress(false);
         }

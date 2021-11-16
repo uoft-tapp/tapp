@@ -6,6 +6,12 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
+import {
+    ContractTemplate,
+    Instructor,
+    Position,
+    RequireSome,
+} from "../../api/defs/types";
 
 const DEFAULT_POSITION = {
     position_code: "",
@@ -23,7 +29,13 @@ const DEFAULT_POSITION = {
  * @param {{position: object, instructors: object[]}} props
  * @returns
  */
-export function PositionEditor(props) {
+export function PositionEditor(props: {
+    position: Partial<Position>;
+    setPosition: (position: Partial<Position>) => any;
+    instructors: Instructor[];
+    contractTemplates: ContractTemplate[];
+    defaultContractTemplate?: ContractTemplate;
+}) {
     const {
         position: positionProp,
         setPosition,
@@ -31,14 +43,17 @@ export function PositionEditor(props) {
         contractTemplates = [],
         defaultContractTemplate = {},
     } = props;
-    const position = { ...DEFAULT_POSITION, ...positionProp };
+    const position = { ...DEFAULT_POSITION, ...positionProp } as RequireSome<
+        Position,
+        keyof typeof DEFAULT_POSITION
+    >;
 
     /**
      * Set `position.instructors` to the specified list.
      *
      * @param {*} instructors
      */
-    function setInstructors(instructors) {
+    function setInstructors(instructors: Instructor[]) {
         setPosition({ ...position, instructors });
     }
 
@@ -47,14 +62,21 @@ export function PositionEditor(props) {
      *
      * @param {*} selectedContractTypes
      */
-    function setContractType(selectedContractTypes) {
+    function setContractType(selectedContractTypes: ContractTemplate[]) {
         const contract_template =
             selectedContractTypes[selectedContractTypes.length - 1] ||
             defaultContractTemplate;
         setPosition({ ...position, contract_template });
     }
 
-    const createFieldEditor = fieldEditorFactory(position, setPosition);
+    const createFieldEditor = fieldEditorFactory<Position>(
+        position as Position,
+        setPosition
+    );
+
+    const selectedContractTemplate = position.contract_template
+        ? [position.contract_template]
+        : [];
 
     return (
         <Form>
@@ -86,7 +108,7 @@ export function PositionEditor(props) {
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Instructors..."
-                    labelKey={(option) =>
+                    labelKey={(option: Instructor) =>
                         `${option.first_name} ${option.last_name}`
                     }
                     selected={position.instructors}
@@ -104,7 +126,7 @@ export function PositionEditor(props) {
                     multiple
                     placeholder="Contract template..."
                     labelKey={(option) => `${option.template_name}`}
-                    selected={[position.contract_template]}
+                    selected={selectedContractTemplate}
                     options={contractTemplates}
                     onChange={setContractType}
                 />

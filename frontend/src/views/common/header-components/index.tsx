@@ -10,7 +10,7 @@ import {
 } from "../../../api/actions";
 import { ActiveUserDisplay } from "../../../components/active-user";
 import { ActiveSessionDisplay } from "../../../components/active-session";
-import { Session, UserRole } from "../../../api/defs/types";
+import { Session, User, UserRole } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function ConnectedActiveSessionDisplay() {
@@ -18,7 +18,7 @@ export function ConnectedActiveSessionDisplay() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
-    function _setActiveSession(session: Session) {
+    function _setActiveSession(session: Session | null) {
         return dispatch(setActiveSession(session));
     }
 
@@ -32,7 +32,7 @@ export function ConnectedActiveSessionDisplay() {
 }
 
 export function ConnectedActiveUserDisplay() {
-    const activeUser = useSelector(activeUserSelector);
+    const activeUser = useSelector(activeUserSelector) as User;
     const activeRole = useSelector(activeRoleSelector);
     const dispatch = useThunkDispatch();
 

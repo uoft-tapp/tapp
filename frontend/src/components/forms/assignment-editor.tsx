@@ -7,6 +7,23 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
 import { splitDateRangeAtNewYear } from "../../api/mockAPI/utils";
+import {
+    Applicant,
+    Assignment,
+    Position,
+    RequireSome,
+    WageChunk,
+} from "../../api/defs/types";
+
+export interface NullableAssignment
+    extends Omit<Assignment, "id" | "wage_chunks"> {
+    id?: Assignment["id"] | null;
+    wage_chunks?:
+        | RequireSome<WageChunk, "start_date" | "end_date" | "hours">[]
+        | null;
+    position_id?: number | null;
+    applicant_id?: number | null;
+}
 
 /**
  * Adds up all the hours for the wage chunks belonging to an assignment and
@@ -16,7 +33,7 @@ import { splitDateRangeAtNewYear } from "../../api/mockAPI/utils";
  * @param {*} assignment
  * @returns
  */
-function assignmentAndWageChunksMatch(assignment) {
+function assignmentAndWageChunksMatch(assignment: NullableAssignment) {
     if (!Array.isArray(assignment.wage_chunks)) {
         return true;
     }
@@ -42,7 +59,12 @@ const DEFAULT_ASSIGNMENT = {
  * @param {{position: object, instructors: object[]}} props
  * @returns
  */
-export function AssignmentEditor(props) {
+export function AssignmentEditor(props: {
+    assignment: NullableAssignment;
+    setAssignment: (assignment: NullableAssignment) => any;
+    applicants: Applicant[];
+    positions: Position[];
+}) {
     const {
         assignment: assignmentProp,
         setAssignment,
@@ -92,7 +114,7 @@ export function AssignmentEditor(props) {
     }, [assignment, setAssignment]);
 
     // update the selected position; this comes with side effects
-    function setPosition(positions) {
+    function setPosition(positions: Position[]) {
         const position = positions[positions.length - 1] || { id: null };
         setAssignment({
             ...assignment,
@@ -105,7 +127,7 @@ export function AssignmentEditor(props) {
     }
 
     // update the selected applicant
-    function setApplicant(applicants) {
+    function setApplicant(applicants: Applicant[]) {
         const applicant = applicants[applicants.length - 1] || { id: null };
         setAssignment({
             ...assignment,
@@ -116,8 +138,8 @@ export function AssignmentEditor(props) {
 
     const createFieldEditor = fieldEditorFactory(assignment, setAssignment);
 
-    let wageChunkAdjuster1 = null;
-    let wageChunkAdjuster2 = null;
+    let wageChunkAdjuster1 = <React.Fragment></React.Fragment>;
+    let wageChunkAdjuster2 = <React.Fragment></React.Fragment>;
     if (assignment.wage_chunks != null) {
         // If there are any wage chunks, there are exactly two of them,
         // one for pre-January and one for post.

@@ -49,7 +49,9 @@ export function fieldEditorFactory<T>(
         title: string,
         attr: keyof T,
         type: EditableType = "text",
-        inputAttrs: Partial<FormControlProps> = {}
+        inputAttrs: Partial<
+            FormControlProps & React.HTMLProps<HTMLInputElement>
+        > = {}
     ) {
         // Function called on the value before it is passed to setBoundData
         let coerceFunc = (x: any) => x;
