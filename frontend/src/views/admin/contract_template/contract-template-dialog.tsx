@@ -9,8 +9,9 @@ import {
 } from "../../../api/actions";
 import { strip } from "../../../libs/utils";
 import { ContractTemplateEditor } from "../../../components/forms/contract-template-editor";
-import { ContractTemplate, PropsForElement } from "../../../api/defs/types";
+import { ContractTemplate } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { PropsForElement } from "../../../api/defs/types/react";
 
 const BLANK_CONTRACT_TEMPLATE = {
     template_name: "",

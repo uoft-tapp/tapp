@@ -13,11 +13,8 @@ import { formatDownloadUrl, capitalize, formatDate } from "../../../libs/utils";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { CellProps } from "react-table";
-import {
-    Applicant,
-    Assignment,
-    PropsForElement,
-} from "../../../api/defs/types";
+import { Applicant, Assignment } from "../../../api/defs/types";
+import { PropsForElement } from "../../../api/defs/types/react";
 
 /**
  * A cell that renders editable applicant information. This component is expected

@@ -13,7 +13,8 @@ import { generateHeaderCell } from "./table-utils";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
 import { EditableCell, EditableType } from "./editable-cell";
-import { PropsForElement, Session } from "../api/defs/types";
+import { Session } from "../api/defs/types";
+import { PropsForElement } from "../api/defs/types/react";
 
 function ConfirmDeleteDialog({
     show,
