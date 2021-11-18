@@ -11,6 +11,7 @@ import { usersReducer } from "../reducers/users";
 import { initFromStage } from "./init";
 import type { ActiveUser, User, UserRole } from "../defs/types";
 import { RootState } from "../../rootReducer";
+import { globalsSelector, setGlobals } from ".";
 
 // actions
 const fetchActiveUserSuccess = actionFactory<ActiveUser>(
@@ -22,6 +23,19 @@ const setActiveUserRoleSuccess = actionFactory<UserRole | null>(
     SET_ACTIVE_USER_ROLE_SUCCESS
 );
 
+/**
+ * Determines whether `role` is a valid UserRole.
+ */
+function isValidRole(role: any): role is UserRole {
+    if (typeof role !== "string") {
+        return false;
+    }
+    if (["admin", "instructor", "ta"].includes(role)) {
+        return true;
+    }
+    return false;
+}
+
 // dispatchers
 export const fetchActiveUser = validatedApiDispatcher({
     name: "fetchActiveUser",
@@ -32,11 +46,13 @@ export const fetchActiveUser = validatedApiDispatcher({
         dispatch(fetchActiveUserSuccess(data));
         // If our currently-set role is one that we don't have,
         // set our role to one we do have.
-        const currentRole = activeRoleSelector(getState());
-        // `currentRole` could be `null`. However `Array.includes` is
-        // a safe operation for any type, so we force TypeScript to stop complaining
-        // by passing in `currentRole!`
-        if (data.roles && !data.roles.includes(currentRole!)) {
+        const currentRole =
+            activeRoleSelector(getState()) || globalsSelector(getState()).role;
+        if (isValidRole(currentRole)) {
+            await dispatch(setActiveUserRole(currentRole));
+        } else if (data.roles?.length > 0) {
+            // If there is no currentRole that could be retrieved from
+            // the state, set the role to the "highest" available.
             await dispatch(setActiveUserRole(data.roles[0]));
         }
         return data;
@@ -73,6 +89,9 @@ export const setActiveUserRole = validatedApiDispatcher({
     dispatcher:
         (payload: UserRole | null, options: { skipInit?: boolean } = {}) =>
         async (dispatch) => {
+            if (payload) {
+                dispatch(setGlobals({ role: payload }));
+            }
             dispatch(setActiveUserRoleSuccess(payload));
             if (!options.skipInit) {
                 await dispatch(

@@ -100,7 +100,11 @@ export function initFromStage(
     const startAfterStage = options.startAfterStage ? 1 : 0;
 
     return async (dispatch, getState) => {
-        const parsedGlobals = { mockAPI: null, activeSession: null };
+        const parsedGlobals = {
+            mockAPI: null,
+            activeSession: null,
+            role: null,
+        };
 
         // These actions don't need to finish in a specific order,
         // so we can wait for them to finish at the end of this function to speed up startup.
