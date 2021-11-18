@@ -12,17 +12,8 @@ class Api::V1::Instructor::ApplicationsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
-        # Find the IDs of all instructors that are associated with the same positions we are
-        position_ids =
-            active_instructor.positions.where(session_id: params[:session_id])
-                .pluck(:id).uniq
-        applicant_ids =
-            Assignment.distinct.where(position_id: position_ids).pluck(
-                :applicant_id
-            ).uniq
-
-        render_success Application.order(:id).where(
-                           applicant_id: applicant_ids
+        render_success active_instructor.applications_by_session(
+                           params[:session_id]
                        )
     end
 end

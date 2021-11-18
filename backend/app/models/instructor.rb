@@ -29,6 +29,18 @@ class Instructor < ApplicationRecord
             .where("assignments.id": assignments_by_session(session_id).ids)
     end
 
+    # Returns all applications that are associated with the instructor and session
+    def applications_by_session(session_id)
+        position_ids =
+            positions.where(session_id: session_id).pluck(:id).uniq
+        applicant_ids =
+            Assignment.distinct.where(position_id: position_ids).pluck(
+                :applicant_id
+            ).uniq
+
+        Application.order(:id).where(applicant_id: applicant_ids)
+    end
+
     # Returns a formatted string displaying the instructor's contact information
     def contact_info
         if email?

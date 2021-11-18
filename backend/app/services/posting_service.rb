@@ -185,7 +185,7 @@ class PostingService
 
             start_of_fall = Date.today.beginning_of_year + 9.months
             if Date.today - Date.today.beginning_of_year < 4.months.in_days
-                start_of_fall = start_of_fall - 1.year
+                start_of_fall -= 1.year
             end
 
             application_attributes[:yip] =
