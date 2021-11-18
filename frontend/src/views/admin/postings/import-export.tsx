@@ -8,6 +8,7 @@ import {
 import { ExportActionButton } from "../../../components/export-button";
 import {
     DataFormat,
+    ExportFormat,
     normalizeImport,
     prepareFull,
     preparePostingData,
@@ -32,9 +33,9 @@ export function ConnectedExportPostingsAction({
     postingId: number;
 }) {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState<
-        "spreadsheet" | "json" | null
-    >(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -59,7 +60,7 @@ export function ConnectedExportPostingsAction({
         doExport().catch(console.error);
     }, [exportType, dispatch, postingId]);
 
-    function onClick(option: "spreadsheet" | "json") {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 

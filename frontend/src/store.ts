@@ -5,7 +5,6 @@ import storage from "redux-persist/lib/storage";
 import rootReducer from "./rootReducer";
 import thunk from "redux-thunk";
 
-/* eslint-disable */
 const configureStore = () => {
     const persistConfig = {
         key: "root",
@@ -20,8 +19,8 @@ const configureStore = () => {
     const persistor = persistStore(store);
 
     if (process.env.NODE_ENV !== "production") {
-        if (module.hot) {
-            module.hot.accept("./rootReducer", () => {
+        if ((module as any).hot) {
+            (module as any).hot.accept("./rootReducer", () => {
                 store.replaceReducer(persistedReducer);
             });
         }
@@ -29,6 +28,5 @@ const configureStore = () => {
 
     return { store, persistor };
 };
-/* eslint-enable */
 
 export default configureStore;

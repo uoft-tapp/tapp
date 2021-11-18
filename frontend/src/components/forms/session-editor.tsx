@@ -1,8 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
-import { docApiPropTypes } from "../../api/defs/doc-generation";
 import { fieldEditorFactory, DialogRow } from "./common-controls";
+import { Session } from "../../api/defs/types";
 /**
  * Edit a session
  *
@@ -10,7 +9,10 @@ import { fieldEditorFactory, DialogRow } from "./common-controls";
  * @param {{session: object, setSession: function}} props
  * @returns
  */
-export function SessionEditor(props) {
+export function SessionEditor(props: {
+    session: Session;
+    setSession: (session: Session) => any;
+}) {
     const { session, setSession } = props;
 
     const createFieldEditor = fieldEditorFactory(session, setSession);
@@ -47,7 +49,3 @@ export function SessionEditor(props) {
         </Form>
     );
 }
-SessionEditor.propTypes = {
-    session: docApiPropTypes.session.isRequired,
-    setSession: PropTypes.func.isRequired,
-};

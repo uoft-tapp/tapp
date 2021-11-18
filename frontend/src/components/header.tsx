@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, NavLinkProps } from "react-bootstrap";
 import { NavLink, useLocation, useRouteMatch } from "react-router-dom";
 
 import "./components.css";
@@ -8,11 +8,12 @@ import "./components.css";
 /**
  * Wrap `"react-router-dom"`'s `NavLink` in Bootstrap
  * styling.
- *
- * @param {*} props
- * @returns
  */
-function BootstrapNavItem(props) {
+function BootstrapNavItem(
+    props: React.PropsWithChildren<
+        { to: string } & NavLinkProps & React.HTMLProps<HTMLAnchorElement>
+    >
+) {
     return (
         <Nav.Item>
             <Nav.Link as={NavLink} {...props}>
@@ -41,15 +42,25 @@ BootstrapNavItem.propTypes = {
  * ```
  *
  * `subroutes.route` is automatically prefixed with the parent's `route`.
- *
- * @export
- * @param {object[]} props.routes
- * @returns
  */
 
-export function Header(props) {
+export function Header(props: {
+    routes: {
+        route: string;
+        name: string;
+        description?: string;
+        subroutes: {
+            route: string;
+            name: string;
+            description?: string;
+        }[];
+    }[];
+    infoComponents: React.ReactNode[];
+}) {
     const { routes = [], infoComponents = [] } = props;
-    let match = useRouteMatch("/:mainRoute/:subRoute?") || {
+    let match = useRouteMatch<{ mainRoute: string; subRoute?: string }>(
+        "/:mainRoute/:subRoute?"
+    ) || {
         params: { mainRoute: "tapp" },
     };
     const { mainRoute } = match.params;
@@ -112,21 +123,3 @@ export function Header(props) {
         </div>
     );
 }
-
-Header.propTypes = {
-    routes: PropTypes.arrayOf(
-        PropTypes.shape({
-            route: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            description: PropTypes.string,
-            subroutes: PropTypes.arrayOf(
-                PropTypes.shape({
-                    route: PropTypes.string.isRequired,
-                    name: PropTypes.string.isRequired,
-                    description: PropTypes.string,
-                })
-            ),
-        })
-    ),
-    infoComponents: PropTypes.array,
-};

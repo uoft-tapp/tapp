@@ -14,12 +14,15 @@ import {
 } from "../../../components/instructors";
 import { Alert } from "react-bootstrap";
 import {
+    DataFormat,
+    ExportFormat,
     normalizeImport,
     prepareInstructorData,
 } from "../../../libs/import-export";
-import { diffImport, getChanged } from "../../../libs/diffs";
+import { diffImport, DiffSpec, getChanged } from "../../../libs/diffs";
 import { instructorSchema } from "../../../libs/schema";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { Instructor, MinimalInstructor } from "../../../api/defs/types";
 
 /**
  * Allows for the download of a file blob containing the exported instructors.
@@ -30,7 +33,9 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  */
 export function ConnectedExportInstructorsAction() {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -38,6 +43,9 @@ export function ConnectedExportInstructorsAction() {
         }
 
         async function doExport() {
+            if (!exportType) {
+                return;
+            }
             // Having an export type of `null` means we're ready to export again,
             // We set the export type to null at the start so in case an error occurs,
             // we can still try again. This *will not* affect the current value of `exportType`
@@ -52,7 +60,7 @@ export function ConnectedExportInstructorsAction() {
         doExport().catch(console.error);
     }, [exportType, dispatch]);
 
-    function onClick(option) {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 
@@ -60,16 +68,22 @@ export function ConnectedExportInstructorsAction() {
 }
 
 export function ConnectedImportInstructorAction({
-    setImportInProgress = null,
+    setImportInProgress,
+}: {
+    setImportInProgress?: (state: boolean) => any;
 }) {
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
-    const [fileContent, setFileContent] = React.useState(null);
-    const [diffed, setDiffed] = React.useState(null);
+    const [fileContent, setFileContent] = React.useState<DataFormat | null>(
+        null
+    );
+    const [diffed, setDiffed] = React.useState<
+        DiffSpec<MinimalInstructor, Instructor>[] | null
+    >(null);
     const [processingError, setProcessingError] = React.useState(null);
     const [inProgress, _setInProgress] = React.useState(false);
 
-    function setInProgress(state) {
+    function setInProgress(state: boolean) {
         _setInProgress(state);
         if (typeof setImportInProgress === "function") {
             setImportInProgress(state);
@@ -95,17 +109,23 @@ export function ConnectedImportInstructorAction({
         try {
             setProcessingError(null);
             // normalize the data coming from the file
-            const data = normalizeImport(fileContent, instructorSchema);
+            const data = normalizeImport(
+                fileContent,
+                instructorSchema
+            ) as Instructor[];
             // Compute which instructors have been added/modified
             const newDiff = diffImport.instructors(data, { instructors });
             setDiffed(newDiff);
-        } catch (e) {
+        } catch (e: any) {
             console.warn(e);
             setProcessingError(e);
         }
     }, [fileContent, instructors, inProgress]);
 
     async function onConfirm() {
+        if (!diffed) {
+            return;
+        }
         const changedInstructors = getChanged(diffed);
 
         await dispatch(upsertInstructors(changedInstructors));
@@ -131,6 +151,9 @@ export function ConnectedImportInstructorAction({
 const DialogContent = React.memo(function DialogContent({
     diffed,
     processingError,
+}: {
+    diffed: DiffSpec<MinimalInstructor, Instructor>[] | null;
+    processingError: string | null;
 }) {
     let dialogContent = <p>No data loaded...</p>;
     if (processingError) {

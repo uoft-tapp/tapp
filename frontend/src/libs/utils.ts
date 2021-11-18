@@ -37,7 +37,7 @@ export function capitalize(word: string | null | undefined): string {
  * @param {string} x
  * @returns
  */
-export function strip(x: string | null | undefined): string {
+export function strip(x: string | number | null | undefined): string {
     if (x == null) {
         return "";
     }

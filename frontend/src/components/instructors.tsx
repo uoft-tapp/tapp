@@ -2,9 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { docApiPropTypes } from "../api/defs/doc-generation";
 import { Form } from "react-bootstrap";
-import { DialogRow } from "./forms/common-controls";
+import { DialogRow, fieldEditorFactory } from "./forms/common-controls";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
+import { Instructor, MinimalInstructor } from "../api/defs/types";
+import { DiffSpec } from "../libs/diffs";
 
 const DEFAULT_COLUMNS = [
     { Header: "Last Name", accessor: "last_name" },
@@ -21,7 +23,10 @@ const DEFAULT_COLUMNS = [
  * @param {{instructors: object[], columns: object[]}} props
  * @returns
  */
-export function InstructorsList(props) {
+export function InstructorsList(props: {
+    instructors: Omit<Instructor, "id">[];
+    columns?: any[];
+}) {
     const { instructors, columns = DEFAULT_COLUMNS } = props;
     return (
         <AdvancedFilterTable
@@ -41,10 +46,14 @@ InstructorsList.propTypes = {
     ),
 };
 
-export function InstructorsDiffList({ modifiedInstructors }) {
+export function InstructorsDiffList({
+    modifiedInstructors,
+}: {
+    modifiedInstructors: DiffSpec<MinimalInstructor, Instructor>[];
+}) {
     return (
         <InstructorsList
-            instructors={modifiedInstructors}
+            instructors={modifiedInstructors as any[]}
             columns={createDiffColumnsFromColumns(DEFAULT_COLUMNS)}
         />
     );
@@ -63,45 +72,17 @@ const DEFAULT_INSTRUCTOR = {
  * @param {{instructor: object, setInstructor: function}} props
  * @returns
  */
-export function InstructorEditor(props) {
+export function InstructorEditor(props: {
+    instructor: Partial<Instructor>;
+    setInstructor: (instructor: Instructor) => any;
+}) {
     const { instructor: instructorProps, setInstructor } = props;
     const instructor = { ...DEFAULT_INSTRUCTOR, ...instructorProps };
 
-    /**
-     * Create a callback function which updates the specified attribute
-     * of a position.
-     *
-     * @param {string} attr
-     * @returns
-     */
-    function setAttrFactory(attr) {
-        return (e) => {
-            const newVal = e.target.value || "";
-            const newInstructor = { ...instructor, [attr]: newVal };
-            setInstructor(newInstructor);
-        };
-    }
-
-    /**
-     * Create a bootstrap form component that updates the specified attr
-     * of `position`
-     *
-     * @param {string} title - Label text of the form control
-     * @param {string} attr - attribute of `position` to be updated when this form control changes
-     * @returns {node}
-     */
-    function createFieldEditor(title, attr, type = "text") {
-        return (
-            <React.Fragment>
-                <Form.Label>{title}</Form.Label>
-                <Form.Control
-                    type={type}
-                    value={instructor[attr] || ""}
-                    onChange={setAttrFactory(attr)}
-                />
-            </React.Fragment>
-        );
-    }
+    const createFieldEditor = fieldEditorFactory<Instructor>(
+        instructor as Instructor,
+        setInstructor
+    );
 
     return (
         <Form>

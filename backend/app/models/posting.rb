@@ -13,8 +13,8 @@ class Posting < ApplicationRecord
 
     def open_status
         today = Time.now.in_time_zone('Eastern Time (US & Canada)').to_date
-        range_start = open_date.to_date
-        range_end = close_date.to_date
+        range_start = open_date&.to_date || 0
+        range_end = close_date&.to_date || 0
         (today >= range_start) && (today <= range_end)
     end
 end

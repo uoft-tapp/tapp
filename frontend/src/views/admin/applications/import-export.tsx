@@ -2,7 +2,10 @@ import React from "react";
 import FileSaver from "file-saver";
 import { exportApplications } from "../../../api/actions";
 import { ExportActionButton } from "../../../components/export-button";
-import { prepareApplicationData } from "../../../libs/import-export";
+import {
+    ExportFormat,
+    prepareApplicationData,
+} from "../../../libs/import-export";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 /**
@@ -14,9 +17,9 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
  */
 export function ConnectedExportApplicationsAction() {
     const dispatch = useThunkDispatch();
-    const [exportType, setExportType] = React.useState<
-        "spreadsheet" | "json" | null
-    >(null);
+    const [exportType, setExportType] = React.useState<ExportFormat | null>(
+        null
+    );
 
     React.useEffect(() => {
         if (!exportType) {
@@ -41,7 +44,7 @@ export function ConnectedExportApplicationsAction() {
         doExport().catch(console.error);
     }, [exportType, dispatch]);
 
-    function onClick(option: "spreadsheet" | "json") {
+    function onClick(option: ExportFormat) {
         setExportType(option);
     }
 

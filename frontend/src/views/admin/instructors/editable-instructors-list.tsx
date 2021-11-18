@@ -10,8 +10,16 @@ import { InstructorsList } from "../../../components/instructors";
 import { DeleteInstructorDialog } from "./delete-instructor-dialog";
 import { FaTrash, FaLock, FaTimes } from "react-icons/fa";
 import { EditableCell } from "../../../components/editable-cell";
+import { CellProps } from "react-table";
+import { Instructor, Position } from "../../../api/defs/types";
 
-function EditableInstructorsList(props) {
+function EditableInstructorsList(props: {
+    upsertInstructor: (instructor: Partial<Instructor>) => any;
+    deleteInstructor: (instructor: { id: number }) => any;
+    inDeleteMode: boolean;
+    positions: Position[];
+    instructors: Instructor[];
+}) {
     const {
         upsertInstructor,
         deleteInstructor,
@@ -21,16 +29,16 @@ function EditableInstructorsList(props) {
     } = props;
 
     const [deleteDialogVisible, setDeleteDialogVisible] = React.useState(false);
-    const [instructorToDelete, setInstructorToDelete] = React.useState(null);
+    const [instructorToDelete, setInstructorToDelete] =
+        React.useState<Instructor | null>(null);
 
-    // Bind an `ApplicantCell` to a particular field
-    function generateCell(field) {
-        return (props) => (
+    function generateCell(field: keyof Instructor) {
+        return (props: CellProps<Instructor>) => (
             <EditableCell field={field} upsert={upsertInstructor} {...props} />
         );
     }
 
-    const instructorCurrentlyAssignedHash = {};
+    const instructorCurrentlyAssignedHash: Record<number, boolean> = {};
     for (const position of positions || []) {
         for (const instructor of position.instructors || []) {
             instructorCurrentlyAssignedHash[instructor.id] = true;
@@ -38,7 +46,7 @@ function EditableInstructorsList(props) {
     }
 
     // props.original contains the row data for this particular instructor
-    function CellDeleteButton({ row }) {
+    function CellDeleteButton({ row }: CellProps<Instructor>) {
         const instructor = row.original;
         const disabled = instructorCurrentlyAssignedHash[instructor.id];
         if (disabled) {
@@ -108,6 +116,9 @@ function EditableInstructorsList(props) {
                     setInstructorToDelete(null);
                 }}
                 onDelete={() => {
+                    if (!instructorToDelete) {
+                        return;
+                    }
                     deleteInstructor(instructorToDelete);
                     setDeleteDialogVisible(false);
                 }}

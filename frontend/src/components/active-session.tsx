@@ -3,8 +3,13 @@ import PropTypes from "prop-types";
 import { FilterableMenu } from "./filterable-menu";
 import { Badge, Dropdown } from "react-bootstrap";
 import { apiPropTypes } from "../api/defs/prop-types";
+import { Session } from "../api/defs/types";
 
-export function ActiveSessionDisplay(props) {
+export function ActiveSessionDisplay(props: {
+    sessions: Session[];
+    activeSession: Session | null;
+    setActiveSession: (session: Session | null) => void;
+}) {
     const { sessions = [], activeSession, setActiveSession } = props;
     // keep track of the dropdown visibility so that the filter can be cleared
     // whenever the dropdown is invisible.
@@ -12,7 +17,7 @@ export function ActiveSessionDisplay(props) {
     const activeSessionId = activeSession ? activeSession.id : null;
 
     let label = <span className="text-secondary mr-2">Select a Session</span>;
-    if (activeSessionId != null) {
+    if (activeSession != null) {
         label = <span className="text-primary mr-2">{activeSession.name}</span>;
     }
 
@@ -21,7 +26,7 @@ export function ActiveSessionDisplay(props) {
             Selected session:
             <Dropdown
                 onSelect={(i) => {
-                    setActiveSession(sessions[i]);
+                    setActiveSession(i == null ? null : sessions[+i]);
                 }}
                 onToggle={(desiredVisibility) =>
                     setDropdownVisible(desiredVisibility)

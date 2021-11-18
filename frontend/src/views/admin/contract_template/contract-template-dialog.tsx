@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal, Button, Alert } from "react-bootstrap";
 import {
     contractTemplatesSelector,
@@ -9,6 +9,9 @@ import {
 } from "../../../api/actions";
 import { strip } from "../../../libs/utils";
 import { ContractTemplateEditor } from "../../../components/forms/contract-template-editor";
+import { ContractTemplate } from "../../../api/defs/types";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { PropsForElement } from "../../../api/defs/types/react";
 
 const BLANK_CONTRACT_TEMPLATE = {
     template_name: "",
@@ -22,8 +25,14 @@ const BLANK_CONTRACT_TEMPLATE = {
  * @param {object} contractTemplate
  * @param {object[]} contractTemplates
  */
-function getConflicts(contractTemplate, contractTemplates) {
-    const ret = { delayShow: "", immediateShow: "" };
+function getConflicts(
+    contractTemplate: Partial<ContractTemplate>,
+    contractTemplates: ContractTemplate[]
+) {
+    const ret: { delayShow: string; immediateShow: React.ReactNode } = {
+        delayShow: "",
+        immediateShow: "",
+    };
     if (
         !strip(contractTemplate.template_name) ||
         !strip(contractTemplate.template_file)
@@ -48,7 +57,14 @@ function getConflicts(contractTemplate, contractTemplates) {
     return ret;
 }
 
-function AddContractTemplateDialog(props) {
+function AddContractTemplateDialog(props: {
+    show: boolean;
+    onHide: (...args: any[]) => void;
+    contractTemplates: ContractTemplate[];
+    upsertContractTemplate: (template: Partial<ContractTemplate>) => any;
+    fetchAllContractTemplates: (...args: any[]) => any;
+    availableTemplates: { template_file: string }[];
+}) {
     const {
         show,
         onHide = () => {},
@@ -57,9 +73,9 @@ function AddContractTemplateDialog(props) {
         upsertContractTemplate,
         fetchAllContractTemplates,
     } = props;
-    const [newContractTemplate, setNewContractTemplate] = React.useState(
-        BLANK_CONTRACT_TEMPLATE
-    );
+    const [newContractTemplate, setNewContractTemplate] = React.useState<
+        Partial<ContractTemplate>
+    >(BLANK_CONTRACT_TEMPLATE);
 
     React.useEffect(() => {
         if (!show) {
@@ -114,10 +130,30 @@ function AddContractTemplateDialog(props) {
 /**
  * AddContractTemplateDialog that has been connected to the redux store
  */
-export const ConnectedAddContractTemplateDialog = connect(
-    (state) => ({
-        contractTemplates: contractTemplatesSelector(state),
-        availableTemplates: allContractTemplatesSelector(state),
-    }),
-    { upsertContractTemplate, fetchAllContractTemplates }
-)(AddContractTemplateDialog);
+export function ConnectedAddContractTemplateDialog(
+    props: Pick<
+        PropsForElement<typeof AddContractTemplateDialog>,
+        "show" | "onHide"
+    >
+) {
+    const contractTemplates = useSelector(contractTemplatesSelector);
+    const availableTemplates = useSelector(allContractTemplatesSelector);
+    const dispatch = useThunkDispatch();
+    const _upsertContractTemplate = React.useCallback(
+        (template) => dispatch(upsertContractTemplate(template)),
+        [dispatch]
+    );
+    const _fetchAllContractTemplates = React.useCallback(
+        () => dispatch(fetchAllContractTemplates()),
+        [dispatch]
+    );
+    return (
+        <AddContractTemplateDialog
+            contractTemplates={contractTemplates}
+            availableTemplates={availableTemplates}
+            upsertContractTemplate={_upsertContractTemplate}
+            fetchAllContractTemplates={_fetchAllContractTemplates}
+            {...props}
+        />
+    );
+}
