@@ -42,6 +42,11 @@ export function InstructorHeader() {
             description: `View information about position ${position.position_code} ${position.position_title}`,
             subroutes: [
                 {
+                    route: `/preferences`,
+                    name: `TA Preferences`,
+                    description: `View information about TAs who have applied to your course`,
+                },
+                {
                     route: `/assignments`,
                     name: `TA Information`,
                     description: `View information about your TAs`,

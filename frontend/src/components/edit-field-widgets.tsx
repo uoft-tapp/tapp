@@ -43,7 +43,9 @@ interface EditFieldProps<T> {
  * @param {*} props
  * @returns
  */
-function EditFieldDialog<T extends string | number>(props: EditFieldProps<T>) {
+export function EditFieldDialog<T extends string | number>(
+    props: EditFieldProps<T>
+) {
     const {
         title,
         value,

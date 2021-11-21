@@ -164,6 +164,7 @@ Rails
                             end
                             resources :postings, only: %i[index create]
                             resources :posting_positions, only: %i[index]
+                            resources :instructor_preferences, only: %i[index]
                         end
 
                         # DDAHs

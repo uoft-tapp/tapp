@@ -191,3 +191,10 @@ export interface RawUser extends HasId {
 export interface RawReportingTag {
     name: string;
 }
+
+export interface RawInstructorPreference {
+    application_id: number;
+    position_id: number;
+    preference_level: number;
+    comment: string;
+}

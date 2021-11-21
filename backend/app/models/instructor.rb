@@ -25,20 +25,15 @@ class Instructor < ApplicationRecord
 
     # Returns all the applicants associated with the instructor and session
     def applicants_by_session(session_id)
-        Applicant.distinct.order(:last_name, :first_name).joins(:assignments)
+        Applicant.distinct.joins(:assignments)
             .where("assignments.id": assignments_by_session(session_id).ids)
     end
 
     # Returns all applications that are associated with the instructor and session
     def applications_by_session(session_id)
-        position_ids =
-            positions.where(session_id: session_id).pluck(:id).uniq
-        applicant_ids =
-            Assignment.distinct.where(position_id: position_ids).pluck(
-                :applicant_id
-            ).uniq
-
-        Application.order(:id).where(applicant_id: applicant_ids)
+        Application.order(:id).where(
+            applicant_id: applicants_by_session(session_id).ids
+        )
     end
 
     # Returns a formatted string displaying the instructor's contact information

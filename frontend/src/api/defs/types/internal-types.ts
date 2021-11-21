@@ -3,6 +3,7 @@
  * querying from the Redux store. They may differ from the raw API payloads
  * (whose types are defined in the `raw-types.ts` file.)
  */
+import { RawInstructorPreference } from ".";
 import type { UserRole } from "./common";
 import type {
     RawApplicant,
@@ -75,4 +76,10 @@ export interface PostingPosition
     extends Omit<RawPostingPosition, "position_id" | "posting_id"> {
     position: Position;
     posting: Posting;
+}
+
+export interface InstructorPreference
+    extends Omit<RawInstructorPreference, "position_id" | "application_id"> {
+    position: Position;
+    application: Application;
 }

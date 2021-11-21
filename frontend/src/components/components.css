@@ -135,3 +135,53 @@
 .form-cell {
     min-width: 5em;
 }
+
+.applicant-rating-container {
+    margin-top: 3px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.applicant-rating-buttons .btn,
+.applicant-rating-container .btn {
+    padding: 0px 3px;
+    display: flex;
+    height: 20px;
+    align-items: center;
+    border-radius: 0pt;
+}
+.applicant-rating-buttons .btn.btn-outline,
+.applicant-rating-container .btn.no-comment {
+    color: #a2a7ab;
+}
+.btn.add-comment:hover,
+.applicant-rating-buttons .btn.btn-outline:hover {
+    color: var(--secondary);
+}
+.applicant-rating-container .comment-container {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    font-size: smaller;
+    color: var(--info);
+}
+.applicant-rating-container .add-comment {
+    margin-left: 5px;
+    flex-grow: 1;
+    justify-content: end;
+    display: flex;
+    overflow: hidden;
+}
+.applicant-rating-container .add-comment:hover .comment-icon.full {
+    color: #138496;
+}
+.applicant-rating-container .comment-icon {
+    display: flex;
+    justify-content: center;
+    margin-left: 4px;
+}
+.applicant-rating-container .comment-icon.full {
+    color: var(--info);
+}

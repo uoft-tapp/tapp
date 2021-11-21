@@ -5,6 +5,8 @@ import { Application } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
 import { formatDateTime } from "../../../libs/utils";
+import { useSelector } from "react-redux";
+import { instructorPreferencesSelector } from "../../../api/actions/instructor_preferences";
 
 interface SurveyJsPage {
     name: string;
@@ -66,6 +68,15 @@ export function ApplicationDetails({
 
         return survey;
     }, [application]);
+
+    const allInstructorPreferences = useSelector(instructorPreferencesSelector);
+    const instructorPreferences = React.useMemo(
+        () =>
+            allInstructorPreferences.filter(
+                (pref) => pref.application.id === application.id
+            ),
+        [allInstructorPreferences, application.id]
+    );
 
     return (
         <React.Fragment>
@@ -186,6 +197,41 @@ export function ApplicationDetails({
                     <tr>
                         <th>Additional Comments</th>
                         <td>{application.comments}</td>
+                    </tr>
+                    <tr>
+                        <th>Instructor Comments</th>
+                        <td>
+                            <ul className="position-preferences-list">
+                                {instructorPreferences
+                                    .filter(
+                                        (pref) =>
+                                            !(
+                                                !pref.comment &&
+                                                pref.preference_level === 0
+                                            )
+                                    )
+                                    .map((pref) => (
+                                        <React.Fragment
+                                            key={pref.position.position_code}
+                                        >
+                                            <Badge
+                                                as="li"
+                                                variant={
+                                                    PREFERENCE_LEVEL_TO_VARIANT[
+                                                        pref.preference_level
+                                                    ] || "info"
+                                                }
+                                            >
+                                                {pref.position.position_code} (
+                                                {pref.preference_level})
+                                            </Badge>
+                                            <span className="instructor-preference-comment">
+                                                {pref.comment}
+                                            </span>
+                                        </React.Fragment>
+                                    ))}
+                            </ul>
+                        </td>
                     </tr>
                     <tr>
                         <th>Submission Date</th>

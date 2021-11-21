@@ -18,8 +18,10 @@ class Api::V1::Instructor::ApplicantsController < ApplicationController
         # We are not calling .save! on these object, so it is okay to directly override private
         # fields with `nil`.
         render_success(
-            active_instructor.applicants_by_session(params[:session_id])
-                .map do |applicant|
+            active_instructor.applicants_by_session(params[:session_id]).order(
+                :last_name,
+                :first_name
+            ).map do |applicant|
                 applicant.phone = nil
                 applicant
             end

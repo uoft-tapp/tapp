@@ -8,10 +8,10 @@ import React from "react";
  * @param {string} name
  * @returns
  */
-export function generateHeaderCell(name: string) {
+export function generateHeaderCell(name: string, title?: string) {
     function header() {
         return (
-            <div title={name} className="table-header">
+            <div title={title ?? name} className="table-header">
                 {name}
             </div>
         );
