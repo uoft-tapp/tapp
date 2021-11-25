@@ -194,10 +194,10 @@ export function InstructorApplicationsTable() {
                                 <Alert.Heading>
                                     Your Rating <small>(click to edit)</small>
                                 </Alert.Heading>
-                                    <ConnectedRating
-                                        application={shownApplication}
-                                        compact={false}
-                                    />
+                                <ConnectedRating
+                                    application={shownApplication}
+                                    compact={false}
+                                />
                             </Alert>
                             <ApplicationDetails
                                 application={shownApplication}
