@@ -14,6 +14,7 @@ class Assignment < ApplicationRecord
 
     scope :by_position,
           ->(position_id) { where(position_id: position_id).order(:id) }
+
     scope(
         :by_session,
         lambda do |session_id|
@@ -21,6 +22,24 @@ class Assignment < ApplicationRecord
                 .order(:id)
         end
     )
+
+    # Returns all applications that correspond to applicants with a
+    # "pending" or "accepted" active offer. These are special because
+    # an instructor should be able to see these applications.
+    scope :with_pending_or_accepted_offer,
+          lambda {
+              joins(:active_offer).where(
+                  offers: { status: %i[pending accepted] }
+              )
+          }
+
+    # Return all applications corresponding to the instructor
+    scope :assigned_to_instructor,
+          lambda { |instructor_id|
+              joins(position: :instructors).where(
+                  positions: { instructors: instructor_id }
+              ).group(:id)
+          }
 
     after_create :create_wage_chunks
 
