@@ -7,6 +7,8 @@ import { activePositionSelector } from "../store/actions";
 import { activeSessionSelector } from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
 import { ConnectedExportAssignmentsAction } from "./import-export";
+import { DisplayRating } from "../../../components/applicant-rating";
+import { FaRegComment } from "react-icons/fa";
 
 export function InstructorPreferencesView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -46,6 +48,20 @@ export function InstructorPreferencesView() {
                     <span className="text-primary">{formattedSessionName}</span>{" "}
                     session. You may review a TA's application and indicate
                     which TAs you are most interested in having for your course.
+                </p>
+                <p>
+                    Please indicate whether a TA is <b>suitable</b> (
+                    <DisplayRating rating={1} />) for the course,{" "}
+                    <b>strongly preferred</b> (
+                    <DisplayRating rating={2} />
+                    ), or <b>not suitable</b> (
+                    <DisplayRating rating={-1} />
+                    ). Additionally, you may leave a comment by clicking the "
+                    <FaRegComment />" icon. If you don't have enough information
+                    to rate the applicant, leave the rating blank or{" "}
+                    <b>unknown</b> (
+                    <DisplayRating rating={0} />
+                    ).
                 </p>
                 <p>
                     Please note that while your preferences will be taken into

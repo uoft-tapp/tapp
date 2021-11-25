@@ -17,7 +17,10 @@ import type {
 
 type NoId<T> = Omit<T, "id">;
 
-export type MinimalSession = NoId<Session>;
+export type MinimalSession = Omit<
+    NoId<Session>,
+    "applications_visible_to_instructors"
+>;
 export type MinimalContractTemplate = NoId<ContractTemplate>;
 export type MinimalInstructor = NoId<Instructor>;
 export type MinimalWageChunk = NoId<WageChunk>;

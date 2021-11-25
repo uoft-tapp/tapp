@@ -4,24 +4,17 @@ import { formatDate, formatMoney } from "../libs/utils";
 import { EditableField } from "./edit-field-widgets";
 
 export type EditableType =
-    | "button"
+    | "boolean"
+    | "paragraph"
     | "checkbox"
-    | "color"
     | "date"
-    | "datetime-local"
     | "email"
     | "file"
-    | "hidden"
-    | "image"
-    | "month"
     | "number"
     | "password"
     | "radio"
     | "range"
-    | "reset"
     | "search"
-    | "submit"
-    | "tel"
     | "text"
     | "time"
     | "url"
@@ -93,6 +86,10 @@ export function EditableCell<T extends HasId, Field extends keyof T = keyof T>({
         case "money":
             displayValue = value != null ? formatMoney("" + value) : "";
             inputDialogValue = value || "";
+            break;
+        case "boolean":
+            displayValue = value ? "True" : "False";
+            inputDialogValue = !!value;
             break;
         default:
             displayValue = value || "";

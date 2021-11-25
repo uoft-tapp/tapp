@@ -9,6 +9,7 @@ export interface RawSession extends HasId {
     name: string;
     rate1: number;
     rate2: number | null;
+    applications_visible_to_instructors: boolean;
 }
 
 export interface RawPosition extends HasId {

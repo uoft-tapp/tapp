@@ -7,6 +7,7 @@ import "./application-details.css";
 import { formatDateTime } from "../../../libs/utils";
 import { useSelector } from "react-redux";
 import { instructorPreferencesSelector } from "../../../api/actions/instructor_preferences";
+import { DisplayRating } from "../../../components/applicant-rating";
 
 interface SurveyJsPage {
     name: string;
@@ -201,7 +202,7 @@ export function ApplicationDetails({
                     <tr>
                         <th>Instructor Comments</th>
                         <td>
-                            <ul className="position-preferences-list">
+                            <ul className="instructor-preferences-list">
                                 {instructorPreferences
                                     .filter(
                                         (pref) =>
@@ -211,24 +212,21 @@ export function ApplicationDetails({
                                             )
                                     )
                                     .map((pref) => (
-                                        <React.Fragment
-                                            key={pref.position.position_code}
-                                        >
-                                            <Badge
-                                                as="li"
-                                                variant={
-                                                    PREFERENCE_LEVEL_TO_VARIANT[
+                                        <li key={pref.position.position_code}>
+                                            <Badge variant="light">
+                                                {pref.position.position_code}{" "}
+                                                <DisplayRating
+                                                    rating={
                                                         pref.preference_level
-                                                    ] || "info"
-                                                }
-                                            >
-                                                {pref.position.position_code} (
-                                                {pref.preference_level})
+                                                    }
+                                                />
                                             </Badge>
-                                            <span className="instructor-preference-comment">
-                                                {pref.comment}
-                                            </span>
-                                        </React.Fragment>
+                                            {pref.comment ? (
+                                                <React.Fragment>
+                                                    ({pref.comment})
+                                                </React.Fragment>
+                                            ) : null}
+                                        </li>
                                     ))}
                             </ul>
                         </td>

@@ -141,9 +141,18 @@
     display: flex;
     justify-content: space-between;
 }
+.applicant-rating-container.expanded > div:first-child {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: .5rem;
+}
+.applicant-rating-container.expanded > div:last-child {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
 
 .applicant-rating-buttons .btn,
-.applicant-rating-container .btn {
+.applicant-rating-container.compact .btn {
     padding: 0px 3px;
     display: flex;
     height: 20px;
@@ -170,7 +179,7 @@
 .applicant-rating-container .add-comment {
     margin-left: 5px;
     flex-grow: 1;
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
     overflow: hidden;
 }
@@ -184,4 +193,22 @@
 }
 .applicant-rating-container .comment-icon.full {
     color: var(--info);
+}
+
+div.p {
+    margin-top: 0px;
+    margin-bottom: 1rem;
+}
+
+.display-rating {
+    padding: 0px 3px;
+}
+.display-rating-container {
+    display: inline-block;
+}
+.applicant-rating-container.expanded .large-rating-button {
+    display: flex;
+}
+.large-rating-button > div:first-child {
+    width: 3em;
 }

@@ -11,6 +11,20 @@ class InstructorPreference < ApplicationRecord
               joins(:position).where(position: { session_id: session_id })
           }
 
+    scope :by_instructor,
+          lambda { |instructor_id|
+              joins(position: :instructors).where(
+                  position: { instructors: instructor_id }
+              )
+          }
+
+    scope :by_visible_to_instructors,
+          lambda {
+              joins(position: :session).where(
+                  sessions: { applications_visible_to_instructors: true }
+              )
+          }
+
     validates :preference_level, numericality: true, allow_nil: true
     validates_uniqueness_of :application_id, scope: %i[position_id]
 end

@@ -59,5 +59,13 @@ export const applicationsRoutes = {
             posts: docApiPropTypes.application,
             returns: docApiPropTypes.application,
         }),
+        "/instructor_preferences": documentCallback({
+            func: () => {
+                throw new Error("Not implemented");
+            },
+            summary: "Upsert an instructor_preference",
+            posts: docApiPropTypes.instructor_preference,
+            returns: docApiPropTypes.instructor_preference,
+        }),
     },
 };

@@ -14,7 +14,6 @@ import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 import { useThunkDispatch } from "../libs/thunk-dispatch";
 import { EditableCell, EditableType } from "./editable-cell";
 import { Session } from "../api/defs/types";
-import { PropsForElement } from "../api/defs/types/react";
 
 function ConfirmDeleteDialog({
     show,
@@ -72,7 +71,7 @@ export function ConnectedSessionsList(props: {
     }
 
     function generateCell(field: keyof Session, type?: EditableType) {
-        return (props: PropsForElement<EditableType>) => (
+        return (props: any) => (
             <EditableCell
                 field={field}
                 upsert={_upsertSession}
@@ -134,6 +133,20 @@ export function ConnectedSessionsList(props: {
             accessor: "rate2",
             className: "number-cell",
             Cell: generateCell("rate2", "money"),
+        },
+        {
+            Header: generateHeaderCell(
+                "Applications Visible",
+                "Whether instructors can view applications for their courses"
+            ),
+            accessor: "applications_visible_to_instructors",
+
+            //           accessor: (session: Session) =>
+            //             session.applications_visible_to_instructors ? "True" : "False",
+            Cell: generateCell(
+                "applications_visible_to_instructors",
+                "boolean"
+            ),
         },
     ];
 

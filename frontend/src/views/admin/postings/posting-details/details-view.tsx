@@ -265,6 +265,7 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
                                 column={{ Header: "Intro Text" }}
                                 upsert={_upsertPosting}
                                 field="intro_text"
+                                type="paragraph"
                                 row={{ original: posting }}
                                 value={posting.intro_text || ""}
                             />

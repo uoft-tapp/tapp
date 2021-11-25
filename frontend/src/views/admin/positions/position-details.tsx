@@ -109,6 +109,7 @@ export function PositionsDetails({ position }: { position: Position }) {
                                 column={{ Header: "Duties" }}
                                 upsert={_upsertPosition}
                                 field="duties"
+                                type="paragraph"
                                 row={{ original: position }}
                                 value={position.duties}
                             />
@@ -121,6 +122,7 @@ export function PositionsDetails({ position }: { position: Position }) {
                                 column={{ Header: "Qualifications" }}
                                 upsert={_upsertPosition}
                                 field="qualifications"
+                                type="paragraph"
                                 row={{ original: position }}
                                 value={position.qualifications}
                             />

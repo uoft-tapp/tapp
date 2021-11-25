@@ -28,7 +28,15 @@ class Api::V1::Admin::SessionsController < ApplicationController
     private
 
     def session_params
-        params.permit(:id, :name, :rate1, :rate2, :start_date, :end_date)
+        params.permit(
+            :id,
+            :name,
+            :rate1,
+            :rate2,
+            :start_date,
+            :end_date,
+            :applications_visible_to_instructors
+        )
     end
 
     def update

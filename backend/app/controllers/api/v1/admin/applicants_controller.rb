@@ -9,7 +9,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
             render_success Applicant.order(:id)
             return
         end
-        render_success Applicant.by_session(params[:session_id])
+        render_success Applicant.by_session(params[:session_id]).order(:id)
     end
 
     def show
@@ -72,8 +72,7 @@ class Api::V1::Admin::ApplicantsController < ApplicationController
         else
             @applicant = Applicant.new(applicant_params)
             render_on_condition(
-                object: @applicant,
-                condition: proc { @applicant.save! }
+                object: @applicant, condition: proc { @applicant.save! }
             )
         end
     end

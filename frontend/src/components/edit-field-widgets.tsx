@@ -43,7 +43,7 @@ interface EditFieldProps<T> {
  * @param {*} props
  * @returns
  */
-export function EditFieldDialog<T extends string | number>(
+export function EditFieldDialog<T extends string | number | boolean>(
     props: EditFieldProps<T>
 ) {
     const {
@@ -52,7 +52,7 @@ export function EditFieldDialog<T extends string | number>(
         show,
         onHide = () => {},
         onChange = () => {},
-        type,
+        type = "text",
     } = props;
     const { formatter = (v) => formatValue(v, type) } = props;
     const [fieldVal, setFieldVal] = React.useState<T>(value);
@@ -96,6 +96,50 @@ export function EditFieldDialog<T extends string | number>(
                 </div>
             </div>
         );
+    // Most types we pass directly into an input, but others we create custom options for.
+    let inputElement = <i>Unknown Input Type</i>;
+    if (["text", "number", "date"].includes(type)) {
+        inputElement = (
+            <input
+                type={type}
+                value={fieldVal as string | number}
+                onChange={(e) => setFieldVal(e.currentTarget.value as T)}
+            />
+        );
+    }
+    if (type === "money") {
+        inputElement = (
+            <input
+                type="number"
+                step={0.01}
+                value={fieldVal as number}
+                onChange={(e) => setFieldVal(e.currentTarget.value as T)}
+            />
+        );
+    }
+    if (type === "boolean") {
+        inputElement = (
+            <label htmlFor="edit-dialog-checkbox">
+                <input
+                    className="mr-2"
+                    type="checkbox"
+                    id="edit-dialog-checkbox"
+                    checked={fieldVal as any}
+                    onChange={(e) => setFieldVal(e.currentTarget.checked as T)}
+                />
+                {fieldVal ? "True/Enabled" : "False/Disabled"}
+            </label>
+        );
+    }
+    if (type === "paragraph") {
+        inputElement = (
+            <textarea
+                style={{ width: "100%" }}
+                value={fieldVal as string}
+                onChange={(e) => setFieldVal(e.currentTarget.value as T)}
+            />
+        );
+    }
 
     return (
         <Modal show={show} onHide={cancelClick}>
@@ -103,12 +147,7 @@ export function EditFieldDialog<T extends string | number>(
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <input
-                    type={type}
-                    value={fieldVal}
-                    onChange={(e) => setFieldVal(e.currentTarget.value as T)}
-                />{" "}
-                {changeIndicator}
+                {inputElement} {changeIndicator}
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={cancelClick} variant="outline-secondary">
@@ -155,7 +194,7 @@ export const EditFieldIcon = React.memo(function EditFieldIcon(props: {
  * @param {{children, title, value, onChange: function, editable: boolean, type?: string}} props
  * @returns
  */
-export function EditableField<T extends string | number>(
+export function EditableField<T extends string | number | boolean>(
     props: EditFieldProps<T> & {
         children: React.ReactNode | null;
         editable: boolean;
