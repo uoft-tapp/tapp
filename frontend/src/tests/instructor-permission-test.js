@@ -674,4 +674,29 @@ export function instructorsPermissionTests(api) {
             expect(resp).toHaveStatus("error");
         });
     });
+
+    it.todo(
+        "when `applications_visible_to_instructor==true` can see all applications for courses associated with self"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==true` can only see applications for courses associated with self"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==true` can create an instructor_preference"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==true` can see all instructor_preferences associated with self"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==true` cannot create an instructor_preference for a position not associated with self"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==false` cannot create an instructor_preference"
+    );
+    it.todo(
+        "when `applications_visible_to_instructor==false` cannot see applications for applicants with an assignment to a position associated with self"
+    );
+    it.todo(
+        "only applications where an applicant indicated a positive preference for a position associated with the instructor are visible (besides applications corresponding to accepted/pending offers)"
+    );
 }

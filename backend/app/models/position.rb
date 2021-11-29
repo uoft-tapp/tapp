@@ -13,6 +13,13 @@ class Position < ApplicationRecord
               numericality: { only_float: true }, allow_nil: true
     validates :position_code, presence: true, uniqueness: { scope: :session }
 
+    scope :by_session, ->(session_id) { where(session: session_id) }
+
+    scope :by_instructor,
+          lambda { |instructor_id|
+              joins(:instructors).where(instructors: instructor_id).group(:id)
+          }
+
     def start_date
         # If we have a non-null date, return that. Otherwise
         # we return the date from the session

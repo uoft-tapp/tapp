@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_07_035325) do
+ActiveRecord::Schema.define(version: 2021_11_21_000001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,18 @@ ActiveRecord::Schema.define(version: 2021_04_07_035325) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ddah_id"], name: "index_duties_on_ddah_id"
+  end
+
+  create_table "instructor_preferences", force: :cascade do |t|
+    t.bigint "position_id", null: false
+    t.bigint "application_id", null: false
+    t.integer "preference_level"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["application_id"], name: "index_instructor_preferences_on_application_id"
+    t.index ["position_id", "application_id"], name: "index_instructor_preferences_on_position_id_and_application_id", unique: true
+    t.index ["position_id"], name: "index_instructor_preferences_on_position_id"
   end
 
   create_table "instructors", force: :cascade do |t|
@@ -262,6 +274,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_035325) do
     t.float "rate2"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "applications_visible_to_instructors", default: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -295,6 +308,8 @@ ActiveRecord::Schema.define(version: 2021_04_07_035325) do
   add_foreign_key "contract_templates", "sessions"
   add_foreign_key "ddahs", "assignments"
   add_foreign_key "duties", "ddahs"
+  add_foreign_key "instructor_preferences", "applications"
+  add_foreign_key "instructor_preferences", "positions"
   add_foreign_key "offers", "assignments"
   add_foreign_key "position_preferences", "applications"
   add_foreign_key "position_preferences", "positions"

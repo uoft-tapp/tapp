@@ -164,6 +164,7 @@ Rails
                             end
                             resources :postings, only: %i[index create]
                             resources :posting_positions, only: %i[index]
+                            resources :instructor_preferences, only: %i[index]
                         end
 
                         # DDAHs
@@ -220,6 +221,7 @@ Rails
                             resources :contract_templates, only: %i[index]
                             resources :positions, only: %i[index]
                             resources :ddahs, only: %i[index]
+                            resources :instructor_preferences, only: %i[index]
                         end
 
                         # Assignments
@@ -231,6 +233,9 @@ Rails
 
                         # Instructors
                         resources :instructors, only: %i[index create]
+
+                        # InstructorPreferences
+                        resources :instructor_preferences, only: %i[create]
 
                         # DDAHs
                         resources :ddahs, only: %i[show create] do

@@ -19,6 +19,7 @@ import type {
     RawSession,
     RawUser,
     RawWageChunk,
+    RawInstructorPreference,
 } from "./raw-types";
 
 export type Duty = RawDuty;
@@ -69,10 +70,17 @@ export interface Application
     applicant: Applicant;
     posting: Posting | null;
     position_preferences: { position: Position; preference_level: number }[];
+    instructor_preferences: InstructorPreference[];
 }
 
 export interface PostingPosition
     extends Omit<RawPostingPosition, "position_id" | "posting_id"> {
     position: Position;
     posting: Posting;
+}
+
+export interface InstructorPreference
+    extends Omit<RawInstructorPreference, "position_id" | "application_id"> {
+    position: Position;
+    application: Application;
 }

@@ -10,6 +10,7 @@ import type {
     PostingPosition,
     Session,
     WageChunk,
+    InstructorPreference,
 } from "./internal-types";
 // Minimal types contain the minimum amount of information needed to reconstruct
 // a particular object. They lack IDs and may be flat compared to what is actually used
@@ -17,7 +18,10 @@ import type {
 
 type NoId<T> = Omit<T, "id">;
 
-export type MinimalSession = NoId<Session>;
+export type MinimalSession = Omit<
+    NoId<Session>,
+    "applications_visible_to_instructors"
+>;
 export type MinimalContractTemplate = NoId<ContractTemplate>;
 export type MinimalInstructor = NoId<Instructor>;
 export type MinimalWageChunk = NoId<WageChunk>;
@@ -62,9 +66,18 @@ export interface MinimalPosting
 export interface MinimalApplication
     extends Omit<
             NoId<Application>,
-            "posting" | "applicant" | "position_preferences"
+            | "posting"
+            | "applicant"
+            | "position_preferences"
+            | "instructor_preferences"
         >,
         MinimalApplicant {
     posting: string | null;
     position_preferences: { position_code: string; preference_level: number }[];
+    instructor_preferences: MinimalInstructorPreference[];
+}
+
+export interface MinimalInstructorPreference
+    extends Omit<InstructorPreference, "position" | "application"> {
+    position_code: string;
 }

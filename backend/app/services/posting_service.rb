@@ -172,9 +172,25 @@ class PostingService
             )
         # the year in progress is computed backwards from the date
         if rest[:program_start]
+            # We compute the year in progress as follows:
+            #   (a) assume all programs start on Oct 1 (we choose October over Sept.,
+            #       because some peope will say their program started on e.g. Sept 14
+            #       rather than Sept 1; we need a date that is at least their start date)
+            #   (b) Find the number of years that have passed between (a) and the applicant's program_start
+            #   (c) Add 1 (since we don't talk about 0th year PhDs, etc.)
+            # This algorithm needs to give the correct year of study even if applicants
+            # fill out an application _before_ they officially advance a year. E.g., a student who
+            # started in 2012 will be in their 3.5th year in the summer of 2015, but we want to call
+            # them a 4th year (since they'll be a fourth year in the fall of 2015).
+
+            start_of_fall = Date.today.beginning_of_year + 9.months
+            if Date.today - Date.today.beginning_of_year < 4.months.in_days
+                start_of_fall -= 1.year
+            end
+
             application_attributes[:yip] =
-                ((Date.today - Date.parse(rest[:program_start])) / 356).floor +
-                    1
+                ((start_of_fall - Date.parse(rest[:program_start])) / 356)
+                    .floor + 1
         end
         application_attributes[:session] = @posting.session
         application_attributes[:posting] = @posting

@@ -10,8 +10,8 @@ class Api::V1::Instructor::PositionsController < ApplicationController
         active_instructor = Instructor.find_by(utorid: active_user.utorid)
         render_success([]) && return unless active_instructor
 
-        render_success active_instructor.positions_by_session(
-                           params[:session_id]
-                       )
+        render_success Position.by_session(params[:session_id]).by_instructor(
+                           active_instructor
+                       ).order(:position_code)
     end
 end

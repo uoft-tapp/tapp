@@ -272,6 +272,13 @@ export const prepareMinimal = {
                     preference_level: position_preference.preference_level,
                 })
             ),
+            instructor_preferences: application.instructor_preferences.map(
+                (pref) => ({
+                    position_code: pref.position.position_code,
+                    preference_level: pref.preference_level,
+                    comment: pref.comment,
+                })
+            ),
             submission_date: application.submission_date,
         });
     },

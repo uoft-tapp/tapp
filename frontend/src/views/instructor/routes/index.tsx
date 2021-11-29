@@ -5,6 +5,9 @@ import { InstructorDdahsView } from "../ddahs";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { setActivePositionId } from "../store/actions";
 import { InstructorSessionsView } from "../sessions";
+import { InstructorPreferencesView } from "../preferences";
+import { useSelector } from "react-redux";
+import { activeSessionSelector } from "../../../api/actions";
 
 /**
  * React component that will update the active position id in the
@@ -23,10 +26,21 @@ function UpdateActivePosition() {
 }
 
 export function InstructorRoutes() {
+    const activeSession = useSelector(activeSessionSelector);
+    const showPreferences =
+        activeSession?.applications_visible_to_instructors || false;
+    const defaultPositionsRedirect = showPreferences
+        ? "/positions/:position_id/preferences"
+        : "/positions/:position_id/assignments";
+
     return (
         <Switch>
             <Route exact path="/">
                 <Redirect from="/" to="/sessions/details" />
+            </Route>
+            <Route path="/positions/:position_id/preferences">
+                <UpdateActivePosition />
+                {showPreferences && <InstructorPreferencesView />}
             </Route>
             <Route path="/positions/:position_id/assignments">
                 <UpdateActivePosition />
@@ -41,7 +55,7 @@ export function InstructorRoutes() {
             </Route>
             <Redirect
                 from="/positions/:position_id"
-                to="/positions/:position_id/assignments"
+                to={defaultPositionsRedirect}
             />
             <Redirect from="/sessions" to="/sessions/details" />
         </Switch>

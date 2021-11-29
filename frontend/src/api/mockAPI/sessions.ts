@@ -72,6 +72,16 @@ export const sessionsRoutes = {
             summary: "Get all available sessions",
             returns: wrappedPropTypes.arrayOf(docApiPropTypes.session),
         }),
+        "/sessions/:session_id/instructor_preferences": documentCallback({
+            func: () => {
+                throw new Error("not implemented");
+            },
+            summary:
+                "Get all instructor preferences associated with the session",
+            returns: wrappedPropTypes.arrayOf(
+                docApiPropTypes.instructor_preference
+            ),
+        }),
     },
     post: {
         "/sessions": documentCallback({

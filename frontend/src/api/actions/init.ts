@@ -24,6 +24,10 @@ import { fetchDdahs } from "./ddahs";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../rootReducer";
 import { AnyAction } from "redux";
+import {
+    fetchInstructorPreferences,
+    fetchInstructorPreferencesSuccess,
+} from "./instructor_preferences";
 
 type InitStages =
     | "pageLoad"
@@ -100,7 +104,11 @@ export function initFromStage(
     const startAfterStage = options.startAfterStage ? 1 : 0;
 
     return async (dispatch, getState) => {
-        const parsedGlobals = { mockAPI: null, activeSession: null };
+        const parsedGlobals = {
+            mockAPI: null,
+            activeSession: null,
+            role: null,
+        };
 
         // These actions don't need to finish in a specific order,
         // so we can wait for them to finish at the end of this function to speed up startup.
@@ -234,12 +242,13 @@ export function initFromStage(
             // `fetchActions` array contains all the fetch API calls that need to be
             // made in order to obtain all data that the app needs.
             const fetchActions = [
+                fetchContractTemplates,
                 fetchApplicants,
+                fetchPositions,
                 fetchApplications,
                 fetchAssignments,
-                fetchContractTemplates,
-                fetchPositions,
                 fetchDdahs,
+                fetchInstructorPreferences,
             ];
 
             // The order of fetching here doesn't matter, so dispatch all at once
@@ -267,6 +276,7 @@ export function clearSessionDependentData(): ThunkAction<
     AnyAction
 > {
     return async (dispatch) => {
+        dispatch(fetchInstructorPreferencesSuccess([]));
         dispatch(fetchApplicantsSuccess([]));
         dispatch(fetchAssignmentsSuccess([]));
         dispatch(fetchContractTemplatesSuccess([]));

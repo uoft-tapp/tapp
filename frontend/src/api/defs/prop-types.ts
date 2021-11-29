@@ -183,6 +183,12 @@ function generatePropTypes(PropTypes: typeof OrigPropTypes) {
             position_id: id,
             posting_id: id,
         }),
+        instructor_preference: PropTypes.shape({
+            preference_level: PropTypes.number,
+            comment: PropTypes.string,
+            position_id: id,
+            posting_id: id,
+        }),
         survey: PropTypes.shape({
             title: PropTypes.string,
             pages: PropTypes.arrayOf(

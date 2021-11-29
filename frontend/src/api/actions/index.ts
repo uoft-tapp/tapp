@@ -12,3 +12,4 @@ export * from "./users";
 export * from "./postings";
 export * from "./init";
 export * from "./globals";
+export * from "../selectors/application-smash";

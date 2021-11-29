@@ -35,15 +35,26 @@ export function InstructorHeader() {
         }
     }, [dispatch, activeSession, sessions]);
 
+    const preferencesRoute = activeSession?.applications_visible_to_instructors
+        ? [
+              {
+                  route: `/preferences`,
+                  name: `TA Preferences`,
+                  description: `View information about TAs who have applied to your course`,
+              },
+          ]
+        : [];
+
     const routes = positions
         .map((position) => ({
             route: `/positions/${position.id}`,
             name: `${position.position_code}`,
             description: `View information about position ${position.position_code} ${position.position_title}`,
             subroutes: [
+                ...preferencesRoute,
                 {
                     route: `/assignments`,
-                    name: `TA Information`,
+                    name: `Assigned TAs`,
                     description: `View information about your TAs`,
                 },
                 {
