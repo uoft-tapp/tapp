@@ -40,38 +40,73 @@
     font-style: italic;
 }
 
+.instructor-ddah-import-duties-diff-list {
+    list-style-type: none;
+    padding-left: 1em;
+}
+.instructor-ddah-import-duties-diff-list ul {
+    padding-left: 7em;
+}
 .instructor-ddah-import-duties-diff-list .duty-created {
-    list-style-type: "✓";
+    list-style-type: none;
 }
 
-.instructor-ddah-import-duties-diff-list .duty-created:after {
-    content: " (new)";
-    color: green;
+.instructor-ddah-import-duties-diff-list .duty-created:before {
+    width: 6em;
+    margin-left: -6em;
+    padding-right: 0.25rem;
+    text-align: right;
+    display: inline-block;
+    content: "(new)";
+    color: var(--green);
     font-weight: bold;
 }
 
 .instructor-ddah-import-duties-diff-list .duty-updated {
-    list-style-type: "✏";
+    list-style-type: none;
     padding-left: 2px;
 }
 
-.instructor-ddah-import-duties-diff-list .duty-updated:after {
-    content: " (updated)";
-    color: orange;
+.instructor-ddah-import-duties-diff-list .duty-updated:before {
+    width: 6em;
+    margin-left: -6em;
+    padding-right: 0.25rem;
+    text-align: right;
+    display: inline-block;
+    content: "(updated)";
+    color: var(--orange);
+    font-weight: bold;
 }
 
 .instructor-ddah-import-duties-diff-list .duty-deleted {
-    list-style-type: "✗";
+    list-style-type: none;
+    text-decoration: line-through;
 }
 
-.instructor-ddah-import-duties-diff-list .duty-deleted:after {
-    color: red;
-    content: " (deleted)";
+.instructor-ddah-import-duties-diff-list .duty-deleted:before {
+    width: 6em;
+    margin-left: -6em;
+    padding-right: 0.25rem;
+    text-align: right;
+    display: inline-block;
+    color: var(--red);
+    content: "(deleted)";
     font-weight: bold;
 }
 
 .instructor-ddah-import-duties-diff-list .duty-unchanged {
-    color: grey;
+    list-style-type: none;
+    color: var(--gray);
+}
+.instructor-ddah-import-duties-diff-list .duty-unchanged:before {
+    width: 6em;
+    margin-left: -6em;
+    padding-right: 0.25rem;
+    text-align: right;
+    display: inline-block;
+    color: var(--gray);
+    content: "(unchanged)";
+    font-weight: light;
 }
 
 .instructor-ddah-import-new-ddah-duties-list li {

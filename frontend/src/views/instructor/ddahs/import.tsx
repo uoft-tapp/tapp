@@ -3,18 +3,12 @@ import { Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { assignmentsSelector, applicantsSelector } from "../../../api/actions";
 import { ddahsSelector, upsertDdahs } from "../../../api/actions/ddahs";
-import {
-    Ddah,
-    Assignment,
-    Applicant,
-    MinimalDdah,
-    RawDuty,
-    Duty,
-} from "../../../api/defs/types";
+import { Ddah, MinimalDdah, RawDuty, Duty } from "../../../api/defs/types";
 import { ImportActionButton } from "../../../components/import-button";
 import { DiffSpec, diffImport, getChanged } from "../../../libs/diffs";
 import { normalizeDdahImports } from "../../../libs/import-export";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { activePositionSelector } from "../store/actions";
 
 enum DiffType {
     Unchanged = "UNCHANGED",
@@ -36,46 +30,42 @@ interface DutyDiff {
     status: DiffType;
 }
 
+/**
+ * Compute the differences between two duties lists
+ */
 function getDutiesDiff(oldDuties: RawDuty[], newDuties: RawDuty[]): DutyDiff[] {
-    let changes: DutyDiff[] = [];
-    let dutiesChanged = false;
+    const allDutyDescriptions = new Set([
+        ...oldDuties.map((duty) => duty.description),
+        ...newDuties.map((duty) => duty.description),
+    ]);
 
-    for (const oldDuty of oldDuties) {
-        let oldDutyDeleted = true;
-
-        for (const [index, newDuty] of newDuties.entries()) {
-            if (
-                oldDuty.description === newDuty.description &&
-                oldDuty.hours === newDuty.hours
-            ) {
-                changes.push({ oldDuty, status: DiffType.Unchanged });
-                newDuties.splice(index, 1);
-                oldDutyDeleted = false;
-            } else if (
-                oldDuty.description === newDuty.description &&
-                oldDuty.hours !== newDuty.hours
-            ) {
-                changes.push({ oldDuty, newDuty, status: DiffType.Updated });
-                newDuties.splice(index, 1);
-                oldDutyDeleted = false;
-                dutiesChanged = true;
-            }
+    const changes = [...allDutyDescriptions].map((description) => {
+        const oldDuty = oldDuties.find(
+            (duty) => duty.description === description
+        );
+        const newDuty = newDuties.find(
+            (duty) => duty.description === description
+        );
+        if (!oldDuty && newDuty) {
+            return { newDuty, status: DiffType.Created };
         }
-
-        // If we did not find old duties to match the new one - mark it as created
-        if (oldDutyDeleted) {
-            changes.push({ oldDuty, status: DiffType.Deleted });
-            dutiesChanged = true;
+        if (oldDuty && !newDuty) {
+            return { oldDuty, status: DiffType.Deleted };
         }
+        if (!oldDuty && !newDuty) {
+            // We should never make it here...
+            throw new Error("Cannot find matching duties");
+        }
+        if (oldDuty?.hours !== newDuty?.hours) {
+            return { oldDuty, newDuty, status: DiffType.Updated };
+        }
+        return { oldDuty, newDuty, status: DiffType.Unchanged };
+    });
+
+    if (changes.every((change) => change.status === DiffType.Unchanged)) {
+        return [];
     }
-
-    // The new duties that are left were just created - add them
-    changes = changes.concat(
-        newDuties.map((duty) => ({ newDuty: duty, status: DiffType.Created }))
-    );
-
-    // Do not return changes if everything is unchanged
-    return dutiesChanged ? changes : [];
+    return changes;
 }
 
 function DutyItem({ oldDuty, newDuty, status }: DutyDiff) {
@@ -113,8 +103,13 @@ function DutyItem({ oldDuty, newDuty, status }: DutyDiff) {
 function DutiesDiffList({ changes }: { changes: DutyDiff[] }) {
     return (
         <ul>
-            {changes.map(({ oldDuty, newDuty, status }) => (
-                <DutyItem oldDuty={oldDuty} newDuty={newDuty} status={status} />
+            {changes.map(({ oldDuty, newDuty, status }, i) => (
+                <DutyItem
+                    key={i}
+                    oldDuty={oldDuty}
+                    newDuty={newDuty}
+                    status={status}
+                />
             ))}
         </ul>
     );
@@ -171,9 +166,10 @@ export function InstructorImportDdahsAction({
     setImportInProgress?: Function | null;
 }) {
     const dispatch = useThunkDispatch();
-    const ddahs = useSelector<any, Ddah[]>(ddahsSelector);
-    const assignments = useSelector<any, Assignment[]>(assignmentsSelector);
-    const applicants = useSelector<any, Applicant[]>(applicantsSelector);
+    const ddahs = useSelector(ddahsSelector);
+    const assignments = useSelector(assignmentsSelector);
+    const applicants = useSelector(applicantsSelector);
+    const activePosition = useSelector(activePositionSelector);
     const [fileContent, setFileContent] = React.useState<{
         fileType: "json" | "spreadsheet";
         data: any;
@@ -214,7 +210,12 @@ export function InstructorImportDdahsAction({
         try {
             setProcessingError(null);
             // normalize the data coming from the file
-            const data = normalizeDdahImports(fileContent, applicants);
+            const data = normalizeDdahImports(
+                fileContent,
+                applicants,
+                undefined,
+                activePosition?.position_code
+            );
 
             // Compute which DDAHs have been added/modified
             const newDiff = diffImport.ddahs(data, { ddahs, assignments });
@@ -237,7 +238,14 @@ export function InstructorImportDdahsAction({
             console.warn(e);
             setProcessingError(e);
         }
-    }, [fileContent, ddahs, assignments, applicants, inProgress]);
+    }, [
+        fileContent,
+        ddahs,
+        assignments,
+        applicants,
+        inProgress,
+        activePosition,
+    ]);
 
     async function onConfirm() {
         if (!diffed) {

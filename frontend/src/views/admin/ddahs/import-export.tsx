@@ -207,7 +207,10 @@ const DEFAULT_DDAH = {
  * @param {Assignment[]} assignments
  * @returns
  */
-function createDdahSpreadsheets(ddahs: Ddah[], assignments: Assignment[]) {
+export function createDdahSpreadsheets(
+    ddahs: Ddah[],
+    assignments: Assignment[]
+) {
     const ddahsByAssignmentId: { [key: string]: Ddah } = {};
     for (const ddah of ddahs) {
         ddahsByAssignmentId[ddah.assignment.id] = ddah;

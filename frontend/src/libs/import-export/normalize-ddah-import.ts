@@ -21,7 +21,8 @@ export function normalizeDdahImports(
         data: any;
     },
     applicants: Applicant[],
-    log = true
+    log = true,
+    positionCodeOverride?: string
 ): MinimalDdah[] {
     let ret: MinimalDdah[] = [];
 
@@ -81,6 +82,9 @@ export function normalizeDdahImports(
             const normalized: {
                 [key: string]: any;
             } = rowMapper.formatRow(row, log);
+            if (positionCodeOverride) {
+                normalized.position_code = positionCodeOverride;
+            }
             if (normalized.utorid == null) {
                 // If a UTORid column was not specified, we need to manually search the applicants for
                 // someone matching the first/last name. `matchByUtoridOrName` will succeed or throw an error,
