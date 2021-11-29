@@ -12,14 +12,15 @@ import { RootState } from "../../rootReducer";
  *
  */
 export function arrayToHash<T extends { id: number }>(
-    l: T[]
+    l: T[],
+    key: keyof T = "id"
 ): Record<number, T> {
     if (!Array.isArray(l)) {
         return l;
     }
     const ret: { [key: number]: T } = {};
     for (const d of l) {
-        ret[d.id] = d;
+        ret[d[key] as unknown as number] = d;
     }
     return ret;
 }

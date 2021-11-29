@@ -14,7 +14,7 @@ const initialState: InstructorPreferenceState = {
     _modelData: [],
 };
 
-export function upsertItem(
+function upsertItem(
     modelData: RawInstructorPreference[],
     newItem: RawInstructorPreference
 ): RawInstructorPreference[] {

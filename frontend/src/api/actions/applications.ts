@@ -7,21 +7,18 @@ import {
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
-    arrayToHash,
     validatedApiDispatcher,
     flattenIdFactory,
     HasId,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
-import { applicationsReducer } from "../reducers/applications";
-import { createSelector } from "reselect";
-import { applicantsSelector, fetchApplicants } from "./applicants";
+import { fetchApplicants } from "./applicants";
 import { activeRoleSelector } from "./users";
 import type { Application, RawApplication } from "../defs/types";
 import { activeSessionSelector } from "./sessions";
-import { fetchPostings, postingsSelector } from "./postings";
-import { positionsSelector } from "./positions";
+import { fetchPostings } from "./postings";
 import { ExportFormat, PrepareDataFunc } from "../../libs/import-export";
+import { applicationsSelector } from "../selectors/application-smash";
 
 // actions
 export const fetchApplicationsSuccess = actionFactory<RawApplication[]>(
@@ -159,56 +156,3 @@ export const exportApplications = validatedApiDispatcher({
             return formatter(applications, format);
         },
 });
-
-// selectors
-
-// Each reducer is given an isolated state; instead of needed to remember to
-// pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
-// search for and return the isolated state associated with `reducer`. This is not
-// a standard redux function.
-const localStoreSelector = applicationsReducer._localStoreSelector;
-export const _applicationsSelector = createSelector(
-    localStoreSelector,
-    (state) => state._modelData
-);
-
-// Get the current list of applications and recompute `applicant_id` and `position_id`
-// to have corresponding `applicant` and `position` objects
-export const applicationsSelector = createSelector(
-    [
-        _applicationsSelector,
-        applicantsSelector,
-        postingsSelector,
-        positionsSelector,
-    ],
-    (applications, applicants, postings, positions) => {
-        if (applications.length === 0) {
-            return [];
-        }
-
-        const applicantsById = arrayToHash(applicants);
-        const postingsById = arrayToHash(postings);
-        const positionsById = arrayToHash(positions);
-
-        // Change `applicant_id` to the corresponding `applicant` object
-        // and similarly, change each `position_id` in each entry of
-        // `position_preferences` to corresponding `position` object.
-        return applications.map(
-            ({ posting_id, applicant_id, position_preferences, ...rest }) =>
-                ({
-                    ...rest,
-                    applicant: applicantsById[applicant_id] || {},
-                    posting:
-                        posting_id != null
-                            ? postingsById[posting_id] || {}
-                            : null,
-                    position_preferences: position_preferences
-                        .map(({ position_id, preference_level }) => ({
-                            position: positionsById[position_id],
-                            preference_level,
-                        }))
-                        .filter((x) => x.position != null),
-                } as unknown as Application)
-        );
-    }
-);

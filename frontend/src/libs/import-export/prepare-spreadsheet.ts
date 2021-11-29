@@ -174,6 +174,8 @@ export const prepareSpreadsheet = {
                         "Previous Experience Summary",
                         "Comments",
                         "Documents",
+                        "Instructor Preferences",
+                        "Instructor Comments",
                         "Custom Question Answers",
                         "Submission Date",
                     ],
@@ -194,8 +196,8 @@ export const prepareSpreadsheet = {
                     application.posting,
                     application.position_preferences
                         .map(
-                            (position_preference) =>
-                                `${position_preference.preference_level}:${position_preference.position_code}`
+                            (pref) =>
+                                `${pref.position_code}:${pref.preference_level}`
                         )
                         .join("; "),
                     application.previous_experience_summary,
@@ -208,6 +210,18 @@ export const prepareSpreadsheet = {
                                 ).href
                         )
                         .join(" "),
+                    application.instructor_preferences
+                        .map(
+                            (pref) =>
+                                `${pref.position_code}:${pref.preference_level}`
+                        )
+                        .join("; "),
+                    application.instructor_preferences
+                        .filter((pref) => pref.comment != null)
+                        .map(
+                            (pref) => `${pref.position_code}:"${pref.comment}"`
+                        )
+                        .join("; "),
                     application.custom_question_answers
                         ? JSON.stringify(application.custom_question_answers)
                         : null,

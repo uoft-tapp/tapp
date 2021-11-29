@@ -7,22 +7,17 @@ import {
 import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
-    arrayToHash,
     validatedApiDispatcher,
     flattenIdFactory,
     HasId,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
-import { createSelector } from "reselect";
 import { activeRoleSelector } from "./users";
 import type {
     InstructorPreference,
     RawInstructorPreference,
 } from "../defs/types";
 import { activeSessionSelector } from "./sessions";
-import { positionsSelector } from "./positions";
-import { instructorPreferencesReducer } from "../reducers/instructorPreferences";
-import { applicationsSelector } from "./applications";
 
 // actions
 export const fetchInstructorPreferencesSuccess = actionFactory<
@@ -130,45 +125,3 @@ export const deleteInstructorPreference = validatedApiDispatcher({
             dispatch(deleteOneInstructorPreferenceSuccess(data));
         },
 });
-
-// selectors
-
-// Each reducer is given an isolated state; instead of needed to remember to
-// pass the isolated state to each selector, `reducer._localStoreSelector` will intelligently
-// search for and return the isolated state associated with `reducer`. This is not
-// a standard redux function.
-const localStoreSelector = instructorPreferencesReducer._localStoreSelector;
-export const _instructorPreferencesSelector = createSelector(
-    localStoreSelector,
-    (state) => state._modelData
-);
-
-// Get the current list of instructor_preferences and recompute `applicant_id` and `position_id`
-// to have corresponding `applicant` and `position` objects
-export const instructorPreferencesSelector = createSelector(
-    [_instructorPreferencesSelector, applicationsSelector, positionsSelector],
-    (instructor_preferences, applications, positions) => {
-        if (instructor_preferences.length === 0) {
-            return [];
-        }
-
-        const applicationsById = arrayToHash(applications);
-        const positionsById = arrayToHash(positions);
-
-        // Change `applicant_id` to the corresponding `applicant` object
-        // and similarly, change each `position_id` in each entry of
-        // `position_preferences` to corresponding `position` object.
-        return instructor_preferences
-            .map(
-                ({ application_id, position_id, ...rest }) =>
-                    ({
-                        ...rest,
-                        application: applicationsById[application_id],
-                        position: positionsById[position_id],
-                    } as InstructorPreference)
-            )
-            .filter(
-                (pref) => pref.application != null && pref.position != null
-            );
-    }
-);

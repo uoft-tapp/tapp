@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import { activeSessionSelector } from "../../../api/actions";
 import { formatDate } from "../../../libs/utils";
-import { ConnectedExportAssignmentsAction } from "./import-export";
 import { DisplayRating } from "../../../components/applicant-rating";
 import { FaRegComment } from "react-icons/fa";
+import { ConnectedExportApplicationsAction } from "./import-export";
 
 export function InstructorPreferencesView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -33,21 +33,21 @@ export function InstructorPreferencesView() {
         <div className="page-body">
             <ActionsList>
                 <ActionHeader>Actions</ActionHeader>
-                <ConnectedExportAssignmentsAction />
+                <ConnectedExportApplicationsAction />
             </ActionsList>
             <ContentArea>
                 <h4>
                     <span>{formattedPositionName}</span>
                 </h4>
                 <p>
-                    Below is a of your TAs who have applied for{" "}
+                    Below is a list of your TAs who have applied for{" "}
                     <span className="text-primary">
                         {formattedPositionName}
                     </span>{" "}
                     for the{" "}
                     <span className="text-primary">{formattedSessionName}</span>{" "}
                     session. You may review a TA's application and indicate
-                    which TAs you are most interested in having for your course.
+                    which TAs would be most suitable for your course.
                 </p>
                 <p>
                     Please indicate whether a TA is <b>suitable</b> (

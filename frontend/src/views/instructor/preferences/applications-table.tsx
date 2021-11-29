@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { activePositionSelector } from "../store/actions";
 import { applicationsSelector } from "../../../api/actions";
@@ -11,10 +11,7 @@ import {
 import { generateHeaderCell } from "../../../components/table-utils";
 import { ApplicantRatingAndComment } from "../../../components/applicant-rating";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import {
-    instructorPreferencesSelector,
-    upsertInstructorPreference,
-} from "../../../api/actions/instructor_preferences";
+import { upsertInstructorPreference } from "../../../api/actions/instructor_preferences";
 import { CellProps } from "react-table";
 import { Alert, Button, Modal } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
@@ -24,8 +21,9 @@ import { PropsForElement } from "../../../api/defs/types/react";
 export function InstructorApplicationsTable() {
     const activePosition = useSelector(activePositionSelector);
     const allApplications = useSelector(applicationsSelector);
-    const [shownApplication, setShownApplication] =
-        React.useState<Application | null>(null);
+    const [shownApplicationId, setShownApplicationId] = React.useState<
+        number | null
+    >(null);
     const dispatch = useThunkDispatch();
     const setInstructorPreference = React.useCallback(
         (pref: InstructorPreference) =>
@@ -33,7 +31,12 @@ export function InstructorApplicationsTable() {
         [dispatch]
     );
 
-    const flatApplications = useMemo(() => {
+    const shownApplication =
+        allApplications.find(
+            (application) => application.id === shownApplicationId
+        ) || null;
+
+    const flatApplications = React.useMemo(() => {
         if (!activePosition) {
             return [];
         }
@@ -51,18 +54,10 @@ export function InstructorApplicationsTable() {
     }: {
         application: Application;
     } & Pick<PropsForElement<typeof ApplicantRatingAndComment>, "compact">) => {
-        const allInstructorPreferences = useSelector(
-            instructorPreferencesSelector
-        );
-        const instructorPreference = React.useMemo(
-            () =>
-                allInstructorPreferences.find(
-                    (pref) =>
-                        pref.application.id === application.id &&
-                        pref.position.id === activePosition?.id
-                ) || null,
-            [application, allInstructorPreferences]
-        );
+        const instructorPreference =
+            application.instructor_preferences.find(
+                (pref) => pref.position.id === activePosition?.id
+            ) || null;
         const applicationAndPosition = {
             application,
             position: activePosition,
@@ -80,7 +75,6 @@ export function InstructorApplicationsTable() {
             />
         );
     };
-
     if (!activePosition) {
         return <h4>No position currently selected</h4>;
     }
@@ -106,7 +100,7 @@ export function InstructorApplicationsTable() {
                             className="mr-2 py-0"
                             title="View the full Application"
                             onClick={() => {
-                                setShownApplication(application);
+                                setShownApplicationId(application.id);
                             }}
                         >
                             <FaSearch className="mr-2" />
@@ -181,7 +175,7 @@ export function InstructorApplicationsTable() {
 
             <Modal
                 show={!!shownApplication}
-                onHide={() => setShownApplication(null)}
+                onHide={() => setShownApplicationId(null)}
                 size="xl"
             >
                 <Modal.Header closeButton>
@@ -207,7 +201,7 @@ export function InstructorApplicationsTable() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={() => setShownApplication(null)}
+                        onClick={() => setShownApplicationId(null)}
                         variant="outline-secondary"
                     >
                         Close

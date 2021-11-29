@@ -1,17 +1,68 @@
 import React from "react";
-import { Badge, Button } from "react-bootstrap";
+import { Alert, Badge, Button, Modal } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 import { Application } from "../../../api/defs/types";
 import * as Survey from "survey-react";
 import "./application-details.css";
 import { formatDateTime } from "../../../libs/utils";
 import { useSelector } from "react-redux";
-import { instructorPreferencesSelector } from "../../../api/actions/instructor_preferences";
 import { DisplayRating } from "../../../components/applicant-rating";
+import { activeSessionSelector } from "../../../api/actions";
 
 interface SurveyJsPage {
     name: string;
     elements: { name: string; type: string }[];
+}
+
+export function PreferencesLinkDialog({
+    visible,
+    onHide,
+}: {
+    visible: boolean;
+    onHide: (...args: any[]) => void;
+}) {
+    const activeSession = useSelector(activeSessionSelector);
+    const url = new URL(window.location.origin);
+    url.searchParams.append("role", "instructor");
+    url.searchParams.append("activeSession", "" + activeSession?.id);
+
+    let warning = null;
+    if (activeSession == null) {
+        warning = (
+            <Alert variant="warning">
+                A valid link can only be generated if a session is selected.
+            </Alert>
+        );
+    }
+    if (activeSession?.applications_visible_to_instructors === false) {
+        warning = (
+            <Alert variant="warning">
+                Instructors can only provide preferences when{" "}
+                <b>Applications Visible to Instructors</b>
+                is set to <b>True</b> via the <i>Sessions</i> page.
+            </Alert>
+        );
+    }
+
+    return (
+        <Modal show={visible} onHide={onHide} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Instructor Preferences URL</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {warning}
+                <p>
+                    You can distribute the following link to allow instructors
+                    to view applications of and give feedback about applicants
+                    for their courses in the <em>{activeSession?.name}</em>{" "}
+                    session.
+                </p>
+                <p>
+                    <a href={url.href}>{url.href}</a>
+                </p>
+            </Modal.Body>
+        </Modal>
+    );
 }
 
 /**
@@ -70,14 +121,7 @@ export function ApplicationDetails({
         return survey;
     }, [application]);
 
-    const allInstructorPreferences = useSelector(instructorPreferencesSelector);
-    const instructorPreferences = React.useMemo(
-        () =>
-            allInstructorPreferences.filter(
-                (pref) => pref.application.id === application.id
-            ),
-        [allInstructorPreferences, application.id]
-    );
+    const instructorPreferences = application.instructor_preferences;
 
     return (
         <React.Fragment>

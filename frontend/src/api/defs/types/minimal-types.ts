@@ -1,3 +1,4 @@
+import { InstructorPreference } from ".";
 import type { Utorid } from "./common";
 import type {
     Applicant,
@@ -65,9 +66,18 @@ export interface MinimalPosting
 export interface MinimalApplication
     extends Omit<
             NoId<Application>,
-            "posting" | "applicant" | "position_preferences"
+            | "posting"
+            | "applicant"
+            | "position_preferences"
+            | "instructor_preferences"
         >,
         MinimalApplicant {
     posting: string | null;
     position_preferences: { position_code: string; preference_level: number }[];
+    instructor_preferences: MinimalInstructorPreference[];
+}
+
+export interface MinimalInstructorPreference
+    extends Omit<InstructorPreference, "position" | "application"> {
+    position_code: string;
 }

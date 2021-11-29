@@ -70,6 +70,7 @@ export interface Application
     applicant: Applicant;
     posting: Posting | null;
     position_preferences: { position: Position; preference_level: number }[];
+    instructor_preferences: InstructorPreference[];
 }
 
 export interface PostingPosition
