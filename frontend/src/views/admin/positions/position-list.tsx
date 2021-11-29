@@ -5,175 +5,18 @@ import {
     deletePosition,
     assignmentsSelector,
     upsertPosition,
-    instructorsSelector,
 } from "../../../api/actions";
 import { PositionsList } from "../../../components/positions-list";
 import { FaTimes, FaLock, FaTrash, FaSearch } from "react-icons/fa";
-import { Badge, Modal, Button, Spinner } from "react-bootstrap";
-import { EditFieldIcon } from "../../../components/edit-field-widgets";
-import { Typeahead } from "react-bootstrap-typeahead";
+import { Modal, Button } from "react-bootstrap";
 import { generateHeaderCell } from "../../../components/table-utils";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { HasId, Instructor, Position } from "../../../api/defs/types";
+import { HasId, Position } from "../../../api/defs/types";
 import { Cell, Column } from "react-table";
 import { EditableCell, EditableType } from "../../../components/editable-cell";
 import { setSelectedPosition } from "./actions";
-
-/**
- * Turn a list of instructor objects into a hash string for comparison as to whether
- * an instructor list has changed.
- *
- * @param {*} instructors
- * @returns
- */
-function hashInstructorList(instructors: Instructor[]) {
-    return instructors
-        .map((i) => `${i.last_name}, ${i.first_name}`)
-        .sort()
-        .join(";");
-}
-
-/**
- * A dialog allowing one to edit instructors. `onChange` is called
- * when "save" is clicked while editing this value.
- *
- * @param {*} props
- * @returns
- */
-function EditInstructorsDialog({
-    position,
-    show,
-    onHide,
-    onChange,
-}: {
-    position: Position;
-    show: boolean;
-    onHide: Function;
-    onChange: Function;
-}) {
-    const value = position.instructors;
-    const allInstructors = useSelector(instructorsSelector);
-    const [fieldVal, setFieldVal] = React.useState(value);
-    const [inProgress, setInProgress] = React.useState(false);
-
-    function cancelClick() {
-        setFieldVal(value);
-        onHide();
-    }
-
-    function saveClick() {
-        async function doSave() {
-            if (hashInstructorList(fieldVal) !== hashInstructorList(value)) {
-                setInProgress(true);
-                // Only call `onChange` if the value has changed
-                await onChange(fieldVal, value);
-            }
-        }
-        doSave().finally(() => {
-            //onHide();
-            setInProgress(false);
-        });
-    }
-    // When a confirm operation is in progress, a spinner is displayed; otherwise
-    // it's hidden
-    const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
-    ) : null;
-
-    const changeIndicator =
-        // eslint-disable-next-line
-        hashInstructorList(fieldVal) == hashInstructorList(value) ? null : (
-            <span>
-                Change from{" "}
-                <span className="field-dialog-formatted-name">
-                    {value
-                        .map(
-                            (instructor) =>
-                                `${instructor.first_name} ${instructor.last_name}`
-                        )
-                        .join(", ")}
-                </span>{" "}
-                to{" "}
-                <span className="field-dialog-formatted-name">
-                    {fieldVal
-                        .map(
-                            (instructor) =>
-                                `${instructor.first_name} ${instructor.last_name}`
-                        )
-                        .join(", ")}
-                </span>
-            </span>
-        );
-
-    return (
-        <Modal show={show} onHide={cancelClick}>
-            <Modal.Header closeButton>
-                <Modal.Title>
-                    Edit Instructors for {position.position_code}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Typeahead
-                    id="instructors-input"
-                    ignoreDiacritics={true}
-                    multiple
-                    placeholder="Instructors..."
-                    labelKey={(option) =>
-                        `${option.first_name} ${option.last_name}`
-                    }
-                    selected={fieldVal}
-                    options={allInstructors}
-                    onChange={setFieldVal}
-                />{" "}
-                {changeIndicator}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={cancelClick} variant="outline-secondary">
-                    Cancel
-                </Button>
-                <Button onClick={saveClick}>{spinner}Save</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
-export function EditInstructorsCell({ row }: { row: { original: Position } }) {
-    const position = row.original;
-    const [dialogShow, setDialogShow] = React.useState(false);
-    const dispatch = useThunkDispatch();
-
-    return (
-        <div className="show-on-hover-wrapper">
-            {position.instructors.map((instructor = {} as any) => {
-                const name = `${instructor.first_name} ${instructor.last_name}`;
-                return (
-                    <Badge variant="secondary" className="mr-1" key={name}>
-                        {name}
-                    </Badge>
-                );
-            })}
-            <EditFieldIcon
-                title="Edit the instructors for this position"
-                hidden={false}
-                onClick={() => setDialogShow(true)}
-            />
-            <EditInstructorsDialog
-                position={position}
-                show={dialogShow}
-                onHide={() => setDialogShow(false)}
-                onChange={async (newInstructors: Instructor[]) => {
-                    await dispatch(
-                        upsertPosition({
-                            id: position.id,
-                            instructors: newInstructors,
-                        })
-                    );
-                    setDialogShow(false);
-                }}
-            />
-        </div>
-    );
-}
+import { EditContractTemplateCell } from "./contract-template-cell";
+import { hashInstructorList, EditInstructorsCell } from "./instructors-cell";
 
 function ConfirmDeleteDialog(props: {
     show: boolean;
@@ -372,6 +215,7 @@ export function ConnectedPositionsList({
         {
             Header: generateHeaderCell("Contract Template"),
             accessor: "contract_template.template_name",
+            Cell: EditContractTemplateCell,
         },
     ];
 
