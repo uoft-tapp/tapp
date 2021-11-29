@@ -59,12 +59,12 @@ export function PositionEditor(props: {
 
     /**
      * Set `position.contract_template` to the most recently selected item
-     *
-     * @param {*} selectedContractTypes
      */
-    function setContractType(selectedContractTypes: ContractTemplate[]) {
+    function setContractTemplate(
+        selectedContractTemplates: ContractTemplate[]
+    ) {
         const contract_template =
-            selectedContractTypes[selectedContractTypes.length - 1] ||
+            selectedContractTemplates[selectedContractTemplates.length - 1] ||
             defaultContractTemplate;
         setPosition({ ...position, contract_template });
     }
@@ -128,7 +128,7 @@ export function PositionEditor(props: {
                     labelKey={(option) => `${option.template_name}`}
                     selected={selectedContractTemplate}
                     options={contractTemplates}
-                    onChange={setContractType}
+                    onChange={setContractTemplate}
                 />
             </Form.Group>
             <h3>Ad-related Info</h3>

@@ -3,8 +3,9 @@ import { upsertPosition } from "../../../api/actions";
 import { HasId, Position } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { EditableCell } from "../../../components/editable-cell";
-import { EditInstructorsCell } from "./position-list";
+import { EditInstructorsCell } from "./instructors-cell";
 import "./style.css";
+import { EditContractTemplateCell } from "./contract-template-cell";
 
 /**
  * Show the details of a position.
@@ -72,7 +73,11 @@ export function PositionsDetails({ position }: { position: Position }) {
                 <tbody>
                     <tr>
                         <th>Contract Template</th>
-                        <td>{position.contract_template.template_name}</td>
+                        <td>
+                            <EditContractTemplateCell
+                                row={{ original: position }}
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <th>Instructors</th>
