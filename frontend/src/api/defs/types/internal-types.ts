@@ -3,7 +3,6 @@
  * querying from the Redux store. They may differ from the raw API payloads
  * (whose types are defined in the `raw-types.ts` file.)
  */
-import { RawInstructorPreference } from ".";
 import type { UserRole } from "./common";
 import type {
     RawApplicant,
@@ -20,6 +19,7 @@ import type {
     RawSession,
     RawUser,
     RawWageChunk,
+    RawInstructorPreference,
 } from "./raw-types";
 
 export type Duty = RawDuty;

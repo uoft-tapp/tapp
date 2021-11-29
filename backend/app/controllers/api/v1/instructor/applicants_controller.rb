@@ -23,11 +23,11 @@ class Api::V1::Instructor::ApplicantsController < ApplicationController
         sometimes_visible_applicants =
             Applicant.by_session(params[:session_id]).by_visible_to_instructors
                 .applied_to_position_for_instructor(active_instructor)
-        visible_applications =
+        visible_applicants =
             (always_visible_applicants + sometimes_visible_applicants).uniq
         # We are out of the realm of ActiveRecordQuerys now, so we need to use
         # regular array methods to sort.
-        visible_applications.sort! do |a, b|
+        visible_applicants.sort! do |a, b|
             [a.last_name, a.first_name] <=> [b.last_name, b.first_name]
         end
 
@@ -38,7 +38,7 @@ class Api::V1::Instructor::ApplicantsController < ApplicationController
         # We are not calling .save! on these object, so it is okay to directly override private
         # fields with `nil`.
         render_success(
-            visible_applications.map do |applicant|
+            visible_applicants.map do |applicant|
                 applicant.phone = nil
                 applicant
             end

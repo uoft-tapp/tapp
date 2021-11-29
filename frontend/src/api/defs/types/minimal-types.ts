@@ -1,4 +1,3 @@
-import { InstructorPreference } from ".";
 import type { Utorid } from "./common";
 import type {
     Applicant,
@@ -11,6 +10,7 @@ import type {
     PostingPosition,
     Session,
     WageChunk,
+    InstructorPreference,
 } from "./internal-types";
 // Minimal types contain the minimum amount of information needed to reconstruct
 // a particular object. They lack IDs and may be flat compared to what is actually used
