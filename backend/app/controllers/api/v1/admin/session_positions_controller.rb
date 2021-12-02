@@ -5,7 +5,7 @@ class Api::V1::Admin::SessionPositionsController < Api::V1::Admin::PositionsCont
 
     # GET /positions
     def index
-        render_success @session.positions
+        render_success @session.positions.order(:position_code)
     end
 
     # POST /positions
