@@ -1,4 +1,6 @@
 import React from "react";
+import XLSX from "xlsx";
+import FileSaver from "file-saver";
 import { useSelector } from "react-redux";
 import {
     activeSessionSelector,
@@ -13,12 +15,71 @@ import { ddahsSelector, upsertDdah } from "../../../api/actions/ddahs";
 import { DdahPreviewModal } from "./ddah-editor";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { activePositionSelector, setDdahForEmailIds } from "../store/actions";
-import { ConnectedExportDdahsAction } from "../../admin/ddahs/import-export";
+import {
+    ConnectedExportDdahsAction,
+    createDdahSpreadsheets,
+} from "../../admin/ddahs/import-export";
 import { setSelectedRows as setSelectedDdahs } from "../../admin/ddah-table/actions";
 import { formatDate } from "../../../libs/utils";
 import { DdahEmailModal } from "./ddah-emailer";
-import { FaMailBulk } from "react-icons/fa";
+import { FaDownload, FaMailBulk } from "react-icons/fa";
 import { InstructorImportDdahsAction } from "./import";
+
+export function ConnectedDownloadPositionDdahTemplatesAction({
+    disabled = false,
+}) {
+    const assignments = useSelector(assignmentsSelector);
+    const ddahs = useSelector(ddahsSelector);
+    const activePosition = useSelector(activePositionSelector);
+
+    async function download() {
+        if (!activePosition) {
+            return;
+        }
+        const spreadsheets = createDdahSpreadsheets(ddahs, assignments);
+        const array = spreadsheets[activePosition.position_code];
+        // workbook sheets and file names can't have `/` or other special characters in them
+        // So we replace them with `_` before we start.
+        const sanitized_position_code = activePosition.position_code.replace(
+            /[^A-z0-9 ]/g,
+            "_"
+        );
+        const workbook = XLSX.utils.book_new();
+        const sheet = XLSX.utils.aoa_to_sheet(array);
+        XLSX.utils.book_append_sheet(
+            workbook,
+            sheet,
+            // Sheet names are limited to 31 characters in length
+            `${sanitized_position_code} DDAHs`.slice(0, 30)
+        );
+        const rawSpreadsheet = XLSX.write(workbook, {
+            type: "array",
+            bookType: "xlsx",
+        });
+
+        const file = new File(
+            [rawSpreadsheet],
+
+            `${sanitized_position_code}-DDAHs.xlsx`,
+            {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            }
+        );
+
+        FileSaver.saveAs(file);
+    }
+
+    return (
+        <ActionButton
+            icon={FaDownload}
+            title="Download a spreadsheet template that you may fill to bulk create/update DDAHs"
+            onClick={() => download()}
+            disabled={disabled}
+        >
+            DDAH Template
+        </ActionButton>
+    );
+}
 
 export function InstructorDdahsView() {
     const activeSession = useSelector(activeSessionSelector);
@@ -96,6 +157,7 @@ export function InstructorDdahsView() {
                 >
                     Email DDAHs
                 </ActionButton>
+                <ConnectedDownloadPositionDdahTemplatesAction />
                 <ActionHeader>Import/Export</ActionHeader>
                 <InstructorImportDdahsAction disabled={!activeSession} />
                 <ConnectedExportDdahsAction disabled={!activeSession} />
