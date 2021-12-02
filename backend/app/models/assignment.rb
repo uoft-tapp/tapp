@@ -18,8 +18,9 @@ class Assignment < ApplicationRecord
     scope(
         :by_session,
         lambda do |session_id|
-            joins(:position).where(positions: { session: session_id }).distinct
-                .order(:id)
+            joins(:position).where(positions: { session: session_id }).group(
+                :id
+            )
         end
     )
 
