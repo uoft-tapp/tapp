@@ -1,0 +1,75 @@
+.assignments-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.position-label {
+    display: inline-block;
+    width: 9em;
+    background-color: var(--light);
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.position-label.matched {
+    background-color: var(--green);
+    color: var(--white);
+}
+.position-label.over {
+    background-color: var(--orange);
+    color: var(--white);
+}
+
+.position-label .position-code,
+.position-label .position-title {
+    display: block;
+    text-align: center;
+}
+.position-label .position-title {
+    font-size: smaller;
+}
+.position-label .additional-info {
+    font-size: smaller;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px 4px;
+    justify-content: center;
+}
+
+.position-label .position-hours::before {
+    content: "Hours: ";
+}
+.position-label .position-filled::before {
+    content: "Filled: ";
+}
+.position-label .position-hours-filled::before {
+    content: "Hours Filled: ";
+}
+
+.position-row {
+    display: flex;
+}
+.position-row-body {
+    display: flex;
+    flex-grow: 1;
+}
+.position-row-body .row-division {
+    display: flex;
+    flex-direction: column;
+}
+.position-row-body .row-division:first-child {
+    flex-grow: 1;
+}
+.position-row-body .row-division-header {
+    font-size: smaller;
+    text-align: center;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+}
+.position-row-body .row-division-body {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+.position-row-body .row-division:nth-child(2n) {
+    background-color: rgba(20, 0, 200, 0.07);
+}
