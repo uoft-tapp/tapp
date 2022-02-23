@@ -29,11 +29,8 @@ export interface NullableAssignment
  * Adds up all the hours for the wage chunks belonging to an assignment and
  * returns true or false based on whether they match the number of hours for the
  * assignment.
- *
- * @param {*} assignment
- * @returns
  */
-function assignmentAndWageChunksMatch(assignment: NullableAssignment) {
+function assignmentAndWageChunkHoursMatch(assignment: NullableAssignment) {
     if (!Array.isArray(assignment.wage_chunks)) {
         return true;
     }
@@ -42,6 +39,35 @@ function assignmentAndWageChunksMatch(assignment: NullableAssignment) {
         totalHours += chunk.hours;
     }
     return totalHours === assignment.hours;
+}
+
+function assignmentAndWageChunkDatesMatch(assignment: NullableAssignment) {
+    if (!Array.isArray(assignment.wage_chunks)) {
+        return true;
+    }
+    if (assignment.wage_chunks.length === 0) {
+        return false;
+    }
+    const wageChunks = [...assignment.wage_chunks];
+    // Sort the wage chunks. We assume they don't overlap!
+    wageChunks.sort((a, b) => {
+        const aDate = new Date(a.start_date);
+        const bDate = new Date(b.start_date);
+        if (aDate === bDate) {
+            return 0;
+        }
+        if (aDate > bDate) {
+            return 1;
+        }
+        return -1;
+    });
+    const firstChunk = wageChunks[0];
+    const lastChunk = wageChunks[wageChunks.length - 1];
+
+    return (
+        firstChunk.start_date === assignment.start_date &&
+        lastChunk.end_date === assignment.end_date
+    );
 }
 
 const DEFAULT_ASSIGNMENT = {
@@ -53,23 +79,22 @@ const DEFAULT_ASSIGNMENT = {
 };
 
 /**
- * Edit information about a position
- *
- * @export
- * @param {{position: object, instructors: object[]}} props
- * @returns
+ * Edit information about an Assignment. If `lockPositionAndApplicant` is set
+ * to true, the position and applicant cannot be edited.
  */
 export function AssignmentEditor(props: {
     assignment: NullableAssignment;
     setAssignment: (assignment: NullableAssignment) => any;
     applicants: Applicant[];
     positions: Position[];
+    lockPositionAndApplicant?: boolean;
 }) {
     const {
         assignment: assignmentProp,
         setAssignment,
         applicants,
         positions,
+        lockPositionAndApplicant,
     } = props;
     const assignment = React.useMemo(
         () => ({ ...DEFAULT_ASSIGNMENT, ...assignmentProp }),
@@ -103,7 +128,8 @@ export function AssignmentEditor(props: {
         // If we made it here, we cross the January first boundary and have exactly two date ranges
         if (
             assignment.wage_chunks == null ||
-            !assignmentAndWageChunksMatch(assignment)
+            !assignmentAndWageChunkHoursMatch(assignment) ||
+            !assignmentAndWageChunkDatesMatch(assignment)
         ) {
             const wage_chunks = splitDateRanges.map((range) => ({
                 ...range,
@@ -177,7 +203,7 @@ export function AssignmentEditor(props: {
                     type="number"
                     title="The number of post-January hours. This value cannot be set directly. You must set the number of pre-January hours."
                     disabled
-                    value={wageChunks[1].hours}
+                    value={wageChunks[1]?.hours}
                 />
             </>
         );
@@ -203,6 +229,7 @@ export function AssignmentEditor(props: {
                         }
                         options={positions}
                         onChange={setPosition}
+                        disabled={lockPositionAndApplicant}
                     />
                 </React.Fragment>
                 <React.Fragment>
@@ -222,6 +249,7 @@ export function AssignmentEditor(props: {
                         }
                         options={applicants}
                         onChange={setApplicant}
+                        disabled={lockPositionAndApplicant}
                     />
                 </React.Fragment>
             </DialogRow>
