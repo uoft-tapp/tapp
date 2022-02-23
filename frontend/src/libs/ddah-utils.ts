@@ -8,7 +8,7 @@ import type { Ddah } from "../api/defs/types";
  * @returns
  */
 export function ddahIssues(ddah: Ddah) {
-    if (ddah.total_hours !== ddah.assignment.hours) {
+    if (Math.abs(ddah.total_hours - ddah.assignment.hours) > 0.001) {
         return `Hours Mismatch (${ddah.total_hours} vs. ${ddah.assignment.hours})`;
     }
     return null;

@@ -19,6 +19,7 @@ import {
     Posting,
     PostingPosition,
 } from "../../api/defs/types";
+import { round } from "../utils";
 
 /**
  * The function type of a function that creates an upsertable
@@ -298,6 +299,7 @@ export const prepareFull: PrepareFull = {
         for (const duty of duties) {
             total_hours += duty.hours;
         }
+        total_hours = round(total_hours, 2);
 
         if (id == null) {
             return {
