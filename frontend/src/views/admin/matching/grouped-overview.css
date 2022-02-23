@@ -10,6 +10,7 @@
     padding: 4px;
     border-radius: 4px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 .position-label.matched {
     background-color: var(--green);
@@ -52,6 +53,7 @@
 .position-row-body {
     display: flex;
     flex-grow: 1;
+    flex-wrap: wrap;
 }
 .position-row-body .row-division {
     display: flex;
