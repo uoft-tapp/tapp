@@ -564,6 +564,10 @@ export function offerEmailTests(api) {
             );
         }
     });
+
+    it.todo(
+        "Offer's position_start_date/end_date matches that of the assignment if the assignment and position have different start/end dates"
+    );
 }
 
 /**

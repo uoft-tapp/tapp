@@ -1,0 +1,32 @@
+.applicant-pill {
+    display: inline-flex;
+    border-radius: 8px;
+    font-size: small;
+    background-color: hsl(134, 61%, 70%);
+    padding: 2px 4px 3px 2px;
+    margin: 1px;
+    height: 35px;
+    width: 150px;
+    overflow: hidden;
+    line-height: 15px;
+}
+.applicant-pill .annotation {
+    padding: 4px 5px 4px 4px;
+    margin-left: 0;
+    margin-right: 2px;
+    font-size: 15px;
+    border-radius: 8px;
+    background-color: rgba(3, 3, 3, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+.applicant-pill .pill-body {
+    overflow: hidden;
+    flex-grow: 1;
+}
+.applicant-pill .name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

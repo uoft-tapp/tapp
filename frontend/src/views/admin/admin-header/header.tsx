@@ -66,6 +66,11 @@ export const ROUTES = [
                 name: "Applications",
                 description: "Manage Applications",
             },
+            {
+                route: "/matching",
+                name: "Matching",
+                description: "Match applicants to positions",
+            },
         ],
     },
 ];

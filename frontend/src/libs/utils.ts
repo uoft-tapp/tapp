@@ -199,3 +199,10 @@ export function formatMoney(moneyString: string): string {
     }
     return parseFloat(moneyString).toFixed(2);
 }
+
+/**
+ * Round `x` to `places` number of decimal places.
+ */
+export function round(x: number, places: number = 0) {
+    return Math.round(x * Math.pow(10, places)) / Math.pow(10, places);
+}

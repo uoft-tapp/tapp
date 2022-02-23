@@ -22,6 +22,7 @@ import { ddahsReducer } from "../reducers";
 import { assignmentsSelector } from "./assignments";
 import type { Ddah, RawAttachment, RawDdah } from "../defs/types";
 import { activeSessionSelector } from "./sessions";
+import { round } from "../../libs/utils";
 
 // actions
 const fetchDdahsSuccess = actionFactory<RawDdah[]>(FETCH_DDAHS_SUCCESS);
@@ -232,7 +233,7 @@ function computeDdahHours(ddah: Pick<Ddah, "duties">) {
     for (const duty of ddah.duties) {
         ret += duty.hours;
     }
-    return ret;
+    return round(ret, 2);
 }
 
 // Each reducer is given an isolated state; instead of needing to remember to
