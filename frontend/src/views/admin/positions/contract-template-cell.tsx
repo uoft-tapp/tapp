@@ -141,9 +141,13 @@ export function EditContractTemplateCell({
     const [dialogShow, setDialogShow] = React.useState(false);
     const dispatch = useThunkDispatch();
 
+    if (!position.contract_template) {
+        return null;
+    }
+
     return (
         <div className="show-on-hover-wrapper">
-            {position.contract_template.template_name}
+            {position.contract_template?.template_name}
             <EditFieldIcon
                 title="Edit the contract templates for this position"
                 hidden={false}
