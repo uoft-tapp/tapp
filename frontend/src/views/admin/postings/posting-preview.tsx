@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
     activeSessionSelector,
-    fetchPosting,
     fetchPostingPositionsForPosting,
+    fetchPostings,
     postingsSelector,
 } from "../../../api/actions";
 import { ContentArea } from "../../../components/layout";
@@ -18,6 +19,8 @@ function ConnectedPostingPreview() {
     const activeSession = useSelector(activeSessionSelector) as Session | null;
     const postings = useSelector(postingsSelector);
     const dispatch = useThunkDispatch();
+    const [postingIsForDifferentSession, setPostingIsForDifferentSession] =
+        React.useState(false);
 
     const params = useParams<{ posting_id?: string }>();
     const posting_id =
@@ -29,10 +32,16 @@ function ConnectedPostingPreview() {
         async function fetchResources() {
             try {
                 const posting = { id: posting_id || 0 };
-                await Promise.all([
-                    dispatch(fetchPosting(posting)),
-                    dispatch(fetchPostingPositionsForPosting(posting)),
-                ]);
+                const postings = await dispatch(fetchPostings());
+                // If we are viewing a posting for a different session, we want to route
+                // back to the overview page instead of continuing.
+                if (!postings.some((p) => p.id === posting.id)) {
+                    setPostingIsForDifferentSession(true);
+                    return;
+                } else {
+                    setPostingIsForDifferentSession(false);
+                }
+                await dispatch(fetchPostingPositionsForPosting(posting));
             } catch (e) {}
         }
 
@@ -43,6 +52,9 @@ function ConnectedPostingPreview() {
 
     const posting = postings.find((posting) => posting.id === posting_id);
 
+    if (postingIsForDifferentSession) {
+        return <Redirect to="/postings/overview" />;
+    }
     if (posting_id == null) {
         return (
             <div className="page-body">

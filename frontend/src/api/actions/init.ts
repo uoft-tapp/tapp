@@ -28,6 +28,7 @@ import {
     fetchInstructorPreferences,
     fetchInstructorPreferencesSuccess,
 } from "./instructor_preferences";
+import { fetchPostingPositionsSuccess, fetchPostingsSuccess } from "./postings";
 
 type InitStages =
     | "pageLoad"
@@ -276,11 +277,15 @@ export function clearSessionDependentData(): ThunkAction<
     AnyAction
 > {
     return async (dispatch) => {
-        dispatch(fetchInstructorPreferencesSuccess([]));
-        dispatch(fetchApplicantsSuccess([]));
-        dispatch(fetchAssignmentsSuccess([]));
-        dispatch(fetchContractTemplatesSuccess([]));
-        dispatch(fetchApplicationsSuccess([]));
-        dispatch(fetchPositionsSuccess([]));
+        await Promise.all([
+            dispatch(fetchInstructorPreferencesSuccess([])),
+            dispatch(fetchApplicantsSuccess([])),
+            dispatch(fetchAssignmentsSuccess([])),
+            dispatch(fetchContractTemplatesSuccess([])),
+            dispatch(fetchApplicationsSuccess([])),
+            dispatch(fetchPositionsSuccess([])),
+            dispatch(fetchPostingsSuccess([])),
+            dispatch(fetchPostingPositionsSuccess([])),
+        ]);
     };
 }

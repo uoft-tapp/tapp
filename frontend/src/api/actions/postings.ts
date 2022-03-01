@@ -32,7 +32,7 @@ import { positionsSelector } from "./positions";
 import { ExportFormat } from "../../libs/import-export";
 
 // actions
-const fetchPostingsSuccess = actionFactory<RawPosting[]>(
+export const fetchPostingsSuccess = actionFactory<RawPosting[]>(
     FETCH_POSTINGS_SUCCESS
 );
 const fetchOnePostingSuccess = actionFactory<RawPosting>(
@@ -46,7 +46,7 @@ const deleteOnePostingSuccess = actionFactory<RawPosting>(
 );
 
 // PostingPosition actions
-const fetchPostingPositionsSuccess = actionFactory<RawPostingPosition[]>(
+export const fetchPostingPositionsSuccess = actionFactory<RawPostingPosition[]>(
     FETCH_POSTING_POSITIONS_SUCCESS
 );
 const fetchOnePostingPositionSuccess = actionFactory<RawPostingPosition>(
