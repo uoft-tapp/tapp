@@ -11,6 +11,7 @@ import {
     arrayToHash,
     flattenIdFactory,
     HasId,
+    isSameSession,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { assignmentsReducer } from "../reducers/assignments";
@@ -60,7 +61,11 @@ export const fetchAssignments = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/assignments`
         )) as RawAssignment[];
-        dispatch(fetchAssignmentsSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchAssignmentsSuccess(data));
+        }
         return data;
     },
 });

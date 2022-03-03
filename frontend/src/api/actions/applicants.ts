@@ -5,7 +5,12 @@ import {
     DELETE_ONE_APPLICANT_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
+import {
+    actionFactory,
+    HasId,
+    isSameSession,
+    validatedApiDispatcher,
+} from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { applicantsReducer } from "../reducers/applicants";
 import { createSelector } from "reselect";
@@ -44,7 +49,11 @@ export const fetchApplicants = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/applicants`
         )) as RawApplicant[];
-        dispatch(fetchApplicantsSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchApplicantsSuccess(data));
+        }
         return data;
     },
 });

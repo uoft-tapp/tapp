@@ -13,6 +13,7 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     HasId,
+    isSameSession,
     splitObjByProps,
     validatedApiDispatcher,
 } from "./utils";
@@ -32,7 +33,7 @@ import { positionsSelector } from "./positions";
 import { ExportFormat } from "../../libs/import-export";
 
 // actions
-const fetchPostingsSuccess = actionFactory<RawPosting[]>(
+export const fetchPostingsSuccess = actionFactory<RawPosting[]>(
     FETCH_POSTINGS_SUCCESS
 );
 const fetchOnePostingSuccess = actionFactory<RawPosting>(
@@ -46,7 +47,7 @@ const deleteOnePostingSuccess = actionFactory<RawPosting>(
 );
 
 // PostingPosition actions
-const fetchPostingPositionsSuccess = actionFactory<RawPostingPosition[]>(
+export const fetchPostingPositionsSuccess = actionFactory<RawPostingPosition[]>(
     FETCH_POSTING_POSITIONS_SUCCESS
 );
 const fetchOnePostingPositionSuccess = actionFactory<RawPostingPosition>(
@@ -74,7 +75,11 @@ export const fetchPostings = validatedApiDispatcher({
         const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/postings` as const
         );
-        dispatch(fetchPostingsSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchPostingsSuccess(data));
+        }
         return data;
     },
 });

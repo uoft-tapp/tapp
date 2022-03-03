@@ -26,13 +26,23 @@ export function InstructorHeader() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
     React.useEffect(() => {
-        // If there's no active session, make a best guess and set that as the active session
-        if (activeSession == null) {
-            const guessedSession = guessActiveSession(sessions);
-            if (guessedSession) {
-                dispatch(setActiveSession(guessedSession));
+        function guessSessionIfNeeded() {
+            // If there's no active session, make a best guess and set that as the active session
+            if (activeSession == null) {
+                const guessedSession = guessActiveSession(sessions);
+                if (guessedSession) {
+                    dispatch(setActiveSession(guessedSession));
+                }
             }
         }
+        // Globals are initialized asynchronously, so they may not be set by the time we reach this function.
+        // Thus, we run `guessSessionIfNeeded` asynchronously in the hopes that Globals are set by
+        // the time it runs.
+        const timeoutId = window.setTimeout(guessSessionIfNeeded, 100);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
     }, [dispatch, activeSession, sessions]);
 
     const preferencesRoute = activeSession?.applications_visible_to_instructors
