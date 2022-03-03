@@ -13,6 +13,7 @@ import { fetchError, upsertError, deleteError } from "./errors";
 import {
     actionFactory,
     HasId,
+    isSameSession,
     splitObjByProps,
     validatedApiDispatcher,
 } from "./utils";
@@ -74,7 +75,11 @@ export const fetchPostings = validatedApiDispatcher({
         const data = await apiGET(
             `/${role}/sessions/${activeSessionId}/postings` as const
         );
-        dispatch(fetchPostingsSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchPostingsSuccess(data));
+        }
         return data;
     },
 });

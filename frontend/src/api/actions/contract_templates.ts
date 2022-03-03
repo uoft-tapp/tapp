@@ -5,7 +5,12 @@ import {
     FETCH_ALL_CONTRACT_TEMPLATES_SUCCESS,
 } from "../constants";
 import { fetchError, upsertError, deleteError } from "./errors";
-import { actionFactory, HasId, validatedApiDispatcher } from "./utils";
+import {
+    actionFactory,
+    HasId,
+    isSameSession,
+    validatedApiDispatcher,
+} from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { contractTemplatesReducer } from "../reducers/contract_templates";
 import { createSelector } from "reselect";
@@ -50,7 +55,11 @@ export const fetchContractTemplates = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/contract_templates`
         )) as RawContractTemplate[];
-        dispatch(fetchContractTemplatesSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchContractTemplatesSuccess(data));
+        }
         return data;
     },
 });

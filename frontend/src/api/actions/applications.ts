@@ -10,6 +10,7 @@ import {
     validatedApiDispatcher,
     flattenIdFactory,
     HasId,
+    isSameSession,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { fetchApplicants } from "./applicants";
@@ -60,7 +61,11 @@ export const fetchApplications = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/applications`
         )) as RawApplication[];
-        dispatch(fetchApplicationsSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchApplicationsSuccess(data));
+        }
         return data;
     },
 });

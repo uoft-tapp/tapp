@@ -10,6 +10,7 @@ import {
     validatedApiDispatcher,
     flattenIdFactory,
     HasId,
+    isSameSession,
 } from "./utils";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import { activeRoleSelector } from "./users";
@@ -67,7 +68,11 @@ export const fetchInstructorPreferences = validatedApiDispatcher({
         const data = (await apiGET(
             `/${role}/sessions/${activeSessionId}/instructor_preferences`
         )) as RawInstructorPreference[];
-        dispatch(fetchInstructorPreferencesSuccess(data));
+        // Between the time we started fetching and the time the data arrived, the active session may have
+        // changed. Make sure the correct active session is set before updating the data.
+        if (isSameSession(activeSessionId, getState)) {
+            dispatch(fetchInstructorPreferencesSuccess(data));
+        }
         return data;
     },
 });

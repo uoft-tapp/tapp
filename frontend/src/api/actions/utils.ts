@@ -5,6 +5,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { Action } from "redux";
 import { HasPayload } from "../reducers/utils";
 import { RootState } from "../../rootReducer";
+import { activeSessionSelector } from "./sessions";
 
 /**
  * Turn an array of items into a hash of items indexed
@@ -246,4 +247,15 @@ export function validatedApiDispatcher<RetType, ArgType extends unknown[]>({
             }
         };
     };
+}
+
+/**
+ * Is the current session's id equal to `desiredSessionId`?
+ */
+export function isSameSession(
+    desiredSessionId: number,
+    getState: () => RootState
+): boolean {
+    const newSessionId = activeSessionSelector(getState())?.id;
+    return desiredSessionId === newSessionId;
 }
