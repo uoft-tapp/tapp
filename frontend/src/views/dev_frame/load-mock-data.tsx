@@ -14,7 +14,6 @@ import {
     debugOnlySetActiveUser,
     fetchActiveUser
 } from "../../api/actions";
-import { upsertInstructorPreference } from "../../api/actions/instructor_preferences";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
     positionSchema,
@@ -152,7 +151,7 @@ export function SeedDataMenu({
         setProgress(100);
     }
 
-    async function seedUsers(limit = 1000) {
+    async function seedUsers(limit = 1053) {
         setProgress(0);
         setStage("Users");
         const users = seedData.users.slice(0, limit);

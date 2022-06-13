@@ -1,34 +1,6326 @@
 [
     {
         "utorid": "colliberr",
-        "roles": ["ta"]
+        "roles": [
+            "ta",
+            "instructor",
+            "admin"
+        ]
     },
     {
         "utorid": "fardoea",
-        "roles": ["ta"]
+        "roles": [
+            "ta"
+        ]
     },
     {
         "utorid": "paternostera",
-        "roles": ["ta"]
+        "roles": [
+            "ta"
+        ]
     },
     {
         "utorid": "vannozziih",
-        "roles": ["ta"]
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bottena",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "o'maraw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "retallicka",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "piriso",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "marchettim",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gillbardc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "laisterw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vigneronl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ludgrovef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "halmv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cassellsb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cureea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "eastburyj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carnegief",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "towllc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lockittf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "iacabuccie",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rankcomr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lomasnyf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "greaterexh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "paszekr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "probeyk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mordantib",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rihanekc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rodrigueza",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bernardtb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tejerom",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jevonl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "caisleyo",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "uccellia",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kittert",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barabischj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "castanol",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "guslond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "statem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vannonia",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pumfrettt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "littefairk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pidgeonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cantosl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tremathacks",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "drakesh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "giblingj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tottmank",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clemowk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rigbyb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matthiesonr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "raithbyk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sebertd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gibbing",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hamssonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fearfullr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vinauc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spottiswoodm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hofm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sanhamh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dewittl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "knivetts",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bedhamn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tommisp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "papet",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mearnsc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "settera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "seidf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wikec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hanej",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heildr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "querrardb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "daccac",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "claesensh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tuffieldj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lorenced",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "baggalleyd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "coonihanj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mutterj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fathers",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spraggsr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rivitts",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "diters",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barrym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "adamovichc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "domans",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brownceyg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "seatterw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fraynev",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sharplessg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maddrelll",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carlanr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "philcottr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lachaizek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccurdys",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "iacobuccii",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "thringr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gorettij",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "benazetc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "franciottit",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gandarr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chesleyb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lardiere",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spacieb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "domked",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mazinr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tourotm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "beaudryb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ellershawg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dooles",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "schurigh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "apdellg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gaskenm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de gowem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "christallg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tizardg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grahlmansg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "versonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "morstattn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jakubowiczt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "macekc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "luckcockv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "winspearb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cozensw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mckaguem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leithera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stabbinsg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mitrovicl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grammerg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "trownsonn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wainera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jizhakic",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wetherillj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nultyt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gennerichc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "flowithl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "collingtond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "yellepd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fendd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "andryushchenkop",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "whitingtonf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "watsamd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "meusd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chinge de halsj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "killeleyk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gobelf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "munsoni",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lorantp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shureyf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "duiguidg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dilgerq",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bremens",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "renee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ricardeg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hacardc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shillabearj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barwackk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bedenhamd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fotherbya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pyecroftp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "disleyg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crannah",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "idlec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "windrams",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ludwikiewicze",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spurretd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "van eedenv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de la felda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "colgraver",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blaslii",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bravec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "seggess",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bateupk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "musprattm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blackmuirk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "agiusp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stebbind",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "daynterl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "parsanda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nieldc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bloxhaml",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "merwec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "titlowd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nockellsd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcquilliamn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gumbf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wratesd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "serleb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "marcrofth",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "andreyn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brunnings",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "compsonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "robardetk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "czajkab",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "silleya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "conryk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maled",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blants",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sabbertony",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kulvere",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dopsons",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hrinchishinc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ondrasekz",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ebbenm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "durringtonj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "berrimanr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "judda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "izkovitzb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "snoadd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "canterr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcfetridges",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "warryn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "coskerryb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leheudeu",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "whitrodn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "giabuzzis",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gobertd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rosierk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leeminga",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "baalhamd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ranklinr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carlettic",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "duckerv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "keepinl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "margrettb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dowe",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ludwikiewiczc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "norsisterl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jirousekj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "voasa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "capozzik",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spittlesi",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "paverd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fiorentinoe",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "naishr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gelsthorpeq",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hayzerk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "caldesb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "trudgionb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cowndleym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "reucastler",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "linfootm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pomroyr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gonoudem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shealsn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sheavillso",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lampell",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wurstf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "inmanc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wherrettk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lukera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ellinsb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ferranj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "damanth",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spottiswoodf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "prandyj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kinderb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "delguah",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gorringa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gladdenw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bonhommes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "coupek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maccaughenc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rubrowc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "beaulyl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "scrammagef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "warykt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "corkillm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "peplerl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "staresmeared",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "seedhousee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rowlinsonl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ewinsx",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ixort",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mosenm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "arnizf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sleemanr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fowlep",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cicchilloc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "klambtr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crammys",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "newsomen",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "benediktg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fossettn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wheadone",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blakemani",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vannarb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ivanishcheva",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wansburyb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "frisele",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "timberlakew",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rounsefellk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shinnm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "alennikovg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wernherl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spearettg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "duchama",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "donawayb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "levenw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "windleyp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "golling",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jochenf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "iacomoo",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matchest",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "labdent",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fressonm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heakerd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "le febref",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bloxsomef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "alfonzol",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dumbarl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cushs",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kendellc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mussonk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "salernos",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "oldroydec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "longhurstb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "perssei",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "duchesneb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "faltine",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chappelh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "loudianes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ringa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fosdicka",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ronchettib",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "coshn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lauxd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bauduind",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bradbornee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "entwistleg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "saphs",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rylek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "giannoniz",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "restoricke",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ainsleed",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chickenb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "croziers",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ohrtmanna",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bellwoodb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cooled",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "muggb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tweenf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pancoastm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rotherforthh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "whittleseaa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "soigouxc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "azemarc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gligorijevici",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "libbism",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "huychef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "effauntl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tunmorec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tampiong",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "layusk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cawdellm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lorrainem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "soggeer",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "houltonp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rosenblumj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kibbyep",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moxsteadr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kemeryg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lukianovl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "haizeldenp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "donisthorpem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stansbya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "letrangem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grinovd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "standevenb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ashbornet",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "treadgert",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sutcliffp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "oldalll",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "speeksg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "finlans",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de beauchempc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "angellp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wherryp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bachelarm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ogelsbym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hargreavesl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "biggenn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blazaa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crumptonl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "privettr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "suthworthr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rickettsj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ilyushkinl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccormickc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crosid",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jentgensj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ilchukz",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "idam",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "libbyw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "drakardn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "drayej",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "locheadk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mathevetb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mclenaghand",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "inderh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clapph",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "adriane",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gaddesn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gobeauxr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "arkilla",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "todarellod",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "worgt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dellitb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "smuthb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "woolhousek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "woolliamsg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "whatsonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "aggetth",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bainese",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kmieciakl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jeevest",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fokerk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "birniea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "keohaned",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kinnied",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "benniond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bullantr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nuschkes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "laysonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dyhousem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bennisonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "naired",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kenewellg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "girviny",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "skippd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mowerc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "donnellj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "alowayf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sillitow",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pollockc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wakefieldl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "juarat",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "karlef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ridelh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcomishs",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "flannigank",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cowndenl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kopeckad",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "phillimorea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ciabatteris",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gressv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "robardg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "torrieu",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bensent",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sallowsl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "smeuinf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tuffm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jaffad",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chestlep",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "aldera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kensalls",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "goulbornek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de la yglesiasn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "olivic",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blazaf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kryzhovm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dyserta",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "iglesiasd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chislettj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bulcroftc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gabitesr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "d'ambrogior",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sextonj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "schollickc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bremleys",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "muldownien",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brunelc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "reynardj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kernellr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcgilmartinj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "klimaszewskic",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "elizabethv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ledsonl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ourryg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mottinelliw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "farhertyf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dowd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stoileg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bendtsena",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "casinm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "itzakb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cassamr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "benckj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcilhonee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shovellerz",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "serginsonm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brambillo",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "beardshalln",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "peyes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "permainx",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "priestnallu",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mackrod",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fransesl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "darlastonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rackamh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "robertza",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dowryb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lamartinet",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mumbersond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kadwalliderr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cottilll",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cramptong",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lamblotl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "doolande",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hammerbergerh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "edmeadsl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "roadt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "auting",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maccaghana",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de hoogez",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "buffink",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wrankmorem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pedlera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blakeya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "falconerb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "johnseyt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "windrossm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fuleph",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "readshawr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cuerdallr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "legionm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "huonicp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cardern",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kempg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rayntona",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mayella",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "yakubovicsl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "basketfieldd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rozenbaumd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "alvaradod",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "follinga",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gettyl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "neaveb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "suttlingb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leiskw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "anteckia",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "prandym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "schubbertc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matsond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jeannardb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pritchitta",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sijmonsr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ricec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "elfesg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "decourtl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "skipm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "verneya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crumpem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grinovr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rodellr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heinricie",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mulkerrinso",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "braggg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sansamc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "woodworths",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cosgreaver",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "whelbandl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hovela",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mobberleym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "baudik",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "justune",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "liverk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "riderg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ghelerdinid",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "markeys",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dongallq",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "scaddono",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "oddyk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "callfj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matfint",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "booelns",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mathiassend",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "medlicotth",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matiebep",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lethabridgec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sainthillg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hatliffel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "breconm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hinrichss",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cuschieril",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "verrye",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cashamh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "estcotm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jagelsp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "elldreda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "canwellc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dockreyd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ashtonhurstb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "marshfielda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "parisok",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mclugishs",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sweetenhama",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gloye",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "skeechs",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "giovannacc@is",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mazdona",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "southards",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "attiwillt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pirrid",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "freebornec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "danieloub",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "claybournej",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcquaidel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heathwoods",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "o'mearat",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "foadl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fishem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cussinse",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "forced",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "streightc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mclayf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ackeryk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bennett",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "loosleyo",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "garlettee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ollarenshawa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leifb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "allmang",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "noorwooda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "haytol",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lamburnem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chesshyrer",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ayrtont",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "skynnerb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "charlong",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barkel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mullards",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "haithb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rowthc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "corkillj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jowlingm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "steartw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sisselotm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nabbsf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "labrenzd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "karadzasr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sewardb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lucaa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tschirschkye",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hagertyj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fewh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gillinow",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mosedillj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dowdallf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rockwellf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bygreavesd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "roubyg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bunkler",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "renshawd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "learek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hindsbergj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grattena",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mallabyt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carwardinew",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccloughlinr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blurtonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gilliardt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bruinemannp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fitzroyc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "philipsend",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bourtond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "muzzallk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vanlintc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cajklerv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "delacourtg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blodgetk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "milnerp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "verog",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "smeev",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "delhaya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bendingd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "torrejond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "siviourc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "petrulisl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maccarlichr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "squibbest",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gwatkinn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gennys",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tugmand",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jonket",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "arnowiczc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "goncavesh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "burnesss",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "larcieres",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "coutthartl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "layeb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pitcherf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chastenetr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sainteaun",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heinzelb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carderd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "millierh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bodycoteg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brosettis",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "chedzoyj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "malshera",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lomasneyw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "phillipl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "garrolda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "northe",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gossopl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "umplebyv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clashf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "casewellw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "alams",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sorrillh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wrenna",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sedgemondb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "villaw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "westmarlande",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "harriek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hobbertm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vereckerb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lotheanf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jovanovica",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matyushonokl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lorraind",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "upfoldr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kollatsche",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lefeavert",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ruaneg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "northedget",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lockhartj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carlans",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "baxstaro",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shutled",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lamars",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blawj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "renardb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lindberghc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lancasterd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gentk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "folcac",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "godains",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "longcasterv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "oguss",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mullinm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clowsern",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "petofih",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barmbyd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lammengab",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "standbridger",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lindstedtb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "labony",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dreyer",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "meakinm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "basleyg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tearj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fantonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jedrychowskig",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "doonicans",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gillespier",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gepheartb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cranhamc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "yukhnevichj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "eglinn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "audasm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rosemanp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "o'regank",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tembridged",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ginnalyc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crosfieldv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dumbartonl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dotsond",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "oxbeg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grisenthwaitec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "haglintonr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "agents",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rissent",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moorruda",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "golsthorpw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "loxlyj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grimsdithd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "marlenw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fleotef",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "heddec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vanichkinh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maccheynel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "radmorec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jellimans",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "primeb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tuxellb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "corkanf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "croyserd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "beumantw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lamminamr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pedricka",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moizerm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bonnyl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "goldesf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cantwellp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "harnella",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "schaffelb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "beavand",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grabertb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kolakovicv",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "borthen",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "davidsena",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "courtliffm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cradockk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dinckeg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "boskellc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "woodesona",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gwynnl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "le barred",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "siwardt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcdowallt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "guyotw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "matelaitisp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "inoldi",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lowries",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cheetamw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "amyesd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "skateg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "raffont",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "shapcotek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nurdind",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moodiec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spearmane",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dunthornd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vigrassd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jugginsa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lanawaym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ruminj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcspirronj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bunneye",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "danate",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "exrolm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "woodroughe",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "myhillf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rulfn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "davidsohnj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "nuttone",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grundd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "triplett",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ankerss",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bownh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clementsg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sarrellj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mcgettiganh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wernhero",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "rahillf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "norewoodb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "measenf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grinawayc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dowlesb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "spenceleyc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "howeyy",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blythn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "collimorec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gallonem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "keverna",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "peyroi",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dewirel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stellmanc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "caughtr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grillsf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "siebx",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bollonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ghironw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fraylingl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wyren",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kenninghamk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grisek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stainsonm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "verrillr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tompkinso",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "meacha",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jobkec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccartu",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "truesdalee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hughlins",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "biffinw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "collymorec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "digwoodj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "flemyngo",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "confaitj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brazerd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dwinek",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gilhespya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "seegert",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "castendam",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moormanl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "priseg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hugina",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brockiem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dunwoodym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dinjesc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cansdalel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clisti",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "robackf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gailw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "farlandk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "largane",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dudleyb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bowickt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pawnsfordt",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maffyi",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jozefc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wildf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "gamblesh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "fehnerso",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wintourz",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "thomaseng",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "crowleyd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tokes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lambardm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "georgea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bernardeaun",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "riolfol",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "redfernw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "terreng",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blofeldd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "swateridgec",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "abrahamsenl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pittse",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccloyn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "valdes",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "goslinh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hallidays",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lies",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "luggart",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "vannerg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "da costap",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "guises",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hynden",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "warburtonb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "travissg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dwirea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "brownc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jankowskia",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "lenoxa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sirmona",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kobusc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mckainr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "diackr",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "presnaila",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "henfrel",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "theseirad",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tersaya",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "de malcharm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "leerf",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "doudneyd",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "locketti",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccluinc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "dossetterg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bossomp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "summerlyl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "iacopinid",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "recherta",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "greatbankl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clossl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "carmanl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mccartank",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "raspinl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "d'aguannos",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bellewa",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "haberghams",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "scamelk",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wasons",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "hewertsona",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "jakelu",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "maddraj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "o'fearguisem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "barthotj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tybaltn",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "strippi",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "clerem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "kerssc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wynchl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "longmuirj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "mongern",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "franssenl",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "blanpeinb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "swiresm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "bielfeldtj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "byarsh",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "sommerlingc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "norreyp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "buiee",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "pimlockm",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "conquestg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "stubbsg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "locarnof",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "grosvenerb",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "castaniea",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "wollacottw",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "callowaym",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ehratg",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "collisonc",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "tassele",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "terbruggenj",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "ferrelih",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "moodiem",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "cysterp",
+        "roles": [
+            "ta"
+        ]
+    },
+    {
+        "utorid": "smithh",
+        "roles": [
+            "instructor"
+        ]
     },
     {
         "utorid": "garciae",
-        "roles": ["ta", "instructor"]
+        "roles": [
+            "ta",
+            "instructor"
+        ]
     },
     {
         "utorid": "millerm",
-        "roles": ["ta", "instructor"]
+        "roles": [
+            "ta",
+            "instructor"
+        ]
     },
     {
         "utorid": "pumfrettn",
-        "roles": ["ta", "instructor"]
+        "roles": [
+            "ta",
+            "instructor"
+        ]
     },
     {
         "utorid": "lockhartl",
-        "roles": ["ta", "instructor"]
+        "roles": [
+            "ta",
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "giroldic",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "la torrei",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "oscallanl",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "dissmank",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "gilyotta",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "campsk",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "sauvana",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "stoffersl",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "gilleberte",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "meddd",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "southernd",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "grzelewskic",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "spurriorc",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "rowank",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "truwertg",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "seagerd",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "tertret",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "coulthardf",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "falkusm",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "phoenixb",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "dowtyt",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "redmaynea",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "ceasera",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "cuestar",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "oransw",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "kingswelln",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "ciccottiod",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "doeb",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "dumpletonb",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "cardosol",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "madeno",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "elfesd",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "standevend",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "perrots",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "rallinshawd",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "howette",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "smalemanb",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "yonr",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "cradockr",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "saltmans",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "sidawayg",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "spinigen",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "martinellop",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "walpolec",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "coxheadt",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "boldtr",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "janatal",
+        "roles": [
+            "instructor"
+        ]
+    },
+    {
+        "utorid": "hamshawt",
+        "roles": [
+            "instructor"
+        ]
     }
 ]
