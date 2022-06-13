@@ -11,8 +11,11 @@ import {
     positionsSelector,
     activeSessionSelector,
     debugOnlyUpsertUser,
+    debugOnlySetActiveUser,
+    fetchActiveUser
 } from "../../api/actions";
-
+import { upsertInstructorPreference } from "../../api/actions/instructor_preferences";
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
     positionSchema,
     applicantSchema,
@@ -109,6 +112,10 @@ export function SeedDataMenu({
         assignment: {
             name: `Assignment (${seedData.assignments.length})`,
             action: seedAssignments,
+        },
+        application: {
+            name: `Applications (${seedData.applications.length})`,
+            action: seedApplications,
         },
         all: { name: "All Data", action: seedAll },
     };
@@ -263,6 +270,70 @@ export function SeedDataMenu({
         }
     }
 
+    async function seedApplications(limit=1000) {
+        setStage("Applications");
+        setProgress(0);
+
+        if (!targetSession) {
+            throw new Error("Need a valid session to continue");
+        }
+
+        count = 0;
+        total = seedData.applications.length;
+
+        // Keep track of the original active user so we can swap back
+        const initialUser = await dispatch(fetchActiveUser());
+
+        // Get this session's posting token:
+        let url_token = "";
+        await apiGET(`/admin/sessions/${targetSession.id}/postings`).then((resp: any) => {
+            url_token = resp[0].url_token;
+        })
+
+        for (const a of seedData.applications.slice(0, limit)) {
+            const currUser = {"utorid": a.utorid, "roles": ["admin", "instructor", "ta"]};
+            await dispatch(debugOnlySetActiveUser(currUser, {skipInit: true}));
+
+            const newApp = {
+                "utorid": a.utorid,
+                "student_number": a.student_number.toString(),
+                "first_name": a.first_name,
+                "last_name": a.last_name,
+                "email": a.email,
+                "phone": a.phone.toString(),
+                "program": a.program,
+                "department": a.department,
+                "yip": a.yip,
+                "gpa": 0,
+                "previous_department_ta": a.previous_department_ta,
+                "previous_university_ta": a.previous_university_ta,
+                "program_start": a.program_start,
+                "previous_other_university_ta": a.previous_other_university_ta,
+                "position_preferences": a.position_preferences,
+            };
+
+            if (a.gpa) {
+                newApp.gpa = a.gpa;
+            }
+
+            await apiPOST(
+                `/public/postings/${url_token}/submit`,
+                { answers: newApp },
+                true
+            );
+
+            count++;
+            setProgress(Math.round((count / total) * 100));
+        }
+
+        await dispatch(debugOnlySetActiveUser({
+            "utorid": initialUser.utorid,
+            "roles": initialUser.roles
+        }));
+
+        setProgress(100);
+    }
+    
     async function seedAll() {
         try {
             setConfirmDialogVisible(false);
