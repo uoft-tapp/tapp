@@ -12,7 +12,8 @@ import {
     activeSessionSelector,
     debugOnlyUpsertUser,
     debugOnlySetActiveUser,
-    fetchActiveUser
+    applicationsSelector,
+    fetchActiveUser,
 } from "../../api/actions";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
@@ -66,6 +67,7 @@ export function SeedDataMenu({
     let contractTemplates: ContractTemplate[] = [];
     let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
+    let applications = useSelector(applicationsSelector);
     let count;
     let total;
 
@@ -116,6 +118,10 @@ export function SeedDataMenu({
             name: `Applications (${seedData.applications.length})`,
             action: seedApplications,
         },
+        instructorPref: {
+            name: `Instructor Preferences (${seedData.applications.length})`,
+            action: seedInstructorPreferences,
+        },
         all: { name: "All Data", action: seedAll },
     };
 
@@ -151,7 +157,7 @@ export function SeedDataMenu({
         setProgress(100);
     }
 
-    async function seedUsers(limit = 1053) {
+    async function seedUsers(limit = 600) {
         setProgress(0);
         setStage("Users");
         const users = seedData.users.slice(0, limit);
@@ -269,7 +275,7 @@ export function SeedDataMenu({
         }
     }
 
-    async function seedApplications(limit=1000) {
+    async function seedApplications(limit = 600) {
         setStage("Applications");
         setProgress(0);
 
@@ -277,43 +283,45 @@ export function SeedDataMenu({
             throw new Error("Need a valid session to continue");
         }
 
-        count = 0;
-        total = seedData.applications.length;
+        let count = 0;
+        let total = seedData.applications.length;
 
         // Keep track of the original active user so we can swap back
         const initialUser = await dispatch(fetchActiveUser());
 
         // Get this session's posting token:
-        let url_token = "";
-        await apiGET(`/admin/sessions/${targetSession.id}/postings`).then((resp: any) => {
-            url_token = resp[0].url_token;
-        })
+        const resp = await apiGET(
+            `/admin/sessions/${targetSession.id}/postings`
+        );
+        let url_token = resp[0].url_token;
 
-        for (const a of seedData.applications.slice(0, limit)) {
-            const currUser = {"utorid": a.utorid, "roles": ["admin", "instructor", "ta"]};
-            await dispatch(debugOnlySetActiveUser(currUser, {skipInit: true}));
+        for (const application of seedData.applications.slice(0, limit)) {
+            const currUser = {
+                utorid: application.utorid,
+                roles: ["admin", "instructor", "ta"],
+            };
+            await dispatch(
+                debugOnlySetActiveUser(currUser, { skipInit: true })
+            );
 
             const newApp = {
-                "utorid": a.utorid,
-                "student_number": a.student_number.toString(),
-                "first_name": a.first_name,
-                "last_name": a.last_name,
-                "email": a.email,
-                "phone": a.phone.toString(),
-                "program": a.program,
-                "department": a.department,
-                "yip": a.yip,
-                "gpa": 0,
-                "previous_department_ta": a.previous_department_ta,
-                "previous_university_ta": a.previous_university_ta,
-                "program_start": a.program_start,
-                "previous_other_university_ta": a.previous_other_university_ta,
-                "position_preferences": a.position_preferences,
+                utorid: application.utorid,
+                student_number: application.student_number,
+                first_name: application.first_name,
+                last_name: application.last_name,
+                email: application.email,
+                phone: application.phone.toString(),
+                program: application.program,
+                department: application.department,
+                yip: application.yip,
+                gpa: application.gpa || 0,
+                previous_department_ta: application.previous_department_ta,
+                previous_university_ta: application.previous_university_ta,
+                program_start: application.program_start,
+                previous_other_university_ta:
+                    application.previous_other_university_ta,
+                position_preferences: application.position_preferences,
             };
-
-            if (a.gpa) {
-                newApp.gpa = a.gpa;
-            }
 
             await apiPOST(
                 `/public/postings/${url_token}/submit`,
@@ -325,14 +333,68 @@ export function SeedDataMenu({
             setProgress(Math.round((count / total) * 100));
         }
 
-        await dispatch(debugOnlySetActiveUser({
-            "utorid": initialUser.utorid,
-            "roles": initialUser.roles
-        }));
+        await dispatch(
+            debugOnlySetActiveUser({
+                utorid: initialUser.utorid,
+                roles: initialUser.roles,
+            })
+        );
 
         setProgress(100);
     }
-    
+
+    async function seedInstructorPreferences(limit = 600) {
+        setStage("Instructor Preferences");
+        setProgress(0);
+
+        if (!targetSession) {
+            throw new Error("Need a valid session to continue");
+        }
+
+        let count = 0;
+        let total = seedData.applications.length;
+
+        for (const application of seedData.applications.slice(0, limit)) {
+            if (application.instructor_preferences) {
+                const targetApplication =
+                    applications.find(
+                        (currApplication) =>
+                            currApplication.applicant.utorid ===
+                            application.utorid
+                    ) || null;
+
+                if (!targetApplication) {
+                    throw new Error("No application found for " + application);
+                }
+
+                for (const position of application.instructor_preferences) {
+                    const targetPosition =
+                        positions.find(
+                            (currPosition) =>
+                                currPosition.position_code ===
+                                position.position_code
+                        ) || null;
+
+                    if (!targetPosition) {
+                        throw new Error(
+                            "No position found for " + position.position_code
+                        );
+                    }
+
+                    await apiPOST(`/instructor/instructor_preferences`, {
+                        preference_level: position.preference_level,
+                        comment: position.comment,
+                        application_id: targetApplication.id,
+                        position_id: targetPosition.id,
+                    });
+                }
+            }
+            count++;
+            setProgress(Math.round((count / total) * 100));
+        }
+        setProgress(100);
+    }
+
     async function seedAll() {
         try {
             setConfirmDialogVisible(false);
