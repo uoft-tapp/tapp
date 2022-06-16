@@ -333,13 +333,7 @@ export function SeedDataMenu({
             setProgress(Math.round((count / total) * 100));
         }
 
-        await dispatch(
-            debugOnlySetActiveUser({
-                utorid: initialUser.utorid,
-                roles: initialUser.roles,
-            })
-        );
-
+        await dispatch(debugOnlySetActiveUser(initialUser));
         setProgress(100);
     }
 
@@ -354,44 +348,52 @@ export function SeedDataMenu({
         let count = 0;
         let total = seedData.applications.length;
 
+        const preferences = [];
+
         for (const application of seedData.applications.slice(0, limit)) {
-            if (application.instructor_preferences) {
-                const targetApplication =
-                    applications.find(
-                        (currApplication) =>
-                            currApplication.applicant.utorid ===
-                            application.utorid
+            if (!application.instructor_preferences) {
+                continue;
+            }
+
+            const targetApplication =
+                applications.find(
+                    (currApplication) =>
+                        currApplication.applicant.utorid === application.utorid
+                ) || null;
+
+            if (!targetApplication) {
+                throw new Error("No application found for " + application);
+            }
+
+            for (let preference of application.instructor_preferences) {
+                const targetPosition =
+                    positions.find(
+                        (currPosition) =>
+                            currPosition.position_code ===
+                            preference.position_code
                     ) || null;
 
-                if (!targetApplication) {
-                    throw new Error("No application found for " + application);
+                if (!targetPosition) {
+                    throw new Error(
+                        "No position found for " + preference.position_code
+                    );
                 }
 
-                for (const position of application.instructor_preferences) {
-                    const targetPosition =
-                        positions.find(
-                            (currPosition) =>
-                                currPosition.position_code ===
-                                position.position_code
-                        ) || null;
-
-                    if (!targetPosition) {
-                        throw new Error(
-                            "No position found for " + position.position_code
-                        );
-                    }
-
-                    await apiPOST(`/instructor/instructor_preferences`, {
-                        preference_level: position.preference_level,
-                        comment: position.comment,
-                        application_id: targetApplication.id,
-                        position_id: targetPosition.id,
-                    });
-                }
+                preferences.push({
+                    preference_level: preference.preference_level,
+                    comment: preference.comment,
+                    application_id: targetApplication.id,
+                    position_id: targetPosition.id,
+                });
             }
+        }
+
+        for (let preference of preferences) {
+            apiPOST(`/instructor/instructor_preferences`, preference);
             count++;
             setProgress(Math.round((count / total) * 100));
         }
+
         setProgress(100);
     }
 
