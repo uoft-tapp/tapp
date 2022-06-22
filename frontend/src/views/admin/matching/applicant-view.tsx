@@ -209,7 +209,7 @@ function GridItem({
                 <div className="star-icon"></div>
             </div>
             <div className="grid-footer">
-                <div className="department">{ summary.mostRecentApplication.department?.substring(0, 1) }</div>
+                <div className="department">{ summary.mostRecentApplication.department?.substring(0, 1).toUpperCase() }</div>
                 <div className="program">{summary.mostRecentApplication.program?.substring(0, 1)}{summary.mostRecentApplication.yip}</div>
                 <div className="ta-rating"></div>
                 <div className="instructor-rating"></div>
