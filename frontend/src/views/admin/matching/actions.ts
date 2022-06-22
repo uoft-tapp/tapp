@@ -1,11 +1,17 @@
 import { RootState } from "../../../rootReducer";
-import { SET_SELECTED_ROWS } from "./constants";
+import { UPSERT_MATCH, BATCH_UPSERT_MATCHES } from "./constants";
+import { Match } from "./types";
 
 // actions
-export const setSelectedRows = (data: number[]) => ({
-    type: SET_SELECTED_ROWS,
+export const upsertMatch = (data: Match) => ({
+    type: UPSERT_MATCH,
     payload: data,
 });
+
+export const batchUpsertMatches = (data: Match[]) => ({
+    type: BATCH_UPSERT_MATCHES,
+    payload: data
+})
 
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;

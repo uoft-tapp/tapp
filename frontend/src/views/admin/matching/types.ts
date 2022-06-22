@@ -1,8 +1,8 @@
 import { Position, Applicant, Assignment, Application } from "../../../api/defs/types";
 
 export type Match = {
-    applicant: Applicant;
-    position: Position;
+    applicantId: number;
+    positionId: number;
     status: "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
     hoursAssigned: number;
 }

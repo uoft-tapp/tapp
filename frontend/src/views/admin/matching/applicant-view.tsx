@@ -66,8 +66,12 @@ export function ApplicantView({
                 <h2>{ summary && summary.position.position_code }</h2>
                 { summary && (
                     viewType === "table" 
-                        ? <TableView applicantSummaries={filteredApplicants} />
-                        : <GridView applicantSummaries={filteredApplicants} />
+                        ? <TableView 
+                            positionSummary={summary}
+                            applicantSummaries={filteredApplicants} />
+                        : <GridView 
+                            positionSummary={summary}
+                            applicantSummaries={filteredApplicants} />
                     )
                 }
             </div>
@@ -76,9 +80,11 @@ export function ApplicantView({
 }
 
 function TableView({
+    positionSummary,
     applicantSummaries
 }: {
-    applicantSummaries: ApplicantSummary[] | null
+    positionSummary: PositionSummary | null;
+    applicantSummaries: ApplicantSummary[] | null;
 }) {
     const columns = [
         {
@@ -174,10 +180,44 @@ function TableRow({
 }
 
 function GridView({
+    positionSummary,
     applicantSummaries
 }: {
-    applicantSummaries: ApplicantSummary[] | null
+    positionSummary: PositionSummary | null;
+    applicantSummaries: ApplicantSummary[] | null;
 }) {
+    const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> = React.useMemo(() => {
+        if (!applicantSummaries || !positionSummary) {
+            return {};
+        }
+
+        const statusMapping: Record<string, string[]> = {
+            "Assigned": ["staged-assigned", "assigned"],
+            "Starred": ["starred"],
+            "Applied": ["applied"],
+            "Hidden": ["hidden"]
+        }
+
+        const ret: Record<string, ApplicantSummary[]> = {}
+        Object.keys(statusMapping).map((key) => ret[key] = []);
+
+        for (const applicantSummary of applicantSummaries) {
+            const positionMatch = applicantSummary.matches.find((match) =>
+                match.positionId === positionSummary.position.id);
+            
+            if (positionMatch) {
+                const statusCategory = Object.keys(statusMapping).find((key) =>
+                    statusMapping[key].includes(positionMatch.status)
+                );
+
+                if (statusCategory) {
+                    ret[statusCategory].push(applicantSummary);
+                }
+            }
+        }
+        return ret;
+    }, [applicantSummaries]);
+
     return (
         <div>
         { applicantSummaries && applicantSummaries.map((summary) => {
@@ -190,6 +230,30 @@ function GridView({
         })}
         </div>
     );
+}
+
+function GridSection({
+    header,
+    applicantSummaries
+}: {
+    header: string,
+    applicantSummaries: ApplicantSummary[]
+}) {
+    return (
+        <div className="grid-view-section">
+            <h2>{ header }</h2>
+            <div className="grid-view-list">
+                { applicantSummaries && applicantSummaries.map((summary) => {
+                    return (
+                        <GridItem
+                            summary={summary}
+                            key={summary.applicant.id}
+                        />
+                    )
+                })}
+            </div>
+        </div>
+    )
 }
 
 function GridItem({

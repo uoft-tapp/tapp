@@ -8,17 +8,48 @@ import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
 
 import { applicationsSelector, assignmentsSelector, positionsSelector, applicantsSelector } from "../../../api/actions";
-import { Assignment } from "../../../api/defs/types";
+import { Assignment, Application, Applicant } from "../../../api/defs/types";
 
-import { matchesSelector, guaranteesSelector, setSelectedRows } from "./actions";
-import { PositionSummary, ApplicantSummary } from "./types";
+import { matchesSelector, guaranteesSelector, upsertMatch, batchUpsertMatches } from "./actions";
+import { PositionSummary, ApplicantSummary, Match } from "./types";
 
 import { PositionList } from "./position-list";
 import { ApplicantView } from "./applicant-view";
 
+function GetNewestApplication(applicant: Applicant, applications: Application[]) {
+    const matchingApplications = applications.filter(
+        (application) => application.applicant.id === applicant.id
+    );
+
+    if (matchingApplications.length === 0) {
+        return null;
+    }
+
+    matchingApplications.sort((a, b) => {
+        if (a.submission_date === b.submission_date) {
+            return 0;
+        }
+        if (a.submission_date > b.submission_date) {
+            return 1;
+        }
+        return -1;
+    });
+
+    return matchingApplications[matchingApplications.length - 1];
+}
+
 export function AdminMatchingView() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
+
+    const [selectedPosition, setSelectedPosition] = React.useState(null);
+
+    const positions = useSelector(positionsSelector);
+    const assignments = useSelector(assignmentsSelector);
+    const applications = useSelector(applicationsSelector);
+    const applicants = useSelector(applicantsSelector);
+    const matches = useSelector(matchesSelector);
+    const guarantees = useSelector(guaranteesSelector);
 
     // We don't load postings by default, so we load them dynamically whenever
     // we view this page.
@@ -29,17 +60,52 @@ export function AdminMatchingView() {
 
         if (activeSession) {
             fetchResources();
+
+            // Initialize match data
+            const initialMatches: Match[] = [];
+
+            for (const applicant of applicants) {
+                const mostRecentApplication = GetNewestApplication(applicant, applications);
+                if (!mostRecentApplication) {
+                    continue;
+                }
+
+                // Mark positions as being applied for
+                for (const positionPreference of mostRecentApplication.position_preferences) {
+                    initialMatches.push({
+                        applicantId: applicant.id,
+                        positionId: positionPreference.position.id,
+                        status: "applied",
+                        hoursAssigned: 0
+                    });
+                }
+
+                // Mark positions as being assigned
+                for (const assignment of assignments) {
+                    const matchingAssignment = initialMatches.find(
+                        (match) => match.applicantId === applicant.id && 
+                                    match.positionId === assignment.position.id &&
+                                    match.status === "applied");
+
+                    // Update existing match object if it exists
+                    if (matchingAssignment) {
+                        matchingAssignment.status = "assigned";
+                        matchingAssignment.hoursAssigned = assignment.hours ? assignment.hours : 0;
+                    } else {
+                        // Otherwise, create a new one
+                        initialMatches.push({
+                            applicantId: applicant.id,
+                            positionId: assignment.position.id,
+                            status: "assigned",
+                            hoursAssigned: assignment.hours ? assignment.hours : 0
+                        });
+                    }
+                }
+            }
+
+            dispatch(batchUpsertMatches(initialMatches));
         }
     }, [activeSession, dispatch]);
-
-    const [selectedPosition, setSelectedPosition] = React.useState(null);
-
-    const positions = useSelector(positionsSelector);
-    const assignments = useSelector(assignmentsSelector);
-    const applications = useSelector(applicationsSelector);
-    const applicants = useSelector(applicantsSelector);
-    const matches = useSelector(matchesSelector);
-    const guarantees = useSelector(guaranteesSelector);
 
     // Get information about positions
     const positionSummaries = React.useMemo(() => {
@@ -52,30 +118,16 @@ export function AdminMatchingView() {
 
         const applicantSummariesByPositionId: Record<number, ApplicantSummary[]> = {};
         for (const applicant of applicants) {
-            // Get newest application for each applicant
-            const matchingApplications = applications.filter(
-                (application) => application.applicant.id === applicant.id
-            );
-
-            if (matchingApplications.length === 0) {
+            const newestApplication = GetNewestApplication(applicant, applications);
+            if (!newestApplication) {
                 continue;
             }
 
-            matchingApplications.sort((a, b) => {
-                if (a.submission_date === b.submission_date) {
-                    return 0;
-                }
-                if (a.submission_date > b.submission_date) {
-                    return 1;
-                }
-                return -1;
-            });
-
             const newApplicantSummary = {
                 applicant: applicant,
-                mostRecentApplication: matchingApplications[matchingApplications.length - 1],
+                mostRecentApplication: newestApplication,
                 matches: matches.filter(
-                    (match) => match.applicant.id === applicant.id
+                    (match) => match.applicantId === applicant.id
                 ) || [],
                 guarantee: guarantees.find(
                     (guarantee) => guarantee.applicant.id === applicant.id
