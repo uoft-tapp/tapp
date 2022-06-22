@@ -20,6 +20,7 @@ import ddahsTableReducer from "./views/admin/ddah-table/reducers";
 import positionsTableReducer from "./views/admin/positions/reducers";
 import instructorUIReducer from "./views/instructor/store/reducers";
 import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
+import matchingDataReducer from "./views/admin/matching/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -31,7 +32,7 @@ import { instructorPreferencesReducer } from "./api/reducers/instructorPreferenc
 //   {
 //      mypath: myReducer
 //   }
-// When `myReducer(localState)` is called, `localSate == globalState.mypath`.
+// When `myReducer(localState)` is called, `localState == globalState.mypath`.
 const reducer = combineReducers({
     model: combineReducers({
         status: statusReducer,
@@ -55,6 +56,7 @@ const reducer = combineReducers({
         positionsTable: positionsTableReducer,
         globals: globalReducer,
         instructor: instructorUIReducer,
+        matchingData: matchingDataReducer
     }),
 });
 

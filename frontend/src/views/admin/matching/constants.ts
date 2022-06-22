@@ -1,0 +1,1 @@
+export const SET_SELECTED_ROWS = "SET_SELECTED_ROWS";
