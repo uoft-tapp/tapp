@@ -2,7 +2,9 @@ import { Position, Applicant, Assignment, Application } from "../../../api/defs/
 
 export type Match = {
     applicantId: number;
+    utorid: string;
     positionId: number;
+    positionCode: string;
     status: "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
     hoursAssigned: number;
 }

@@ -58,6 +58,12 @@ export function AdminMatchingView() {
             return await dispatch(fetchPostings());
         }
 
+        if (activeSession) {
+            fetchResources();
+        }
+    }, [activeSession, dispatch]);
+
+    React.useEffect(() => {
         async function initializeMatches() {
             const initialMatches: Match[] = [];
 
@@ -71,7 +77,9 @@ export function AdminMatchingView() {
                 for (const positionPreference of mostRecentApplication.position_preferences) {
                     initialMatches.push({
                         applicantId: applicant.id,
+                        utorid: applicant.utorid,
                         positionId: positionPreference.position.id,
+                        positionCode: positionPreference.position.position_code,
                         status: "applied",
                         hoursAssigned: 0
                     });
@@ -91,7 +99,9 @@ export function AdminMatchingView() {
                     // Otherwise, create a new one
                     initialMatches.push({
                         applicantId: assignment.applicant.id,
+                        utorid: assignment.applicant.utorid,
                         positionId: assignment.position.id,
+                        positionCode: assignment.position.position_code,
                         status: "assigned",
                         hoursAssigned: assignment.hours ? assignment.hours : 0
                     });
@@ -101,11 +111,8 @@ export function AdminMatchingView() {
             return await dispatch(batchUpsertMatches(initialMatches));
         }
 
-        if (activeSession) {
-            fetchResources();
-            initializeMatches();
-        }
-    }, [activeSession, dispatch]);
+        initializeMatches();
+    }, [dispatch, applicants, assignments, applications])
 
     // Get information about positions
     const positionSummaries = React.useMemo(() => {
@@ -143,6 +150,23 @@ export function AdminMatchingView() {
                     applicantSummariesByPositionId[position.position.id] || [];
                 applicantSummariesByPositionId[position.position.id].push(newApplicantSummary);
             })
+
+            // Add summary to positions where the applicant has been assigned:
+            assignments.filter(
+                (assignment) => assignment.applicant.id === applicant.id
+            ).forEach(
+                (assignment) => {
+                    applicantSummariesByPositionId[assignment.position.id] =  
+                        applicantSummariesByPositionId[assignment.position.id] || [];
+
+                    const existingSummary = applicantSummariesByPositionId[assignment.position.id].find((summary) => 
+                        summary.applicant.id === applicant.id);
+
+                    // Add the applicant summary to the position only if the summary does not already exist
+                    if (!existingSummary) {
+                        applicantSummariesByPositionId[assignment.position.id].push(newApplicantSummary);
+                    }
+            });
         }
 
         const ret: Record<number, PositionSummary> = {};
@@ -161,10 +185,13 @@ export function AdminMatchingView() {
                     (position.desired_num_assignments || 0),
                 2
             );
+
+            // TODO: Update this to include staged assignment hours as well
             const hoursAssigned = round(
                 sum(...activeAssignments.map((assignment) => assignment.hours)),
                 2
             );
+            
             let filledStatus: "empty" | "under" | "matched" | "over" = "empty";
             if (targetHours > 0 && hoursAssigned === 0) {
                 filledStatus = "empty";

@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Position, Applicant } from "../../../api/defs/types";
-import { PositionSummary, ApplicantSummary } from "./types";
+import { Position, Applicant, Application } from "../../../api/defs/types";
+import { PositionSummary, ApplicantSummary, Match } from "./types";
+import { positionsSelector } from "../../../api/actions";
 
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
 import { Button, Form } from "react-bootstrap";
@@ -9,7 +10,25 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { Table } from "react-bootstrap";
 
+import { sum } from "../../../api/mockAPI/utils";
+import { round } from "../../../libs/utils";
+
 import "./styles.css";
+
+const statusMapping: Record<string, string[]> = {
+    "Assigned": ["staged-assigned", "assigned"],
+    "Starred": ["starred"],
+    "Applied": ["applied"],
+    "Hidden": ["hidden"]
+}
+
+function GetApplicantMatchForPosition(applicantSummary: ApplicantSummary, position: Position) {
+    return applicantSummary.matches.find((match) => match.positionId === position.id) || null;
+}
+
+function GetPositionPrefForPosition(application: Application, position: Position) {
+    return application.position_preferences?.find((positionPref) => positionPref.position.id === position.id);
+}
 
 export function ApplicantView({
     summary,
@@ -18,16 +37,26 @@ export function ApplicantView({
 }) {
     const [viewType, setViewType] = React.useState("table");
     const [searchValue, setSearchValue] = React.useState('');
-    const [applicantFilters, setApplicantFilters] = React.useState([]);
+    const [applicantFilters, setApplicantFilters] = React.useState({
+        program: [
+            {code: "P", value: true },
+            {code: "M", value: true},
+            {code: "U", value: true}
+        ]
+    });
+
+    const programFilters = applicantFilters.program.filter((item) => item.value).map((item) => { return item.code })
 
     const filteredApplicants = summary && summary.applicantSummaries
         .filter(
             (applicantSummary) => 
-                (
-                    applicantSummary.applicant.first_name + 
+                (applicantSummary.applicant.first_name + 
                     " " + 
-                    applicantSummary.applicant.last_name
+                    applicantSummary.applicant.last_name + 
+                    " " + 
+                    applicantSummary.applicant.utorid
                 ).toLowerCase().includes(searchValue.toLowerCase())
+                && programFilters.includes(applicantSummary.mostRecentApplication?.program || "")
         )
         .sort((a, b) => {
             return (
@@ -46,7 +75,20 @@ export function ApplicantView({
                     }/>
                 </Form>
                 <div className="filter-button-container">
-                    <FaFilter className="filter-button" />
+                    <FaFilter className="filter-button" onClick={
+                        (e) => {
+                            const updatedFilter = [...applicantFilters.program];
+                            const target = updatedFilter.find((item) => item.code === "U");
+                            if (target) {
+                                target.value = !target.value;
+                            }
+
+                            // TODO: update this; it currently just toggles "U"
+                            setApplicantFilters({...applicantFilters, 
+                                program: updatedFilter
+                            });
+                        }
+                    }/>
                 </div>
                 <div className="container-filler"></div>
                 <ToggleButtonGroup id="view-toggle" type="radio" name="views" defaultValue={viewType} onChange={setViewType}>
@@ -82,73 +124,32 @@ function TableView({
     positionSummary: PositionSummary | null;
     applicantSummaries: ApplicantSummary[] | null;
 }) {
-    const columns = [
-        {
-            Header: "Last",
-            accessor: "last_name"
-        },
-        {
-            Header: "First",
-            accessor: "first_name"
-        },
-        {
-            Header: "UTORid",
-            accessor: "utorid"
-        },
-        {
-            Header: "Program",
-            accessor: "program"
-        },
-        {
-            Header: "YIP",
-            accessor: "yip"
-        },
-        {
-            Header: "Department",
-            accessor: "department"
-        },
-        // {
-        //     Header: "Guaranteed",
-        //     accessor: "guaranteed_hours"
-        // },
-        // {
-        //     Header: "Assigned",
-        //     accessor: "assigned_hours"
-        // },
-        // {
-        //     Header: "Assignments",
-        //     accessor: "assignments"
-        // },
-        // {
-        //     Header: "Instr. Rating",
-        //     accessor: "instructor_ratings"
-        // },
-        // {
-        //     Header: "TA Rating",
-        //     accessor: "preference_level"
-        // },
-        // {
-        //     Header: "Status",
-        //     accessor: "status"
-        // }
-    ];
-
     return (
         <Table striped bordered hover responsive size="sm">
             <thead>
             <tr>
-            {columns.map((item, i) => {
-                return (
-                    <th>{item.Header}</th>
-                );
-            })}
+                <th>Last</th>
+                <th>First</th>
+                <th>UTORid</th>
+                <th>Department</th>
+                <th>Program</th>
+                <th>YIP</th>
+                <th>GPA</th>
+                <th>Status</th>
+                <th>TA Rating</th>
+                <th>Instructor Rating</th>
+                <th>Assignments</th>
+                <th>Hours Assigned</th>
+                <th>Hours Previously Assigned</th>
+                <th>Guarantee Total</th>
             </tr>
             </thead>
             <tbody>
-            { applicantSummaries && applicantSummaries.map((summary) => {
+            { applicantSummaries && positionSummary && applicantSummaries.map((summary) => {
                 return (
                     <TableRow 
-                        summary={summary} 
+                        summary={summary}
+                        position={positionSummary.position}
                         key={summary.applicant.id}
                     />
                 );
@@ -158,19 +159,61 @@ function TableView({
     );
 }
 
+function GetMappedStatusForMatch(match: Match | null) {
+    if (!match) {
+        return null;
+    }
+
+    return Object.keys(statusMapping).find((key) =>
+        statusMapping[key].includes(match.status)
+    );
+}
+
 function TableRow({
-    summary
+    summary,
+    position
 }: {
-    summary: ApplicantSummary
+    summary: ApplicantSummary;
+    position: Position;
 }) {
+    const applicantMatch = GetApplicantMatchForPosition(summary, position);
+    const statusCategory = GetMappedStatusForMatch(applicantMatch);
+    const positionPref = GetPositionPrefForPosition(summary.mostRecentApplication, position);
+
+    const instructorRatings = summary.mostRecentApplication.instructor_preferences.filter(
+        (pref) => pref.position.id === position.id)
+        .map((rating) => {
+        return rating.preference_level
+    }) || [];
+
     return (
         <tr>
             <td>{summary.applicant.last_name}</td>
             <td>{summary.applicant.first_name}</td>
             <td>{summary.applicant.utorid}</td>
+            <td>{summary.mostRecentApplication.department}</td>
             <td>{summary.mostRecentApplication.program}</td>
             <td>{summary.mostRecentApplication.yip}</td>
-            <td>{summary.mostRecentApplication.department}</td>
+            <td>{summary.mostRecentApplication.gpa && summary.mostRecentApplication.gpa}</td>
+            <td>{statusCategory} { statusCategory === "Assigned" 
+                ? "(" + (applicantMatch ? applicantMatch.hoursAssigned : 0) + ")" 
+                : "" }</td>
+            <td>{ positionPref ? positionPref.preference_level : "" }</td>
+            <td>{ instructorRatings.length > 0 ? round(sum(...instructorRatings) / instructorRatings.length, 3) + " (" + instructorRatings.length + ")" : "" }</td>
+            <td>{ summary.matches.map((match) => {
+                if (match.status === "assigned" || match.status === "staged-assigned") {
+                    return match.positionCode + " (" + match.hoursAssigned + ") ";
+                }
+            }) }</td>
+
+            <td>{ sum(...summary.matches.map((match) => {
+                if (match.status === "assigned" || match.status === "staged-assigned") {
+                    return match.hoursAssigned;
+                }
+                return 0;
+            }))}</td>
+            <td>{ summary.guarantee && summary.guarantee.previousHoursFulfilled}</td>
+            <td>{ summary.guarantee && summary.guarantee.totalHoursOwed }</td>
         </tr>
     );
 }
@@ -182,40 +225,26 @@ function GridView({
     positionSummary: PositionSummary | null;
     applicantSummaries: ApplicantSummary[] | null;
 }) {
-    const statusMapping: Record<string, string[]> = {
-        "Assigned": ["staged-assigned", "assigned"],
-        "Starred": ["starred"],
-        "Applied": ["applied"],
-        "Hidden": ["hidden"]
-    }
-
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> = {};
     Object.keys(statusMapping).map((key) => applicantSummariesByMatchStatus[key] = []);
 
     if (applicantSummaries && positionSummary) {
         for (const applicantSummary of applicantSummaries) {
-            const positionMatch = applicantSummary.matches.find((match) =>
-                match.positionId === positionSummary.position.id);
-            
-            if (positionMatch) {
-                const statusCategory = Object.keys(statusMapping).find((key) =>
-                    statusMapping[key].includes(positionMatch.status)
-                );
-
-                if (statusCategory) {
-                    applicantSummariesByMatchStatus[statusCategory].push(applicantSummary);
-                }
+            const applicantMatch = GetApplicantMatchForPosition(applicantSummary, positionSummary.position);
+            const statusCategory = GetMappedStatusForMatch(applicantMatch);
+            if (statusCategory) {
+                applicantSummariesByMatchStatus[statusCategory].push(applicantSummary);
             }
         }
     }
 
     return (
         <div>
-        { applicantSummaries && applicantSummaries.map((summary) => {
+        { applicantSummaries && Object.keys(applicantSummariesByMatchStatus).map((key) => {
             return (
-                <GridItem
-                    summary={summary}
-                    key={summary.applicant.id}
+                <GridSection
+                    header={key}
+                    applicantSummaries={applicantSummariesByMatchStatus[key]}
                 />
             )
         })}
@@ -232,9 +261,9 @@ function GridSection({
 }) {
     return (
         <div className="grid-view-section">
-            <h2>{ header }</h2>
+            <h4>{ header }</h4>
             <div className="grid-view-list">
-                { applicantSummaries && applicantSummaries.map((summary) => {
+                { applicantSummaries.map((summary) => {
                     return (
                         <GridItem
                             summary={summary}
