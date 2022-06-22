@@ -20,26 +20,22 @@ export function ApplicantView({
     const [searchValue, setSearchValue] = React.useState('');
     const [applicantFilters, setApplicantFilters] = React.useState([]);
 
-    const filteredApplicants = React.useMemo(() => {
-        const ret: ApplicantSummary[] | null = summary && summary.applicantSummaries
-            .filter(
-                (applicantSummary) => 
-                    (
-                        applicantSummary.applicant.first_name + 
-                        " " + 
-                        applicantSummary.applicant.last_name
-                    ).toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .sort((a, b) => {
-                return (
-                    (a.applicant.last_name + ", " + a.applicant.first_name).toLowerCase() <
-                    (b.applicant.last_name + ", " + b.applicant.first_name).toLowerCase())
-                        ? -1
-                        : 1;
-            });
-
-        return ret;
-    }, [searchValue, applicantFilters, summary]);
+    const filteredApplicants = summary && summary.applicantSummaries
+        .filter(
+            (applicantSummary) => 
+                (
+                    applicantSummary.applicant.first_name + 
+                    " " + 
+                    applicantSummary.applicant.last_name
+                ).toLowerCase().includes(searchValue.toLowerCase())
+        )
+        .sort((a, b) => {
+            return (
+                (a.applicant.last_name + ", " + a.applicant.first_name).toLowerCase() <
+                (b.applicant.last_name + ", " + b.applicant.first_name).toLowerCase())
+                    ? -1
+                    : 1;
+        });
 
     return (
         <div className="matching-course-main">
@@ -186,21 +182,17 @@ function GridView({
     positionSummary: PositionSummary | null;
     applicantSummaries: ApplicantSummary[] | null;
 }) {
-    const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> = React.useMemo(() => {
-        if (!applicantSummaries || !positionSummary) {
-            return {};
-        }
+    const statusMapping: Record<string, string[]> = {
+        "Assigned": ["staged-assigned", "assigned"],
+        "Starred": ["starred"],
+        "Applied": ["applied"],
+        "Hidden": ["hidden"]
+    }
 
-        const statusMapping: Record<string, string[]> = {
-            "Assigned": ["staged-assigned", "assigned"],
-            "Starred": ["starred"],
-            "Applied": ["applied"],
-            "Hidden": ["hidden"]
-        }
+    const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> = {};
+    Object.keys(statusMapping).map((key) => applicantSummariesByMatchStatus[key] = []);
 
-        const ret: Record<string, ApplicantSummary[]> = {}
-        Object.keys(statusMapping).map((key) => ret[key] = []);
-
+    if (applicantSummaries && positionSummary) {
         for (const applicantSummary of applicantSummaries) {
             const positionMatch = applicantSummary.matches.find((match) =>
                 match.positionId === positionSummary.position.id);
@@ -211,12 +203,11 @@ function GridView({
                 );
 
                 if (statusCategory) {
-                    ret[statusCategory].push(applicantSummary);
+                    applicantSummariesByMatchStatus[statusCategory].push(applicantSummary);
                 }
             }
         }
-        return ret;
-    }, [applicantSummaries]);
+    }
 
     return (
         <div>

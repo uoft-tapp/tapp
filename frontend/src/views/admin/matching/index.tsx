@@ -58,10 +58,7 @@ export function AdminMatchingView() {
             return await dispatch(fetchPostings());
         }
 
-        if (activeSession) {
-            fetchResources();
-
-            // Initialize match data
+        async function initializeMatches() {
             const initialMatches: Match[] = [];
 
             for (const applicant of applicants) {
@@ -79,31 +76,34 @@ export function AdminMatchingView() {
                         hoursAssigned: 0
                     });
                 }
+            }
 
-                // Mark positions as being assigned
-                for (const assignment of assignments) {
-                    const matchingAssignment = initialMatches.find(
-                        (match) => match.applicantId === applicant.id && 
-                                    match.positionId === assignment.position.id &&
-                                    match.status === "applied");
+            // Mark positions as being assigned
+            for (const assignment of assignments) {
+                const matchingAssignment = initialMatches.find(
+                    (match) => (match.applicantId === assignment.applicant.id && match.positionId === assignment.position.id && match.status === "applied"));
 
-                    // Update existing match object if it exists
-                    if (matchingAssignment) {
-                        matchingAssignment.status = "assigned";
-                        matchingAssignment.hoursAssigned = assignment.hours ? assignment.hours : 0;
-                    } else {
-                        // Otherwise, create a new one
-                        initialMatches.push({
-                            applicantId: applicant.id,
-                            positionId: assignment.position.id,
-                            status: "assigned",
-                            hoursAssigned: assignment.hours ? assignment.hours : 0
-                        });
-                    }
+                // Update existing match object if it exists
+                if (matchingAssignment) {
+                    matchingAssignment.status = "assigned";
+                    matchingAssignment.hoursAssigned = assignment.hours ? assignment.hours : 0;
+                } else {
+                    // Otherwise, create a new one
+                    initialMatches.push({
+                        applicantId: assignment.applicant.id,
+                        positionId: assignment.position.id,
+                        status: "assigned",
+                        hoursAssigned: assignment.hours ? assignment.hours : 0
+                    });
                 }
             }
 
-            dispatch(batchUpsertMatches(initialMatches));
+            return await dispatch(batchUpsertMatches(initialMatches));
+        }
+
+        if (activeSession) {
+            fetchResources();
+            initializeMatches();
         }
     }, [activeSession, dispatch]);
 
@@ -123,15 +123,19 @@ export function AdminMatchingView() {
                 continue;
             }
 
+            const applicantMatches = matches.filter(
+                (match) => match.applicantId === applicant.id
+            ) || [];
+
+            const applicantGuarantee = guarantees.find(
+                (guarantee) => guarantee.applicant.id === applicant.id
+            ) || null;
+
             const newApplicantSummary = {
                 applicant: applicant,
                 mostRecentApplication: newestApplication,
-                matches: matches.filter(
-                    (match) => match.applicantId === applicant.id
-                ) || [],
-                guarantee: guarantees.find(
-                    (guarantee) => guarantee.applicant.id === applicant.id
-                ) || null
+                matches: applicantMatches,
+                guarantee: applicantGuarantee
             }
 
             newApplicantSummary.mostRecentApplication.position_preferences.forEach(position => {
