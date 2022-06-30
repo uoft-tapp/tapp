@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 import { FaFilter } from "react-icons/fa";
 import { Form } from "react-bootstrap";
 
-import { Position } from "../../../api/defs/types";
 import { PositionSummary } from "./types";
 import { round } from "../../../libs/utils";
 
@@ -64,7 +63,7 @@ export function PositionList({
     onClick: Function;
 }) {
     // Either display the list of all courses or focus on the currently-selected on
-    const [showDetail, setShowDetail] = React.useState(false);
+    // const [showDetail, setShowDetail] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState("");
     const [positionFilters, setPositionFilters] = React.useState([]);
 
@@ -79,7 +78,7 @@ export function PositionList({
                     : 1;
             });
         return ret;
-    }, [searchValue, positionFilters, summaries]);
+    }, [searchValue, summaries]);
 
     return (
         <div className="position-sidebar">

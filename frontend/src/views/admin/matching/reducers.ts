@@ -15,29 +15,30 @@ const initialState: MatchingDataState = {
 
 const matchingDataReducer = createReducer(initialState, {
     [UPSERT_MATCH]: (state, action) => {
-        // If a match with this applicant ID and position ID already exists, update it:
-        if (state.matches.find(
+        // Check if a match with this applicant ID and position ID already exist
+        const existingMatch = state.matches.find(
             (match) => 
-                match.applicantId === (action.payload).applicantId && match.positionId === (action.payload).positionId)
-        ) {
-            return { ...state, matches: [
-                    state.matches.map((match) => {
-                        if (match.applicantId === (action.payload).applicantId && match.positionId === (action.payload).positionId) {
-                            return action.payload;
-                        }
-                        return match;
-                    })
+                match.applicantId === (action.payload).applicantId && match.positionId === (action.payload).positionId) || null;
+
+        if (!existingMatch) {
+            return { ...state, 
+                matches: [
+                    ...state.matches,
+                    action.payload
                 ]
             }
         }
 
-        // Otherwise, just append to the list
-        return { ...state, 
-            matches: [
-                ...state.matches,
-                action.payload
-            ]
-        }
+        // Item exists, so we have to update it
+        return { ...state, matches: state.matches.map(
+            (match) => {
+                if (match.applicantId === (action.payload).applicantId && match.positionId === (action.payload).positionId) {
+                    return action.payload;
+                } else {
+                    return match;
+                }
+            }
+        )};
     },
     [BATCH_UPSERT_MATCHES]: (state, action) => {
         return {...state, matches: action.payload};

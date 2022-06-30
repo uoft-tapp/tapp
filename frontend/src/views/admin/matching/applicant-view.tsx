@@ -1,17 +1,20 @@
 import React from "react";
+import classNames from "classnames";
 
-import { Position, Applicant, Application } from "../../../api/defs/types";
+import { Position, Application } from "../../../api/defs/types";
 import { PositionSummary, ApplicantSummary, Match } from "./types";
-import { positionsSelector } from "../../../api/actions";
 
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { Table } from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
+
+import { upsertMatch } from "./actions";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 import "./styles.css";
 
@@ -31,40 +34,47 @@ function GetPositionPrefForPosition(application: Application, position: Position
 }
 
 export function ApplicantView({
-    summary,
+    position,
+    applicants
 }: {
-    summary: PositionSummary | null;
+    position: Position | null;
+    applicants: ApplicantSummary[];
 }) {
-    const [viewType, setViewType] = React.useState("table");
+    const [viewType, setViewType] = React.useState<"table" | "grid">("table");
     const [searchValue, setSearchValue] = React.useState('');
     const [applicantFilters, setApplicantFilters] = React.useState({
         program: [
             {code: "P", value: true },
             {code: "M", value: true},
-            {code: "U", value: true}
+            {code: "U", value: true},
+            {code: "MScAC", value: true},
+            {code: "PD", value: true},
+            {code: "other", value: true}
         ]
     });
 
     const programFilters = applicantFilters.program.filter((item) => item.value).map((item) => { return item.code })
-
-    const filteredApplicants = summary && summary.applicantSummaries
-        .filter(
-            (applicantSummary) => 
-                (applicantSummary.applicant.first_name + 
-                    " " + 
-                    applicantSummary.applicant.last_name + 
-                    " " + 
-                    applicantSummary.applicant.utorid
-                ).toLowerCase().includes(searchValue.toLowerCase())
-                && programFilters.includes(applicantSummary.mostRecentApplication?.program || "")
-        )
-        .sort((a, b) => {
-            return (
-                (a.applicant.last_name + ", " + a.applicant.first_name).toLowerCase() <
-                (b.applicant.last_name + ", " + b.applicant.first_name).toLowerCase())
-                    ? -1
-                    : 1;
-        });
+    const filteredApplicants = React.useMemo(() => {
+        const ret: ApplicantSummary[] = applicants
+            .filter(
+                (applicant) => 
+                    (applicant.applicant.first_name + 
+                        " " + 
+                        applicant.applicant.last_name + 
+                        " " + 
+                        applicant.applicant.utorid
+                    ).toLowerCase().includes(searchValue.toLowerCase())
+                    && programFilters.includes(applicant.mostRecentApplication?.program || "")
+            )
+            .sort((a, b) => {
+                return (
+                    (a.applicant.last_name + ", " + a.applicant.first_name).toLowerCase() <
+                    (b.applicant.last_name + ", " + b.applicant.first_name).toLowerCase())
+                        ? -1
+                        : 1;
+            });
+        return ret;
+    }, [searchValue, applicants]);
 
     return (
         <div className="matching-course-main">
@@ -77,13 +87,13 @@ export function ApplicantView({
                 <div className="filter-button-container">
                     <FaFilter className="filter-button" onClick={
                         (e) => {
+                            // TODO: update this; it currently just toggles "U"
                             const updatedFilter = [...applicantFilters.program];
                             const target = updatedFilter.find((item) => item.code === "U");
                             if (target) {
                                 target.value = !target.value;
                             }
 
-                            // TODO: update this; it currently just toggles "U"
                             setApplicantFilters({...applicantFilters, 
                                 program: updatedFilter
                             });
@@ -101,15 +111,15 @@ export function ApplicantView({
                 </ToggleButtonGroup>
             </div>
             <div>
-                <h2>{ summary && summary.position.position_code }</h2>
-                { summary && (
+                <h2>{ position && position.position_code }</h2>
+                { position && (
                     viewType === "table" 
                         ? <TableView 
-                            positionSummary={summary}
-                            applicantSummaries={filteredApplicants} />
+                            position={position}
+                            applicants={filteredApplicants} />
                         : <GridView 
-                            positionSummary={summary}
-                            applicantSummaries={filteredApplicants} />
+                            position={position}
+                            applicants={filteredApplicants} />
                     )
                 }
             </div>
@@ -118,11 +128,11 @@ export function ApplicantView({
 }
 
 function TableView({
-    positionSummary,
-    applicantSummaries
+    position,
+    applicants
 }: {
-    positionSummary: PositionSummary | null;
-    applicantSummaries: ApplicantSummary[] | null;
+    position: Position;
+    applicants: ApplicantSummary[];
 }) {
     return (
         <Table striped bordered hover responsive size="sm">
@@ -145,12 +155,12 @@ function TableView({
             </tr>
             </thead>
             <tbody>
-            { applicantSummaries && positionSummary && applicantSummaries.map((summary) => {
+            { applicants.map((applicant) => {
                 return (
                     <TableRow 
-                        summary={summary}
-                        position={positionSummary.position}
-                        key={summary.applicant.id}
+                        applicant={applicant}
+                        position={position}
+                        key={applicant.applicant.id}
                     />
                 );
             }) }
@@ -170,17 +180,17 @@ function GetMappedStatusForMatch(match: Match | null) {
 }
 
 function TableRow({
-    summary,
-    position
+    position,
+    applicant
 }: {
-    summary: ApplicantSummary;
     position: Position;
+    applicant: ApplicantSummary;
 }) {
-    const applicantMatch = GetApplicantMatchForPosition(summary, position);
+    const applicantMatch = GetApplicantMatchForPosition(applicant, position);
     const statusCategory = GetMappedStatusForMatch(applicantMatch);
-    const positionPref = GetPositionPrefForPosition(summary.mostRecentApplication, position);
+    const positionPref = GetPositionPrefForPosition(applicant.mostRecentApplication, position);
 
-    const instructorRatings = summary.mostRecentApplication.instructor_preferences.filter(
+    const instructorRatings = applicant.mostRecentApplication.instructor_preferences.filter(
         (pref) => pref.position.id === position.id)
         .map((rating) => {
         return rating.preference_level
@@ -188,63 +198,64 @@ function TableRow({
 
     return (
         <tr>
-            <td>{summary.applicant.last_name}</td>
-            <td>{summary.applicant.first_name}</td>
-            <td>{summary.applicant.utorid}</td>
-            <td>{summary.mostRecentApplication.department}</td>
-            <td>{summary.mostRecentApplication.program}</td>
-            <td>{summary.mostRecentApplication.yip}</td>
-            <td>{summary.mostRecentApplication.gpa && summary.mostRecentApplication.gpa}</td>
+            <td>{applicant.applicant.last_name}</td>
+            <td>{applicant.applicant.first_name}</td>
+            <td>{applicant.applicant.utorid}</td>
+            <td>{applicant.mostRecentApplication.department}</td>
+            <td>{applicant.mostRecentApplication.program}</td>
+            <td>{applicant.mostRecentApplication.yip}</td>
+            <td>{applicant.mostRecentApplication.gpa && applicant.mostRecentApplication.gpa}</td>
             <td>{statusCategory} { statusCategory === "Assigned" 
                 ? "(" + (applicantMatch ? applicantMatch.hoursAssigned : 0) + ")" 
                 : "" }</td>
             <td>{ positionPref ? positionPref.preference_level : "" }</td>
             <td>{ instructorRatings.length > 0 ? round(sum(...instructorRatings) / instructorRatings.length, 3) + " (" + instructorRatings.length + ")" : "" }</td>
-            <td>{ summary.matches.map((match) => {
+            <td>{ applicant.matches.map((match) => {
                 if (match.status === "assigned" || match.status === "staged-assigned") {
                     return match.positionCode + " (" + match.hoursAssigned + ") ";
                 }
+                return "";
             }) }</td>
 
-            <td>{ sum(...summary.matches.map((match) => {
+            <td>{ sum(...applicant.matches.map((match) => {
                 if (match.status === "assigned" || match.status === "staged-assigned") {
                     return match.hoursAssigned;
                 }
                 return 0;
             }))}</td>
-            <td>{ summary.guarantee && summary.guarantee.previousHoursFulfilled}</td>
-            <td>{ summary.guarantee && summary.guarantee.totalHoursOwed }</td>
+            <td>{ applicant.guarantee && applicant.guarantee.previousHoursFulfilled}</td>
+            <td>{ applicant.guarantee && applicant.guarantee.totalHoursOwed }</td>
         </tr>
     );
 }
 
 function GridView({
-    positionSummary,
-    applicantSummaries
+    position,
+    applicants
 }: {
-    positionSummary: PositionSummary | null;
-    applicantSummaries: ApplicantSummary[] | null;
+    position: Position;
+    applicants: ApplicantSummary[];
 }) {
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> = {};
     Object.keys(statusMapping).map((key) => applicantSummariesByMatchStatus[key] = []);
 
-    if (applicantSummaries && positionSummary) {
-        for (const applicantSummary of applicantSummaries) {
-            const applicantMatch = GetApplicantMatchForPosition(applicantSummary, positionSummary.position);
-            const statusCategory = GetMappedStatusForMatch(applicantMatch);
-            if (statusCategory) {
-                applicantSummariesByMatchStatus[statusCategory].push(applicantSummary);
-            }
+    for (const applicant of applicants) {
+        const applicantMatch = GetApplicantMatchForPosition(applicant, position);
+        const statusCategory = GetMappedStatusForMatch(applicantMatch);
+        if (statusCategory) {
+            applicantSummariesByMatchStatus[statusCategory].push(applicant);
         }
     }
 
     return (
         <div>
-        { applicantSummaries && Object.keys(applicantSummariesByMatchStatus).map((key) => {
+        { Object.keys(applicantSummariesByMatchStatus).map((key) => {
             return (
                 <GridSection
+                    key={key}
                     header={key}
-                    applicantSummaries={applicantSummariesByMatchStatus[key]}
+                    applicants={applicantSummariesByMatchStatus[key]}
+                    position={position}
                 />
             )
         })}
@@ -254,20 +265,23 @@ function GridView({
 
 function GridSection({
     header,
-    applicantSummaries
+    applicants,
+    position
 }: {
-    header: string,
-    applicantSummaries: ApplicantSummary[]
+    header: string;
+    applicants: ApplicantSummary[];
+    position: Position;
 }) {
     return (
         <div className="grid-view-section">
             <h4>{ header }</h4>
             <div className="grid-view-list">
-                { applicantSummaries.map((summary) => {
+                { applicants.map((applicant) => {
                     return (
                         <GridItem
-                            summary={summary}
-                            key={summary.applicant.id}
+                            applicant={applicant}
+                            position={position}
+                            key={applicant.applicant.id}
                         />
                     )
                 })}
@@ -277,26 +291,84 @@ function GridSection({
 }
 
 function GridItem({
-    summary
+    applicant,
+    position
 }: {
-    summary: ApplicantSummary
+    applicant: ApplicantSummary;
+    position: Position;
 }) {
+    const dispatch = useThunkDispatch();
+
+    function _upsertMatch(match: Match | null) {
+        if (!match) {
+            return;
+        }
+        return dispatch(upsertMatch(match));
+    }
+
+    async function updateMatch() {
+        await _upsertMatch(newMatch);
+    }
+
+    const applicantMatch = GetApplicantMatchForPosition(applicant, position);
+    const positionPref = GetPositionPrefForPosition(applicant.mostRecentApplication, position);
+
+    const instructorRatings = applicant.mostRecentApplication.instructor_preferences.filter(
+        (pref) => pref.position.id === position.id)
+        .map((rating) => {
+        return rating.preference_level
+    }) || [];
+
+    // Purely for testing match update functionality
+    const newMatch: Match | null = applicantMatch ? {
+        applicantId: applicantMatch.applicantId,
+        utorid: applicantMatch.utorid,
+        positionId: applicantMatch.positionId,
+        positionCode: applicantMatch.positionCode,
+        status: "assigned",
+        hoursAssigned: 60
+    } : null;
+
+
+    let filledStatus: "empty" | "under" | "matched" | "over" | "" = "";
+    const hoursOwed = applicant.guarantee ? applicant.guarantee.totalHoursOwed : 0;
+    const totalAssignedHours = round(sum(...applicant.matches.map((match) => {
+        if (match.status === "assigned" || match.status === "staged-assigned") {
+            return match.hoursAssigned;
+        }
+        return 0;
+    })), 2);
+
+    if (totalAssignedHours > hoursOwed) {
+        filledStatus = "over";
+    } else if (hoursOwed > 0) {
+        if (totalAssignedHours === 0) {
+            filledStatus = "empty"
+        } else if (totalAssignedHours === hoursOwed) {
+            filledStatus = "matched";
+        } else {
+            filledStatus = "under";
+        }
+    };
+
     return (
-        <div className="applicant-grid-item">
-            <div className="status-sidebar">
-                <div>0</div>
-                <div>0</div>
+        <div className="applicant-grid-item noselect" onClick={updateMatch}>
+            <div className={classNames("applicant-status-sidebar", filledStatus)}>
+                <div className="applicant-status-value">{ totalAssignedHours }</div>
+                <div className="applicant-status-value">{ hoursOwed }</div>
             </div>
-            <div className="grid-header">
-                <div className="applicant-name">{ summary.applicant.first_name + " " + summary.applicant.last_name }</div>
-                <div className="tooltip-icon"></div>
-                <div className="star-icon"></div>
-            </div>
-            <div className="grid-footer">
-                <div className="department">{ summary.mostRecentApplication.department?.substring(0, 1).toUpperCase() }</div>
-                <div className="program">{summary.mostRecentApplication.program?.substring(0, 1)}{summary.mostRecentApplication.yip}</div>
-                <div className="ta-rating"></div>
-                <div className="instructor-rating"></div>
+            <div className="applicant-grid-main">
+                <div className="grid-row">
+                    <div className="applicant-name">{ applicant.applicant.first_name + " " + applicant.applicant.last_name }</div>
+                    <div className="tooltip-icon"></div>
+                    <div className="star-icon"></div>
+                </div>
+                <div className="grid-row">
+                    <div className="grid-detail-small">{ applicant.mostRecentApplication.department?.substring(0, 1).toUpperCase() }</div>
+                    <div className="grid-detail-small">{ applicant.mostRecentApplication.program?.substring(0, 1) }{ applicant.mostRecentApplication.yip }</div>
+                    <div className="grid-detail-small">{ positionPref ? positionPref.preference_level : "" }</div>
+                    <div className="grid-detail-small">{ instructorRatings.length > 0 ? round(sum(...instructorRatings) / instructorRatings.length, 3) : ""}</div>
+                </div>
             </div>
         </div>
     );

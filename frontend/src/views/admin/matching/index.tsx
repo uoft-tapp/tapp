@@ -4,13 +4,12 @@ import { ContentArea } from "../../../components/layout";
 import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
 
 import { applicationsSelector, assignmentsSelector, positionsSelector, applicantsSelector } from "../../../api/actions";
 import { Assignment, Application, Applicant } from "../../../api/defs/types";
 
-import { matchesSelector, guaranteesSelector, upsertMatch, batchUpsertMatches } from "./actions";
+import { matchesSelector, guaranteesSelector, batchUpsertMatches } from "./actions";
 import { PositionSummary, ApplicantSummary, Match } from "./types";
 
 import { PositionList } from "./position-list";
@@ -43,6 +42,7 @@ export function AdminMatchingView() {
     const dispatch = useThunkDispatch();
 
     const [selectedPosition, setSelectedPosition] = React.useState(null);
+    const [test, setTest] = React.useState("");
 
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
@@ -171,27 +171,17 @@ export function AdminMatchingView() {
 
         const ret: Record<number, PositionSummary> = {};
         for (const position of positions) {
-            const assignmentsForPosition =
-                assignmentsByPositionId[position.id] || [];
-
-            const activeAssignments = assignmentsForPosition.filter(
-                (assignment) =>
-                    ["accepted", "provisional", "pending"].includes(
-                        assignment.active_offer_status || ""
-                    )
-            );
             const targetHours = round(
                 position.hours_per_assignment *
                     (position.desired_num_assignments || 0),
                 2
             );
 
-            // TODO: Update this to include staged assignment hours as well
-            const hoursAssigned = round(
-                sum(...activeAssignments.map((assignment) => assignment.hours)),
-                2
-            );
-            
+            let hoursAssigned = 0;
+            for (const match of matches.filter((match) => ["assigned", "staged-assigned"].includes(match.status) && match.positionId === position.id)) {
+                hoursAssigned += match.hoursAssigned;
+            }
+
             let filledStatus: "empty" | "under" | "matched" | "over" = "empty";
             if (targetHours > 0 && hoursAssigned === 0) {
                 filledStatus = "empty";
@@ -211,8 +201,15 @@ export function AdminMatchingView() {
                 applicantSummaries: applicantSummariesByPositionId[position.id] || []
             };
         }
+
         return ret;
     }, [positions, assignments, applications, applicants, matches, guarantees]);
+
+    let currApplicants: ApplicantSummary[] = [];
+    
+    if (selectedPosition !== null) {
+        currApplicants = positionSummaries[(selectedPosition as PositionSummary).position.id].applicantSummaries;
+    }
 
     return (
         <div className="page-body">
@@ -224,7 +221,8 @@ export function AdminMatchingView() {
                     onClick={setSelectedPosition}
                 />
                 <ApplicantView
-                    summary={selectedPosition}
+                    position={(selectedPosition as PositionSummary | null)?.position || null}
+                    applicants={currApplicants}
                 />
             </div>
             </ContentArea>

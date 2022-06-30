@@ -197,3 +197,95 @@
 .container-filler {
     flex-grow: 1;
 }
+
+/* GRID VIEW */
+.grid-view-list {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+    row-gap: 6px;
+    column-gap: 8px;
+}
+
+.applicant-grid-item {
+    display: flex;
+    width: 200px;
+    border-radius: 5px;
+    overflow: hidden;
+    align-items: center;
+    background-color: #fff;
+    filter: drop-shadow(2px 2px 2px #bbb);
+    margin-bottom: 5px;
+    cursor: pointer;
+
+    font-size: smaller;
+}
+
+.applicant-grid-item > * {
+    display: flex;
+}
+
+.applicant-status-sidebar {
+    width: 30px;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    color: #fff;
+    background-color: #cfcfcf;
+}
+
+.applicant-status-sidebar.empty {
+    background-color: #D70000;
+}
+
+.applicant-status-sidebar.under {
+    background-color: #FFCC16;
+}
+
+.applicant-status-sidebar.matched {
+    background-color: #00C12B;
+}
+
+.applicant-status-sidebar.over {
+    background-color: #00E5F3;
+}
+
+.applicant-grid-main {
+    flex-direction: column;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+.applicant-grid-main:nth-child(1) {
+    margin-top: 3px;
+}
+
+.applicant-grid-main:nth-child(2) {
+    margin-bottom: 3px;
+}
+
+.grid-row {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+}
+
+.grid-detail-small {
+    min-width: 20px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: 500;
+    color: #868686;
+    background: #eeeeee;
+}
+
+.applicant-name {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
