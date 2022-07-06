@@ -1,0 +1,42 @@
+[
+    {
+        "utorid": "colliberr",
+        "totalHoursOwed": 120,
+        "previousHoursFulfilled": 20
+    },
+    {
+        "utorid": "fardoea",
+        "totalHoursOwed": 60,
+        "previousHoursFulfilled": 0
+    },
+    {
+        "utorid": "paternostera",
+        "totalHoursOwed": 180,
+        "previousHoursFulfilled": 60
+    },
+    {
+        "utorid": "barwackk",
+        "totalHoursOwed": 240,
+        "previousHoursFulfilled": 120
+    },
+    {
+        "utorid": "cardern",
+        "totalHoursOwed": 60,
+        "previousHoursFulfilled": 0
+    },
+    {
+        "utorid": "crumpem",
+        "totalHoursOwed": 90,
+        "previousHoursFulfilled": 20
+    },
+    {
+        "utorid": "auting",
+        "totalHoursOwed": 60,
+        "previousHoursFulfilled": 0
+    },
+    {
+        "utorid": "conryk",
+        "totalHoursOwed": 150,
+        "previousHoursFulfilled": 0
+    }
+]

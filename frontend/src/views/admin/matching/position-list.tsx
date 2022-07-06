@@ -55,7 +55,7 @@ function PositionRow({
             className={classNames("position-row", "noselect")}
             onClick={() => {
                 setSelectedPosition(summary);
-                // if isFocus, show detailed info about this position
+                // TODO: if isFocus, show detailed info about this position
             }}
         >
             <div

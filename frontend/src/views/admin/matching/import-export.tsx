@@ -6,7 +6,7 @@ import { Modal, Button, Row, Form, Col } from "react-bootstrap";
 import { DataFormat } from "../../../libs/import-export";
 import { BsCircleFill } from "react-icons/bs";
 import { Match, AppointmentGuaranteeStatus } from "./types";
-import { upsertMatch } from "./actions";
+import { upsertMatch, batchUpsertGuarantees } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function ExportMatchingDataButton({
@@ -25,7 +25,7 @@ export function ExportMatchingDataButton({
         const date = new Date();
         FileSaver.saveAs(
             blob,
-            "matching_data" +
+            "matching_data-" +
                 date.getFullYear() +
                 "-" +
                 date.getMonth().toString().padStart(2, "0") +
@@ -81,7 +81,7 @@ export function ImportMatchingDataButton({
     const [diffedMatches, setDiffedMatches] = React.useState<Match[] | null>(
         null
     );
-    const [diffedGuarantees, setDiffedGuarantees] = React.useState<
+    const [newGuarantees, setNewGuarantees] = React.useState<
         AppointmentGuaranteeStatus[] | null
     >(null);
 
@@ -158,8 +158,20 @@ export function ImportMatchingDataButton({
                 setDiffedMatches(diffedMatches);
             }
 
-            // Get diffed guarantees:
-            // ...
+            if (Object.keys(fileContent.data).includes("guarantees")) {
+                setNewGuarantees(
+                    fileContent.data.guarantees.map(
+                        (guarantee: AppointmentGuaranteeStatus) => {
+                            return {
+                                utorid: guarantee.utorid,
+                                totalHoursOwed: guarantee.totalHoursOwed,
+                                previousHoursFulfilled:
+                                    guarantee.previousHoursFulfilled,
+                            } as AppointmentGuaranteeStatus;
+                        }
+                    )
+                );
+            }
         } catch (e: any) {
             console.warn(e);
         }
@@ -178,6 +190,22 @@ export function ImportMatchingDataButton({
         await _upsertMatch(match);
     }
 
+    function _batchUpsertGuarantees(
+        guarantees: AppointmentGuaranteeStatus[] | null
+    ) {
+        if (!guarantees) {
+            return;
+        }
+
+        return dispatch(batchUpsertGuarantees(guarantees));
+    }
+
+    async function updateGuarantees(
+        guarantees: AppointmentGuaranteeStatus[] | null
+    ) {
+        await _batchUpsertGuarantees(guarantees);
+    }
+
     function _onConfirm() {
         if (diffedMatches) {
             for (const match of diffedMatches) {
@@ -185,8 +213,8 @@ export function ImportMatchingDataButton({
             }
         }
 
-        if (diffedGuarantees) {
-            console.log("Guarantees: ", diffedGuarantees);
+        if (newGuarantees) {
+            updateGuarantees(newGuarantees);
         }
 
         setFileArrayBuffer(null);
@@ -258,6 +286,9 @@ export function ImportGuaranteesButton({
     const [fileContent, setFileContent] = React.useState<DataFormat | null>(
         null
     );
+    const [newGuarantees, setNewGuarantees] = React.useState<
+        AppointmentGuaranteeStatus[] | null
+    >(null);
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {
@@ -280,12 +311,71 @@ export function ImportGuaranteesButton({
         reader.readAsArrayBuffer(file);
     }
 
-    function _onConfirm() {
-        // TODO: check for updates to state
-        console.log("Confirmed input!");
+    React.useEffect(() => {
+        if (!fileArrayBuffer) {
+            return;
+        }
 
-        // If data has changed, update as edited:
-        setMarkAsUpdated(true);
+        const rawData = new Uint8Array(fileArrayBuffer);
+        try {
+            const str = new TextDecoder().decode(rawData);
+            setFileContent({ data: JSON.parse(str), fileType: "json" });
+            return;
+            // eslint-disable-next-line
+        } catch (e) {}
+
+        console.warn(
+            "Could not determine file type for",
+            fileInputLabel,
+            fileArrayBuffer
+        );
+    }, [fileArrayBuffer, fileInputLabel]);
+
+    React.useEffect(() => {
+        if (!fileContent) {
+            return;
+        }
+        try {
+            setNewGuarantees(
+                fileContent.data.map(
+                    (guarantee: AppointmentGuaranteeStatus) => {
+                        return {
+                            utorid: guarantee.utorid,
+                            totalHoursOwed: guarantee.totalHoursOwed,
+                            previousHoursFulfilled:
+                                guarantee.previousHoursFulfilled,
+                        } as AppointmentGuaranteeStatus;
+                    }
+                )
+            );
+        } catch (e: any) {
+            console.warn(e);
+        }
+    }, [fileContent]);
+
+    const dispatch = useThunkDispatch();
+
+    function _batchUpsertGuarantees(
+        guarantees: AppointmentGuaranteeStatus[] | null
+    ) {
+        if (!guarantees) {
+            return;
+        }
+
+        return dispatch(batchUpsertGuarantees(guarantees));
+    }
+
+    async function updateGuarantees(
+        guarantees: AppointmentGuaranteeStatus[] | null
+    ) {
+        await _batchUpsertGuarantees(guarantees);
+    }
+
+    function _onConfirm() {
+        if (newGuarantees) {
+            updateGuarantees(newGuarantees);
+            setMarkAsUpdated(true);
+        }
 
         setFileArrayBuffer(null);
         setFileContent(null);
@@ -306,9 +396,7 @@ export function ImportGuaranteesButton({
             </Button>
             <Modal show={addDialogVisible}>
                 <Modal.Header>
-                    <Modal.Title>
-                        Import Subsequent Appointment Status
-                    </Modal.Title>
+                    <Modal.Title>Import Appointment Guarantee Data</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

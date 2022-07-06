@@ -171,7 +171,7 @@ export function AdminMatchingView() {
 
             const applicantGuarantee =
                 guarantees.find(
-                    (guarantee) => guarantee.applicantId === applicant.id
+                    (guarantee) => guarantee.utorid === applicant.utorid
                 ) || null;
 
             const newApplicantSummary = {

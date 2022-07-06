@@ -1,4 +1,9 @@
-import { UPSERT_MATCH, BATCH_UPSERT_MATCHES, UPSERT_GUARANTEE, BATCH_UPSERT_GUARANTEES } from "./constants";
+import {
+    UPSERT_MATCH,
+    BATCH_UPSERT_MATCHES,
+    UPSERT_GUARANTEE,
+    BATCH_UPSERT_GUARANTEES,
+} from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus } from "./types";
 
@@ -49,8 +54,7 @@ const matchingDataReducer = createReducer(initialState, {
         // Check if guarantee for a particular applicant already exists
         const existingGuarantee =
             state.guarantees.find(
-                (guarantee) =>
-                    guarantee.applicantId === action.payload.applicantId
+                (guarantee) => guarantee.utorid === action.payload.utorid
             ) || null;
 
         if (!existingGuarantee) {
@@ -64,7 +68,7 @@ const matchingDataReducer = createReducer(initialState, {
         return {
             ...state,
             guarantees: state.guarantees.map((guarantee) => {
-                if (guarantee.applicantId === action.payload.applicantId) {
+                if (guarantee.utorid === action.payload.utorid) {
                     return action.payload;
                 } else {
                     return guarantee;

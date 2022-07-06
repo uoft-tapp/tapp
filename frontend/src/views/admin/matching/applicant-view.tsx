@@ -473,7 +473,7 @@ function GridItem({
     const hoursOwed = applicant.guarantee
         ? applicant.guarantee.totalHoursOwed
         : 0;
-    const totalAssignedHours = round(
+    let totalAssignedHours = round(
         sum(
             ...applicant.matches.map((match) => {
                 if (
@@ -484,7 +484,10 @@ function GridItem({
                 }
                 return 0;
             })
-        ),
+        ) +
+            (applicant.guarantee
+                ? applicant.guarantee.previousHoursFulfilled
+                : 0),
         2
     );
 

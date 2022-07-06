@@ -15,7 +15,6 @@ export type Match = {
 };
 
 export type AppointmentGuaranteeStatus = {
-    applicantId: number;
     utorid: string;
     totalHoursOwed: number;
     previousHoursFulfilled: number;
