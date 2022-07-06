@@ -1,6 +1,11 @@
 import { RootState } from "../../../rootReducer";
-import { UPSERT_MATCH, BATCH_UPSERT_MATCHES } from "./constants";
-import { Match } from "./types";
+import {
+    UPSERT_MATCH,
+    BATCH_UPSERT_MATCHES,
+    UPSERT_GUARANTEE,
+    BATCH_UPSERT_GUARANTEES,
+} from "./constants";
+import { Match, AppointmentGuaranteeStatus } from "./types";
 
 // actions
 export const upsertMatch = (data: Match) => ({
@@ -10,6 +15,16 @@ export const upsertMatch = (data: Match) => ({
 
 export const batchUpsertMatches = (data: Match[]) => ({
     type: BATCH_UPSERT_MATCHES,
+    payload: data,
+});
+
+export const upsertGuarantee = (data: AppointmentGuaranteeStatus) => ({
+    type: UPSERT_GUARANTEE,
+    payload: data,
+});
+
+export const batchUpsertGuarantees = (data: AppointmentGuaranteeStatus[]) => ({
+    type: BATCH_UPSERT_GUARANTEES,
     payload: data,
 });
 

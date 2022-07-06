@@ -25,7 +25,8 @@ export function ExportMatchingDataButton({
         const date = new Date();
         FileSaver.saveAs(
             blob,
-            date.getFullYear() +
+            "matching_data" +
+                date.getFullYear() +
                 "-" +
                 date.getMonth().toString().padStart(2, "0") +
                 "-" +
