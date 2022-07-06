@@ -1,4 +1,9 @@
-import { Position, Applicant, Assignment, Application } from "../../../api/defs/types";
+import {
+    Position,
+    Applicant,
+    Assignment,
+    Application,
+} from "../../../api/defs/types";
 
 export type Match = {
     applicantId: number;
@@ -7,13 +12,14 @@ export type Match = {
     positionCode: string;
     status: "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
     hoursAssigned: number;
-}
+};
 
 export type AppointmentGuaranteeStatus = {
-    applicant: Applicant;
+    applicantId: number;
+    utorid: string;
     totalHoursOwed: number;
     previousHoursFulfilled: number;
-}
+};
 
 export type PositionSummary = {
     position: Position;
@@ -28,4 +34,4 @@ export type ApplicantSummary = {
     mostRecentApplication: Application;
     matches: Match[];
     guarantee: AppointmentGuaranteeStatus | null;
-}
+};

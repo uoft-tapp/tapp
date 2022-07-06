@@ -56,7 +56,7 @@ const reducer = combineReducers({
         positionsTable: positionsTableReducer,
         globals: globalReducer,
         instructor: instructorUIReducer,
-        matchingData: matchingDataReducer
+        matchingData: matchingDataReducer,
     }),
 });
 

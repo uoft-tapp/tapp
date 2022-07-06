@@ -6,16 +6,35 @@ import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 
-import { applicationsSelector, assignmentsSelector, positionsSelector, applicantsSelector } from "../../../api/actions";
+import {
+    applicationsSelector,
+    assignmentsSelector,
+    positionsSelector,
+    applicantsSelector,
+} from "../../../api/actions";
 import { Assignment, Application, Applicant } from "../../../api/defs/types";
 
-import { matchesSelector, guaranteesSelector, batchUpsertMatches } from "./actions";
+import {
+    matchesSelector,
+    guaranteesSelector,
+    batchUpsertMatches,
+} from "./actions";
 import { PositionSummary, ApplicantSummary, Match } from "./types";
 
 import { PositionList } from "./position-list";
 import { ApplicantView } from "./applicant-view";
 
-function GetNewestApplication(applicant: Applicant, applications: Application[]) {
+import {
+    ImportMatchingDataButton,
+    ImportGuaranteesButton,
+    ExportMatchingDataButton,
+} from "./import-export";
+import { FinalizeChangesButton } from "./finalize-changes";
+
+function GetNewestApplication(
+    applicant: Applicant,
+    applications: Application[]
+) {
     const matchingApplications = applications.filter(
         (application) => application.applicant.id === applicant.id
     );
@@ -41,8 +60,9 @@ export function AdminMatchingView() {
     const activeSession = useSelector(activeSessionSelector);
     const dispatch = useThunkDispatch();
 
-    const [selectedPosition, setSelectedPosition] = React.useState(null);
-    const [test, setTest] = React.useState("");
+    const [selectedPosition, setSelectedPosition] =
+        React.useState<PositionSummary | null>(null);
+    const [markAsUpdated, setMarkAsUpdated] = React.useState(false);
 
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
@@ -68,7 +88,10 @@ export function AdminMatchingView() {
             const initialMatches: Match[] = [];
 
             for (const applicant of applicants) {
-                const mostRecentApplication = GetNewestApplication(applicant, applications);
+                const mostRecentApplication = GetNewestApplication(
+                    applicant,
+                    applications
+                );
                 if (!mostRecentApplication) {
                     continue;
                 }
@@ -81,7 +104,7 @@ export function AdminMatchingView() {
                         positionId: positionPreference.position.id,
                         positionCode: positionPreference.position.position_code,
                         status: "applied",
-                        hoursAssigned: 0
+                        hoursAssigned: 0,
                     });
                 }
             }
@@ -89,12 +112,18 @@ export function AdminMatchingView() {
             // Mark positions as being assigned
             for (const assignment of assignments) {
                 const matchingAssignment = initialMatches.find(
-                    (match) => (match.applicantId === assignment.applicant.id && match.positionId === assignment.position.id && match.status === "applied"));
+                    (match) =>
+                        match.applicantId === assignment.applicant.id &&
+                        match.positionId === assignment.position.id &&
+                        match.status === "applied"
+                );
 
                 // Update existing match object if it exists
                 if (matchingAssignment) {
                     matchingAssignment.status = "assigned";
-                    matchingAssignment.hoursAssigned = assignment.hours ? assignment.hours : 0;
+                    matchingAssignment.hoursAssigned = assignment.hours
+                        ? assignment.hours
+                        : 0;
                 } else {
                     // Otherwise, create a new one
                     initialMatches.push({
@@ -103,7 +132,7 @@ export function AdminMatchingView() {
                         positionId: assignment.position.id,
                         positionCode: assignment.position.position_code,
                         status: "assigned",
-                        hoursAssigned: assignment.hours ? assignment.hours : 0
+                        hoursAssigned: assignment.hours ? assignment.hours : 0,
                     });
                 }
             }
@@ -112,7 +141,7 @@ export function AdminMatchingView() {
         }
 
         initializeMatches();
-    }, [dispatch, applicants, assignments, applications])
+    }, [dispatch, applicants, assignments, applications]);
 
     // Get information about positions
     const positionSummaries = React.useMemo(() => {
@@ -123,50 +152,68 @@ export function AdminMatchingView() {
             assignmentsByPositionId[assignment.position.id].push(assignment);
         }
 
-        const applicantSummariesByPositionId: Record<number, ApplicantSummary[]> = {};
+        const applicantSummariesByPositionId: Record<
+            number,
+            ApplicantSummary[]
+        > = {};
         for (const applicant of applicants) {
-            const newestApplication = GetNewestApplication(applicant, applications);
+            const newestApplication = GetNewestApplication(
+                applicant,
+                applications
+            );
             if (!newestApplication) {
                 continue;
             }
 
-            const applicantMatches = matches.filter(
-                (match) => match.applicantId === applicant.id
-            ) || [];
+            const applicantMatches =
+                matches.filter((match) => match.applicantId === applicant.id) ||
+                [];
 
-            const applicantGuarantee = guarantees.find(
-                (guarantee) => guarantee.applicant.id === applicant.id
-            ) || null;
+            const applicantGuarantee =
+                guarantees.find(
+                    (guarantee) => guarantee.applicantId === applicant.id
+                ) || null;
 
             const newApplicantSummary = {
                 applicant: applicant,
                 mostRecentApplication: newestApplication,
                 matches: applicantMatches,
-                guarantee: applicantGuarantee
-            }
+                guarantee: applicantGuarantee,
+            };
 
-            newApplicantSummary.mostRecentApplication.position_preferences.forEach(position => {
-                applicantSummariesByPositionId[position.position.id] =
-                    applicantSummariesByPositionId[position.position.id] || [];
-                applicantSummariesByPositionId[position.position.id].push(newApplicantSummary);
-            })
+            newApplicantSummary.mostRecentApplication.position_preferences.forEach(
+                (position) => {
+                    applicantSummariesByPositionId[position.position.id] =
+                        applicantSummariesByPositionId[position.position.id] ||
+                        [];
+                    applicantSummariesByPositionId[position.position.id].push(
+                        newApplicantSummary
+                    );
+                }
+            );
 
             // Add summary to positions where the applicant has been assigned:
-            assignments.filter(
-                (assignment) => assignment.applicant.id === applicant.id
-            ).forEach(
-                (assignment) => {
-                    applicantSummariesByPositionId[assignment.position.id] =  
-                        applicantSummariesByPositionId[assignment.position.id] || [];
+            assignments
+                .filter(
+                    (assignment) => assignment.applicant.id === applicant.id
+                )
+                .forEach((assignment) => {
+                    applicantSummariesByPositionId[assignment.position.id] =
+                        applicantSummariesByPositionId[
+                            assignment.position.id
+                        ] || [];
 
-                    const existingSummary = applicantSummariesByPositionId[assignment.position.id].find((summary) => 
-                        summary.applicant.id === applicant.id);
+                    const existingSummary = applicantSummariesByPositionId[
+                        assignment.position.id
+                    ].find((summary) => summary.applicant.id === applicant.id);
 
                     // Add the applicant summary to the position only if the summary does not already exist
                     if (!existingSummary) {
-                        applicantSummariesByPositionId[assignment.position.id].push(newApplicantSummary);
+                        applicantSummariesByPositionId[
+                            assignment.position.id
+                        ].push(newApplicantSummary);
                     }
-            });
+                });
         }
 
         const ret: Record<number, PositionSummary> = {};
@@ -178,7 +225,11 @@ export function AdminMatchingView() {
             );
 
             let hoursAssigned = 0;
-            for (const match of matches.filter((match) => ["assigned", "staged-assigned"].includes(match.status) && match.positionId === position.id)) {
+            for (const match of matches.filter(
+                (match) =>
+                    ["assigned", "staged-assigned"].includes(match.status) &&
+                    match.positionId === position.id
+            )) {
                 hoursAssigned += match.hoursAssigned;
             }
 
@@ -198,7 +249,8 @@ export function AdminMatchingView() {
                 hoursAssigned,
                 filledStatus,
                 assignments: assignmentsByPositionId[position.id] || [],
-                applicantSummaries: applicantSummariesByPositionId[position.id] || []
+                applicantSummaries:
+                    applicantSummariesByPositionId[position.id] || [],
             };
         }
 
@@ -206,25 +258,43 @@ export function AdminMatchingView() {
     }, [positions, assignments, applications, applicants, matches, guarantees]);
 
     let currApplicants: ApplicantSummary[] = [];
-    
+
     if (selectedPosition !== null) {
-        currApplicants = positionSummaries[(selectedPosition as PositionSummary).position.id].applicantSummaries;
+        currApplicants =
+            positionSummaries[selectedPosition.position.id].applicantSummaries;
     }
 
     return (
         <div className="page-body">
             <ContentArea>
-            <div className="matching-container">
-                <PositionList 
-                    currPosition={selectedPosition}
-                    summaries={positionSummaries}
-                    onClick={setSelectedPosition}
-                />
-                <ApplicantView
-                    position={(selectedPosition as PositionSummary | null)?.position || null}
-                    applicants={currApplicants}
-                />
-            </div>
+                <div className="matching-container">
+                    <div className="matching-body">
+                        <PositionList
+                            currPosition={selectedPosition}
+                            summaries={positionSummaries}
+                            setSelectedPosition={setSelectedPosition}
+                        />
+                        <ApplicantView
+                            position={selectedPosition?.position || null}
+                            applicants={currApplicants}
+                            setMarkAsUpdated={setMarkAsUpdated}
+                        />
+                    </div>
+                    <div className="matching-footer">
+                        <ImportMatchingDataButton
+                            setMarkAsUpdated={setMarkAsUpdated}
+                        />
+                        <ImportGuaranteesButton
+                            setMarkAsUpdated={setMarkAsUpdated}
+                        />
+                        <ExportMatchingDataButton
+                            markAsUpdated={markAsUpdated}
+                            setMarkAsUpdated={setMarkAsUpdated}
+                        />
+                        <div className="footer-button-separator" />
+                        <FinalizeChangesButton />
+                    </div>
+                </div>
             </ContentArea>
         </div>
     );

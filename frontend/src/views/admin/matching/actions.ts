@@ -10,10 +10,12 @@ export const upsertMatch = (data: Match) => ({
 
 export const batchUpsertMatches = (data: Match[]) => ({
     type: BATCH_UPSERT_MATCHES,
-    payload: data
-})
+    payload: data,
+});
 
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
-export const matchesSelector = (state: RootState) => state.ui.matchingData.matches;
-export const guaranteesSelector = (state: RootState) => state.ui.matchingData.guarantees;
+export const matchesSelector = (state: RootState) =>
+    state.ui.matchingData.matches;
+export const guaranteesSelector = (state: RootState) =>
+    state.ui.matchingData.guarantees;
