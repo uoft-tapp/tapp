@@ -27,7 +27,10 @@ export function FinalizeChangesButton() {
     function onClick() {
         setShowDialog(true);
 
-        // Sort assignments by utorid:
+        // TODO: Update to a more meaningful sort
+        // position code > name
+        // or name > position code
+        // Sort assignments by utorid
         setStagedAssignments(
             matchingData.matches
                 .filter((match) => match.status === "staged-assigned")
@@ -45,27 +48,29 @@ export function FinalizeChangesButton() {
     }
 
     function _onConfirm() {
-        if (stagedAssignments) {
-            for (const match of stagedAssignments) {
-                const newAssignment = {
-                    position: positions.find(
-                        (position) => position.id === match.positionId
-                    ),
-                    position_id: match.positionId,
-                    hours: match.hoursAssigned,
-                    applicant: applicants.find(
-                        (applicant) =>
-                            applicant.utorid === match.utorid &&
-                            applicant.id === match.applicantId
-                    ),
-                    applicant_id: match.applicantId,
-                };
+        setShowDialog(false);
 
-                makeAssignment(newAssignment as Partial<Assignment>);
-            }
+        if (!stagedAssignments) {
+            return;
         }
 
-        setShowDialog(false);
+        for (const match of stagedAssignments) {
+            const newAssignment = {
+                position: positions.find(
+                    (position) => position.id === match.positionId
+                ),
+                position_id: match.positionId,
+                hours: match.hoursAssigned,
+                applicant: applicants.find(
+                    (applicant) =>
+                        applicant.utorid === match.utorid &&
+                        applicant.id === match.applicantId
+                ),
+                applicant_id: match.applicantId,
+            };
+
+            makeAssignment(newAssignment as Partial<Assignment>);
+        }
     }
 
     return (
@@ -88,7 +93,13 @@ export function FinalizeChangesButton() {
                         <ul>
                             {stagedAssignments.map((match) => {
                                 return (
-                                    <li>
+                                    <li
+                                        key={
+                                            "" +
+                                            match.utorid +
+                                            match.positionCode
+                                        }
+                                    >
                                         {match.utorid} - {match.positionCode} -{" "}
                                         {match.hoursAssigned}
                                     </li>

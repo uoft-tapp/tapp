@@ -30,7 +30,7 @@ export type PositionSummary = {
 
 export type ApplicantSummary = {
     applicant: Applicant;
-    mostRecentApplication: Application;
+    application: Application;
     matches: Match[];
     guarantee: AppointmentGuaranteeStatus | null;
 };

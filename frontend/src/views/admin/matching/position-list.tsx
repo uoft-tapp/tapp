@@ -10,23 +10,23 @@ import { round } from "../../../libs/utils";
 import "./styles.css";
 
 function PositionRow({
-    summary,
-    isFocus,
+    positionSummary,
+    focused,
     setSelectedPosition,
 }: {
-    summary: PositionSummary;
-    isFocus: boolean;
+    positionSummary: PositionSummary;
+    focused: boolean;
     setSelectedPosition: Function;
 }) {
     const targetHours = round(
-        summary.position.hours_per_assignment *
-            (summary.position.desired_num_assignments || 0),
+        positionSummary.position.hours_per_assignment *
+            (positionSummary.position.desired_num_assignments || 0),
         2
     );
 
     let backgroundStyle = "";
 
-    switch (summary.filledStatus) {
+    switch (positionSummary.filledStatus) {
         case "over":
             backgroundStyle = "rgba(0, 229, 243, 0.15)";
             break;
@@ -35,7 +35,7 @@ function PositionRow({
             break;
         case "under":
             let percentage = round(
-                (summary.hoursAssigned / targetHours) * 100,
+                (positionSummary.hoursAssigned / targetHours) * 100,
                 0
             );
             backgroundStyle =
@@ -54,18 +54,18 @@ function PositionRow({
             style={{ background: backgroundStyle }}
             className={classNames("position-row", "noselect")}
             onClick={() => {
-                setSelectedPosition(summary);
-                // TODO: if isFocus, show detailed info about this position
+                setSelectedPosition(positionSummary);
+                // TODO: if focused, show detailed info about this position
             }}
         >
             <div
-                className={classNames("status-sidebar", summary.filledStatus)}
+                className={classNames("status-sidebar", positionSummary.filledStatus)}
             ></div>
             <span className="position-title">
-                {summary.position.position_code}
+                {positionSummary.position.position_code}
             </span>
             <span className="position-hours-filled">
-                {summary.hoursAssigned}/{targetHours}
+                {positionSummary.hoursAssigned}/{targetHours}
             </span>
         </div>
     );
@@ -120,8 +120,8 @@ export function PositionList({
             <div className="position-list">
                 {filteredList.map((summary) => (
                     <PositionRow
-                        summary={summary}
-                        isFocus={summary === currPosition}
+                        positionSummary={summary}
+                        focused={summary === currPosition}
                         setSelectedPosition={setSelectedPosition}
                         key={summary.position.id}
                     />

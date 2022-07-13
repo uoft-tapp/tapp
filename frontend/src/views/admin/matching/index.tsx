@@ -31,7 +31,7 @@ import {
 } from "./import-export";
 import { FinalizeChangesButton } from "./finalize-changes";
 
-function GetNewestApplication(
+function getNewestApplication(
     applicant: Applicant,
     applications: Application[]
 ) {
@@ -88,7 +88,7 @@ export function AdminMatchingView() {
             const initialMatches: Match[] = [];
 
             for (const applicant of applicants) {
-                const mostRecentApplication = GetNewestApplication(
+                const mostRecentApplication = getNewestApplication(
                     applicant,
                     applications
                 );
@@ -157,7 +157,7 @@ export function AdminMatchingView() {
             ApplicantSummary[]
         > = {};
         for (const applicant of applicants) {
-            const newestApplication = GetNewestApplication(
+            const newestApplication = getNewestApplication(
                 applicant,
                 applications
             );
@@ -176,44 +176,38 @@ export function AdminMatchingView() {
 
             const newApplicantSummary = {
                 applicant: applicant,
-                mostRecentApplication: newestApplication,
+                application: newestApplication,
                 matches: applicantMatches,
                 guarantee: applicantGuarantee,
             };
 
-            newApplicantSummary.mostRecentApplication.position_preferences.forEach(
-                (position) => {
-                    applicantSummariesByPositionId[position.position.id] =
-                        applicantSummariesByPositionId[position.position.id] ||
-                        [];
-                    applicantSummariesByPositionId[position.position.id].push(
-                        newApplicantSummary
-                    );
-                }
-            );
+            for (const position of newApplicantSummary.application.position_preferences) {
+                applicantSummariesByPositionId[position.position.id] =
+                    applicantSummariesByPositionId[position.position.id] ||
+                    [];
+                applicantSummariesByPositionId[position.position.id].push(
+                    newApplicantSummary
+                );
+            };
 
             // Add summary to positions where the applicant has been assigned:
-            assignments
-                .filter(
-                    (assignment) => assignment.applicant.id === applicant.id
-                )
-                .forEach((assignment) => {
-                    applicantSummariesByPositionId[assignment.position.id] =
-                        applicantSummariesByPositionId[
-                            assignment.position.id
-                        ] || [];
-
-                    const existingSummary = applicantSummariesByPositionId[
+            for (const assignment of assignments.filter((assignment) => assignment.applicant.id === applicant.id)) {
+                applicantSummariesByPositionId[assignment.position.id] =
+                    applicantSummariesByPositionId[
                         assignment.position.id
-                    ].find((summary) => summary.applicant.id === applicant.id);
+                    ] || [];
 
-                    // Add the applicant summary to the position only if the summary does not already exist
-                    if (!existingSummary) {
-                        applicantSummariesByPositionId[
-                            assignment.position.id
-                        ].push(newApplicantSummary);
-                    }
-                });
+                const existingSummary = applicantSummariesByPositionId[
+                    assignment.position.id
+                ].find((summary) => summary.applicant.id === applicant.id);
+
+                // Add the applicant summary to the position only if the summary does not already exist
+                if (!existingSummary) {
+                    applicantSummariesByPositionId[
+                        assignment.position.id
+                    ].push(newApplicantSummary);
+                }
+            };
         }
 
         const ret: Record<number, PositionSummary> = {};
@@ -261,7 +255,7 @@ export function AdminMatchingView() {
 
     if (selectedPosition !== null) {
         currApplicants =
-            positionSummaries[selectedPosition.position.id].applicantSummaries;
+            positionSummaries[selectedPosition.position.id]?.applicantSummaries;
     }
 
     return (
