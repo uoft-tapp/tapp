@@ -374,3 +374,8 @@
     display: flex;
     column-gap: 3px;
 }
+
+.sort-dropdown-container > * > .dropdown-menu.show {
+    max-height: 250px;
+    overflow-y: scroll;
+}
