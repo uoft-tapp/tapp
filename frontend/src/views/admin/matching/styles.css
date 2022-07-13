@@ -369,3 +369,8 @@
 .star-icon:hover {
     color: gold;
 }
+
+.sort-dropdown-container {
+    display: flex;
+    column-gap: 3px;
+}

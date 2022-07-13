@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-import { Position, Application } from "../../../api/defs/types";
+import { Position } from "../../../api/defs/types";
 import { ApplicantSummary, Match } from "./types";
 
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
@@ -19,8 +19,12 @@ import { round } from "../../../libs/utils";
 import { upsertMatch } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
-import { getApplicantMatchForPosition, getPositionPrefForPosition, getApplicantTotalHoursAssigned } from "./utils";
-import { sortKeys, applySorts } from "./sorts";
+import {
+    getApplicantMatchForPosition,
+    getPositionPrefForPosition,
+    getApplicantTotalHoursAssigned,
+} from "./utils";
+import { applySorts, SortDropdowns } from "./sorts";
 
 import "./styles.css";
 
@@ -66,35 +70,25 @@ export function ApplicantView({
         }
 
         // Filter applicants by value
-        const ret: ApplicantSummary[] = applicants
-            .filter(
-                (applicant) =>
-                    (
-                        applicant.applicant.first_name +
-                        " " +
-                        applicant.applicant.last_name +
-                        " " +
-                        applicant.applicant.utorid
-                    )
-                        .toLowerCase()
-                        .includes(searchValue.toLowerCase()) &&
-                    programFilters.includes(
-                        applicant.application?.program || ""
-                    )
-            );
+        const ret: ApplicantSummary[] = applicants.filter(
+            (applicant) =>
+                (
+                    applicant.applicant.first_name +
+                    " " +
+                    applicant.applicant.last_name +
+                    " " +
+                    applicant.applicant.utorid
+                )
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase()) &&
+                programFilters.includes(applicant.application?.program || "")
+        );
 
         // Apply sorts based on sort lists
-        // temporarily hardcoding the sort list for debugging w/o UI support:
-        applySorts(ret, ["totalHoursOwedDesc"], position);
+        applySorts(ret, sortList, position);
 
         return ret;
-    }, [searchValue, applicants, programFilters, sortList]);
-
-    for (const a of filteredApplicants) {
-        let aHoursRemaining = (a.guarantee?.totalHoursOwed || 0) -
-            (a.guarantee?.previousHoursFulfilled || 0) -
-            getApplicantTotalHoursAssigned(a);
-    }
+    }, [searchValue, sortList, programFilters, applicants, position]);
 
     return (
         <div className="matching-course-main">
@@ -130,6 +124,10 @@ export function ApplicantView({
                             }}
                         />
                     </div>
+                    <SortDropdowns
+                        sortList={sortList}
+                        setSortList={setSortList}
+                    />
                     <div className="container-filler"></div>
                     <ToggleButtonGroup
                         id="view-toggle"
@@ -265,10 +263,7 @@ function TableRow({
             <td>{applicant.application.department}</td>
             <td>{applicant.application.program}</td>
             <td>{applicant.application.yip}</td>
-            <td>
-                {applicant.application.gpa &&
-                    applicant.application.gpa}
-            </td>
+            <td>{applicant.application.gpa && applicant.application.gpa}</td>
             <td>
                 {statusCategory}{" "}
                 {statusCategory === "Assigned"
@@ -306,9 +301,7 @@ function TableRow({
                 })}
             </td>
 
-            <td>
-                {getApplicantTotalHoursAssigned(applicant)}
-            </td>
+            <td>{getApplicantTotalHoursAssigned(applicant)}</td>
             <td>
                 {applicant.guarantee &&
                     applicant.guarantee.previousHoursFulfilled}
@@ -500,7 +493,7 @@ function GridItem({
                     </div>
                     <div className="icon-container">
                         <ApplicantTooltip />
-                        <ApplicantStar 
+                        <ApplicantStar
                             match={applicantMatch}
                             setMarkAsUpdated={setMarkAsUpdated}
                         />
@@ -513,10 +506,7 @@ function GridItem({
                             .toUpperCase()}
                     </div>
                     <div className="grid-detail-small">
-                        {applicant.application.program?.substring(
-                            0,
-                            1
-                        )}
+                        {applicant.application.program?.substring(0, 1)}
                         {applicant.application.yip}
                     </div>
                     <div className="grid-detail-small">
@@ -540,7 +530,13 @@ function GridItem({
     );
 }
 
-function ApplicantStar({match, setMarkAsUpdated}: {match: Match | null, setMarkAsUpdated: Function}) {
+function ApplicantStar({
+    match,
+    setMarkAsUpdated,
+}: {
+    match: Match | null;
+    setMarkAsUpdated: Function;
+}) {
     const dispatch = useThunkDispatch();
 
     async function _onClick(e: any) {
@@ -549,18 +545,33 @@ function ApplicantStar({match, setMarkAsUpdated}: {match: Match | null, setMarkA
         if (match) {
             const newMatch = {
                 ...match,
-                status: match.status === "starred" ? "applied" : (match.status === "applied" ? "starred" : match.status as "applied" | "starred" | "staged-assigned" | "assigned" | "hidden")
-            }
+                status:
+                    match.status === "starred"
+                        ? "applied"
+                        : match.status === "applied"
+                        ? "starred"
+                        : (match.status as
+                              | "applied"
+                              | "starred"
+                              | "staged-assigned"
+                              | "assigned"
+                              | "hidden"),
+            };
 
             await dispatch(upsertMatch(newMatch));
-            
-            if (newMatch.status === "starred" || newMatch.status === "applied") {
+
+            if (
+                newMatch.status === "starred" ||
+                newMatch.status === "applied"
+            ) {
                 setMarkAsUpdated(true);
             }
         }
     }
 
-    return <BsStarFill className="star-icon" onClick={async (e) => _onClick(e)} />;
+    return (
+        <BsStarFill className="star-icon" onClick={async (e) => _onClick(e)} />
+    );
 }
 
 function ApplicantTooltip() {
