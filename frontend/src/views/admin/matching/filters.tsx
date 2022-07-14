@@ -376,18 +376,18 @@ function filterTaPref(
             (applicantSummary) => {
                 // Get the applicant's preference for this position
                 if (!applicantSummary.application) {
-                    return;
+                    return null;
                 }
 
                 const applicantPref = getPositionPrefForPosition(applicantSummary.application, currPosition);
 
                 if (!applicantPref || excludeValues.includes(applicantPref.preference_level)) {
-                    return;
+                    return null;
                 }
 
                 return applicantSummary;
             }
-        ) || []
+        ).filter((applicantSummary) => applicantSummary !== null) || []
     );
 }
 
@@ -406,12 +406,12 @@ function filterPositionStatus(
             (applicantSummary) => {
                 const match = getApplicantMatchForPosition(applicantSummary, currPosition);
                 if (!match || excludeValues.includes(match.status)) {
-                    return;
+                    return null;
                 }
 
                 return applicantSummary;
             }
-        ) || []
+        ).filter((applicantSummary) => applicantSummary !== null) || []
     );
 }
 
@@ -442,11 +442,11 @@ function filterHourFulfillment(
                 }
 
                 if (excludeValues.includes(applicantHourStatus)) {
-                    return;
+                    return null;
                 }
 
                 return applicantSummary;
             }
-        ) || []
+        ).filter((applicantSummary) => applicantSummary !== null) || []
     );
 }

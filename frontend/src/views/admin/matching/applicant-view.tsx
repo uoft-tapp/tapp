@@ -51,6 +51,9 @@ export function ApplicantView({
     const [showFilters, setShowFilters] = React.useState(false);
     const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
 
+    // const [selectedApplicant, setSelectedApplicant] = React.useState<ApplicantSummary | null>(null);
+    // const []
+
     const filteredApplicants = React.useMemo(() => {
         if (!applicants) {
             return [] as ApplicantSummary[];
@@ -167,6 +170,7 @@ function TableView({
         <Table striped bordered hover responsive size="sm">
             <thead>
                 <tr>
+                    <th>Status</th>
                     <th>Last</th>
                     <th>First</th>
                     <th>UTORid</th>
@@ -174,7 +178,6 @@ function TableView({
                     <th>Program</th>
                     <th>YIP</th>
                     <th>GPA</th>
-                    <th>Status</th>
                     <th>TA Rating</th>
                     <th>Instructor Rating</th>
                     <th>Assignments</th>
@@ -234,13 +237,6 @@ function TableRow({
 
     return (
         <tr>
-            <td>{applicant.applicant.last_name}</td>
-            <td>{applicant.applicant.first_name}</td>
-            <td>{applicant.applicant.utorid}</td>
-            <td>{applicant.application.department}</td>
-            <td>{applicant.application.program}</td>
-            <td>{applicant.application.yip}</td>
-            <td>{applicant.application.gpa && applicant.application.gpa}</td>
             <td>
                 {statusCategory}{" "}
                 {statusCategory === "Assigned"
@@ -249,6 +245,13 @@ function TableRow({
                       ")"
                     : ""}
             </td>
+            <td>{applicant.applicant.last_name}</td>
+            <td>{applicant.applicant.first_name}</td>
+            <td>{applicant.applicant.utorid}</td>
+            <td>{applicant.application.department}</td>
+            <td>{applicant.application.program}</td>
+            <td>{applicant.application.yip}</td>
+            <td>{applicant.application.gpa ? applicant.application.gpa : ""}</td>
             <td>{positionPref ? positionPref.preference_level : ""}</td>
             <td>
                 {instructorRatings.length > 0
@@ -277,7 +280,6 @@ function TableRow({
                     return "";
                 })}
             </td>
-
             <td>{getApplicantTotalHoursAssigned(applicant)}</td>
             <td>
                 {applicant.guarantee &&
@@ -412,7 +414,7 @@ function GridItem({
               positionId: applicantMatch.positionId,
               positionCode: applicantMatch.positionCode,
               status: "staged-assigned",
-              hoursAssigned: 60,
+              hoursAssigned: position.hours_per_assignment || 0,
           }
         : null;
 
@@ -544,6 +546,12 @@ function ApplicantStar({
                 setMarkAsUpdated(true);
             }
         }
+    }
+
+    if (match && match.status === "starred") {
+        return (
+            <BsStarFill className="star-icon filled" onClick={async (e) => _onClick(e)} />
+        );
     }
 
     return (

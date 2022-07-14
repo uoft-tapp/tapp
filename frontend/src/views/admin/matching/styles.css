@@ -363,6 +363,10 @@
     transition: color .2s ease-out;
 }
 
+.star-icon.filled {
+    color: gold;
+}
+
 .star-icon:hover {
     color: gold;
 }
