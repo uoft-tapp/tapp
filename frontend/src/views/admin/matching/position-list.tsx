@@ -107,7 +107,7 @@ export function PositionList({
                 <Form inline>
                     <Form.Control
                         type="text"
-                        placeholder="Search positions..."
+                        placeholder="Filter by position code..."
                         style={{ width: "100%" }}
                         className="mr-sm-2"
                         onChange={(e) => setSearchValue(e.target.value)}

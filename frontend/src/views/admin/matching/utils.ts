@@ -4,8 +4,12 @@ import { sum } from "../../../api/mockAPI/utils";
 
 export function getApplicantMatchForPosition(
     applicantSummary: ApplicantSummary,
-    position: Position
+    position: Position | null
 ) {
+    if (!position || !applicantSummary || !applicantSummary.matches) {
+        return null;
+    }
+
     return (
         applicantSummary.matches.find(
             (match) => match.positionId === position.id
@@ -15,8 +19,12 @@ export function getApplicantMatchForPosition(
 
 export function getPositionPrefForPosition(
     application: Application,
-    position: Position
+    position: Position | null
 ) {
+    if (!position) {
+        return null;
+    }
+
     return application.position_preferences?.find(
         (positionPref) => positionPref.position.id === position.id
     ) || null;

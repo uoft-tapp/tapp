@@ -1,6 +1,11 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { Position } from "../../../api/defs/types";
 import { ApplicantSummary } from "./types";
+import {
+    getPositionPrefForPosition,
+    getApplicantMatchForPosition,
+    getApplicantTotalHoursAssigned
+} from "./utils";
 
 export type FilterListItem = {
     section: string;
@@ -13,12 +18,12 @@ type FilterMapItem = {
 };
 
 type FilterMapItemValue = {
-    value: string;
+    value: any;
     label: string;
 };
 
 const filterMap: Record<string, FilterMapItem> = {
-    Program: {
+    "Program": {
         filterFunc: filterProgram,
         values: [
             {
@@ -41,8 +46,124 @@ const filterMap: Record<string, FilterMapItem> = {
                 value: "U",
                 label: "Undergraduate",
             },
+            {
+                value: "Other",
+                label: "Other",
+            },
         ],
     },
+    "Department": {
+        filterFunc: filterDept,
+        values: [
+            {
+                value: "math",
+                label: "Mathematics/Applied Mathematics",
+            },
+            {
+                value: "cs",
+                label: "Computer Science",
+            },
+            {
+                value: "engr",
+                label: "Engineering",
+            },
+            {
+                value: "astro",
+                label: "Astronomy and Astrophysics",
+            },
+            {
+                value: "chem",
+                label: "Chemistry",
+            },
+            {
+                value: "biophys",
+                label: "Medical Biophysics",
+            },
+            {
+                value: "phys",
+                label: "Physics",
+            },
+            {
+                value: "stat",
+                label: "Statistics",
+            },
+        ],
+    },
+    "TA Preference": {
+        filterFunc: filterTaPref,
+        values: [
+            {
+                value: 3,
+                label: "High",
+            },
+            {
+                value: 2,
+                label: "Medium",
+            },
+            {
+                value: 1,
+                label: "Low",
+            },
+            {
+                value: 0,
+                label: "N/A",
+            },
+            {
+                value: -1,
+                label: "Strong Preference Against",
+            },
+        ],
+    },
+    "Position Status": {
+        filterFunc: filterPositionStatus,
+        values: [
+            {
+                value: "assigned",
+                label: "Assigned"
+            },
+            {
+                value: "staged-assigned",
+                label: "Assigned (Staged)"
+            },
+            {
+                value: "starred",
+                label: "Starred"
+            },
+            {
+                value: "applied",
+                label: "Applied"
+            },
+            {
+                value: "hidden",
+                label: "Hidden"
+            }
+        ]
+    },
+    "Hour Fulfillment": {
+        filterFunc: filterHourFulfillment,
+        values: [
+            {
+                value: "over",
+                label: "Overfilled"
+            },
+            {
+                value: "filled",
+                label: "Filled"
+            },
+            {
+                value: "under",
+                label: "Underfilled"
+            }, 
+            {
+                value: "empty",
+                label: "Unstarted"
+            },
+            {
+                value: "N/A",
+                label: "N/A"
+            }
+        ]
+    }
 };
 
 function FilterCheckbox({
@@ -110,16 +231,22 @@ export function FilterModal({
 }) {
     return (
         <>
-            <Modal show={showFilters}>
+            <Modal
+                show={showFilters}
+                onHide={() => {
+                    setShowFilters(false);
+                }}
+                dialogClassName="filter-modal"
+            >
                 <Modal.Header>
                     <Modal.Title>Filter Applicants</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form className="filter-form">
                         {Object.keys(filterMap).map((section) => {
                             return (
                                 <Form.Group className="mb-3">
-                                    <Form.Label>{section}</Form.Label>
+                                    <Form.Label className="filter-section-title">{section}</Form.Label>
                                     {filterMap[section]["values"].map(
                                         (item: FilterMapItemValue) => {
                                             return (
@@ -153,6 +280,8 @@ export function FilterModal({
     );
 }
 
+let currPosition: Position | null = null;
+
 export function applyFilters(
     applicantSummaries: ApplicantSummary[],
     filterList: FilterListItem[],
@@ -161,6 +290,8 @@ export function applyFilters(
     if (!applicantSummaries || filterList.length === 0 || !position) {
         return applicantSummaries;
     }
+
+    currPosition = position;
 
     let filteredList: ApplicantSummary[] = [...applicantSummaries];
 
@@ -198,6 +329,8 @@ function filterProgram(
         return applicantSummaries;
     }
 
+    // TODO: Special case when handling "other"
+
     return (
         applicantSummaries.filter(
             (applicantSummary) =>
@@ -205,6 +338,115 @@ function filterProgram(
                 applicantSummary.application &&
                 applicantSummary.application.program &&
                 !excludeValues.includes(applicantSummary.application.program)
+        ) || []
+    );
+}
+
+function filterDept(
+    applicantSummaries: ApplicantSummary[],
+    excludeValues: string[]
+) {
+    if (!applicantSummaries || excludeValues.length === 0) {
+        return applicantSummaries;
+    }
+
+    // TODO: Special case when handling "other"
+
+    return (
+        applicantSummaries.filter(
+            (applicantSummary) =>
+                applicantSummary &&
+                applicantSummary.application &&
+                applicantSummary.application.department &&
+                !excludeValues.includes(applicantSummary.application.department)
+        ) || []
+    );
+}
+
+function filterTaPref(
+    applicantSummaries: ApplicantSummary[],
+    excludeValues: number[]
+) {
+    if (applicantSummaries.length === 0 || excludeValues.length === 0 || currPosition === null) {
+        return applicantSummaries;
+    }
+
+    return (
+        applicantSummaries.map(
+            (applicantSummary) => {
+                // Get the applicant's preference for this position
+                if (!applicantSummary.application) {
+                    return;
+                }
+
+                const applicantPref = getPositionPrefForPosition(applicantSummary.application, currPosition);
+
+                if (!applicantPref || excludeValues.includes(applicantPref.preference_level)) {
+                    return;
+                }
+
+                return applicantSummary;
+            }
+        ) || []
+    );
+}
+
+function filterPositionStatus(
+    applicantSummaries: ApplicantSummary[],
+    excludeValues: string[]
+) {
+    if (applicantSummaries.length === 0 || excludeValues.length === 0 || currPosition === null) {
+        return applicantSummaries;
+    }
+
+    // TODO: Special case when handling "other"
+
+    return (
+        applicantSummaries.map(
+            (applicantSummary) => {
+                const match = getApplicantMatchForPosition(applicantSummary, currPosition);
+                if (!match || excludeValues.includes(match.status)) {
+                    return;
+                }
+
+                return applicantSummary;
+            }
+        ) || []
+    );
+}
+
+function filterHourFulfillment(
+    applicantSummaries: ApplicantSummary[],
+    excludeValues: string[]
+) {
+    if (applicantSummaries.length === 0 || excludeValues.length === 0) {
+        return applicantSummaries;
+    }
+
+    return (
+        applicantSummaries.map(
+            (applicantSummary) => {
+                let applicantHourStatus = "N/A";
+
+                if (applicantSummary.guarantee && applicantSummary.guarantee.totalHoursOwed > 0) {
+                    const totalHoursAssigned = getApplicantTotalHoursAssigned(applicantSummary) + applicantSummary.guarantee.previousHoursFulfilled;
+                    if (totalHoursAssigned > applicantSummary.guarantee.totalHoursOwed) {
+                        applicantHourStatus = "over";
+                    } else if (totalHoursAssigned === applicantSummary.guarantee.totalHoursOwed) {
+                        applicantHourStatus = "filled";
+                    } else if (totalHoursAssigned > 0) {
+                        applicantHourStatus = "under";
+                    } else if (totalHoursAssigned === 0) {
+                        applicantHourStatus = "empty";
+                    }
+                }
+
+                if (excludeValues.includes(applicantHourStatus)) {
+                    return;
+                }
+
+                return applicantSummary;
+            }
         ) || []
     );
 }
