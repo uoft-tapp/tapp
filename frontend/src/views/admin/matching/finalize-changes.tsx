@@ -24,23 +24,21 @@ export function FinalizeChangesButton() {
 
     const dispatch = useThunkDispatch();
 
-    function onClick() {
-        setShowDialog(true);
-
-        // TODO: Update to a more meaningful sort
-        // position code > name
-        // or name > position code
-        // Sort assignments by utorid
+    React.useEffect(() => {
         setStagedAssignments(
             matchingData.matches
                 .filter((match) => match.status === "staged-assigned")
                 .sort((a, b) => {
-                    return (a.utorid + " " + a.positionCode).toLowerCase() <
-                        (b.utorid + " " + b.positionCode).toLowerCase()
+                    return (a.positionCode + " " + a.utorid).toLowerCase() <
+                        ( b.positionCode + " " + b.utorid).toLowerCase()
                         ? -1
                         : 1;
                 }) || null
         );
+    }, [matchingData])
+
+    function onClick() {
+        setShowDialog(true);
     }
 
     async function makeAssignment(assignment: Partial<Assignment>) {
@@ -80,10 +78,14 @@ export function FinalizeChangesButton() {
                 size="sm"
                 className="footer-button finalize"
                 onClick={onClick}
+                disabled={stagedAssignments && stagedAssignments.length === 0 ? true : false}
             >
-                Finalize Changes
+                Finalize Changes { stagedAssignments && stagedAssignments.length > 0 ? " (" + stagedAssignments.length + ")" : "" }
             </Button>
-            <Modal show={showDialog}>
+            <Modal 
+                show={showDialog}
+                dialogClassName="finalize-changes-modal"
+            >
                 <Modal.Header>
                     <Modal.Title>Finalize Changes</Modal.Title>
                 </Modal.Header>
@@ -96,12 +98,11 @@ export function FinalizeChangesButton() {
                                     <li
                                         key={
                                             "" +
-                                            match.utorid +
-                                            match.positionCode
+                                            match.positionCode +
+                                            match.utorid
                                         }
                                     >
-                                        {match.utorid} - {match.positionCode} -{" "}
-                                        {match.hoursAssigned}
+                                        {match.positionCode} - {match.utorid} ({match.hoursAssigned})
                                     </li>
                                 );
                             })}
