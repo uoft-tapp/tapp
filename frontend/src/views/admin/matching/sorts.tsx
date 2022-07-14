@@ -16,16 +16,6 @@ type sortMapItem = {
 };
 
 const sortMap: Record<string, sortMapItem> = {
-    nameAsc: {
-        function: sortByLastName,
-        asc: true,
-        name: "Name (ASC)",
-    },
-    nameDesc: {
-        function: sortByLastName,
-        asc: false,
-        name: "Name (DESC)",
-    },
     programAsc: {
         function: sortByProgram,
         asc: true,
@@ -46,16 +36,6 @@ const sortMap: Record<string, sortMapItem> = {
         asc: false,
         name: "Department (DESC)",
     },
-    gpaAsc: {
-        function: sortByGpa,
-        asc: true,
-        name: "GPA (ASC)",
-    },
-    gpaDesc: {
-        function: sortByGpa,
-        asc: false,
-        name: "GPA (DESC)",
-    },
     yipAsc: {
         function: sortByYip,
         asc: true,
@@ -66,25 +46,35 @@ const sortMap: Record<string, sortMapItem> = {
         asc: false,
         name: "Year in Progress (DESC)",
     },
+    gpaAsc: {
+        function: sortByGpa,
+        asc: true,
+        name: "GPA (ASC)",
+    },
+    gpaDesc: {
+        function: sortByGpa,
+        asc: false,
+        name: "GPA (DESC)",
+    },
     taPrefAsc: {
         function: sortByApplicantPref,
         asc: true,
-        name: "TA Rating (ASC)",
+        name: "TA Preference (ASC)",
     },
     taPrefDesc: {
         function: sortByApplicantPref,
         asc: false,
-        name: "TA Rating (DESC)",
+        name: "TA Preference (DESC)",
     },
     instPrefAsc: {
-        function: sortByInstuctorRating,
+        function: sortByInstructorRating,
         asc: true,
-        name: "Instructor Rating (ASC)",
+        name: "Instructor Preference (ASC)",
     },
     instPrefDesc: {
-        function: sortByInstuctorRating,
+        function: sortByInstructorRating,
         asc: false,
-        name: "Instructor Rating (DESC)",
+        name: "Instructor Preference (DESC)",
     },
     totalHoursAssignedAsc: {
         function: sortByTotalHoursAssigned,
@@ -115,6 +105,26 @@ const sortMap: Record<string, sortMapItem> = {
         function: sortByRemainingHoursOwed,
         asc: false,
         name: "Remaining Hours Owed (DESC)",
+    },
+    firstNameAsc: {
+        function: sortByFirstName,
+        asc: true,
+        name: "First Name (ASC)"
+    },
+    firstNameDesc: {
+        function: sortByFirstName,
+        asc: true,
+        name: "First Name (ASC)"
+    },
+    lastNameAsc: {
+        function: sortByLastName,
+        asc: true,
+        name: "Last Name (ASC)",
+    },
+    lastNameDesc: {
+        function: sortByLastName,
+        asc: false,
+        name: "Last Name (DESC)",
     },
 };
 
@@ -201,12 +211,12 @@ function SortDropdownItem({
 }
 
 export function applySorts(
-    applicantSummaries: ApplicantSummary[] | null,
+    applicantSummaries: ApplicantSummary[],
     sortList: string[],
     position: Position | null
 ) {
     // Return early if any inputs aren't defined
-    if (!position || !applicantSummaries || sortList.length === 0) {
+    if (!position || applicantSummaries.length === 0 || sortList.length === 0) {
         return;
     }
 
@@ -219,10 +229,12 @@ export function applySorts(
             continue;
         }
 
+        // Return early if the sort name doesn't exist in the sort map for whatever reason
         if (!Object.keys(sortMap).includes(sortName)) {
             return;
         }
 
+        // Apply the respective sort function
         sortMap[sortName]["function"](
             applicantSummaries,
             sortMap[sortName]["asc"]
@@ -230,8 +242,27 @@ export function applySorts(
     }
 }
 
+// Wrapper function for handling ascending vs. descending sorts
 function flipIfDescending(val: number, asc: boolean) {
     return val * (asc ? 1 : -1);
+}
+
+// Sorting functions -- all of these do in-place sorting
+function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
+    applicantSummaries.sort((a, b) => {
+        return (
+            a.applicant.first_name +
+            ", " +
+            a.applicant.last_name
+        ).toLowerCase() <
+            (
+                b.applicant.first_name +
+                ", " +
+                b.applicant.last_name
+            ).toLowerCase()
+            ? flipIfDescending(-1, asc)
+            : flipIfDescending(1, asc);
+    });
 }
 
 function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
@@ -298,11 +329,11 @@ function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
 function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
         if (!a.application.yip) {
-            return flipIfDescending(1, asc);
+            return 1;
         }
 
         if (!b.application.yip) {
-            return flipIfDescending(-1, asc);
+            return -1;
         }
 
         return a.application.yip < b.application.yip
@@ -353,7 +384,7 @@ function sortByApplicantPref(
     });
 }
 
-function sortByInstuctorRating(
+function sortByInstructorRating(
     applicantSummaries: ApplicantSummary[],
     asc = true
 ) {

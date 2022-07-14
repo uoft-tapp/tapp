@@ -8,10 +8,9 @@ import { FaFilter, FaTable, FaTh } from "react-icons/fa";
 import { BsInfoCircleFill, BsStarFill } from "react-icons/bs";
 import { RiStickyNoteFill } from "react-icons/ri";
 
-import { Form } from "react-bootstrap";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import { Table } from "react-bootstrap";
+import { Form, Table } from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
@@ -24,7 +23,8 @@ import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "./utils";
-import { applySorts, SortDropdowns } from "./sorts";
+import { SortDropdowns, applySorts } from "./sorts";
+import { FilterModal, applyFilters, FilterListItem } from "./filters";
 
 import "./styles.css";
 
@@ -47,31 +47,18 @@ export function ApplicantView({
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
     const [sortList, setSortList] = React.useState<string[]>([]);
-    const [applicantFilters, setApplicantFilters] = React.useState({
-        program: [
-            { code: "P", value: true },
-            { code: "M", value: true },
-            { code: "U", value: true },
-            { code: "MScAC", value: true },
-            { code: "PD", value: true },
-            { code: "other", value: true },
-        ],
-    });
 
-    const programFilters = applicantFilters.program
-        .filter((item) => item.value)
-        .map((item) => {
-            return item.code;
-        });
+    const [showFilters, setShowFilters] = React.useState(false);
+    const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
 
     const filteredApplicants = React.useMemo(() => {
         if (!applicants) {
             return [] as ApplicantSummary[];
         }
 
-        // Filter applicants by value
-        const ret: ApplicantSummary[] = applicants.filter(
-            (applicant) =>
+        // Filter applicants that match the search value
+        const filteredBySearch: ApplicantSummary[] =
+            applicants.filter((applicant) =>
                 (
                     applicant.applicant.first_name +
                     " " +
@@ -80,15 +67,18 @@ export function ApplicantView({
                     applicant.applicant.utorid
                 )
                     .toLowerCase()
-                    .includes(searchValue.toLowerCase()) &&
-                programFilters.includes(applicant.application?.program || "")
-        );
+                    .includes(searchValue.toLowerCase())
+            ) || [];
+
+        // Apply filters based on filter list
+        const filteredByFilters: ApplicantSummary[] =
+            applyFilters(filteredBySearch, filterList, position) || [];
 
         // Apply sorts based on sort lists
-        applySorts(ret, sortList, position);
+        applySorts(filteredByFilters, sortList, position);
 
-        return ret;
-    }, [searchValue, sortList, programFilters, applicants, position]);
+        return filteredByFilters;
+    }, [searchValue, sortList, filterList, applicants, position]);
 
     return (
         <div className="matching-course-main">
@@ -97,7 +87,7 @@ export function ApplicantView({
                     <Form inline>
                         <Form.Control
                             type="text"
-                            placeholder="Search applicants..."
+                            placeholder="Filter by name/UTORid..."
                             className="mr-sm-2"
                             onChange={(e) => setSearchValue(e.target.value)}
                         />
@@ -105,23 +95,7 @@ export function ApplicantView({
                     <div className="filter-button-container">
                         <FaFilter
                             className="filter-button"
-                            onClick={(e) => {
-                                // TODO: update this; it currently just toggles "U"
-                                const updatedFilter = [
-                                    ...applicantFilters.program,
-                                ];
-                                const target = updatedFilter.find(
-                                    (item) => item.code === "U"
-                                );
-                                if (target) {
-                                    target.value = !target.value;
-                                }
-
-                                setApplicantFilters({
-                                    ...applicantFilters,
-                                    program: updatedFilter,
-                                });
-                            }}
+                            onClick={() => setShowFilters(!showFilters)}
                         />
                     </div>
                     <SortDropdowns
@@ -152,9 +126,6 @@ export function ApplicantView({
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </div>
-                <div className="applicant-filter-container">
-                    {/* TODO: collapsible div? filters go here */}
-                </div>
                 <h2>{position && position.position_code}</h2>
             </div>
             <div className="matching-course-body">
@@ -173,6 +144,12 @@ export function ApplicantView({
                         />
                     ))}
             </div>
+            <FilterModal
+                showFilters={showFilters}
+                setShowFilters={setShowFilters}
+                filterList={filterList}
+                setFilterList={setFilterList}
+            />
         </div>
     );
 }
