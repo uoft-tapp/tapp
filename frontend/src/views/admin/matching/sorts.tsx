@@ -303,6 +303,10 @@ function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
             return flipIfDescending(-1, asc);
         }
 
+        if (a.application.program === b.application.program) {
+            return 0;
+        }
+
         return priority.indexOf(a.application.program) <
             priority.indexOf(b.application.program)
             ? flipIfDescending(-1, asc)
@@ -320,6 +324,10 @@ function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
             return flipIfDescending(-1, asc);
         }
 
+        if (a.application.gpa === b.application.gpa) {
+            return 0;
+        }
+
         return a.application.gpa > b.application.gpa
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
@@ -334,6 +342,10 @@ function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
 
         if (!b.application.yip) {
             return -1;
+        }
+
+        if (a.application.yip === b.application.yip) {
+            return 0;
         }
 
         return a.application.yip < b.application.yip
@@ -378,6 +390,10 @@ function sortByApplicantPref(
             return flipIfDescending(1, asc);
         }
 
+        if (aPref === bPref) {
+            return 0;
+        }
+
         return aPref.preference_level < bPref.preference_level
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
@@ -420,6 +436,10 @@ function sortByInstructorRating(
         const bAvgRating =
             sum(...bInstructorRatings) / bInstructorRatings.length;
 
+        if (aAvgRating === bAvgRating) {
+            return 0;
+        }
+
         return aAvgRating < bAvgRating
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
@@ -439,8 +459,14 @@ function sortByTotalHoursAssigned(
             return -1;
         }
 
-        return getApplicantTotalHoursAssigned(a) <
-            getApplicantTotalHoursAssigned(b)
+        const aHours = getApplicantTotalHoursAssigned(a);
+        const bHours = getApplicantTotalHoursAssigned(b);
+
+        if (aHours === bHours) {
+            return 0;
+        }
+
+        return aHours < bHours
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -451,8 +477,14 @@ function sortByTotalHoursOwed(
     asc = true
 ) {
     applicantSummaries.sort((a, b) => {
-        return (a.guarantee?.totalHoursOwed || 0) <
-            (b.guarantee?.totalHoursOwed || 0)
+        const aHours = a.guarantee?.totalHoursOwed || 0;
+        const bHours = a.guarantee?.totalHoursOwed || 0;
+
+        if (aHours === bHours) {
+            return 0;
+        }
+
+        return aHours < bHours
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -480,6 +512,10 @@ function sortByRemainingHoursOwed(
             (b.guarantee?.totalHoursOwed || 0) -
             (b.guarantee?.previousHoursFulfilled || 0) -
             getApplicantTotalHoursAssigned(b);
+
+        if (aHoursRemaining === bHoursRemaining) {
+            return 0;
+        }
 
         return aHoursRemaining < bHoursRemaining
             ? flipIfDescending(-1, asc)

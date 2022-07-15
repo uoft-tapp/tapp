@@ -4,13 +4,14 @@ import classNames from "classnames";
 import { Position } from "../../../api/defs/types";
 import { ApplicantSummary, Match } from "./types";
 
-import { FaFilter, FaTable, FaTh } from "react-icons/fa";
+import { FaFilter, FaTable, FaTh, FaLock } from "react-icons/fa";
 import { BsInfoCircleFill, BsStarFill } from "react-icons/bs";
 import { RiStickyNoteFill } from "react-icons/ri";
 
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import { Form, Table } from "react-bootstrap";
+import Collapse from 'react-bootstrap/Collapse';
+import { Form, Table, Dropdown } from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
@@ -29,10 +30,11 @@ import { FilterModal, applyFilters, FilterListItem } from "./filters";
 import "./styles.css";
 
 const statusMapping: Record<string, string[]> = {
-    Assigned: ["staged-assigned", "assigned"],
-    Starred: ["starred"],
-    Applied: ["applied"],
-    Hidden: ["hidden"],
+    "Assigned": ["assigned"],
+    "Assigned (Staged)": ["staged-assigned"],
+    "Starred": ["starred"],
+    "Applied": ["applied"],
+    "Hidden": ["hidden"],
 };
 
 export function ApplicantView({
@@ -46,7 +48,7 @@ export function ApplicantView({
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
-    const [sortList, setSortList] = React.useState<string[]>([]);
+    const [sortList, setSortList] = React.useState<string[]>(["deptAsc", "programDesc", "yipAsc"]);
 
     const [showFilters, setShowFilters] = React.useState(false);
     const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
@@ -251,7 +253,9 @@ function TableRow({
             <td>{applicant.application.department}</td>
             <td>{applicant.application.program}</td>
             <td>{applicant.application.yip}</td>
-            <td>{applicant.application.gpa ? applicant.application.gpa : ""}</td>
+            <td>
+                {applicant.application.gpa ? applicant.application.gpa : ""}
+            </td>
             <td>{positionPref ? positionPref.preference_level : ""}</td>
             <td>
                 {instructorRatings.length > 0
@@ -378,26 +382,13 @@ function GridItem({
     setMarkAsUpdated: Function;
 }) {
     const dispatch = useThunkDispatch();
-
-    function _upsertMatch(match: Match | null) {
-        if (!match) {
-            return;
-        }
-        return dispatch(upsertMatch(match));
-    }
-
-    async function updateMatch() {
-        await _upsertMatch(newMatch);
-
-        // Check if data has changed:
-        setMarkAsUpdated(true);
-    }
-
     const applicantMatch = getApplicantMatchForPosition(applicant, position);
     const positionPref = getPositionPrefForPosition(
         applicant.application,
         position
     );
+
+    const [open, setOpen] = React.useState(false);
 
     const instructorRatings =
         applicant.application.instructor_preferences
@@ -406,17 +397,28 @@ function GridItem({
                 return rating.preference_level;
             }) || [];
 
-    // Purely for testing match update functionality
-    const newMatch: Match | null = applicantMatch
-        ? {
-              applicantId: applicantMatch.applicantId,
-              utorid: applicantMatch.utorid,
-              positionId: applicantMatch.positionId,
-              positionCode: applicantMatch.positionCode,
-              status: "staged-assigned",
-              hoursAssigned: position.hours_per_assignment || 0,
-          }
-        : null;
+    function _upsertMatch(match: Match | null) {
+        if (!match) {
+            return;
+        }
+        return dispatch(upsertMatch(match));
+    }
+
+    async function updateApplicantMatch(newStatus: "staged-assigned" | "hidden" | "starred" | "applied", hoursAssigned?: number) {
+        const newMatch: Match | null = applicantMatch
+            ? {
+                ...applicantMatch,
+                status: newStatus,
+            }
+            : null;
+
+        if (newMatch && hoursAssigned) {
+            newMatch.hoursAssigned = hoursAssigned;
+        }
+
+        await _upsertMatch(newMatch);
+        setMarkAsUpdated(true);
+    }
 
     let filledStatus: "empty" | "under" | "matched" | "over" | "" = "";
     const hoursOwed = applicant.guarantee
@@ -453,104 +455,114 @@ function GridItem({
     }
 
     return (
-        <div className="applicant-grid-item noselect" onClick={updateMatch}>
+        <div 
+            className="applicant-dropdown-wrapper dropdown" 
+        >
             <div
-                className={classNames("applicant-status-sidebar", filledStatus)}
+                className="applicant-grid-item noselect"
+                onClick={() => {
+                    // if (applicantMatch?.status !== "assigned") {
+                    //     updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0);
+                    // }
+                    setOpen(!open);
+                }}
             >
-                <div className="applicant-status-value">
-                    {totalAssignedHours}
+                <div
+                    className={classNames("applicant-status-sidebar", filledStatus)}
+                >
+                    <div className="applicant-status-value">
+                        {totalAssignedHours}
+                    </div>
+                    <div className="applicant-status-divider" />
+                    <div className="applicant-status-value">{hoursOwed}</div>
                 </div>
-                <div className="applicant-status-divider" />
-                <div className="applicant-status-value">{hoursOwed}</div>
+                <div className="applicant-grid-main">
+                    <div className="grid-row">
+                        <div className="applicant-name">
+                            {applicant.applicant.first_name +
+                                " " +
+                                applicant.applicant.last_name}
+                        </div>
+                        <div className="icon-container">
+                            {/*<ApplicantTooltip />*/}
+                            { !applicantMatch?.status.includes("assigned") && <ApplicantStar
+                                match={applicantMatch}
+                                updateApplicantMatch={updateApplicantMatch}
+                                setMarkAsUpdated={setMarkAsUpdated}
+                            /> }
+                            { applicantMatch?.status === "assigned" && <FaLock className="locked-applicant" /> }
+                        </div>
+                    </div>
+                    <div className="grid-row">
+                        <div className="grid-detail-small">
+                            {applicant.application.department
+                                ?.substring(0, 1)
+                                .toUpperCase()}
+                        </div>
+                        <div className="grid-detail-small">
+                            {applicant.application.program?.substring(0, 1)}
+                            {applicant.application.yip}
+                        </div>
+                        <div className="grid-detail-small">
+                            {positionPref ? positionPref.preference_level : ""}
+                        </div>
+                        <div className="grid-detail-small">
+                            {instructorRatings.length > 0
+                                ? round(
+                                      sum(...instructorRatings) /
+                                          instructorRatings.length,
+                                      3
+                                  )
+                                : ""}
+                        </div>
+                        <div className="icon-container">
+                            <ApplicantNote />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="applicant-grid-main">
-                <div className="grid-row">
-                    <div className="applicant-name">
-                        {applicant.applicant.first_name +
-                            " " +
-                            applicant.applicant.last_name}
-                    </div>
-                    <div className="icon-container">
-                        <ApplicantTooltip />
-                        <ApplicantStar
-                            match={applicantMatch}
-                            setMarkAsUpdated={setMarkAsUpdated}
-                        />
-                    </div>
+            <Collapse in={open}>
+                <div className="applicant-dropdown-menu dropdown-menu noselect">
+                    <a className="dropdown-item" onClick={() => console.log("a")}>View applicant detail</a>
+                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "staged-assigned" && <a className="dropdown-item" onClick={() => updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0)}>Assign to <b>{position.position_code}</b> ({ position.hours_per_assignment || 0 })</a> }
+                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => console.log("updating assigned hours")}>Update hours</a>}
+                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "hidden" && <a className="dropdown-item" onClick={() => updateApplicantMatch("hidden")}>Hide from <b>{position.position_code}</b></a> }
+                    { applicantMatch?.status === "hidden" && <a className="dropdown-item" onClick={() => updateApplicantMatch("applied")}>Unhide from <b>{position.position_code}</b></a> }
+                    {/*<a className="dropdown-item">Hide from all</a>*/}
                 </div>
-                <div className="grid-row">
-                    <div className="grid-detail-small">
-                        {applicant.application.department
-                            ?.substring(0, 1)
-                            .toUpperCase()}
-                    </div>
-                    <div className="grid-detail-small">
-                        {applicant.application.program?.substring(0, 1)}
-                        {applicant.application.yip}
-                    </div>
-                    <div className="grid-detail-small">
-                        {positionPref ? positionPref.preference_level : ""}
-                    </div>
-                    <div className="grid-detail-small">
-                        {instructorRatings.length > 0
-                            ? round(
-                                  sum(...instructorRatings) /
-                                      instructorRatings.length,
-                                  3
-                              )
-                            : ""}
-                    </div>
-                    <div className="icon-container">
-                        <ApplicantNote />
-                    </div>
-                </div>
-            </div>
+            </Collapse>
         </div>
     );
 }
 
 function ApplicantStar({
     match,
+    updateApplicantMatch,
     setMarkAsUpdated,
 }: {
     match: Match | null;
+    updateApplicantMatch: Function;
     setMarkAsUpdated: Function;
 }) {
     const dispatch = useThunkDispatch();
 
     async function _onClick(e: any) {
         e.stopPropagation();
-
         if (match) {
-            const newMatch = {
-                ...match,
-                status:
-                    match.status === "starred"
-                        ? "applied"
-                        : match.status === "applied"
-                        ? "starred"
-                        : (match.status as
-                              | "applied"
-                              | "starred"
-                              | "staged-assigned"
-                              | "assigned"
-                              | "hidden"),
-            };
-
-            await dispatch(upsertMatch(newMatch));
-
-            if (
-                newMatch.status === "starred" ||
-                newMatch.status === "applied"
-            ) {
-                setMarkAsUpdated(true);
+            if (match.status === "applied" || match.status === "hidden") {
+                updateApplicantMatch("starred");
+            } else if (match.status === "starred") {
+                updateApplicantMatch("applied");
             }
         }
     }
 
     if (match && match.status === "starred") {
         return (
-            <BsStarFill className="star-icon filled" onClick={async (e) => _onClick(e)} />
+            <BsStarFill
+                className="star-icon filled"
+                onClick={async (e) => _onClick(e)}
+            />
         );
     }
 
