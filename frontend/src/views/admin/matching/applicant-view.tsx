@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-import { Position } from "../../../api/defs/types";
+import { Position, Application } from "../../../api/defs/types";
 import { ApplicantSummary, Match } from "./types";
 
 import { FaFilter, FaTable, FaTh, FaLock } from "react-icons/fa";
@@ -11,7 +11,7 @@ import { RiStickyNoteFill } from "react-icons/ri";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Collapse from 'react-bootstrap/Collapse';
-import { Form, Table, Dropdown } from "react-bootstrap";
+import { Form, Table, Dropdown, Modal, Button } from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
@@ -26,6 +26,8 @@ import {
 } from "./utils";
 import { SortDropdowns, applySorts } from "./sorts";
 import { FilterModal, applyFilters, FilterListItem } from "./filters";
+
+import { ApplicationDetails } from "../applications/application-details";
 
 import "./styles.css";
 
@@ -389,6 +391,8 @@ function GridItem({
     );
 
     const [open, setOpen] = React.useState(false);
+    const [shownApplication, setShownApplication] =
+        React.useState<Application | null>(null);
 
     const instructorRatings =
         applicant.application.instructor_preferences
@@ -461,9 +465,6 @@ function GridItem({
             <div
                 className="applicant-grid-item noselect"
                 onClick={() => {
-                    // if (applicantMatch?.status !== "assigned") {
-                    //     updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0);
-                    // }
                     setOpen(!open);
                 }}
             >
@@ -523,14 +524,39 @@ function GridItem({
             </div>
             <Collapse in={open}>
                 <div className="applicant-dropdown-menu dropdown-menu noselect">
-                    <a className="dropdown-item" onClick={() => console.log("a")}>View applicant detail</a>
-                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "staged-assigned" && <a className="dropdown-item" onClick={() => updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0)}>Assign to <b>{position.position_code}</b> ({ position.hours_per_assignment || 0 })</a> }
-                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => console.log("updating assigned hours")}>Update hours</a>}
-                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "hidden" && <a className="dropdown-item" onClick={() => updateApplicantMatch("hidden")}>Hide from <b>{position.position_code}</b></a> }
-                    { applicantMatch?.status === "hidden" && <a className="dropdown-item" onClick={() => updateApplicantMatch("applied")}>Unhide from <b>{position.position_code}</b></a> }
+                    <a className="dropdown-item" onClick={() => {
+                        setShownApplication(applicant.application);
+                        setOpen(false);
+                    }}>View application details</a>
+                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0); setOpen(false); }}>Assign to <b>{position.position_code}</b> ({ position.hours_per_assignment || 0 })</a> }
+                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", 60); setOpen(false); }}>Change assigned hours (60)</a>}
+                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("hidden"); setOpen(false); }}>Hide from <b>{position.position_code}</b></a> }
+                    { applicantMatch?.status === "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("applied"); setOpen(false); }}>Unhide from <b>{position.position_code}</b></a> }
                     {/*<a className="dropdown-item">Hide from all</a>*/}
                 </div>
             </Collapse>
+            <Modal
+                show={!!shownApplication}
+                onHide={() => setShownApplication(null)}
+                size="xl"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Application Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {shownApplication && (
+                        <ApplicationDetails application={shownApplication} />
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={() => setShownApplication(null)}
+                        variant="outline-secondary"
+                    >
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }
