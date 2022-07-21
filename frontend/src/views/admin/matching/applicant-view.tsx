@@ -461,6 +461,7 @@ function GridItem({
     return (
         <div 
             className="applicant-dropdown-wrapper dropdown" 
+            onMouseLeave={() => setOpen(false)}
         >
             <div
                 className="applicant-grid-item noselect"
@@ -530,8 +531,10 @@ function GridItem({
                     }}>View application details</a>
                     { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0); setOpen(false); }}>Assign to <b>{position.position_code}</b> ({ position.hours_per_assignment || 0 })</a> }
                     { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", 60); setOpen(false); }}>Change assigned hours (60)</a>}
+                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("applied"); setOpen(false); }}>Unassign from <b>{position.position_code}</b></a>}
                     { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("hidden"); setOpen(false); }}>Hide from <b>{position.position_code}</b></a> }
                     { applicantMatch?.status === "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("applied"); setOpen(false); }}>Unhide from <b>{position.position_code}</b></a> }
+
                     {/*<a className="dropdown-item">Hide from all</a>*/}
                 </div>
             </Collapse>

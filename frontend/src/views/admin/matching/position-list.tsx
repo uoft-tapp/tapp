@@ -65,7 +65,7 @@ function PositionRow({
                 {positionSummary.position.position_code}
             </span>
             <span className="position-hours-filled">
-                {positionSummary.hoursAssigned} / {targetHours} H
+                {positionSummary.hoursAssigned} / {targetHours} h
             </span>
         </div>
     );
