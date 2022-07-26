@@ -123,6 +123,7 @@ export function SeedDataMenu({
             action: seedInstructorPreferences,
         },
         all: { name: "All Data", action: seedAll },
+        matching: { name: "Matching Data", action: seedMatching }
     };
 
     React.useEffect(() => {
@@ -173,17 +174,20 @@ export function SeedDataMenu({
     async function seedContractTemplate() {
         setProgress(0);
         setStage("Contract Template");
-        const contractTemplate = await dispatch(
-            upsertContractTemplate(seedData.contractTemplates[0])
-        );
-        contractTemplates.push(contractTemplate);
+        for (const template of seedData.contractTemplates) {
+            const contractTemplate = await dispatch(
+                upsertContractTemplate(template)
+            );
+
+            contractTemplates.push(contractTemplate);
+        }
         setProgress(100);
     }
 
     async function seedInstructors(limit = 1000) {
         setStage("Instructors");
         setProgress(0);
-        for (let instructor of seedData.instructors.slice(0, limit)) {
+        for (const instructor of seedData.instructors.slice(0, limit)) {
             if (
                 !instructors.some((inst) => inst.utorid === instructor.utorid)
             ) {
@@ -293,6 +297,11 @@ export function SeedDataMenu({
         const resp = await apiGET(
             `/admin/sessions/${targetSession.id}/postings`
         );
+
+        if (resp.length === 0) {
+            throw new Error("No postings found");
+        }
+
         let url_token = resp[0].url_token;
 
         for (const application of seedData.applications.slice(0, limit)) {
@@ -333,7 +342,13 @@ export function SeedDataMenu({
             setProgress(Math.round((count / total) * 100));
         }
 
-        await dispatch(debugOnlySetActiveUser(initialUser));
+        await dispatch(
+            debugOnlySetActiveUser({
+                utorid: initialUser.utorid,
+                roles: initialUser.roles,
+            })
+        );
+
         setProgress(100);
     }
 
@@ -348,52 +363,44 @@ export function SeedDataMenu({
         let count = 0;
         let total = seedData.applications.length;
 
-        const preferences = [];
-
         for (const application of seedData.applications.slice(0, limit)) {
-            if (!application.instructor_preferences) {
-                continue;
-            }
-
-            const targetApplication =
-                applications.find(
-                    (currApplication) =>
-                        currApplication.applicant.utorid === application.utorid
-                ) || null;
-
-            if (!targetApplication) {
-                throw new Error("No application found for " + application);
-            }
-
-            for (let preference of application.instructor_preferences) {
-                const targetPosition =
-                    positions.find(
-                        (currPosition) =>
-                            currPosition.position_code ===
-                            preference.position_code
+            if (application.instructor_preferences) {
+                const targetApplication =
+                    applications.find(
+                        (currApplication) =>
+                            currApplication.applicant.utorid ===
+                            application.utorid
                     ) || null;
 
-                if (!targetPosition) {
-                    throw new Error(
-                        "No position found for " + preference.position_code
-                    );
+                if (!targetApplication) {
+                    throw new Error("No application found for " + application);
                 }
 
-                preferences.push({
-                    preference_level: preference.preference_level,
-                    comment: preference.comment,
-                    application_id: targetApplication.id,
-                    position_id: targetPosition.id,
-                });
-            }
-        }
+                for (const position of application.instructor_preferences) {
+                    const targetPosition =
+                        positions.find(
+                            (currPosition) =>
+                                currPosition.position_code ===
+                                position.position_code
+                        ) || null;
 
-        for (let preference of preferences) {
-            apiPOST(`/instructor/instructor_preferences`, preference);
+                    if (!targetPosition) {
+                        throw new Error(
+                            "No position found for " + position.position_code
+                        );
+                    }
+
+                    await apiPOST(`/instructor/instructor_preferences`, {
+                        preference_level: position.preference_level,
+                        comment: position.comment,
+                        application_id: targetApplication.id,
+                        position_id: targetPosition.id,
+                    });
+                }
+            }
             count++;
             setProgress(Math.round((count / total) * 100));
         }
-
         setProgress(100);
     }
 
@@ -408,6 +415,28 @@ export function SeedDataMenu({
             await seedPositions();
             await seedApplicants();
             await seedAssignments();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setInProgress(false);
+        }
+    }
+
+    async function seedMatching() {
+        try {
+            setConfirmDialogVisible(false);
+            setInProgress(true);
+
+            await seedSession();
+            await seedContractTemplate();
+            await seedUsers();
+            await seedInstructors();
+            await seedPositions();
+            
+            await seedApplications();
+
+            // Temporarily set user to someone marked as an instructor in all positions
+            await seedInstructorPreferences();
         } catch (error) {
             console.error(error);
         } finally {

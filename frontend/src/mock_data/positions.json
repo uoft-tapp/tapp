@@ -28,7 +28,7 @@
         "hours_per_assignment": 70,
         "start_date": "2020-07-26",
         "end_date": "2021-03-01",
-        "instructors": ["millerm"],
+        "instructors": ["millerm", "smithh"],
         "contract_template": "Regular"
     },
     {
@@ -180,7 +180,7 @@
         "hours_per_assignment": 127,
         "start_date": "2020-05-30",
         "end_date": "2021-05-19",
-        "instructors": ["garciae"],
+        "instructors": ["garciae", "smithh"],
         "contract_template": "Regular"
     },
     {
@@ -188,7 +188,7 @@
         "hours_per_assignment": 136,
         "start_date": "2020-07-02",
         "end_date": "2021-03-05",
-        "instructors": ["garciae"],
+        "instructors": ["garciae", "smithh"],
         "contract_template": "Regular"
     },
     {
