@@ -1,6 +1,7 @@
 import { normalizeImport } from "../../libs/import-export";
 import {
     instructorsSelector,
+    contractTemplatesSelector,
     upsertApplicant,
     upsertAssignment,
     upsertPosition,
@@ -11,8 +12,14 @@ import {
     positionsSelector,
     activeSessionSelector,
     debugOnlyUpsertUser,
+    debugOnlySetActiveUser,
+    applicationsSelector,
+    fetchActiveUser,
+    upsertPosting,
+    upsertPostingPosition,
+    fetchPositions,
 } from "../../api/actions";
-
+import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
     positionSchema,
     applicantSchema,
@@ -25,7 +32,6 @@ import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
     Applicant,
-    ContractTemplate,
     MinimalAssignment,
     MinimalPosition,
     Session,
@@ -59,11 +65,13 @@ export function SeedDataMenu({
     const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
+    const contractTemplates = useSelector(contractTemplatesSelector);
+    const positions = useSelector(positionsSelector);
     const targetSession = useSelector(activeSessionSelector);
+
     let session: Session | null;
-    let contractTemplates: ContractTemplate[] = [];
-    let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
+    let applications = useSelector(applicationsSelector);
     let count;
     let total;
 
@@ -110,7 +118,16 @@ export function SeedDataMenu({
             name: `Assignment (${seedData.assignments.length})`,
             action: seedAssignments,
         },
+        application: {
+            name: `Applications (${seedData.applications.length})`,
+            action: seedApplications,
+        },
+        instructorPref: {
+            name: `Instructor Preferences (${seedData.applications.length})`,
+            action: seedInstructorPreferences,
+        },
         all: { name: "All Data", action: seedAll },
+        matching: { name: "All Matching Data", action: seedMatching },
     };
 
     React.useEffect(() => {
@@ -145,7 +162,7 @@ export function SeedDataMenu({
         setProgress(100);
     }
 
-    async function seedUsers(limit = 1000) {
+    async function seedUsers(limit = 600) {
         setProgress(0);
         setStage("Users");
         const users = seedData.users.slice(0, limit);
@@ -161,17 +178,16 @@ export function SeedDataMenu({
     async function seedContractTemplate() {
         setProgress(0);
         setStage("Contract Template");
-        const contractTemplate = await dispatch(
-            upsertContractTemplate(seedData.contractTemplates[0])
-        );
-        contractTemplates.push(contractTemplate);
+        for (const template of seedData.contractTemplates) {
+            await dispatch(upsertContractTemplate(template));
+        }
         setProgress(100);
     }
 
     async function seedInstructors(limit = 1000) {
         setStage("Instructors");
         setProgress(0);
-        for (let instructor of seedData.instructors.slice(0, limit)) {
+        for (const instructor of seedData.instructors.slice(0, limit)) {
             if (
                 !instructors.some((inst) => inst.utorid === instructor.utorid)
             ) {
@@ -189,6 +205,7 @@ export function SeedDataMenu({
         setProgress(0);
         count = 0;
         total = seedData.positions.length;
+
         const data = (
             normalizeImport(
                 {
@@ -263,6 +280,132 @@ export function SeedDataMenu({
         }
     }
 
+    async function seedApplications(limit = 600) {
+        setStage("Applications");
+        setProgress(0);
+
+        if (!targetSession) {
+            throw new Error("Need a valid session to continue");
+        }
+
+        let count = 0;
+        let total = seedData.applications.length;
+
+        // Keep track of the original active user so we can swap back
+        const initialUser = await dispatch(fetchActiveUser());
+
+        // Get this session's posting token:
+        const resp = await apiGET(
+            `/admin/sessions/${targetSession.id}/postings`
+        );
+
+        if (resp.length === 0) {
+            throw new Error("No postings found");
+        }
+
+        // Seeded applications are directed at the first posting of the active session
+        let url_token = resp[0].url_token;
+
+        for (const application of seedData.applications.slice(0, limit)) {
+            const currUser = {
+                utorid: application.utorid,
+                roles: ["admin", "instructor", "ta"],
+            };
+            await dispatch(
+                debugOnlySetActiveUser(currUser, { skipInit: true })
+            );
+
+            const newApp = {
+                utorid: application.utorid,
+                student_number: application.student_number,
+                first_name: application.first_name,
+                last_name: application.last_name,
+                email: application.email,
+                phone: application.phone.toString(),
+                program: application.program,
+                department: application.department,
+                yip: application.yip,
+                gpa: application.gpa || 0,
+                previous_department_ta: application.previous_department_ta,
+                previous_university_ta: application.previous_university_ta,
+                program_start: application.program_start,
+                previous_other_university_ta:
+                    application.previous_other_university_ta,
+                position_preferences: application.position_preferences,
+            };
+
+            await apiPOST(
+                `/public/postings/${url_token}/submit`,
+                { answers: newApp },
+                true
+            );
+
+            count++;
+            setProgress(Math.round((count / total) * 100));
+        }
+
+        await dispatch(
+            debugOnlySetActiveUser({
+                utorid: initialUser.utorid,
+                roles: initialUser.roles,
+            })
+        );
+
+        setProgress(100);
+    }
+
+    async function seedInstructorPreferences(limit = 600) {
+        setStage("Instructor Preferences");
+        setProgress(0);
+
+        if (!targetSession) {
+            throw new Error("Need a valid session to continue");
+        }
+
+        let count = 0;
+        let total = seedData.applications.length;
+
+        for (const application of seedData.applications.slice(0, limit)) {
+            if (application.instructor_preferences) {
+                const targetApplication =
+                    applications.find(
+                        (currApplication) =>
+                            currApplication.applicant.utorid ===
+                            application.utorid
+                    ) || null;
+
+                if (!targetApplication) {
+                    throw new Error("No application found for " + application);
+                }
+
+                for (const position of application.instructor_preferences) {
+                    const targetPosition =
+                        positions.find(
+                            (currPosition) =>
+                                currPosition.position_code ===
+                                position.position_code
+                        ) || null;
+
+                    if (!targetPosition) {
+                        throw new Error(
+                            "No position found for " + position.position_code
+                        );
+                    }
+
+                    await apiPOST(`/instructor/instructor_preferences`, {
+                        preference_level: position.preference_level,
+                        comment: position.comment,
+                        application_id: targetApplication.id,
+                        position_id: targetPosition.id,
+                    });
+                }
+            }
+            count++;
+            setProgress(Math.round((count / total) * 100));
+        }
+        setProgress(100);
+    }
+
     async function seedAll() {
         try {
             setConfirmDialogVisible(false);
@@ -274,6 +417,89 @@ export function SeedDataMenu({
             await seedPositions();
             await seedApplicants();
             await seedAssignments();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setInProgress(false);
+        }
+    }
+
+    async function seedMatching() {
+        try {
+            setConfirmDialogVisible(false);
+            setInProgress(true);
+
+            setStage("Matching Data");
+
+            // Keep track of current user so we can swap back at the end
+            const initialUser = await dispatch(fetchActiveUser());
+
+            // // Create a new session
+            const mockSessionData = {
+                start_date: "2021/01/01",
+                end_date: "2022/12/31",
+                name: `Session ${new Date().toLocaleString()}`,
+                rate1: 50,
+                applications_visible_to_instructors: true,
+            };
+            session = await dispatch(upsertSession(mockSessionData));
+            await dispatch(setActiveSession(session));
+
+            await seedContractTemplate();
+            await seedUsers();
+            await seedInstructors();
+            await seedPositions();
+
+            // Create a new posting
+            setStage("Posting");
+            const newPosting = await dispatch(
+                upsertPosting({
+                    name: "Matching Data Posting",
+                    open_date: "2022-01-01T00:00:00.000Z",
+                    close_date: "2022-12-31T00:00:00.000Z",
+                    intro_text: "This is a test posting for matching data.",
+                    availability: "auto",
+                    custom_questions: null,
+                    open_status: true,
+                })
+            );
+
+            // Add all seeded positions to posting:
+            const sessionPositions = await dispatch(fetchPositions());
+
+            setStage("Posting Positions");
+            for (const position of sessionPositions) {
+                await dispatch(
+                    upsertPostingPosition({
+                        position_id: position.id,
+                        posting_id: newPosting.id,
+                        hours: position.hours_per_assignment,
+                        num_positions: Math.floor(Math.random() * 29) + 1,
+                    })
+                );
+            }
+
+            await seedApplications();
+
+            // Temporarily set user to someone marked as an instructor in all positions
+            await dispatch(
+                debugOnlySetActiveUser(
+                    {
+                        utorid: "smithh",
+                        roles: ["admin, instructor", "ta"],
+                    },
+                    { skipInit: true }
+                )
+            );
+            await seedInstructorPreferences();
+
+            // Go back to the original user
+            await dispatch(
+                debugOnlySetActiveUser({
+                    utorid: initialUser.utorid,
+                    roles: initialUser.roles,
+                })
+            );
         } catch (error) {
             console.error(error);
         } finally {

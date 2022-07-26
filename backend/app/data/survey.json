@@ -64,6 +64,14 @@
                         {
                             "value": "U",
                             "text": "Undergraduate Student"
+                        },
+                        {
+                            "value": "MScAC",
+                            "text": "MScAC"
+                        },
+                        {
+                            "value": "PD",
+                            "text": "Postdoctorate Fellow"
                         }
                     ],
                     "hasOther": true

@@ -6,6 +6,7 @@ import instructors from "./instructors.json";
 import positions from "./positions.json";
 import sessions from "./sessions.json";
 import users from "./users.json";
+import applications from "./applications.json";
 
 export const seedData = {
     applicants,
@@ -14,5 +15,6 @@ export const seedData = {
     instructors,
     positions,
     sessions,
+    applications,
     users: users as Omit<RawUser, "id">[],
 };
