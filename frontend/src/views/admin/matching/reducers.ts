@@ -3,6 +3,7 @@ import {
     BATCH_UPSERT_MATCHES,
     UPSERT_GUARANTEE,
     BATCH_UPSERT_GUARANTEES,
+    UPSERT_NOTE
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus } from "./types";
@@ -10,12 +11,13 @@ import { Match, AppointmentGuaranteeStatus } from "./types";
 interface MatchingDataState {
     matches: Match[];
     guarantees: AppointmentGuaranteeStatus[];
+    notes: Record<string, string | null>;
 }
 
-// initialize the state of offer table
 const initialState: MatchingDataState = {
     matches: [],
     guarantees: [],
+    notes: {}
 };
 
 const matchingDataReducer = createReducer(initialState, {
@@ -79,6 +81,12 @@ const matchingDataReducer = createReducer(initialState, {
     [BATCH_UPSERT_GUARANTEES]: (state, action) => {
         return { ...state, guarantees: action.payload };
     },
+    [UPSERT_NOTE]: (state, action) => {
+        const existingNotes: Record<string, string|null> = {...state.notes};
+        existingNotes[action.payload.utorid] = action.payload.note;
+        
+        return { ...state, notes: existingNotes };
+    }
 });
 
 export default matchingDataReducer;

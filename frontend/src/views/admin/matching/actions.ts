@@ -4,6 +4,7 @@ import {
     BATCH_UPSERT_MATCHES,
     UPSERT_GUARANTEE,
     BATCH_UPSERT_GUARANTEES,
+    UPSERT_NOTE
 } from "./constants";
 import { Match, AppointmentGuaranteeStatus } from "./types";
 
@@ -28,9 +29,16 @@ export const batchUpsertGuarantees = (data: AppointmentGuaranteeStatus[]) => ({
     payload: data,
 });
 
+export const upsertNote = (data: Record<string, string|null>) => ({
+    type: UPSERT_NOTE,
+    payload: data
+})
+
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
 export const matchesSelector = (state: RootState) =>
     state.ui.matchingData.matches;
 export const guaranteesSelector = (state: RootState) =>
     state.ui.matchingData.guarantees;
+export const notesSelector = (state: RootState) =>
+    state.ui.matchingData.notes;

@@ -251,6 +251,7 @@ export function FilterModal({
                                         (item: FilterMapItemValue) => {
                                             return (
                                                 <FilterCheckbox
+                                                    key={item["label"]}
                                                     value={item["value"]}
                                                     label={item["label"]}
                                                     section={section}

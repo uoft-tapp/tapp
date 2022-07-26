@@ -17,6 +17,7 @@ import { Assignment, Application, Applicant } from "../../../api/defs/types";
 import {
     matchesSelector,
     guaranteesSelector,
+    notesSelector,
     batchUpsertMatches,
 } from "./actions";
 import { PositionSummary, ApplicantSummary, Match } from "./types";
@@ -161,6 +162,7 @@ export function AdminMatchingView() {
                 applicant,
                 applications
             );
+
             if (!newestApplication) {
                 continue;
             }
@@ -179,6 +181,7 @@ export function AdminMatchingView() {
                 application: newestApplication,
                 matches: applicantMatches,
                 guarantee: applicantGuarantee,
+                note: null
             };
 
             for (const position of newApplicantSummary.application.position_preferences) {

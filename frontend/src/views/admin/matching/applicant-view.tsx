@@ -55,9 +55,6 @@ export function ApplicantView({
     const [showFilters, setShowFilters] = React.useState(false);
     const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
 
-    // const [selectedApplicant, setSelectedApplicant] = React.useState<ApplicantSummary | null>(null);
-    // const []
-
     const filteredApplicants = React.useMemo(() => {
         if (!applicants) {
             return [] as ApplicantSummary[];
@@ -492,7 +489,7 @@ function GridItem({
                                 updateApplicantMatch={updateApplicantMatch}
                                 setMarkAsUpdated={setMarkAsUpdated}
                             /> }
-                            { applicantMatch?.status === "assigned" && <FaLock className="locked-applicant" /> }
+                            { applicantMatch?.status === "assigned" && <FaLock className="applicant-icon active" /> }
                         </div>
                     </div>
                     <div className="grid-row">
@@ -518,7 +515,10 @@ function GridItem({
                                 : ""}
                         </div>
                         <div className="icon-container">
-                            <ApplicantNote />
+                            <ApplicantNote 
+                                applicantSummary={applicant}
+                                setMarkAsUpdated={setMarkAsUpdated}
+                            />
                         </div>
                     </div>
                 </div>
@@ -604,9 +604,63 @@ function ApplicantTooltip() {
     function _onClick(e: any) {
         e.stopPropagation();
     }
-    return <BsInfoCircleFill onClick={(e) => _onClick(e)} />;
+    return <BsInfoCircleFill onClick={(e) => _onClick(e)} />
 }
 
-function ApplicantNote() {
-    return <RiStickyNoteFill color="#eee" />;
+function ApplicantNote({
+    applicantSummary,
+    setMarkAsUpdated
+}: {
+    applicantSummary: ApplicantSummary;
+    setMarkAsUpdated: Function;
+}) {
+    const [show, setShow] = React.useState(false);
+
+    function _onClick(e: any){ 
+        e.stopPropagation();
+        setShow(true);
+    }
+
+    return (
+        <>
+        <RiStickyNoteFill className={ `applicant-icon ${ applicantSummary.note && applicantSummary.note.length > 0 ? "active" : "inactive" }` } onClick={(e) => _onClick(e)} />
+        <Modal
+            show={show}
+            onHide={() => setShow(false)}
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>Applicant Note</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Form.Group className="mb-3">
+                        <Form.Control as="textarea" rows={3} defaultValue={ applicantSummary.note && applicantSummary.note.length > 0 ? applicantSummary.note : "" }/>
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button
+                    onClick={() => setShow(false)}
+                    variant="outline-secondary"
+                >
+                    Close
+                </Button>
+                <Button
+                    onClick={() => {
+                        setShow(false);
+
+                        // Save the note data
+
+                        // Update to show a change was made to state
+
+                    }}
+                    variant="outline-primary"
+                >
+                    Save
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        </>
+    )
+
 }

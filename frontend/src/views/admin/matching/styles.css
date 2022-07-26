@@ -146,7 +146,7 @@
 }
 
 .filter-button-container {
-    padding-right: 5px;
+    /*padding-right: 5px;*/
     margin: 10px;
 }
 
@@ -434,4 +434,12 @@
 
 .locked-applicant {
     color: #595959;
+}
+
+.applicant-icon.active {
+    color: #595959;
+}
+
+.applicant-icon.inactive {
+    color: #eee;
 }

@@ -83,7 +83,6 @@ export function PositionList({
     // Either display the list of all courses or focus on the currently-selected on
     // const [showDetail, setShowDetail] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState("");
-    const [positionFilters, setPositionFilters] = React.useState([]);
 
     const filteredList = React.useMemo(() => {
         const ret: PositionSummary[] = Object.values(summaries)
@@ -113,9 +112,6 @@ export function PositionList({
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
                 </Form>
-                <div className="filter-button-container">
-                    <FaFilter className="filter-button" />
-                </div>
             </div>
             <div className="position-list">
                 {filteredList.map((summary) => (

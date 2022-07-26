@@ -33,4 +33,5 @@ export type ApplicantSummary = {
     application: Application;
     matches: Match[];
     guarantee: AppointmentGuaranteeStatus | null;
+    note: string | null;
 };
