@@ -15,6 +15,9 @@ import {
     debugOnlySetActiveUser,
     applicationsSelector,
     fetchActiveUser,
+    upsertPosting,
+    upsertPostingPosition,
+    fetchPositions,
 } from "../../api/actions";
 import { apiGET, apiPOST } from "../../libs/api-utils";
 import {
@@ -29,7 +32,6 @@ import { useThunkDispatch } from "../../libs/thunk-dispatch";
 import { prepareFull } from "../../libs/import-export";
 import {
     Applicant,
-    ContractTemplate,
     MinimalAssignment,
     MinimalPosition,
     Session,
@@ -64,10 +66,10 @@ export function SeedDataMenu({
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
     const contractTemplates = useSelector(contractTemplatesSelector);
+    const positions = useSelector(positionsSelector);
     const targetSession = useSelector(activeSessionSelector);
 
     let session: Session | null;
-    let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
     let applications = useSelector(applicationsSelector);
     let count;
@@ -125,7 +127,7 @@ export function SeedDataMenu({
             action: seedInstructorPreferences,
         },
         all: { name: "All Data", action: seedAll },
-        matching: { name: "Matching Data", action: seedMatching }
+        matching: { name: "All Matching Data", action: seedMatching },
     };
 
     React.useEffect(() => {
@@ -177,9 +179,7 @@ export function SeedDataMenu({
         setProgress(0);
         setStage("Contract Template");
         for (const template of seedData.contractTemplates) {
-            await dispatch(
-                upsertContractTemplate(template)
-            );
+            await dispatch(upsertContractTemplate(template));
         }
         setProgress(100);
     }
@@ -303,6 +303,7 @@ export function SeedDataMenu({
             throw new Error("No postings found");
         }
 
+        // Seeded applications are directed at the first posting of the active session
         let url_token = resp[0].url_token;
 
         for (const application of seedData.applications.slice(0, limit)) {
@@ -428,16 +429,77 @@ export function SeedDataMenu({
             setConfirmDialogVisible(false);
             setInProgress(true);
 
-            await seedSession();
+            setStage("Matching Data");
+
+            // Keep track of current user so we can swap back at the end
+            const initialUser = await dispatch(fetchActiveUser());
+
+            // // Create a new session
+            const mockSessionData = {
+                start_date: "2021/01/01",
+                end_date: "2022/12/31",
+                name: `Session ${new Date().toLocaleString()}`,
+                rate1: 50,
+                applications_visible_to_instructors: true,
+            };
+            session = await dispatch(upsertSession(mockSessionData));
+            await dispatch(setActiveSession(session));
+
             await seedContractTemplate();
             await seedUsers();
             await seedInstructors();
             await seedPositions();
-            
+
+            // Create a new posting
+            setStage("Posting");
+            const newPosting = await dispatch(
+                upsertPosting({
+                    name: "Matching Data Posting",
+                    open_date: "2022-01-01T00:00:00.000Z",
+                    close_date: "2022-12-31T00:00:00.000Z",
+                    intro_text: "This is a test posting for matching data.",
+                    availability: "auto",
+                    custom_questions: null,
+                    open_status: true,
+                })
+            );
+
+            // Add all seeded positions to posting:
+            const sessionPositions = await dispatch(fetchPositions());
+
+            setStage("Posting Positions");
+            for (const position of sessionPositions) {
+                await dispatch(
+                    upsertPostingPosition({
+                        position_id: position.id,
+                        posting_id: newPosting.id,
+                        hours: position.hours_per_assignment,
+                        num_positions: Math.floor(Math.random() * 29) + 1,
+                    })
+                );
+            }
+
             await seedApplications();
 
             // Temporarily set user to someone marked as an instructor in all positions
+            await dispatch(
+                debugOnlySetActiveUser(
+                    {
+                        utorid: "smithh",
+                        roles: ["admin, instructor", "ta"],
+                    },
+                    { skipInit: true }
+                )
+            );
             await seedInstructorPreferences();
+
+            // Go back to the original user
+            await dispatch(
+                debugOnlySetActiveUser({
+                    utorid: initialUser.utorid,
+                    roles: initialUser.roles,
+                })
+            );
         } catch (error) {
             console.error(error);
         } finally {
