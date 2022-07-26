@@ -1,6 +1,7 @@
 import { normalizeImport } from "../../libs/import-export";
 import {
     instructorsSelector,
+    contractTemplatesSelector,
     upsertApplicant,
     upsertAssignment,
     upsertPosition,
@@ -62,9 +63,10 @@ export function SeedDataMenu({
     const [progress, setProgress] = React.useState(0);
     const dispatch = useThunkDispatch();
     const instructors = useSelector(instructorsSelector);
+    const contractTemplates = useSelector(contractTemplatesSelector);
     const targetSession = useSelector(activeSessionSelector);
+
     let session: Session | null;
-    let contractTemplates: ContractTemplate[] = [];
     let positions = useSelector(positionsSelector);
     let applicants: Applicant[] = [];
     let applications = useSelector(applicationsSelector);
@@ -175,11 +177,9 @@ export function SeedDataMenu({
         setProgress(0);
         setStage("Contract Template");
         for (const template of seedData.contractTemplates) {
-            const contractTemplate = await dispatch(
+            await dispatch(
                 upsertContractTemplate(template)
             );
-
-            contractTemplates.push(contractTemplate);
         }
         setProgress(100);
     }
@@ -205,6 +205,7 @@ export function SeedDataMenu({
         setProgress(0);
         count = 0;
         total = seedData.positions.length;
+
         const data = (
             normalizeImport(
                 {
