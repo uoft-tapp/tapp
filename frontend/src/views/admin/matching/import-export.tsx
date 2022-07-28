@@ -6,7 +6,7 @@ import { Modal, Button, Row, Form, Col } from "react-bootstrap";
 import { DataFormat } from "../../../libs/import-export";
 import { BsCircleFill } from "react-icons/bs";
 import { Match, AppointmentGuaranteeStatus } from "./types";
-import { upsertMatch, batchUpsertGuarantees } from "./actions";
+import { upsertMatch, batchUpsertGuarantees, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 export function ExportMatchingDataButton({
@@ -84,6 +84,9 @@ export function ImportMatchingDataButton({
     const [newGuarantees, setNewGuarantees] = React.useState<
         AppointmentGuaranteeStatus[] | null
     >(null);
+    const [newNotes, setNewNotes] = React.useState<
+        Record<string, string | null>
+    >({});
 
     const matchingData = useSelector(matchingDataSelector);
 
@@ -172,6 +175,16 @@ export function ImportMatchingDataButton({
                     )
                 );
             }
+
+            if (Object.keys(fileContent.data).includes("notes")) {
+                const importedNotes: Record<string, string | null> = {};
+                Object.keys(fileContent.data.notes).map((utorid) => {
+                    importedNotes[utorid] = fileContent.data.notes[utorid];
+                    return;
+                });
+
+                setNewNotes(importedNotes);
+            }
         } catch (e: any) {
             console.warn(e);
         }
@@ -206,6 +219,17 @@ export function ImportMatchingDataButton({
         await _batchUpsertGuarantees(guarantees);
     }
 
+    function _upsertNote(utorid: string, note: string | null) {
+        return dispatch(upsertNote({ utorid: utorid, note: note }));
+    }
+
+    async function updateNotes(notes: Record<string, string | null>) {
+        Object.keys(notes).map((utorid) => {
+            _upsertNote(utorid, notes[utorid]);
+            return;
+        });
+    }
+
     function _onConfirm() {
         if (diffedMatches) {
             for (const match of diffedMatches) {
@@ -215,6 +239,10 @@ export function ImportMatchingDataButton({
 
         if (newGuarantees) {
             updateGuarantees(newGuarantees);
+        }
+
+        if (newNotes) {
+            updateNotes(newNotes);
         }
 
         setFileArrayBuffer(null);
