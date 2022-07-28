@@ -178,10 +178,9 @@ export function ImportMatchingDataButton({
 
             if (Object.keys(fileContent.data).includes("notes")) {
                 const importedNotes: Record<string, string | null> = {};
-                Object.keys(fileContent.data.notes).map((utorid) => {
+                for (const utorid in Object.keys(fileContent.data.notes)) {
                     importedNotes[utorid] = fileContent.data.notes[utorid];
-                    return;
-                });
+                }
 
                 setNewNotes(importedNotes);
             }
@@ -224,10 +223,9 @@ export function ImportMatchingDataButton({
     }
 
     async function updateNotes(notes: Record<string, string | null>) {
-        Object.keys(notes).map((utorid) => {
+        for (const utorid in Object.keys(notes)) {
             _upsertNote(utorid, notes[utorid]);
-            return;
-        });
+        }
     }
 
     function _onConfirm() {

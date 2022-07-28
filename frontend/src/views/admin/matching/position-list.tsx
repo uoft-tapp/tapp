@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 
-import { FaFilter } from "react-icons/fa";
 import { Form } from "react-bootstrap";
 
 import { PositionSummary } from "./types";

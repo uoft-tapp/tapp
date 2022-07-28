@@ -363,7 +363,7 @@ function GridSection({
                 {applicants.map((applicant) => {
                     return (
                         <GridItem
-                            applicant={applicant}
+                            applicantSummary={applicant}
                             position={position}
                             setMarkAsUpdated={setMarkAsUpdated}
                             key={applicant.applicant.id}
@@ -376,18 +376,21 @@ function GridSection({
 }
 
 function GridItem({
-    applicant,
+    applicantSummary,
     position,
     setMarkAsUpdated,
 }: {
-    applicant: ApplicantSummary;
+    applicantSummary: ApplicantSummary;
     position: Position;
     setMarkAsUpdated: Function;
 }) {
     const dispatch = useThunkDispatch();
-    const applicantMatch = getApplicantMatchForPosition(applicant, position);
+    const applicantMatch = getApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
     const positionPref = getPositionPrefForPosition(
-        applicant.application,
+        applicantSummary.application,
         position
     );
 
@@ -396,7 +399,7 @@ function GridItem({
         React.useState<Application | null>(null);
 
     const instructorRatings =
-        applicant.application.instructor_preferences
+        applicantSummary.application.instructor_preferences
             .filter((pref) => pref.position.id === position.id)
             .map((rating) => {
                 return rating.preference_level;
@@ -407,6 +410,17 @@ function GridItem({
             return;
         }
         return dispatch(upsertMatch(match));
+    }
+
+    async function hideApplicantFromAll() {
+        // Update all of this applicant's matches except for those in which they are assigned/staged-assigned
+        for (const match of applicantSummary.matches) {
+            if (match.status === "applied") {
+                const newMatch: Match = { ...match, status: "hidden" };
+                await _upsertMatch(newMatch);
+                setMarkAsUpdated(true);
+            }
+        }
     }
 
     async function updateApplicantMatch(
@@ -429,12 +443,12 @@ function GridItem({
     }
 
     let filledStatus: "empty" | "under" | "matched" | "over" | "" = "";
-    const hoursOwed = applicant.guarantee
-        ? applicant.guarantee.totalHoursOwed
+    const hoursOwed = applicantSummary.guarantee
+        ? applicantSummary.guarantee.totalHoursOwed
         : 0;
     let totalAssignedHours = round(
         sum(
-            ...applicant.matches.map((match) => {
+            ...applicantSummary.matches.map((match) => {
                 if (
                     match.status === "assigned" ||
                     match.status === "staged-assigned"
@@ -444,8 +458,8 @@ function GridItem({
                 return 0;
             })
         ) +
-            (applicant.guarantee
-                ? applicant.guarantee.previousHoursFulfilled
+            (applicantSummary.guarantee
+                ? applicantSummary.guarantee.previousHoursFulfilled
                 : 0),
         2
     );
@@ -488,12 +502,11 @@ function GridItem({
                 <div className="applicant-grid-main">
                     <div className="grid-row">
                         <div className="applicant-name">
-                            {applicant.applicant.first_name +
+                            {applicantSummary.applicant.first_name +
                                 " " +
-                                applicant.applicant.last_name}
+                                applicantSummary.applicant.last_name}
                         </div>
                         <div className="icon-container">
-                            {/*<ApplicantTooltip />*/}
                             {!applicantMatch?.status.includes("assigned") && (
                                 <ApplicantStar
                                     match={applicantMatch}
@@ -508,13 +521,16 @@ function GridItem({
                     </div>
                     <div className="grid-row">
                         <div className="grid-detail-small">
-                            {applicant.application.department
+                            {applicantSummary.application.department
                                 ?.substring(0, 1)
                                 .toUpperCase()}
                         </div>
                         <div className="grid-detail-small">
-                            {applicant.application.program?.substring(0, 1)}
-                            {applicant.application.yip}
+                            {applicantSummary.application.program?.substring(
+                                0,
+                                1
+                            )}
+                            {applicantSummary.application.yip}
                         </div>
                         <div className="grid-detail-small">
                             {positionPref ? positionPref.preference_level : ""}
@@ -530,7 +546,7 @@ function GridItem({
                         </div>
                         <div className="icon-container">
                             <ApplicantNote
-                                applicantSummary={applicant}
+                                applicantSummary={applicantSummary}
                                 setMarkAsUpdated={setMarkAsUpdated}
                             />
                         </div>
@@ -542,14 +558,16 @@ function GridItem({
                     <a
                         className="dropdown-item"
                         onClick={() => {
-                            setShownApplication(applicant.application);
+                            setShownApplication(applicantSummary.application);
                             setOpen(false);
                         }}
                     >
                         View application details
                     </a>
-                    {applicantMatch?.status !== "assigned" &&
-                        applicantMatch?.status !== "staged-assigned" && (
+                    {applicantMatch?.status &&
+                        ["hidden", "applied"].includes(
+                            applicantMatch?.status
+                        ) && (
                             <a
                                 className="dropdown-item"
                                 onClick={() => {
@@ -598,6 +616,20 @@ function GridItem({
                                 Hide from <b>{position.position_code}</b>
                             </a>
                         )}
+                    {applicantMatch?.status &&
+                        ["hidden", "applied"].includes(
+                            applicantMatch?.status
+                        ) && (
+                            <a
+                                className="dropdown-item"
+                                onClick={() => {
+                                    hideApplicantFromAll();
+                                    setOpen(false);
+                                }}
+                            >
+                                Hide from all courses
+                            </a>
+                        )}
                     {applicantMatch?.status === "hidden" && (
                         <a
                             className="dropdown-item"
@@ -609,8 +641,6 @@ function GridItem({
                             Unhide from <b>{position.position_code}</b>
                         </a>
                     )}
-
-                    {/*<a className="dropdown-item">Hide from all</a>*/}
                 </div>
             </Collapse>
             <Modal
@@ -673,13 +703,6 @@ function ApplicantStar({
     return (
         <BsStarFill className="star-icon" onClick={async (e) => _onClick(e)} />
     );
-}
-
-function ApplicantTooltip() {
-    function _onClick(e: any) {
-        e.stopPropagation();
-    }
-    return <BsInfoCircleFill onClick={(e) => _onClick(e)} />;
 }
 
 function ApplicantNote({
