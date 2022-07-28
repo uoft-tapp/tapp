@@ -3,7 +3,7 @@ import {
     BATCH_UPSERT_MATCHES,
     UPSERT_GUARANTEE,
     BATCH_UPSERT_GUARANTEES,
-    UPSERT_NOTE
+    UPSERT_NOTE,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus } from "./types";
@@ -17,7 +17,7 @@ interface MatchingDataState {
 const initialState: MatchingDataState = {
     matches: [],
     guarantees: [],
-    notes: {}
+    notes: {},
 };
 
 const matchingDataReducer = createReducer(initialState, {
@@ -82,11 +82,11 @@ const matchingDataReducer = createReducer(initialState, {
         return { ...state, guarantees: action.payload };
     },
     [UPSERT_NOTE]: (state, action) => {
-        const existingNotes: Record<string, string|null> = {...state.notes};
+        const existingNotes: Record<string, string | null> = { ...state.notes };
         existingNotes[action.payload.utorid] = action.payload.note;
-        
+
         return { ...state, notes: existingNotes };
-    }
+    },
 });
 
 export default matchingDataReducer;

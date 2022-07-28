@@ -10,13 +10,13 @@ import { RiStickyNoteFill } from "react-icons/ri";
 
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import Collapse from 'react-bootstrap/Collapse';
-import { Form, Table, Dropdown, Modal, Button } from "react-bootstrap";
+import Collapse from "react-bootstrap/Collapse";
+import { Form, Table, Modal, Button } from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
 
-import { upsertMatch } from "./actions";
+import { upsertMatch, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 import {
@@ -32,11 +32,11 @@ import { ApplicationDetails } from "../applications/application-details";
 import "./styles.css";
 
 const statusMapping: Record<string, string[]> = {
-    "Assigned": ["assigned"],
+    Assigned: ["assigned"],
     "Assigned (Staged)": ["staged-assigned"],
-    "Starred": ["starred"],
-    "Applied": ["applied"],
-    "Hidden": ["hidden"],
+    Starred: ["starred"],
+    Applied: ["applied"],
+    Hidden: ["hidden"],
 };
 
 export function ApplicantView({
@@ -50,7 +50,11 @@ export function ApplicantView({
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
-    const [sortList, setSortList] = React.useState<string[]>(["deptAsc", "programDesc", "yipAsc"]);
+    const [sortList, setSortList] = React.useState<string[]>([
+        "deptAsc",
+        "programDesc",
+        "yipAsc",
+    ]);
 
     const [showFilters, setShowFilters] = React.useState(false);
     const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
@@ -405,12 +409,15 @@ function GridItem({
         return dispatch(upsertMatch(match));
     }
 
-    async function updateApplicantMatch(newStatus: "staged-assigned" | "hidden" | "starred" | "applied", hoursAssigned?: number) {
+    async function updateApplicantMatch(
+        newStatus: "staged-assigned" | "hidden" | "starred" | "applied",
+        hoursAssigned?: number
+    ) {
         const newMatch: Match | null = applicantMatch
             ? {
-                ...applicantMatch,
-                status: newStatus,
-            }
+                  ...applicantMatch,
+                  status: newStatus,
+              }
             : null;
 
         if (newMatch && hoursAssigned) {
@@ -456,8 +463,8 @@ function GridItem({
     }
 
     return (
-        <div 
-            className="applicant-dropdown-wrapper dropdown" 
+        <div
+            className="applicant-dropdown-wrapper dropdown"
             onMouseLeave={() => setOpen(false)}
         >
             <div
@@ -467,7 +474,10 @@ function GridItem({
                 }}
             >
                 <div
-                    className={classNames("applicant-status-sidebar", filledStatus)}
+                    className={classNames(
+                        "applicant-status-sidebar",
+                        filledStatus
+                    )}
                 >
                     <div className="applicant-status-value">
                         {totalAssignedHours}
@@ -484,12 +494,16 @@ function GridItem({
                         </div>
                         <div className="icon-container">
                             {/*<ApplicantTooltip />*/}
-                            { !applicantMatch?.status.includes("assigned") && <ApplicantStar
-                                match={applicantMatch}
-                                updateApplicantMatch={updateApplicantMatch}
-                                setMarkAsUpdated={setMarkAsUpdated}
-                            /> }
-                            { applicantMatch?.status === "assigned" && <FaLock className="applicant-icon active" /> }
+                            {!applicantMatch?.status.includes("assigned") && (
+                                <ApplicantStar
+                                    match={applicantMatch}
+                                    updateApplicantMatch={updateApplicantMatch}
+                                    setMarkAsUpdated={setMarkAsUpdated}
+                                />
+                            )}
+                            {applicantMatch?.status === "assigned" && (
+                                <FaLock className="applicant-icon active" />
+                            )}
                         </div>
                     </div>
                     <div className="grid-row">
@@ -515,7 +529,7 @@ function GridItem({
                                 : ""}
                         </div>
                         <div className="icon-container">
-                            <ApplicantNote 
+                            <ApplicantNote
                                 applicantSummary={applicant}
                                 setMarkAsUpdated={setMarkAsUpdated}
                             />
@@ -525,15 +539,76 @@ function GridItem({
             </div>
             <Collapse in={open}>
                 <div className="applicant-dropdown-menu dropdown-menu noselect">
-                    <a className="dropdown-item" onClick={() => {
-                        setShownApplication(applicant.application);
-                        setOpen(false);
-                    }}>View application details</a>
-                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", position.hours_per_assignment || 0); setOpen(false); }}>Assign to <b>{position.position_code}</b> ({ position.hours_per_assignment || 0 })</a> }
-                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("staged-assigned", 60); setOpen(false); }}>Change assigned hours (60)</a>}
-                    { applicantMatch?.status === "staged-assigned" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("applied"); setOpen(false); }}>Unassign from <b>{position.position_code}</b></a>}
-                    { applicantMatch?.status !== "assigned" && applicantMatch?.status !== "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("hidden"); setOpen(false); }}>Hide from <b>{position.position_code}</b></a> }
-                    { applicantMatch?.status === "hidden" && <a className="dropdown-item" onClick={() => { updateApplicantMatch("applied"); setOpen(false); }}>Unhide from <b>{position.position_code}</b></a> }
+                    <a
+                        className="dropdown-item"
+                        onClick={() => {
+                            setShownApplication(applicant.application);
+                            setOpen(false);
+                        }}
+                    >
+                        View application details
+                    </a>
+                    {applicantMatch?.status !== "assigned" &&
+                        applicantMatch?.status !== "staged-assigned" && (
+                            <a
+                                className="dropdown-item"
+                                onClick={() => {
+                                    updateApplicantMatch(
+                                        "staged-assigned",
+                                        position.hours_per_assignment || 0
+                                    );
+                                    setOpen(false);
+                                }}
+                            >
+                                Assign to <b>{position.position_code}</b> (
+                                {position.hours_per_assignment || 0})
+                            </a>
+                        )}
+                    {applicantMatch?.status === "staged-assigned" && (
+                        <a
+                            className="dropdown-item"
+                            onClick={() => {
+                                updateApplicantMatch("staged-assigned", 60);
+                                setOpen(false);
+                            }}
+                        >
+                            Change assigned hours (60)
+                        </a>
+                    )}
+                    {applicantMatch?.status === "staged-assigned" && (
+                        <a
+                            className="dropdown-item"
+                            onClick={() => {
+                                updateApplicantMatch("applied");
+                                setOpen(false);
+                            }}
+                        >
+                            Unassign from <b>{position.position_code}</b>
+                        </a>
+                    )}
+                    {applicantMatch?.status !== "assigned" &&
+                        applicantMatch?.status !== "hidden" && (
+                            <a
+                                className="dropdown-item"
+                                onClick={() => {
+                                    updateApplicantMatch("hidden");
+                                    setOpen(false);
+                                }}
+                            >
+                                Hide from <b>{position.position_code}</b>
+                            </a>
+                        )}
+                    {applicantMatch?.status === "hidden" && (
+                        <a
+                            className="dropdown-item"
+                            onClick={() => {
+                                updateApplicantMatch("applied");
+                                setOpen(false);
+                            }}
+                        >
+                            Unhide from <b>{position.position_code}</b>
+                        </a>
+                    )}
 
                     {/*<a className="dropdown-item">Hide from all</a>*/}
                 </div>
@@ -604,63 +679,87 @@ function ApplicantTooltip() {
     function _onClick(e: any) {
         e.stopPropagation();
     }
-    return <BsInfoCircleFill onClick={(e) => _onClick(e)} />
+    return <BsInfoCircleFill onClick={(e) => _onClick(e)} />;
 }
 
 function ApplicantNote({
     applicantSummary,
-    setMarkAsUpdated
+    setMarkAsUpdated,
 }: {
     applicantSummary: ApplicantSummary;
     setMarkAsUpdated: Function;
 }) {
+    const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
+    const [note, setNote] = React.useState(applicantSummary.note);
 
-    function _onClick(e: any){ 
+    function _onClick(e: any) {
         e.stopPropagation();
         setShow(true);
     }
 
+    function _upsertNote(utorid: string, note: string | null) {
+        return dispatch(upsertNote({ utorid: utorid, note: note }));
+    }
+
+    async function updateApplicantNote(note: string | null) {
+        await _upsertNote(applicantSummary.applicant.utorid, note);
+        setMarkAsUpdated(true);
+    }
+
     return (
         <>
-        <RiStickyNoteFill className={ `applicant-icon ${ applicantSummary.note && applicantSummary.note.length > 0 ? "active" : "inactive" }` } onClick={(e) => _onClick(e)} />
-        <Modal
-            show={show}
-            onHide={() => setShow(false)}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Applicant Note</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3">
-                        <Form.Control as="textarea" rows={3} defaultValue={ applicantSummary.note && applicantSummary.note.length > 0 ? applicantSummary.note : "" }/>
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    onClick={() => setShow(false)}
-                    variant="outline-secondary"
-                >
-                    Close
-                </Button>
-                <Button
-                    onClick={() => {
-                        setShow(false);
-
-                        // Save the note data
-
-                        // Update to show a change was made to state
-
-                    }}
-                    variant="outline-primary"
-                >
-                    Save
-                </Button>
-            </Modal.Footer>
-        </Modal>
+            <RiStickyNoteFill
+                className={`applicant-icon ${
+                    applicantSummary.note && applicantSummary.note.length > 0
+                        ? "active"
+                        : "inactive"
+                }`}
+                onClick={(e) => _onClick(e)}
+            />
+            <Modal show={show} onHide={() => setShow(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Applicant Note</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                defaultValue={
+                                    applicantSummary.note &&
+                                    applicantSummary.note.length > 0
+                                        ? applicantSummary.note
+                                        : ""
+                                }
+                                onChange={(e) => setNote(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={() => setShow(false)}
+                        variant="outline-secondary"
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            if (note?.length === 0) {
+                                updateApplicantNote(null);
+                            } else {
+                                updateApplicantNote(note);
+                            }
+                            setShow(false);
+                        }}
+                        variant="outline-primary"
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
-    )
-
+    );
 }

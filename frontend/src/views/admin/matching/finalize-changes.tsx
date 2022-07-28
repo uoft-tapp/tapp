@@ -30,12 +30,12 @@ export function FinalizeChangesButton() {
                 .filter((match) => match.status === "staged-assigned")
                 .sort((a, b) => {
                     return (a.positionCode + " " + a.utorid).toLowerCase() <
-                        ( b.positionCode + " " + b.utorid).toLowerCase()
+                        (b.positionCode + " " + b.utorid).toLowerCase()
                         ? -1
                         : 1;
                 }) || null
         );
-    }, [matchingData])
+    }, [matchingData]);
 
     function onClick() {
         setShowDialog(true);
@@ -53,21 +53,26 @@ export function FinalizeChangesButton() {
         }
 
         for (const match of stagedAssignments) {
-            const newAssignment = {
-                position: positions.find(
-                    (position) => position.id === match.positionId
-                ),
-                position_id: match.positionId,
+            const targetPosition = positions.find(
+                (position) => position.id === match.positionId
+            );
+            const targetApplicant = applicants.find(
+                (applicant) =>
+                    applicant.utorid === match.utorid &&
+                    applicant.id === match.applicantId
+            );
+
+            if (!targetPosition || !targetApplicant) {
+                return;
+            }
+
+            const newAssignment: Partial<Assignment> = {
+                position: targetPosition,
                 hours: match.hoursAssigned,
-                applicant: applicants.find(
-                    (applicant) =>
-                        applicant.utorid === match.utorid &&
-                        applicant.id === match.applicantId
-                ),
-                applicant_id: match.applicantId,
+                applicant: targetApplicant,
             };
 
-            makeAssignment(newAssignment as Partial<Assignment>);
+            makeAssignment(newAssignment);
         }
     }
 
@@ -78,14 +83,18 @@ export function FinalizeChangesButton() {
                 size="sm"
                 className="footer-button finalize"
                 onClick={onClick}
-                disabled={stagedAssignments && stagedAssignments.length === 0 ? true : false}
+                disabled={
+                    stagedAssignments && stagedAssignments.length === 0
+                        ? true
+                        : false
+                }
             >
-                Finalize Changes { stagedAssignments && stagedAssignments.length > 0 ? " (" + stagedAssignments.length + ")" : "" }
+                Finalize Changes{" "}
+                {stagedAssignments && stagedAssignments.length > 0
+                    ? " (" + stagedAssignments.length + ")"
+                    : ""}
             </Button>
-            <Modal 
-                show={showDialog}
-                dialogClassName="finalize-changes-modal"
-            >
+            <Modal show={showDialog} dialogClassName="finalize-changes-modal">
                 <Modal.Header>
                     <Modal.Title>Finalize Changes</Modal.Title>
                 </Modal.Header>
@@ -102,7 +111,8 @@ export function FinalizeChangesButton() {
                                             match.utorid
                                         }
                                     >
-                                        {match.positionCode} - {match.utorid} ({match.hoursAssigned})
+                                        {match.positionCode} - {match.utorid} (
+                                        {match.hoursAssigned})
                                     </li>
                                 );
                             })}

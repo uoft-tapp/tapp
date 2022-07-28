@@ -4,7 +4,7 @@ import { ApplicantSummary } from "./types";
 import {
     getPositionPrefForPosition,
     getApplicantMatchForPosition,
-    getApplicantTotalHoursAssigned
+    getApplicantTotalHoursAssigned,
 } from "./utils";
 
 export type FilterListItem = {
@@ -23,7 +23,7 @@ type FilterMapItemValue = {
 };
 
 const filterMap: Record<string, FilterMapItem> = {
-    "Program": {
+    Program: {
         filterFunc: filterProgram,
         values: [
             {
@@ -52,7 +52,7 @@ const filterMap: Record<string, FilterMapItem> = {
             },
         ],
     },
-    "Department": {
+    Department: {
         filterFunc: filterDept,
         values: [
             {
@@ -119,51 +119,51 @@ const filterMap: Record<string, FilterMapItem> = {
         values: [
             {
                 value: "assigned",
-                label: "Assigned"
+                label: "Assigned",
             },
             {
                 value: "staged-assigned",
-                label: "Assigned (Staged)"
+                label: "Assigned (Staged)",
             },
             {
                 value: "starred",
-                label: "Starred"
+                label: "Starred",
             },
             {
                 value: "applied",
-                label: "Applied"
+                label: "Applied",
             },
             {
                 value: "hidden",
-                label: "Hidden"
-            }
-        ]
+                label: "Hidden",
+            },
+        ],
     },
     "Hour Fulfillment": {
         filterFunc: filterHourFulfillment,
         values: [
             {
                 value: "over",
-                label: "Overfilled"
+                label: "Overfilled",
             },
             {
                 value: "filled",
-                label: "Filled"
+                label: "Filled",
             },
             {
                 value: "under",
-                label: "Underfilled"
-            }, 
+                label: "Underfilled",
+            },
             {
                 value: "empty",
-                label: "Unstarted"
+                label: "Unstarted",
             },
             {
                 value: "N/A",
-                label: "N/A"
-            }
-        ]
-    }
+                label: "N/A",
+            },
+        ],
+    },
 };
 
 function FilterCheckbox({
@@ -246,7 +246,9 @@ export function FilterModal({
                         {Object.keys(filterMap).map((section) => {
                             return (
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="filter-section-title">{section}</Form.Label>
+                                    <Form.Label className="filter-section-title">
+                                        {section}
+                                    </Form.Label>
                                     {filterMap[section]["values"].map(
                                         (item: FilterMapItemValue) => {
                                             return (
@@ -368,27 +370,37 @@ function filterTaPref(
     applicantSummaries: ApplicantSummary[],
     excludeValues: number[]
 ) {
-    if (applicantSummaries.length === 0 || excludeValues.length === 0 || currPosition === null) {
+    if (
+        applicantSummaries.length === 0 ||
+        excludeValues.length === 0 ||
+        currPosition === null
+    ) {
         return applicantSummaries;
     }
 
     return (
-        applicantSummaries.map(
-            (applicantSummary) => {
+        applicantSummaries
+            .map((applicantSummary) => {
                 // Get the applicant's preference for this position
                 if (!applicantSummary.application) {
                     return null;
                 }
 
-                const applicantPref = getPositionPrefForPosition(applicantSummary.application, currPosition);
+                const applicantPref = getPositionPrefForPosition(
+                    applicantSummary.application,
+                    currPosition
+                );
 
-                if (!applicantPref || excludeValues.includes(applicantPref.preference_level)) {
+                if (
+                    !applicantPref ||
+                    excludeValues.includes(applicantPref.preference_level)
+                ) {
                     return null;
                 }
 
                 return applicantSummary;
-            }
-        ).filter((applicantSummary) => applicantSummary !== null) || []
+            })
+            .filter((applicantSummary) => applicantSummary !== null) || []
     );
 }
 
@@ -396,23 +408,30 @@ function filterPositionStatus(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {
-    if (applicantSummaries.length === 0 || excludeValues.length === 0 || currPosition === null) {
+    if (
+        applicantSummaries.length === 0 ||
+        excludeValues.length === 0 ||
+        currPosition === null
+    ) {
         return applicantSummaries;
     }
 
     // TODO: Special case when handling "other"
 
     return (
-        applicantSummaries.map(
-            (applicantSummary) => {
-                const match = getApplicantMatchForPosition(applicantSummary, currPosition);
+        applicantSummaries
+            .map((applicantSummary) => {
+                const match = getApplicantMatchForPosition(
+                    applicantSummary,
+                    currPosition
+                );
                 if (!match || excludeValues.includes(match.status)) {
                     return null;
                 }
 
                 return applicantSummary;
-            }
-        ).filter((applicantSummary) => applicantSummary !== null) || []
+            })
+            .filter((applicantSummary) => applicantSummary !== null) || []
     );
 }
 
@@ -425,15 +444,26 @@ function filterHourFulfillment(
     }
 
     return (
-        applicantSummaries.map(
-            (applicantSummary) => {
+        applicantSummaries
+            .map((applicantSummary) => {
                 let applicantHourStatus = "N/A";
 
-                if (applicantSummary.guarantee && applicantSummary.guarantee.totalHoursOwed > 0) {
-                    const totalHoursAssigned = getApplicantTotalHoursAssigned(applicantSummary) + applicantSummary.guarantee.previousHoursFulfilled;
-                    if (totalHoursAssigned > applicantSummary.guarantee.totalHoursOwed) {
+                if (
+                    applicantSummary.guarantee &&
+                    applicantSummary.guarantee.totalHoursOwed > 0
+                ) {
+                    const totalHoursAssigned =
+                        getApplicantTotalHoursAssigned(applicantSummary) +
+                        applicantSummary.guarantee.previousHoursFulfilled;
+                    if (
+                        totalHoursAssigned >
+                        applicantSummary.guarantee.totalHoursOwed
+                    ) {
                         applicantHourStatus = "over";
-                    } else if (totalHoursAssigned === applicantSummary.guarantee.totalHoursOwed) {
+                    } else if (
+                        totalHoursAssigned ===
+                        applicantSummary.guarantee.totalHoursOwed
+                    ) {
                         applicantHourStatus = "filled";
                     } else if (totalHoursAssigned > 0) {
                         applicantHourStatus = "under";
@@ -447,7 +477,7 @@ function filterHourFulfillment(
                 }
 
                 return applicantSummary;
-            }
-        ).filter((applicantSummary) => applicantSummary !== null) || []
+            })
+            .filter((applicantSummary) => applicantSummary !== null) || []
     );
 }

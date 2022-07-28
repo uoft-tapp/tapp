@@ -25,12 +25,16 @@ export function getPositionPrefForPosition(
         return null;
     }
 
-    return application.position_preferences?.find(
-        (positionPref) => positionPref.position.id === position.id
-    ) || null;
+    return (
+        application.position_preferences?.find(
+            (positionPref) => positionPref.position.id === position.id
+        ) || null
+    );
 }
 
-export function getApplicantTotalHoursAssigned(applicantSummary: ApplicantSummary) {
+export function getApplicantTotalHoursAssigned(
+    applicantSummary: ApplicantSummary
+) {
     return sum(
         ...applicantSummary.matches.map((match) => {
             if (
@@ -41,5 +45,5 @@ export function getApplicantTotalHoursAssigned(applicantSummary: ApplicantSummar
             }
             return 0;
         })
-    )
+    );
 }

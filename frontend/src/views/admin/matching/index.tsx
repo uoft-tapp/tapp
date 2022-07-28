@@ -71,6 +71,7 @@ export function AdminMatchingView() {
     const applicants = useSelector(applicantsSelector);
     const matches = useSelector(matchesSelector);
     const guarantees = useSelector(guaranteesSelector);
+    const notes = useSelector(notesSelector);
 
     // We don't load postings by default, so we load them dynamically whenever
     // we view this page.
@@ -181,24 +182,25 @@ export function AdminMatchingView() {
                 application: newestApplication,
                 matches: applicantMatches,
                 guarantee: applicantGuarantee,
-                note: null
+                note: notes[applicant.utorid] || null,
             };
 
-            for (const position of newApplicantSummary.application.position_preferences) {
+            for (const position of newApplicantSummary.application
+                .position_preferences) {
                 applicantSummariesByPositionId[position.position.id] =
-                    applicantSummariesByPositionId[position.position.id] ||
-                    [];
+                    applicantSummariesByPositionId[position.position.id] || [];
                 applicantSummariesByPositionId[position.position.id].push(
                     newApplicantSummary
                 );
-            };
+            }
 
             // Add summary to positions where the applicant has been assigned:
-            for (const assignment of assignments.filter((assignment) => assignment.applicant.id === applicant.id)) {
+            for (const assignment of assignments.filter(
+                (assignment) => assignment.applicant.id === applicant.id
+            )) {
                 applicantSummariesByPositionId[assignment.position.id] =
-                    applicantSummariesByPositionId[
-                        assignment.position.id
-                    ] || [];
+                    applicantSummariesByPositionId[assignment.position.id] ||
+                    [];
 
                 const existingSummary = applicantSummariesByPositionId[
                     assignment.position.id
@@ -206,11 +208,11 @@ export function AdminMatchingView() {
 
                 // Add the applicant summary to the position only if the summary does not already exist
                 if (!existingSummary) {
-                    applicantSummariesByPositionId[
-                        assignment.position.id
-                    ].push(newApplicantSummary);
+                    applicantSummariesByPositionId[assignment.position.id].push(
+                        newApplicantSummary
+                    );
                 }
-            };
+            }
         }
 
         const ret: Record<number, PositionSummary> = {};
@@ -252,7 +254,15 @@ export function AdminMatchingView() {
         }
 
         return ret;
-    }, [positions, assignments, applications, applicants, matches, guarantees]);
+    }, [
+        positions,
+        assignments,
+        applications,
+        applicants,
+        matches,
+        guarantees,
+        notes,
+    ]);
 
     let currApplicants: ApplicantSummary[] = [];
 

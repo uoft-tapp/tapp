@@ -109,12 +109,12 @@ const sortMap: Record<string, sortMapItem> = {
     firstNameAsc: {
         function: sortByFirstName,
         asc: true,
-        name: "First Name (ASC)"
+        name: "First Name (ASC)",
     },
     firstNameDesc: {
         function: sortByFirstName,
         asc: true,
-        name: "First Name (ASC)"
+        name: "First Name (ASC)",
     },
     lastNameAsc: {
         function: sortByLastName,

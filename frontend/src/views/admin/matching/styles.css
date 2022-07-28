@@ -360,7 +360,7 @@
 
 .star-icon {
     color: #eee;
-    transition: color .2s ease-out;
+    transition: color 0.2s ease-out;
 }
 
 .star-icon.filled {
@@ -391,7 +391,7 @@
     width: 100%;
 }
 
-.filter-modal > .modal-content  > .modal-body {
+.filter-modal > .modal-content > .modal-body {
     overflow-y: scroll;
     width: 100%;
     height: 100%;

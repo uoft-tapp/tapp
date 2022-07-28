@@ -59,7 +59,10 @@ function PositionRow({
             }}
         >
             <div
-                className={classNames("status-sidebar", positionSummary.filledStatus)}
+                className={classNames(
+                    "status-sidebar",
+                    positionSummary.filledStatus
+                )}
             ></div>
             <span className="position-title">
                 {positionSummary.position.position_code}
