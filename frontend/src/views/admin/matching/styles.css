@@ -327,8 +327,11 @@
 }
 
 .matching-course-header {
-    /* todo: make sticky? */
     padding: 0 3px;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
 }
 
 .matching-course-body {
