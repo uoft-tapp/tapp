@@ -243,6 +243,14 @@
     column-gap: 8px;
 }
 
+.grid-view-section:not(:first-child) {
+    margin-top: 10px;
+}
+
+.grid-view-section > h4 {
+    margin-bottom: 4px;
+}
+
 .applicant-grid-item {
     display: flex;
     width: 190px;
