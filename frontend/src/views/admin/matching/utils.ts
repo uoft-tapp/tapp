@@ -12,7 +12,7 @@ export function getApplicantMatchForPosition(
 
     return (
         applicantSummary.matches.find(
-            (match) => match.positionId === position.id
+            (match) => match.positionCode === position.position_code
         ) || null
     );
 }

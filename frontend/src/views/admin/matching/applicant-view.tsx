@@ -43,12 +43,10 @@ export function ApplicantView({
     position,
     applicants,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     position: Position | null;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
@@ -141,14 +139,12 @@ export function ApplicantView({
                             position={position}
                             applicants={filteredApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                         />
                     ) : (
                         <GridView
                             position={position}
                             applicants={filteredApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                         />
                     ))}
             </div>
@@ -166,12 +162,10 @@ function TableView({
     position,
     applicants,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     return (
         <Table striped bordered hover responsive size="sm">
@@ -200,7 +194,6 @@ function TableView({
                             applicant={applicant}
                             position={position}
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                             key={applicant.applicant.id}
                         />
                     );
@@ -224,12 +217,10 @@ function TableRow({
     position,
     applicant,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     position: Position;
     applicant: ApplicantSummary;
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const applicantMatch = getApplicantMatchForPosition(applicant, position);
     const statusCategory = getMappedStatusForMatch(applicantMatch);
@@ -306,12 +297,10 @@ function GridView({
     position,
     applicants,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> =
         {};
@@ -339,7 +328,6 @@ function GridView({
                         header={key}
                         applicants={applicantSummariesByMatchStatus[key]}
                         setMarkAsUpdated={setMarkAsUpdated}
-                        setLocalStore={setLocalStore}
                         position={position}
                     />
                 );
@@ -353,13 +341,11 @@ function GridSection({
     applicants,
     position,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     header: string;
     applicants: ApplicantSummary[];
     position: Position;
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     // Don't show the section if there are no applicants
     if (applicants.length === 0) {
@@ -376,7 +362,6 @@ function GridSection({
                             applicantSummary={applicant}
                             position={position}
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                             key={applicant.applicant.id}
                         />
                     );
@@ -390,12 +375,10 @@ function GridItem({
     applicantSummary,
     position,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     applicantSummary: ApplicantSummary;
     position: Position;
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const dispatch = useThunkDispatch();
     const applicantMatch = getApplicantMatchForPosition(
@@ -533,7 +516,6 @@ function GridItem({
                                 <ApplicantStar
                                     match={applicantMatch}
                                     updateApplicantMatch={updateApplicantMatch}
-                                    setLocalStore={setLocalStore}
                                     setMarkAsUpdated={setMarkAsUpdated}
                                 />
                             )}
@@ -577,7 +559,6 @@ function GridItem({
                             <ApplicantNote
                                 applicantSummary={applicantSummary}
                                 setMarkAsUpdated={setMarkAsUpdated}
-                                setLocalStore={setLocalStore}
                             />
                         </div>
                     </div>
@@ -750,12 +731,10 @@ function ApplicantStar({
     match,
     updateApplicantMatch,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     match: Match | null;
     updateApplicantMatch: Function;
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     async function _onClick(e: any) {
         if (match) {
@@ -784,11 +763,9 @@ function ApplicantStar({
 function ApplicantNote({
     applicantSummary,
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     applicantSummary: ApplicantSummary;
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);

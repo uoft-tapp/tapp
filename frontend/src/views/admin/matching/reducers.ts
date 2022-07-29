@@ -27,8 +27,8 @@ const matchingDataReducer = createReducer(initialState, {
         const existingMatch =
             state.matches.find(
                 (match) =>
-                    match.applicantId === action.payload.applicantId &&
-                    match.positionId === action.payload.positionId
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
             ) || null;
 
         if (!existingMatch) {
@@ -40,8 +40,8 @@ const matchingDataReducer = createReducer(initialState, {
             ...state,
             matches: state.matches.map((match) => {
                 if (
-                    match.applicantId === action.payload.applicantId &&
-                    match.positionId === action.payload.positionId
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
                 ) {
                     return action.payload;
                 } else {

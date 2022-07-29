@@ -150,9 +150,7 @@ export function AdminMatchingView() {
                         ) || null;
 
                     initialMatches.push({
-                        applicantId: applicant.id,
                         utorid: applicant.utorid,
-                        positionId: positionPreference.position.id,
                         positionCode: positionPreference.position.position_code,
                         status: savedMatchForPosition
                             ? savedMatchForPosition.status
@@ -168,8 +166,8 @@ export function AdminMatchingView() {
             for (const assignment of assignments) {
                 const matchingAssignment = initialMatches.find(
                     (match) =>
-                        match.applicantId === assignment.applicant.id &&
-                        match.positionId === assignment.position.id
+                        match.utorid === assignment.applicant.utorid &&
+                        match.positionCode === assignment.position.position_code
                 );
 
                 // Update existing match object if it exists
@@ -181,9 +179,7 @@ export function AdminMatchingView() {
                 } else {
                     // Otherwise, create a new one
                     initialMatches.push({
-                        applicantId: assignment.applicant.id,
                         utorid: assignment.applicant.utorid,
-                        positionId: assignment.position.id,
                         positionCode: assignment.position.position_code,
                         status: "assigned",
                         hoursAssigned: assignment.hours ? assignment.hours : 0,
@@ -238,7 +234,7 @@ export function AdminMatchingView() {
             }
 
             const applicantMatches =
-                matches.filter((match) => match.applicantId === applicant.id) ||
+                matches.filter((match) => match.utorid === applicant.utorid) ||
                 [];
 
             const applicantGuarantee =
@@ -296,7 +292,7 @@ export function AdminMatchingView() {
             for (const match of matches.filter(
                 (match) =>
                     ["assigned", "staged-assigned"].includes(match.status) &&
-                    match.positionId === position.id
+                    match.positionCode === position.position_code
             )) {
                 hoursAssigned += match.hoursAssigned;
             }
@@ -354,7 +350,6 @@ export function AdminMatchingView() {
                             position={selectedPosition?.position || null}
                             applicants={currApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                         />
                     </div>
                     <div className="matching-footer">

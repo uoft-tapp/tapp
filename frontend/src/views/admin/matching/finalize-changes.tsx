@@ -54,12 +54,10 @@ export function FinalizeChangesButton() {
 
         for (const match of stagedAssignments) {
             const targetPosition = positions.find(
-                (position) => position.id === match.positionId
+                (position) => position.position_code === match.positionCode
             );
             const targetApplicant = applicants.find(
-                (applicant) =>
-                    applicant.utorid === match.utorid &&
-                    applicant.id === match.applicantId
+                (applicant) => applicant.utorid === match.utorid
             );
 
             if (!targetPosition || !targetApplicant) {

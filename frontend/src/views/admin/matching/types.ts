@@ -6,9 +6,7 @@ import {
 } from "../../../api/defs/types";
 
 export type Match = {
-    applicantId: number;
     utorid: string;
-    positionId: number;
     positionCode: string;
     status: "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
     hoursAssigned: number;

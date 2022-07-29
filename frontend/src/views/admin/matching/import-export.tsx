@@ -147,12 +147,13 @@ export function ImportMatchingDataButton({
                         !matchingData.matches.find(
                             (oldMatch: Match) =>
                                 oldMatch.utorid === newMatch.utorid &&
-                                oldMatch.positionId === newMatch.positionId
+                                oldMatch.positionCode === newMatch.positionCode
                         ) ||
                         matchingData.matches.find(
                             (oldMatch: Match) =>
                                 oldMatch.utorid === newMatch.utorid &&
-                                oldMatch.positionId === newMatch.positionId &&
+                                oldMatch.positionCode ===
+                                    newMatch.positionCode &&
                                 oldMatch.status !== "assigned" &&
                                 (oldMatch.status !== newMatch.status ||
                                     oldMatch.hoursAssigned !==
