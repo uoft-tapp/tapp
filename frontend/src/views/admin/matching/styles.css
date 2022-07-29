@@ -338,6 +338,10 @@
     padding: 0 3px;
 }
 
+.matching-course-body > .table-responsive {
+    font-size: smaller;
+}
+
 .applicant-status-divider {
     width: 75%;
     height: 1px;
