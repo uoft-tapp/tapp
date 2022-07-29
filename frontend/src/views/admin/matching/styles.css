@@ -154,6 +154,10 @@
     cursor: pointer;
 }
 
+.filter-button.active {
+    color: orange;
+}
+
 .position-list {
     overflow-y: scroll;
 }
@@ -427,8 +431,7 @@
     background-color: white;
 }
 
-.applicant-dropdown-menu > a {
-    cursor: pointer;
+.applicant-dropdown-menu > button {
     font-size: smaller;
 }
 

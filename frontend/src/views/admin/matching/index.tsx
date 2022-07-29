@@ -14,13 +14,23 @@ import {
 } from "../../../api/actions";
 import { Assignment, Application, Applicant } from "../../../api/defs/types";
 
+import { MatchingDataState } from "./reducers";
+
 import {
+    matchingDataSelector,
     matchesSelector,
     guaranteesSelector,
     notesSelector,
     batchUpsertMatches,
+    batchUpsertGuarantees,
+    batchUpsertNotes,
 } from "./actions";
-import { PositionSummary, ApplicantSummary, Match } from "./types";
+import {
+    PositionSummary,
+    ApplicantSummary,
+    Match,
+    AppointmentGuaranteeStatus,
+} from "./types";
 
 import { PositionList } from "./position-list";
 import { ApplicantView } from "./applicant-view";
@@ -31,6 +41,8 @@ import {
     ExportMatchingDataButton,
 } from "./import-export";
 import { FinalizeChangesButton } from "./finalize-changes";
+
+import { Button } from "react-bootstrap";
 
 function getNewestApplication(
     applicant: Applicant,
@@ -43,6 +55,12 @@ function getNewestApplication(
     if (matchingApplications.length === 0) {
         return null;
     }
+
+    // Separate applications by posting
+
+    // Get the newest application for each posting
+
+    // Create the combination of these postings
 
     matchingApplications.sort((a, b) => {
         if (a.submission_date === b.submission_date) {
@@ -72,6 +90,26 @@ export function AdminMatchingView() {
     const matches = useSelector(matchesSelector);
     const guarantees = useSelector(guaranteesSelector);
     const notes = useSelector(notesSelector);
+    const matchingData = useSelector(matchingDataSelector);
+
+    const [localStore, setLocalStore] = React.useState(() => {
+        const saved = localStorage.getItem("matchingData");
+        if (!saved) {
+            return {
+                matches: [],
+                guarantees: [],
+                notes: {},
+            } as MatchingDataState;
+        }
+
+        return JSON.parse(saved) as MatchingDataState;
+    });
+
+    React.useEffect(() => {
+        localStorage.setItem("matchingData", JSON.stringify(localStore));
+        // console.log("saved to local storage:", localStore);
+        console.log("Updated local storage", localStore);
+    }, [localStore]);
 
     // We don't load postings by default, so we load them dynamically whenever
     // we view this page.
@@ -98,15 +136,30 @@ export function AdminMatchingView() {
                     continue;
                 }
 
+                // Apply changes from local storage
+                const savedMatches: Match[] = localStore.matches;
+
                 // Mark positions as being applied for
                 for (const positionPreference of mostRecentApplication.position_preferences) {
+                    const savedMatchForPosition =
+                        savedMatches?.find(
+                            (match) =>
+                                match.positionCode ===
+                                    positionPreference.position.position_code &&
+                                match.utorid === applicant.utorid
+                        ) || null;
+
                     initialMatches.push({
                         applicantId: applicant.id,
                         utorid: applicant.utorid,
                         positionId: positionPreference.position.id,
                         positionCode: positionPreference.position.position_code,
-                        status: "applied",
-                        hoursAssigned: 0,
+                        status: savedMatchForPosition
+                            ? savedMatchForPosition.status
+                            : "applied",
+                        hoursAssigned: savedMatchForPosition
+                            ? savedMatchForPosition.hoursAssigned
+                            : 0,
                     });
                 }
             }
@@ -116,8 +169,7 @@ export function AdminMatchingView() {
                 const matchingAssignment = initialMatches.find(
                     (match) =>
                         match.applicantId === assignment.applicant.id &&
-                        match.positionId === assignment.position.id &&
-                        match.status === "applied"
+                        match.positionId === assignment.position.id
                 );
 
                 // Update existing match object if it exists
@@ -142,8 +194,25 @@ export function AdminMatchingView() {
             return await dispatch(batchUpsertMatches(initialMatches));
         }
 
+        async function initializeGuarantees() {
+            const savedGuarantees: AppointmentGuaranteeStatus[] =
+                localStore.guarantees;
+            if (savedGuarantees.length > 0) {
+                return await dispatch(batchUpsertGuarantees(savedGuarantees));
+            }
+        }
+
+        async function initializeNotes() {
+            const savedNotes: Record<string, string | null> = localStore.notes;
+            if (Object.keys(savedNotes).length > 0) {
+                return await dispatch(batchUpsertNotes(savedNotes));
+            }
+        }
+
         initializeMatches();
-    }, [dispatch, applicants, assignments, applications]);
+        initializeGuarantees();
+        initializeNotes();
+    }, [dispatch, applicants, assignments, applications, localStore]);
 
     // Get information about positions
     const positionSummaries = React.useMemo(() => {
@@ -285,20 +354,31 @@ export function AdminMatchingView() {
                             position={selectedPosition?.position || null}
                             applicants={currApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                         />
                     </div>
                     <div className="matching-footer">
                         <ImportMatchingDataButton
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                         />
                         <ImportGuaranteesButton
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                         />
                         <ExportMatchingDataButton
                             markAsUpdated={markAsUpdated}
                             setMarkAsUpdated={setMarkAsUpdated}
                         />
                         <div className="footer-button-separator" />
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            className="footer-button"
+                            onClick={() => setLocalStore(matchingData)}
+                        >
+                            Save Local
+                        </Button>
                         <FinalizeChangesButton />
                     </div>
                 </div>

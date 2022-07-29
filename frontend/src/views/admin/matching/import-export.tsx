@@ -61,8 +61,10 @@ export function ExportMatchingDataButton({
 
 export function ImportMatchingDataButton({
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -243,6 +245,10 @@ export function ImportMatchingDataButton({
             updateNotes(newNotes);
         }
 
+        if (diffedMatches || newGuarantees || newNotes) {
+            setLocalStore(matchingData);
+        }
+
         setFileArrayBuffer(null);
         setFileContent(null);
         setFileInputLabel(defaultLabel);
@@ -295,8 +301,10 @@ export function ImportMatchingDataButton({
 
 export function ImportGuaranteesButton({
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -315,6 +323,7 @@ export function ImportGuaranteesButton({
     const [newGuarantees, setNewGuarantees] = React.useState<
         AppointmentGuaranteeStatus[] | null
     >(null);
+    const matchingData = useSelector(matchingDataSelector);
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {
@@ -400,6 +409,7 @@ export function ImportGuaranteesButton({
     function _onConfirm() {
         if (newGuarantees) {
             updateGuarantees(newGuarantees);
+            setLocalStore(matchingData);
             setMarkAsUpdated(true);
         }
 

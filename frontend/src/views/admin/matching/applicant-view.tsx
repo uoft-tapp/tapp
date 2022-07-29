@@ -5,7 +5,7 @@ import { Position, Application } from "../../../api/defs/types";
 import { ApplicantSummary, Match } from "./types";
 
 import { FaFilter, FaTable, FaTh, FaLock } from "react-icons/fa";
-import { BsInfoCircleFill, BsStarFill } from "react-icons/bs";
+import { BsStarFill } from "react-icons/bs";
 import { RiStickyNoteFill } from "react-icons/ri";
 
 import ToggleButton from "react-bootstrap/ToggleButton";
@@ -43,10 +43,12 @@ export function ApplicantView({
     position,
     applicants,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     position: Position | null;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
@@ -102,7 +104,9 @@ export function ApplicantView({
                     </Form>
                     <div className="filter-button-container">
                         <FaFilter
-                            className="filter-button"
+                            className={`filter-button ${
+                                filterList.length > 0 ? "active" : ""
+                            }`}
                             onClick={() => setShowFilters(!showFilters)}
                         />
                     </div>
@@ -143,12 +147,14 @@ export function ApplicantView({
                             position={position}
                             applicants={filteredApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                         />
                     ) : (
                         <GridView
                             position={position}
                             applicants={filteredApplicants}
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                         />
                     ))}
             </div>
@@ -166,10 +172,12 @@ function TableView({
     position,
     applicants,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     return (
         <Table striped bordered hover responsive size="sm">
@@ -198,6 +206,7 @@ function TableView({
                             applicant={applicant}
                             position={position}
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                             key={applicant.applicant.id}
                         />
                     );
@@ -221,10 +230,12 @@ function TableRow({
     position,
     applicant,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     position: Position;
     applicant: ApplicantSummary;
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const applicantMatch = getApplicantMatchForPosition(applicant, position);
     const statusCategory = getMappedStatusForMatch(applicantMatch);
@@ -301,10 +312,12 @@ function GridView({
     position,
     applicants,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> =
         {};
@@ -332,6 +345,7 @@ function GridView({
                         header={key}
                         applicants={applicantSummariesByMatchStatus[key]}
                         setMarkAsUpdated={setMarkAsUpdated}
+                        setLocalStore={setLocalStore}
                         position={position}
                     />
                 );
@@ -345,11 +359,13 @@ function GridSection({
     applicants,
     position,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     header: string;
     applicants: ApplicantSummary[];
     position: Position;
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     // Don't show the section if there are no applicants
     if (applicants.length === 0) {
@@ -366,6 +382,7 @@ function GridSection({
                             applicantSummary={applicant}
                             position={position}
                             setMarkAsUpdated={setMarkAsUpdated}
+                            setLocalStore={setLocalStore}
                             key={applicant.applicant.id}
                         />
                     );
@@ -379,10 +396,12 @@ function GridItem({
     applicantSummary,
     position,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     applicantSummary: ApplicantSummary;
     position: Position;
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const dispatch = useThunkDispatch();
     const applicantMatch = getApplicantMatchForPosition(
@@ -397,6 +416,9 @@ function GridItem({
     const [open, setOpen] = React.useState(false);
     const [shownApplication, setShownApplication] =
         React.useState<Application | null>(null);
+    const [showChangeHours, setShowChangeHours] = React.useState(false);
+
+    const [hoursAssigned, setHoursAssigned] = React.useState("");
 
     const instructorRatings =
         applicantSummary.application.instructor_preferences
@@ -506,11 +528,18 @@ function GridItem({
                                 " " +
                                 applicantSummary.applicant.last_name}
                         </div>
-                        <div className="icon-container">
+                        <div
+                            className="icon-container"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}
+                        >
                             {!applicantMatch?.status.includes("assigned") && (
                                 <ApplicantStar
                                     match={applicantMatch}
                                     updateApplicantMatch={updateApplicantMatch}
+                                    setLocalStore={setLocalStore}
                                     setMarkAsUpdated={setMarkAsUpdated}
                                 />
                             )}
@@ -544,10 +573,17 @@ function GridItem({
                                   )
                                 : ""}
                         </div>
-                        <div className="icon-container">
+                        <div
+                            className="icon-container"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }}
+                        >
                             <ApplicantNote
                                 applicantSummary={applicantSummary}
                                 setMarkAsUpdated={setMarkAsUpdated}
+                                setLocalStore={setLocalStore}
                             />
                         </div>
                     </div>
@@ -555,7 +591,7 @@ function GridItem({
             </div>
             <Collapse in={open}>
                 <div className="applicant-dropdown-menu dropdown-menu noselect">
-                    <a
+                    <button
                         className="dropdown-item"
                         onClick={() => {
                             setShownApplication(applicantSummary.application);
@@ -563,12 +599,12 @@ function GridItem({
                         }}
                     >
                         View application details
-                    </a>
+                    </button>
                     {applicantMatch?.status &&
-                        ["hidden", "applied"].includes(
+                        ["hidden", "applied", "starred"].includes(
                             applicantMatch?.status
                         ) && (
-                            <a
+                            <button
                                 className="dropdown-item"
                                 onClick={() => {
                                     updateApplicantMatch(
@@ -580,21 +616,21 @@ function GridItem({
                             >
                                 Assign to <b>{position.position_code}</b> (
                                 {position.hours_per_assignment || 0})
-                            </a>
+                            </button>
                         )}
                     {applicantMatch?.status === "staged-assigned" && (
-                        <a
+                        <button
                             className="dropdown-item"
                             onClick={() => {
-                                updateApplicantMatch("staged-assigned", 60);
+                                setShowChangeHours(true);
                                 setOpen(false);
                             }}
                         >
-                            Change assigned hours (60)
-                        </a>
+                            Change assigned hours
+                        </button>
                     )}
                     {applicantMatch?.status === "staged-assigned" && (
-                        <a
+                        <button
                             className="dropdown-item"
                             onClick={() => {
                                 updateApplicantMatch("applied");
@@ -602,11 +638,11 @@ function GridItem({
                             }}
                         >
                             Unassign from <b>{position.position_code}</b>
-                        </a>
+                        </button>
                     )}
                     {applicantMatch?.status !== "assigned" &&
                         applicantMatch?.status !== "hidden" && (
-                            <a
+                            <button
                                 className="dropdown-item"
                                 onClick={() => {
                                     updateApplicantMatch("hidden");
@@ -614,13 +650,13 @@ function GridItem({
                                 }}
                             >
                                 Hide from <b>{position.position_code}</b>
-                            </a>
+                            </button>
                         )}
                     {applicantMatch?.status &&
-                        ["hidden", "applied"].includes(
+                        ["hidden", "applied", "starred"].includes(
                             applicantMatch?.status
                         ) && (
-                            <a
+                            <button
                                 className="dropdown-item"
                                 onClick={() => {
                                     hideApplicantFromAll();
@@ -628,10 +664,10 @@ function GridItem({
                                 }}
                             >
                                 Hide from all courses
-                            </a>
+                            </button>
                         )}
                     {applicantMatch?.status === "hidden" && (
-                        <a
+                        <button
                             className="dropdown-item"
                             onClick={() => {
                                 updateApplicantMatch("applied");
@@ -639,7 +675,7 @@ function GridItem({
                             }}
                         >
                             Unhide from <b>{position.position_code}</b>
-                        </a>
+                        </button>
                     )}
                 </div>
             </Collapse>
@@ -665,6 +701,53 @@ function GridItem({
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <Modal
+                show={showChangeHours}
+                onHide={() => setShowChangeHours(false)}
+                size="sm"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Hours</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                type="number"
+                                defaultValue={
+                                    applicantMatch &&
+                                    applicantMatch.hoursAssigned > 0
+                                        ? applicantMatch.hoursAssigned
+                                        : 0
+                                }
+                                onChange={(e) =>
+                                    setHoursAssigned(e.target.value)
+                                }
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        onClick={() => setShowChangeHours(false)}
+                        variant="outline-secondary"
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            updateApplicantMatch(
+                                "staged-assigned",
+                                Number(hoursAssigned)
+                            );
+                            setShowChangeHours(false);
+                        }}
+                        variant="outline-primary"
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }
@@ -673,15 +756,14 @@ function ApplicantStar({
     match,
     updateApplicantMatch,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     match: Match | null;
     updateApplicantMatch: Function;
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
-    const dispatch = useThunkDispatch();
-
     async function _onClick(e: any) {
-        e.stopPropagation();
         if (match) {
             if (match.status === "applied" || match.status === "hidden") {
                 updateApplicantMatch("starred");
@@ -708,16 +790,17 @@ function ApplicantStar({
 function ApplicantNote({
     applicantSummary,
     setMarkAsUpdated,
+    setLocalStore,
 }: {
     applicantSummary: ApplicantSummary;
     setMarkAsUpdated: Function;
+    setLocalStore: Function;
 }) {
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
     const [note, setNote] = React.useState(applicantSummary.note);
 
     function _onClick(e: any) {
-        e.stopPropagation();
         setShow(true);
     }
 

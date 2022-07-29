@@ -245,7 +245,7 @@ export function FilterModal({
                     <Form className="filter-form">
                         {Object.keys(filterMap).map((section) => {
                             return (
-                                <Form.Group className="mb-3">
+                                <Form.Group className="mb-3" key={section}>
                                     <Form.Label className="filter-section-title">
                                         {section}
                                     </Form.Label>
