@@ -48,9 +48,9 @@ export function ExportMatchingDataButton() {
 }
 
 export function ImportMatchingDataButton({
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -283,9 +283,9 @@ export function ImportMatchingDataButton({
 }
 
 export function ImportGuaranteesButton({
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -390,7 +390,7 @@ export function ImportGuaranteesButton({
     function _onConfirm() {
         if (newGuarantees) {
             updateGuarantees(newGuarantees);
-            setMarkAsUpdated(true);
+            markAsUpdated(true);
         }
 
         setFileArrayBuffer(null);

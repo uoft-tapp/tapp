@@ -123,7 +123,7 @@ export function AdminMatchingView() {
 
     const [selectedPosition, setSelectedPosition] =
         React.useState<PositionSummary | null>(null);
-    const [markAsUpdated, setMarkAsUpdated] = React.useState(false);
+    const [updated, setUpdated] = React.useState(false);
 
     const positions = useSelector(positionsSelector);
     const assignments = useSelector(assignmentsSelector);
@@ -166,7 +166,7 @@ export function AdminMatchingView() {
     // Pop-up to prompt users to save changes when reloading or leaving the page
     // Note that this doesn't fire when swapping to a different view in TAPP...
     window.onbeforeunload = (e) =>
-        markAsUpdated
+        updated
             ? "There are unsaved local changes. If you leave before saving, your changes will be lost."
             : null;
 
@@ -396,27 +396,21 @@ export function AdminMatchingView() {
                         <ApplicantView
                             position={selectedPosition?.position || null}
                             applicants={currApplicants}
-                            setMarkAsUpdated={setMarkAsUpdated}
+                            markAsUpdated={setUpdated}
                         />
                     </div>
                     <div className="matching-footer">
-                        <ImportMatchingDataButton
-                            setMarkAsUpdated={setMarkAsUpdated}
-                        />
-                        <ImportGuaranteesButton
-                            setMarkAsUpdated={setMarkAsUpdated}
-                        />
+                        <ImportMatchingDataButton markAsUpdated={setUpdated} />
+                        <ImportGuaranteesButton markAsUpdated={setUpdated} />
                         <ExportMatchingDataButton />
                         <div className="footer-button-separator" />
                         <Button
-                            variant={`success ${
-                                markAsUpdated ? "" : "disabled"
-                            }`}
+                            variant={`success ${updated ? "" : "disabled"}`}
                             size="sm"
                             className="footer-button"
                             onClick={() => {
                                 setLocalStore(matchingData);
-                                setMarkAsUpdated(false);
+                                setUpdated(false);
                             }}
                         >
                             Save Local Changes

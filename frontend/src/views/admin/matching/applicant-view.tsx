@@ -56,11 +56,11 @@ const statusMapping: Record<string, string[]> = {
 export function ApplicantView({
     position,
     applicants,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     position: Position | null;
     applicants: ApplicantSummary[];
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
@@ -163,13 +163,13 @@ export function ApplicantView({
                         <TableView
                             position={position}
                             applicants={filteredApplicants}
-                            setMarkAsUpdated={setMarkAsUpdated}
+                            markAsUpdated={markAsUpdated}
                         />
                     ) : (
                         <GridView
                             position={position}
                             applicants={filteredApplicants}
-                            setMarkAsUpdated={setMarkAsUpdated}
+                            markAsUpdated={markAsUpdated}
                         />
                     ))}
                 {position && (
@@ -204,11 +204,11 @@ export function ApplicantView({
 function TableView({
     position,
     applicants,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     return (
         <Table striped bordered hover responsive size="sm">
@@ -236,7 +236,7 @@ function TableView({
                         <TableRow
                             applicant={applicant}
                             position={position}
-                            setMarkAsUpdated={setMarkAsUpdated}
+                            markAsUpdated={markAsUpdated}
                             key={applicant.applicant.id}
                         />
                     );
@@ -271,11 +271,11 @@ function getMappedStatusForMatch(match: Match | null) {
 function TableRow({
     position,
     applicant,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     position: Position;
     applicant: ApplicantSummary;
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const applicantMatch = getApplicantMatchForPosition(applicant, position);
     const statusCategory = getMappedStatusForMatch(applicantMatch);
@@ -384,11 +384,11 @@ function LockedAssignTooltip() {
 function GridView({
     position,
     applicants,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     position: Position;
     applicants: ApplicantSummary[];
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> =
         {};
@@ -415,7 +415,7 @@ function GridView({
                         key={key}
                         header={key}
                         applicants={applicantSummariesByMatchStatus[key]}
-                        setMarkAsUpdated={setMarkAsUpdated}
+                        markAsUpdated={markAsUpdated}
                         position={position}
                     />
                 );
@@ -434,12 +434,12 @@ function GridSection({
     header,
     applicants,
     position,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     header: string;
     applicants: ApplicantSummary[];
     position: Position;
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     // Don't show the section if there are no applicants
     if (applicants.length === 0) {
@@ -457,7 +457,7 @@ function GridSection({
                         <GridItem
                             applicantSummary={applicant}
                             position={position}
-                            setMarkAsUpdated={setMarkAsUpdated}
+                            markAsUpdated={markAsUpdated}
                             key={applicant.applicant.id}
                         />
                     );
@@ -476,11 +476,11 @@ function GridSection({
 function GridItem({
     applicantSummary,
     position,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     applicantSummary: ApplicantSummary;
     position: Position;
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const dispatch = useThunkDispatch();
     const applicantMatch = getApplicantMatchForPosition(
@@ -519,7 +519,7 @@ function GridItem({
             if (match.status === "applied") {
                 const newMatch: Match = { ...match, status: "hidden" };
                 await _upsertMatch(newMatch);
-                setMarkAsUpdated(true);
+                markAsUpdated(true);
             }
         }
     }
@@ -540,7 +540,7 @@ function GridItem({
         }
 
         await _upsertMatch(newMatch);
-        setMarkAsUpdated(true);
+        markAsUpdated(true);
     }
 
     let filledStatus: "empty" | "under" | "matched" | "over" | "" = "";
@@ -625,7 +625,7 @@ function GridItem({
                                 <ApplicantStar
                                     match={applicantMatch}
                                     updateApplicantMatch={updateApplicantMatch}
-                                    setMarkAsUpdated={setMarkAsUpdated}
+                                    markAsUpdated={markAsUpdated}
                                 />
                             </div>
                         )}
@@ -664,7 +664,7 @@ function GridItem({
                         >
                             <ApplicantNote
                                 applicantSummary={applicantSummary}
-                                setMarkAsUpdated={setMarkAsUpdated}
+                                markAsUpdated={markAsUpdated}
                             />
                         </div>
                     </div>
@@ -843,11 +843,11 @@ function GridItem({
 function ApplicantStar({
     match,
     updateApplicantMatch,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     match: Match | null;
     updateApplicantMatch: Function;
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     async function _onClick(e: any) {
         if (match) {
@@ -875,17 +875,17 @@ function ApplicantStar({
 
 /**
  * A button that displays a dialog allowing one to edit an applicant's notes.
- * "setMarkAsUpdated" is called when a change has been made.
+ * "markAsUpdated" is called when a change has been made.
  *
  * @param {*} props
  * @returns
  */
 function ApplicantNote({
     applicantSummary,
-    setMarkAsUpdated,
+    markAsUpdated,
 }: {
     applicantSummary: ApplicantSummary;
-    setMarkAsUpdated: Function;
+    markAsUpdated: Function;
 }) {
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
@@ -901,7 +901,7 @@ function ApplicantNote({
 
     async function updateApplicantNote(note: string | null) {
         await _upsertNote(applicantSummary.applicant.utorid, note);
-        setMarkAsUpdated(true);
+        markAsUpdated(true);
     }
 
     return (
