@@ -43,6 +43,7 @@ import {
 import { FinalizeChangesButton } from "./finalize-changes";
 
 import { Button } from "react-bootstrap";
+import { BsCircleFill } from "react-icons/bs";
 
 function getCombinedApplication(
     applicant: Applicant,
@@ -148,8 +149,6 @@ export function AdminMatchingView() {
 
     React.useEffect(() => {
         localStorage.setItem("matchingData", JSON.stringify(localStore));
-        // console.log("saved to local storage:", localStore);
-        console.log("Updated local storage", localStore);
     }, [localStore]);
 
     // We don't load postings by default, so we load them dynamically whenever
@@ -163,6 +162,13 @@ export function AdminMatchingView() {
             fetchResources();
         }
     }, [activeSession, dispatch]);
+
+    // Pop-up to prompt users to save changes when reloading or leaving the page
+    // Note that this doesn't fire when swapping to a different view in TAPP...
+    window.onbeforeunload = (e) =>
+        markAsUpdated
+            ? "There are unsaved local changes. If you leave before saving, your changes will be lost."
+            : null;
 
     React.useEffect(() => {
         async function initializeMatches() {
@@ -396,24 +402,24 @@ export function AdminMatchingView() {
                     <div className="matching-footer">
                         <ImportMatchingDataButton
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                         />
                         <ImportGuaranteesButton
                             setMarkAsUpdated={setMarkAsUpdated}
-                            setLocalStore={setLocalStore}
                         />
-                        <ExportMatchingDataButton
-                            markAsUpdated={markAsUpdated}
-                            setMarkAsUpdated={setMarkAsUpdated}
-                        />
+                        <ExportMatchingDataButton />
                         <div className="footer-button-separator" />
                         <Button
-                            variant="outline-primary"
+                            variant={`success ${
+                                markAsUpdated ? "" : "disabled"
+                            }`}
                             size="sm"
                             className="footer-button"
-                            onClick={() => setLocalStore(matchingData)}
+                            onClick={() => {
+                                setLocalStore(matchingData);
+                                setMarkAsUpdated(false);
+                            }}
                         >
-                            Save Local
+                            Save Local Changes
                         </Button>
                         <FinalizeChangesButton />
                     </div>

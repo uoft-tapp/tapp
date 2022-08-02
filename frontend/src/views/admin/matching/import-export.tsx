@@ -9,13 +9,7 @@ import { Match, AppointmentGuaranteeStatus } from "./types";
 import { upsertMatch, batchUpsertGuarantees, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
-export function ExportMatchingDataButton({
-    markAsUpdated,
-    setMarkAsUpdated,
-}: {
-    markAsUpdated: boolean;
-    setMarkAsUpdated: Function;
-}) {
+export function ExportMatchingDataButton() {
     const matchingData = useSelector(matchingDataSelector);
 
     function onClick() {
@@ -39,7 +33,6 @@ export function ExportMatchingDataButton({
                 date.getSeconds().toString().padStart(2, "0") +
                 ".json"
         );
-        setMarkAsUpdated(false);
     }
 
     return (
@@ -49,11 +42,6 @@ export function ExportMatchingDataButton({
             className="footer-button"
             onClick={onClick}
         >
-            {markAsUpdated && (
-                <div className="change-icon">
-                    <BsCircleFill />
-                </div>
-            )}
             Export Data
         </Button>
     );
@@ -61,10 +49,8 @@ export function ExportMatchingDataButton({
 
 export function ImportMatchingDataButton({
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -246,10 +232,6 @@ export function ImportMatchingDataButton({
             updateNotes(newNotes);
         }
 
-        if (diffedMatches || newGuarantees || newNotes) {
-            setLocalStore(matchingData);
-        }
-
         setFileArrayBuffer(null);
         setFileContent(null);
         setFileInputLabel(defaultLabel);
@@ -302,10 +284,8 @@ export function ImportMatchingDataButton({
 
 export function ImportGuaranteesButton({
     setMarkAsUpdated,
-    setLocalStore,
 }: {
     setMarkAsUpdated: Function;
-    setLocalStore: Function;
 }) {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
@@ -410,7 +390,6 @@ export function ImportGuaranteesButton({
     function _onConfirm() {
         if (newGuarantees) {
             updateGuarantees(newGuarantees);
-            setLocalStore(matchingData);
             setMarkAsUpdated(true);
         }
 
