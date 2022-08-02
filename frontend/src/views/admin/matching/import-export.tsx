@@ -4,7 +4,6 @@ import { matchingDataSelector } from "./actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Row, Form, Col } from "react-bootstrap";
 import { DataFormat } from "../../../libs/import-export";
-import { BsCircleFill } from "react-icons/bs";
 import { Match, AppointmentGuaranteeStatus } from "./types";
 import { upsertMatch, batchUpsertGuarantees, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
@@ -304,7 +303,6 @@ export function ImportGuaranteesButton({
     const [newGuarantees, setNewGuarantees] = React.useState<
         AppointmentGuaranteeStatus[] | null
     >(null);
-    const matchingData = useSelector(matchingDataSelector);
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {

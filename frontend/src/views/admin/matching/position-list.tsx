@@ -1,8 +1,5 @@
 import React from "react";
-import classNames from "classnames";
-
 import { Form } from "react-bootstrap";
-
 import { PositionSummary } from "./types";
 import { round } from "../../../libs/utils";
 

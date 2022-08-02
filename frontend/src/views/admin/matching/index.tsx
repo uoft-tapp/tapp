@@ -13,7 +13,6 @@ import {
     applicantsSelector,
 } from "../../../api/actions";
 import { Assignment, Application, Applicant } from "../../../api/defs/types";
-
 import { MatchingDataState } from "./reducers";
 
 import {
@@ -41,9 +40,7 @@ import {
     ExportMatchingDataButton,
 } from "./import-export";
 import { FinalizeChangesButton } from "./finalize-changes";
-
 import { Button } from "react-bootstrap";
-import { BsCircleFill } from "react-icons/bs";
 
 function getCombinedApplication(
     applicant: Applicant,
