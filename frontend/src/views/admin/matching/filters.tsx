@@ -22,6 +22,13 @@ type FilterMapItemValue = {
     label: string;
 };
 
+export const defaultFilterList: FilterListItem[] = [
+    {
+        section: "Position Status",
+        value: "hidden",
+    },
+];
+
 const filterMap: Record<string, FilterMapItem> = {
     Program: {
         filterFunc: filterProgram,
@@ -166,6 +173,12 @@ const filterMap: Record<string, FilterMapItem> = {
     },
 };
 
+/**
+ * A single checkbox item that will add or remove a filter item from "filterList" via "setFilterList".
+ *
+ * @param {*} props
+ * @returns
+ */
 function FilterCheckbox({
     value,
     label,
@@ -218,6 +231,12 @@ function FilterCheckbox({
     );
 }
 
+/**
+ * A pop-up window containing a list of filter-able items in the form of checkboxes.
+ *
+ * @param {*} props
+ * @returns
+ */
 export function FilterModal({
     showFilters,
     setShowFilters,
@@ -285,6 +304,14 @@ export function FilterModal({
 
 let currPosition: Position | null = null;
 
+/**
+ * Returns a copy of input applicant summaries with filters applied, specified by "filterList".
+ *
+ * @param {ApplicantSummary} applicantSummaries
+ * @param {FilterListItem[]} filterList
+ * @param {Position | null} position
+ * @returns {ApplicantSummary[]}
+ */
 export function applyFilters(
     applicantSummaries: ApplicantSummary[],
     filterList: FilterListItem[],
@@ -324,6 +351,13 @@ export function applyFilters(
     return filteredList;
 }
 
+/**
+ * Returns a filtered list of applicant summaries based on which program applicants belong to.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {string[]} excludeValues - A list of program values (strings) to be filtered
+ * @returns {ApplicantSummary[]}
+ */
 function filterProgram(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
@@ -331,8 +365,6 @@ function filterProgram(
     if (!applicantSummaries || excludeValues.length === 0) {
         return applicantSummaries;
     }
-
-    // TODO: Special case when handling "other"
 
     return (
         applicantSummaries.filter(
@@ -345,6 +377,13 @@ function filterProgram(
     );
 }
 
+/**
+ * Returns a filtered list of applicant summaries based on which department applicants belong to.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {string[]} excludeValues - A list of department values (strings) to be filtered
+ * @returns {ApplicantSummary[]}
+ */
 function filterDept(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
@@ -352,8 +391,6 @@ function filterDept(
     if (!applicantSummaries || excludeValues.length === 0) {
         return applicantSummaries;
     }
-
-    // TODO: Special case when handling "other"
 
     return (
         applicantSummaries.filter(
@@ -366,6 +403,13 @@ function filterDept(
     );
 }
 
+/**
+ * Returns a filtered list of applicant summaries based on each applicant's preference level for a position.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {number[]} excludeValues - A list of preference levels (numbers) to be filtered
+ * @returns {ApplicantSummary[]}
+ */
 function filterTaPref(
     applicantSummaries: ApplicantSummary[],
     excludeValues: number[]
@@ -404,6 +448,13 @@ function filterTaPref(
     );
 }
 
+/**
+ * Returns a filtered list of applicant summaries based on their matching status for the position.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {string[]} excludeValues - A list of status values (strings) to be filtered
+ * @returns {ApplicantSummary[]}
+ */
 function filterPositionStatus(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
@@ -415,8 +466,6 @@ function filterPositionStatus(
     ) {
         return applicantSummaries;
     }
-
-    // TODO: Special case when handling "other"
 
     return (
         applicantSummaries
@@ -435,6 +484,13 @@ function filterPositionStatus(
     );
 }
 
+/**
+ * Returns a filtered list of applicant summaries based on the completeness of their appointment guarantees.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {string[]} excludeValues - A list of fulfillment levels (strings) to be filtered
+ * @returns {ApplicantSummary[]}
+ */
 function filterHourFulfillment(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]

@@ -13,6 +13,13 @@ import {
     upsertAssignment,
 } from "../../../api/actions";
 
+/**
+ * A button that brings up a modal allowing users to see a list of staged assignments
+ * and transform them into real assignments.
+ *
+ * @param {*} props
+ * @returns
+ */
 export function FinalizeChangesButton() {
     const [showDialog, setShowDialog] = React.useState(false);
     const [stagedAssignments, setStagedAssignments] = React.useState<
@@ -29,8 +36,8 @@ export function FinalizeChangesButton() {
             matchingData.matches
                 .filter((match) => match.status === "staged-assigned")
                 .sort((a, b) => {
-                    return (a.positionCode + " " + a.utorid).toLowerCase() <
-                        (b.positionCode + " " + b.utorid).toLowerCase()
+                    return `${a.positionCode} ${a.utorid}`.toLowerCase() <
+                        `${b.positionCode} ${b.utorid}`.toLowerCase()
                         ? -1
                         : 1;
                 }) || null
@@ -89,7 +96,7 @@ export function FinalizeChangesButton() {
             >
                 Finalize Changes{" "}
                 {stagedAssignments && stagedAssignments.length > 0
-                    ? " (" + stagedAssignments.length + ")"
+                    ? ` (${stagedAssignments.length})`
                     : ""}
             </Button>
             <Modal show={showDialog} dialogClassName="finalize-changes-modal">
@@ -103,11 +110,7 @@ export function FinalizeChangesButton() {
                             {stagedAssignments.map((match) => {
                                 return (
                                     <li
-                                        key={
-                                            "" +
-                                            match.positionCode +
-                                            match.utorid
-                                        }
+                                        key={`${match.positionCode} ${match.utorid}`}
                                     >
                                         {match.positionCode} - {match.utorid} (
                                         {match.hoursAssigned})

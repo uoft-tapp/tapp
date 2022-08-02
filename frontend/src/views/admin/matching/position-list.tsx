@@ -8,6 +8,13 @@ import { round } from "../../../libs/utils";
 
 import "./styles.css";
 
+/**
+ * A row in the list of positions displaying information about
+ * how many hours have been assigned and how close it is to being complete.
+ *
+ * @param {*} props
+ * @returns
+ */
 function PositionRow({
     positionSummary,
     focused,
@@ -23,45 +30,28 @@ function PositionRow({
         2
     );
 
-    let backgroundStyle = "";
-
-    switch (positionSummary.filledStatus) {
-        case "over":
-            backgroundStyle = "rgba(0, 229, 243, 0.15)";
-            break;
-        case "matched":
-            backgroundStyle = "rgba(0, 193, 43, 0.15)";
-            break;
-        case "under":
-            let percentage = round(
-                (positionSummary.hoursAssigned / targetHours) * 100,
-                0
-            );
-            backgroundStyle =
-                "-webkit-linear-gradient(left, rgba(255, 204, 22, 0.15) " +
-                percentage +
-                "%, #fff " +
-                percentage +
-                "%, #fff 100%)";
-            break;
-        default:
-            break;
+    // Overriding style specifically for under-assigned courses since we need a particular width
+    let backgroundOverride = "";
+    if (positionSummary.filledStatus === "under") {
+        let percentage = round(
+            (positionSummary.hoursAssigned / targetHours) * 100,
+            0
+        );
+        backgroundOverride = `-webkit-linear-gradient(left, rgba(255, 204, 22, 0.15) ${percentage}%, #fff ${percentage}%, #fff 100%)`;
     }
 
     return (
         <div
-            style={{ background: backgroundStyle }}
-            className={classNames("position-row", "noselect")}
+            style={{ background: backgroundOverride }}
+            className={`position-row noselect ${positionSummary.filledStatus}`}
             onClick={() => {
                 setSelectedPosition(positionSummary);
-                // TODO: if focused, show detailed info about this position
             }}
         >
             <div
-                className={classNames(
-                    "status-sidebar",
-                    positionSummary.filledStatus
-                )}
+                className={`status-sidebar ${positionSummary.filledStatus} ${
+                    focused ? "selected" : ""
+                }`}
             ></div>
             <span className="position-title">
                 {positionSummary.position.position_code}
@@ -73,6 +63,12 @@ function PositionRow({
     );
 }
 
+/**
+ * A searchable list of position codes.
+ *
+ * @param {*} props
+ * @returns
+ */
 export function PositionList({
     currPosition,
     summaries,
@@ -83,7 +79,6 @@ export function PositionList({
     setSelectedPosition: Function;
 }) {
     // Either display the list of all courses or focus on the currently-selected on
-    // const [showDetail, setShowDetail] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState("");
 
     const filteredList = React.useMemo(() => {
@@ -119,7 +114,9 @@ export function PositionList({
                 {filteredList.map((summary) => (
                     <PositionRow
                         positionSummary={summary}
-                        focused={summary === currPosition}
+                        focused={
+                            summary?.position.id === currPosition?.position.id
+                        }
                         setSelectedPosition={setSelectedPosition}
                         key={summary.position.id}
                     />

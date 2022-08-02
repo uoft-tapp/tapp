@@ -24,13 +24,27 @@ import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "./utils";
-import { SortDropdowns, applySorts } from "./sorts";
-import { FilterModal, applyFilters, FilterListItem } from "./filters";
+import {
+    SortDropdowns,
+    applySorts,
+    sortMapItem,
+    defaultSortList,
+} from "./sorts";
+import {
+    FilterModal,
+    applyFilters,
+    FilterListItem,
+    defaultFilterList,
+} from "./filters";
 
 import { ApplicationDetails } from "../applications/application-details";
 
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 import "./styles.css";
 
+// Mapping of status strings to better human-readable text
 const statusMapping: Record<string, string[]> = {
     Assigned: ["assigned"],
     "Assigned (Staged)": ["staged-assigned"],
@@ -50,24 +64,32 @@ export function ApplicantView({
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
     const [searchValue, setSearchValue] = React.useState("");
-    const [sortList, setSortList] = React.useState<string[]>([
-        "deptAsc",
-        "programDesc",
-        "yipAsc",
-    ]);
+    const [sortList, setSortList] =
+        React.useState<sortMapItem[]>(defaultSortList);
 
     const [showFilters, setShowFilters] = React.useState(false);
-    const [filterList, setFilterList] = React.useState<FilterListItem[]>([]);
+    const [filterList, setFilterList] =
+        React.useState<FilterListItem[]>(defaultFilterList);
+
+    const [numHiddenApplicants, setNumHiddenApplicants] = React.useState(0);
 
     const filteredApplicants = React.useMemo(() => {
         if (!applicants) {
             return [] as ApplicantSummary[];
         }
 
+        const totalNumApplicants = applicants.length;
+
         // Filter applicants that match the search value
         const filteredBySearch: ApplicantSummary[] =
             applicants.filter((applicant) =>
-                `$(applicant.applicant.first_name) $(applicant.applicant.last_name) $(applicant.applicant.utorid)`
+                (
+                    applicant.applicant.first_name +
+                    " " +
+                    applicant.applicant.last_name +
+                    " " +
+                    applicant.applicant.utorid
+                )
                     .toLowerCase()
                     .includes(searchValue.toLowerCase())
             ) || [];
@@ -78,6 +100,9 @@ export function ApplicantView({
 
         // Apply sorts based on sort lists
         applySorts(filteredByFilters, sortList, position);
+
+        // Keep track of how many applicants are hidden
+        setNumHiddenApplicants(totalNumApplicants - filteredByFilters.length);
 
         return filteredByFilters;
     }, [searchValue, sortList, filterList, applicants, position]);
@@ -147,6 +172,18 @@ export function ApplicantView({
                             setMarkAsUpdated={setMarkAsUpdated}
                         />
                     ))}
+                {position && (
+                    // Footer to show info about how many applicants are visible/hidden
+                    <div className="applicant-count">{`Showing ${
+                        filteredApplicants.length
+                    }/${
+                        filteredApplicants.length + numHiddenApplicants
+                    } applicants ${
+                        numHiddenApplicants > 0
+                            ? `(${numHiddenApplicants} hidden)`
+                            : ""
+                    }`}</div>
+                )}
             </div>
             <FilterModal
                 showFilters={showFilters}
@@ -158,6 +195,12 @@ export function ApplicantView({
     );
 }
 
+/**
+ * A presentation of applicant information in table view.
+ *
+ * @param {*} props
+ * @returns
+ */
 function TableView({
     position,
     applicants,
@@ -203,6 +246,12 @@ function TableView({
     );
 }
 
+/**
+ * Gets the human-friendly name for a match's status.
+ *
+ * @param {*} match
+ * @returns {string}
+ */
 function getMappedStatusForMatch(match: Match | null) {
     if (!match) {
         return null;
@@ -213,6 +262,12 @@ function getMappedStatusForMatch(match: Match | null) {
     );
 }
 
+/**
+ * A row of applicant information to be presented in a table (TableView).
+ *
+ * @param {*} props
+ * @returns
+ */
 function TableRow({
     position,
     applicant,
@@ -293,6 +348,39 @@ function TableRow({
     );
 }
 
+/**
+ * A lock icon that can be hovered over and displays a tooltip.
+ * Displayed next to the "Assigned" header so users know they cannot edit locked-in assignments.
+ *
+ * @param {*} props
+ * @returns
+ */
+function LockedAssignTooltip() {
+    const renderTooltip = (props: any) => (
+        <Tooltip id="button-tooltip" {...props}>
+            These assignments can only be changed through the Assignments &
+            Positions {">"} Assignments tab.
+        </Tooltip>
+    );
+
+    return (
+        <OverlayTrigger
+            placement="right"
+            delay={{ show: 10, hide: 10 }}
+            overlay={renderTooltip}
+        >
+            <FaLock className="header-lock" />
+        </OverlayTrigger>
+    );
+}
+
+/**
+ * A presentation of applicants and their summaries in a grid-based view.
+ * Applicants are divided into sections based on match status (e.g., applied, staged-assigned).
+ *
+ * @param {*} props
+ * @returns
+ */
 function GridView({
     position,
     applicants,
@@ -336,6 +424,12 @@ function GridView({
     );
 }
 
+/**
+ * A section/collection of grid items for a specified match status (e.g., applied, staged-assigned).
+ *
+ * @param {*} props
+ * @returns
+ */
 function GridSection({
     header,
     applicants,
@@ -354,7 +448,9 @@ function GridSection({
 
     return (
         <div className="grid-view-section">
-            <h4>{header}</h4>
+            <h4>
+                {header} {header === "Assigned" ? <LockedAssignTooltip /> : ""}
+            </h4>
             <div className="grid-view-list">
                 {applicants.map((applicant) => {
                     return (
@@ -371,6 +467,12 @@ function GridSection({
     );
 }
 
+/**
+ * A grid item to be displayed in grid view, outlining information about an applicant's summary.
+ *
+ * @param {*} props
+ * @returns
+ */
 function GridItem({
     applicantSummary,
     position,
@@ -476,6 +578,7 @@ function GridItem({
     }
 
     return (
+        // Entire item is marked as a dropdown trigger to access the list of actions
         <div
             className="applicant-dropdown-wrapper dropdown"
             onMouseLeave={() => setOpen(false)}
@@ -505,24 +608,27 @@ function GridItem({
                                 " " +
                                 applicantSummary.applicant.last_name}
                         </div>
-                        <div
-                            className="icon-container"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}
-                        >
-                            {!applicantMatch?.status.includes("assigned") && (
+                        {applicantMatch?.status.includes("assigned") && (
+                            <div className="applicant-hours">
+                                {" "}
+                                ({applicantMatch.hoursAssigned})
+                            </div>
+                        )}
+                        {!applicantMatch?.status.includes("assigned") && (
+                            <div
+                                className="icon-container"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                }}
+                            >
                                 <ApplicantStar
                                     match={applicantMatch}
                                     updateApplicantMatch={updateApplicantMatch}
                                     setMarkAsUpdated={setMarkAsUpdated}
                                 />
-                            )}
-                            {applicantMatch?.status === "assigned" && (
-                                <FaLock className="applicant-icon active" />
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                     <div className="grid-row">
                         <div className="grid-detail-small">
@@ -565,6 +671,7 @@ function GridItem({
                 </div>
             </div>
             <Collapse in={open}>
+                {/* The list of dropdown actions */}
                 <div className="applicant-dropdown-menu dropdown-menu noselect">
                     <button
                         className="dropdown-item"
@@ -727,6 +834,12 @@ function GridItem({
     );
 }
 
+/**
+ * A button allowing one to toggle an applicant's "starred" status for the currently-sected position.
+ *
+ * @param {*} props
+ * @returns
+ */
 function ApplicantStar({
     match,
     updateApplicantMatch,
@@ -760,6 +873,13 @@ function ApplicantStar({
     );
 }
 
+/**
+ * A button that displays a dialog allowing one to edit an applicant's notes.
+ * "setMarkAsUpdated" is called when a change has been made.
+ *
+ * @param {*} props
+ * @returns
+ */
 function ApplicantNote({
     applicantSummary,
     setMarkAsUpdated,

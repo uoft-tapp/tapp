@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Position } from "../../../api/defs/types";
 import { ApplicantSummary } from "./types";
 import {
@@ -7,134 +9,62 @@ import {
 import { sum } from "../../../api/mockAPI/utils";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
+import { GrFormClose } from "react-icons/gr";
 import "./styles.css";
 
-type sortMapItem = {
+export type sortMapItem = {
     function: Function;
     asc: boolean;
     name: string;
 };
 
-const sortMap: Record<string, sortMapItem> = {
-    programAsc: {
-        function: sortByProgram,
-        asc: true,
-        name: "Program (ASC)",
-    },
-    programDesc: {
-        function: sortByProgram,
-        asc: false,
-        name: "Program (DESC)",
-    },
-    deptAsc: {
+export const defaultSortList = [
+    {
         function: sortByDepartment,
         asc: true,
-        name: "Department (ASC)",
+        name: "Department",
     },
-    deptDesc: {
-        function: sortByDepartment,
+    {
+        function: sortByProgram,
         asc: false,
-        name: "Department (DESC)",
+        name: "Program",
     },
-    yipAsc: {
+    {
         function: sortByYip,
         asc: true,
-        name: "Year in Progress (ASC)",
+        name: "Year in Progress",
     },
-    yipDesc: {
-        function: sortByYip,
-        asc: false,
-        name: "Year in Progress (DESC)",
-    },
-    gpaAsc: {
-        function: sortByGpa,
-        asc: true,
-        name: "GPA (ASC)",
-    },
-    gpaDesc: {
-        function: sortByGpa,
-        asc: false,
-        name: "GPA (DESC)",
-    },
-    taPrefAsc: {
-        function: sortByApplicantPref,
-        asc: true,
-        name: "TA Preference (ASC)",
-    },
-    taPrefDesc: {
-        function: sortByApplicantPref,
-        asc: false,
-        name: "TA Preference (DESC)",
-    },
-    instPrefAsc: {
-        function: sortByInstructorRating,
-        asc: true,
-        name: "Instructor Preference (ASC)",
-    },
-    instPrefDesc: {
-        function: sortByInstructorRating,
-        asc: false,
-        name: "Instructor Preference (DESC)",
-    },
-    totalHoursAssignedAsc: {
-        function: sortByTotalHoursAssigned,
-        asc: true,
-        name: "Total Hours Assigned (ASC)",
-    },
-    totalHoursAssignedDesc: {
-        function: sortByTotalHoursAssigned,
-        asc: false,
-        name: "Total Hours Assigned (DESC)",
-    },
-    totalHoursOwedAsc: {
-        function: sortByTotalHoursOwed,
-        asc: true,
-        name: "Total Hours Owed (ASC)",
-    },
-    totalHoursOwedDesc: {
-        function: sortByTotalHoursOwed,
-        asc: false,
-        name: "Total Hours Owed (DESC)",
-    },
-    remainingHoursOwedAsc: {
-        function: sortByRemainingHoursOwed,
-        asc: true,
-        name: "Remaining Hours Owed (ASC)",
-    },
-    remainingHoursOwedDesc: {
-        function: sortByRemainingHoursOwed,
-        asc: false,
-        name: "Remaining Hours Owed (DESC)",
-    },
-    firstNameAsc: {
-        function: sortByFirstName,
-        asc: true,
-        name: "First Name (ASC)",
-    },
-    firstNameDesc: {
-        function: sortByFirstName,
-        asc: true,
-        name: "First Name (ASC)",
-    },
-    lastNameAsc: {
-        function: sortByLastName,
-        asc: true,
-        name: "Last Name (ASC)",
-    },
-    lastNameDesc: {
-        function: sortByLastName,
-        asc: false,
-        name: "Last Name (DESC)",
-    },
+];
+
+// A mapping of sort names to their sorting functions
+const sortMap: Record<string, Function> = {
+    Program: sortByProgram,
+    Department: sortByDepartment,
+    "Year in Progress": sortByYip,
+    GPA: sortByGpa,
+    "TA Preference": sortByApplicantPref,
+    "Instructor Preference": sortByInstructorRating,
+    "Total Hours Assigned": sortByTotalHoursAssigned,
+    "Total Hours Owed": sortByTotalHoursOwed,
+    "Remaining Hours Owed": sortByRemainingHoursOwed,
+    "First Name": sortByFirstName,
+    "Last Name": sortByLastName,
 };
 
 let currPosition: Position | null = null;
 
+/**
+ * A collection of dropdown lists (SortDropdownItem) for applying sorts.
+ *
+ * @param {*} props
+ * @returns
+ */
 export function SortDropdowns({
     sortList,
     setSortList,
 }: {
-    sortList: string[];
+    sortList: sortMapItem[];
     setSortList: Function;
 }) {
     return (
@@ -144,7 +74,7 @@ export function SortDropdowns({
                     <SortDropdownItem
                         key={index}
                         index={index}
-                        selected={item}
+                        selected={item.name}
                         sortList={sortList}
                         setSortList={setSortList}
                     />
@@ -161,6 +91,14 @@ export function SortDropdowns({
     );
 }
 
+/**
+ * A set of items including a dropdown list of sorting types,
+ * a button for specifying whether the sort should be done in ascending/descending order,
+ * and a button for removing the sort from the sorting list.
+ *
+ * @param {*} props
+ * @returns
+ */
 function SortDropdownItem({
     index,
     selected,
@@ -169,50 +107,89 @@ function SortDropdownItem({
 }: {
     index: number;
     selected: string | null;
-    sortList: string[];
+    sortList: sortMapItem[];
     setSortList: Function;
 }) {
+    let items: sortMapItem[];
+
     return (
-        <DropdownButton
-            title={selected ? sortMap[selected]["name"] : "Sort by... "}
-            size="sm"
-            variant="light"
-        >
-            {/* Basically a "remove this sort" button at the top of the list */}
+        <>
+            <DropdownButton
+                title={selected ? selected : "Sort by... "}
+                size="sm"
+                variant="info"
+                className="sort-dropdown"
+            >
+                {Object.keys(sortMap).map((item) => {
+                    return (
+                        <Dropdown.Item
+                            key={item}
+                            onSelect={() => {
+                                items = [...sortList];
+                                const newSortItem: sortMapItem = {
+                                    function: sortMap[item],
+                                    asc: true,
+                                    name: item,
+                                };
+
+                                items[index] = newSortItem;
+                                setSortList(items);
+                            }}
+                        >
+                            {item}
+                        </Dropdown.Item>
+                    );
+                })}
+            </DropdownButton>
             {selected && (
-                <Dropdown.Item
-                    key="empty"
-                    onSelect={() => {
-                        let items = [...sortList];
+                <div
+                    className="sort-icon"
+                    onClick={() => {
+                        // Button for specifying ascending/descending order
+                        items = [...sortList];
+                        items[index] = {
+                            ...items[index],
+                            asc: !items[index]["asc"],
+                        };
+                        setSortList(items);
+                    }}
+                >
+                    {" "}
+                    {sortList[index]["asc"] ? (
+                        <TiArrowSortedUp />
+                    ) : (
+                        <TiArrowSortedDown />
+                    )}{" "}
+                </div>
+            )}
+            {selected && (
+                <div
+                    className="sort-icon"
+                    onClick={() => {
+                        // Button for removing this sort
+                        items = [...sortList];
                         items.splice(index, 1);
                         setSortList(items);
                     }}
                 >
-                    -
-                </Dropdown.Item>
+                    <GrFormClose />
+                </div>
             )}
-
-            {Object.keys(sortMap).map((item) => {
-                return (
-                    <Dropdown.Item
-                        key={item}
-                        onSelect={() => {
-                            let items = [...sortList];
-                            items[index] = item;
-                            setSortList(items);
-                        }}
-                    >
-                        {sortMap[item]["name"]}
-                    </Dropdown.Item>
-                );
-            })}
-        </DropdownButton>
+        </>
     );
 }
 
+/**
+ * Applies a set of sorting functions outlined by "sortList" to a list of applicant summaries.
+ *
+ * @param {ApplicantSummary[]} applicantSummaries
+ * @param {sortMapItem[]} sortList
+ * @param {Position | null} position
+ * @returns
+ */
 export function applySorts(
     applicantSummaries: ApplicantSummary[],
-    sortList: string[],
+    sortList: sortMapItem[],
     position: Position | null
 ) {
     // Return early if any inputs aren't defined
@@ -224,21 +201,8 @@ export function applySorts(
 
     // Apply each sort in the opposite order they appear in sortList
     let reversedList = [...sortList].reverse();
-    for (const sortName of reversedList) {
-        if (sortName === "") {
-            continue;
-        }
-
-        // Return early if the sort name doesn't exist in the sort map for whatever reason
-        if (!Object.keys(sortMap).includes(sortName)) {
-            return;
-        }
-
-        // Apply the respective sort function
-        sortMap[sortName]["function"](
-            applicantSummaries,
-            sortMap[sortName]["asc"]
-        );
+    for (const sortItem of reversedList) {
+        sortItem["function"](applicantSummaries, sortItem["asc"]);
     }
 }
 
@@ -250,16 +214,8 @@ function flipIfDescending(val: number, asc: boolean) {
 // Sorting functions -- all of these do in-place sorting
 function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return (
-            a.applicant.first_name +
-            ", " +
-            a.applicant.last_name
-        ).toLowerCase() <
-            (
-                b.applicant.first_name +
-                ", " +
-                b.applicant.last_name
-            ).toLowerCase()
+        return `${a.applicant.first_name}, ${a.applicant.last_name}`.toLowerCase() <
+            `${b.applicant.first_name}, ${b.applicant.last_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -267,16 +223,8 @@ function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return (
-            a.applicant.last_name +
-            ", " +
-            a.applicant.first_name
-        ).toLowerCase() <
-            (
-                b.applicant.last_name +
-                ", " +
-                b.applicant.first_name
-            ).toLowerCase()
+        return `${a.applicant.last_name}, ${a.applicant.first_name}`.toLowerCase() <
+            `${b.applicant.last_name}, ${b.applicant.first_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });

@@ -44,7 +44,7 @@ import { FinalizeChangesButton } from "./finalize-changes";
 
 import { Button } from "react-bootstrap";
 
-function getNewestApplication(
+function getCombinedApplication(
     applicant: Applicant,
     applications: Application[]
 ) {
@@ -57,22 +57,63 @@ function getNewestApplication(
     }
 
     // Separate applications by posting
-
-    // Get the newest application for each posting
-
-    // Create the combination of these postings
-
-    matchingApplications.sort((a, b) => {
-        if (a.submission_date === b.submission_date) {
-            return 0;
+    const applicationsByPosting: Record<number, Application[]> = {};
+    for (const application of matchingApplications) {
+        // Handle case where posting is null (pretend id is -1)
+        let postingId = -1;
+        if (application.posting) {
+            postingId = application.posting.id;
         }
-        if (a.submission_date > b.submission_date) {
-            return 1;
-        }
-        return -1;
-    });
+        applicationsByPosting[postingId] =
+            applicationsByPosting[postingId] || [];
+        applicationsByPosting[postingId].push(application);
+    }
 
-    return matchingApplications[matchingApplications.length - 1];
+    // Sort each bucket:
+    let combinedApplication: Application | null = null;
+    for (const posting of Object.keys(applicationsByPosting)) {
+        applicationsByPosting[+posting].sort((a, b) => {
+            if (a.submission_date === b.submission_date) {
+                return 0;
+            }
+            if (a.submission_date > b.submission_date) {
+                return 1;
+            }
+            return -1;
+        });
+
+        const newestApplication =
+            applicationsByPosting[+posting][
+                applicationsByPosting[+posting].length - 1
+            ];
+        if (!combinedApplication) {
+            combinedApplication = newestApplication;
+        } else {
+            // Update values to include info from this application
+            for (const positionPref of newestApplication.position_preferences) {
+                const matchingPref =
+                    combinedApplication.position_preferences.find(
+                        (pref) =>
+                            pref.position.position_code ===
+                            positionPref.position.position_code
+                    ) || null;
+
+                if (!matchingPref) {
+                    combinedApplication.position_preferences.push(positionPref);
+                } else {
+                    // Update position preference to take the maximum of the two
+                    matchingPref.preference_level = Math.max(
+                        positionPref.preference_level,
+                        matchingPref.preference_level
+                    );
+                }
+            }
+
+            // Combine custom question answers?
+        }
+    }
+
+    return combinedApplication;
 }
 
 export function AdminMatchingView() {
@@ -128,11 +169,11 @@ export function AdminMatchingView() {
             const initialMatches: Match[] = [];
 
             for (const applicant of applicants) {
-                const mostRecentApplication = getNewestApplication(
+                const combinedApplication = getCombinedApplication(
                     applicant,
                     applications
                 );
-                if (!mostRecentApplication) {
+                if (!combinedApplication) {
                     continue;
                 }
 
@@ -140,7 +181,7 @@ export function AdminMatchingView() {
                 const savedMatches: Match[] = localStore.matches;
 
                 // Mark positions as being applied for
-                for (const positionPreference of mostRecentApplication.position_preferences) {
+                for (const positionPreference of combinedApplication.position_preferences) {
                     const savedMatchForPosition =
                         savedMatches?.find(
                             (match) =>
@@ -224,12 +265,12 @@ export function AdminMatchingView() {
             ApplicantSummary[]
         > = {};
         for (const applicant of applicants) {
-            const newestApplication = getNewestApplication(
+            const combinedApplication = getCombinedApplication(
                 applicant,
                 applications
             );
 
-            if (!newestApplication) {
+            if (!combinedApplication) {
                 continue;
             }
 
@@ -244,7 +285,7 @@ export function AdminMatchingView() {
 
             const newApplicantSummary = {
                 applicant: applicant,
-                application: newestApplication,
+                application: combinedApplication,
                 matches: applicantMatches,
                 guarantee: applicantGuarantee,
                 note: notes[applicant.utorid] || null,
