@@ -114,7 +114,7 @@ export function ImportMatchingDataButton({
             return;
         }
         try {
-            if (Object.keys(fileContent.data).includes("matches")) {
+            if (fileContent.data["matches"]) {
                 // Filter matches based on whether
                 // - the utorid and positionId combo don't exist at all in the current matching data set, or
                 // - the combination exists but the assignment status or hoursAssigned is different
@@ -140,22 +140,17 @@ export function ImportMatchingDataButton({
                 setDiffedMatches(diffedMatches);
             }
 
-            if (Object.keys(fileContent.data).includes("guarantees")) {
+            if (fileContent.data["guarantees"]) {
                 setNewGuarantees(
                     fileContent.data.guarantees.map(
                         (guarantee: AppointmentGuaranteeStatus) => {
-                            return {
-                                utorid: guarantee.utorid,
-                                totalHoursOwed: guarantee.totalHoursOwed,
-                                previousHoursFulfilled:
-                                    guarantee.previousHoursFulfilled,
-                            } as AppointmentGuaranteeStatus;
+                            return { ...guarantee };
                         }
                     )
                 );
             }
 
-            if (Object.keys(fileContent.data).includes("notes")) {
+            if (fileContent.data["notes"]) {
                 const importedNotes: Record<string, string | null> = {};
                 for (const utorid in Object.keys(fileContent.data.notes)) {
                     importedNotes[utorid] = fileContent.data.notes[utorid];
