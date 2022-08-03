@@ -63,7 +63,7 @@ export function ApplicantView({
     markAsUpdated: Function;
 }) {
     const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
-    const [searchValue, setSearchValue] = React.useState("");
+    const [filterString, setFilterString] = React.useState("");
     const [sortList, setSortList] =
         React.useState<sortMapItem[]>(defaultSortList);
 
@@ -87,7 +87,7 @@ export function ApplicantView({
                     applicant.applicant.utorid
                 )
                     .toLowerCase()
-                    .includes(searchValue.toLowerCase())
+                    .includes(filterString.toLowerCase())
             ) || [];
 
         // Apply filters based on filter list
@@ -98,7 +98,7 @@ export function ApplicantView({
         applySorts(filteredByFilters, sortList, position);
 
         return filteredByFilters;
-    }, [searchValue, sortList, filterList, applicants, position]);
+    }, [filterString, sortList, filterList, applicants, position]);
 
     return (
         <div className="matching-course-main">
@@ -109,7 +109,7 @@ export function ApplicantView({
                             type="text"
                             placeholder="Filter by name/UTORid..."
                             className="mr-sm-2"
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            onChange={(e) => setFilterString(e.target.value)}
                         />
                     </Form>
                     <div className="filter-button-container">
