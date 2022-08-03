@@ -841,7 +841,7 @@ function ApplicantStar({
             className={classNames("star-icon", {
                 filled: match?.status === "starred",
             })}
-            onClick={async () => _onClick()}
+            onClick={_onClick}
         />
     );
 }
@@ -864,7 +864,7 @@ function ApplicantNote({
     const [show, setShow] = React.useState(false);
     const [note, setNote] = React.useState(applicantSummary.note);
 
-    function _onClick(e: any) {
+    function _onClick() {
         setShow(true);
     }
 
@@ -885,7 +885,7 @@ function ApplicantNote({
                         ? "active"
                         : "inactive"
                 }`}
-                onClick={(e) => _onClick(e)}
+                onClick={_onClick}
             />
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
