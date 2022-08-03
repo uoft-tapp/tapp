@@ -82,14 +82,8 @@ export function ApplicantView({
 
         // Filter applicants that match the search value
         const filteredBySearch: ApplicantSummary[] =
-            applicants.filter((applicant) =>
-                (
-                    applicant.applicant.first_name +
-                    " " +
-                    applicant.applicant.last_name +
-                    " " +
-                    applicant.applicant.utorid
-                )
+            applicants.filter((applicantSummary) =>
+                `${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name} ${applicantSummary.applicant.utorid}`
                     .toLowerCase()
                     .includes(filterString.toLowerCase())
             ) || [];
