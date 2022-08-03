@@ -12,7 +12,7 @@ export function ExportMatchingDataButton() {
     const matchingData = useSelector(matchingDataSelector);
 
     function onClick() {
-        const blob = new Blob([JSON.stringify(matchingData)], {
+        const blob = new Blob([JSON.stringify(matchingData, null, 4)], {
             type: "text/plain;charset=utf-8",
         });
         const date = new Date();
