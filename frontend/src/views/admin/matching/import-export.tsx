@@ -15,22 +15,13 @@ export function ExportMatchingDataButton() {
         const blob = new Blob([JSON.stringify(matchingData, null, 4)], {
             type: "text/plain;charset=utf-8",
         });
-        const date = new Date();
         FileSaver.saveAs(
             blob,
-            "matching_data-" +
-                date.getFullYear() +
-                "-" +
-                date.getMonth().toString().padStart(2, "0") +
-                "-" +
-                date.getDate().toString().padStart(2, "0") +
-                "-" +
-                date.getHours().toString().padStart(2, "0") +
-                "-" +
-                date.getMinutes().toString().padStart(2, "0") +
-                "-" +
-                date.getSeconds().toString().padStart(2, "0") +
-                ".json"
+            `matching_data-${new Date().toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            })}.json`
         );
     }
 
