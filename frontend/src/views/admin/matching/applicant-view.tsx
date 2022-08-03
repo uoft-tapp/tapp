@@ -8,10 +8,17 @@ import { FaFilter, FaTable, FaTh, FaLock } from "react-icons/fa";
 import { BsStarFill } from "react-icons/bs";
 import { RiStickyNoteFill } from "react-icons/ri";
 
-import ToggleButton from "react-bootstrap/ToggleButton";
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import Collapse from "react-bootstrap/Collapse";
-import { Form, Table, Modal, Button } from "react-bootstrap";
+import {
+    Form,
+    Table,
+    Modal,
+    Button,
+    ToggleButton,
+    ToggleButtonGroup,
+    Collapse,
+    OverlayTrigger,
+    Tooltip,
+} from "react-bootstrap";
 
 import { sum } from "../../../api/mockAPI/utils";
 import { round } from "../../../libs/utils";
@@ -38,9 +45,6 @@ import {
 } from "./filters";
 
 import { ApplicationDetails } from "../applications/application-details";
-
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 
 import "./styles.css";
 
