@@ -55,10 +55,9 @@ const matchingDataReducer = createReducer(initialState, {
     },
     [UPSERT_GUARANTEE]: (state, action) => {
         // Check if guarantee for a particular applicant already exists
-        const existingGuarantee =
-            state.guarantees.find(
-                (guarantee) => guarantee.utorid === action.payload.utorid
-            ) || null;
+        const existingGuarantee = state.guarantees.find(
+            (guarantee) => guarantee.utorid === action.payload.utorid
+        );
 
         if (!existingGuarantee) {
             return {
