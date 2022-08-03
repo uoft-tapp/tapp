@@ -369,10 +369,9 @@ function filterProgram(
     return (
         applicantSummaries.filter(
             (applicantSummary) =>
-                applicantSummary &&
-                applicantSummary.application &&
-                applicantSummary.application.program &&
-                !excludeValues.includes(applicantSummary.application.program)
+                !excludeValues.includes(
+                    applicantSummary?.application?.program || ""
+                )
         ) || []
     );
 }
@@ -395,10 +394,9 @@ function filterDept(
     return (
         applicantSummaries.filter(
             (applicantSummary) =>
-                applicantSummary &&
-                applicantSummary.application &&
-                applicantSummary.application.department &&
-                !excludeValues.includes(applicantSummary.application.department)
+                !excludeValues.includes(
+                    applicantSummary?.application?.department || ""
+                )
         ) || []
     );
 }
