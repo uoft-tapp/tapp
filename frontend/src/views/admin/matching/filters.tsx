@@ -317,7 +317,7 @@ export function applyFilters(
     filterList: FilterListItem[],
     position: Position | null
 ) {
-    if (!applicantSummaries || filterList.length === 0 || !position) {
+    if (filterList.length === 0 || !position) {
         return applicantSummaries;
     }
 
@@ -362,7 +362,7 @@ function filterProgram(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {
-    if (!applicantSummaries || excludeValues.length === 0) {
+    if (excludeValues.length === 0) {
         return applicantSummaries;
     }
 
@@ -388,7 +388,7 @@ function filterDept(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {
-    if (!applicantSummaries || excludeValues.length === 0) {
+    if (excludeValues.length === 0) {
         return applicantSummaries;
     }
 
