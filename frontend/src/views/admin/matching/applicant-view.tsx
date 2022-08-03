@@ -112,9 +112,9 @@ export function ApplicantView({
                     </Form>
                     <div className="filter-button-container">
                         <FaFilter
-                            className={`filter-button ${
-                                filterList.length > 0 ? "active" : ""
-                            }`}
+                            className={classNames("filter-button", {
+                                active: filterList.length > 0,
+                            })}
                             onClick={() => setShowFilters(!showFilters)}
                         />
                     </div>
@@ -153,13 +153,13 @@ export function ApplicantView({
                     (viewType === "table" ? (
                         <TableView
                             position={position}
-                            applicants={filteredApplicants}
+                            applicantSummaries={filteredApplicants}
                             markAsUpdated={markAsUpdated}
                         />
                     ) : (
                         <GridView
                             position={position}
-                            applicants={filteredApplicants}
+                            applicantSummaries={filteredApplicants}
                             markAsUpdated={markAsUpdated}
                         />
                     ))}
@@ -194,11 +194,11 @@ export function ApplicantView({
  */
 function TableView({
     position,
-    applicants,
+    applicantSummaries,
     markAsUpdated,
 }: {
     position: Position;
-    applicants: ApplicantSummary[];
+    applicantSummaries: ApplicantSummary[];
     markAsUpdated: Function;
 }) {
     return (
@@ -222,13 +222,13 @@ function TableView({
                 </tr>
             </thead>
             <tbody>
-                {applicants.map((applicant) => {
+                {applicantSummaries.map((applicantSummary) => {
                     return (
                         <TableRow
-                            applicant={applicant}
+                            applicantSummary={applicantSummary}
                             position={position}
                             markAsUpdated={markAsUpdated}
-                            key={applicant.applicant.id}
+                            key={applicantSummary.applicant.id}
                         />
                     );
                 })}
@@ -261,22 +261,25 @@ function getMappedStatusForMatch(match: Match | null) {
  */
 function TableRow({
     position,
-    applicant,
+    applicantSummary,
     markAsUpdated,
 }: {
     position: Position;
-    applicant: ApplicantSummary;
+    applicantSummary: ApplicantSummary;
     markAsUpdated: Function;
 }) {
-    const applicantMatch = getApplicantMatchForPosition(applicant, position);
+    const applicantMatch = getApplicantMatchForPosition(
+        applicantSummary,
+        position
+    );
     const statusCategory = getMappedStatusForMatch(applicantMatch);
     const positionPref = getPositionPrefForPosition(
-        applicant.application,
+        applicantSummary.application,
         position
     );
 
     const instructorRatings =
-        applicant.application.instructor_preferences
+        applicantSummary.application.instructor_preferences
             .filter((pref) => pref.position.id === position.id)
             .map((rating) => {
                 return rating.preference_level;
@@ -287,21 +290,17 @@ function TableRow({
             <td>
                 {statusCategory}{" "}
                 {statusCategory === "Assigned"
-                    ? "(" +
-                      (applicantMatch ? applicantMatch.hoursAssigned : 0) +
-                      ")"
+                    ? `(${applicantMatch?.hoursAssigned || "0"})`
                     : ""}
             </td>
-            <td>{applicant.applicant.last_name}</td>
-            <td>{applicant.applicant.first_name}</td>
-            <td>{applicant.applicant.utorid}</td>
-            <td>{applicant.application.department}</td>
-            <td>{applicant.application.program}</td>
-            <td>{applicant.application.yip}</td>
-            <td>
-                {applicant.application.gpa ? applicant.application.gpa : ""}
-            </td>
-            <td>{positionPref ? positionPref.preference_level : ""}</td>
+            <td>{applicantSummary.applicant.last_name}</td>
+            <td>{applicantSummary.applicant.first_name}</td>
+            <td>{applicantSummary.applicant.utorid}</td>
+            <td>{applicantSummary.application.department}</td>
+            <td>{applicantSummary.application.program}</td>
+            <td>{applicantSummary.application.yip}</td>
+            <td>{applicantSummary.application.gpa || ""}</td>
+            <td>{positionPref?.preference_level || ""}</td>
             <td>
                 {instructorRatings.length > 0
                     ? round(
@@ -309,32 +308,24 @@ function TableRow({
                           3
                       ) +
                       (instructorRatings.length > 1
-                          ? " (" + instructorRatings.length + ")"
+                          ? ` (${instructorRatings.length})`
                           : "")
                     : ""}
             </td>
             <td>
-                {applicant.matches.map((match) => {
+                {applicantSummary.matches.map((match) => {
                     if (
                         match.status === "assigned" ||
                         match.status === "staged-assigned"
                     ) {
-                        return (
-                            match.positionCode +
-                            " (" +
-                            match.hoursAssigned +
-                            ") "
-                        );
+                        return `${match.positionCode} (${match.hoursAssigned})`;
                     }
                     return "";
                 })}
             </td>
-            <td>{getApplicantTotalHoursAssigned(applicant)}</td>
-            <td>
-                {applicant.guarantee &&
-                    applicant.guarantee.previousHoursFulfilled}
-            </td>
-            <td>{applicant.guarantee && applicant.guarantee.totalHoursOwed}</td>
+            <td>{getApplicantTotalHoursAssigned(applicantSummary)}</td>
+            <td>{applicantSummary.guarantee?.previousHoursFulfilled || ""}</td>
+            <td>{applicantSummary.guarantee?.totalHoursOwed || ""}</td>
         </tr>
     );
 }
@@ -374,11 +365,11 @@ function LockedAssignTooltip() {
  */
 function GridView({
     position,
-    applicants,
+    applicantSummaries,
     markAsUpdated,
 }: {
     position: Position;
-    applicants: ApplicantSummary[];
+    applicantSummaries: ApplicantSummary[];
     markAsUpdated: Function;
 }) {
     const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> =
@@ -387,14 +378,16 @@ function GridView({
         (key) => (applicantSummariesByMatchStatus[key] = [])
     );
 
-    for (const applicant of applicants) {
+    for (const applicantSummary of applicantSummaries) {
         const applicantMatch = getApplicantMatchForPosition(
-            applicant,
+            applicantSummary,
             position
         );
         const statusCategory = getMappedStatusForMatch(applicantMatch);
         if (statusCategory) {
-            applicantSummariesByMatchStatus[statusCategory].push(applicant);
+            applicantSummariesByMatchStatus[statusCategory].push(
+                applicantSummary
+            );
         }
     }
 
@@ -405,7 +398,9 @@ function GridView({
                     <GridSection
                         key={key}
                         header={key}
-                        applicants={applicantSummariesByMatchStatus[key]}
+                        applicantSummaries={
+                            applicantSummariesByMatchStatus[key]
+                        }
                         markAsUpdated={markAsUpdated}
                         position={position}
                     />
@@ -423,17 +418,17 @@ function GridView({
  */
 function GridSection({
     header,
-    applicants,
+    applicantSummaries,
     position,
     markAsUpdated,
 }: {
     header: string;
-    applicants: ApplicantSummary[];
+    applicantSummaries: ApplicantSummary[];
     position: Position;
     markAsUpdated: Function;
 }) {
     // Don't show the section if there are no applicants
-    if (applicants.length === 0) {
+    if (applicantSummaries.length === 0) {
         return null;
     }
 
@@ -443,13 +438,13 @@ function GridSection({
                 {header} {header === "Assigned" ? <LockedAssignTooltip /> : ""}
             </h4>
             <div className="grid-view-list">
-                {applicants.map((applicant) => {
+                {applicantSummaries.map((applicantSummary) => {
                     return (
                         <GridItem
-                            applicantSummary={applicant}
+                            applicantSummary={applicantSummary}
                             position={position}
                             markAsUpdated={markAsUpdated}
-                            key={applicant.applicant.id}
+                            key={applicantSummary.applicant.id}
                         />
                     );
                 })}
@@ -535,9 +530,7 @@ function GridItem({
     }
 
     let filledStatus: "empty" | "under" | "matched" | "over" | "" = "";
-    const hoursOwed = applicantSummary.guarantee
-        ? applicantSummary.guarantee.totalHoursOwed
-        : 0;
+    const hoursOwed = applicantSummary.guarantee?.totalHoursOwed || 0;
     let totalAssignedHours = round(
         sum(
             ...applicantSummary.matches.map((match) => {
@@ -549,10 +542,7 @@ function GridItem({
                 }
                 return 0;
             })
-        ) +
-            (applicantSummary.guarantee
-                ? applicantSummary.guarantee.previousHoursFulfilled
-                : 0),
+        ) + (applicantSummary.guarantee?.previousHoursFulfilled || 0),
         2
     );
 
@@ -595,9 +585,8 @@ function GridItem({
                 <div className="applicant-grid-main">
                     <div className="grid-row">
                         <div className="applicant-name">
-                            {applicantSummary.applicant.first_name +
-                                " " +
-                                applicantSummary.applicant.last_name}
+                            {applicantSummary.applicant.first_name}{" "}
+                            {applicantSummary.applicant.last_name}
                         </div>
                         {applicantMatch?.status.includes("assigned") && (
                             <div className="applicant-hours">
@@ -624,18 +613,15 @@ function GridItem({
                     <div className="grid-row">
                         <div className="grid-detail-small">
                             {applicantSummary.application.department
-                                ?.substring(0, 1)
+                                ?.charAt(0)
                                 .toUpperCase()}
                         </div>
                         <div className="grid-detail-small">
-                            {applicantSummary.application.program?.substring(
-                                0,
-                                1
-                            )}
+                            {applicantSummary.application.program?.charAt(0)}
                             {applicantSummary.application.yip}
                         </div>
                         <div className="grid-detail-small">
-                            {positionPref ? positionPref.preference_level : ""}
+                            {positionPref?.preference_level || ""}
                         </div>
                         <div className="grid-detail-small">
                             {instructorRatings.length > 0
@@ -915,12 +901,7 @@ function ApplicantNote({
                             <Form.Control
                                 as="textarea"
                                 rows={3}
-                                defaultValue={
-                                    applicantSummary.note &&
-                                    applicantSummary.note.length > 0
-                                        ? applicantSummary.note
-                                        : ""
-                                }
+                                defaultValue={applicantSummary.note || ""}
                                 onChange={(e) => setNote(e.target.value)}
                             />
                         </Form.Group>
