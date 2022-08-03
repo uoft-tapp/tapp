@@ -297,22 +297,33 @@ function TableRow({
             <td>{applicantSummary.application.gpa || ""}</td>
             <td>{positionPref?.preference_level || ""}</td>
             <td>{avgInstructorRating || ""}</td>
-            <td>
-                {applicantSummary.matches.map((match) => {
-                    if (
-                        match.status === "assigned" ||
-                        match.status === "staged-assigned"
-                    ) {
-                        return `${match.positionCode} (${match.hoursAssigned})`;
-                    }
-                    return "";
-                })}
-            </td>
+            <td>{formatAssignedCourses(applicantSummary)}</td>
             <td>{getApplicantTotalHoursAssigned(applicantSummary)}</td>
             <td>{applicantSummary.guarantee?.previousHoursFulfilled || ""}</td>
             <td>{applicantSummary.guarantee?.totalHoursOwed || ""}</td>
         </tr>
     );
+}
+
+/**
+ * Takes an applicant summary and returns a formatted string containing
+ * the applicant's assignments and hours assigned, separated by newlines.
+ *
+ * @param {ApplicantSummary} applicantSummary
+ * @returns {string}
+ */
+function formatAssignedCourses(applicantSummary: ApplicantSummary) {
+    return applicantSummary.matches
+        .map((match) => {
+            if (
+                match.status === "assigned" ||
+                match.status === "staged-assigned"
+            ) {
+                return `${match.positionCode} (${match.hoursAssigned})`;
+            }
+        })
+        .filter((match) => match)
+        .join("\n");
 }
 
 /**
