@@ -7,8 +7,7 @@ import {
     getApplicantTotalHoursAssigned,
 } from "./utils";
 import { sum } from "../../../libs/utils";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
 import "./styles.css";
