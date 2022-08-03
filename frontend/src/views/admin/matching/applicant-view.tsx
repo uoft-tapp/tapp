@@ -123,24 +123,15 @@ export function ApplicantView({
                     />
                     <div className="container-filler"></div>
                     <ToggleButtonGroup
-                        id="view-toggle"
                         type="radio"
                         name="views"
                         defaultValue={viewType}
                         onChange={setViewType}
                     >
-                        <ToggleButton
-                            className="no-highlight"
-                            id="tbg-radio-1"
-                            value={"grid"}
-                        >
+                        <ToggleButton className="no-highlight" value={"grid"}>
                             <FaTh />
                         </ToggleButton>
-                        <ToggleButton
-                            className="no-highlight"
-                            id="tbg-radio-2"
-                            value={"table"}
-                        >
+                        <ToggleButton className="no-highlight" value={"table"}>
                             <FaTable />
                         </ToggleButton>
                     </ToggleButtonGroup>
@@ -284,6 +275,11 @@ function TableRow({
                 return rating.preference_level;
             }) || [];
 
+    const avgInstructorRating =
+        instructorRatings.length > 0
+            ? round(sum(...instructorRatings) / instructorRatings.length, 3)
+            : null;
+
     return (
         <tr>
             <td>
@@ -300,17 +296,7 @@ function TableRow({
             <td>{applicantSummary.application.yip}</td>
             <td>{applicantSummary.application.gpa || ""}</td>
             <td>{positionPref?.preference_level || ""}</td>
-            <td>
-                {instructorRatings.length > 0
-                    ? round(
-                          sum(...instructorRatings) / instructorRatings.length,
-                          3
-                      ) +
-                      (instructorRatings.length > 1
-                          ? ` (${instructorRatings.length})`
-                          : "")
-                    : ""}
-            </td>
+            <td>{avgInstructorRating || ""}</td>
             <td>
                 {applicantSummary.matches.map((match) => {
                     if (
