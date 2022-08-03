@@ -826,7 +826,7 @@ function ApplicantStar({
     updateApplicantMatch: Function;
     markAsUpdated: Function;
 }) {
-    async function _onClick(e: any) {
+    async function _onClick() {
         if (match) {
             if (match.status === "applied" || match.status === "hidden") {
                 updateApplicantMatch("starred");
@@ -841,7 +841,7 @@ function ApplicantStar({
             className={classNames("star-icon", {
                 filled: match?.status === "starred",
             })}
-            onClick={async (e) => _onClick(e)}
+            onClick={async () => _onClick()}
         />
     );
 }
