@@ -20,8 +20,7 @@ import {
     Tooltip,
 } from "react-bootstrap";
 
-import { sum } from "../../../api/mockAPI/utils";
-import { round } from "../../../libs/utils";
+import { sum, round } from "../../../libs/utils";
 
 import { upsertMatch, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";

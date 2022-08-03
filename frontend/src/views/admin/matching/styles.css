@@ -374,8 +374,8 @@
 }
 
 .no-highlight {
-    outline: none !important;
-    box-shadow: none !important;
+    outline: none;
+    box-shadow: none;
 }
 
 .icon-container {

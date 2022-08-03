@@ -6,7 +6,7 @@ import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "./utils";
-import { sum } from "../../../api/mockAPI/utils";
+import { sum } from "../../../libs/utils";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";

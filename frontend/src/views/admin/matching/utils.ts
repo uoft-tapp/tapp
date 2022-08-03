@@ -1,6 +1,6 @@
 import { Position, Application } from "../../../api/defs/types";
 import { ApplicantSummary } from "./types";
-import { sum } from "../../../api/mockAPI/utils";
+import { sum } from "../../../libs/utils";
 
 export function getApplicantMatchForPosition(
     applicantSummary: ApplicantSummary,
