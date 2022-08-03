@@ -836,17 +836,13 @@ function ApplicantStar({
         }
     }
 
-    if (match && match.status === "starred") {
-        return (
-            <BsStarFill
-                className="star-icon filled"
-                onClick={async (e) => _onClick(e)}
-            />
-        );
-    }
-
     return (
-        <BsStarFill className="star-icon" onClick={async (e) => _onClick(e)} />
+        <BsStarFill
+            className={classNames("star-icon", {
+                filled: match?.status === "starred",
+            })}
+            onClick={async (e) => _onClick(e)}
+        />
     );
 }
 
