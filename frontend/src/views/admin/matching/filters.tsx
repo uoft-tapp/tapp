@@ -335,9 +335,9 @@ export function applyFilters(
     }
 
     // Apply filters for each type
-    for (const key of Object.keys(filterBuckets)) {
+    for (const key in filterBuckets) {
         // Return early if this key doesn't exist in the filter map for some reason
-        if (!Object.keys(filterMap).includes(key)) {
+        if (!filterMap[key]) {
             return;
         }
 

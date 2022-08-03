@@ -69,8 +69,8 @@ function getCombinedApplication(
 
     // Sort each bucket:
     let combinedApplication: Application | null = null;
-    for (const posting of Object.keys(applicationsByPosting)) {
-        applicationsByPosting[+posting].sort((a, b) => {
+    for (const applications of Object.values(applicationsByPosting)) {
+        applications.sort((a, b) => {
             if (a.submission_date === b.submission_date) {
                 return 0;
             }
@@ -81,9 +81,7 @@ function getCombinedApplication(
         });
 
         const newestApplication =
-            applicationsByPosting[+posting][
-                applicationsByPosting[+posting].length - 1
-            ];
+            applications[applications.length - 1];
         if (!combinedApplication) {
             combinedApplication = newestApplication;
         } else {
