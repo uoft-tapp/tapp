@@ -71,14 +71,10 @@ export function ApplicantView({
     const [filterList, setFilterList] =
         React.useState<FilterListItem[]>(defaultFilterList);
 
-    const [numHiddenApplicants, setNumHiddenApplicants] = React.useState(0);
-
     const filteredApplicants = React.useMemo(() => {
         if (!applicants) {
             return [] as ApplicantSummary[];
         }
-
-        const totalNumApplicants = applicants.length;
 
         // Filter applicants that match the search value
         const filteredBySearch: ApplicantSummary[] =
@@ -100,9 +96,6 @@ export function ApplicantView({
 
         // Apply sorts based on sort lists
         applySorts(filteredByFilters, sortList, position);
-
-        // Keep track of how many applicants are hidden
-        setNumHiddenApplicants(totalNumApplicants - filteredByFilters.length);
 
         return filteredByFilters;
     }, [searchValue, sortList, filterList, applicants, position]);
@@ -176,11 +169,11 @@ export function ApplicantView({
                     // Footer to show info about how many applicants are visible/hidden
                     <div className="applicant-count">{`Showing ${
                         filteredApplicants.length
-                    }/${
-                        filteredApplicants.length + numHiddenApplicants
-                    } applicants ${
-                        numHiddenApplicants > 0
-                            ? `(${numHiddenApplicants} hidden)`
+                    }/${applicants.length} applicants ${
+                        applicants.length - filteredApplicants.length > 0
+                            ? `(${
+                                  applicants.length - filteredApplicants.length
+                              } hidden)`
                             : ""
                     }`}</div>
                 )}
