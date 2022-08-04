@@ -1,16 +1,16 @@
 import React from "react";
 
-import { Position } from "../../../api/defs/types";
-import { ApplicantSummary } from "./types";
+import { Position } from "../../../../api/defs/types";
+import { ApplicantSummary } from "../types";
 import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
-} from "./utils";
-import { sum } from "../../../libs/utils";
+} from "../utils";
+import { sum } from "../../../../libs/utils";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
-import "./styles.css";
+import "../styles.css";
 
 export type sortMapItem = {
     function: Function;

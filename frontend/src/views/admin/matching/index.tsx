@@ -32,7 +32,7 @@ import {
 } from "./types";
 
 import { PositionList } from "./position-list";
-import { ApplicantView } from "./applicant-view";
+import { ApplicantView } from "./applicant-view/applicant-view";
 
 import {
     ImportMatchingDataButton,

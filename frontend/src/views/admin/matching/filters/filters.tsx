@@ -1,11 +1,11 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import { Position } from "../../../api/defs/types";
-import { ApplicantSummary } from "./types";
+import { Position } from "../../../../api/defs/types";
+import { ApplicantSummary } from "../types";
 import {
     getPositionPrefForPosition,
     getApplicantMatchForPosition,
     getApplicantTotalHoursAssigned,
-} from "./utils";
+} from "../utils";
 
 export type FilterListItem = {
     section: string;

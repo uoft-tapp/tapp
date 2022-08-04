@@ -1,8 +1,8 @@
 import React from "react";
 import classNames from "classnames";
 
-import { Position, Application } from "../../../api/defs/types";
-import { ApplicantSummary, Match } from "./types";
+import { Position, Application } from "../../../../api/defs/types";
+import { ApplicantSummary, Match } from "../types";
 
 import { FaFilter, FaTable, FaTh, FaLock } from "react-icons/fa";
 import { BsStarFill } from "react-icons/bs";
@@ -18,34 +18,34 @@ import {
     Collapse,
 } from "react-bootstrap";
 
-import { sum, round } from "../../../libs/utils";
+import { sum, round } from "../../../../libs/utils";
 
-import { upsertMatch, upsertNote } from "./actions";
-import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { upsertMatch, upsertNote } from "../actions";
+import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 import {
     getApplicantMatchForPosition,
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
-} from "./utils";
+} from "../utils";
 import {
     SortDropdowns,
     applySorts,
     sortMapItem,
     defaultSortList,
-} from "./sorts";
+} from "../sorts/sorts";
 import {
     FilterModal,
     applyFilters,
     FilterListItem,
     defaultFilterList,
-} from "./filters";
+} from "../filters/filters";
 
-import { ViewType } from "./types";
+import { ViewType } from "../types";
 
-import { ApplicationDetails } from "../applications/application-details";
+import { ApplicationDetails } from "../../applications/application-details";
 
-import "./styles.css";
+import "../styles.css";
 
 // Mapping of status strings to better human-readable text
 const statusMapping: Record<string, string[]> = {
