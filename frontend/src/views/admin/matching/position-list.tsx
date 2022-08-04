@@ -74,14 +74,14 @@ export function PositionList({
     setSelectedPosition: Function;
 }) {
     // Either display the list of all courses or focus on the currently-selected on
-    const [searchValue, setSearchValue] = React.useState("");
+    const [filterString, setFilterString] = React.useState("");
 
     const filteredList = React.useMemo(() => {
         const ret: PositionSummary[] = Object.values(summaries)
             .filter((summary) =>
                 summary.position.position_code
                     .toLowerCase()
-                    .includes(searchValue.toLowerCase())
+                    .includes(filterString.toLowerCase())
             )
             .sort((a, b) => {
                 return a.position.position_code.toLowerCase() <
@@ -90,7 +90,7 @@ export function PositionList({
                     : 1;
             });
         return ret;
-    }, [searchValue, summaries]);
+    }, [filterString, summaries]);
 
     return (
         <div className="position-sidebar">
@@ -101,7 +101,7 @@ export function PositionList({
                         placeholder="Filter by position code..."
                         style={{ width: "100%" }}
                         className="mr-sm-2"
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => setFilterString(e.target.value)}
                     />
                 </Form>
             </div>
