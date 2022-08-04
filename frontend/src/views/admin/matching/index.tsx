@@ -128,25 +128,6 @@ export function AdminMatchingView() {
     const notes = useSelector(notesSelector);
     const matchingData = useSelector(matchingDataSelector);
 
-    const [localStore, setLocalStore] = React.useState(() => {
-        const saved = localStorage.getItem("matchingData");
-        if (!saved) {
-            return {
-                matches: [],
-                guarantees: [],
-                notes: {},
-                selectedPositionId: null,
-                viewType: "grid",
-            } as MatchingDataState;
-        }
-
-        return JSON.parse(saved) as MatchingDataState;
-    });
-
-    React.useEffect(() => {
-        localStorage.setItem("matchingData", JSON.stringify(localStore));
-    }, [localStore]);
-
     // We don't load postings by default, so we load them dynamically whenever
     // we view this page.
     React.useEffect(() => {
@@ -158,13 +139,6 @@ export function AdminMatchingView() {
             fetchResources();
         }
     }, [activeSession, dispatch]);
-
-    // Pop-up to prompt users to save changes when reloading or leaving the page
-    // Note that this doesn't fire when swapping to a different view in TAPP...
-    window.onbeforeunload = (e) =>
-        updated
-            ? "There are unsaved local changes. If you leave before saving, your changes will be lost."
-            : null;
 
     React.useEffect(() => {
         async function initializeMatches() {
@@ -179,28 +153,13 @@ export function AdminMatchingView() {
                     continue;
                 }
 
-                // Apply changes from local storage
-                const savedMatches: Match[] = localStore.matches;
-
                 // Mark positions as being applied for
                 for (const positionPreference of combinedApplication.position_preferences) {
-                    const savedMatchForPosition =
-                        savedMatches?.find(
-                            (match) =>
-                                match.positionCode ===
-                                    positionPreference.position.position_code &&
-                                match.utorid === applicant.utorid
-                        ) || null;
-
                     initialMatches.push({
                         utorid: applicant.utorid,
                         positionCode: positionPreference.position.position_code,
-                        status: savedMatchForPosition
-                            ? savedMatchForPosition.status
-                            : "applied",
-                        hoursAssigned: savedMatchForPosition
-                            ? savedMatchForPosition.hoursAssigned
-                            : 0,
+                        status: "applied",
+                        hoursAssigned: 0,
                     });
                 }
             }
@@ -233,25 +192,8 @@ export function AdminMatchingView() {
             return await dispatch(batchUpsertMatches(initialMatches));
         }
 
-        async function initializeGuarantees() {
-            const savedGuarantees: AppointmentGuaranteeStatus[] =
-                localStore.guarantees;
-            if (savedGuarantees.length > 0) {
-                return await dispatch(batchUpsertGuarantees(savedGuarantees));
-            }
-        }
-
-        async function initializeNotes() {
-            const savedNotes: Record<string, string | null> = localStore.notes;
-            if (Object.keys(savedNotes).length > 0) {
-                return await dispatch(batchUpsertNotes(savedNotes));
-            }
-        }
-
         initializeMatches();
-        initializeGuarantees();
-        initializeNotes();
-    }, [dispatch, applicants, assignments, applications, localStore]);
+    }, [dispatch, applicants, assignments, applications]);
 
     // Get information about positions
     const positionSummaries = React.useMemo(() => {
@@ -398,19 +340,8 @@ export function AdminMatchingView() {
                     <div className="matching-footer">
                         <ImportMatchingDataButton markAsUpdated={setUpdated} />
                         <ImportGuaranteesButton markAsUpdated={setUpdated} />
-                        <ExportMatchingDataButton />
+                        <ExportMatchingDataButton updated={updated} />
                         <div className="footer-button-separator" />
-                        <Button
-                            variant={`success ${updated ? "" : "disabled"}`}
-                            size="sm"
-                            className="footer-button"
-                            onClick={() => {
-                                setLocalStore(matchingData);
-                                setUpdated(false);
-                            }}
-                        >
-                            Save Local Changes
-                        </Button>
                         <FinalizeChangesButton />
                     </div>
                 </div>

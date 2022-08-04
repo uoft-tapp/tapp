@@ -7,8 +7,9 @@ import { DataFormat } from "../../../libs/import-export";
 import { Match, AppointmentGuaranteeStatus } from "./types";
 import { upsertMatch, batchUpsertGuarantees, upsertNote } from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { BsCircleFill } from "react-icons/bs";
 
-export function ExportMatchingDataButton() {
+export function ExportMatchingDataButton({ updated }: { updated: boolean }) {
     const matchingData = useSelector(matchingDataSelector);
 
     function onClick() {
@@ -32,6 +33,11 @@ export function ExportMatchingDataButton() {
             className="footer-button"
             onClick={onClick}
         >
+            {updated && (
+                <div className="change-icon">
+                    <BsCircleFill />
+                </div>
+            )}
             Export Data
         </Button>
     );
