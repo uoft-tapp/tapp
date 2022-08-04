@@ -179,7 +179,6 @@ export function ApplicantView({
 /**
  * A presentation of applicant information in table view.
  *
- * @param {*} props
  * @returns
  */
 function TableView({
@@ -230,7 +229,6 @@ function TableView({
 /**
  * Gets the human-friendly name for a match's status.
  *
- * @param {*} match
  * @returns {string}
  */
 function getMappedStatusForMatch(match: Match | null) {
@@ -246,7 +244,6 @@ function getMappedStatusForMatch(match: Match | null) {
 /**
  * A row of applicant information to be presented in a table (TableView).
  *
- * @param {*} props
  * @returns
  */
 function TableRow({
@@ -309,7 +306,6 @@ function TableRow({
  * Takes an applicant summary and returns a formatted string containing
  * the applicant's assignments and hours assigned, separated by newlines.
  *
- * @param {ApplicantSummary} applicantSummary
  * @returns {string}
  */
 function formatAssignedCourses(applicantSummary: ApplicantSummary) {
@@ -331,7 +327,6 @@ function formatAssignedCourses(applicantSummary: ApplicantSummary) {
  * A presentation of applicants and their summaries in a grid-based view.
  * Applicants are divided into sections based on match status (e.g., applied, staged-assigned).
  *
- * @param {*} props
  * @returns
  */
 function GridView({
@@ -384,7 +379,6 @@ function GridView({
 /**
  * A section/collection of grid items for a specified match status (e.g., applied, staged-assigned).
  *
- * @param {*} props
  * @returns
  */
 function GridSection({
@@ -436,7 +430,6 @@ function GridSection({
 /**
  * A grid item to be displayed in grid view, outlining information about an applicant's summary.
  *
- * @param {*} props
  * @returns
  */
 function GridItem({
@@ -794,7 +787,6 @@ function GridItem({
 /**
  * A button allowing one to toggle an applicant's "starred" status for the currently-sected position.
  *
- * @param {*} props
  * @returns
  */
 function ApplicantStar({

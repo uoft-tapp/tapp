@@ -9,7 +9,6 @@ import "./styles.css";
  * A row in the list of positions displaying information about
  * how many hours have been assigned and how close it is to being complete.
  *
- * @param {*} props
  * @returns
  */
 function PositionRow({
@@ -63,7 +62,6 @@ function PositionRow({
 /**
  * A searchable list of position codes.
  *
- * @param {*} props
  * @returns
  */
 export function PositionList({

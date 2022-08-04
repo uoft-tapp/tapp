@@ -17,7 +17,6 @@ import {
  * A button that brings up a modal allowing users to see a list of staged assignments
  * and transform them into real assignments.
  *
- * @param {*} props
  * @returns
  */
 export function FinalizeChangesButton() {

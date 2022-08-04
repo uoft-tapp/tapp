@@ -56,7 +56,6 @@ let currPosition: Position | null = null;
 /**
  * A collection of dropdown lists (SortDropdownItem) for applying sorts.
  *
- * @param {*} props
  * @returns
  */
 export function SortDropdowns({
@@ -95,7 +94,6 @@ export function SortDropdowns({
  * a button for specifying whether the sort should be done in ascending/descending order,
  * and a button for removing the sort from the sorting list.
  *
- * @param {*} props
  * @returns
  */
 function SortDropdownItem({
@@ -181,9 +179,6 @@ function SortDropdownItem({
 /**
  * Applies a set of sorting functions outlined by "sortList" to a list of applicant summaries.
  *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {sortMapItem[]} sortList
- * @param {Position | null} position
  * @returns
  */
 export function applySorts(
