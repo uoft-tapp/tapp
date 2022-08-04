@@ -21,7 +21,7 @@ const initialState: MatchingDataState = {
     notes: {},
 };
 
-const matchingDataReducer = createReducer(initialState, {
+export const matchingDataReducer = createReducer(initialState, {
     [UPSERT_MATCH]: (state, action) => {
         // Check if a match with this applicant ID and position ID already exist
         const existingMatch =
@@ -91,5 +91,3 @@ const matchingDataReducer = createReducer(initialState, {
         return { ...state, notes: action.payload };
     },
 });
-
-export default matchingDataReducer;

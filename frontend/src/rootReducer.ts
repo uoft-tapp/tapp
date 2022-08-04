@@ -20,7 +20,7 @@ import ddahsTableReducer from "./views/admin/ddah-table/reducers";
 import positionsTableReducer from "./views/admin/positions/reducers";
 import instructorUIReducer from "./views/instructor/store/reducers";
 import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
-import matchingDataReducer from "./views/admin/matching/reducers";
+import { matchingDataReducer } from "./views/admin/matching/reducers";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
