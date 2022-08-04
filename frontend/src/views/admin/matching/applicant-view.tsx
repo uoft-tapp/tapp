@@ -327,32 +327,6 @@ function formatAssignedCourses(applicantSummary: ApplicantSummary) {
 }
 
 /**
- * A lock icon that can be hovered over and displays a tooltip.
- * Displayed next to the "Assigned" header so users know they cannot edit locked-in assignments.
- *
- * @param {*} props
- * @returns
- */
-function LockedAssignTooltip() {
-    const renderTooltip = (props: any) => (
-        <Tooltip id="button-tooltip" {...props}>
-            These assignments can only be changed through the Assignments &
-            Positions {">"} Assignments tab.
-        </Tooltip>
-    );
-
-    return (
-        <OverlayTrigger
-            placement="right"
-            delay={{ show: 10, hide: 10 }}
-            overlay={renderTooltip}
-        >
-            <FaLock className="header-lock" />
-        </OverlayTrigger>
-    );
-}
-
-/**
  * A presentation of applicants and their summaries in a grid-based view.
  * Applicants are divided into sections based on match status (e.g., applied, staged-assigned).
  *
@@ -431,7 +405,16 @@ function GridSection({
     return (
         <div className="grid-view-section">
             <h4>
-                {header} {header === "Assigned" ? <LockedAssignTooltip /> : ""}
+                {header}{" "}
+                {header === "Assigned" ? (
+                    <FaLock
+                        className="header-lock"
+                        title="These assignments can only be changed through the Assignments &
+            Positions > Assignments tab."
+                    />
+                ) : (
+                    ""
+                )}
             </h4>
             <div className="grid-view-list">
                 {applicantSummaries.map((applicantSummary) => {
