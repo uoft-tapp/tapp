@@ -9,6 +9,8 @@ import {
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus } from "./types";
 
+export { matchingDataReducer };
+
 export interface MatchingDataState {
     matches: Match[];
     guarantees: AppointmentGuaranteeStatus[];
@@ -21,7 +23,7 @@ const initialState: MatchingDataState = {
     notes: {},
 };
 
-export const matchingDataReducer = createReducer(initialState, {
+const matchingDataReducer = createReducer(initialState, {
     [UPSERT_MATCH]: (state, action) => {
         // Check if a match with this applicant ID and position ID already exist
         const existingMatch =
