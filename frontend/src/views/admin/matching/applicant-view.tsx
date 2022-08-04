@@ -16,8 +16,6 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     Collapse,
-    OverlayTrigger,
-    Tooltip,
 } from "react-bootstrap";
 
 import { sum, round } from "../../../libs/utils";
@@ -56,6 +54,8 @@ const statusMapping: Record<string, string[]> = {
     Hidden: ["hidden"],
 };
 
+type ViewType = "table" | "grid";
+
 export function ApplicantView({
     position,
     applicants,
@@ -65,7 +65,7 @@ export function ApplicantView({
     applicants: ApplicantSummary[];
     markAsUpdated: Function;
 }) {
-    const [viewType, setViewType] = React.useState<"table" | "grid">("grid");
+    const [viewType, setViewType] = React.useState<ViewType>("grid");
     const [filterString, setFilterString] = React.useState("");
     const [sortList, setSortList] =
         React.useState<sortMapItem[]>(defaultSortList);
@@ -321,6 +321,7 @@ function formatAssignedCourses(applicantSummary: ApplicantSummary) {
             ) {
                 return `${match.positionCode} (${match.hoursAssigned})`;
             }
+            return null;
         })
         .filter((match) => match)
         .join("\n");
