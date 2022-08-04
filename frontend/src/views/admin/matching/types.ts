@@ -33,3 +33,5 @@ export type ApplicantSummary = {
     guarantee: AppointmentGuaranteeStatus | null;
     note: string | null;
 };
+
+export type ViewType = "table" | "grid";

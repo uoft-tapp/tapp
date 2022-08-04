@@ -5,9 +5,11 @@ import {
     BATCH_UPSERT_GUARANTEES,
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
+    SET_SELECTED_POSITION,
+    SET_VIEW_TYPE
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
-import { Match, AppointmentGuaranteeStatus } from "./types";
+import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
 
 export { matchingDataReducer };
 
@@ -15,12 +17,16 @@ export interface MatchingDataState {
     matches: Match[];
     guarantees: AppointmentGuaranteeStatus[];
     notes: Record<string, string | null>;
+    selectedPositionId: number | null;
+    viewType: ViewType;
 }
 
 const initialState: MatchingDataState = {
     matches: [],
     guarantees: [],
     notes: {},
+    selectedPositionId: null,
+    viewType: "grid"
 };
 
 const matchingDataReducer = createReducer(initialState, {
@@ -92,4 +98,10 @@ const matchingDataReducer = createReducer(initialState, {
     [BATCH_UPSERT_NOTES]: (state, action) => {
         return { ...state, notes: action.payload };
     },
+    [SET_SELECTED_POSITION]: (state, action) => {
+        return { ...state, selectedPositionId: action.payload };
+    },
+    [SET_VIEW_TYPE]: (state, action) => {
+        return {...state, viewType: action.payload};
+    }
 });

@@ -41,6 +41,8 @@ import {
     defaultFilterList,
 } from "./filters";
 
+import { ViewType } from "./types";
+
 import { ApplicationDetails } from "../applications/application-details";
 
 import "./styles.css";
@@ -53,8 +55,6 @@ const statusMapping: Record<string, string[]> = {
     Applied: ["applied"],
     Hidden: ["hidden"],
 };
-
-type ViewType = "table" | "grid";
 
 export function ApplicantView({
     position,

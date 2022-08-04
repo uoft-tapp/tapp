@@ -80,8 +80,7 @@ function getCombinedApplication(
             return -1;
         });
 
-        const newestApplication =
-            applications[applications.length - 1];
+        const newestApplication = applications[applications.length - 1];
         if (!combinedApplication) {
             combinedApplication = newestApplication;
         } else {
@@ -136,6 +135,8 @@ export function AdminMatchingView() {
                 matches: [],
                 guarantees: [],
                 notes: {},
+                selectedPositionId: null,
+                viewType: "grid",
             } as MatchingDataState;
         }
 

@@ -6,8 +6,10 @@ import {
     BATCH_UPSERT_GUARANTEES,
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
+    SET_SELECTED_POSITION,
+    SET_VIEW_TYPE,
 } from "./constants";
-import { Match, AppointmentGuaranteeStatus } from "./types";
+import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
 import { actionFactory } from "../../../api/actions/utils";
 
 // actions
@@ -28,6 +30,12 @@ export const upsertNote =
 export const batchUpsertNotes =
     actionFactory<Record<string, string | null>>(BATCH_UPSERT_NOTES);
 
+export const setSelectedPosition = actionFactory<number | null>(
+    SET_SELECTED_POSITION
+);
+
+export const setViewType = actionFactory<ViewType>(SET_VIEW_TYPE);
+
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
 export const matchesSelector = (state: RootState) =>
@@ -35,3 +43,7 @@ export const matchesSelector = (state: RootState) =>
 export const guaranteesSelector = (state: RootState) =>
     state.ui.matchingData.guarantees;
 export const notesSelector = (state: RootState) => state.ui.matchingData.notes;
+export const selectedPositionSelector = (state: RootState) =>
+    state.ui.matchingData.selectedPositionId;
+export const viewTypeSelector = (state: RootState) =>
+    state.ui.matchingData.viewType;
