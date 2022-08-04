@@ -8,7 +8,7 @@ import {
 export type Match = {
     utorid: string;
     positionCode: string;
-    status: "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
+    status: MatchStatus;
     hoursAssigned: number;
 };
 
@@ -21,7 +21,7 @@ export type AppointmentGuaranteeStatus = {
 export type PositionSummary = {
     position: Position;
     hoursAssigned: number;
-    filledStatus: "empty" | "under" | "matched" | "over";
+    filledStatus: FillStatus;
     assignments: Assignment[];
     applicantSummaries: ApplicantSummary[];
 };
@@ -35,3 +35,5 @@ export type ApplicantSummary = {
 };
 
 export type ViewType = "table" | "grid";
+export type MatchStatus = "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
+export type FillStatus = "empty" | "under" | "matched" | "over";
