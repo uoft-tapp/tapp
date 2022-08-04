@@ -1,7 +1,7 @@
 import { reducer as notificationReducer } from "react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
-import offerTableReducer from "./views/admin/offertable/reducers";
+import { offerTableReducer } from "./views/admin/offertable/reducers";
 import {
     statusReducer,
     sessionsReducer,
@@ -16,9 +16,9 @@ import {
     postingPositionsReducer,
 } from "./api/reducers";
 import { usersReducer } from "./api/reducers/users";
-import ddahsTableReducer from "./views/admin/ddah-table/reducers";
-import positionsTableReducer from "./views/admin/positions/reducers";
-import instructorUIReducer from "./views/instructor/store/reducers";
+import { ddahsTableReducer } from "./views/admin/ddah-table/reducers";
+import { positionsTableReducer } from "./views/admin/positions/reducers";
+import { instructorUIReducer } from "./views/instructor/store/reducers";
 import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
 import { matchingDataReducer } from "./views/admin/matching/reducers";
 
