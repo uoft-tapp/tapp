@@ -18,7 +18,7 @@ import {
  * and transform them into real assignments.
  */
 export function FinalizeChangesButton() {
-    const [showDialog, setShowDialog] = React.useState(false);
+    const [dialogVisible, setDialogVisible] = React.useState(false);
 
     const matches = useSelector(matchesSelector);
     const positions = useSelector(positionsSelector);
@@ -37,14 +37,9 @@ export function FinalizeChangesButton() {
             });
     }, [matches]);
 
-    function onClick() {
-        setShowDialog(true);
-    }
-
     function _onConfirm() {
-        setShowDialog(false);
-
         if (stagedAssignments.length === 0) {
+            setDialogVisible(false);
             return;
         }
 
@@ -68,6 +63,7 @@ export function FinalizeChangesButton() {
 
             dispatch(upsertAssignment(newAssignment));
         }
+        setDialogVisible(false);
     }
 
     return (
@@ -76,7 +72,7 @@ export function FinalizeChangesButton() {
                 variant="outline-primary"
                 size="sm"
                 className="footer-button finalize"
-                onClick={onClick}
+                onClick={() => setDialogVisible(true)}
                 disabled={stagedAssignments.length === 0}
             >
                 Finalize Changes{" "}
@@ -84,7 +80,11 @@ export function FinalizeChangesButton() {
                     ? ` (${stagedAssignments.length})`
                     : ""}
             </Button>
-            <Modal show={showDialog} dialogClassName="finalize-changes-modal">
+            <Modal
+                show={dialogVisible}
+                dialogClassName="finalize-changes-modal"
+                onHide={() => setDialogVisible(false)}
+            >
                 <Modal.Header>
                     <Modal.Title>Finalize Changes</Modal.Title>
                 </Modal.Header>
@@ -105,7 +105,7 @@ export function FinalizeChangesButton() {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
-                        onClick={() => setShowDialog(false)}
+                        onClick={() => setDialogVisible(false)}
                         variant="light"
                     >
                         Cancel
