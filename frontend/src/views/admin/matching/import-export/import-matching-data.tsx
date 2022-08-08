@@ -113,56 +113,23 @@ export function ImportMatchingDataButton() {
 
     const dispatch = useThunkDispatch();
 
-    function _upsertMatch(match: Match | null) {
-        if (!match) {
-            return;
-        }
-        return dispatch(upsertMatch(match));
-    }
-
-    async function updateMatch(match: Match | null) {
-        await _upsertMatch(match);
-    }
-
-    function _batchUpsertGuarantees(
-        guarantees: AppointmentGuaranteeStatus[] | null
-    ) {
-        if (!guarantees) {
-            return;
-        }
-
-        return dispatch(batchUpsertGuarantees(guarantees));
-    }
-
-    async function updateGuarantees(
-        guarantees: AppointmentGuaranteeStatus[] | null
-    ) {
-        await _batchUpsertGuarantees(guarantees);
-    }
-
-    function _upsertNote(utorid: string, note: string | null) {
-        return dispatch(upsertNote({ utorid: utorid, note: note }));
-    }
-
-    async function updateNotes(notes: Record<string, string | null>) {
-        for (const utorid in Object.keys(notes)) {
-            _upsertNote(utorid, notes[utorid]);
-        }
-    }
-
     function _onConfirm() {
         if (diffedMatches) {
             for (const match of diffedMatches) {
-                updateMatch(match);
+                dispatch(upsertMatch(match));
             }
         }
 
         if (newGuarantees) {
-            updateGuarantees(newGuarantees);
+            dispatch(batchUpsertGuarantees(newGuarantees));
         }
 
         if (newNotes) {
-            updateNotes(newNotes);
+            for (const utorid in Object.keys(newNotes)) {
+                dispatch(
+                    upsertNote({ utorid: utorid, note: newNotes[utorid] })
+                );
+            }
         }
 
         setFileArrayBuffer(null);
