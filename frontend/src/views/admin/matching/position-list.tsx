@@ -18,7 +18,6 @@ export function PositionList({
     selectedPositionId: number | null;
     positionSummaries: Record<number, PositionSummary>;
 }) {
-    // Either display the list of all courses or focus on the currently-selected on
     const [filterString, setFilterString] = React.useState("");
     const filteredList = React.useMemo(() => {
         const ret: PositionSummary[] = Object.values(positionSummaries)
@@ -66,8 +65,6 @@ export function PositionList({
 /**
  * A single row in a list of positions displaying information about
  * how many hours have been assigned and how close it is to being complete.
- *
- * @returns
  */
 function PositionRow({
     positionSummary,
