@@ -12,6 +12,7 @@ import {
     positionsSelector,
     applicantsSelector,
 } from "../../../api/actions";
+
 import {
     Assignment,
     Application,
@@ -37,11 +38,10 @@ import {
 import { PositionList } from "./position-list";
 import { ApplicantView } from "./applicant-view/applicant-view";
 
-import {
-    ImportMatchingDataButton,
-    ImportGuaranteesButton,
-    ExportMatchingDataButton,
-} from "./import-export";
+import { ImportMatchingDataButton } from "./import-export/import-matching-data";
+import { ExportMatchingDataButton } from "./import-export/export-matching-data";
+import { ImportGuaranteesButton } from "./import-export/import-guarantees";
+
 import { FinalizeChangesButton } from "./finalize-changes";
 
 export function AdminMatchingView() {
