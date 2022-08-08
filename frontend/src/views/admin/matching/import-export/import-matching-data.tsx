@@ -103,10 +103,13 @@ export function ImportMatchingDataButton() {
 
                 setNewNotes(importedNotes);
             }
-        } catch (e: any) {
-            console.warn(e);
-        }
-    }, [fileContent, matches]);
+            setWarningMessage("");
+            return;
+        } catch (e: any) {}
+        const warning = `Could not parse data for ${fileInputLabel}, check content format`;
+        setWarningMessage(warning);
+        console.warn(warning);
+    }, [fileContent, matches, fileInputLabel]);
 
     function _onConfirm() {
         if (diffedMatches) {

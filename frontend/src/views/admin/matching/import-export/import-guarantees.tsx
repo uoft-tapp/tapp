@@ -83,11 +83,13 @@ export function ImportGuaranteesButton() {
                     }
                 )
             );
-        } catch (e: any) {
-            console.warn(e);
-            setWarningMessage(e);
-        }
-    }, [fileContent]);
+            setWarningMessage("");
+            return;
+        } catch (e: any) {}
+        const warning = `Could not parse data for ${fileInputLabel}, check content format`;
+        setWarningMessage(warning);
+        console.warn(warning);
+    }, [fileContent, fileInputLabel]);
 
     const dispatch = useThunkDispatch();
 
