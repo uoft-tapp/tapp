@@ -84,9 +84,7 @@ export function GridItem({
         >
             <div
                 className="applicant-grid-item noselect"
-                onClick={() => {
-                    setOpen(!open);
-                }}
+                onClick={() => setOpen(!open)}
             >
                 <GridItemSidebar applicantSummary={applicantSummary} />
                 <GridItemBody
