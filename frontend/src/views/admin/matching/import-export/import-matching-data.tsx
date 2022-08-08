@@ -1,7 +1,7 @@
 import React from "react";
 import { matchesSelector } from "../actions";
 import { useSelector } from "react-redux";
-import { Modal, Button, Row, Form, Col } from "react-bootstrap";
+import { Modal, Button, Row, Form, Col, Alert } from "react-bootstrap";
 import { DataFormat } from "../../../../libs/import-export";
 import { Match, AppointmentGuaranteeStatus } from "../types";
 import { upsertMatch, batchUpsertGuarantees, upsertNote } from "../actions";
@@ -9,11 +9,6 @@ import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 export function ImportMatchingDataButton() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
-
-    function onClick() {
-        setAddDialogVisible(true);
-    }
-
     const defaultLabel = "Select a JSON file.";
 
     const [fileInputLabel, setFileInputLabel] = React.useState(defaultLabel);
@@ -32,7 +27,10 @@ export function ImportMatchingDataButton() {
         Record<string, string | null>
     >({});
 
+    const [warningMessage, setWarningMessage] = React.useState("");
+
     const matches = useSelector(matchesSelector);
+    const dispatch = useThunkDispatch();
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {
@@ -44,12 +42,13 @@ export function ImportMatchingDataButton() {
         const reader = new FileReader();
         reader.onload = (e) => {
             if (!e.target || typeof e.target.result === "string") {
-                console.warn(
-                    "File of unexpected type",
-                    typeof e.target?.result
-                );
+                const warning = `File of unexpected type ${typeof e.target
+                    ?.result}`;
+                setWarningMessage(warning);
+                console.warn(warning);
                 return;
             }
+            setWarningMessage("");
             setFileArrayBuffer(e.target.result);
         };
         reader.readAsArrayBuffer(file);
@@ -64,15 +63,13 @@ export function ImportMatchingDataButton() {
         try {
             const str = new TextDecoder().decode(rawData);
             setFileContent({ data: JSON.parse(str), fileType: "json" });
+            setWarningMessage("");
             return;
             // eslint-disable-next-line
         } catch (e) {}
-
-        console.warn(
-            "Could not determine file type for",
-            fileInputLabel,
-            fileArrayBuffer
-        );
+        const warning = `Could not determine file type for ${fileInputLabel}`;
+        setWarningMessage(warning);
+        console.warn(warning);
     }, [fileArrayBuffer, fileInputLabel]);
 
     React.useEffect(() => {
@@ -111,8 +108,6 @@ export function ImportMatchingDataButton() {
         }
     }, [fileContent, matches]);
 
-    const dispatch = useThunkDispatch();
-
     function _onConfirm() {
         if (diffedMatches) {
             for (const match of diffedMatches) {
@@ -135,6 +130,7 @@ export function ImportMatchingDataButton() {
         setFileArrayBuffer(null);
         setFileContent(null);
         setFileInputLabel(defaultLabel);
+        setWarningMessage("");
 
         setAddDialogVisible(false);
     }
@@ -145,7 +141,7 @@ export function ImportMatchingDataButton() {
                 variant="outline-primary"
                 size="sm"
                 className="footer-button"
-                onClick={onClick}
+                onClick={() => setAddDialogVisible(true)}
             >
                 Import Data
             </Button>
@@ -165,6 +161,9 @@ export function ImportMatchingDataButton() {
                             </Col>
                         </Row>
                     </Form>
+                    {warningMessage && (
+                        <Alert variant="warning">{warningMessage}</Alert>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -173,7 +172,11 @@ export function ImportMatchingDataButton() {
                     >
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={_onConfirm}>
+                    <Button
+                        variant="primary"
+                        onClick={_onConfirm}
+                        disabled={!!warningMessage.length}
+                    >
                         Confirm
                     </Button>
                 </Modal.Footer>
