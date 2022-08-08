@@ -1,5 +1,5 @@
 import React from "react";
-import { matchingDataSelector } from "../actions";
+import { matchesSelector } from "../actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Row, Form, Col } from "react-bootstrap";
 import { DataFormat } from "../../../../libs/import-export";
@@ -32,7 +32,7 @@ export function ImportMatchingDataButton() {
         Record<string, string | null>
     >({});
 
-    const matchingData = useSelector(matchingDataSelector);
+    const matches = useSelector(matchesSelector);
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {
@@ -81,28 +81,10 @@ export function ImportMatchingDataButton() {
         }
         try {
             if (fileContent.data["matches"]) {
-                // Filter matches based on whether
-                // - the utorid and positionId combo don't exist at all in the current matching data set, or
-                // - the combination exists but the assignment status or hoursAssigned is different
-                const diffedMatches = fileContent.data.matches.filter(
-                    (newMatch: Match) =>
-                        !matchingData.matches.find(
-                            (oldMatch: Match) =>
-                                oldMatch.utorid === newMatch.utorid &&
-                                oldMatch.positionCode === newMatch.positionCode
-                        ) ||
-                        matchingData.matches.find(
-                            (oldMatch: Match) =>
-                                oldMatch.utorid === newMatch.utorid &&
-                                oldMatch.positionCode ===
-                                    newMatch.positionCode &&
-                                oldMatch.status !== "assigned" &&
-                                (oldMatch.status !== newMatch.status ||
-                                    oldMatch.hoursAssigned !==
-                                        newMatch.hoursAssigned)
-                        )
+                const diffedMatches = getDiffedMatches(
+                    fileContent.data["matches"],
+                    matches
                 );
-
                 setDiffedMatches(diffedMatches);
             }
 
@@ -127,7 +109,7 @@ export function ImportMatchingDataButton() {
         } catch (e: any) {
             console.warn(e);
         }
-    }, [fileContent, matchingData.matches]);
+    }, [fileContent, matches]);
 
     const dispatch = useThunkDispatch();
 
@@ -230,5 +212,32 @@ export function ImportMatchingDataButton() {
                 </Modal.Footer>
             </Modal>
         </>
+    );
+}
+
+/**
+ * Compares two lists of matches (`oldMatchList` and `newMatchList`) and returns a new list containing
+ * only the matches from `newMatchList` where:
+ * (a) the utorid and positionId combo don't exist at all in `oldMatchList`, or
+ * (b) the combination exists but the assignment status or hoursAssigned is different
+ */
+function getDiffedMatches(oldMatchList: Match[], newMatchList: Match[]) {
+    return newMatchList.filter(
+        (newMatch: Match) =>
+            !oldMatchList.find(
+                // Remove matches whose utorid + position code combination already existed
+                (oldMatch: Match) =>
+                    oldMatch.utorid === newMatch.utorid &&
+                    oldMatch.positionCode === newMatch.positionCode
+            ) ||
+            oldMatchList.find(
+                // But keep matches that have had a value modified
+                (oldMatch: Match) =>
+                    oldMatch.utorid === newMatch.utorid &&
+                    oldMatch.positionCode === newMatch.positionCode &&
+                    oldMatch.status !== "assigned" &&
+                    (oldMatch.status !== newMatch.status ||
+                        oldMatch.hoursAssigned !== newMatch.hoursAssigned)
+            )
     );
 }
