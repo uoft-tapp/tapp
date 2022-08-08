@@ -175,7 +175,7 @@ export function ImportMatchingDataButton() {
                     <Button
                         variant="primary"
                         onClick={_onConfirm}
-                        disabled={!!warningMessage.length}
+                        disabled={!!warningMessage}
                     >
                         Confirm
                     </Button>

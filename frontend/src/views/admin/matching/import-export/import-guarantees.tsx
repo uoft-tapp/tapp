@@ -1,16 +1,17 @@
 import React from "react";
-import { Modal, Button, Row, Form, Col } from "react-bootstrap";
+import { Modal, Button, Row, Form, Col, Alert } from "react-bootstrap";
 import { DataFormat } from "../../../../libs/import-export";
 import { AppointmentGuaranteeStatus } from "../types";
 import { batchUpsertGuarantees } from "../actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
+/**
+ * A button that displays a modal to allow users to upload JSON files
+ * with information about subsequent appointment guarantees to be
+ * upserted.
+ */
 export function ImportGuaranteesButton() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
-
-    function onClick() {
-        setAddDialogVisible(true);
-    }
 
     const defaultLabel = "Select a JSON file.";
 
@@ -23,6 +24,7 @@ export function ImportGuaranteesButton() {
     const [newGuarantees, setNewGuarantees] = React.useState<
         AppointmentGuaranteeStatus[] | null
     >(null);
+    const [warningMessage, setWarningMessage] = React.useState("");
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         if (!event.target || !event.target.files) {
@@ -34,12 +36,13 @@ export function ImportGuaranteesButton() {
         const reader = new FileReader();
         reader.onload = (e) => {
             if (!e.target || typeof e.target.result === "string") {
-                console.warn(
-                    "File of unexpected type",
-                    typeof e.target?.result
-                );
+                const warning = `File of unexpected type ${typeof e.target
+                    ?.result}`;
+                setWarningMessage(warning);
+                console.warn(warning);
                 return;
             }
+            setWarningMessage("");
             setFileArrayBuffer(e.target.result);
         };
         reader.readAsArrayBuffer(file);
@@ -54,15 +57,13 @@ export function ImportGuaranteesButton() {
         try {
             const str = new TextDecoder().decode(rawData);
             setFileContent({ data: JSON.parse(str), fileType: "json" });
+            setWarningMessage("");
             return;
             // eslint-disable-next-line
         } catch (e) {}
-
-        console.warn(
-            "Could not determine file type for",
-            fileInputLabel,
-            fileArrayBuffer
-        );
+        const warning = `Could not determine file type for ${fileInputLabel}`;
+        console.warn(warning);
+        setWarningMessage(warning);
     }, [fileArrayBuffer, fileInputLabel]);
 
     React.useEffect(() => {
@@ -84,6 +85,7 @@ export function ImportGuaranteesButton() {
             );
         } catch (e: any) {
             console.warn(e);
+            setWarningMessage(e);
         }
     }, [fileContent]);
 
@@ -107,7 +109,7 @@ export function ImportGuaranteesButton() {
                 variant="outline-primary"
                 size="sm"
                 className="footer-button"
-                onClick={onClick}
+                onClick={() => setAddDialogVisible(true)}
             >
                 Import Appt. Data
             </Button>
@@ -127,6 +129,9 @@ export function ImportGuaranteesButton() {
                             </Col>
                         </Row>
                     </Form>
+                    {warningMessage && (
+                        <Alert variant="warning">{warningMessage}</Alert>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -135,7 +140,11 @@ export function ImportGuaranteesButton() {
                     >
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={_onConfirm}>
+                    <Button
+                        variant="primary"
+                        onClick={_onConfirm}
+                        disabled={!!warningMessage}
+                    >
                         Confirm
                     </Button>
                 </Modal.Footer>
