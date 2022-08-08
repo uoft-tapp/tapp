@@ -22,10 +22,11 @@ export function PositionList({
     const [filterString, setFilterString] = React.useState("");
     const filteredList = React.useMemo(() => {
         const ret: PositionSummary[] = Object.values(positionSummaries)
-            .filter((summary) =>
-                summary.position.position_code
-                    .toLowerCase()
-                    .includes(filterString.toLowerCase())
+            .filter(
+                (summary) =>
+                    summary.position.position_code
+                        .toLowerCase()
+                        .indexOf(filterString.toLowerCase()) !== -1
             )
             .sort((a, b) => {
                 return a.position.position_code.toLowerCase() <
