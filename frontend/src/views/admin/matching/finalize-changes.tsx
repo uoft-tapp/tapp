@@ -16,8 +16,6 @@ import {
 /**
  * A button that brings up a modal allowing users to see a list of staged assignments
  * and transform them into real assignments.
- *
- * @returns
  */
 export function FinalizeChangesButton() {
     const [showDialog, setShowDialog] = React.useState(false);

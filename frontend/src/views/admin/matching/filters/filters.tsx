@@ -31,7 +31,7 @@ export const defaultFilterList: FilterListItem[] = [
 
 const filterMap: Record<string, FilterMapItem> = {
     Program: {
-        filterFunc: filterProgram,
+        filterFunc: filterByProgram,
         values: [
             {
                 value: "PD",
@@ -60,7 +60,7 @@ const filterMap: Record<string, FilterMapItem> = {
         ],
     },
     Department: {
-        filterFunc: filterDept,
+        filterFunc: filterByDept,
         values: [
             {
                 value: "math",
@@ -97,7 +97,7 @@ const filterMap: Record<string, FilterMapItem> = {
         ],
     },
     "TA Preference": {
-        filterFunc: filterTaPref,
+        filterFunc: filterByTaPref,
         values: [
             {
                 value: 3,
@@ -122,7 +122,7 @@ const filterMap: Record<string, FilterMapItem> = {
         ],
     },
     "Position Status": {
-        filterFunc: filterPositionStatus,
+        filterFunc: filterByPositionStatus,
         values: [
             {
                 value: "assigned",
@@ -147,7 +147,7 @@ const filterMap: Record<string, FilterMapItem> = {
         ],
     },
     "Hour Fulfillment": {
-        filterFunc: filterHourFulfillment,
+        filterFunc: filterByHourFulfillment,
         values: [
             {
                 value: "over",
@@ -175,9 +175,6 @@ const filterMap: Record<string, FilterMapItem> = {
 
 /**
  * A single checkbox item that will add or remove a filter item from "filterList" via "setFilterList".
- *
- * @param {*} props
- * @returns
  */
 function FilterCheckbox({
     value,
@@ -233,9 +230,6 @@ function FilterCheckbox({
 
 /**
  * A pop-up window containing a list of filter-able items in the form of checkboxes.
- *
- * @param {*} props
- * @returns
  */
 export function FilterModal({
     showFilters,
@@ -302,15 +296,8 @@ export function FilterModal({
     );
 }
 
-let currPosition: Position | null = null;
-
 /**
- * Returns a copy of input applicant summaries with filters applied, specified by "filterList".
- *
- * @param {ApplicantSummary} applicantSummaries
- * @param {FilterListItem[]} filterList
- * @param {Position | null} position
- * @returns {ApplicantSummary[]}
+ * Returns a copy of `applicantSummaries` with filters applied, specified by `filterList`.
  */
 export function applyFilters(
     applicantSummaries: ApplicantSummary[],
@@ -318,10 +305,8 @@ export function applyFilters(
     position: Position | null
 ) {
     if (filterList.length === 0 || !position) {
-        return applicantSummaries;
+        return [...applicantSummaries];
     }
-
-    currPosition = position;
 
     let filteredList: ApplicantSummary[] = [...applicantSummaries];
 
@@ -341,11 +326,19 @@ export function applyFilters(
             return;
         }
 
-        // Call the section's filter function
-        filteredList = filterMap[key]["filterFunc"](
-            filteredList,
-            filterBuckets[key]
-        );
+        if (key === "TA Preference" || key === "Position Status") {
+            filteredList = filterMap[key]["filterFunc"](
+                filteredList,
+                filterBuckets[key],
+                position
+            );
+        } else {
+            // Call the section's filter function
+            filteredList = filterMap[key]["filterFunc"](
+                filteredList,
+                filterBuckets[key]
+            );
+        }
     }
 
     return filteredList;
@@ -353,12 +346,8 @@ export function applyFilters(
 
 /**
  * Returns a filtered list of applicant summaries based on which program applicants belong to.
- *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {string[]} excludeValues - A list of program values (strings) to be filtered
- * @returns {ApplicantSummary[]}
  */
-function filterProgram(
+function filterByProgram(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {
@@ -378,12 +367,8 @@ function filterProgram(
 
 /**
  * Returns a filtered list of applicant summaries based on which department applicants belong to.
- *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {string[]} excludeValues - A list of department values (strings) to be filtered
- * @returns {ApplicantSummary[]}
  */
-function filterDept(
+function filterByDept(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {
@@ -403,19 +388,16 @@ function filterDept(
 
 /**
  * Returns a filtered list of applicant summaries based on each applicant's preference level for a position.
- *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {number[]} excludeValues - A list of preference levels (numbers) to be filtered
- * @returns {ApplicantSummary[]}
  */
-function filterTaPref(
+function filterByTaPref(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: number[]
+    excludeValues: number[],
+    position: Position
 ) {
     if (
         applicantSummaries.length === 0 ||
         excludeValues.length === 0 ||
-        currPosition === null
+        !position
     ) {
         return applicantSummaries;
     }
@@ -430,7 +412,7 @@ function filterTaPref(
 
                 const applicantPref = getPositionPrefForPosition(
                     applicantSummary.application,
-                    currPosition
+                    position
                 );
 
                 if (
@@ -448,19 +430,16 @@ function filterTaPref(
 
 /**
  * Returns a filtered list of applicant summaries based on their matching status for the position.
- *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {string[]} excludeValues - A list of status values (strings) to be filtered
- * @returns {ApplicantSummary[]}
  */
-function filterPositionStatus(
+function filterByPositionStatus(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: string[]
+    excludeValues: string[],
+    position: Position
 ) {
     if (
         applicantSummaries.length === 0 ||
         excludeValues.length === 0 ||
-        currPosition === null
+        !position
     ) {
         return applicantSummaries;
     }
@@ -470,7 +449,7 @@ function filterPositionStatus(
             .map((applicantSummary) => {
                 const match = getApplicantMatchForPosition(
                     applicantSummary,
-                    currPosition
+                    position
                 );
                 if (!match || excludeValues.includes(match.status)) {
                     return null;
@@ -484,12 +463,8 @@ function filterPositionStatus(
 
 /**
  * Returns a filtered list of applicant summaries based on the completeness of their appointment guarantees.
- *
- * @param {ApplicantSummary[]} applicantSummaries
- * @param {string[]} excludeValues - A list of fulfillment levels (strings) to be filtered
- * @returns {ApplicantSummary[]}
  */
-function filterHourFulfillment(
+function filterByHourFulfillment(
     applicantSummaries: ApplicantSummary[],
     excludeValues: string[]
 ) {

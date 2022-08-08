@@ -1,43 +1,14 @@
-import React from "react";
-
-import { Position } from "../../../../api/defs/types";
 import { ApplicantSummary } from "../types";
+import { SortListItem } from "./sort-bar";
+import { Position } from "../../../../api/defs/types";
 import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "../utils";
 import { sum } from "../../../../libs/utils";
-import { Dropdown, DropdownButton } from "react-bootstrap";
-import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { GrFormClose } from "react-icons/gr";
-import "../styles.css";
-
-export type sortMapItem = {
-    function: Function;
-    asc: boolean;
-    name: string;
-};
-
-export const defaultSortList = [
-    {
-        function: sortByDepartment,
-        asc: true,
-        name: "Department",
-    },
-    {
-        function: sortByProgram,
-        asc: false,
-        name: "Program",
-    },
-    {
-        function: sortByYip,
-        asc: true,
-        name: "Year in Progress",
-    },
-];
 
 // A mapping of sort names to their sorting functions
-const sortMap: Record<string, Function> = {
+export const sortMap: Record<string, Function> = {
     Program: sortByProgram,
     Department: sortByDepartment,
     "Year in Progress": sortByYip,
@@ -51,153 +22,37 @@ const sortMap: Record<string, Function> = {
     "Last Name": sortByLastName,
 };
 
-let currPosition: Position | null = null;
-
 /**
- * A collection of dropdown lists (SortDropdownItem) for applying sorts.
- *
- * @returns
- */
-export function SortDropdowns({
-    sortList,
-    setSortList,
-}: {
-    sortList: sortMapItem[];
-    setSortList: Function;
-}) {
-    return (
-        <div className="sort-dropdown-container">
-            {sortList.map((item, index) => {
-                return (
-                    <SortDropdownItem
-                        key={index}
-                        index={index}
-                        selected={item.name}
-                        sortList={sortList}
-                        setSortList={setSortList}
-                    />
-                );
-            })}
-            <SortDropdownItem
-                key={sortList.length}
-                index={sortList.length}
-                selected={null}
-                sortList={sortList}
-                setSortList={setSortList}
-            />
-        </div>
-    );
-}
-
-/**
- * A set of items including a dropdown list of sorting types,
- * a button for specifying whether the sort should be done in ascending/descending order,
- * and a button for removing the sort from the sorting list.
- *
- * @returns
- */
-function SortDropdownItem({
-    index,
-    selected,
-    sortList,
-    setSortList,
-}: {
-    index: number;
-    selected: string | null;
-    sortList: sortMapItem[];
-    setSortList: Function;
-}) {
-    let items: sortMapItem[];
-
-    return (
-        <>
-            <DropdownButton
-                title={selected ? selected : "Sort by... "}
-                size="sm"
-                variant="info"
-                className="sort-dropdown"
-            >
-                {Object.keys(sortMap).map((item) => {
-                    return (
-                        <Dropdown.Item
-                            key={item}
-                            onSelect={() => {
-                                items = [...sortList];
-                                const newSortItem: sortMapItem = {
-                                    function: sortMap[item],
-                                    asc: true,
-                                    name: item,
-                                };
-
-                                items[index] = newSortItem;
-                                setSortList(items);
-                            }}
-                        >
-                            {item}
-                        </Dropdown.Item>
-                    );
-                })}
-            </DropdownButton>
-            {selected && (
-                <div
-                    className="sort-icon"
-                    onClick={() => {
-                        // Button for specifying ascending/descending order
-                        items = [...sortList];
-                        items[index] = {
-                            ...items[index],
-                            asc: !items[index]["asc"],
-                        };
-                        setSortList(items);
-                    }}
-                >
-                    {" "}
-                    {sortList[index]["asc"] ? (
-                        <TiArrowSortedUp />
-                    ) : (
-                        <TiArrowSortedDown />
-                    )}{" "}
-                </div>
-            )}
-            {selected && (
-                <div
-                    className="sort-icon"
-                    onClick={() => {
-                        // Button for removing this sort
-                        items = [...sortList];
-                        items.splice(index, 1);
-                        setSortList(items);
-                    }}
-                >
-                    <GrFormClose />
-                </div>
-            )}
-        </>
-    );
-}
-
-/**
- * Applies a set of sorting functions outlined by "sortList" to a list of applicant summaries.
- *
- * @returns
+ * Returns a copy of `applicantSummaries` with a set of sorting functions outlined by `sortList`
+ * applied.
  */
 export function applySorts(
     applicantSummaries: ApplicantSummary[],
-    sortList: sortMapItem[],
-    position: Position | null
+    sortList: SortListItem[],
+    position: Position
 ) {
     // Return early if any inputs aren't defined
-    if (!position || applicantSummaries.length === 0 || sortList.length === 0) {
-        return;
+    if (applicantSummaries.length === 0 || sortList.length === 0) {
+        return [];
     }
 
-    currPosition = position;
+    const ret: ApplicantSummary[] = [...applicantSummaries];
 
     // Apply each sort in the opposite order they appear in sortList
     let reversedList = [...sortList].reverse();
     for (const sortItem of reversedList) {
-        sortItem["function"](applicantSummaries, sortItem["asc"]);
+        // Handle special sort cases where we need to know position info
+        if (
+            sortItem["name"] === "TA Preference" ||
+            sortItem["name"] === "Instructor Preference"
+        ) {
+            sortMap[sortItem["name"]](ret, sortItem["asc"], position);
+        } else {
+            sortMap[sortItem["name"]](ret, sortItem["asc"]);
+        }
     }
+
+    return ret;
 }
 
 // Wrapper function for handling ascending vs. descending sorts
@@ -314,7 +169,8 @@ function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByApplicantPref(
     applicantSummaries: ApplicantSummary[],
-    asc = true
+    asc = true,
+    currPosition: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         if (!currPosition) {
@@ -344,7 +200,8 @@ function sortByApplicantPref(
 
 function sortByInstructorRating(
     applicantSummaries: ApplicantSummary[],
-    asc = true
+    asc = true,
+    currPosition: Position | null
 ) {
     applicantSummaries.sort((a, b) => {
         if (!currPosition) {

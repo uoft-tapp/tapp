@@ -22,7 +22,6 @@ export type PositionSummary = {
     position: Position;
     hoursAssigned: number;
     filledStatus: FillStatus;
-    assignments: Assignment[];
     applicantSummaries: ApplicantSummary[];
 };
 
@@ -35,5 +34,10 @@ export type ApplicantSummary = {
 };
 
 export type ViewType = "table" | "grid";
-export type MatchStatus = "applied" | "starred" | "staged-assigned" | "assigned" | "hidden";
+export type MatchStatus =
+    | "applied"
+    | "starred"
+    | "staged-assigned"
+    | "assigned"
+    | "hidden";
 export type FillStatus = "empty" | "under" | "matched" | "over";

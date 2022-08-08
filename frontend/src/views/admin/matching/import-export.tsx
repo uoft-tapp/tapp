@@ -1,16 +1,23 @@
 import React from "react";
 import FileSaver from "file-saver";
-import { matchingDataSelector } from "./actions";
+import { matchingDataSelector, updatedSelector } from "./actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Row, Form, Col } from "react-bootstrap";
 import { DataFormat } from "../../../libs/import-export";
 import { Match, AppointmentGuaranteeStatus } from "./types";
-import { upsertMatch, batchUpsertGuarantees, upsertNote } from "./actions";
+import {
+    upsertMatch,
+    batchUpsertGuarantees,
+    upsertNote,
+    setUpdated,
+} from "./actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { BsCircleFill } from "react-icons/bs";
 
-export function ExportMatchingDataButton({ updated }: { updated: boolean }) {
+export function ExportMatchingDataButton() {
     const matchingData = useSelector(matchingDataSelector);
+    const updated = useSelector(updatedSelector);
+    const dispatch = useThunkDispatch();
 
     function onClick() {
         const blob = new Blob([JSON.stringify(matchingData, null, 4)], {
@@ -24,6 +31,8 @@ export function ExportMatchingDataButton({ updated }: { updated: boolean }) {
                 day: "numeric",
             })}.json`
         );
+
+        dispatch(setUpdated(false));
     }
 
     return (
@@ -43,11 +52,7 @@ export function ExportMatchingDataButton({ updated }: { updated: boolean }) {
     );
 }
 
-export function ImportMatchingDataButton({
-    markAsUpdated,
-}: {
-    markAsUpdated: Function;
-}) {
+export function ImportMatchingDataButton() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
     function onClick() {
@@ -273,11 +278,7 @@ export function ImportMatchingDataButton({
     );
 }
 
-export function ImportGuaranteesButton({
-    markAsUpdated,
-}: {
-    markAsUpdated: Function;
-}) {
+export function ImportGuaranteesButton() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
 
     function onClick() {
@@ -361,26 +362,9 @@ export function ImportGuaranteesButton({
 
     const dispatch = useThunkDispatch();
 
-    function _batchUpsertGuarantees(
-        guarantees: AppointmentGuaranteeStatus[] | null
-    ) {
-        if (!guarantees) {
-            return;
-        }
-
-        return dispatch(batchUpsertGuarantees(guarantees));
-    }
-
-    async function updateGuarantees(
-        guarantees: AppointmentGuaranteeStatus[] | null
-    ) {
-        await _batchUpsertGuarantees(guarantees);
-    }
-
     function _onConfirm() {
         if (newGuarantees) {
-            updateGuarantees(newGuarantees);
-            markAsUpdated(true);
+            dispatch(batchUpsertGuarantees(newGuarantees));
         }
 
         setFileArrayBuffer(null);

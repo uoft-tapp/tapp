@@ -6,7 +6,8 @@ import {
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
     SET_SELECTED_POSITION,
-    SET_VIEW_TYPE
+    SET_VIEW_TYPE,
+    SET_UPDATED,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
@@ -19,6 +20,7 @@ export interface MatchingDataState {
     notes: Record<string, string | null>;
     selectedPositionId: number | null;
     viewType: ViewType;
+    updated: boolean;
 }
 
 const initialState: MatchingDataState = {
@@ -26,7 +28,8 @@ const initialState: MatchingDataState = {
     guarantees: [],
     notes: {},
     selectedPositionId: null,
-    viewType: "grid"
+    viewType: "grid",
+    updated: false,
 };
 
 const matchingDataReducer = createReducer(initialState, {
@@ -40,7 +43,11 @@ const matchingDataReducer = createReducer(initialState, {
             ) || null;
 
         if (!existingMatch) {
-            return { ...state, matches: [...state.matches, action.payload] };
+            return {
+                ...state,
+                matches: [...state.matches, action.payload],
+                updated: true,
+            };
         }
 
         // Item exists, so we have to update it
@@ -56,6 +63,7 @@ const matchingDataReducer = createReducer(initialState, {
                     return match;
                 }
             }),
+            updated: true,
         };
     },
     [BATCH_UPSERT_MATCHES]: (state, action) => {
@@ -84,16 +92,17 @@ const matchingDataReducer = createReducer(initialState, {
                     return guarantee;
                 }
             }),
+            updated: true,
         };
     },
     [BATCH_UPSERT_GUARANTEES]: (state, action) => {
-        return { ...state, guarantees: action.payload };
+        return { ...state, guarantees: action.payload, updated: true };
     },
     [UPSERT_NOTE]: (state, action) => {
         const existingNotes: Record<string, string | null> = { ...state.notes };
         existingNotes[action.payload.utorid] = action.payload.note;
 
-        return { ...state, notes: existingNotes };
+        return { ...state, notes: existingNotes, updated: true };
     },
     [BATCH_UPSERT_NOTES]: (state, action) => {
         return { ...state, notes: action.payload };
@@ -102,6 +111,9 @@ const matchingDataReducer = createReducer(initialState, {
         return { ...state, selectedPositionId: action.payload };
     },
     [SET_VIEW_TYPE]: (state, action) => {
-        return {...state, viewType: action.payload};
-    }
+        return { ...state, viewType: action.payload };
+    },
+    [SET_UPDATED]: (state, action) => {
+        return { ...state, updated: action.payload };
+    },
 });

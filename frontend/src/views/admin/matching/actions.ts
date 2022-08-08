@@ -8,6 +8,7 @@ import {
     BATCH_UPSERT_NOTES,
     SET_SELECTED_POSITION,
     SET_VIEW_TYPE,
+    SET_UPDATED,
 } from "./constants";
 import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
 import { actionFactory } from "../../../api/actions/utils";
@@ -36,6 +37,8 @@ export const setSelectedPosition = actionFactory<number | null>(
 
 export const setViewType = actionFactory<ViewType>(SET_VIEW_TYPE);
 
+export const setUpdated = actionFactory<boolean>(SET_UPDATED);
+
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
 export const matchesSelector = (state: RootState) =>
@@ -47,3 +50,5 @@ export const selectedPositionSelector = (state: RootState) =>
     state.ui.matchingData.selectedPositionId;
 export const viewTypeSelector = (state: RootState) =>
     state.ui.matchingData.viewType;
+export const updatedSelector = (state: RootState) =>
+    state.ui.matchingData.updated;
