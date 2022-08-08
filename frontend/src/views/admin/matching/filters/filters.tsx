@@ -190,15 +190,9 @@ function FilterCheckbox({
     setFilterList: Function;
 }) {
     // Mark as unchecked if this item is in the filter list
-    let filterListIndex = -1;
-    for (let index = 0; index < filterList.length; index++) {
-        if (
-            filterList[index].section === section &&
-            filterList[index].value === value
-        ) {
-            filterListIndex = index;
-        }
-    }
+    const filterListIndex = filterList.findIndex(
+        (item) => item.section === section && item.value === value
+    );
 
     return (
         <Form.Check
