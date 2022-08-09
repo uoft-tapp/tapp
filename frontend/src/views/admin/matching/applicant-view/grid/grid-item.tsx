@@ -20,8 +20,6 @@ import { ApplicantNote } from "./applicant-note";
 import { ApplicantStar } from "./applicant-star";
 import { AdjustHourModal, ApplicationDetailModal } from "./modals";
 
-import "../../styles.css";
-
 /**
  * A grid item to be displayed in grid view, outlining information about an applicant's summary.
  */

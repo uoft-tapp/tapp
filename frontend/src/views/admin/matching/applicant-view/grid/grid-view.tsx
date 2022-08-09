@@ -6,7 +6,6 @@ import { statusMapping } from "../applicant-view";
 import { GridItem } from "./grid-item";
 
 import { FaLock } from "react-icons/fa";
-import "../../styles.css";
 
 /**
  * A presentation of applicants and their summaries in a grid-based view.

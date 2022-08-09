@@ -6,7 +6,6 @@ import { Form, Modal, Button } from "react-bootstrap";
 
 import { upsertNote } from "../../actions";
 import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
-import "../../styles.css";
 
 /**
  * A button that displays a dialog allowing one to edit an applicant's notes.

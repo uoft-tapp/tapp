@@ -12,8 +12,6 @@ import {
 
 import { statusMapping } from "../applicant-view";
 
-import "../../styles.css";
-
 /**
  * A presentation of applicant information in table view.
  */

@@ -5,7 +5,6 @@ import { sortMap } from "./sorts";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
-import "../styles.css";
 
 export type SortListItem = {
     name: string;

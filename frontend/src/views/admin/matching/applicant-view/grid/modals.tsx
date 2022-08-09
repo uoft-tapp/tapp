@@ -3,7 +3,6 @@ import { Application } from "../../../../../api/defs/types";
 import { Match } from "../../types";
 import { Form, Modal, Button } from "react-bootstrap";
 import { ApplicationDetails } from "../../../applications/application-details";
-import "../../styles.css";
 
 /**
  * A modal window displaying detailed information about an application.

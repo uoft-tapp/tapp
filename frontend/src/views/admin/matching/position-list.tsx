@@ -1,12 +1,9 @@
 import React from "react";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
-
 import { PositionSummary } from "./types";
 import { setSelectedPosition } from "./actions";
-
 import { Form } from "react-bootstrap";
-import "./styles.css";
 
 /**
  * A searchable list of position codes.

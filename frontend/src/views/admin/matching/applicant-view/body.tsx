@@ -9,8 +9,6 @@ import { PositionSummary } from "../types";
 import { TableView } from "./table/table-view";
 import { GridView } from "./grid/grid-view";
 
-import "../styles.css";
-
 export function ApplicantViewBody({
     positionSummary,
     applicantSummaries,

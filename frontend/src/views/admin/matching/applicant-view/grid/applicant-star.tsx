@@ -2,7 +2,6 @@ import React from "react";
 import classNames from "classnames";
 import { Match } from "../../types";
 import { BsStarFill } from "react-icons/bs";
-import "../../styles.css";
 
 /**
  * A button for toggling applicant's "starred" status for the currently-selected position.

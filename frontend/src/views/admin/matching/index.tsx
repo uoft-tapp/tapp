@@ -43,6 +43,7 @@ import { ExportMatchingDataButton } from "./import-export/export-matching-data";
 import { ImportGuaranteesButton } from "./import-export/import-guarantees";
 
 import { FinalizeChangesButton } from "./finalize-changes";
+import "./styles.css";
 
 export function AdminMatchingView() {
     const activeSession = useSelector(activeSessionSelector);

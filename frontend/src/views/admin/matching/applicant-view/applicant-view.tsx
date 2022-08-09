@@ -12,8 +12,6 @@ import {
 import { ApplicantViewHeader } from "./header";
 import { ApplicantViewBody } from "./body";
 
-import "../styles.css";
-
 // Mapping of status strings to better human-readable text
 export const statusMapping: Record<string, string> = {
     assigned: "Assigned",
