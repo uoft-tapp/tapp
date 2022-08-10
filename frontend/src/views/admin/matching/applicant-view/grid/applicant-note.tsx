@@ -15,13 +15,13 @@ export function ApplicantNote({
 }) {
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
-    const [note, setNote] = React.useState(applicantSummary.note);
+    const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note);
 
     function updateApplicantNote(note: string | null) {
         dispatch(
             upsertNote({
                 utorid: applicantSummary.applicant.utorid,
-                note: note,
+                note: noteTemp,
             })
         );
     }
@@ -47,7 +47,7 @@ export function ApplicantNote({
                                 as="textarea"
                                 rows={3}
                                 defaultValue={applicantSummary.note || ""}
-                                onChange={(e) => setNote(e.target.value)}
+                                onChange={(e) => setNoteTemp(e.target.value)}
                             />
                         </Form.Group>
                     </Form>
@@ -61,10 +61,10 @@ export function ApplicantNote({
                     </Button>
                     <Button
                         onClick={() => {
-                            if (note?.length === 0) {
+                            if (noteTemp?.length === 0) {
                                 updateApplicantNote(null);
                             } else {
-                                updateApplicantNote(note);
+                                updateApplicantNote(noteTemp);
                             }
                             setShow(false);
                         }}
