@@ -8,7 +8,7 @@ import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "../../utils";
-import { matchingStatusToString } from "../applicant-view";
+import { matchingStatusToString } from "../";
 
 /**
  * A presentation of applicant information in table view.

@@ -3,7 +3,7 @@ import { Position } from "../../../../../api/defs/types";
 import { ApplicantSummary, MatchStatus } from "../../types";
 import { getApplicantMatchForPosition } from "../../utils";
 import { GridItem } from "./grid-item";
-import { matchingStatusToString } from "../applicant-view";
+import { matchingStatusToString } from "../";
 import { FaLock } from "react-icons/fa";
 
 /**

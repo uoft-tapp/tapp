@@ -36,7 +36,7 @@ import {
 } from "./types";
 
 import { PositionList } from "./position-list";
-import { ApplicantView } from "./applicant-view/applicant-view";
+import { ApplicantView } from "./applicant-view";
 
 import { ImportMatchingDataButton } from "./import-export/import-matching-data";
 import { ExportMatchingDataButton } from "./import-export/export-matching-data";
