@@ -6,6 +6,10 @@ import { PositionSummary } from "../types";
 import { TableView } from "./table/table-view";
 import { GridView } from "./grid/grid-view";
 
+/**
+ * The main body of the applicant view containing a list of all applicant summaries
+ * for a particular position, presented in either a table or grid view.
+ */
 export function ApplicantViewBody({
     positionSummary,
     applicantSummaries,
