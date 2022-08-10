@@ -160,13 +160,13 @@ function GridItemBody({
                     {applicantSummary.applicant.first_name}{" "}
                     {applicantSummary.applicant.last_name}
                 </div>
-                {match.status.includes("assigned") && (
+                {["assigned", "staged-assigned"].includes(match.status) && (
                     <div className="applicant-hours">
                         {" "}
                         ({match.hoursAssigned})
                     </div>
                 )}
-                {!match.status.includes("assigned") && (
+                {!["assigned", "staged-assigned"].includes(match.status) && (
                     <div
                         className="icon-container"
                         onClick={(e) => {
