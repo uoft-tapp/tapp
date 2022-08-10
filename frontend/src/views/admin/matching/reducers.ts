@@ -11,7 +11,6 @@ import {
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
-
 export { matchingDataReducer };
 
 export interface MatchingDataState {

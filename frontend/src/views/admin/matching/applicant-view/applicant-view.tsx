@@ -19,7 +19,7 @@ export const statusMapping: Record<string, string> = {
 export function ApplicantView({
     positionSummary,
 }: {
-    positionSummary: PositionSummary | null;
+    positionSummary: PositionSummary;
 }) {
     const [filterString, setFilterString] = React.useState("");
     const [sortList, setSortList] =
@@ -29,10 +29,6 @@ export function ApplicantView({
         React.useState<FilterListItem[]>(defaultFilterList);
 
     const filteredApplicants: ApplicantSummary[] = React.useMemo(() => {
-        if (!positionSummary) {
-            return [];
-        }
-
         return applyFiltersAndSort(
             positionSummary,
             filterString,
@@ -51,12 +47,10 @@ export function ApplicantView({
                 sortList={sortList}
                 setSortList={setSortList}
             />
-            {positionSummary && (
-                <ApplicantViewBody
-                    positionSummary={positionSummary}
-                    applicantSummaries={filteredApplicants}
-                />
-            )}
+            <ApplicantViewBody
+                positionSummary={positionSummary}
+                applicantSummaries={filteredApplicants}
+            />
         </div>
     );
 }

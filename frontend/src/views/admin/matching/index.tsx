@@ -142,9 +142,11 @@ export function AdminMatchingView() {
                             selectedPositionId={selectedPositionId}
                             positionSummaries={positionSummaries}
                         />
-                        <ApplicantView
-                            positionSummary={selectedPositionSummary}
-                        />
+                        {selectedPositionSummary && (
+                            <ApplicantView
+                                positionSummary={selectedPositionSummary}
+                            />
+                        )}
                     </div>
                     <div className="matching-footer">
                         <ImportMatchingDataButton />
