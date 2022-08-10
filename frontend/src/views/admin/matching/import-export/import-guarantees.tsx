@@ -10,7 +10,7 @@ import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
  * with information about subsequent appointment guarantees to be upserted.
  */
 export function ImportGuaranteesButton() {
-    const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [addDialog, setAddDialog] = React.useState(false);
 
     const defaultLabel = "Select a JSON file.";
 
@@ -101,7 +101,7 @@ export function ImportGuaranteesButton() {
         setFileContent(null);
         setFileInputLabel(defaultLabel);
 
-        setAddDialogVisible(false);
+        setAddDialog(false);
     }
 
     return (
@@ -110,11 +110,11 @@ export function ImportGuaranteesButton() {
                 variant="outline-primary"
                 size="sm"
                 className="footer-button"
-                onClick={() => setAddDialogVisible(true)}
+                onClick={() => setAddDialog(true)}
             >
                 Import Appt. Data
             </Button>
-            <Modal show={addDialogVisible}>
+            <Modal show={addDialog}>
                 <Modal.Header>
                     <Modal.Title>Import Appointment Guarantee Data</Modal.Title>
                 </Modal.Header>
@@ -135,10 +135,7 @@ export function ImportGuaranteesButton() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        onClick={() => setAddDialogVisible(false)}
-                        variant="light"
-                    >
+                    <Button onClick={() => setAddDialog(false)} variant="light">
                         Cancel
                     </Button>
                     <Button

@@ -8,7 +8,7 @@ import { upsertMatch, batchUpsertGuarantees, upsertNote } from "../actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 export function ImportMatchingDataButton() {
-    const [addDialogVisible, setAddDialogVisible] = React.useState(false);
+    const [addDialog, setAddDialog] = React.useState(false);
     const defaultLabel = "Select a JSON file.";
 
     const [fileInputLabel, setFileInputLabel] = React.useState(defaultLabel);
@@ -135,7 +135,7 @@ export function ImportMatchingDataButton() {
         setFileInputLabel(defaultLabel);
         setWarningMessage("");
 
-        setAddDialogVisible(false);
+        setAddDialog(false);
     }
 
     return (
@@ -144,11 +144,11 @@ export function ImportMatchingDataButton() {
                 variant="outline-primary"
                 size="sm"
                 className="footer-button"
-                onClick={() => setAddDialogVisible(true)}
+                onClick={() => setAddDialog(true)}
             >
                 Import Data
             </Button>
-            <Modal show={addDialogVisible}>
+            <Modal show={addDialog}>
                 <Modal.Header>
                     <Modal.Title>Import Matching Data</Modal.Title>
                 </Modal.Header>
@@ -169,10 +169,7 @@ export function ImportMatchingDataButton() {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        onClick={() => setAddDialogVisible(false)}
-                        variant="light"
-                    >
+                    <Button onClick={() => setAddDialog(false)} variant="light">
                         Cancel
                     </Button>
                     <Button
