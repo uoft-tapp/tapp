@@ -141,13 +141,11 @@ function GridItemBody({
     }, [position, applicantSummary]);
 
     const instructorRatings = React.useMemo(() => {
-        return (
-            applicantSummary.application.instructor_preferences
-                .filter((pref) => pref.position.id === position.id)
-                .map((rating) => {
-                    return rating.preference_level;
-                }) || []
-        );
+        return applicantSummary.application.instructor_preferences
+            .filter((pref) => pref.position.id === position.id)
+            .map((rating) => {
+                return rating.preference_level;
+            });
     }, [applicantSummary, position.id]);
 
     const avgInstructorRating =
