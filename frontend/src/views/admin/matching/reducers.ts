@@ -35,12 +35,11 @@ const initialState: MatchingDataState = {
 const matchingDataReducer = createReducer(initialState, {
     [UPSERT_MATCH]: (state, action) => {
         // Check if a match with this applicant ID and position ID already exist
-        const existingMatch =
-            state.matches.find(
-                (match) =>
-                    match.utorid === action.payload.utorid &&
-                    match.positionCode === action.payload.positionCode
-            );
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
 
         if (!existingMatch) {
             return {
