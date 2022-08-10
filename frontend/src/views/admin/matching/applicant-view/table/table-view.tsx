@@ -8,7 +8,7 @@ import {
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "../../utils";
-import { statusMapping } from "../applicant-view";
+import { matchingStatusToString } from "../applicant-view";
 
 /**
  * A presentation of applicant information in table view.
@@ -81,7 +81,7 @@ function TableRow({
         return null;
     }
 
-    const statusCategory = statusMapping[applicantMatch.status];
+    const statusCategory = matchingStatusToString[applicantMatch.status];
 
     const instructorRatings =
         applicantSummary.application.instructor_preferences

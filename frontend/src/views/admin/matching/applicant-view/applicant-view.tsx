@@ -1,5 +1,5 @@
 import React from "react";
-import { ApplicantSummary, PositionSummary } from "../types";
+import { ApplicantSummary, PositionSummary, MatchStatus } from "../types";
 import { SortListItem, defaultSortList } from "../sorts/sort-bar";
 import { applySorts } from "../sorts/sorts";
 import { applyFilters, FilterListItem } from "../filters/filters";
@@ -8,7 +8,7 @@ import { ApplicantViewHeader } from "./header";
 import { ApplicantViewBody } from "./body";
 
 // Mapping of status strings to better human-readable text
-export const statusMapping: Record<string, string> = {
+export const matchingStatusToString: Record<MatchStatus, string> = {
     assigned: "Assigned",
     "staged-assigned": "Assigned (Staged)",
     applied: "Applied",

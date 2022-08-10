@@ -1,10 +1,9 @@
 import React from "react";
 import { Position } from "../../../../../api/defs/types";
-import { ApplicantSummary } from "../../types";
+import { ApplicantSummary, MatchStatus } from "../../types";
 import { getApplicantMatchForPosition } from "../../utils";
-import { statusMapping } from "../applicant-view";
 import { GridItem } from "./grid-item";
-
+import { matchingStatusToString } from "../applicant-view";
 import { FaLock } from "react-icons/fa";
 
 /**
@@ -18,42 +17,52 @@ export function GridView({
     position: Position;
     applicantSummaries: ApplicantSummary[];
 }) {
-    const applicantSummariesByMatchStatus: Record<string, ApplicantSummary[]> =
-        React.useMemo(() => {
-            const ret: Record<string, ApplicantSummary[]> = {
-                Assigned: [],
-                "Assigned (Staged)": [],
-                Starred: [],
-                Applied: [],
-                Hidden: [],
-            };
+    const applicantSummariesByMatchStatus: Record<
+        MatchStatus,
+        ApplicantSummary[]
+    > = React.useMemo(() => {
+        const ret: Record<MatchStatus, ApplicantSummary[]> = {
+            applied: [],
+            starred: [],
+            "staged-assigned": [],
+            assigned: [],
+            hidden: [],
+        };
 
-            for (const applicantSummary of applicantSummaries) {
-                const applicantMatch = getApplicantMatchForPosition(
-                    applicantSummary,
-                    position
-                );
+        for (const applicantSummary of applicantSummaries) {
+            const applicantMatch = getApplicantMatchForPosition(
+                applicantSummary,
+                position
+            );
 
-                if (!applicantMatch || !applicantMatch.status) {
-                    continue;
-                }
-
-                const category = statusMapping[applicantMatch.status];
-                ret[category].push(applicantSummary);
+            if (!applicantMatch || !applicantMatch.status) {
+                continue;
             }
 
-            return ret;
-        }, [applicantSummaries, position]);
+            ret[applicantMatch.status] = ret[applicantMatch.status] || [];
+            ret[applicantMatch.status].push(applicantSummary);
+        }
+
+        return ret;
+    }, [applicantSummaries, position]);
+
+    const statusList: MatchStatus[] = [
+        "assigned",
+        "staged-assigned",
+        "starred",
+        "applied",
+        "hidden",
+    ];
 
     return (
         <div>
-            {Object.keys(applicantSummariesByMatchStatus).map((key, index) => {
+            {statusList.map((status) => {
                 return (
                     <GridSection
-                        key={index}
-                        header={key}
+                        key={status}
+                        header={matchingStatusToString[status]}
                         applicantSummaries={
-                            applicantSummariesByMatchStatus[key]
+                            applicantSummariesByMatchStatus[status]
                         }
                         position={position}
                     />
