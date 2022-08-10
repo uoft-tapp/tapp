@@ -100,7 +100,7 @@ export function FinalizeChangesButton() {
                 onClick={() => setDialogVisible(true)}
                 disabled={stagedAssignments.length === 0}
             >
-                Finalize Changes{" "}
+                Finalize Changes
                 {stagedAssignments.length > 0
                     ? ` (${stagedAssignments.length})`
                     : ""}
