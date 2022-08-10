@@ -393,21 +393,6 @@
     font-weight: 600;
 }
 
-.finalize-changes-modal {
-    height: 60%;
-}
-
-.finalize-changes-modal > .modal-content {
-    height: 100%;
-    width: 100%;
-}
-
-.finalize-changes-modal > .modal-content > .modal-body {
-    overflow-y: scroll;
-    width: 100%;
-    height: 100%;
-}
-
 .applicant-dropdown-menu {
     top: 40px;
     background-color: white;

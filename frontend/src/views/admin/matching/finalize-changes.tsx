@@ -1,17 +1,32 @@
 import React from "react";
 import { matchesSelector } from "./actions";
 import { useSelector } from "react-redux";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-import { Match } from "./types";
 
-import { Assignment } from "../../../api/defs/types";
+import { Assignment, Applicant } from "../../../api/defs/types";
+
+import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 
 import {
     positionsSelector,
     applicantsSelector,
     upsertAssignment,
 } from "../../../api/actions";
+
+const DEFAULT_COLUMNS = [
+    { Header: "Position Code", accessor: "positionCode" },
+    { Header: "Hours", accessor: "hoursAssigned" },
+    { Header: "Last Name", accessor: "applicant.last_name" },
+    { Header: "First Name", accessor: "applicant.first_name" },
+    { Header: "UTORid", accessor: "applicant.utorid" },
+];
+
+type StagedAssignmentData = {
+    positionCode: string;
+    hoursAssigned: number;
+    applicant: Applicant;
+};
 
 /**
  * A button that brings up a modal allowing users to see a list of staged assignments
@@ -26,16 +41,29 @@ export function FinalizeChangesButton() {
 
     const dispatch = useThunkDispatch();
 
-    const stagedAssignments: Match[] = React.useMemo(() => {
-        return matches
-            .filter((match) => match.status === "staged-assigned")
-            .sort((a, b) => {
-                return `${a.positionCode} ${a.utorid}`.toLowerCase() <
-                    `${b.positionCode} ${b.utorid}`.toLowerCase()
-                    ? -1
-                    : 1;
+    const stagedAssignments: StagedAssignmentData[] = React.useMemo(() => {
+        const stagedAssignedMatches = matches.filter(
+            (match) => match.status === "staged-assigned"
+        );
+
+        const ret: StagedAssignmentData[] = [];
+        for (const match of stagedAssignedMatches) {
+            const targetApplicant = applicants.find(
+                (applicant) => applicant.utorid === match.utorid
+            );
+            if (!targetApplicant) {
+                continue;
+            }
+
+            ret.push({
+                positionCode: match.positionCode,
+                hoursAssigned: match.hoursAssigned,
+                applicant: targetApplicant,
             });
-    }, [matches]);
+        }
+
+        return ret;
+    }, [matches, applicants]);
 
     function _onConfirm() {
         if (stagedAssignments.length === 0) {
@@ -47,18 +75,15 @@ export function FinalizeChangesButton() {
             const targetPosition = positions.find(
                 (position) => position.position_code === match.positionCode
             );
-            const targetApplicant = applicants.find(
-                (applicant) => applicant.utorid === match.utorid
-            );
 
-            if (!targetPosition || !targetApplicant) {
+            if (!targetPosition) {
                 return;
             }
 
             const newAssignment: Partial<Assignment> = {
                 position: targetPosition,
                 hours: match.hoursAssigned,
-                applicant: targetApplicant,
+                applicant: match.applicant,
             };
 
             dispatch(upsertAssignment(newAssignment));
@@ -84,24 +109,20 @@ export function FinalizeChangesButton() {
                 show={dialogVisible}
                 dialogClassName="finalize-changes-modal"
                 onHide={() => setDialogVisible(false)}
+                size="lg"
             >
                 <Modal.Header>
                     <Modal.Title>Finalize Changes</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    The following assignments will be made:
-                    <ul>
-                        {stagedAssignments.map((match) => {
-                            return (
-                                <li
-                                    key={`${match.positionCode} ${match.utorid}`}
-                                >
-                                    {match.positionCode} - {match.utorid} (
-                                    {match.hoursAssigned})
-                                </li>
-                            );
-                        })}
-                    </ul>
+                    <Alert variant="info">
+                        The following assignments will be made.
+                    </Alert>
+                    <AdvancedFilterTable
+                        columns={DEFAULT_COLUMNS}
+                        data={stagedAssignments}
+                        filterable={true}
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
