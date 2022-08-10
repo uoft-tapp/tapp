@@ -140,7 +140,7 @@ export function AdminMatchingView() {
                     <div className="matching-body">
                         <PositionList
                             selectedPositionId={selectedPositionId}
-                            positionSummaries={positionSummaries}
+                            positionSummaries={Object.values(positionSummaries)}
                         />
                         {selectedPositionSummary && (
                             <ApplicantView

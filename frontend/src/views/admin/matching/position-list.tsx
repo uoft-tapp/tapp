@@ -13,11 +13,11 @@ export function PositionList({
     positionSummaries,
 }: {
     selectedPositionId: number | null;
-    positionSummaries: Record<number, PositionSummary>;
+    positionSummaries: PositionSummary[];
 }) {
     const [filterString, setFilterString] = React.useState("");
     const filteredList = React.useMemo(() => {
-        const ret: PositionSummary[] = Object.values(positionSummaries)
+        const ret: PositionSummary[] = positionSummaries
             .filter(
                 (summary) =>
                     summary.position.position_code
