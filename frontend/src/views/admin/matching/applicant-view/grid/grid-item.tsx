@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 import { Position, Application } from "../../../../../api/defs/types";
-import { ApplicantSummary, Match } from "../../types";
+import { ApplicantSummary, Match, FillStatus } from "../../types";
 
 import { Collapse } from "react-bootstrap";
 import { sum, round } from "../../../../../libs/utils";
@@ -234,7 +234,7 @@ function GridItemSidebar({
     }, [applicantSummary]);
 
     const filledStatus = React.useMemo(() => {
-        let ret: "empty" | "under" | "matched" | "over" | "" = "";
+        let ret: FillStatus | "" = "";
         if (totalAssignedHours > hoursOwed) {
             ret = "over";
         } else if (hoursOwed > 0) {
