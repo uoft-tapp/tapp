@@ -7,8 +7,7 @@ import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 /**
  * A button that displays a modal to allow users to upload JSON files
- * with information about subsequent appointment guarantees to be
- * upserted.
+ * with information about subsequent appointment guarantees to be upserted.
  */
 export function ImportGuaranteesButton() {
     const [addDialogVisible, setAddDialogVisible] = React.useState(false);
