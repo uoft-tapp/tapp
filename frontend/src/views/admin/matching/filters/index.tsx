@@ -23,56 +23,49 @@ export function FilterModal({
     setFilterList: Function;
 }) {
     return (
-        <>
-            <Modal
-                show={showFilters}
-                onHide={() => {
-                    setShowFilters(false);
-                }}
-                dialogClassName="filter-modal"
-            >
-                <Modal.Header>
-                    <Modal.Title>Filter Applicants</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form className="filter-form">
-                        {Object.keys(filterMap).map((section) => {
-                            return (
-                                <Form.Group className="mb-3" key={section}>
-                                    <Form.Label className="filter-section-title">
-                                        {section}
-                                    </Form.Label>
-                                    {filterMap[section]["values"].map(
-                                        (item: FilterMapItemValue) => {
-                                            return (
-                                                <FilterCheckbox
-                                                    key={item["label"]}
-                                                    value={item["value"]}
-                                                    label={item["label"]}
-                                                    section={section}
-                                                    filterList={filterList}
-                                                    setFilterList={
-                                                        setFilterList
-                                                    }
-                                                />
-                                            );
-                                        }
-                                    )}
-                                </Form.Group>
-                            );
-                        })}
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        onClick={() => setShowFilters(false)}
-                        variant="light"
-                    >
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
+        <Modal
+            show={showFilters}
+            onHide={() => {
+                setShowFilters(false);
+            }}
+            dialogClassName="filter-modal"
+        >
+            <Modal.Header>
+                <Modal.Title>Filter Applicants</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form className="filter-form">
+                    {Object.keys(filterMap).map((section) => {
+                        return (
+                            <Form.Group className="mb-3" key={section}>
+                                <Form.Label className="filter-section-title">
+                                    {section}
+                                </Form.Label>
+                                {filterMap[section]["values"].map(
+                                    (item: FilterMapItemValue) => {
+                                        return (
+                                            <FilterCheckbox
+                                                key={item["label"]}
+                                                value={item["value"]}
+                                                label={item["label"]}
+                                                section={section}
+                                                filterList={filterList}
+                                                setFilterList={setFilterList}
+                                            />
+                                        );
+                                    }
+                                )}
+                            </Form.Group>
+                        );
+                    })}
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => setShowFilters(false)} variant="light">
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 }
 

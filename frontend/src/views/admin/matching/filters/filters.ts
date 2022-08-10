@@ -183,9 +183,8 @@ export function applyFilters(
     const filterBuckets: Record<string, string[]> = {};
 
     for (const filterItem of filterList) {
-        const bucket = filterBuckets[filterItem.section] || [];
-        bucket.push(filterItem.value);
-        filterBuckets[filterItem.section] = bucket;
+        filterBuckets[filterItem.section] = filterBuckets[filterItem.section] || [];
+        filterBuckets[filterItem.section].push(filterItem.value);
     }
 
     // Apply filters for each type
