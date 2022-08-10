@@ -56,16 +56,14 @@ export function GridItem({
         newStatus: "staged-assigned" | "hidden" | "starred" | "applied",
         hoursAssigned?: number
     ) {
-        const newMatch: Match | null = applicantMatch
-            ? {
-                  ...applicantMatch,
-                  status: newStatus,
-              }
-            : null;
-
-        if (!newMatch) {
+        if (!applicantMatch) {
             return;
         }
+
+        const newMatch: Match = {
+            ...applicantMatch,
+            status: newStatus,
+        };
 
         if (hoursAssigned !== undefined) {
             newMatch.hoursAssigned = hoursAssigned;
