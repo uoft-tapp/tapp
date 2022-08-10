@@ -153,6 +153,9 @@ function GridItemBody({
             ? round(sum(...instructorRatings) / instructorRatings.length, 3)
             : null;
 
+    const isAssigned =
+        match.status === "assigned" || match.status === "staged-assigned";
+
     return (
         <div className="applicant-grid-main">
             <div className="grid-row">
@@ -160,13 +163,13 @@ function GridItemBody({
                     {applicantSummary.applicant.first_name}{" "}
                     {applicantSummary.applicant.last_name}
                 </div>
-                {["assigned", "staged-assigned"].includes(match.status) && (
+                {isAssigned && (
                     <div className="applicant-hours">
                         {" "}
                         ({match.hoursAssigned})
                     </div>
                 )}
-                {!["assigned", "staged-assigned"].includes(match.status) && (
+                {!isAssigned && (
                     <div
                         className="icon-container"
                         onClick={(e) => {
