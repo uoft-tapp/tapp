@@ -57,7 +57,7 @@ export function ApplicantNote({
                         onClick={() => setShow(false)}
                         variant="outline-secondary"
                     >
-                        Close
+                        Cancel
                     </Button>
                     <Button
                         onClick={() => {
