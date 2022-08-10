@@ -88,7 +88,7 @@ function PositionRow({
         }
 
         return 0;
-    }, [positionSummary]);
+    }, [positionSummary, targetHours]);
 
     return (
         <div
