@@ -1,5 +1,5 @@
 import { ApplicantSummary } from "../types";
-import { SortListItem } from "./sort-bar";
+import { SortListItem } from ".";
 import { Position } from "../../../../api/defs/types";
 import {
     getPositionPrefForPosition,

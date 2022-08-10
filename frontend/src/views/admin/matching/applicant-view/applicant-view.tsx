@@ -1,6 +1,6 @@
 import React from "react";
 import { ApplicantSummary, PositionSummary, MatchStatus } from "../types";
-import { SortListItem, defaultSortList } from "../sorts/sort-bar";
+import { SortListItem, defaultSortList } from "../sorts";
 import { applySorts } from "../sorts/sorts";
 import { applyFilters, FilterListItem } from "../filters/filters";
 import { defaultFilterList } from "../filters";

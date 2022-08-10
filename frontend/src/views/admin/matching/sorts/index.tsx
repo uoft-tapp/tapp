@@ -1,7 +1,5 @@
 import React from "react";
-
 import { sortMap } from "./sorts";
-
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
