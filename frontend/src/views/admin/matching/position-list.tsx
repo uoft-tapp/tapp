@@ -77,35 +77,47 @@ function PositionRow({
         2
     );
 
-    // Overriding style specifically for under-assigned courses since we need a particular width
-    let backgroundOverride = "";
-    if (positionSummary.filledStatus === "under") {
-        let percentage = round(
-            (positionSummary.hoursAssigned / targetHours) * 100,
-            0
-        );
-        backgroundOverride = `-webkit-linear-gradient(left, rgba(255, 204, 22, 0.15) ${percentage}%, #fff ${percentage}%, #fff 100%)`;
-    }
+    const progress = React.useMemo(() => {
+        if (["over", "matched"].includes(positionSummary.filledStatus)) {
+            return 100;
+        } else if (positionSummary.filledStatus === "under") {
+            return round(
+                (positionSummary.hoursAssigned / targetHours) * 100,
+                0
+            );
+        }
+
+        return 0;
+    }, [positionSummary]);
 
     return (
         <div
-            style={{ background: backgroundOverride }}
-            className={`position-row noselect ${positionSummary.filledStatus}`}
-            onClick={() => {
-                dispatch(setSelectedPosition(positionSummary.position.id));
-            }}
+            className="position-row noselect"
+            onClick={() =>
+                dispatch(setSelectedPosition(positionSummary.position.id))
+            }
         >
             <div
                 className={`status-sidebar ${positionSummary.filledStatus} ${
                     focused ? "selected" : ""
                 }`}
             ></div>
-            <span className="position-title">
-                {positionSummary.position.position_code}
-            </span>
-            <span className="position-hours-filled">
-                {positionSummary.hoursAssigned} / {targetHours} h
-            </span>
+            <div className="position-row-body">
+                <div className="position-row-background">
+                    <div
+                        style={{ width: `${progress}%` }}
+                        className={`progress ${positionSummary.filledStatus}`}
+                    ></div>
+                </div>
+                <div className="position-row-info">
+                    <span className="position-title">
+                        {positionSummary.position.position_code}
+                    </span>
+                    <span className="position-hours-filled">
+                        {positionSummary.hoursAssigned} / {targetHours} h
+                    </span>
+                </div>
+            </div>
         </div>
     );
 }

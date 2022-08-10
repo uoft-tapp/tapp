@@ -1,52 +1,3 @@
-.assignments-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.position-label {
-    display: inline-block;
-    width: 9em;
-    background-color: var(--light);
-    padding: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-.position-label.matched {
-    background-color: var(--green);
-    color: var(--white);
-}
-.position-label.over {
-    background-color: var(--orange);
-    color: var(--white);
-}
-
-.position-label .position-code,
-.position-label .position-title {
-    display: block;
-    text-align: center;
-}
-.position-label .position-title {
-    font-size: smaller;
-}
-.position-label .additional-info {
-    font-size: smaller;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0px 4px;
-    justify-content: center;
-}
-
-.position-label .position-hours::before {
-    content: "Hours: ";
-}
-.position-label .position-filled::before {
-    content: "Filled: ";
-}
-.position-label .position-hours-filled::before {
-    content: "Hours Filled: ";
-}
-
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -54,36 +5,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.position-row {
-    display: flex;
-}
-
-.position-row-body {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-}
-.position-row-body .row-division {
-    display: flex;
-    flex-direction: column;
-}
-.position-row-body .row-division:first-child {
-    flex-grow: 1;
-}
-.position-row-body .row-division-header {
-    font-size: smaller;
-    text-align: center;
-    border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
-}
-.position-row-body .row-division-body {
-    flex-grow: 1;
-    display: flex;
-    flex-wrap: wrap;
-}
-.position-row-body .row-division:nth-child(2n) {
-    background-color: rgba(20, 0, 200, 0.07);
 }
 
 /* COURSE VIEW CSS */
@@ -175,6 +96,49 @@
 .position-row:selected {
 }
 
+.position-row-body {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    height: 100%;
+    position: relative;
+    align-items: center;
+}
+
+.position-row-background {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.position-row-info {
+    display: flex;
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+.position-row-background > .progress {
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    position: relative;
+    transition: width 0.75s ease;
+}
+
+.progress.over {
+    background-color: rgba(0, 229, 243, 0.15);
+}
+
+.progress.matched {
+    background-color: rgba(0, 193, 43, 0.15);
+}
+
+.progress.under {
+    background-color: rgba(255, 204, 22, 0.15);
+}
+
 .matching-course-main {
     height: 100%;
     flex-grow: 1;
@@ -200,6 +164,7 @@
     height: 100%;
     background-color: #d5d5d5;
     transition: width 0.5s ease;
+    transition: background-color 0.75s ease;
 }
 
 .status-sidebar.empty {
@@ -222,21 +187,13 @@
     width: 25px;
 }
 
-.position-row.over {
-    background: rgba(0, 229, 243, 0.15);
-}
-
-.position-row.matched {
-    background: rgba(0, 193, 43, 0.15);
-}
-
-.position-row > .position-title {
+.position-row-info > .position-title {
     flex-grow: 1;
     padding-left: 10px;
     font-weight: 600;
 }
 
-.position-row > .position-hours-filled {
+.position-row-info > .position-hours-filled {
     padding-left: 10px;
     padding-right: 10px;
     font-weight: 250;
@@ -251,7 +208,6 @@
 .grid-view-list {
     display: flex;
     flex-wrap: wrap;
-    /*overflow: scroll;*/
     row-gap: 6px;
     column-gap: 8px;
 }
