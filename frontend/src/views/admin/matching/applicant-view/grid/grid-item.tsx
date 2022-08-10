@@ -21,7 +21,7 @@ import { ApplicantStar } from "./applicant-star";
 import { AdjustHourModal, ApplicationDetailModal } from "./modals";
 
 /**
- * A grid item to be displayed in grid view, outlining information about an applicant's summary.
+ * A grid item to be displayed in grid view, showing a summary of an applicant.
  */
 export function GridItem({
     applicantSummary,
