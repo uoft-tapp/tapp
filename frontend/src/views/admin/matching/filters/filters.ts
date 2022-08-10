@@ -183,7 +183,8 @@ export function applyFilters(
     const filterBuckets: Record<string, string[]> = {};
 
     for (const filterItem of filterList) {
-        filterBuckets[filterItem.section] = filterBuckets[filterItem.section] || [];
+        filterBuckets[filterItem.section] =
+            filterBuckets[filterItem.section] || [];
         filterBuckets[filterItem.section].push(filterItem.value);
     }
 

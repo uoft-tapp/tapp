@@ -59,10 +59,11 @@ export function ImportGuaranteesButton() {
             setWarningMessage("");
             return;
             // eslint-disable-next-line
-        } catch (e) {}
-        const warning = `Could not determine file type for ${fileInputLabel}`;
-        console.warn(warning);
-        setWarningMessage(warning);
+        } catch (e) {
+            const warning = `Could not determine file type for ${fileInputLabel}`;
+            console.warn(warning);
+            setWarningMessage(warning);
+        }
     }, [fileArrayBuffer, fileInputLabel]);
 
     React.useEffect(() => {
@@ -84,10 +85,11 @@ export function ImportGuaranteesButton() {
             );
             setWarningMessage("");
             return;
-        } catch (e: any) {}
-        const warning = `Could not parse data for ${fileInputLabel}, check content format`;
-        setWarningMessage(warning);
-        console.warn(warning);
+        } catch (e: any) {
+            const warning = `Could not parse data for ${fileInputLabel}, check content format`;
+            setWarningMessage(warning);
+            console.warn(warning);
+        }
     }, [fileContent, fileInputLabel]);
 
     const dispatch = useThunkDispatch();

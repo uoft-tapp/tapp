@@ -66,10 +66,11 @@ export function ImportMatchingDataButton() {
             setWarningMessage("");
             return;
             // eslint-disable-next-line
-        } catch (e) {}
-        const warning = `Could not determine file type for ${fileInputLabel}`;
-        setWarningMessage(warning);
-        console.warn(warning);
+        } catch (e) {
+            const warning = `Could not determine file type for ${fileInputLabel}`;
+            setWarningMessage(warning);
+            console.warn(warning);
+        }
     }, [fileArrayBuffer, fileInputLabel]);
 
     React.useEffect(() => {
@@ -105,10 +106,11 @@ export function ImportMatchingDataButton() {
             }
             setWarningMessage("");
             return;
-        } catch (e: any) {}
-        const warning = `Could not parse data for ${fileInputLabel}, check content format`;
-        setWarningMessage(warning);
-        console.warn(warning);
+        } catch (e: any) {
+            const warning = `Could not parse data for ${fileInputLabel}, check content format`;
+            setWarningMessage(warning);
+            console.warn(warning);
+        }
     }, [fileContent, matches, fileInputLabel]);
 
     function _onConfirm() {
