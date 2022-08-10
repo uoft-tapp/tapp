@@ -196,14 +196,14 @@ export function applyFilters(
         }
 
         if (key === "TA Preference" || key === "Position Status") {
-            filteredList = filterMap[key]["filterFunc"](
+            filteredList = filterMap[key].filterFunc(
                 filteredList,
                 filterBuckets[key],
                 position
             );
         } else {
             // Call the section's filter function
-            filteredList = filterMap[key]["filterFunc"](
+            filteredList = filterMap[key].filterFunc(
                 filteredList,
                 filterBuckets[key]
             );
@@ -224,13 +224,11 @@ function filterByProgram(
         return applicantSummaries;
     }
 
-    return (
-        applicantSummaries.filter(
-            (applicantSummary) =>
-                !excludeValues.includes(
-                    applicantSummary?.application?.program || ""
-                )
-        ) || []
+    return applicantSummaries.filter(
+        (applicantSummary) =>
+            !excludeValues.includes(
+                applicantSummary?.application?.program || ""
+            )
     );
 }
 
@@ -245,13 +243,11 @@ function filterByDept(
         return applicantSummaries;
     }
 
-    return (
-        applicantSummaries.filter(
-            (applicantSummary) =>
-                !excludeValues.includes(
-                    applicantSummary?.application?.department || ""
-                )
-        ) || []
+    return applicantSummaries.filter(
+        (applicantSummary) =>
+            !excludeValues.includes(
+                applicantSummary?.application?.department || ""
+            )
     );
 }
 
@@ -313,21 +309,19 @@ function filterByPositionStatus(
         return applicantSummaries;
     }
 
-    return (
-        applicantSummaries
-            .map((applicantSummary) => {
-                const match = getApplicantMatchForPosition(
-                    applicantSummary,
-                    position
-                );
-                if (!match || excludeValues.includes(match.status)) {
-                    return null;
-                }
+    return applicantSummaries
+        .map((applicantSummary) => {
+            const match = getApplicantMatchForPosition(
+                applicantSummary,
+                position
+            );
+            if (!match || excludeValues.includes(match.status)) {
+                return null;
+            }
 
-                return applicantSummary;
-            })
-            .filter((applicantSummary) => applicantSummary !== null) || []
-    );
+            return applicantSummary;
+        })
+        .filter((applicantSummary) => applicantSummary !== null);
 }
 
 /**
@@ -341,41 +335,39 @@ function filterByHourFulfillment(
         return applicantSummaries;
     }
 
-    return (
-        applicantSummaries
-            .map((applicantSummary) => {
-                let applicantHourStatus = "N/A";
+    return applicantSummaries
+        .map((applicantSummary) => {
+            let applicantHourStatus = "N/A";
 
+            if (
+                applicantSummary.guarantee &&
+                applicantSummary.guarantee.totalHoursOwed > 0
+            ) {
+                const totalHoursAssigned =
+                    getApplicantTotalHoursAssigned(applicantSummary) +
+                    applicantSummary.guarantee.previousHoursFulfilled;
                 if (
-                    applicantSummary.guarantee &&
-                    applicantSummary.guarantee.totalHoursOwed > 0
+                    totalHoursAssigned >
+                    applicantSummary.guarantee.totalHoursOwed
                 ) {
-                    const totalHoursAssigned =
-                        getApplicantTotalHoursAssigned(applicantSummary) +
-                        applicantSummary.guarantee.previousHoursFulfilled;
-                    if (
-                        totalHoursAssigned >
-                        applicantSummary.guarantee.totalHoursOwed
-                    ) {
-                        applicantHourStatus = "over";
-                    } else if (
-                        totalHoursAssigned ===
-                        applicantSummary.guarantee.totalHoursOwed
-                    ) {
-                        applicantHourStatus = "filled";
-                    } else if (totalHoursAssigned > 0) {
-                        applicantHourStatus = "under";
-                    } else if (totalHoursAssigned === 0) {
-                        applicantHourStatus = "empty";
-                    }
+                    applicantHourStatus = "over";
+                } else if (
+                    totalHoursAssigned ===
+                    applicantSummary.guarantee.totalHoursOwed
+                ) {
+                    applicantHourStatus = "filled";
+                } else if (totalHoursAssigned > 0) {
+                    applicantHourStatus = "under";
+                } else if (totalHoursAssigned === 0) {
+                    applicantHourStatus = "empty";
                 }
+            }
 
-                if (excludeValues.includes(applicantHourStatus)) {
-                    return null;
-                }
+            if (excludeValues.includes(applicantHourStatus)) {
+                return null;
+            }
 
-                return applicantSummary;
-            })
-            .filter((applicantSummary) => applicantSummary !== null) || []
-    );
+            return applicantSummary;
+        })
+        .filter((applicantSummary) => applicantSummary !== null);
 }

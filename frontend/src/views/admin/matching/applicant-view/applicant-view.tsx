@@ -62,12 +62,12 @@ function applyFiltersAndSort(
     sortList: SortListItem[]
 ) {
     // Apply search value filter
-    const filteredBySearch =
-        positionSummary.applicantSummaries.filter((applicantSummary) =>
+    const filteredBySearch = positionSummary.applicantSummaries.filter(
+        (applicantSummary) =>
             `${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name} ${applicantSummary.applicant.utorid}`
                 .toLowerCase()
                 .includes(filterString.toLowerCase())
-        ) || [];
+    );
 
     // Apply filters based on filter list
     const filteredByFilters: ApplicantSummary[] =
