@@ -143,7 +143,6 @@
     height: 100%;
     flex-grow: 1;
     margin-left: 20px;
-
     display: flex;
     flex-direction: column;
     overflow: scroll;
@@ -163,8 +162,7 @@
     width: 5px;
     height: 100%;
     background-color: #d5d5d5;
-    transition: width 0.5s ease;
-    transition: background-color 0.75s ease;
+    transition: width 0.5s ease, background-color 0.75s ease;
 }
 
 .status-sidebar.empty {
