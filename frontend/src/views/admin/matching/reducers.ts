@@ -40,7 +40,7 @@ const matchingDataReducer = createReducer(initialState, {
                 (match) =>
                     match.utorid === action.payload.utorid &&
                     match.positionCode === action.payload.positionCode
-            ) || null;
+            );
 
         if (!existingMatch) {
             return {
