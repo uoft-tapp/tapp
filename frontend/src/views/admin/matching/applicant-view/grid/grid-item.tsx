@@ -41,6 +41,10 @@ export function GridItem({
         position
     );
 
+    if (!applicantMatch) {
+        return null;
+    }
+
     // Update all of this applicant's matches except for those in which they are assigned/staged-assigned
     function hideApplicantFromAll() {
         for (const match of applicantSummary.matches) {
@@ -125,15 +129,11 @@ function GridItemBody({
     updateApplicantMatch,
 }: {
     position: Position;
-    applicantSummary: ApplicantSummary | null;
-    match: Match | null;
+    applicantSummary: ApplicantSummary;
+    match: Match;
     updateApplicantMatch: Function;
 }) {
     const positionPref = React.useMemo(() => {
-        if (!applicantSummary) {
-            return null;
-        }
-
         return getPositionPrefForPosition(
             applicantSummary.application,
             position
@@ -141,10 +141,6 @@ function GridItemBody({
     }, [position, applicantSummary]);
 
     const instructorRatings = React.useMemo(() => {
-        if (!applicantSummary) {
-            return [];
-        }
-
         return (
             applicantSummary.application.instructor_preferences
                 .filter((pref) => pref.position.id === position.id)
@@ -158,10 +154,6 @@ function GridItemBody({
         instructorRatings.length > 0
             ? round(sum(...instructorRatings) / instructorRatings.length, 3)
             : null;
-
-    if (!applicantSummary || !match) {
-        return null;
-    }
 
     return (
         <div className="applicant-grid-main">
