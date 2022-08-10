@@ -1,11 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
 import { viewTypeSelector } from "../actions";
 import { ApplicantSummary } from "../types";
-
 import { PositionSummary } from "../types";
-
 import { TableView } from "./table/table-view";
 import { GridView } from "./grid/grid-view";
 

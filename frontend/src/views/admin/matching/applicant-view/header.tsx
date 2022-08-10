@@ -1,16 +1,13 @@
 import React from "react";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
-
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { setViewType, viewTypeSelector } from "../actions";
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
-
 import { Form, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-
 import { SortBar, SortListItem } from "../sorts/sort-bar";
-import { FilterModal, FilterListItem } from "../filters/filters";
-
+import { FilterModal } from "../filters";
+import { FilterListItem } from "../filters/filters";
 import { PositionSummary } from "../types";
 
 /**

@@ -3,13 +3,11 @@ import { ApplicantSummary } from "../../types";
 import { Table } from "react-bootstrap";
 import { sum, round } from "../../../../../libs/utils";
 import React from "react";
-
 import {
     getApplicantMatchForPosition,
     getPositionPrefForPosition,
     getApplicantTotalHoursAssigned,
 } from "../../utils";
-
 import { statusMapping } from "../applicant-view";
 
 /**

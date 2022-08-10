@@ -1,14 +1,9 @@
 import React from "react";
-
 import { ApplicantSummary, PositionSummary } from "../types";
 import { SortListItem, defaultSortList } from "../sorts/sort-bar";
 import { applySorts } from "../sorts/sorts";
-import {
-    applyFilters,
-    defaultFilterList,
-    FilterListItem,
-} from "../filters/filters";
-
+import { applyFilters, FilterListItem } from "../filters/filters";
+import { defaultFilterList } from "../filters";
 import { ApplicantViewHeader } from "./header";
 import { ApplicantViewBody } from "./body";
 

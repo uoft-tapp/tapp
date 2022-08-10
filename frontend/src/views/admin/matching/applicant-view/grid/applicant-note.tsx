@@ -1,9 +1,7 @@
 import React from "react";
 import { ApplicantSummary } from "../../types";
 import { RiStickyNoteFill } from "react-icons/ri";
-
 import { Form, Modal, Button } from "react-bootstrap";
-
 import { upsertNote } from "../../actions";
 import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
 
@@ -18,10 +16,6 @@ export function ApplicantNote({
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
     const [note, setNote] = React.useState(applicantSummary.note);
-
-    function _onClick() {
-        setShow(true);
-    }
 
     function updateApplicantNote(note: string | null) {
         dispatch(
@@ -40,7 +34,7 @@ export function ApplicantNote({
                         ? "active"
                         : "inactive"
                 }`}
-                onClick={_onClick}
+                onClick={() => setShow(true)}
             />
             <Modal show={show} onHide={() => setShow(false)}>
                 <Modal.Header closeButton>
