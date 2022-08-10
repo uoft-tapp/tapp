@@ -290,6 +290,15 @@ function GridItemDropdown({
         return null;
     }
 
+    const canBeAssigned =
+        applicantMatch.status === "hidden" ||
+        applicantMatch.status === "applied" ||
+        applicantMatch.status === "starred";
+
+    const canBeHidden =
+        applicantMatch.status !== "assigned" &&
+        applicantMatch.status !== "hidden";
+
     return (
         <Collapse in={show}>
             <div className="applicant-dropdown-menu dropdown-menu noselect">
@@ -302,24 +311,21 @@ function GridItemDropdown({
                 >
                     View application details
                 </button>
-                {applicantMatch.status &&
-                    ["hidden", "applied", "starred"].includes(
-                        applicantMatch?.status
-                    ) && (
-                        <button
-                            className="dropdown-item"
-                            onClick={() => {
-                                updateApplicantMatch(
-                                    "staged-assigned",
-                                    position.hours_per_assignment || 0
-                                );
-                                setShow(false);
-                            }}
-                        >
-                            Assign to <b>{position.position_code}</b> (
-                            {position.hours_per_assignment || 0})
-                        </button>
-                    )}
+                {canBeAssigned && (
+                    <button
+                        className="dropdown-item"
+                        onClick={() => {
+                            updateApplicantMatch(
+                                "staged-assigned",
+                                position.hours_per_assignment || 0
+                            );
+                            setShow(false);
+                        }}
+                    >
+                        Assign to <b>{position.position_code}</b> (
+                        {position.hours_per_assignment || 0})
+                    </button>
+                )}
                 {applicantMatch.status === "staged-assigned" && (
                     <button
                         className="dropdown-item"
@@ -342,32 +348,28 @@ function GridItemDropdown({
                         Unassign from <b>{position.position_code}</b>
                     </button>
                 )}
-                {applicantMatch.status !== "assigned" &&
-                    applicantMatch.status !== "hidden" && (
-                        <button
-                            className="dropdown-item"
-                            onClick={() => {
-                                updateApplicantMatch("hidden");
-                                setShow(false);
-                            }}
-                        >
-                            Hide from <b>{position.position_code}</b>
-                        </button>
-                    )}
-                {applicantMatch.status &&
-                    ["hidden", "applied", "starred"].includes(
-                        applicantMatch?.status
-                    ) && (
-                        <button
-                            className="dropdown-item"
-                            onClick={() => {
-                                hideApplicantFromAll();
-                                setShow(false);
-                            }}
-                        >
-                            Hide from all courses
-                        </button>
-                    )}
+                {canBeHidden && (
+                    <button
+                        className="dropdown-item"
+                        onClick={() => {
+                            updateApplicantMatch("hidden");
+                            setShow(false);
+                        }}
+                    >
+                        Hide from <b>{position.position_code}</b>
+                    </button>
+                )}
+                {canBeAssigned && (
+                    <button
+                        className="dropdown-item"
+                        onClick={() => {
+                            hideApplicantFromAll();
+                            setShow(false);
+                        }}
+                    >
+                        Hide from all courses
+                    </button>
+                )}
                 {applicantMatch.status === "hidden" && (
                     <button
                         className="dropdown-item"
