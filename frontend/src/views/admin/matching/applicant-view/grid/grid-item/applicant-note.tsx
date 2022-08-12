@@ -1,9 +1,9 @@
 import React from "react";
-import { ApplicantSummary } from "../../types";
+import { ApplicantSummary } from "../../../types";
 import { RiStickyNoteFill } from "react-icons/ri";
 import { Form, Modal, Button } from "react-bootstrap";
-import { upsertNote } from "../../actions";
-import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
+import { upsertNote } from "../../../actions";
+import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
 
 /**
  * A button that displays a dialog allowing one to edit an applicant's notes.
