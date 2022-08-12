@@ -5,7 +5,7 @@ import {
     BATCH_UPSERT_GUARANTEES,
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
-    SET_SELECTED_POSITION,
+    SET_SELECTED_MATCHING_POSITION,
     SET_VIEW_TYPE,
     SET_UPDATED,
 } from "./constants";
@@ -17,7 +17,7 @@ export interface MatchingDataState {
     matches: RawMatch[];
     guarantees: AppointmentGuaranteeStatus[];
     notes: Record<string, string>;
-    selectedPositionId: number | null;
+    selectedMatchingPositionId: number | null;
     viewType: ViewType;
     updated: boolean;
 }
@@ -26,7 +26,7 @@ const initialState: MatchingDataState = {
     matches: [],
     guarantees: [],
     notes: {},
-    selectedPositionId: null,
+    selectedMatchingPositionId: null,
     viewType: "grid",
     updated: false,
 };
@@ -141,8 +141,8 @@ const matchingDataReducer = createReducer(initialState, {
     [BATCH_UPSERT_NOTES]: (state, action) => {
         return { ...state, notes: action.payload };
     },
-    [SET_SELECTED_POSITION]: (state, action) => {
-        return { ...state, selectedPositionId: action.payload };
+    [SET_SELECTED_MATCHING_POSITION]: (state, action) => {
+        return { ...state, selectedMatchingPositionId: action.payload };
     },
     [SET_VIEW_TYPE]: (state, action) => {
         return { ...state, viewType: action.payload };
