@@ -194,24 +194,35 @@ export function ImportMatchingDataButton() {
  * (b) the combination exists but the assignment status or hoursAssigned is different
  */
 function getDiffedMatches(oldMatchList: RawMatch[], newMatchList: RawMatch[]) {
-    return newMatchList.filter(
-        (newMatch) =>
-            !oldMatchList.find(
-                // Remove matches whose utorid + position code combination already existed
-                (oldMatch) =>
-                    oldMatch.utorid === newMatch.utorid &&
-                    oldMatch.positionCode === newMatch.positionCode
-            ) ||
-            oldMatchList.find(
-                // But keep matches that have had a value modified
-                (oldMatch) =>
-                    oldMatch.utorid === newMatch.utorid &&
-                    oldMatch.positionCode === newMatch.positionCode &&
-                    (oldMatch.starred !== newMatch.starred ||
-                        oldMatch.hidden !== newMatch.hidden ||
-                        oldMatch.stagedAssigned !== newMatch.stagedAssigned ||
-                        oldMatch.stagedHoursAssigned !==
-                            newMatch.stagedHoursAssigned)
-            )
-    );
+    const oldMatchHash: Record<string, Record<string, RawMatch>> = {};
+    for (const match of oldMatchList) {
+        if (!oldMatchHash[match.utorid]) {
+            oldMatchHash[match.utorid] = {};
+        }
+
+        oldMatchHash[match.utorid][match.positionCode] = match;
+    }
+
+    return newMatchList.filter((newMatch) => {
+        // Keep this match if the utorid + position code combination don't already exist
+        if (
+            !oldMatchHash[newMatch.utorid] ||
+            !oldMatchHash[newMatch.utorid][newMatch.positionCode]
+        ) {
+            return true;
+        }
+
+        // Combination exists, need to check if any values were modified:
+        const oldMatch = oldMatchHash[newMatch.utorid][newMatch.positionCode];
+        if (
+            oldMatch.starred !== newMatch.starred ||
+            oldMatch.hidden !== newMatch.hidden ||
+            oldMatch.stagedAssigned !== newMatch.stagedAssigned ||
+            oldMatch.stagedHoursAssigned !== newMatch.stagedHoursAssigned
+        ) {
+            return true;
+        }
+
+        return false;
+    });
 }
