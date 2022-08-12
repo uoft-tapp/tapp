@@ -96,7 +96,11 @@ export const combinedApplicationsSelector = createSelector(
             .map((applicant) => {
                 const matchingApplications =
                     applicationsByApplicantId[applicant.id];
-                if (matchingApplications.length === 0) {
+
+                if (
+                    !matchingApplications ||
+                    matchingApplications.length === 0
+                ) {
                     return null;
                 }
 
