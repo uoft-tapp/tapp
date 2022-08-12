@@ -7,7 +7,7 @@ import {
     positionsSelector,
     applicantsSelector,
 } from "../../../api/actions";
-import { Assignment, Application } from "../../../api/defs/types";
+import { Assignment, Application, Position } from "../../../api/defs/types";
 import {
     UPSERT_MATCH,
     BATCH_UPSERT_MATCHES,
@@ -27,6 +27,7 @@ import {
     AppointmentGuaranteeStatus,
     ViewType,
     FillStatus,
+    MatchStatus,
 } from "./types";
 import { actionFactory } from "../../../api/actions/utils";
 
@@ -80,12 +81,19 @@ export const combinedApplicationsSelector = createSelector(
             return [];
         }
 
+        const applicationsByApplicantId: Record<number, Application[]> = {};
+        for (const application of applications) {
+            applicationsByApplicantId[application.applicant.id] =
+                applicationsByApplicantId[application.applicant.id] || [];
+            applicationsByApplicantId[application.applicant.id].push(
+                application
+            );
+        }
+
         return applicants
             .map((applicant) => {
-                const matchingApplications = applications.filter(
-                    (application) => application.applicant.id === applicant.id
-                );
-
+                const matchingApplications =
+                    applicationsByApplicantId[applicant.id];
                 if (matchingApplications.length === 0) {
                     return null;
                 }
@@ -165,7 +173,6 @@ export const matchesSelector = createSelector(
         combinedApplicationsSelector,
     ],
     (rawMatches, positions, applicants, assignments, applications) => {
-        // returns a mapping of matchable assignments to applicant IDs
         let ret: MatchableAssignment[] = [];
 
         const applicationsByApplicantId: Record<number, Application> = {};
@@ -190,6 +197,11 @@ export const matchesSelector = createSelector(
             rawMatchesByUtorid[rawMatch.utorid].push(rawMatch);
         }
 
+        const positionsByPositionCode: Record<string, Position> = {};
+        for (const position of positions) {
+            positionsByPositionCode[position.position_code] = position;
+        }
+
         // Go over every applicant and determine their matches
         for (const applicant of applicants) {
             const matchesByPositionId: Record<number, MatchableAssignment> = {};
@@ -211,14 +223,13 @@ export const matchesSelector = createSelector(
 
             // Override with RawMatch data if it exists
             for (const rawMatch of rawMatchesByUtorid[applicant.utorid] || []) {
-                const targetPosition = positions.find(
-                    (position) =>
-                        position.position_code === rawMatch.positionCode
-                );
-                if (targetPosition) {
-                    matchesByPositionId[targetPosition.id] = {
+                if (positionsByPositionCode[rawMatch.positionCode]) {
+                    matchesByPositionId[
+                        positionsByPositionCode[rawMatch.positionCode].id
+                    ] = {
                         applicant: applicant,
-                        position: targetPosition,
+                        position:
+                            positionsByPositionCode[rawMatch.positionCode],
                         hoursAssigned: rawMatch.stagedHoursAssigned || 0,
                         status: getMatchStatusFromRawMatch(rawMatch),
                     };
@@ -253,22 +264,34 @@ export const applicantSummariesSelector = createSelector(
     ],
     (applicants, matches, guarantees, notes, applications) => {
         const ret: ApplicantSummary[] = [];
+        const applicationsByApplicantId: Record<number, Application | null> =
+            {};
+        for (const application of applications) {
+            if (application) {
+                applicationsByApplicantId[application.applicant.id] =
+                    application;
+            }
+        }
+
+        const matchesByApplicantId: Record<number, MatchableAssignment[]> = {};
+        for (const match of matches) {
+            matchesByApplicantId[match.applicant.id] =
+                matchesByApplicantId[match.applicant.id] || [];
+            matchesByApplicantId[match.applicant.id].push(match);
+        }
+
+        const guaranteesByUtorid: Record<string, AppointmentGuaranteeStatus> =
+            {};
+        for (const guarantee of guarantees) {
+            guaranteesByUtorid[guarantee.utorid] = guarantee;
+        }
 
         for (const applicant of applicants) {
             ret.push({
                 applicant: applicant,
-                application:
-                    applications.find(
-                        (application) =>
-                            application?.applicant.id === applicant.id
-                    ) || null,
-                matches: matches.filter(
-                    (match) => match.applicant.id === applicant.id
-                ),
-                guarantee:
-                    guarantees.find(
-                        (guarantee) => guarantee.utorid === applicant.utorid
-                    ) || null,
+                application: applicationsByApplicantId[applicant.id],
+                matches: matchesByApplicantId[applicant.id] || [],
+                guarantee: guaranteesByUtorid[applicant.utorid],
                 note: notes[applicant.utorid] || null,
             });
         }
@@ -297,22 +320,48 @@ export const positionSummariesByIdSelector = createSelector(
             }
         }
 
-        for (const position of positions) {
-            const positionMatches = matches.filter(
-                (match) => match.position.id === position.id
-            );
+        const matchesByPositionAndStatus: Record<
+            number,
+            Record<MatchStatus, MatchableAssignment[]>
+        > = {};
+        for (const match of matches) {
+            if (!matchesByPositionAndStatus[match.position.id]) {
+                matchesByPositionAndStatus[match.position.id] = {
+                    applied: [],
+                    assigned: [],
+                    "staged-assigned": [],
+                    hidden: [],
+                    starred: [],
+                };
+            }
 
+            matchesByPositionAndStatus[match.position.id][match.status].push(
+                match
+            );
+        }
+
+        for (const position of positions) {
             const targetHours = round(
                 position.hours_per_assignment *
                     (position.desired_num_assignments || 0),
                 2
             );
 
+            // Go over matches marked as assigned/staged-assigned and get the number of hours assigned
             let hoursAssigned = 0;
-            for (const match of positionMatches.filter((match) =>
-                ["assigned", "staged-assigned"].includes(match.status)
-            )) {
-                hoursAssigned += match.hoursAssigned || 0;
+            const assignedStatuses: MatchStatus[] = [
+                "assigned",
+                "staged-assigned",
+            ];
+
+            if (matchesByPositionAndStatus[position.id]) {
+                for (const status of assignedStatuses) {
+                    for (const match of matchesByPositionAndStatus[position.id][
+                        status
+                    ]) {
+                        hoursAssigned += match.hoursAssigned || 0;
+                    }
+                }
             }
 
             let filledStatus: FillStatus = "empty";
