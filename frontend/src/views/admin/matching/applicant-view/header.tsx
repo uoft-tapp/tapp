@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import { setViewType, viewTypeSelector } from "../actions";
+import { setApplicantViewMode, applicantViewModeSelector } from "../actions";
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
 import { Form, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { SortBar, SortListItem } from "../sorts";
@@ -58,14 +58,14 @@ export function ApplicantViewHeader({
  */
 function DisplayToggle() {
     const dispatch = useThunkDispatch();
-    const viewType = useSelector(viewTypeSelector);
+    const applicantViewMode = useSelector(applicantViewModeSelector);
 
     return (
         <ToggleButtonGroup
             type="radio"
             name="views"
-            defaultValue={viewType}
-            onChange={(e) => dispatch(setViewType(e))}
+            defaultValue={applicantViewMode}
+            onChange={(e) => dispatch(setApplicantViewMode(e))}
         >
             <ToggleButton className="no-highlight" value={"grid"}>
                 <FaTh />

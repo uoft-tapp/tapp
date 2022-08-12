@@ -16,7 +16,7 @@ import {
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
     SET_SELECTED_MATCHING_POSITION,
-    SET_VIEW_TYPE,
+    SET_APPLICANT_VIEW_MODE,
     SET_UPDATED,
 } from "./constants";
 import {
@@ -25,7 +25,7 @@ import {
     ApplicantSummary,
     MatchableAssignment,
     AppointmentGuaranteeStatus,
-    ViewType,
+    ApplicantViewMode,
     FillStatus,
     MatchStatus,
 } from "./types";
@@ -54,7 +54,9 @@ export const setSelectedMatchingPosition = actionFactory<number | null>(
     SET_SELECTED_MATCHING_POSITION
 );
 
-export const setViewType = actionFactory<ViewType>(SET_VIEW_TYPE);
+export const setApplicantViewMode = actionFactory<ApplicantViewMode>(
+    SET_APPLICANT_VIEW_MODE
+);
 
 export const setUpdated = actionFactory<boolean>(SET_UPDATED);
 
@@ -65,8 +67,8 @@ export const guaranteesSelector = (state: RootState) =>
 export const notesSelector = (state: RootState) => state.ui.matchingData.notes;
 export const selectedMatchingPositionSelector = (state: RootState) =>
     state.ui.matchingData.selectedMatchingPositionId;
-export const viewTypeSelector = (state: RootState) =>
-    state.ui.matchingData.viewType;
+export const applicantViewModeSelector = (state: RootState) =>
+    state.ui.matchingData.applicantViewMode;
 export const updatedSelector = (state: RootState) =>
     state.ui.matchingData.updated;
 

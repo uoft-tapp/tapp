@@ -6,11 +6,15 @@ import {
     UPSERT_NOTE,
     BATCH_UPSERT_NOTES,
     SET_SELECTED_MATCHING_POSITION,
-    SET_VIEW_TYPE,
+    SET_APPLICANT_VIEW_MODE,
     SET_UPDATED,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
-import { RawMatch, AppointmentGuaranteeStatus, ViewType } from "./types";
+import {
+    RawMatch,
+    AppointmentGuaranteeStatus,
+    ApplicantViewMode,
+} from "./types";
 export { matchingDataReducer };
 
 export interface MatchingDataState {
@@ -18,7 +22,7 @@ export interface MatchingDataState {
     guarantees: AppointmentGuaranteeStatus[];
     notes: Record<string, string>;
     selectedMatchingPositionId: number | null;
-    viewType: ViewType;
+    applicantViewMode: ApplicantViewMode;
     updated: boolean;
 }
 
@@ -27,7 +31,7 @@ const initialState: MatchingDataState = {
     guarantees: [],
     notes: {},
     selectedMatchingPositionId: null,
-    viewType: "grid",
+    applicantViewMode: "grid",
     updated: false,
 };
 
@@ -144,8 +148,8 @@ const matchingDataReducer = createReducer(initialState, {
     [SET_SELECTED_MATCHING_POSITION]: (state, action) => {
         return { ...state, selectedMatchingPositionId: action.payload };
     },
-    [SET_VIEW_TYPE]: (state, action) => {
-        return { ...state, viewType: action.payload };
+    [SET_APPLICANT_VIEW_MODE]: (state, action) => {
+        return { ...state, applicantViewMode: action.payload };
     },
     [SET_UPDATED]: (state, action) => {
         return { ...state, updated: action.payload };

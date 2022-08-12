@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { viewTypeSelector } from "../actions";
+import { applicantViewModeSelector } from "../actions";
 import { ApplicantSummary, PositionSummary } from "../types";
 import { TableView } from "./table/table-view";
 import { GridView } from "./grid/grid-view";
@@ -16,7 +16,7 @@ export function ApplicantViewBody({
     positionSummary: PositionSummary;
     applicantSummaries: ApplicantSummary[];
 }) {
-    const viewType = useSelector(viewTypeSelector);
+    const applicantViewMode = useSelector(applicantViewModeSelector);
 
     // A string to be displayed at the bottom of the body summarizing how many
     // applications are visible vs. hidden
@@ -37,7 +37,7 @@ export function ApplicantViewBody({
 
     return (
         <div className="matching-course-body">
-            {viewType === "table" ? (
+            {applicantViewMode === "table" ? (
                 <TableView
                     position={positionSummary.position}
                     applicantSummaries={applicantSummaries}
