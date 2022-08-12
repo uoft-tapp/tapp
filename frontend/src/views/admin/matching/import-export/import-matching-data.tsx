@@ -87,13 +87,7 @@ export function ImportMatchingDataButton() {
             }
 
             if (fileContent.data["guarantees"]) {
-                setNewGuarantees(
-                    fileContent.data.guarantees.map(
-                        (guarantee: AppointmentGuaranteeStatus) => {
-                            return { ...guarantee };
-                        }
-                    )
-                );
+                setNewGuarantees(fileContent.data.guarantees);
             }
 
             if (fileContent.data["notes"]) {
@@ -177,7 +171,7 @@ export function ImportMatchingDataButton() {
                     <Button
                         variant="primary"
                         onClick={_onConfirm}
-                        disabled={!!warningMessage}
+                        disabled={!!warningMessage || !fileContent}
                     >
                         Confirm
                     </Button>

@@ -144,7 +144,7 @@ export function ImportGuaranteesButton() {
                     <Button
                         variant="primary"
                         onClick={_onConfirm}
-                        disabled={!!warningMessage}
+                        disabled={!!warningMessage || !fileContent}
                     >
                         Confirm
                     </Button>
