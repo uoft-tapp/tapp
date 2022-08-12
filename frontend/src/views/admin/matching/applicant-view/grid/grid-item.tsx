@@ -20,6 +20,8 @@ import { ApplicantNote } from "./applicant-note";
 import { ApplicantStar } from "./applicant-star";
 import { AdjustHourModal, ApplicationDetailModal } from "./modals";
 
+import { departmentCodes } from "../../name-maps";
+
 /**
  * A grid item to be displayed in grid view, showing a summary of an applicant.
  */
@@ -115,6 +117,10 @@ function GridItemBody({
     const isAssigned =
         match.status === "assigned" || match.status === "staged-assigned";
 
+    const deptCode = applicantSummary.application?.department
+        ? departmentCodes[applicantSummary.application.department]
+        : null;
+
     return (
         <div className="applicant-grid-main">
             <div className="grid-row">
@@ -139,10 +145,11 @@ function GridItemBody({
                 )}
             </div>
             <div className="grid-row">
-                <div className="grid-detail-small">
-                    {applicantSummary.application?.department
-                        ?.charAt(0)
-                        .toUpperCase()}
+                <div
+                    className="grid-detail-small"
+                    title={deptCode ? deptCode["full"] : ""}
+                >
+                    {deptCode && deptCode["abbrev"]}
                 </div>
                 <div className="grid-detail-small">
                     {applicantSummary.application?.program?.charAt(0)}
