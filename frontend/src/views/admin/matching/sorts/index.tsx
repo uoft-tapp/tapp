@@ -1,15 +1,10 @@
 import React from "react";
-import { sortMap } from "./sorts";
+import { sortMap, SortType, SortListItem } from "./sorts";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { GrFormClose } from "react-icons/gr";
 
-export type SortListItem = {
-    name: string;
-    asc: boolean;
-};
-
-export const defaultSortList = [
+export const defaultSortList: SortListItem[] = [
     {
         name: "Department",
         asc: true,
@@ -92,7 +87,7 @@ function SortDropdown({
                                 items = [...sortList];
                                 const newSortItem: SortListItem = {
                                     asc: true,
-                                    name: item,
+                                    name: item as SortType,
                                 };
 
                                 items[index] = newSortItem;

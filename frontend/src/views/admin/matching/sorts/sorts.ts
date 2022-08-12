@@ -1,5 +1,4 @@
 import { ApplicantSummary } from "../types";
-import { SortListItem } from ".";
 import { Position } from "../../../../api/defs/types";
 import {
     getPositionPrefForPosition,
@@ -7,8 +6,26 @@ import {
 } from "../utils";
 import { sum } from "../../../../libs/utils";
 
+export type SortListItem = {
+    name: SortType;
+    asc: boolean;
+};
+
+export type SortType =
+    | "Program"
+    | "Department"
+    | "Year in Progress"
+    | "GPA"
+    | "TA Preference"
+    | "Instructor Preference"
+    | "Total Hours Assigned"
+    | "Total Hours Owed"
+    | "Remaining Hours Owed"
+    | "First Name"
+    | "Last Name";
+
 // A mapping of sort names to their sorting functions
-export const sortMap: Record<string, Function> = {
+export const sortMap: Record<SortType, Function> = {
     Program: sortByProgram,
     Department: sortByDepartment,
     "Year in Progress": sortByYip,

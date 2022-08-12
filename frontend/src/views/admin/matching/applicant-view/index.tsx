@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicantSummary, PositionSummary, MatchStatus } from "../types";
-import { SortListItem, defaultSortList } from "../sorts";
-import { applySorts } from "../sorts/sorts";
+import { defaultSortList } from "../sorts";
+import { applySorts, SortListItem } from "../sorts/sorts";
 import { applyFilters, FilterListItem } from "../filters/filters";
 import { defaultFilterList } from "../filters";
 import { ApplicantViewHeader } from "./header";
