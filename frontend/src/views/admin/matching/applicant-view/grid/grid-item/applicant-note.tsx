@@ -17,14 +17,17 @@ export function ApplicantNote({
     const [show, setShow] = React.useState(false);
     const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note || "");
 
-    function updateApplicantNote(note: string) {
-        dispatch(
-            upsertNote({
-                utorid: applicantSummary.applicant.utorid,
-                note: noteTemp,
-            })
-        );
-    }
+    const updateApplicantNote = React.useCallback(
+        (note: string) => {
+            dispatch(
+                upsertNote({
+                    utorid: applicantSummary.applicant.utorid,
+                    note: noteTemp,
+                })
+            );
+        },
+        [dispatch, noteTemp, applicantSummary]
+    );
 
     return (
         <>

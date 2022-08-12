@@ -10,20 +10,22 @@ import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
  */
 export function ApplicantStar({ match }: { match: MatchableAssignment }) {
     const dispatch = useThunkDispatch();
+    const updateStarred = React.useCallback(() => {
+        dispatch(
+            upsertMatch({
+                positionCode: match.position.position_code,
+                utorid: match.applicant.utorid,
+                starred: match.status !== "starred",
+            })
+        );
+    }, [dispatch, match]);
+
     return (
         <BsStarFill
             className={classNames("star-icon", {
                 filled: match.status === "starred",
             })}
-            onClick={() =>
-                dispatch(
-                    upsertMatch({
-                        positionCode: match.position.position_code,
-                        utorid: match.applicant.utorid,
-                        starred: match.status !== "starred",
-                    })
-                )
-            }
+            onClick={updateStarred}
         />
     );
 }
