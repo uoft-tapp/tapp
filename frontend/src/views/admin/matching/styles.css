@@ -365,6 +365,7 @@
 .sort-dropdown-container > * > .dropdown-menu.show {
     max-height: 250px;
     overflow-y: scroll;
+    font-size: smaller;
 }
 
 .filter-modal {
@@ -394,11 +395,7 @@
 }
 
 .applicant-dropdown-menu {
-    top: 40px;
     background-color: white;
-}
-
-.applicant-dropdown-menu > button {
     font-size: smaller;
 }
 

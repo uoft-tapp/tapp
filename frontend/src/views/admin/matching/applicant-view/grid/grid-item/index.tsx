@@ -7,6 +7,20 @@ import { GridItemDropdown } from "./dropdown";
 import { GridItemStatusBar } from "./status-bar";
 import { GridItemBody } from "./body";
 
+import { Dropdown } from "react-bootstrap";
+
+type CustomToggleProps = {
+    children?: React.ReactNode;
+    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {};
+};
+
+type CustomMenuProps = {
+    children?: React.ReactNode;
+    style?: React.CSSProperties;
+    className?: string;
+    labeledBy?: string;
+};
+
 /**
  * A grid item to be displayed in grid view, showing a summary of an applicant.
  */
@@ -28,15 +42,16 @@ export function GridItem({
         return null;
     }
 
-    return (
-        // Entire item is marked as a dropdown trigger to access the list of actions
-        <div
-            className="applicant-dropdown-wrapper dropdown"
-            onMouseLeave={() => setOpen(false)}
-        >
+    const CustomToggle = React.forwardRef(
+        (props: CustomToggleProps, ref: React.Ref<HTMLDivElement>) => (
             <div
+                ref={ref}
                 className="applicant-grid-item noselect"
-                onClick={() => setOpen(!open)}
+                onClick={(e) => {
+                    e.preventDefault();
+                    if (props.onClick) props.onClick(e);
+                    setOpen(!open);
+                }}
             >
                 <GridItemStatusBar applicantSummary={applicantSummary} />
                 <GridItemBody
@@ -44,14 +59,38 @@ export function GridItem({
                     match={match}
                 />
             </div>
-            <GridItemDropdown
-                match={match}
-                applicantSummary={applicantSummary}
-                show={open}
-                setShow={setOpen}
-                setShownApplication={setShownApplication}
-                setShowChangeHours={setShowChangeHours}
-            />
+        )
+    );
+
+    const CustomMenu = React.forwardRef(
+        (props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
+            return (
+                <div
+                    ref={ref}
+                    style={props.style}
+                    className={props.className}
+                    aria-labelledby={props.labeledBy}
+                >
+                    <GridItemDropdown
+                        match={match}
+                        applicantSummary={applicantSummary}
+                        setShownApplication={setShownApplication}
+                        setShowChangeHours={setShowChangeHours}
+                    />
+                </div>
+            );
+        }
+    );
+
+    return (
+        <>
+            <Dropdown>
+                <Dropdown.Toggle as={CustomToggle} />
+                <Dropdown.Menu
+                    as={CustomMenu}
+                    className="applicant-dropdown-menu"
+                />
+            </Dropdown>
             <ApplicationDetailModal
                 application={shownApplication}
                 setShownApplication={setShownApplication}
@@ -61,6 +100,6 @@ export function GridItem({
                 show={showChangeHours}
                 setShow={setShowChangeHours}
             />
-        </div>
+        </>
     );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { Application } from "../../../../../../api/defs/types";
-import { Collapse } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import { upsertMatch } from "../../../actions";
 import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
 
@@ -11,15 +11,11 @@ import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
 export function GridItemDropdown({
     match,
     applicantSummary,
-    show,
-    setShow,
     setShownApplication,
     setShowChangeHours,
 }: {
     match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
-    show: boolean;
-    setShow: (arg0: boolean) => void;
     setShownApplication: (arg0: Application | null) => void;
     setShowChangeHours: (arg0: boolean) => void;
 }) {
@@ -90,96 +86,51 @@ export function GridItemDropdown({
     }
 
     return (
-        <Collapse in={show}>
-            <div className="applicant-dropdown-menu dropdown-menu noselect">
-                <button
-                    className="dropdown-item"
-                    onClick={() => {
-                        setShownApplication(applicantSummary.application);
-                        setShow(false);
-                    }}
-                >
-                    View application details
-                </button>
-                {canBeAssigned && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            assignToPosition();
-                            setShow(false);
-                        }}
-                    >
-                        Assign to <b>{match.position.position_code}</b> (
-                        {match.position.hours_per_assignment || 0})
-                    </button>
-                )}
-                {match.status === "staged-assigned" && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            setShowChangeHours(true);
-                            setShow(false);
-                        }}
-                    >
+        <>
+            <Dropdown.Item
+                onClick={() =>
+                    setShownApplication(applicantSummary.application)
+                }
+            >
+                View application details
+            </Dropdown.Item>
+            {canBeAssigned && (
+                <Dropdown.Item onClick={() => assignToPosition()}>
+                    Assign to <b>{match.position.position_code}</b> (
+                    {match.position.hours_per_assignment || 0})
+                </Dropdown.Item>
+            )}
+            {match.status === "staged-assigned" && (
+                <>
+                    <Dropdown.Item onClick={() => setShowChangeHours(true)}>
                         Change assigned hours
-                    </button>
-                )}
-                {match.status === "staged-assigned" && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            unassignFromPosition();
-                            setShow(false);
-                        }}
-                    >
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => unassignFromPosition()}>
                         Unassign from <b>{match.position.position_code}</b>
-                    </button>
-                )}
-                {canBeHidden && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            hideFromPosition();
-                            setShow(false);
-                        }}
-                    >
-                        Hide from <b>{match.position.position_code}</b>
-                    </button>
-                )}
-                {canBeAssigned && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            hideFromAll();
-                            setShow(false);
-                        }}
-                    >
-                        Hide from all courses
-                    </button>
-                )}
-                {match.status === "hidden" && (
-                    <>
-                        <button
-                            className="dropdown-item"
-                            onClick={() => {
-                                unhideFromPosition();
-                                setShow(false);
-                            }}
-                        >
-                            Unhide from <b>{match.position.position_code}</b>
-                        </button>
-                        <button
-                            className="dropdown-item"
-                            onClick={() => {
-                                unhideFromAll();
-                                setShow(false);
-                            }}
-                        >
-                            Unhide from all courses
-                        </button>
-                    </>
-                )}
-            </div>
-        </Collapse>
+                    </Dropdown.Item>
+                </>
+            )}
+            {canBeHidden && (
+                <Dropdown.Item onClick={() => hideFromPosition()}>
+                    Hide from <b>{match.position.position_code}</b>
+                </Dropdown.Item>
+            )}
+
+            {canBeAssigned && (
+                <Dropdown.Item onClick={() => hideFromAll()}>
+                    Hide from all courses
+                </Dropdown.Item>
+            )}
+            {match.status === "hidden" && (
+                <>
+                    <Dropdown.Item onClick={() => unhideFromPosition()}>
+                        Unhide from <b>{match.position.position_code}</b>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => unhideFromAll()}>
+                        Unhide from all courses
+                    </Dropdown.Item>
+                </>
+            )}
+        </>
     );
 }

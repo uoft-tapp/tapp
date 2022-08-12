@@ -53,15 +53,3 @@ export type MatchStatus =
     | "assigned"
     | "hidden";
 export type FillStatus = "empty" | "under" | "matched" | "over";
-
-export type Program = "P" | "M" | "U" | "PD" | "MScAC" | "other";
-export type Department =
-    | "math"
-    | "cs"
-    | "engr"
-    | "astro"
-    | "chem"
-    | "biophys"
-    | "phys"
-    | "stat"
-    | "other";
