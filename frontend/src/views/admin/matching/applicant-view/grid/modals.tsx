@@ -57,7 +57,7 @@ export function AdjustHourModal({
 }: {
     match: MatchableAssignment;
     show: boolean;
-    setShow: Function;
+    setShow: (arg0: boolean) => void;
 }) {
     const [hoursAssigned, setHoursAssigned] = React.useState("");
     const dispatch = useThunkDispatch();

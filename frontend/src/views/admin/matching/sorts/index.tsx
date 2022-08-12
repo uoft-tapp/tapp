@@ -32,7 +32,7 @@ export function SortBar({
     setSortList,
 }: {
     sortList: SortListItem[];
-    setSortList: Function;
+    setSortList: (arg0: SortListItem[]) => void;
 }) {
     return (
         <div className="sort-dropdown-container">
@@ -72,7 +72,7 @@ function SortDropdown({
     index: number;
     selected: string | null;
     sortList: SortListItem[];
-    setSortList: Function;
+    setSortList: (arg0: SortListItem[]) => void;
 }) {
     let items: SortListItem[];
 

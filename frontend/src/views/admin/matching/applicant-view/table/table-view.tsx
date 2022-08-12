@@ -9,7 +9,7 @@ import {
 } from "../../utils";
 import { matchingStatusToString } from "../";
 import { AdvancedFilterTable } from "../../../../../components/filter-table/advanced-filter-table";
-import { departmentCodes } from "../../name-maps";
+import { departmentCodes, programCodes } from "../../name-maps";
 
 const DEFAULT_COLUMNS = [
     { Header: "Status", accessor: "status" },
@@ -99,7 +99,9 @@ export function TableView({
             department: summary.application?.department
                 ? departmentCodes[summary.application?.department]["full"]
                 : "",
-            program: summary.application?.program,
+            program: summary.application?.program
+                ? programCodes[summary.application?.program]["full"]
+                : "",
             yip: summary.application?.yip,
             gpa: summary.application?.gpa,
             taPreference: positionPrefsByApplicantId[summary.applicant.id],

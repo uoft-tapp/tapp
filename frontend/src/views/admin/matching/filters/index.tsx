@@ -18,9 +18,9 @@ export function FilterModal({
     setFilterList,
 }: {
     showFilters: boolean;
-    setShowFilters: Function;
+    setShowFilters: (arg0: boolean) => void;
     filterList: FilterListItem[];
-    setFilterList: Function;
+    setFilterList: (arg0: FilterListItem[]) => void;
 }) {
     return (
         <Modal

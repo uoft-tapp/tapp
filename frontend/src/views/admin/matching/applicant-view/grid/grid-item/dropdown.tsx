@@ -1,5 +1,6 @@
 import React from "react";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
+import { Application } from "../../../../../../api/defs/types";
 import { Collapse } from "react-bootstrap";
 import { upsertMatch } from "../../../actions";
 import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
@@ -18,9 +19,9 @@ export function GridItemDropdown({
     match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
     show: boolean;
-    setShow: Function;
-    setShownApplication: Function;
-    setShowChangeHours: Function;
+    setShow: (arg0: boolean) => void;
+    setShownApplication: (arg0: Application | null) => void;
+    setShowChangeHours: (arg0: boolean) => void;
 }) {
     const dispatch = useThunkDispatch();
     const baseMatchValues = {

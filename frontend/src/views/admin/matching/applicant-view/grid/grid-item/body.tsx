@@ -4,7 +4,7 @@ import { sum, round } from "../../../../../../libs/utils";
 import { getPositionPrefForPosition } from "../../../utils";
 import { ApplicantNote } from "./applicant-note";
 import { ApplicantStar } from "./applicant-star";
-import { departmentCodes } from "../../../name-maps";
+import { departmentCodes, programCodes } from "../../../name-maps";
 
 /**
  * The main body of a grid item, presenting most of the information for an applicant.
@@ -47,6 +47,10 @@ export function GridItemBody({
         ? departmentCodes[applicantSummary.application.department]
         : null;
 
+    const progCode = applicantSummary.application?.program
+        ? programCodes[applicantSummary.application.program]
+        : null;
+
     return (
         <div className="applicant-grid-main">
             <div className="grid-row">
@@ -77,8 +81,11 @@ export function GridItemBody({
                 >
                     {deptCode && deptCode["abbrev"]}
                 </div>
-                <div className="grid-detail-small">
-                    {applicantSummary.application?.program?.charAt(0)}
+                <div
+                    className="grid-detail-small"
+                    title={progCode ? progCode["full"] : ""}
+                >
+                    {progCode && progCode["abbrev"]}
                     {applicantSummary.application?.yip}
                 </div>
                 <div className="grid-detail-small">

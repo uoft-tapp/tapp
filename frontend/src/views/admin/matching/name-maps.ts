@@ -37,3 +37,30 @@ export const departmentCodes: Record<string, { abbrev: string; full: string }> =
             full: "Other",
         },
     };
+
+export const programCodes: Record<string, { abbrev: string; full: string }> = {
+    U: {
+        abbrev: "U",
+        full: "Undergraduate",
+    },
+    PD: {
+        abbrev: "PD",
+        full: "Postdoc",
+    },
+    P: {
+        abbrev: "P",
+        full: "PhD",
+    },
+    MScAC: {
+        abbrev: "m",
+        full: "Masters of Applied Computing",
+    },
+    M: {
+        abbrev: "M",
+        full: "Masters",
+    },
+    other: {
+        abbrev: "o",
+        full: "Other",
+    },
+};

@@ -23,11 +23,11 @@ export function ApplicantViewHeader({
     setSortList,
 }: {
     positionSummary: PositionSummary | null;
-    setFilterString: Function;
+    setFilterString: (arg0: string) => void;
     filterList: FilterListItem[];
-    setFilterList: Function;
+    setFilterList: (arg0: FilterListItem[]) => void;
     sortList: SortListItem[];
-    setSortList: Function;
+    setSortList: (arg0: SortListItem[]) => void;
 }) {
     return (
         <div className="matching-course-header">
@@ -85,7 +85,7 @@ function ApplicantFilterButton({
     setFilterList,
 }: {
     filterList: FilterListItem[];
-    setFilterList: Function;
+    setFilterList: (arg0: FilterListItem[]) => unknown;
 }) {
     const [show, setShow] = React.useState(false);
 
