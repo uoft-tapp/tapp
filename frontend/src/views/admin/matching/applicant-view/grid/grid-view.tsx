@@ -92,15 +92,13 @@ function GridSection({
     return (
         <div className="grid-view-section">
             <h4>
-                {header}{" "}
-                {header === "Assigned" ? (
+                {header}
+                {header === "Assigned" && (
                     <FaLock
                         className="header-lock"
                         title="These assignments can only be changed through the Assignments &
             Positions > Assignments tab."
                     />
-                ) : (
-                    ""
                 )}
             </h4>
             <div className="grid-view-list">

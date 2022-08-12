@@ -341,19 +341,18 @@ function filterByHourFulfillment(
 
             if (
                 applicantSummary.guarantee &&
-                applicantSummary.guarantee.totalHoursOwed > 0
+                applicantSummary.guarantee.minHoursOwed > 0
             ) {
                 const totalHoursAssigned =
                     getApplicantTotalHoursAssigned(applicantSummary) +
                     applicantSummary.guarantee.previousHoursFulfilled;
                 if (
-                    totalHoursAssigned >
-                    applicantSummary.guarantee.totalHoursOwed
+                    totalHoursAssigned > applicantSummary.guarantee.minHoursOwed
                 ) {
                     applicantHourStatus = "over";
                 } else if (
                     totalHoursAssigned ===
-                    applicantSummary.guarantee.totalHoursOwed
+                    applicantSummary.guarantee.minHoursOwed
                 ) {
                     applicantHourStatus = "filled";
                 } else if (totalHoursAssigned > 0) {

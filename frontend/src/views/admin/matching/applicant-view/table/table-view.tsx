@@ -1,6 +1,5 @@
 import { Position } from "../../../../../api/defs/types";
-import { ApplicantSummary } from "../../types";
-import { Table } from "react-bootstrap";
+import { ApplicantSummary, MatchableAssignment } from "../../types";
 import { sum, round } from "../../../../../libs/utils";
 import React from "react";
 import {
@@ -9,9 +8,27 @@ import {
     getApplicantTotalHoursAssigned,
 } from "../../utils";
 import { matchingStatusToString } from "../";
+import { AdvancedFilterTable } from "../../../../../components/filter-table/advanced-filter-table";
+
+const DEFAULT_COLUMNS = [
+    { Header: "Status", accessor: "status" },
+    { Header: "First Name", accessor: "first_name" },
+    { Header: "Last Name", accessor: "last_name" },
+    { Header: "UTORid", accessor: "utorid" },
+    { Header: "Department", accessor: "department" },
+    { Header: "Program", accessor: "program" },
+    { Header: "YIP", accessor: "yip" },
+    { Header: "GPA", accessor: "gpa" },
+    { Header: "TA Rating", accessor: "taPreference" },
+    { Header: "Instructor Rating", accessor: "instructorPreference" },
+    { Header: "Assignments", accessor: "assignments" },
+    { Header: "Hours Assigned", accessor: "totalHoursAssigned" },
+    { Header: "Hours Previously Assigned", accessor: "previousHoursFulfilled" },
+    { Header: "Total Guaranteed Hours", accessor: "guaranteedHours" },
+];
 
 /**
- * A presentation of applicant information in table view.
+ * A presentation of applicant information in table view, using a AdvancedFilterTable.
  */
 export function TableView({
     position,
@@ -20,103 +37,88 @@ export function TableView({
     position: Position;
     applicantSummaries: ApplicantSummary[];
 }) {
+    const positionPrefsByApplicantId: Record<number, number | null> =
+        React.useMemo(() => {
+            const ret: Record<number, number | null> = {};
+            for (const summary of applicantSummaries) {
+                ret[summary.applicant.id] =
+                    getPositionPrefForPosition(summary.application, position)
+                        ?.preference_level || null;
+            }
+
+            return ret;
+        }, [applicantSummaries, position]);
+
+    const applicantMatchesByApplicantId: Record<
+        number,
+        MatchableAssignment | null
+    > = React.useMemo(() => {
+        const ret: Record<number, MatchableAssignment | null> = {};
+        for (const summary of applicantSummaries) {
+            ret[summary.applicant.id] = getApplicantMatchForPosition(
+                summary,
+                position
+            );
+        }
+
+        return ret;
+    }, [applicantSummaries, position]);
+
+    const mappedSummaries = applicantSummaries.map((summary) => {
+        const instructorRatings =
+            summary.application?.instructor_preferences
+                .filter((pref) => pref.position.id === position.id)
+                .map((rating) => {
+                    return rating.preference_level;
+                }) || [];
+
+        const avgInstructorRating =
+            instructorRatings.length > 0
+                ? round(sum(...instructorRatings) / instructorRatings.length, 3)
+                : null;
+
+        const match = applicantMatchesByApplicantId[summary.applicant.id];
+
+        let statusCategory = "";
+        if (match) {
+            statusCategory = matchingStatusToString[match.status];
+            if (
+                statusCategory === "Assigned" ||
+                statusCategory === "Assigned (Staged)"
+            ) {
+                statusCategory += ` (${match.hoursAssigned || "0"})`;
+            }
+        }
+
+        return {
+            status: statusCategory,
+            last_name: summary.applicant.last_name,
+            first_name: summary.applicant.first_name,
+            utorid: summary.applicant.utorid,
+            department: summary.application?.department,
+            program: summary.application?.program,
+            yip: summary.application?.yip,
+            gpa: summary.application?.gpa,
+            taPreference: positionPrefsByApplicantId[summary.applicant.id],
+            instructorPreference: avgInstructorRating,
+            assignments: formatAssignedCourses(summary),
+            totalHoursAssigned: getApplicantTotalHoursAssigned(summary),
+            previousHoursFulfilled: summary.guarantee?.previousHoursFulfilled,
+            guaranteedHours: `${
+                summary.guarantee?.minHoursOwed
+                    ? `${summary.guarantee.minHoursOwed}
+                ${
+                    summary.guarantee.maxHoursOwed
+                        ? ` - ${summary.guarantee.maxHoursOwed}`
+                        : ""
+                }`
+                    : ""
+            }`,
+        };
+    });
+
     return (
-        <Table striped bordered hover responsive size="sm">
-            <thead>
-                <tr>
-                    <th>Status</th>
-                    <th>Last</th>
-                    <th>First</th>
-                    <th>UTORid</th>
-                    <th>Department</th>
-                    <th>Program</th>
-                    <th>YIP</th>
-                    <th>GPA</th>
-                    <th>TA Rating</th>
-                    <th>Instructor Rating</th>
-                    <th>Assignments</th>
-                    <th>Hours Assigned</th>
-                    <th>Hours Previously Assigned</th>
-                    <th>Guarantee Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {applicantSummaries.map((applicantSummary) => {
-                    return (
-                        <TableRow
-                            applicantSummary={applicantSummary}
-                            position={position}
-                            key={applicantSummary.applicant.id}
-                        />
-                    );
-                })}
-            </tbody>
-        </Table>
-    );
-}
-
-/**
- * A row of applicant information to be presented in a table (TableView).
- */
-function TableRow({
-    position,
-    applicantSummary,
-}: {
-    position: Position;
-    applicantSummary: ApplicantSummary;
-}) {
-    const applicantMatch = getApplicantMatchForPosition(
-        applicantSummary,
-        position
-    );
-
-    const positionPref = React.useMemo(() => {
-        return getPositionPrefForPosition(
-            applicantSummary.application,
-            position
-        );
-    }, [position, applicantSummary]);
-
-    if (!applicantMatch) {
-        return null;
-    }
-
-    const statusCategory = matchingStatusToString[applicantMatch.status];
-
-    const instructorRatings =
-        applicantSummary.application.instructor_preferences
-            .filter((pref) => pref.position.id === position.id)
-            .map((rating) => {
-                return rating.preference_level;
-            }) || [];
-
-    const avgInstructorRating =
-        instructorRatings.length > 0
-            ? round(sum(...instructorRatings) / instructorRatings.length, 3)
-            : null;
-
-    return (
-        <tr>
-            <td>
-                {statusCategory}{" "}
-                {statusCategory === "Assigned"
-                    ? `(${applicantMatch?.hoursAssigned || "0"})`
-                    : ""}
-            </td>
-            <td>{applicantSummary.applicant.last_name}</td>
-            <td>{applicantSummary.applicant.first_name}</td>
-            <td>{applicantSummary.applicant.utorid}</td>
-            <td>{applicantSummary.application.department}</td>
-            <td>{applicantSummary.application.program}</td>
-            <td>{applicantSummary.application.yip}</td>
-            <td>{applicantSummary.application.gpa || ""}</td>
-            <td>{positionPref?.preference_level || ""}</td>
-            <td>{avgInstructorRating || ""}</td>
-            <td>{formatAssignedCourses(applicantSummary)}</td>
-            <td>{getApplicantTotalHoursAssigned(applicantSummary)}</td>
-            <td>{applicantSummary.guarantee?.previousHoursFulfilled || ""}</td>
-            <td>{applicantSummary.guarantee?.totalHoursOwed || ""}</td>
-        </tr>
+        <AdvancedFilterTable columns={DEFAULT_COLUMNS} data={mappedSummaries} />
     );
 }
 
@@ -131,7 +133,7 @@ function formatAssignedCourses(applicantSummary: ApplicantSummary) {
                 match.status === "assigned" ||
                 match.status === "staged-assigned"
             ) {
-                return `${match.positionCode} (${match.hoursAssigned})`;
+                return `${match.position.position_code} (${match.hoursAssigned})`;
             }
             return null;
         })

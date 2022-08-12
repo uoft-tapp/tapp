@@ -83,29 +83,29 @@ function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
     const priority = ["U", "PD", "MScAC", "M", "P"];
     applicantSummaries.sort((a, b) => {
         // Empty entries are treated as lowest priority
-        if (!a.application.program) {
+        if (!a.application?.program) {
             return flipIfDescending(1, asc);
         }
 
-        if (!b.application.program) {
+        if (!b.application?.program) {
             return flipIfDescending(-1, asc);
         }
 
         // Then "other" responses
-        if (priority.indexOf(a.application.program) === -1) {
+        if (priority.indexOf(a.application?.program) === -1) {
             return flipIfDescending(1, asc);
         }
 
-        if (priority.indexOf(b.application.program) === -1) {
+        if (priority.indexOf(b.application?.program) === -1) {
             return flipIfDescending(-1, asc);
         }
 
-        if (a.application.program === b.application.program) {
+        if (a.application?.program === b.application?.program) {
             return 0;
         }
 
-        return priority.indexOf(a.application.program) <
-            priority.indexOf(b.application.program)
+        return priority.indexOf(a.application?.program) <
+            priority.indexOf(b.application?.program)
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -113,19 +113,19 @@ function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        if (!a.application.gpa) {
+        if (!a.application?.gpa) {
             return flipIfDescending(1, asc);
         }
 
-        if (!b.application.gpa) {
+        if (!b.application?.gpa) {
             return flipIfDescending(-1, asc);
         }
 
-        if (a.application.gpa === b.application.gpa) {
+        if (a.application?.gpa === b.application?.gpa) {
             return 0;
         }
 
-        return a.application.gpa > b.application.gpa
+        return a.application?.gpa > b.application?.gpa
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -133,19 +133,19 @@ function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        if (!a.application.yip) {
+        if (!a.application?.yip) {
             return 1;
         }
 
-        if (!b.application.yip) {
+        if (!b.application?.yip) {
             return -1;
         }
 
-        if (a.application.yip === b.application.yip) {
+        if (a.application?.yip === b.application?.yip) {
             return 0;
         }
 
-        return a.application.yip < b.application.yip
+        return a.application?.yip < b.application?.yip
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -153,15 +153,15 @@ function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        if (!a.application.department) {
+        if (!a.application?.department) {
             return flipIfDescending(1, asc);
         }
 
-        if (!b.application.department) {
+        if (!b.application?.department) {
             return flipIfDescending(-1, asc);
         }
 
-        return a.application.department < b.application.department
+        return a.application?.department < b.application?.department
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -209,14 +209,14 @@ function sortByInstructorRating(
         }
 
         const aInstructorRatings =
-            a.application.instructor_preferences
+            a.application?.instructor_preferences
                 .filter((pref) => pref.position.id === currPosition?.id)
                 .map((rating) => {
                     return rating.preference_level;
                 }) || [];
 
         const bInstructorRatings =
-            b.application.instructor_preferences
+            b.application?.instructor_preferences
                 .filter((pref) => pref.position.id === currPosition?.id)
                 .map((rating) => {
                     return rating.preference_level;
@@ -276,8 +276,8 @@ function sortByTotalHoursOwed(
     asc = true
 ) {
     applicantSummaries.sort((a, b) => {
-        const aHours = a.guarantee?.totalHoursOwed || 0;
-        const bHours = a.guarantee?.totalHoursOwed || 0;
+        const aHours = a.guarantee?.minHoursOwed || 0;
+        const bHours = a.guarantee?.minHoursOwed || 0;
 
         if (aHours === bHours) {
             return 0;
@@ -303,12 +303,12 @@ function sortByRemainingHoursOwed(
         }
 
         let aHoursRemaining =
-            (a.guarantee?.totalHoursOwed || 0) -
+            (a.guarantee?.minHoursOwed || 0) -
             (a.guarantee?.previousHoursFulfilled || 0) -
             getApplicantTotalHoursAssigned(a);
 
         let bHoursRemaining =
-            (b.guarantee?.totalHoursOwed || 0) -
+            (b.guarantee?.minHoursOwed || 0) -
             (b.guarantee?.previousHoursFulfilled || 0) -
             getApplicantTotalHoursAssigned(b);
 

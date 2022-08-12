@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 import { Position, Application } from "../../../../../api/defs/types";
-import { ApplicantSummary, Match, FillStatus } from "../../types";
+import { ApplicantSummary, MatchableAssignment, FillStatus } from "../../types";
 
 import { Collapse } from "react-bootstrap";
 import { sum, round } from "../../../../../libs/utils";
@@ -35,45 +35,10 @@ export function GridItem({
         React.useState<Application | null>(null);
     const [showChangeHours, setShowChangeHours] = React.useState(false);
 
-    const dispatch = useThunkDispatch();
-    const applicantMatch = getApplicantMatchForPosition(
-        applicantSummary,
-        position
-    );
+    const match = getApplicantMatchForPosition(applicantSummary, position);
 
-    if (!applicantMatch) {
+    if (!match) {
         return null;
-    }
-
-    // Update all of this applicant's matches except for those in which they are assigned/staged-assigned
-    function hideApplicantFromAll() {
-        for (const match of applicantSummary.matches) {
-            if (match.status === "applied") {
-                const newMatch: Match = { ...match, status: "hidden" };
-                dispatch(upsertMatch(newMatch));
-            }
-        }
-    }
-
-    // Update this applicant's match status
-    function updateApplicantMatch(
-        newStatus: "staged-assigned" | "hidden" | "starred" | "applied",
-        hoursAssigned?: number
-    ) {
-        if (!applicantMatch) {
-            return;
-        }
-
-        const newMatch: Match = {
-            ...applicantMatch,
-            status: newStatus,
-        };
-
-        if (hoursAssigned !== undefined) {
-            newMatch.hoursAssigned = hoursAssigned;
-        }
-
-        dispatch(upsertMatch(newMatch));
     }
 
     return (
@@ -88,30 +53,24 @@ export function GridItem({
             >
                 <GridItemSidebar applicantSummary={applicantSummary} />
                 <GridItemBody
-                    position={position}
                     applicantSummary={applicantSummary}
-                    match={applicantMatch}
-                    updateApplicantMatch={updateApplicantMatch}
+                    match={match}
                 />
             </div>
             <GridItemDropdown
-                position={position}
-                applicantMatch={applicantMatch}
+                match={match}
                 applicantSummary={applicantSummary}
                 show={open}
                 setShow={setOpen}
                 setShownApplication={setShownApplication}
                 setShowChangeHours={setShowChangeHours}
-                updateApplicantMatch={updateApplicantMatch}
-                hideApplicantFromAll={hideApplicantFromAll}
             />
             <ApplicationDetailModal
                 application={shownApplication}
                 setShownApplication={setShownApplication}
             />
             <AdjustHourModal
-                applicantMatch={applicantMatch}
-                updateApplicantMatch={updateApplicantMatch}
+                match={match}
                 show={showChangeHours}
                 setShow={setShowChangeHours}
             />
@@ -123,30 +82,30 @@ export function GridItem({
  * The main body of a grid item, presenting most of the information for an applicant.
  */
 function GridItemBody({
-    position,
     applicantSummary,
     match,
-    updateApplicantMatch,
 }: {
-    position: Position;
     applicantSummary: ApplicantSummary;
-    match: Match;
-    updateApplicantMatch: Function;
+    match: MatchableAssignment;
 }) {
     const positionPref = React.useMemo(() => {
         return getPositionPrefForPosition(
             applicantSummary.application,
-            position
+            match.position
         );
-    }, [position, applicantSummary]);
+    }, [match, applicantSummary]);
 
     const instructorRatings = React.useMemo(() => {
+        if (!applicantSummary.application?.instructor_preferences) {
+            return [];
+        }
+
         return applicantSummary.application.instructor_preferences
-            .filter((pref) => pref.position.id === position.id)
+            .filter((pref) => pref.position.id === match.position.id)
             .map((rating) => {
                 return rating.preference_level;
             });
-    }, [applicantSummary, position.id]);
+    }, [applicantSummary, match]);
 
     const avgInstructorRating =
         instructorRatings.length > 0
@@ -160,12 +119,10 @@ function GridItemBody({
         <div className="applicant-grid-main">
             <div className="grid-row">
                 <div className="applicant-name">
-                    {applicantSummary.applicant.first_name}{" "}
-                    {applicantSummary.applicant.last_name}
+                    {`${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name}`}
                 </div>
                 {isAssigned && (
                     <div className="applicant-hours">
-                        {" "}
                         ({match.hoursAssigned})
                     </div>
                 )}
@@ -177,22 +134,19 @@ function GridItemBody({
                             e.stopPropagation();
                         }}
                     >
-                        <ApplicantStar
-                            match={match}
-                            updateApplicantMatch={updateApplicantMatch}
-                        />
+                        <ApplicantStar match={match} />
                     </div>
                 )}
             </div>
             <div className="grid-row">
                 <div className="grid-detail-small">
-                    {applicantSummary.application.department
+                    {applicantSummary.application?.department
                         ?.charAt(0)
                         .toUpperCase()}
                 </div>
                 <div className="grid-detail-small">
-                    {applicantSummary.application.program?.charAt(0)}
-                    {applicantSummary.application.yip}
+                    {applicantSummary.application?.program?.charAt(0)}
+                    {applicantSummary.application?.yip}
                 </div>
                 <div className="grid-detail-small">
                     {positionPref?.preference_level || ""}
@@ -221,9 +175,9 @@ function GridItemBody({
 function GridItemSidebar({
     applicantSummary,
 }: {
-    applicantSummary: ApplicantSummary | null;
+    applicantSummary: ApplicantSummary;
 }) {
-    const hoursOwed = applicantSummary?.guarantee?.totalHoursOwed || 0;
+    const hoursOwed = applicantSummary.guarantee?.minHoursOwed || 0;
     const totalAssignedHours = React.useMemo(() => {
         if (!applicantSummary) {
             return 0;
@@ -266,38 +220,85 @@ function GridItemSidebar({
  * A dropdown list of actions to perform on an applicant/grid item.
  */
 function GridItemDropdown({
-    position,
-    applicantMatch,
+    match,
     applicantSummary,
     show,
     setShow,
     setShownApplication,
     setShowChangeHours,
-    updateApplicantMatch,
-    hideApplicantFromAll,
 }: {
-    position: Position;
-    applicantMatch: Match | null;
+    match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
     show: boolean;
     setShow: Function;
     setShownApplication: Function;
     setShowChangeHours: Function;
-    updateApplicantMatch: Function;
-    hideApplicantFromAll: Function;
 }) {
-    if (!applicantMatch) {
-        return null;
-    }
+    const dispatch = useThunkDispatch();
+    const baseMatchValues = {
+        positionCode: match.position.position_code,
+        utorid: match.applicant.utorid,
+    };
 
     const canBeAssigned =
-        applicantMatch.status === "hidden" ||
-        applicantMatch.status === "applied" ||
-        applicantMatch.status === "starred";
+        match.status === "hidden" ||
+        match.status === "applied" ||
+        match.status === "starred";
 
     const canBeHidden =
-        applicantMatch.status !== "assigned" &&
-        applicantMatch.status !== "hidden";
+        match.status !== "assigned" && match.status !== "hidden";
+
+    function assignToPosition() {
+        dispatch(
+            upsertMatch({
+                ...baseMatchValues,
+                stagedAssigned: true,
+                stagedHoursAssigned: match.position.hours_per_assignment || 0,
+            })
+        );
+    }
+
+    function unassignFromPosition() {
+        dispatch(
+            upsertMatch({
+                ...baseMatchValues,
+                stagedAssigned: false,
+                stagedHoursAssigned: 0,
+            })
+        );
+    }
+
+    function hideFromPosition() {
+        dispatch(upsertMatch({ ...baseMatchValues, hidden: true }));
+    }
+
+    function unhideFromPosition() {
+        dispatch(upsertMatch({ ...baseMatchValues, hidden: false }));
+    }
+
+    function hideFromAll() {
+        for (const targetMatch of applicantSummary.matches) {
+            dispatch(
+                upsertMatch({
+                    utorid: match.applicant.utorid,
+                    positionCode: targetMatch.position.position_code,
+                    hidden: true,
+                })
+            );
+        }
+    }
+
+    function unhideFromAll() {
+        for (const targetMatch of applicantSummary.matches) {
+            dispatch(
+                upsertMatch({
+                    utorid: match.applicant.utorid,
+                    positionCode: targetMatch.position.position_code,
+                    hidden: false,
+                })
+            );
+        }
+    }
 
     return (
         <Collapse in={show}>
@@ -315,18 +316,15 @@ function GridItemDropdown({
                     <button
                         className="dropdown-item"
                         onClick={() => {
-                            updateApplicantMatch(
-                                "staged-assigned",
-                                position.hours_per_assignment || 0
-                            );
+                            assignToPosition();
                             setShow(false);
                         }}
                     >
-                        Assign to <b>{position.position_code}</b> (
-                        {position.hours_per_assignment || 0})
+                        Assign to <b>{match.position.position_code}</b> (
+                        {match.position.hours_per_assignment || 0})
                     </button>
                 )}
-                {applicantMatch.status === "staged-assigned" && (
+                {match.status === "staged-assigned" && (
                     <button
                         className="dropdown-item"
                         onClick={() => {
@@ -337,49 +335,60 @@ function GridItemDropdown({
                         Change assigned hours
                     </button>
                 )}
-                {applicantMatch.status === "staged-assigned" && (
+                {match.status === "staged-assigned" && (
                     <button
                         className="dropdown-item"
                         onClick={() => {
-                            updateApplicantMatch("applied");
+                            unassignFromPosition();
                             setShow(false);
                         }}
                     >
-                        Unassign from <b>{position.position_code}</b>
+                        Unassign from <b>{match.position.position_code}</b>
                     </button>
                 )}
                 {canBeHidden && (
                     <button
                         className="dropdown-item"
                         onClick={() => {
-                            updateApplicantMatch("hidden");
+                            hideFromPosition();
                             setShow(false);
                         }}
                     >
-                        Hide from <b>{position.position_code}</b>
+                        Hide from <b>{match.position.position_code}</b>
                     </button>
                 )}
                 {canBeAssigned && (
                     <button
                         className="dropdown-item"
                         onClick={() => {
-                            hideApplicantFromAll();
+                            hideFromAll();
                             setShow(false);
                         }}
                     >
                         Hide from all courses
                     </button>
                 )}
-                {applicantMatch.status === "hidden" && (
-                    <button
-                        className="dropdown-item"
-                        onClick={() => {
-                            updateApplicantMatch("applied");
-                            setShow(false);
-                        }}
-                    >
-                        Unhide from <b>{position.position_code}</b>
-                    </button>
+                {match.status === "hidden" && (
+                    <>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => {
+                                unhideFromPosition();
+                                setShow(false);
+                            }}
+                        >
+                            Unhide from <b>{match.position.position_code}</b>
+                        </button>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => {
+                                unhideFromAll();
+                                setShow(false);
+                            }}
+                        >
+                            Unhide from all courses
+                        </button>
+                    </>
                 )}
             </div>
         </Collapse>

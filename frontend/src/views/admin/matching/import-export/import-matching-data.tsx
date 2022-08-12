@@ -1,9 +1,9 @@
 import React from "react";
-import { matchesSelector } from "../actions";
+import { rawMatchesSelector } from "../actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Row, Form, Col, Alert } from "react-bootstrap";
 import { DataFormat } from "../../../../libs/import-export";
-import { Match, AppointmentGuaranteeStatus } from "../types";
+import { RawMatch, AppointmentGuaranteeStatus } from "../types";
 import { upsertMatch, batchUpsertGuarantees, upsertNote } from "../actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
@@ -17,7 +17,7 @@ export function ImportMatchingDataButton() {
     const [fileContent, setFileContent] = React.useState<DataFormat | null>(
         null
     );
-    const [diffedMatches, setDiffedMatches] = React.useState<Match[] | null>(
+    const [diffedMatches, setDiffedMatches] = React.useState<RawMatch[] | null>(
         null
     );
     const [newGuarantees, setNewGuarantees] = React.useState<
@@ -29,7 +29,7 @@ export function ImportMatchingDataButton() {
 
     const [warningMessage, setWarningMessage] = React.useState("");
 
-    const matches = useSelector(matchesSelector);
+    const rawMatches = useSelector(rawMatchesSelector);
     const dispatch = useThunkDispatch();
 
     function _onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -80,8 +80,8 @@ export function ImportMatchingDataButton() {
         try {
             if (fileContent.data["matches"]) {
                 const diffedMatches = getDiffedMatches(
-                    fileContent.data["matches"],
-                    matches
+                    rawMatches,
+                    fileContent.data["matches"]
                 );
                 setDiffedMatches(diffedMatches);
             }
@@ -111,7 +111,7 @@ export function ImportMatchingDataButton() {
             setWarningMessage(warning);
             console.warn(warning);
         }
-    }, [fileContent, matches, fileInputLabel]);
+    }, [fileContent, rawMatches, fileInputLabel]);
 
     function _onConfirm() {
         if (diffedMatches) {
@@ -193,23 +193,25 @@ export function ImportMatchingDataButton() {
  * (a) the utorid and positionId combo don't exist at all in `oldMatchList`, or
  * (b) the combination exists but the assignment status or hoursAssigned is different
  */
-function getDiffedMatches(oldMatchList: Match[], newMatchList: Match[]) {
+function getDiffedMatches(oldMatchList: RawMatch[], newMatchList: RawMatch[]) {
     return newMatchList.filter(
-        (newMatch: Match) =>
+        (newMatch) =>
             !oldMatchList.find(
                 // Remove matches whose utorid + position code combination already existed
-                (oldMatch: Match) =>
+                (oldMatch) =>
                     oldMatch.utorid === newMatch.utorid &&
                     oldMatch.positionCode === newMatch.positionCode
             ) ||
             oldMatchList.find(
                 // But keep matches that have had a value modified
-                (oldMatch: Match) =>
+                (oldMatch) =>
                     oldMatch.utorid === newMatch.utorid &&
                     oldMatch.positionCode === newMatch.positionCode &&
-                    oldMatch.status !== "assigned" &&
-                    (oldMatch.status !== newMatch.status ||
-                        oldMatch.hoursAssigned !== newMatch.hoursAssigned)
+                    (oldMatch.starred !== newMatch.starred ||
+                        oldMatch.hidden !== newMatch.hidden ||
+                        oldMatch.stagedAssigned !== newMatch.stagedAssigned ||
+                        oldMatch.stagedHoursAssigned !==
+                            newMatch.stagedHoursAssigned)
             )
     );
 }

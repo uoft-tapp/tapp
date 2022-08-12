@@ -1,8 +1,10 @@
 import React from "react";
 import { Application } from "../../../../../api/defs/types";
-import { Match } from "../../types";
+import { MatchableAssignment } from "../../types";
 import { Form, Modal, Button } from "react-bootstrap";
 import { ApplicationDetails } from "../../../applications/application-details";
+import { upsertMatch } from "../../actions";
+import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
 
 /**
  * A modal window displaying detailed information about an application.
@@ -12,7 +14,7 @@ export function ApplicationDetailModal({
     setShownApplication,
 }: {
     application: Application | null;
-    setShownApplication: Function;
+    setShownApplication: (application: Application | null) => void;
 }) {
     if (!application) {
         return null;
@@ -49,21 +51,16 @@ export function ApplicationDetailModal({
  * is assigned to a course.
  */
 export function AdjustHourModal({
-    applicantMatch,
-    updateApplicantMatch,
+    match,
     show,
     setShow,
 }: {
-    applicantMatch: Match | null;
-    updateApplicantMatch: Function;
+    match: MatchableAssignment;
     show: boolean;
     setShow: Function;
 }) {
     const [hoursAssigned, setHoursAssigned] = React.useState("");
-    if (!applicantMatch) {
-        return null;
-    }
-
+    const dispatch = useThunkDispatch();
     return (
         <Modal show={show} onHide={() => setShow(false)} size="sm">
             <Modal.Header closeButton>
@@ -75,9 +72,8 @@ export function AdjustHourModal({
                         <Form.Control
                             type="number"
                             defaultValue={
-                                applicantMatch &&
-                                applicantMatch.hoursAssigned > 0
-                                    ? applicantMatch.hoursAssigned
+                                match && match.hoursAssigned > 0
+                                    ? match.hoursAssigned
                                     : 0
                             }
                             onChange={(e) => setHoursAssigned(e.target.value)}
@@ -93,10 +89,15 @@ export function AdjustHourModal({
                     Close
                 </Button>
                 <Button
+                    disabled={hoursAssigned === ""}
                     onClick={() => {
-                        updateApplicantMatch(
-                            "staged-assigned",
-                            Number(hoursAssigned)
+                        dispatch(
+                            upsertMatch({
+                                positionCode: match.position.position_code,
+                                utorid: match.applicant.utorid,
+                                stagedAssigned: true,
+                                stagedHoursAssigned: Number(hoursAssigned),
+                            })
                         );
                         setShow(false);
                     }}

@@ -1,2017 +1,2018 @@
 [
     {
         "utorid": "fardoea",
-        "totalHoursOwed": 354,
+        "minHoursOwed": 354,
         "previousHoursFulfilled": 81
     },
     {
         "utorid": "paternostera",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 219
     },
     {
         "utorid": "vannozziih",
-        "totalHoursOwed": 86,
+        "minHoursOwed": 86,
         "previousHoursFulfilled": 27
     },
     {
         "utorid": "bottena",
-        "totalHoursOwed": 57,
+        "minHoursOwed": 57,
         "previousHoursFulfilled": 56
     },
     {
         "utorid": "omaraw",
-        "totalHoursOwed": 154,
+        "minHoursOwed": 154,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "retallicka",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "piriso",
-        "totalHoursOwed": 230,
+        "minHoursOwed": 230,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "vigneronl",
-        "totalHoursOwed": 329,
+        "minHoursOwed": 329,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "halmv",
-        "totalHoursOwed": 392,
+        "minHoursOwed": 392,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cassellsb",
-        "totalHoursOwed": 163,
+        "minHoursOwed": 163,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cureea",
-        "totalHoursOwed": 142,
+        "minHoursOwed": 142,
         "previousHoursFulfilled": 81
     },
     {
         "utorid": "eastburyj",
-        "totalHoursOwed": 120,
+        "minHoursOwed": 120,
         "previousHoursFulfilled": 90
     },
     {
         "utorid": "carnegief",
-        "totalHoursOwed": 82,
+        "minHoursOwed": 82,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "towllc",
-        "totalHoursOwed": 43,
+        "minHoursOwed": 43,
         "previousHoursFulfilled": 29
     },
     {
         "utorid": "lockittf",
-        "totalHoursOwed": 329,
+        "minHoursOwed": 329,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rankcomr",
-        "totalHoursOwed": 363,
+        "minHoursOwed": 363,
         "previousHoursFulfilled": 112
     },
     {
         "utorid": "lomasnyf",
-        "totalHoursOwed": 364,
+        "minHoursOwed": 364,
         "previousHoursFulfilled": 340
     },
     {
         "utorid": "greaterexh",
-        "totalHoursOwed": 128,
+        "minHoursOwed": 128,
         "previousHoursFulfilled": 128
     },
     {
         "utorid": "paszekr",
-        "totalHoursOwed": 396,
+        "minHoursOwed": 396,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "probeyk",
-        "totalHoursOwed": 85,
+        "minHoursOwed": 85,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rihanekc",
-        "totalHoursOwed": 39,
+        "minHoursOwed": 39,
         "previousHoursFulfilled": 27
     },
     {
         "utorid": "bernardtb",
-        "totalHoursOwed": 262,
+        "minHoursOwed": 262,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "jevonl",
-        "totalHoursOwed": 334,
+        "minHoursOwed": 334,
         "previousHoursFulfilled": 164
     },
     {
         "utorid": "uccellia",
-        "totalHoursOwed": 55,
+        "minHoursOwed": 55,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kittert",
-        "totalHoursOwed": 315,
+        "minHoursOwed": 315,
         "previousHoursFulfilled": 4
     },
     {
         "utorid": "barabischj",
-        "totalHoursOwed": 323,
+        "minHoursOwed": 323,
         "previousHoursFulfilled": 129
     },
     {
         "utorid": "castanol",
-        "totalHoursOwed": 37,
+        "minHoursOwed": 37,
         "previousHoursFulfilled": 6
     },
     {
         "utorid": "vannonia",
-        "totalHoursOwed": 239,
+        "minHoursOwed": 239,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "pumfrettt",
-        "totalHoursOwed": 296,
+        "minHoursOwed": 296,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "littefairk",
-        "totalHoursOwed": 352,
+        "minHoursOwed": 352,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "pidgeonc",
-        "totalHoursOwed": 358,
+        "minHoursOwed": 358,
         "previousHoursFulfilled": 17
     },
     {
         "utorid": "cantosl",
-        "totalHoursOwed": 152,
+        "minHoursOwed": 152,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "tremathacks",
-        "totalHoursOwed": 298,
+        "minHoursOwed": 298,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "tottmank",
-        "totalHoursOwed": 66,
+        "minHoursOwed": 66,
         "previousHoursFulfilled": 13
     },
     {
         "utorid": "clemowk",
-        "totalHoursOwed": 311,
+        "minHoursOwed": 311,
         "previousHoursFulfilled": 193
     },
     {
         "utorid": "rigbyb",
-        "totalHoursOwed": 41,
+        "minHoursOwed": 41,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "matthiesonr",
-        "totalHoursOwed": 278,
+        "minHoursOwed": 278,
         "previousHoursFulfilled": 62
     },
     {
         "utorid": "raithbyk",
-        "totalHoursOwed": 327,
+        "minHoursOwed": 327,
         "previousHoursFulfilled": 78
     },
     {
         "utorid": "sebertd",
-        "totalHoursOwed": 181,
+        "minHoursOwed": 181,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gibbing",
-        "totalHoursOwed": 306,
+        "minHoursOwed": 306,
         "previousHoursFulfilled": 140
     },
     {
         "utorid": "fearfullr",
-        "totalHoursOwed": 169,
+        "minHoursOwed": 169,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "dewittl",
-        "totalHoursOwed": 278,
+        "minHoursOwed": 278,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "papet",
-        "totalHoursOwed": 358,
+        "minHoursOwed": 358,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "settera",
-        "totalHoursOwed": 59,
+        "minHoursOwed": 59,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "seidf",
-        "totalHoursOwed": 36,
+        "minHoursOwed": 36,
         "previousHoursFulfilled": 34
     },
     {
         "utorid": "hanej",
-        "totalHoursOwed": 104,
+        "minHoursOwed": 104,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "heildr",
-        "totalHoursOwed": 204,
+        "minHoursOwed": 204,
         "previousHoursFulfilled": 39
     },
     {
         "utorid": "querrardb",
-        "totalHoursOwed": 136,
+        "minHoursOwed": 136,
         "previousHoursFulfilled": 22
     },
     {
         "utorid": "claesensh",
-        "totalHoursOwed": 336,
+        "minHoursOwed": 336,
         "previousHoursFulfilled": 265
     },
     {
         "utorid": "tuffieldj",
-        "totalHoursOwed": 193,
+        "minHoursOwed": 193,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "baggalleyd",
-        "totalHoursOwed": 305,
+        "minHoursOwed": 305,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "coonihanj",
-        "totalHoursOwed": 143,
+        "minHoursOwed": 143,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mutterj",
-        "totalHoursOwed": 303,
+        "minHoursOwed": 303,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fathers",
-        "totalHoursOwed": 328,
+        "minHoursOwed": 328,
         "previousHoursFulfilled": 37
     },
     {
         "utorid": "spraggsr",
-        "totalHoursOwed": 211,
+        "minHoursOwed": 211,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "barrym",
-        "totalHoursOwed": 387,
+        "minHoursOwed": 387,
         "previousHoursFulfilled": 66
     },
     {
         "utorid": "adamovichc",
-        "totalHoursOwed": 203,
+        "minHoursOwed": 203,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "domans",
-        "totalHoursOwed": 298,
+        "minHoursOwed": 298,
         "previousHoursFulfilled": 60
     },
     {
         "utorid": "brownceyg",
-        "totalHoursOwed": 331,
+        "minHoursOwed": 331,
         "previousHoursFulfilled": 120
     },
     {
         "utorid": "seatterw",
-        "totalHoursOwed": 137,
+        "minHoursOwed": 137,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fraynev",
-        "totalHoursOwed": 374,
+        "minHoursOwed": 374,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "sharplessg",
-        "totalHoursOwed": 194,
+        "minHoursOwed": 194,
         "previousHoursFulfilled": 92
     },
     {
         "utorid": "philcottr",
-        "totalHoursOwed": 330,
+        "minHoursOwed": 330,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mccurdys",
-        "totalHoursOwed": 96,
+        "minHoursOwed": 96,
         "previousHoursFulfilled": 72
     },
     {
         "utorid": "iacobuccii",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gorettij",
-        "totalHoursOwed": 361,
+        "minHoursOwed": 361,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "benazetc",
-        "totalHoursOwed": 266,
+        "minHoursOwed": 266,
         "previousHoursFulfilled": 216
     },
     {
         "utorid": "franciottit",
-        "totalHoursOwed": 306,
+        "minHoursOwed": 306,
         "previousHoursFulfilled": 91
     },
     {
         "utorid": "chesleyb",
-        "totalHoursOwed": 255,
+        "minHoursOwed": 255,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "spacieb",
-        "totalHoursOwed": 306,
+        "minHoursOwed": 306,
         "previousHoursFulfilled": 241
     },
     {
         "utorid": "domked",
-        "totalHoursOwed": 72,
+        "minHoursOwed": 72,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "beaudryb",
-        "totalHoursOwed": 378,
+        "minHoursOwed": 378,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "apdellg",
-        "totalHoursOwed": 221,
+        "minHoursOwed": 221,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gaskenm",
-        "totalHoursOwed": 333,
+        "minHoursOwed": 333,
         "previousHoursFulfilled": 38
     },
     {
         "utorid": "de gowem",
-        "totalHoursOwed": 158,
+        "minHoursOwed": 158,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "christallg",
-        "totalHoursOwed": 229,
+        "minHoursOwed": 229,
         "previousHoursFulfilled": 51
     },
     {
         "utorid": "tizardg",
-        "totalHoursOwed": 194,
+        "minHoursOwed": 194,
         "previousHoursFulfilled": 165
     },
     {
         "utorid": "versonc",
-        "totalHoursOwed": 139,
+        "minHoursOwed": 139,
         "previousHoursFulfilled": 114
     },
     {
         "utorid": "jakubowiczt",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 280
     },
     {
         "utorid": "luckcockv",
-        "totalHoursOwed": 269,
+        "minHoursOwed": 269,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "winspearb",
-        "totalHoursOwed": 194,
+        "minHoursOwed": 194,
         "previousHoursFulfilled": 99
     },
     {
         "utorid": "cozensw",
-        "totalHoursOwed": 119,
+        "minHoursOwed": 119,
         "previousHoursFulfilled": 113
     },
     {
         "utorid": "mckaguem",
-        "totalHoursOwed": 287,
+        "minHoursOwed": 287,
         "previousHoursFulfilled": 156
     },
     {
         "utorid": "leithera",
-        "totalHoursOwed": 395,
+        "minHoursOwed": 395,
         "previousHoursFulfilled": 59
     },
     {
         "utorid": "stabbinsg",
-        "totalHoursOwed": 391,
+        "minHoursOwed": 391,
         "previousHoursFulfilled": 299
     },
     {
         "utorid": "mitrovicl",
-        "totalHoursOwed": 398,
+        "minHoursOwed": 398,
         "previousHoursFulfilled": 23
     },
     {
         "utorid": "grammerg",
-        "totalHoursOwed": 396,
+        "minHoursOwed": 396,
         "previousHoursFulfilled": 174
     },
     {
         "utorid": "trownsonn",
-        "totalHoursOwed": 119,
+        "minHoursOwed": 119,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "wainera",
-        "totalHoursOwed": 64,
+        "minHoursOwed": 64,
         "previousHoursFulfilled": 15
     },
     {
         "utorid": "jizhakic",
-        "totalHoursOwed": 335,
+        "minHoursOwed": 335,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "wetherillj",
-        "totalHoursOwed": 164,
+        "minHoursOwed": 164,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gennerichc",
-        "totalHoursOwed": 164,
+        "minHoursOwed": 164,
         "previousHoursFulfilled": 146
     },
     {
         "utorid": "yellepd",
-        "totalHoursOwed": 206,
+        "minHoursOwed": 206,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fendd",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "whitingtonf",
-        "totalHoursOwed": 118,
+        "minHoursOwed": 118,
         "previousHoursFulfilled": 53
     },
     {
         "utorid": "watsamd",
-        "totalHoursOwed": 86,
+        "minHoursOwed": 86,
         "previousHoursFulfilled": 24
     },
     {
         "utorid": "chinge de halsj",
-        "totalHoursOwed": 291,
+        "minHoursOwed": 291,
         "previousHoursFulfilled": 114
     },
     {
         "utorid": "gobelf",
-        "totalHoursOwed": 127,
+        "minHoursOwed": 127,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "munsoni",
-        "totalHoursOwed": 298,
+        "minHoursOwed": 298,
         "previousHoursFulfilled": 71
     },
     {
         "utorid": "lorantp",
-        "totalHoursOwed": 325,
+        "minHoursOwed": 325,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "shureyf",
-        "totalHoursOwed": 339,
+        "minHoursOwed": 339,
         "previousHoursFulfilled": 27
     },
     {
         "utorid": "duiguidg",
-        "totalHoursOwed": 189,
+        "minHoursOwed": 189,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "renee",
-        "totalHoursOwed": 327,
+        "minHoursOwed": 327,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "hacardc",
-        "totalHoursOwed": 245,
+        "minHoursOwed": 245,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bedenhamd",
-        "totalHoursOwed": 303,
+        "minHoursOwed": 303,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fotherbya",
-        "totalHoursOwed": 118,
+        "minHoursOwed": 118,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "pyecroftp",
-        "totalHoursOwed": 318,
+        "minHoursOwed": 318,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "disleyg",
-        "totalHoursOwed": 297,
+        "minHoursOwed": 297,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "crannah",
-        "totalHoursOwed": 141,
+        "minHoursOwed": 141,
         "previousHoursFulfilled": 119
     },
     {
         "utorid": "idlec",
-        "totalHoursOwed": 169,
+        "minHoursOwed": 169,
         "previousHoursFulfilled": 36
     },
     {
         "utorid": "windrams",
-        "totalHoursOwed": 263,
+        "minHoursOwed": 263,
         "previousHoursFulfilled": 38
     },
     {
         "utorid": "spurretd",
-        "totalHoursOwed": 147,
+        "minHoursOwed": 147,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "van eedenv",
-        "totalHoursOwed": 366,
+        "minHoursOwed": 366,
         "previousHoursFulfilled": 94
     },
     {
         "utorid": "de la felda",
-        "totalHoursOwed": 98,
+        "minHoursOwed": 98,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "colgraver",
-        "totalHoursOwed": 155,
+        "minHoursOwed": 155,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bravec",
-        "totalHoursOwed": 269,
+        "minHoursOwed": 269,
         "previousHoursFulfilled": 266
     },
     {
         "utorid": "seggess",
-        "totalHoursOwed": 236,
+        "minHoursOwed": 236,
         "previousHoursFulfilled": 71
     },
     {
         "utorid": "musprattm",
-        "totalHoursOwed": 254,
+        "minHoursOwed": 254,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "agiusp",
-        "totalHoursOwed": 201,
+        "minHoursOwed": 201,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "stebbind",
-        "totalHoursOwed": 58,
+        "minHoursOwed": 58,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "parsanda",
-        "totalHoursOwed": 184,
+        "minHoursOwed": 184,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "nieldc",
-        "totalHoursOwed": 325,
+        "minHoursOwed": 325,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "merwec",
-        "totalHoursOwed": 246,
+        "minHoursOwed": 246,
         "previousHoursFulfilled": 125
     },
     {
         "utorid": "nockellsd",
-        "totalHoursOwed": 153,
+        "minHoursOwed": 153,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "wratesd",
-        "totalHoursOwed": 351,
+        "minHoursOwed": 351,
         "previousHoursFulfilled": 162
     },
     {
         "utorid": "serleb",
-        "totalHoursOwed": 44,
+        "minHoursOwed": 44,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "andreyn",
-        "totalHoursOwed": 329,
+        "minHoursOwed": 329,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "brunnings",
-        "totalHoursOwed": 270,
+        "minHoursOwed": 270,
         "previousHoursFulfilled": 206
     },
     {
         "utorid": "compsonb",
-        "totalHoursOwed": 400,
+        "minHoursOwed": 400,
         "previousHoursFulfilled": 215
     },
     {
         "utorid": "robardetk",
-        "totalHoursOwed": 332,
+        "minHoursOwed": 332,
         "previousHoursFulfilled": 9
     },
     {
         "utorid": "czajkab",
-        "totalHoursOwed": 90,
+        "minHoursOwed": 90,
         "previousHoursFulfilled": 61
     },
     {
         "utorid": "silleya",
-        "totalHoursOwed": 68,
+        "minHoursOwed": 68,
         "previousHoursFulfilled": 67
     },
     {
         "utorid": "conryk",
-        "totalHoursOwed": 344,
+        "minHoursOwed": 344,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "blants",
-        "totalHoursOwed": 262,
+        "minHoursOwed": 262,
         "previousHoursFulfilled": 32
     },
     {
         "utorid": "dopsons",
-        "totalHoursOwed": 353,
+        "minHoursOwed": 353,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ondrasekz",
-        "totalHoursOwed": 178,
+        "minHoursOwed": 178,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ebbenm",
-        "totalHoursOwed": 226,
+        "minHoursOwed": 226,
         "previousHoursFulfilled": 77
     },
     {
         "utorid": "judda",
-        "totalHoursOwed": 37,
+        "minHoursOwed": 37,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "snoadd",
-        "totalHoursOwed": 128,
+        "minHoursOwed": 128,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "canterr",
-        "totalHoursOwed": 68,
+        "minHoursOwed": 68,
         "previousHoursFulfilled": 35
     },
     {
         "utorid": "mcfetridges",
-        "totalHoursOwed": 45,
+        "minHoursOwed": 45,
         "previousHoursFulfilled": 16
     },
     {
         "utorid": "coskerryb",
-        "totalHoursOwed": 218,
+        "minHoursOwed": 218,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "leheudeu",
-        "totalHoursOwed": 265,
+        "minHoursOwed": 265,
         "previousHoursFulfilled": 73
     },
     {
         "utorid": "whitrodn",
-        "totalHoursOwed": 99,
+        "minHoursOwed": 99,
         "previousHoursFulfilled": 30
     },
     {
         "utorid": "giabuzzis",
-        "totalHoursOwed": 284,
+        "minHoursOwed": 284,
         "previousHoursFulfilled": 261
     },
     {
         "utorid": "gobertd",
-        "totalHoursOwed": 139,
+        "minHoursOwed": 139,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rosierk",
-        "totalHoursOwed": 350,
+        "minHoursOwed": 350,
         "previousHoursFulfilled": 283
     },
     {
         "utorid": "leeminga",
-        "totalHoursOwed": 85,
+        "minHoursOwed": 85,
         "previousHoursFulfilled": 35
     },
     {
         "utorid": "duckerv",
-        "totalHoursOwed": 241,
+        "minHoursOwed": 241,
         "previousHoursFulfilled": 238
     },
     {
         "utorid": "dowe",
-        "totalHoursOwed": 166,
+        "minHoursOwed": 166,
         "previousHoursFulfilled": 17
     },
     {
         "utorid": "norsisterl",
-        "totalHoursOwed": 207,
+        "minHoursOwed": 207,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "voasa",
-        "totalHoursOwed": 287,
+        "minHoursOwed": 287,
         "previousHoursFulfilled": 19
     },
     {
         "utorid": "spittlesi",
-        "totalHoursOwed": 96,
+        "minHoursOwed": 96,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fiorentinoe",
-        "totalHoursOwed": 200,
+        "minHoursOwed": 200,
         "previousHoursFulfilled": 52
     },
     {
         "utorid": "naishr",
-        "totalHoursOwed": 300,
+        "minHoursOwed": 300,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "caldesb",
-        "totalHoursOwed": 378,
+        "minHoursOwed": 378,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "trudgionb",
-        "totalHoursOwed": 203,
+        "minHoursOwed": 203,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cowndleym",
-        "totalHoursOwed": 143,
+        "minHoursOwed": 143,
         "previousHoursFulfilled": 106
     },
     {
         "utorid": "reucastler",
-        "totalHoursOwed": 364,
+        "minHoursOwed": 364,
         "previousHoursFulfilled": 151
     },
     {
         "utorid": "linfootm",
-        "totalHoursOwed": 100,
+        "minHoursOwed": 100,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "shealsn",
-        "totalHoursOwed": 150,
+        "minHoursOwed": 150,
         "previousHoursFulfilled": 21
     },
     {
         "utorid": "wurstf",
-        "totalHoursOwed": 180,
+        "minHoursOwed": 180,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "wherrettk",
-        "totalHoursOwed": 317,
+        "minHoursOwed": 317,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ellinsb",
-        "totalHoursOwed": 217,
+        "minHoursOwed": 217,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ferranj",
-        "totalHoursOwed": 37,
+        "minHoursOwed": 37,
         "previousHoursFulfilled": 35
     },
     {
         "utorid": "damanth",
-        "totalHoursOwed": 345,
+        "minHoursOwed": 345,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "spottiswoodf",
-        "totalHoursOwed": 247,
+        "minHoursOwed": 247,
         "previousHoursFulfilled": 122
     },
     {
         "utorid": "prandyj",
-        "totalHoursOwed": 163,
+        "minHoursOwed": 163,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kinderb",
-        "totalHoursOwed": 355,
+        "minHoursOwed": 355,
         "previousHoursFulfilled": 249
     },
     {
         "utorid": "delguah",
-        "totalHoursOwed": 318,
+        "minHoursOwed": 318,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gorringa",
-        "totalHoursOwed": 390,
+        "minHoursOwed": 390,
         "previousHoursFulfilled": 33
     },
     {
         "utorid": "gladdenw",
-        "totalHoursOwed": 261,
+        "minHoursOwed": 261,
         "previousHoursFulfilled": 208
     },
     {
         "utorid": "maccaughenc",
-        "totalHoursOwed": 31,
+        "minHoursOwed": 31,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rubrowc",
-        "totalHoursOwed": 113,
+        "minHoursOwed": 113,
         "previousHoursFulfilled": 99
     },
     {
         "utorid": "beaulyl",
-        "totalHoursOwed": 205,
+        "minHoursOwed": 205,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "scrammagef",
-        "totalHoursOwed": 127,
+        "minHoursOwed": 127,
         "previousHoursFulfilled": 40
     },
     {
         "utorid": "warykt",
-        "totalHoursOwed": 237,
+        "minHoursOwed": 237,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "peplerl",
-        "totalHoursOwed": 261,
+        "minHoursOwed": 261,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "seedhousee",
-        "totalHoursOwed": 191,
+        "minHoursOwed": 191,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ewinsx",
-        "totalHoursOwed": 149,
+        "minHoursOwed": 149,
         "previousHoursFulfilled": 18
     },
     {
         "utorid": "ixort",
-        "totalHoursOwed": 175,
+        "minHoursOwed": 175,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mosenm",
-        "totalHoursOwed": 355,
+        "minHoursOwed": 355,
         "previousHoursFulfilled": 122
     },
     {
         "utorid": "arnizf",
-        "totalHoursOwed": 281,
+        "minHoursOwed": 281,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fowlep",
-        "totalHoursOwed": 283,
+        "minHoursOwed": 283,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cicchilloc",
-        "totalHoursOwed": 336,
+        "minHoursOwed": 336,
         "previousHoursFulfilled": 219
     },
     {
         "utorid": "klambtr",
-        "totalHoursOwed": 111,
+        "minHoursOwed": 111,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "crammys",
-        "totalHoursOwed": 251,
+        "minHoursOwed": 251,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "newsomen",
-        "totalHoursOwed": 332,
+        "minHoursOwed": 332,
         "previousHoursFulfilled": 244
     },
     {
         "utorid": "benediktg",
-        "totalHoursOwed": 216,
+        "minHoursOwed": 216,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fossettn",
-        "totalHoursOwed": 62,
+        "minHoursOwed": 62,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "blakemani",
-        "totalHoursOwed": 195,
+        "minHoursOwed": 195,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "vannarb",
-        "totalHoursOwed": 205,
+        "minHoursOwed": 205,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ivanishcheva",
-        "totalHoursOwed": 264,
+        "minHoursOwed": 264,
         "previousHoursFulfilled": 216
     },
     {
         "utorid": "wansburyb",
-        "totalHoursOwed": 250,
+        "minHoursOwed": 250,
         "previousHoursFulfilled": 118
     },
     {
         "utorid": "frisele",
-        "totalHoursOwed": 129,
+        "minHoursOwed": 129,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "timberlakew",
-        "totalHoursOwed": 165,
+        "minHoursOwed": 165,
         "previousHoursFulfilled": 41
     },
     {
         "utorid": "shinnm",
-        "totalHoursOwed": 261,
+        "minHoursOwed": 261,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "alennikovg",
-        "totalHoursOwed": 374,
+        "minHoursOwed": 374,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "wernherl",
-        "totalHoursOwed": 291,
+        "minHoursOwed": 291,
         "previousHoursFulfilled": 23
     },
     {
         "utorid": "spearettg",
-        "totalHoursOwed": 298,
+        "minHoursOwed": 298,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "duchama",
-        "totalHoursOwed": 346,
+        "minHoursOwed": 346,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "golling",
-        "totalHoursOwed": 325,
+        "minHoursOwed": 325,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "jochenf",
-        "totalHoursOwed": 216,
+        "minHoursOwed": 216,
         "previousHoursFulfilled": 77
     },
     {
         "utorid": "iacomoo",
-        "totalHoursOwed": 58,
+        "minHoursOwed": 58,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "matchest",
-        "totalHoursOwed": 385,
+        "minHoursOwed": 385,
         "previousHoursFulfilled": 226
     },
     {
         "utorid": "fressonm",
-        "totalHoursOwed": 357,
+        "minHoursOwed": 357,
         "previousHoursFulfilled": 128
     },
     {
         "utorid": "heakerd",
-        "totalHoursOwed": 71,
+        "minHoursOwed": 71,
         "previousHoursFulfilled": 5
     },
     {
         "utorid": "le febref",
-        "totalHoursOwed": 293,
+        "minHoursOwed": 293,
         "previousHoursFulfilled": 187
     },
     {
         "utorid": "cushs",
-        "totalHoursOwed": 113,
+        "minHoursOwed": 113,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kendellc",
-        "totalHoursOwed": 274,
+        "minHoursOwed": 274,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mussonk",
-        "totalHoursOwed": 316,
+        "minHoursOwed": 316,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "salernos",
-        "totalHoursOwed": 334,
+        "minHoursOwed": 334,
         "previousHoursFulfilled": 309
     },
     {
         "utorid": "longhurstb",
-        "totalHoursOwed": 101,
+        "minHoursOwed": 101,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "duchesneb",
-        "totalHoursOwed": 114,
+        "minHoursOwed": 114,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "chappelh",
-        "totalHoursOwed": 32,
+        "minHoursOwed": 32,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "loudianes",
-        "totalHoursOwed": 54,
+        "minHoursOwed": 54,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "coshn",
-        "totalHoursOwed": 292,
+        "minHoursOwed": 292,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "lauxd",
-        "totalHoursOwed": 338,
+        "minHoursOwed": 338,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bradbornee",
-        "totalHoursOwed": 72,
+        "minHoursOwed": 72,
         "previousHoursFulfilled": 18
     },
     {
         "utorid": "saphs",
-        "totalHoursOwed": 383,
+        "minHoursOwed": 383,
         "previousHoursFulfilled": 197
     },
     {
         "utorid": "rylek",
-        "totalHoursOwed": 251,
+        "minHoursOwed": 251,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "giannoniz",
-        "totalHoursOwed": 268,
+        "minHoursOwed": 268,
         "previousHoursFulfilled": 47
     },
     {
         "utorid": "restoricke",
-        "totalHoursOwed": 170,
+        "minHoursOwed": 170,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bellwoodb",
-        "totalHoursOwed": 141,
+        "minHoursOwed": 141,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cooled",
-        "totalHoursOwed": 242,
+        "minHoursOwed": 242,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rotherforthh",
-        "totalHoursOwed": 157,
+        "minHoursOwed": 157,
         "previousHoursFulfilled": 48
     },
     {
         "utorid": "whittleseaa",
-        "totalHoursOwed": 67,
+        "minHoursOwed": 67,
         "previousHoursFulfilled": 6
     },
     {
         "utorid": "soigouxc",
-        "totalHoursOwed": 114,
+        "minHoursOwed": 114,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "azemarc",
-        "totalHoursOwed": 304,
+        "minHoursOwed": 304,
         "previousHoursFulfilled": 112
     },
     {
         "utorid": "gligorijevici",
-        "totalHoursOwed": 85,
+        "minHoursOwed": 85,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "effauntl",
-        "totalHoursOwed": 226,
+        "minHoursOwed": 226,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "tunmorec",
-        "totalHoursOwed": 109,
+        "minHoursOwed": 109,
         "previousHoursFulfilled": 8
     },
     {
         "utorid": "tampiong",
-        "totalHoursOwed": 219,
+        "minHoursOwed": 219,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cawdellm",
-        "totalHoursOwed": 185,
+        "minHoursOwed": 185,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "lorrainem",
-        "totalHoursOwed": 331,
+        "minHoursOwed": 331,
         "previousHoursFulfilled": 292
     },
     {
         "utorid": "soggeer",
-        "totalHoursOwed": 167,
+        "minHoursOwed": 167,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "houltonp",
-        "totalHoursOwed": 151,
+        "minHoursOwed": 151,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rosenblumj",
-        "totalHoursOwed": 224,
+        "minHoursOwed": 224,
         "previousHoursFulfilled": 40
     },
     {
         "utorid": "moxsteadr",
-        "totalHoursOwed": 205,
+        "minHoursOwed": 205,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "lukianovl",
-        "totalHoursOwed": 265,
+        "minHoursOwed": 265,
         "previousHoursFulfilled": 79
     },
     {
         "utorid": "donisthorpem",
-        "totalHoursOwed": 311,
+        "minHoursOwed": 311,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "stansbya",
-        "totalHoursOwed": 399,
+        "minHoursOwed": 399,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "standevenb",
-        "totalHoursOwed": 244,
+        "minHoursOwed": 244,
         "previousHoursFulfilled": 196
     },
     {
         "utorid": "ashbornet",
-        "totalHoursOwed": 271,
+        "minHoursOwed": 271,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "treadgert",
-        "totalHoursOwed": 292,
+        "minHoursOwed": 292,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "sutcliffp",
-        "totalHoursOwed": 232,
+        "minHoursOwed": 232,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "oldalll",
-        "totalHoursOwed": 366,
+        "minHoursOwed": 366,
         "previousHoursFulfilled": 100
     },
     {
         "utorid": "speeksg",
-        "totalHoursOwed": 232,
+        "minHoursOwed": 232,
         "previousHoursFulfilled": 141
     },
     {
         "utorid": "angellp",
-        "totalHoursOwed": 139,
+        "minHoursOwed": 139,
         "previousHoursFulfilled": 60
     },
     {
         "utorid": "wherryp",
-        "totalHoursOwed": 391,
+        "minHoursOwed": 391,
         "previousHoursFulfilled": 325
     },
     {
         "utorid": "ogelsbym",
-        "totalHoursOwed": 35,
+        "minHoursOwed": 35,
         "previousHoursFulfilled": 25
     },
     {
         "utorid": "biggenn",
-        "totalHoursOwed": 208,
+        "minHoursOwed": 208,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "crumptonl",
-        "totalHoursOwed": 349,
+        "minHoursOwed": 349,
         "previousHoursFulfilled": 272
     },
     {
         "utorid": "privettr",
-        "totalHoursOwed": 127,
+        "minHoursOwed": 127,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ilyushkinl",
-        "totalHoursOwed": 164,
+        "minHoursOwed": 164,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mccormickc",
-        "totalHoursOwed": 220,
+        "minHoursOwed": 220,
         "previousHoursFulfilled": 70
     },
     {
         "utorid": "crosid",
-        "totalHoursOwed": 187,
+        "minHoursOwed": 187,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "jentgensj",
-        "totalHoursOwed": 253,
+        "minHoursOwed": 253,
         "previousHoursFulfilled": 207
     },
     {
         "utorid": "ilchukz",
-        "totalHoursOwed": 106,
+        "minHoursOwed": 106,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "idam",
-        "totalHoursOwed": 82,
+        "minHoursOwed": 82,
         "previousHoursFulfilled": 5
     },
     {
         "utorid": "libbyw",
-        "totalHoursOwed": 33,
+        "minHoursOwed": 33,
         "previousHoursFulfilled": 4
     },
     {
         "utorid": "drayej",
-        "totalHoursOwed": 37,
+        "minHoursOwed": 37,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "locheadk",
-        "totalHoursOwed": 387,
+        "minHoursOwed": 387,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mathevetb",
-        "totalHoursOwed": 110,
+        "minHoursOwed": 110,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mclenaghand",
-        "totalHoursOwed": 376,
+        "minHoursOwed": 376,
         "previousHoursFulfilled": 144
     },
     {
         "utorid": "inderh",
-        "totalHoursOwed": 286,
+        "minHoursOwed": 286,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "adriane",
-        "totalHoursOwed": 60,
+        "minHoursOwed": 60,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gobeauxr",
-        "totalHoursOwed": 278,
+        "minHoursOwed": 278,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "worgt",
-        "totalHoursOwed": 394,
+        "minHoursOwed": 394,
+        "maxHoursOwed": 500,
         "previousHoursFulfilled": 252
     },
     {
         "utorid": "dellitb",
-        "totalHoursOwed": 378,
+        "minHoursOwed": 378,
         "previousHoursFulfilled": 332
     },
     {
         "utorid": "woolhousek",
-        "totalHoursOwed": 76,
+        "minHoursOwed": 76,
         "previousHoursFulfilled": 54
     },
     {
         "utorid": "whatsonc",
-        "totalHoursOwed": 105,
+        "minHoursOwed": 105,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "aggetth",
-        "totalHoursOwed": 268,
+        "minHoursOwed": 268,
         "previousHoursFulfilled": 109
     },
     {
         "utorid": "jeevest",
-        "totalHoursOwed": 293,
+        "minHoursOwed": 293,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fokerk",
-        "totalHoursOwed": 88,
+        "minHoursOwed": 88,
         "previousHoursFulfilled": 1
     },
     {
         "utorid": "birniea",
-        "totalHoursOwed": 323,
+        "minHoursOwed": 323,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kinnied",
-        "totalHoursOwed": 205,
+        "minHoursOwed": 205,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "benniond",
-        "totalHoursOwed": 67,
+        "minHoursOwed": 67,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "dyhousem",
-        "totalHoursOwed": 281,
+        "minHoursOwed": 281,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bennisonb",
-        "totalHoursOwed": 364,
+        "minHoursOwed": 364,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "naired",
-        "totalHoursOwed": 96,
+        "minHoursOwed": 96,
         "previousHoursFulfilled": 87
     },
     {
         "utorid": "girviny",
-        "totalHoursOwed": 83,
+        "minHoursOwed": 83,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "skippd",
-        "totalHoursOwed": 169,
+        "minHoursOwed": 169,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mowerc",
-        "totalHoursOwed": 69,
+        "minHoursOwed": 69,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "alowayf",
-        "totalHoursOwed": 280,
+        "minHoursOwed": 280,
         "previousHoursFulfilled": 201
     },
     {
         "utorid": "sillitow",
-        "totalHoursOwed": 90,
+        "minHoursOwed": 90,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "pollockc",
-        "totalHoursOwed": 149,
+        "minHoursOwed": 149,
         "previousHoursFulfilled": 113
     },
     {
         "utorid": "wakefieldl",
-        "totalHoursOwed": 54,
+        "minHoursOwed": 54,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "juarat",
-        "totalHoursOwed": 396,
+        "minHoursOwed": 396,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ridelh",
-        "totalHoursOwed": 35,
+        "minHoursOwed": 35,
         "previousHoursFulfilled": 21
     },
     {
         "utorid": "flannigank",
-        "totalHoursOwed": 236,
+        "minHoursOwed": 236,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cowndenl",
-        "totalHoursOwed": 351,
+        "minHoursOwed": 351,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "phillimorea",
-        "totalHoursOwed": 151,
+        "minHoursOwed": 151,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "gressv",
-        "totalHoursOwed": 83,
+        "minHoursOwed": 83,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "torrieu",
-        "totalHoursOwed": 187,
+        "minHoursOwed": 187,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "bensent",
-        "totalHoursOwed": 151,
+        "minHoursOwed": 151,
         "previousHoursFulfilled": 127
     },
     {
         "utorid": "sallowsl",
-        "totalHoursOwed": 135,
+        "minHoursOwed": 135,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "smeuinf",
-        "totalHoursOwed": 394,
+        "minHoursOwed": 394,
         "previousHoursFulfilled": 228
     },
     {
         "utorid": "jaffad",
-        "totalHoursOwed": 396,
+        "minHoursOwed": 396,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "chestlep",
-        "totalHoursOwed": 219,
+        "minHoursOwed": 219,
         "previousHoursFulfilled": 115
     },
     {
         "utorid": "aldera",
-        "totalHoursOwed": 303,
+        "minHoursOwed": 303,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kensalls",
-        "totalHoursOwed": 226,
+        "minHoursOwed": 226,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "goulbornek",
-        "totalHoursOwed": 70,
+        "minHoursOwed": 70,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "olivic",
-        "totalHoursOwed": 132,
+        "minHoursOwed": 132,
         "previousHoursFulfilled": 130
     },
     {
         "utorid": "blazaf",
-        "totalHoursOwed": 118,
+        "minHoursOwed": 118,
         "previousHoursFulfilled": 92
     },
     {
         "utorid": "kryzhovm",
-        "totalHoursOwed": 122,
+        "minHoursOwed": 122,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "dyserta",
-        "totalHoursOwed": 374,
+        "minHoursOwed": 374,
         "previousHoursFulfilled": 129
     },
     {
         "utorid": "iglesiasd",
-        "totalHoursOwed": 356,
+        "minHoursOwed": 356,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "chislettj",
-        "totalHoursOwed": 342,
+        "minHoursOwed": 342,
         "previousHoursFulfilled": 214
     },
     {
         "utorid": "gabitesr",
-        "totalHoursOwed": 258,
+        "minHoursOwed": 258,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "dambrogior",
-        "totalHoursOwed": 252,
+        "minHoursOwed": 252,
         "previousHoursFulfilled": 224
     },
     {
         "utorid": "bremleys",
-        "totalHoursOwed": 73,
+        "minHoursOwed": 73,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "muldownien",
-        "totalHoursOwed": 46,
+        "minHoursOwed": 46,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "brunelc",
-        "totalHoursOwed": 50,
+        "minHoursOwed": 50,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "kernellr",
-        "totalHoursOwed": 219,
+        "minHoursOwed": 219,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "elizabethv",
-        "totalHoursOwed": 213,
+        "minHoursOwed": 213,
         "previousHoursFulfilled": 66
     },
     {
         "utorid": "mottinelliw",
-        "totalHoursOwed": 399,
+        "minHoursOwed": 399,
         "previousHoursFulfilled": 220
     },
     {
         "utorid": "dowd",
-        "totalHoursOwed": 217,
+        "minHoursOwed": 217,
         "previousHoursFulfilled": 72
     },
     {
         "utorid": "shovellerz",
-        "totalHoursOwed": 383,
+        "minHoursOwed": 383,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "serginsonm",
-        "totalHoursOwed": 87,
+        "minHoursOwed": 87,
         "previousHoursFulfilled": 4
     },
     {
         "utorid": "brambillo",
-        "totalHoursOwed": 143,
+        "minHoursOwed": 143,
         "previousHoursFulfilled": 91
     },
     {
         "utorid": "beardshalln",
-        "totalHoursOwed": 285,
+        "minHoursOwed": 285,
         "previousHoursFulfilled": 28
     },
     {
         "utorid": "priestnallu",
-        "totalHoursOwed": 328,
+        "minHoursOwed": 328,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fransesl",
-        "totalHoursOwed": 372,
+        "minHoursOwed": 372,
         "previousHoursFulfilled": 221
     },
     {
         "utorid": "darlastonb",
-        "totalHoursOwed": 377,
+        "minHoursOwed": 377,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "rackamh",
-        "totalHoursOwed": 59,
+        "minHoursOwed": 59,
         "previousHoursFulfilled": 14
     },
     {
         "utorid": "robertza",
-        "totalHoursOwed": 340,
+        "minHoursOwed": 340,
         "previousHoursFulfilled": 166
     },
     {
         "utorid": "dowryb",
-        "totalHoursOwed": 269,
+        "minHoursOwed": 269,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "lamartinet",
-        "totalHoursOwed": 235,
+        "minHoursOwed": 235,
         "previousHoursFulfilled": 59
     },
     {
         "utorid": "mumbersond",
-        "totalHoursOwed": 265,
+        "minHoursOwed": 265,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cottilll",
-        "totalHoursOwed": 214,
+        "minHoursOwed": 214,
         "previousHoursFulfilled": 58
     },
     {
         "utorid": "cramptong",
-        "totalHoursOwed": 202,
+        "minHoursOwed": 202,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "lamblotl",
-        "totalHoursOwed": 392,
+        "minHoursOwed": 392,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "edmeadsl",
-        "totalHoursOwed": 352,
+        "minHoursOwed": 352,
         "previousHoursFulfilled": 84
     },
     {
         "utorid": "roadt",
-        "totalHoursOwed": 232,
+        "minHoursOwed": 232,
         "previousHoursFulfilled": 81
     },
     {
         "utorid": "auting",
-        "totalHoursOwed": 256,
+        "minHoursOwed": 256,
         "previousHoursFulfilled": 4
     },
     {
         "utorid": "maccaghana",
-        "totalHoursOwed": 366,
+        "minHoursOwed": 366,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "de hoogez",
-        "totalHoursOwed": 34,
+        "minHoursOwed": 34,
         "previousHoursFulfilled": 32
     },
     {
         "utorid": "buffink",
-        "totalHoursOwed": 397,
+        "minHoursOwed": 397,
         "previousHoursFulfilled": 95
     },
     {
         "utorid": "blakeya",
-        "totalHoursOwed": 346,
+        "minHoursOwed": 346,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "falconerb",
-        "totalHoursOwed": 115,
+        "minHoursOwed": 115,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "windrossm",
-        "totalHoursOwed": 222,
+        "minHoursOwed": 222,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "fuleph",
-        "totalHoursOwed": 330,
+        "minHoursOwed": 330,
         "previousHoursFulfilled": 237
     },
     {
         "utorid": "readshawr",
-        "totalHoursOwed": 55,
+        "minHoursOwed": 55,
         "previousHoursFulfilled": 21
     },
     {
         "utorid": "cuerdallr",
-        "totalHoursOwed": 266,
+        "minHoursOwed": 266,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cardern",
-        "totalHoursOwed": 164,
+        "minHoursOwed": 164,
         "previousHoursFulfilled": 141
     },
     {
         "utorid": "kempg",
-        "totalHoursOwed": 369,
+        "minHoursOwed": 369,
         "previousHoursFulfilled": 218
     },
     {
         "utorid": "rayntona",
-        "totalHoursOwed": 137,
+        "minHoursOwed": 137,
         "previousHoursFulfilled": 126
     },
     {
         "utorid": "mayella",
-        "totalHoursOwed": 317,
+        "minHoursOwed": 317,
         "previousHoursFulfilled": 29
     },
     {
         "utorid": "basketfieldd",
-        "totalHoursOwed": 353,
+        "minHoursOwed": 353,
         "previousHoursFulfilled": 256
     },
     {
         "utorid": "rozenbaumd",
-        "totalHoursOwed": 272,
+        "minHoursOwed": 272,
         "previousHoursFulfilled": 218
     },
     {
         "utorid": "follinga",
-        "totalHoursOwed": 184,
+        "minHoursOwed": 184,
         "previousHoursFulfilled": 168
     },
     {
         "utorid": "gettyl",
-        "totalHoursOwed": 385,
+        "minHoursOwed": 385,
         "previousHoursFulfilled": 342
     },
     {
         "utorid": "neaveb",
-        "totalHoursOwed": 30,
+        "minHoursOwed": 30,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "leiskw",
-        "totalHoursOwed": 301,
+        "minHoursOwed": 301,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "anteckia",
-        "totalHoursOwed": 375,
+        "minHoursOwed": 375,
         "previousHoursFulfilled": 37
     },
     {
         "utorid": "prandym",
-        "totalHoursOwed": 342,
+        "minHoursOwed": 342,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "schubbertc",
-        "totalHoursOwed": 119,
+        "minHoursOwed": 119,
         "previousHoursFulfilled": 42
     },
     {
         "utorid": "matsond",
-        "totalHoursOwed": 145,
+        "minHoursOwed": 145,
         "previousHoursFulfilled": 21
     },
     {
         "utorid": "jeannardb",
-        "totalHoursOwed": 181,
+        "minHoursOwed": 181,
         "previousHoursFulfilled": 91
     },
     {
         "utorid": "pritchitta",
-        "totalHoursOwed": 76,
+        "minHoursOwed": 76,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ricec",
-        "totalHoursOwed": 313,
+        "minHoursOwed": 313,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "elfesg",
-        "totalHoursOwed": 291,
+        "minHoursOwed": 291,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "decourtl",
-        "totalHoursOwed": 398,
+        "minHoursOwed": 398,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "verneya",
-        "totalHoursOwed": 83,
+        "minHoursOwed": 83,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "crumpem",
-        "totalHoursOwed": 97,
+        "minHoursOwed": 97,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "grinovr",
-        "totalHoursOwed": 354,
+        "minHoursOwed": 354,
         "previousHoursFulfilled": 297
     },
     {
         "utorid": "heinricie",
-        "totalHoursOwed": 400,
+        "minHoursOwed": 400,
         "previousHoursFulfilled": 356
     },
     {
         "utorid": "mulkerrinso",
-        "totalHoursOwed": 361,
+        "minHoursOwed": 361,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "braggg",
-        "totalHoursOwed": 283,
+        "minHoursOwed": 283,
         "previousHoursFulfilled": 2
     },
     {
         "utorid": "woodworths",
-        "totalHoursOwed": 318,
+        "minHoursOwed": 318,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "whelbandl",
-        "totalHoursOwed": 112,
+        "minHoursOwed": 112,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "hovela",
-        "totalHoursOwed": 349,
+        "minHoursOwed": 349,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "mobberleym",
-        "totalHoursOwed": 263,
+        "minHoursOwed": 263,
         "previousHoursFulfilled": 50
     },
     {
         "utorid": "justune",
-        "totalHoursOwed": 371,
+        "minHoursOwed": 371,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "liverk",
-        "totalHoursOwed": 236,
+        "minHoursOwed": 236,
         "previousHoursFulfilled": 232
     },
     {
         "utorid": "riderg",
-        "totalHoursOwed": 109,
+        "minHoursOwed": 109,
         "previousHoursFulfilled": 26
     },
     {
         "utorid": "ghelerdinid",
-        "totalHoursOwed": 191,
+        "minHoursOwed": 191,
         "previousHoursFulfilled": 166
     },
     {
         "utorid": "markeys",
-        "totalHoursOwed": 160,
+        "minHoursOwed": 160,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "scaddono",
-        "totalHoursOwed": 55,
+        "minHoursOwed": 55,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "oddyk",
-        "totalHoursOwed": 37,
+        "minHoursOwed": 37,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "callfj",
-        "totalHoursOwed": 71,
+        "minHoursOwed": 71,
         "previousHoursFulfilled": 5
     },
     {
         "utorid": "booelns",
-        "totalHoursOwed": 376,
+        "minHoursOwed": 376,
         "previousHoursFulfilled": 290
     },
     {
         "utorid": "mathiassend",
-        "totalHoursOwed": 79,
+        "minHoursOwed": 79,
         "previousHoursFulfilled": 4
     },
     {
         "utorid": "medlicotth",
-        "totalHoursOwed": 60,
+        "minHoursOwed": 60,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "matiebep",
-        "totalHoursOwed": 255,
+        "minHoursOwed": 255,
         "previousHoursFulfilled": 69
     },
     {
         "utorid": "sainthillg",
-        "totalHoursOwed": 332,
+        "minHoursOwed": 332,
         "previousHoursFulfilled": 232
     },
     {
         "utorid": "hatliffel",
-        "totalHoursOwed": 101,
+        "minHoursOwed": 101,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "hinrichss",
-        "totalHoursOwed": 52,
+        "minHoursOwed": 52,
         "previousHoursFulfilled": 27
     },
     {
         "utorid": "cuschieril",
-        "totalHoursOwed": 64,
+        "minHoursOwed": 64,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "cashamh",
-        "totalHoursOwed": 167,
+        "minHoursOwed": 167,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "estcotm",
-        "totalHoursOwed": 209,
+        "minHoursOwed": 209,
         "previousHoursFulfilled": 79
     },
     {
         "utorid": "jagelsp",
-        "totalHoursOwed": 292,
+        "minHoursOwed": 292,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "elldreda",
-        "totalHoursOwed": 300,
+        "minHoursOwed": 300,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "canwellc",
-        "totalHoursOwed": 235,
+        "minHoursOwed": 235,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "ashtonhurstb",
-        "totalHoursOwed": 362,
+        "minHoursOwed": 362,
         "previousHoursFulfilled": 157
     },
     {
         "utorid": "marshfielda",
-        "totalHoursOwed": 144,
+        "minHoursOwed": 144,
         "previousHoursFulfilled": 89
     },
     {
         "utorid": "parisok",
-        "totalHoursOwed": 222,
+        "minHoursOwed": 222,
         "previousHoursFulfilled": 160
     },
     {
         "utorid": "mclugishs",
-        "totalHoursOwed": 88,
+        "minHoursOwed": 88,
         "previousHoursFulfilled": 42
     },
     {
         "utorid": "sweetenhama",
-        "totalHoursOwed": 186,
+        "minHoursOwed": 186,
         "previousHoursFulfilled": 25
     },
     {
         "utorid": "gloye",
-        "totalHoursOwed": 161,
+        "minHoursOwed": 161,
         "previousHoursFulfilled": 150
     },
     {
         "utorid": "skeechs",
-        "totalHoursOwed": 375,
+        "minHoursOwed": 375,
         "previousHoursFulfilled": 0
     },
     {
         "utorid": "giovannacc@is",
-        "totalHoursOwed": 298,
+        "minHoursOwed": 298,
         "previousHoursFulfilled": 0
     }
 ]

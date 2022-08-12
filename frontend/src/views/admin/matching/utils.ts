@@ -12,16 +12,16 @@ export function getApplicantMatchForPosition(
 
     return (
         applicantSummary.matches.find(
-            (match) => match.positionCode === position.position_code
+            (match) => match.position.position_code === position.position_code
         ) || null
     );
 }
 
 export function getPositionPrefForPosition(
-    application: Application,
-    position: Position | null
+    application: Application | null,
+    position: Position
 ) {
-    if (!position) {
+    if (!application) {
         return null;
     }
 

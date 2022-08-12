@@ -1,32 +1,18 @@
 import React from "react";
-import { matchesSelector } from "./actions";
+import { matchesSelector, upsertMatch } from "./actions";
 import { useSelector } from "react-redux";
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
-
-import { Assignment, Applicant } from "../../../api/defs/types";
-
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
-
-import {
-    positionsSelector,
-    applicantsSelector,
-    upsertAssignment,
-} from "../../../api/actions";
+import { upsertAssignment } from "../../../api/actions";
 
 const DEFAULT_COLUMNS = [
-    { Header: "Position Code", accessor: "positionCode" },
+    { Header: "Position Code", accessor: "position.position_code" },
     { Header: "Hours", accessor: "hoursAssigned" },
     { Header: "Last Name", accessor: "applicant.last_name" },
     { Header: "First Name", accessor: "applicant.first_name" },
     { Header: "UTORid", accessor: "applicant.utorid" },
 ];
-
-type StagedAssignmentData = {
-    positionCode: string;
-    hoursAssigned: number;
-    applicant: Applicant;
-};
 
 /**
  * A button that brings up a modal allowing users to see a list of staged assignments
@@ -36,34 +22,24 @@ export function FinalizeChangesButton() {
     const [dialogVisible, setDialogVisible] = React.useState(false);
 
     const matches = useSelector(matchesSelector);
-    const positions = useSelector(positionsSelector);
-    const applicants = useSelector(applicantsSelector);
-
     const dispatch = useThunkDispatch();
+    const stagedAssignments = React.useMemo(() => {
+        return matches.filter((match) => match.status === "staged-assigned");
+    }, [matches]);
 
-    const stagedAssignments: StagedAssignmentData[] = React.useMemo(() => {
-        const stagedAssignedMatches = matches.filter(
-            (match) => match.status === "staged-assigned"
-        );
-
-        const ret: StagedAssignmentData[] = [];
-        for (const match of stagedAssignedMatches) {
-            const targetApplicant = applicants.find(
-                (applicant) => applicant.utorid === match.utorid
+    async function finalizeAssignments() {
+        const assignmentPromises = stagedAssignments.map((match) => {
+            return dispatch(
+                upsertAssignment({
+                    position: match.position,
+                    applicant: match.applicant,
+                    hours: match.hoursAssigned,
+                })
             );
-            if (!targetApplicant) {
-                continue;
-            }
+        });
 
-            ret.push({
-                positionCode: match.positionCode,
-                hoursAssigned: match.hoursAssigned,
-                applicant: targetApplicant,
-            });
-        }
-
-        return ret;
-    }, [matches, applicants]);
+        await Promise.all(assignmentPromises);
+    }
 
     function _onConfirm() {
         if (stagedAssignments.length === 0) {
@@ -71,22 +47,18 @@ export function FinalizeChangesButton() {
             return;
         }
 
+        finalizeAssignments();
+
+        // Remove these staged assignments from the matching data:
         for (const match of stagedAssignments) {
-            const targetPosition = positions.find(
-                (position) => position.position_code === match.positionCode
+            dispatch(
+                upsertMatch({
+                    positionCode: match.position.position_code,
+                    utorid: match.applicant.utorid,
+                    stagedAssigned: false,
+                    stagedHoursAssigned: 0,
+                })
             );
-
-            if (!targetPosition) {
-                return;
-            }
-
-            const newAssignment: Partial<Assignment> = {
-                position: targetPosition,
-                hours: match.hoursAssigned,
-                applicant: match.applicant,
-            };
-
-            dispatch(upsertAssignment(newAssignment));
         }
         setDialogVisible(false);
     }

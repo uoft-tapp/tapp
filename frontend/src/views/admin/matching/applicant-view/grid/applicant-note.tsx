@@ -15,9 +15,9 @@ export function ApplicantNote({
 }) {
     const dispatch = useThunkDispatch();
     const [show, setShow] = React.useState(false);
-    const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note);
+    const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note || "");
 
-    function updateApplicantNote(note: string | null) {
+    function updateApplicantNote(note: string) {
         dispatch(
             upsertNote({
                 utorid: applicantSummary.applicant.utorid,
@@ -61,11 +61,7 @@ export function ApplicantNote({
                     </Button>
                     <Button
                         onClick={() => {
-                            if (noteTemp?.length === 0) {
-                                updateApplicantNote(null);
-                            } else {
-                                updateApplicantNote(noteTemp);
-                            }
+                            updateApplicantNote(noteTemp);
                             setShow(false);
                         }}
                         variant="outline-primary"

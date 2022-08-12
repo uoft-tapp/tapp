@@ -10,13 +10,13 @@ import {
     SET_UPDATED,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
-import { Match, AppointmentGuaranteeStatus, ViewType } from "./types";
+import { RawMatch, AppointmentGuaranteeStatus, ViewType } from "./types";
 export { matchingDataReducer };
 
 export interface MatchingDataState {
-    matches: Match[];
+    matches: RawMatch[];
     guarantees: AppointmentGuaranteeStatus[];
-    notes: Record<string, string | null>;
+    notes: Record<string, string>;
     selectedPositionId: number | null;
     viewType: ViewType;
     updated: boolean;
@@ -33,7 +33,7 @@ const initialState: MatchingDataState = {
 
 const matchingDataReducer = createReducer(initialState, {
     [UPSERT_MATCH]: (state, action) => {
-        // Check if a match with this applicant ID and position ID already exist
+        // Check if a match with this applicant ID and position ID already exists
         const existingMatch = state.matches.find(
             (match) =>
                 match.utorid === action.payload.utorid &&
@@ -41,26 +41,54 @@ const matchingDataReducer = createReducer(initialState, {
         );
 
         if (!existingMatch) {
-            return {
-                ...state,
-                matches: [...state.matches, action.payload],
-                updated: true,
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
+                stagedAssigned: action.payload.stagedAssigned || false,
+                starred: action.payload.starred || false,
+                hidden: action.payload.hidden || false,
             };
+
+            // If any flag is set to true, add the new RawMatch
+            if (
+                newMatch.stagedAssigned ||
+                newMatch.starred ||
+                newMatch.hidden
+            ) {
+                return {
+                    ...state,
+                    matches: [...state.matches, action.payload],
+                    updated: true,
+                };
+            }
+
+            return state;
         }
 
         // Item exists, so we have to update it
+        const newMatch: RawMatch = { ...existingMatch, ...action.payload };
         return {
             ...state,
-            matches: state.matches.map((match) => {
-                if (
-                    match.utorid === action.payload.utorid &&
-                    match.positionCode === action.payload.positionCode
-                ) {
-                    return action.payload;
-                } else {
-                    return match;
-                }
-            }),
+            matches: state.matches
+                .map((match) => {
+                    if (
+                        match.utorid === action.payload.utorid &&
+                        match.positionCode === action.payload.positionCode
+                    ) {
+                        if (
+                            newMatch.stagedAssigned ||
+                            newMatch.starred ||
+                            newMatch.hidden
+                        ) {
+                            return newMatch;
+                        }
+                        return null;
+                    } else {
+                        return match;
+                    }
+                })
+                .filter((match) => !!match),
             updated: true,
         };
     },
@@ -97,8 +125,16 @@ const matchingDataReducer = createReducer(initialState, {
         return { ...state, guarantees: action.payload, updated: true };
     },
     [UPSERT_NOTE]: (state, action) => {
-        const existingNotes: Record<string, string | null> = { ...state.notes };
-        existingNotes[action.payload.utorid] = action.payload.note;
+        const existingNotes: Record<string, string> = { ...state.notes };
+
+        // If the note is empty, delete it from the record
+        if (!action.payload.note) {
+            if (existingNotes[action.payload.utorid]) {
+                delete existingNotes[action.payload.utorid];
+            }
+        } else {
+            existingNotes[action.payload.utorid] = action.payload.note;
+        }
 
         return { ...state, notes: existingNotes, updated: true };
     },

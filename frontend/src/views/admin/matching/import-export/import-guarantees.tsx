@@ -76,7 +76,8 @@ export function ImportGuaranteesButton() {
                     (guarantee: AppointmentGuaranteeStatus) => {
                         return {
                             utorid: guarantee.utorid,
-                            totalHoursOwed: guarantee.totalHoursOwed,
+                            minHoursOwed: guarantee.minHoursOwed,
+                            maxHoursOwed: guarantee.maxHoursOwed,
                             previousHoursFulfilled:
                                 guarantee.previousHoursFulfilled,
                         } as AppointmentGuaranteeStatus;
