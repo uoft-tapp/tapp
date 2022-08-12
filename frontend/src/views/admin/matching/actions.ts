@@ -50,8 +50,8 @@ export const upsertNote =
 export const batchUpsertNotes =
     actionFactory<Record<string, string | null>>(BATCH_UPSERT_NOTES);
 
-export const setSelectedPosition = actionFactory<number | null>(
-    SET_SELECTED_POSITION
+export const setSelectedMatchingPosition = actionFactory<number | null>(
+    SET_SELECTED_MATCHING_POSITION
 );
 
 export const setViewType = actionFactory<ViewType>(SET_VIEW_TYPE);
@@ -63,8 +63,8 @@ export const matchingDataSelector = (state: RootState) => state.ui.matchingData;
 export const guaranteesSelector = (state: RootState) =>
     state.ui.matchingData.guarantees;
 export const notesSelector = (state: RootState) => state.ui.matchingData.notes;
-export const selectedPositionSelector = (state: RootState) =>
-    state.ui.matchingData.selectedPositionId;
+export const selectedMatchingPositionSelector = (state: RootState) =>
+    state.ui.matchingData.selectedMatchingPositionId;
 export const viewTypeSelector = (state: RootState) =>
     state.ui.matchingData.viewType;
 export const updatedSelector = (state: RootState) =>

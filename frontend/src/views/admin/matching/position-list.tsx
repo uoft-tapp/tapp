@@ -2,7 +2,7 @@ import React from "react";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 import { PositionSummary } from "./types";
-import { setSelectedPosition } from "./actions";
+import { setSelectedMatchingPosition } from "./actions";
 import { Form } from "react-bootstrap";
 
 /**
@@ -94,7 +94,9 @@ function PositionRow({
         <div
             className="position-row noselect"
             onClick={() =>
-                dispatch(setSelectedPosition(positionSummary.position.id))
+                dispatch(
+                    setSelectedMatchingPosition(positionSummary.position.id)
+                )
             }
         >
             <div

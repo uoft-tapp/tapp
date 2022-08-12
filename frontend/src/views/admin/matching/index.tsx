@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import {
-    selectedPositionSelector,
+    selectedMatchingPositionSelector,
     positionSummariesByIdSelector,
 } from "./actions";
 import { PositionSummary } from "./types";
@@ -34,7 +34,7 @@ export function AdminMatchingView() {
 
     // Get information about positions
     const positionSummaries = useSelector(positionSummariesByIdSelector);
-    const selectedPositionId = useSelector(selectedPositionSelector);
+    const selectedPositionId = useSelector(selectedMatchingPositionSelector);
     const selectedPositionSummary: PositionSummary | null =
         React.useMemo(() => {
             if (!selectedPositionId) {
