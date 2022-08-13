@@ -35,8 +35,7 @@ export function ImportGuaranteesButton() {
         const reader = new FileReader();
         reader.onload = (e) => {
             if (!e.target || typeof e.target.result === "string") {
-                const warning = `File of unexpected type ${typeof e.target
-                    ?.result}`;
+                const warning = "File of unexpected type";
                 setWarningMessage(warning);
                 console.warn(warning);
                 return;
