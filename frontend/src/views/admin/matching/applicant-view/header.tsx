@@ -8,7 +8,7 @@ import { Form, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { SortBar } from "../sorts";
 import { SortListItem } from "../sorts/sorts";
 import { FilterModal } from "../filters";
-import { FilterListItem } from "../filters/filters";
+import { FilterType } from "../filters/filters";
 import { PositionSummary } from "../types";
 
 /**
@@ -25,8 +25,8 @@ export function ApplicantViewHeader({
 }: {
     positionSummary: PositionSummary | null;
     setFilterString: (arg0: string) => void;
-    filterList: FilterListItem[];
-    setFilterList: (arg0: FilterListItem[]) => void;
+    filterList: Record<FilterType, any[]>;
+    setFilterList: (arg0: Record<FilterType, any[]>) => void;
     sortList: SortListItem[];
     setSortList: (arg0: SortListItem[]) => void;
 }) {
@@ -85,17 +85,24 @@ function ApplicantFilterButton({
     filterList,
     setFilterList,
 }: {
-    filterList: FilterListItem[];
-    setFilterList: (arg0: FilterListItem[]) => unknown;
+    filterList: Record<FilterType, any[]>;
+    setFilterList: (arg0: Record<FilterType, any[]>) => void;
 }) {
     const [show, setShow] = React.useState(false);
+    const numActiveFilters: number = React.useMemo(() => {
+        let count = 0;
+        for (const filterType in filterList) {
+            count += filterList[filterType as FilterType].length;
+        }
+        return count;
+    }, [filterList]);
 
     return (
         <>
             <div className="filter-button-container">
                 <FaFilter
                     className={classNames("filter-button", {
-                        active: filterList.length > 0,
+                        active: numActiveFilters > 0,
                     })}
                     onClick={() => setShow(!show)}
                 />

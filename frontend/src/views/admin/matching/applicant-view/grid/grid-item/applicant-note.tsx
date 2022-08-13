@@ -32,6 +32,7 @@ export function ApplicantNote({
     return (
         <>
             <RiStickyNoteFill
+                title="View or edit this applicant's note"
                 className={`applicant-icon ${
                     applicantSummary.note && applicantSummary.note.length > 0
                         ? "active"

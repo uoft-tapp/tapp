@@ -5,7 +5,6 @@ import React from "react";
 import {
     getApplicantMatchForPosition,
     getPositionPrefForPosition,
-    getApplicantTotalHoursAssigned,
 } from "../../utils";
 import { matchingStatusToString } from "../";
 import { AdvancedFilterTable } from "../../../../../components/filter-table/advanced-filter-table";
@@ -97,17 +96,21 @@ export function TableView({
             first_name: summary.applicant.first_name,
             utorid: summary.applicant.utorid,
             department: summary.application?.department
-                ? departmentCodes[summary.application?.department]["full"]
+                ? departmentCodes[summary.application?.department]
+                    ? departmentCodes[summary.application?.department]["full"]
+                    : `Other (${summary.application?.department})`
                 : "",
             program: summary.application?.program
-                ? programCodes[summary.application?.program]["full"]
+                ? programCodes[summary.application?.program]
+                    ? programCodes[summary.application?.program]["full"]
+                    : `Other (${summary.application?.program})`
                 : "",
             yip: summary.application?.yip,
             gpa: summary.application?.gpa,
             taPreference: positionPrefsByApplicantId[summary.applicant.id],
             instructorPreference: avgInstructorRating,
             assignments: formatAssignedCourses(summary),
-            totalHoursAssigned: getApplicantTotalHoursAssigned(summary),
+            totalHoursAssigned: summary.hoursAssigned,
             previousHoursFulfilled: summary.guarantee?.previousHoursFulfilled,
             guaranteedHours: `${
                 summary.guarantee?.minHoursOwed

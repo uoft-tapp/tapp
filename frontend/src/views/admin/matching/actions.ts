@@ -293,12 +293,43 @@ export const applicantSummariesSelector = createSelector(
         }
 
         for (const applicant of applicants) {
+            let hoursAssigned = 0;
+            for (const match of matchesByApplicantId[applicant.id] || []) {
+                if (
+                    match.status === "assigned" ||
+                    match.status === "staged-assigned"
+                ) {
+                    hoursAssigned += match.hoursAssigned;
+                }
+            }
+
+            let filledStatus: FillStatus = "n/a";
+            if (hoursAssigned > 0) {
+                filledStatus = "over";
+            }
+
+            if (guaranteesByUtorid[applicant.utorid]) {
+                const targetHours =
+                    guaranteesByUtorid[applicant.utorid].minHoursOwed;
+                if (targetHours > 0 && hoursAssigned === 0) {
+                    filledStatus = "empty";
+                } else if (targetHours - hoursAssigned > 0) {
+                    filledStatus = "under";
+                } else if (targetHours - hoursAssigned === 0) {
+                    filledStatus = "matched";
+                } else if (targetHours - hoursAssigned < 0) {
+                    filledStatus = "over";
+                }
+            }
+
             ret.push({
                 applicant: applicant,
                 application: applicationsByApplicantId[applicant.id],
                 matches: matchesByApplicantId[applicant.id] || [],
                 guarantee: guaranteesByUtorid[applicant.utorid],
                 note: notes[applicant.utorid] || null,
+                hoursAssigned: hoursAssigned,
+                filledStatus: filledStatus,
             });
         }
 

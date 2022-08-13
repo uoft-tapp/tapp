@@ -3,165 +3,86 @@ import { Position } from "../../../../api/defs/types";
 import {
     getPositionPrefForPosition,
     getApplicantMatchForPosition,
-    getApplicantTotalHoursAssigned,
 } from "../utils";
 
-export type FilterListItem = {
-    section: string;
-    value: string;
-};
+export type FilterType =
+    | "program"
+    | "department"
+    | "taPositionPref"
+    | "status"
+    | "hourFulfillment";
 
-export type FilterMapItem = {
-    filterFunc: Function;
-    values: FilterMapItemValue[];
-};
-
-export type FilterMapItemValue = {
-    value: any;
-    label: string;
-};
-
-export const filterMap: Record<string, FilterMapItem> = {
-    Program: {
-        filterFunc: filterByProgram,
+export const filterMap: Record<
+    FilterType,
+    {
+        label: string;
+        func: Function;
+        values: { label: string; value: any }[];
+        hasOther: boolean;
+    }
+> = {
+    program: {
+        label: "Program",
+        func: filterByProgram,
         values: [
-            {
-                value: "PD",
-                label: "Postdoc",
-            },
-            {
-                value: "P",
-                label: "PhD",
-            },
-            {
-                value: "M",
-                label: "Masters",
-            },
-            {
-                value: "MScAC",
-                label: "MScAC",
-            },
-            {
-                value: "U",
-                label: "Undergraduate",
-            },
-            {
-                value: "Other",
-                label: "Other",
-            },
+            { label: "Postdoc (PD)", value: "PD" },
+            { label: "PhD (P)", value: "P" },
+            { label: "Masters (M)", value: "M" },
+            { label: "MScAC (m)", value: "MScAC" },
+            { label: "Undergraduate (U)", value: "U" },
         ],
+        hasOther: true,
     },
-    Department: {
-        filterFunc: filterByDept,
+    department: {
+        label: "Department",
+        func: filterByDept,
         values: [
-            {
-                value: "math",
-                label: "Mathematics/Applied Mathematics",
-            },
-            {
-                value: "cs",
-                label: "Computer Science",
-            },
-            {
-                value: "engr",
-                label: "Engineering",
-            },
-            {
-                value: "astro",
-                label: "Astronomy and Astrophysics",
-            },
-            {
-                value: "chem",
-                label: "Chemistry",
-            },
-            {
-                value: "biophys",
-                label: "Medical Biophysics",
-            },
-            {
-                value: "phys",
-                label: "Physics",
-            },
-            {
-                value: "stat",
-                label: "Statistics",
-            },
+            { label: "Mathematics/Applied Mathematics (M)", value: "math" },
+            { label: "Computer Science (CS)", value: "cs" },
+            { label: "Engineering (E)", value: "engr" },
+            { label: "Astronomy and Astrophysics (A)", value: "astro" },
+            { label: "Chemistry (Ch)", value: "chem" },
+            { label: "Medical Biophysics (B)", value: "biophys" },
+            { label: "Physics (P)", value: "phys" },
+            { label: "Statistics (S)", value: "stat" },
         ],
+        hasOther: true,
     },
-    "TA Preference": {
-        filterFunc: filterByTaPref,
+    taPositionPref: {
+        label: "TA Preference",
+        func: filterByTaPref,
         values: [
-            {
-                value: 3,
-                label: "High",
-            },
-            {
-                value: 2,
-                label: "Medium",
-            },
-            {
-                value: 1,
-                label: "Low",
-            },
-            {
-                value: 0,
-                label: "N/A",
-            },
-            {
-                value: -1,
-                label: "Strong Preference Against",
-            },
+            { label: "High", value: 3 },
+            { label: "Medium", value: 2 },
+            { label: "Low", value: 1 },
+            { label: "N/A", value: 0 },
+            { label: "Strong Preference Against", value: -1 },
         ],
+        hasOther: true,
     },
-    "Position Status": {
-        filterFunc: filterByPositionStatus,
+    status: {
+        label: "Position Status",
+        func: filterByPositionStatus,
         values: [
-            {
-                value: "assigned",
-                label: "Assigned",
-            },
-            {
-                value: "staged-assigned",
-                label: "Assigned (Staged)",
-            },
-            {
-                value: "starred",
-                label: "Starred",
-            },
-            {
-                value: "applied",
-                label: "Applied",
-            },
-            {
-                value: "hidden",
-                label: "Hidden",
-            },
+            { label: "Assigned", value: "assigned" },
+            { label: "Assigned (Staged)", value: "staged-assigned" },
+            { label: "Starred", value: "starred" },
+            { label: "Applied", value: "applied" },
+            { label: "Hidden", value: "hidden" },
         ],
+        hasOther: false,
     },
-    "Hour Fulfillment": {
-        filterFunc: filterByHourFulfillment,
+    hourFulfillment: {
+        label: "Hour Fulfillment",
+        func: filterByHourFulfillment,
         values: [
-            {
-                value: "over",
-                label: "Overfilled",
-            },
-            {
-                value: "filled",
-                label: "Filled",
-            },
-            {
-                value: "under",
-                label: "Underfilled",
-            },
-            {
-                value: "empty",
-                label: "Unstarted",
-            },
-            {
-                value: "N/A",
-                label: "N/A",
-            },
+            { label: "Overfilled", value: "over" },
+            { label: "Filled", value: "matched" },
+            { label: "Underfilled", value: "under" },
+            { label: "Empty", value: "empty" },
+            { label: "N/A", value: "n/a" },
         ],
+        hasOther: false,
     },
 };
 
@@ -170,47 +91,43 @@ export const filterMap: Record<string, FilterMapItem> = {
  */
 export function applyFilters(
     applicantSummaries: ApplicantSummary[],
-    filterList: FilterListItem[],
+    filterList: Record<FilterType, any[]>,
     position: Position | null
 ) {
-    if (filterList.length === 0 || !position) {
+    if (Object.keys(filterList).length === 0 || !position) {
         return [...applicantSummaries];
     }
 
     let filteredList: ApplicantSummary[] = [...applicantSummaries];
-
-    // Create buckets
-    const filterBuckets: Record<string, string[]> = {};
-
-    for (const filterItem of filterList) {
-        filterBuckets[filterItem.section] =
-            filterBuckets[filterItem.section] || [];
-        filterBuckets[filterItem.section].push(filterItem.value);
-    }
-
-    // Apply filters for each type
-    for (const key in filterBuckets) {
-        // Return early if this key doesn't exist in the filter map for some reason
-        if (!filterMap[key]) {
-            return;
-        }
-
-        if (key === "TA Preference" || key === "Position Status") {
-            filteredList = filterMap[key].filterFunc(
+    for (const key in filterList) {
+        if (key === "taPositionPref" || key === "status") {
+            filteredList = filterMap[key as FilterType].func(
                 filteredList,
-                filterBuckets[key],
+                filterList[key as FilterType],
                 position
             );
         } else {
-            // Call the section's filter function
-            filteredList = filterMap[key].filterFunc(
+            filteredList = filterMap[key as FilterType].func(
                 filteredList,
-                filterBuckets[key]
+                filterList[key as FilterType]
             );
         }
     }
 
     return filteredList;
+}
+
+/**
+ * Returns true if the value is considered to belong to the "other" group for a given filter type.
+ */
+function checkIsOther(filterType: FilterType, value: any) {
+    for (const values of filterMap[filterType].values) {
+        if (values.value === value) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -224,12 +141,21 @@ function filterByProgram(
         return applicantSummaries;
     }
 
-    return applicantSummaries.filter(
-        (applicantSummary) =>
-            !excludeValues.includes(
-                applicantSummary?.application?.program || ""
-            )
-    );
+    return applicantSummaries.filter((applicantSummary) => {
+        const program = applicantSummary?.application?.program || "";
+        if (excludeValues.includes(program)) {
+            return false;
+        }
+
+        if (
+            excludeValues.includes("other") &&
+            checkIsOther("program", program)
+        ) {
+            return false;
+        }
+
+        return true;
+    });
 }
 
 /**
@@ -243,12 +169,21 @@ function filterByDept(
         return applicantSummaries;
     }
 
-    return applicantSummaries.filter(
-        (applicantSummary) =>
-            !excludeValues.includes(
-                applicantSummary?.application?.department || ""
-            )
-    );
+    return applicantSummaries.filter((applicantSummary) => {
+        const dept = applicantSummary?.application?.department || "";
+        if (excludeValues.includes(dept)) {
+            return false;
+        }
+
+        if (
+            excludeValues.includes("other") &&
+            checkIsOther("department", dept)
+        ) {
+            return false;
+        }
+
+        return true;
+    });
 }
 
 /**
@@ -256,7 +191,7 @@ function filterByDept(
  */
 function filterByTaPref(
     applicantSummaries: ApplicantSummary[],
-    excludeValues: number[],
+    excludeValues: any[],
     position: Position
 ) {
     if (
@@ -267,30 +202,29 @@ function filterByTaPref(
         return applicantSummaries;
     }
 
-    return (
-        applicantSummaries
-            .map((applicantSummary) => {
-                // Get the applicant's preference for this position
-                if (!applicantSummary.application) {
-                    return null;
-                }
+    return applicantSummaries.filter((applicantSummary) => {
+        let pref: number | null = null;
+        if (applicantSummary.application) {
+            const positionPref = getPositionPrefForPosition(
+                applicantSummary.application,
+                position
+            );
 
-                const applicantPref = getPositionPrefForPosition(
-                    applicantSummary.application,
-                    position
-                );
+            if (positionPref) {
+                pref = positionPref.preference_level;
+            }
+        }
 
-                if (
-                    !applicantPref ||
-                    excludeValues.includes(applicantPref.preference_level)
-                ) {
-                    return null;
-                }
+        if (excludeValues.includes("other") && pref === null) {
+            return false;
+        }
 
-                return applicantSummary;
-            })
-            .filter((applicantSummary) => applicantSummary !== null) || []
-    );
+        if (excludeValues.includes(pref)) {
+            return false;
+        }
+
+        return true;
+    });
 }
 
 /**
@@ -309,19 +243,15 @@ function filterByPositionStatus(
         return applicantSummaries;
     }
 
-    return applicantSummaries
-        .map((applicantSummary) => {
-            const match = getApplicantMatchForPosition(
-                applicantSummary,
-                position
-            );
-            if (!match || excludeValues.includes(match.status)) {
-                return null;
-            }
+    return applicantSummaries.filter((applicantSummary) => {
+        const match = getApplicantMatchForPosition(applicantSummary, position);
 
-            return applicantSummary;
-        })
-        .filter((applicantSummary) => applicantSummary !== null);
+        if (!match || excludeValues.includes(match.status)) {
+            return false;
+        }
+
+        return true;
+    });
 }
 
 /**
@@ -335,38 +265,8 @@ function filterByHourFulfillment(
         return applicantSummaries;
     }
 
-    return applicantSummaries
-        .map((applicantSummary) => {
-            let applicantHourStatus = "N/A";
-
-            if (
-                applicantSummary.guarantee &&
-                applicantSummary.guarantee.minHoursOwed > 0
-            ) {
-                const totalHoursAssigned =
-                    getApplicantTotalHoursAssigned(applicantSummary) +
-                    applicantSummary.guarantee.previousHoursFulfilled;
-                if (
-                    totalHoursAssigned > applicantSummary.guarantee.minHoursOwed
-                ) {
-                    applicantHourStatus = "over";
-                } else if (
-                    totalHoursAssigned ===
-                    applicantSummary.guarantee.minHoursOwed
-                ) {
-                    applicantHourStatus = "filled";
-                } else if (totalHoursAssigned > 0) {
-                    applicantHourStatus = "under";
-                } else if (totalHoursAssigned === 0) {
-                    applicantHourStatus = "empty";
-                }
-            }
-
-            if (excludeValues.includes(applicantHourStatus)) {
-                return null;
-            }
-
-            return applicantSummary;
-        })
-        .filter((applicantSummary) => applicantSummary !== null);
+    return applicantSummaries.filter(
+        (applicantSummary) =>
+            !excludeValues.includes(applicantSummary.filledStatus)
+    );
 }

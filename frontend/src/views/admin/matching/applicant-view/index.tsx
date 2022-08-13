@@ -2,7 +2,7 @@ import React from "react";
 import { ApplicantSummary, PositionSummary, MatchStatus } from "../types";
 import { defaultSortList } from "../sorts";
 import { applySorts, SortListItem } from "../sorts/sorts";
-import { applyFilters, FilterListItem } from "../filters/filters";
+import { applyFilters, FilterType } from "../filters/filters";
 import { defaultFilterList } from "../filters";
 import { ApplicantViewHeader } from "./header";
 import { ApplicantViewBody } from "./body";
@@ -26,7 +26,7 @@ export function ApplicantView({
         React.useState<SortListItem[]>(defaultSortList);
 
     const [filterList, setFilterList] =
-        React.useState<FilterListItem[]>(defaultFilterList);
+        React.useState<Record<FilterType, any[]>>(defaultFilterList);
 
     const filteredApplicants: ApplicantSummary[] = React.useMemo(() => {
         return applyFiltersAndSort(
@@ -58,7 +58,7 @@ export function ApplicantView({
 function applyFiltersAndSort(
     positionSummary: PositionSummary,
     filterString: string,
-    filterList: FilterListItem[],
+    filterList: Record<FilterType, any[]>,
     sortList: SortListItem[]
 ) {
     // Apply search value filter

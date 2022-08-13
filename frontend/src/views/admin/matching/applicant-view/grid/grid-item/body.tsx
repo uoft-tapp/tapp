@@ -77,21 +77,47 @@ export function GridItemBody({
             <div className="grid-row">
                 <div
                     className="grid-detail-small"
-                    title={deptCode ? deptCode["full"] : ""}
+                    title={
+                        deptCode
+                            ? deptCode["full"]
+                            : applicantSummary.application?.department
+                            ? `Other (${applicantSummary.application?.department})`
+                            : ""
+                    }
                 >
-                    {deptCode && deptCode["abbrev"]}
+                    {deptCode
+                        ? deptCode["abbrev"]
+                        : applicantSummary.application?.department
+                        ? "o"
+                        : ""}
                 </div>
                 <div
                     className="grid-detail-small"
-                    title={progCode ? progCode["full"] : ""}
+                    title={
+                        progCode
+                            ? progCode["full"]
+                            : applicantSummary.application?.program
+                            ? `Other (${applicantSummary.application?.program})`
+                            : ""
+                    }
                 >
-                    {progCode && progCode["abbrev"]}
+                    {progCode
+                        ? progCode["abbrev"]
+                        : applicantSummary.application?.program
+                        ? "o"
+                        : ""}
                     {applicantSummary.application?.yip}
                 </div>
-                <div className="grid-detail-small">
-                    {positionPref?.preference_level || ""}
+                <div
+                    className="grid-detail-small"
+                    title="TA's preference level"
+                >
+                    {positionPref?.preference_level}
                 </div>
-                <div className="grid-detail-small">
+                <div
+                    className="grid-detail-small"
+                    title="Average instructor rating"
+                >
                     {avgInstructorRating || ""}
                 </div>
                 <div

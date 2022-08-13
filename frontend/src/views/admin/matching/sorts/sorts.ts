@@ -1,9 +1,6 @@
 import { ApplicantSummary } from "../types";
 import { Position } from "../../../../api/defs/types";
-import {
-    getPositionPrefForPosition,
-    getApplicantTotalHoursAssigned,
-} from "../utils";
+import { getPositionPrefForPosition } from "../utils";
 import { sum } from "../../../../libs/utils";
 
 export type SortListItem = {
@@ -275,8 +272,8 @@ function sortByTotalHoursAssigned(
             return -1;
         }
 
-        const aHours = getApplicantTotalHoursAssigned(a);
-        const bHours = getApplicantTotalHoursAssigned(b);
+        const aHours = a.hoursAssigned;
+        const bHours = b.hoursAssigned;
 
         if (aHours === bHours) {
             return 0;
@@ -322,12 +319,12 @@ function sortByRemainingHoursOwed(
         let aHoursRemaining =
             (a.guarantee?.minHoursOwed || 0) -
             (a.guarantee?.previousHoursFulfilled || 0) -
-            getApplicantTotalHoursAssigned(a);
+            a.hoursAssigned;
 
         let bHoursRemaining =
             (b.guarantee?.minHoursOwed || 0) -
             (b.guarantee?.previousHoursFulfilled || 0) -
-            getApplicantTotalHoursAssigned(b);
+            b.hoursAssigned;
 
         if (aHoursRemaining === bHoursRemaining) {
             return 0;

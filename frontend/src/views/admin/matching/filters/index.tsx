@@ -1,12 +1,14 @@
+import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { FilterListItem, FilterMapItemValue, filterMap } from "./filters";
+import { FilterType, filterMap } from "./filters";
 
-export const defaultFilterList: FilterListItem[] = [
-    {
-        section: "Position Status",
-        value: "hidden",
-    },
-];
+export const defaultFilterList: Record<FilterType, any[]> = {
+    program: [],
+    department: [],
+    taPositionPref: [],
+    status: ["hidden"],
+    hourFulfillment: [],
+};
 
 /**
  * A pop-up window containing a list of filter-able items in the form of checkboxes.
@@ -19,9 +21,18 @@ export function FilterModal({
 }: {
     showFilters: boolean;
     setShowFilters: (arg0: boolean) => void;
-    filterList: FilterListItem[];
-    setFilterList: (arg0: FilterListItem[]) => void;
+    filterList: Record<FilterType, any[]>;
+    setFilterList: (arg0: Record<FilterType, any[]>) => void;
 }) {
+    // Enforcing an order for the filters to appear
+    const filterTypeList: FilterType[] = [
+        "department",
+        "program",
+        "taPositionPref",
+        "status",
+        "hourFulfillment",
+    ];
+
     return (
         <Modal
             show={showFilters}
@@ -35,25 +46,37 @@ export function FilterModal({
             </Modal.Header>
             <Modal.Body>
                 <Form className="filter-form">
-                    {Object.keys(filterMap).map((section) => {
+                    {filterTypeList.map((filterKey) => {
                         return (
-                            <Form.Group className="mb-3" key={section}>
+                            <Form.Group className="mb-3" key={filterKey}>
                                 <Form.Label className="filter-section-title">
-                                    {section}
+                                    {filterMap[filterKey].label}
                                 </Form.Label>
-                                {filterMap[section]["values"].map(
-                                    (item: FilterMapItemValue) => {
+                                {filterMap[filterKey].values.map(
+                                    (filterValue) => {
                                         return (
                                             <FilterCheckbox
-                                                key={item["label"]}
-                                                value={item["value"]}
-                                                label={item["label"]}
-                                                section={section}
+                                                key={filterValue.value}
+                                                filterType={filterKey}
+                                                filterItem={filterValue}
                                                 filterList={filterList}
                                                 setFilterList={setFilterList}
                                             />
                                         );
                                     }
+                                )}
+                                {filterMap[filterKey].hasOther && (
+                                    // Add a checkbox for any filter key that is allowed to have an "other" value
+                                    <FilterCheckbox
+                                        key={`${filterKey}-other`}
+                                        filterType={filterKey}
+                                        filterItem={{
+                                            label: "Other",
+                                            value: "other",
+                                        }}
+                                        filterList={filterList}
+                                        setFilterList={setFilterList}
+                                    />
                                 )}
                             </Form.Group>
                         );
@@ -73,43 +96,34 @@ export function FilterModal({
  * A single checkbox item that will add or remove a filter item from "filterList" via "setFilterList".
  */
 function FilterCheckbox({
-    value,
-    label,
-    section,
+    filterType,
+    filterItem,
     filterList,
     setFilterList,
 }: {
-    value: string;
-    label: string;
-    section: string;
-    filterList: FilterListItem[];
-    setFilterList: Function;
+    filterType: FilterType;
+    filterItem: { label: string; value: any };
+    filterList: Record<FilterType, any[]>;
+    setFilterList: (arg0: Record<FilterType, any[]>) => void;
 }) {
     // Mark as unchecked if this item is in the filter list
-    const filterListIndex = filterList.findIndex(
-        (item) => item.section === section && item.value === value
-    );
+    const filterListIndex: number = React.useMemo(() => {
+        return filterList[filterType].indexOf(filterItem.value);
+    }, [filterList, filterItem.value, filterType]);
 
     return (
         <Form.Check
-            key={value}
-            id="default-checkbox"
             type="checkbox"
-            label={label}
+            label={filterItem.label}
             defaultChecked={filterListIndex === -1}
             onChange={() => {
-                let newFilterList = [...filterList];
+                const newFilterList = { ...filterList };
                 if (filterListIndex === -1) {
                     // Previously checked, now unchecked; need to add to filter list
-                    const newItem: FilterListItem = {
-                        section: section,
-                        value: value,
-                    };
-
-                    newFilterList.push(newItem);
+                    newFilterList[filterType].push(filterItem.value);
                 } else {
-                    // Remove from the filter list
-                    newFilterList.splice(filterListIndex, 1);
+                    // Remove the value from the filter list
+                    newFilterList[filterType].splice(filterListIndex, 1);
                 }
 
                 setFilterList(newFilterList);
