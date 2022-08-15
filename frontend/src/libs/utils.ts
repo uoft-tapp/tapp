@@ -3,6 +3,21 @@ import { shallowEqual } from "react-redux";
 import { Session } from "../api/defs/types";
 
 /**
+ * Adds the arguments passed in.
+ *
+ * @export
+ * @param {} numbers
+ * @returns {number}
+ */
+export function sum(...numbers: number[]) {
+    let ret = 0;
+    for (const num of numbers) {
+        ret += +num;
+    }
+    return ret;
+}
+
+/**
  * Compare the two input strings.
  * @param {string} str1
  * @param {string} str2

@@ -3,21 +3,6 @@
  */
 
 /**
- * Adds the arguments passed in.
- *
- * @export
- * @param {} numbers
- * @returns {number}
- */
-export function sum(...numbers) {
-    let ret = 0;
-    for (const num of numbers) {
-        ret += +num;
-    }
-    return ret;
-}
-
-/**
  * Given a date range, returns an array of one or two ranges depending
  * on whether the date range includes a new-years.
  *

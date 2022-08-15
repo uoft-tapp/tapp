@@ -1,6 +1,6 @@
 import { SET_SELECTED_ROWS } from "./constants";
 import { createReducer } from "redux-create-reducer";
-
+export { offerTableReducer };
 interface OfferTableState {
     selectedAssignmentIds: number[];
 }
@@ -15,5 +15,3 @@ const offerTableReducer = createReducer(initialState, {
         return { ...state, selectedAssignmentIds: action.payload };
     },
 });
-
-export default offerTableReducer;

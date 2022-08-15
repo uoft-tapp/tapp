@@ -36,7 +36,7 @@
     },
     {
         "position_code": "CSC870",
-        "utorid": "o'maraw",
+        "utorid": "omaraw",
         "hours": 137,
         "start_date": "2020/05/06",
         "end_date": "2021/04/07"
@@ -3263,7 +3263,7 @@
     },
     {
         "position_code": "CSC839H1S",
-        "utorid": "d'ambrogior",
+        "utorid": "dambrogior",
         "hours": 89,
         "start_date": "2020/05/01",
         "end_date": "2021/03/22"
@@ -4264,7 +4264,7 @@
     },
     {
         "position_code": "CSC756H1S",
-        "utorid": "o'mearat",
+        "utorid": "omearat",
         "hours": 28,
         "start_date": "2020/07/17",
         "end_date": "2021/04/14"
@@ -5342,7 +5342,7 @@
     },
     {
         "position_code": "STA292H1S",
-        "utorid": "o'regank",
+        "utorid": "oregank",
         "hours": 103,
         "start_date": "2020/07/02",
         "end_date": "2021/03/22"
@@ -6721,7 +6721,7 @@
     },
     {
         "position_code": "CSC135H1S",
-        "utorid": "d'aguannos",
+        "utorid": "daguannos",
         "hours": 52,
         "start_date": null,
         "end_date": null
@@ -6777,7 +6777,7 @@
     },
     {
         "position_code": "MAT194",
-        "utorid": "o'fearguisem",
+        "utorid": "ofearguisem",
         "hours": 126,
         "start_date": "2020/06/26",
         "end_date": "2021/03/28"
