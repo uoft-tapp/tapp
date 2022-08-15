@@ -13,7 +13,7 @@ export function createDiffCell<T extends object>({
     accessor,
     Cell,
 }: Column<T> & { Cell?: any }) {
-    const accessors = ("" + accessor).split(".");
+    const accessors = String(accessor).split(".");
     function get(obj: any) {
         let ret = obj;
         for (const key of accessors) {
