@@ -47,7 +47,7 @@ export function applySorts(
 ) {
     // Return early if any inputs aren't defined
     if (applicantSummaries.length === 0 || sortList.length === 0) {
-        return [];
+        return [...applicantSummaries];
     }
 
     const ret: ApplicantSummary[] = [...applicantSummaries];
