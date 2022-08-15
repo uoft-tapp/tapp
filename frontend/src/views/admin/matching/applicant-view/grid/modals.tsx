@@ -67,7 +67,7 @@ export function AdjustHourModal({
                 <Modal.Title>Update Hours</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={(e) => e.preventDefault()}>
                     <Form.Group className="mb-3">
                         <Form.Control
                             type="number"

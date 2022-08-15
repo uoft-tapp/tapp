@@ -33,7 +33,7 @@ export function ApplicantViewHeader({
     return (
         <div className="matching-course-header">
             <div className="search-container">
-                <Form inline>
+                <Form inline onSubmit={(e) => e.preventDefault()}>
                     <Form.Control
                         type="text"
                         placeholder="Filter by name/UTORid..."

@@ -36,7 +36,7 @@ export function PositionList({
     return (
         <div className="position-sidebar">
             <div className="search-container position-search">
-                <Form inline>
+                <Form inline onSubmit={(e) => e.preventDefault()}>
                     <Form.Control
                         type="text"
                         placeholder="Filter by position code..."
