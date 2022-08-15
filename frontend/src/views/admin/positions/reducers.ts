@@ -1,5 +1,6 @@
 import { SET_SELECTED_POSITION } from "./constants";
 import { createReducer } from "redux-create-reducer";
+export { positionsTableReducer };
 
 interface PositionsTableState {
     selectedPositionIds: number | null;
@@ -15,5 +16,3 @@ const positionsTableReducer = createReducer(initialState, {
         return { ...state, selectedPositionIds: action.payload };
     },
 });
-
-export default positionsTableReducer;

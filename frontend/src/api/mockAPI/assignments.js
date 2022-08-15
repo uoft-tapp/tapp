@@ -6,7 +6,6 @@ import {
 import {
     getAttributesCheckMessage,
     findAllById,
-    sum,
     splitDateRangeAtNewYear,
     MockAPIController,
     wageChunkArrayToStartAndEndDates,
@@ -14,6 +13,7 @@ import {
     wageChunkArrayToPayPeriodDescription,
     errorUnlessRole,
 } from "./utils";
+import { sum } from "../../libs/utils";
 import { Session } from "./sessions";
 import { Position } from "./positions";
 import { WageChunk } from "./wage_chunks";

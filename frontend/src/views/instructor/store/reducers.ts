@@ -3,6 +3,7 @@ import {
     SET_INSTRUCTOR_DDAHS_FOR_EMAIL,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
+export { instructorUIReducer };
 
 interface InstructorUIState {
     selectedDdahForEmailIds: number[];
@@ -23,5 +24,3 @@ const instructorUIReducer = createReducer(initialState, {
         return { ...state, activePositionId: action.payload };
     },
 });
-
-export default instructorUIReducer;
