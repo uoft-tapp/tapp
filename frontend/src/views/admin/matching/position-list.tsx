@@ -92,7 +92,9 @@ function PositionRow({
 
     return (
         <div
-            className={`position-row noselect ${focused ? "selected" : ""}`}
+            className={`position-row noselect ${focused ? "selected" : ""} ${
+                positionSummary.filledStatus
+            }`}
             onClick={() =>
                 dispatch(
                     setSelectedMatchingPosition(positionSummary.position.id)

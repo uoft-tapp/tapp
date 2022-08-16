@@ -91,11 +91,29 @@
     margin-right: 15px;
     margin-bottom: 5px;
     box-shadow: 3px 2px 5px -3px #7d7d7d;
-    transition: height 0.5s ease-out;
+    transition: height 0.4s ease-out;
 }
 
 .position-row.selected {
     height: 65px;
+    border: 2px;
+    border-style: dashed dashed dashed none;
+}
+
+.position-row.selected.empty {
+    border-color: #d70000;
+}
+
+.position-row.selected.under {
+    border-color: #ffcc16;
+}
+
+.position-row.selected.matched {
+    border-color: #00c12b;
+}
+
+.position-row.selected.over {
+    border-color: #00e5f3;
 }
 
 .position-row.selected > * >.position-row-info {
@@ -143,15 +161,15 @@
 }
 
 .progress.over {
-    background-color: rgba(0, 229, 243, 0.15);
+    background-color: rgba(0, 229, 243, 0.25);
 }
 
 .progress.matched {
-    background-color: rgba(0, 193, 43, 0.15);
+    background-color: rgba(0, 193, 43, 0.25);
 }
 
 .progress.under {
-    background-color: rgba(255, 204, 22, 0.15);
+    background-color: rgba(255, 204, 22, 0.25);
 }
 
 .matching-course-main {
