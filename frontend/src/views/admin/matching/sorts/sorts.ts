@@ -77,7 +77,7 @@ function flipIfDescending(val: number, asc: boolean) {
 // Sorting functions -- all of these do in-place sorting
 function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return `${a.applicant.first_name}, ${a.applicant.last_name}`.toLowerCase() <
+        return `${a.applicant.first_name}, ${a.applicant.last_name}`.toLowerCase() <=
             `${b.applicant.first_name}, ${b.applicant.last_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
@@ -86,7 +86,7 @@ function sortByFirstName(applicantSummaries: ApplicantSummary[], asc = true) {
 
 function sortByLastName(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
-        return `${a.applicant.last_name}, ${a.applicant.first_name}`.toLowerCase() <
+        return `${a.applicant.last_name}, ${a.applicant.first_name}`.toLowerCase() <=
             `${b.applicant.last_name}, ${b.applicant.first_name}`.toLowerCase()
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
@@ -128,18 +128,18 @@ function sortByProgram(applicantSummaries: ApplicantSummary[], asc = true) {
 function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.gpa) {
-            return flipIfDescending(1, asc);
+            return flipIfDescending(-1, asc);
         }
 
         if (!b.application?.gpa) {
-            return flipIfDescending(-1, asc);
+            return flipIfDescending(1, asc);
         }
 
         if (a.application?.gpa === b.application?.gpa) {
             return 0;
         }
 
-        return a.application?.gpa > b.application?.gpa
+        return a.application?.gpa <= b.application?.gpa
             ? flipIfDescending(-1, asc)
             : flipIfDescending(1, asc);
     });
@@ -148,11 +148,11 @@ function sortByGpa(applicantSummaries: ApplicantSummary[], asc = true) {
 function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.yip) {
-            return 1;
+            return flipIfDescending(-1, asc);
         }
 
         if (!b.application?.yip) {
-            return -1;
+            return flipIfDescending(1, asc);
         }
 
         if (a.application?.yip === b.application?.yip) {
@@ -168,11 +168,15 @@ function sortByYip(applicantSummaries: ApplicantSummary[], asc = true) {
 function sortByDepartment(applicantSummaries: ApplicantSummary[], asc = true) {
     applicantSummaries.sort((a, b) => {
         if (!a.application?.department) {
-            return flipIfDescending(1, asc);
+            return flipIfDescending(-1, asc);
         }
 
         if (!b.application?.department) {
-            return flipIfDescending(-1, asc);
+            return flipIfDescending(1, asc);
+        }
+
+        if (a.application?.department === b.application?.department) {
+            return 0;
         }
 
         return a.application?.department < b.application?.department
@@ -265,11 +269,11 @@ function sortByTotalHoursAssigned(
 ) {
     applicantSummaries.sort((a, b) => {
         if (!a.matches) {
-            return 1;
+            return flipIfDescending(-1, asc);
         }
 
         if (!b.matches) {
-            return -1;
+            return flipIfDescending(1, asc);
         }
 
         const aHours = a.hoursAssigned;
@@ -308,23 +312,22 @@ function sortByRemainingHoursOwed(
     asc = true
 ) {
     applicantSummaries.sort((a, b) => {
-        if (!a.matches || !a.guarantee) {
-            return 1;
-        }
+        const aHoursOwed = a.guarantee?.minHoursOwed || 0;
+        const bHoursOwed = a.guarantee?.minHoursOwed || 0;
 
-        if (!b.matches || !b.guarantee) {
-            return -1;
+        // Neither applicant has a guarantee to worry about
+        if (aHoursOwed === bHoursOwed) {
+            return 0;
         }
 
         let aHoursRemaining =
-            (a.guarantee?.minHoursOwed || 0) -
+            aHoursOwed -
             (a.guarantee?.previousHoursFulfilled || 0) -
-            a.hoursAssigned;
-
+            (a.hoursAssigned || 0);
         let bHoursRemaining =
-            (b.guarantee?.minHoursOwed || 0) -
+            bHoursOwed -
             (b.guarantee?.previousHoursFulfilled || 0) -
-            b.hoursAssigned;
+            (b.hoursAssigned || 0);
 
         if (aHoursRemaining === bHoursRemaining) {
             return 0;
