@@ -92,7 +92,7 @@ function PositionRow({
 
     return (
         <div
-            className="position-row noselect"
+            className={`position-row noselect ${focused ? "selected" : ""}`}
             onClick={() =>
                 dispatch(
                     setSelectedMatchingPosition(positionSummary.position.id)
@@ -100,9 +100,7 @@ function PositionRow({
             }
         >
             <div
-                className={`status-sidebar ${positionSummary.filledStatus} ${
-                    focused ? "selected" : ""
-                }`}
+                className={`status-sidebar ${positionSummary.filledStatus}`}
             ></div>
             <div className="position-row-body">
                 <div className="position-row-background">
@@ -118,6 +116,15 @@ function PositionRow({
                     <span className="position-hours-filled">
                         {positionSummary.hoursAssigned} / {targetHours} h
                     </span>
+                    {focused && (
+                        <span className="position-row-detail">
+                            {positionSummary.applicantSummaries.length}{" "}
+                            applicant
+                            {positionSummary.applicantSummaries.length === 1
+                                ? ""
+                                : "s"}
+                        </span>
+                    )}
                 </div>
             </div>
         </div>

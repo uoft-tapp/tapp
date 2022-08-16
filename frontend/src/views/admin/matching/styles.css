@@ -91,9 +91,16 @@
     margin-right: 15px;
     margin-bottom: 5px;
     box-shadow: 3px 2px 5px -3px #7d7d7d;
+    transition: height 0.5s ease-out;
 }
 
-.position-row:selected {
+.position-row.selected {
+    height: 65px;
+
+}
+
+.position-row.selected > * >.position-row-info {
+    flex-wrap: wrap;
 }
 
 .position-row-body {
@@ -117,6 +124,15 @@
     position: relative;
     width: 100%;
     z-index: 10;
+}
+
+.position-row-detail {
+    flex-basis: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 250;
+    font-size: smaller;
+    margin-top: 2px;
 }
 
 .position-row-background > .progress {
@@ -162,7 +178,6 @@
     width: 5px;
     height: 100%;
     background-color: #d5d5d5;
-    transition: width 0.5s ease, background-color 0.75s ease;
 }
 
 .status-sidebar.empty {
@@ -179,10 +194,6 @@
 
 .status-sidebar.over {
     background-color: #00e5f3;
-}
-
-.status-sidebar.selected {
-    width: 25px;
 }
 
 .position-row-info > .position-title {
