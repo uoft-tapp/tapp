@@ -36,9 +36,8 @@ export function FilterModal({
     return (
         <Modal
             show={showFilters}
-            onHide={() => {
-                setShowFilters(false);
-            }}
+            onHide={() => setShowFilters(false)}
+            size="xl"
             dialogClassName="filter-modal"
         >
             <Modal.Header>
