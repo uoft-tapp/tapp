@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 import { PositionSummary } from "./types";
@@ -92,9 +93,12 @@ function PositionRow({
 
     return (
         <div
-            className={`position-row noselect ${focused ? "selected" : ""} ${
-                positionSummary.filledStatus
-            }`}
+            className={classNames(
+                "position-row",
+                "noselect",
+                positionSummary.filledStatus,
+                { selected: focused }
+            )}
             onClick={() =>
                 dispatch(
                     setSelectedMatchingPosition(positionSummary.position.id)
