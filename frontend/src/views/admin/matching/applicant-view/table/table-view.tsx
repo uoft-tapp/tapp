@@ -17,14 +17,26 @@ const DEFAULT_COLUMNS = [
     { Header: "UTORid", accessor: "utorid" },
     { Header: "Department", accessor: "department" },
     { Header: "Program", accessor: "program" },
-    { Header: "YIP", accessor: "yip" },
-    { Header: "GPA", accessor: "gpa" },
-    { Header: "TA Rating", accessor: "taPreference" },
-    { Header: "Instructor Rating", accessor: "instructorPreference" },
+    { Header: "YIP", accessor: "yip", width: 64 },
+    { Header: "GPA", accessor: "gpa", width: 64 },
+    { Header: "TA Rating", accessor: "taPreference", width: 64 },
+    {
+        Header: "Instructor Rating",
+        accessor: "instructorPreference",
+        width: 64,
+    },
     { Header: "Assignments", accessor: "assignments" },
-    { Header: "Hours Assigned", accessor: "totalHoursAssigned" },
-    { Header: "Hours Previously Assigned", accessor: "previousHoursFulfilled" },
-    { Header: "Total Guaranteed Hours", accessor: "guaranteedHours" },
+    { Header: "Assigned Hours", accessor: "totalHoursAssigned", width: 64 },
+    {
+        Header: "Previously Assigned Hours",
+        accessor: "previousHoursFulfilled",
+        width: 64,
+    },
+    {
+        Header: "Total Guaranteed Hours",
+        accessor: "guaranteedHours",
+        width: 64,
+    },
 ];
 
 /**
