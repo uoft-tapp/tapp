@@ -105,8 +105,8 @@ export function TableView({
                     ? programCodes[summary.application?.program]["full"]
                     : `Other (${summary.application?.program})`
                 : "",
-            yip: summary.application?.yip,
-            gpa: summary.application?.gpa,
+            yip: summary.application?.yip || "",
+            gpa: summary.application?.gpa || "",
             taPreference: positionPrefsByApplicantId[summary.applicant.id],
             instructorPreference: avgInstructorRating,
             assignments: formatAssignedCourses(summary),

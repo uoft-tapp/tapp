@@ -311,10 +311,13 @@
 
 .matching-course-body {
     padding: 0 3px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.matching-course-body > .table-responsive {
-    font-size: smaller;
+.matching-course-body > .filter-table-container {
+    height: 100%;
 }
 
 .applicant-status-divider {
@@ -443,6 +446,10 @@
     font-size: medium;
     color: #595959;
     cursor: pointer;
+}
+
+.applicant-view-filler {
+    flex-grow: 1;
 }
 
 .applicant-count {
