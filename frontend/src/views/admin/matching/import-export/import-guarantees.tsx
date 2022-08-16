@@ -116,7 +116,7 @@ export function ImportGuaranteesButton() {
             >
                 Import Sub. Appt. Data
             </Button>
-            <Modal show={addDialog}>
+            <Modal show={addDialog} onHide={() => setAddDialog(false)}>
                 <Modal.Header>
                     <Modal.Title>
                         Import Subsequent Appointment Data
