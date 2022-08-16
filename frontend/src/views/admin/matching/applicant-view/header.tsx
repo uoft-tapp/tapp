@@ -33,14 +33,14 @@ export function ApplicantViewHeader({
     return (
         <div className="matching-course-header">
             <div className="search-container">
-                <Form inline onSubmit={(e) => e.preventDefault()}>
-                    <Form.Control
+                <div className="form-inline">
+                    <input
+                        className="form-control mr-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by name/UTORid..."
-                        className="mr-sm-2"
                         onChange={(e) => setFilterString(e.target.value)}
                     />
-                </Form>
+                </div>
                 <ApplicantFilterButton
                     filterList={filterList}
                     setFilterList={setFilterList}

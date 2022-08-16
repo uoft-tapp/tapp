@@ -1,7 +1,7 @@
 import React from "react";
 import { Application } from "../../../../../api/defs/types";
 import { MatchableAssignment } from "../../types";
-import { Form, Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { ApplicationDetails } from "../../../applications/application-details";
 import { upsertMatch } from "../../actions";
 import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
@@ -67,19 +67,16 @@ export function AdjustHourModal({
                 <Modal.Title>Update Hours</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={(e) => e.preventDefault()}>
-                    <Form.Group className="mb-3">
-                        <Form.Control
-                            type="number"
-                            defaultValue={
-                                match && match.hoursAssigned > 0
-                                    ? match.hoursAssigned
-                                    : 0
-                            }
-                            onChange={(e) => setHoursAssigned(e.target.value)}
-                        />
-                    </Form.Group>
-                </Form>
+                <input
+                    className="form-control"
+                    type="number"
+                    defaultValue={
+                        match && match.hoursAssigned > 0
+                            ? match.hoursAssigned
+                            : 0
+                    }
+                    onChange={(e) => setHoursAssigned(e.target.value)}
+                />
             </Modal.Body>
             <Modal.Footer>
                 <Button

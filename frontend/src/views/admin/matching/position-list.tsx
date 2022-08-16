@@ -37,15 +37,14 @@ export function PositionList({
     return (
         <div className="position-sidebar">
             <div className="search-container position-search">
-                <Form inline onSubmit={(e) => e.preventDefault()}>
-                    <Form.Control
+                <div className="form-inline">
+                    <input
+                        className="form-control mr-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by position code..."
-                        style={{ width: "100%" }}
-                        className="mr-sm-2"
                         onChange={(e) => setFilterString(e.target.value)}
                     />
-                </Form>
+                </div>
             </div>
             <div className="position-list">
                 {filteredList.map((summary) => (

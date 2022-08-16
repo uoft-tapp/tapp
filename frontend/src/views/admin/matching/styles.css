@@ -62,8 +62,12 @@
     margin-bottom: 10px;
 }
 
-.position-search > form {
+.position-search > .form-inline {
     flex-grow: 1;
+}
+
+.position-search > .form-inline > input {
+    width: 100%;
 }
 
 .filter-button-container {
