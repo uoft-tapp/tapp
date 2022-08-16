@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { setApplicantViewMode, applicantViewModeSelector } from "../actions";
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
-import { Form, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { SortBar } from "../sorts";
 import { SortListItem } from "../sorts/sorts";
 import { FilterModal } from "../filters";
