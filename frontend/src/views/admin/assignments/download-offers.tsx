@@ -21,7 +21,10 @@ function offerUrl(assignment: Assignment) {
  *
  */
 function assignmentToFilename(assignment: Assignment) {
-    return `${assignment.position.position_code}-contract-${assignment.applicant.last_name}.pdf`;
+    const fileName = `${assignment.applicant.last_name}, ${assignment.applicant.first_name}_${assignment.position.position_code}.pdf`;
+    // Escape characters that are not allowed in a file name
+    // Code from https://stackoverflow.com/questions/42210199/remove-illegal-characters-from-a-file-name-but-leave-spaces
+    return fileName.replace(/[/\\?%*:|"<>]/g, '-');
 }
 
 export function DownloadOfferPdfs({
@@ -42,7 +45,7 @@ export function DownloadOfferPdfs({
         disabledString = " (Some selected assignments do not have offers)";
     }
 
-    async function downloadDdahs() {
+    async function downloadOffers() {
         const fetches = await Promise.all(
             selectedAssignments.map((assignment) =>
                 Promise.all([
@@ -71,7 +74,7 @@ export function DownloadOfferPdfs({
                 icon={FaDownload}
                 disabled={!!disabledString}
                 onClick={() => setShowConfirmation(true)}
-                title={"Download PDF copies of selected DDAHs" + disabledString}
+                title={"Download PDF copies of selected offers" + disabledString}
             >
                 Download PDFs
             </ActionButton>
@@ -79,9 +82,9 @@ export function DownloadOfferPdfs({
                 data={selectedAssignments}
                 visible={showConfirmation}
                 setVisible={setShowConfirmation}
-                callback={downloadDdahs}
-                title="Download DDAH PDFs"
-                body={`Download PDFs of the following ${selectedAssignments.length} DDAHs.`}
+                callback={downloadOffers}
+                title="Download offer PDFs"
+                body={`Download PDFs of the following ${selectedAssignments.length} offers.`}
                 confirmation={"Download"}
             />
         </React.Fragment>
