@@ -143,7 +143,7 @@ export function ImportMatchingDataButton() {
             >
                 Import Data
             </Button>
-            <Modal show={addDialog}>
+            <Modal show={addDialog} onHide={() => setAddDialog(false)}>
                 <Modal.Header>
                     <Modal.Title>Import Matching Data</Modal.Title>
                 </Modal.Header>

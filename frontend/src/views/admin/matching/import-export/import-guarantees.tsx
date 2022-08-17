@@ -114,11 +114,13 @@ export function ImportGuaranteesButton() {
                 className="footer-button"
                 onClick={() => setAddDialog(true)}
             >
-                Import Appt. Data
+                Import Sub. Appt. Data
             </Button>
-            <Modal show={addDialog}>
+            <Modal show={addDialog} onHide={() => setAddDialog(false)}>
                 <Modal.Header>
-                    <Modal.Title>Import Appointment Guarantee Data</Modal.Title>
+                    <Modal.Title>
+                        Import Subsequent Appointment Data
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

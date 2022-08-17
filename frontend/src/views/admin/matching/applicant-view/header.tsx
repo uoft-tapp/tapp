@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { setApplicantViewMode, applicantViewModeSelector } from "../actions";
 import { FaFilter, FaTable, FaTh } from "react-icons/fa";
-import { Form, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { SortBar } from "../sorts";
 import { SortListItem } from "../sorts/sorts";
 import { FilterModal } from "../filters";
@@ -33,14 +33,14 @@ export function ApplicantViewHeader({
     return (
         <div className="matching-course-header">
             <div className="search-container">
-                <Form inline>
-                    <Form.Control
+                <div className="form-inline">
+                    <input
+                        className="form-control mr-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by name/UTORid..."
-                        className="mr-sm-2"
                         onChange={(e) => setFilterString(e.target.value)}
                     />
-                </Form>
+                </div>
                 <ApplicantFilterButton
                     filterList={filterList}
                     setFilterList={setFilterList}

@@ -1,9 +1,9 @@
 import React from "react";
+import classNames from "classnames";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 import { PositionSummary } from "./types";
 import { setSelectedMatchingPosition } from "./actions";
-import { Form } from "react-bootstrap";
 
 /**
  * A searchable list of position codes.
@@ -36,15 +36,14 @@ export function PositionList({
     return (
         <div className="position-sidebar">
             <div className="search-container position-search">
-                <Form inline>
-                    <Form.Control
+                <div className="form-inline">
+                    <input
+                        className="form-control mr-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by position code..."
-                        style={{ width: "100%" }}
-                        className="mr-sm-2"
                         onChange={(e) => setFilterString(e.target.value)}
                     />
-                </Form>
+                </div>
             </div>
             <div className="position-list">
                 {filteredList.map((summary) => (
@@ -92,7 +91,12 @@ function PositionRow({
 
     return (
         <div
-            className="position-row noselect"
+            className={classNames(
+                "position-row",
+                "noselect",
+                positionSummary.filledStatus,
+                { selected: focused }
+            )}
             onClick={() =>
                 dispatch(
                     setSelectedMatchingPosition(positionSummary.position.id)
@@ -100,9 +104,7 @@ function PositionRow({
             }
         >
             <div
-                className={`status-sidebar ${positionSummary.filledStatus} ${
-                    focused ? "selected" : ""
-                }`}
+                className={`status-sidebar ${positionSummary.filledStatus}`}
             ></div>
             <div className="position-row-body">
                 <div className="position-row-background">
@@ -118,6 +120,15 @@ function PositionRow({
                     <span className="position-hours-filled">
                         {positionSummary.hoursAssigned} / {targetHours} h
                     </span>
+                    {focused && (
+                        <span className="position-row-detail">
+                            {positionSummary.applicantSummaries.length}{" "}
+                            applicant
+                            {positionSummary.applicantSummaries.length === 1
+                                ? ""
+                                : "s"}
+                        </span>
+                    )}
                 </div>
             </div>
         </div>

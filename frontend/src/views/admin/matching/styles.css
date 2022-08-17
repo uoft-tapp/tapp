@@ -62,8 +62,12 @@
     margin-bottom: 10px;
 }
 
-.position-search > form {
+.position-search > .form-inline {
     flex-grow: 1;
+}
+
+.position-search > .form-inline > input {
+    width: 100%;
 }
 
 .filter-button-container {
@@ -91,9 +95,33 @@
     margin-right: 15px;
     margin-bottom: 5px;
     box-shadow: 3px 2px 5px -3px #7d7d7d;
+    transition: height 0.4s ease-out;
 }
 
-.position-row:selected {
+.position-row.selected {
+    height: 65px;
+    border: 2px;
+    border-style: dashed dashed dashed none;
+}
+
+.position-row.selected.empty {
+    border-color: #d70000;
+}
+
+.position-row.selected.under {
+    border-color: #ffcc16;
+}
+
+.position-row.selected.matched {
+    border-color: #00c12b;
+}
+
+.position-row.selected.over {
+    border-color: #00e5f3;
+}
+
+.position-row.selected > * >.position-row-info {
+    flex-wrap: wrap;
 }
 
 .position-row-body {
@@ -119,6 +147,15 @@
     z-index: 10;
 }
 
+.position-row-detail {
+    flex-basis: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: 250;
+    font-size: smaller;
+    margin-top: 2px;
+}
+
 .position-row-background > .progress {
     height: 100%;
     width: 100%;
@@ -128,15 +165,15 @@
 }
 
 .progress.over {
-    background-color: rgba(0, 229, 243, 0.15);
+    background-color: rgba(0, 229, 243, 0.25);
 }
 
 .progress.matched {
-    background-color: rgba(0, 193, 43, 0.15);
+    background-color: rgba(0, 193, 43, 0.25);
 }
 
 .progress.under {
-    background-color: rgba(255, 204, 22, 0.15);
+    background-color: rgba(255, 204, 22, 0.25);
 }
 
 .matching-course-main {
@@ -162,7 +199,6 @@
     width: 5px;
     height: 100%;
     background-color: #d5d5d5;
-    transition: width 0.5s ease, background-color 0.75s ease;
 }
 
 .status-sidebar.empty {
@@ -179,10 +215,6 @@
 
 .status-sidebar.over {
     background-color: #00e5f3;
-}
-
-.status-sidebar.selected {
-    width: 25px;
 }
 
 .position-row-info > .position-title {
@@ -311,10 +343,13 @@
 
 .matching-course-body {
     padding: 0 3px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.matching-course-body > .table-responsive {
-    font-size: smaller;
+.matching-course-body > .filter-table-container {
+    height: 100%;
 }
 
 .applicant-status-divider {
@@ -365,22 +400,6 @@
     max-height: 250px;
     overflow-y: scroll;
     font-size: smaller;
-}
-
-.filter-modal {
-    height: 60%;
-    max-width: 65%;
-}
-
-.filter-modal > .modal-content {
-    height: 100%;
-    width: 100%;
-}
-
-.filter-modal > .modal-content > .modal-body {
-    overflow-y: scroll;
-    width: 100%;
-    height: 100%;
 }
 
 .filter-form {
@@ -443,6 +462,10 @@
     font-size: medium;
     color: #595959;
     cursor: pointer;
+}
+
+.applicant-view-filler {
+    flex-grow: 1;
 }
 
 .applicant-count {
