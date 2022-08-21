@@ -4,6 +4,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { round } from "../../../libs/utils";
 import { PositionSummary } from "./types";
 import { setSelectedMatchingPosition } from "./actions";
+import { Button } from "react-bootstrap";
 
 /**
  * A searchable list of position codes.
@@ -34,25 +35,27 @@ export function PositionList({
     }, [filterString, positionSummaries]);
 
     return (
-        <div className="position-sidebar">
+        <div className="position-sidebar page-actions">
             <div className="search-container position-search">
-                <div className="form-inline">
-                    <input
-                        className="form-control mr-sm-2 search-bar"
-                        type="text"
-                        placeholder="Filter by position code..."
-                        onChange={(e) => setFilterString(e.target.value)}
-                    />
-                </div>
+                <input
+                    className="form-control search-bar"
+                    type="text"
+                    placeholder="Filter by position code..."
+                    onChange={(e) => setFilterString(e.target.value)}
+                />
             </div>
             <div className="position-list">
-                {filteredList.map((summary) => (
-                    <PositionRow
-                        positionSummary={summary}
-                        focused={summary?.position.id === selectedPositionId}
-                        key={summary.position.id}
-                    />
-                ))}
+                <div className="position-list-inner">
+                    {filteredList.map((summary) => (
+                        <PositionRow
+                            positionSummary={summary}
+                            focused={
+                                summary?.position.id === selectedPositionId
+                            }
+                            key={summary.position.id}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
@@ -90,10 +93,10 @@ function PositionRow({
     }, [positionSummary, targetHours]);
 
     return (
-        <div
+        <Button
+            bsPrefix="position-row"
             className={classNames(
                 "position-row",
-                "noselect",
                 positionSummary.filledStatus,
                 { selected: focused }
             )}
@@ -103,10 +106,7 @@ function PositionRow({
                 )
             }
         >
-            <div
-                className={`status-sidebar ${positionSummary.filledStatus}`}
-            ></div>
-            <div className="position-row-body">
+            <React.Fragment>
                 <div className="position-row-background">
                     <div
                         style={{ width: `${progress}%` }}
@@ -130,7 +130,7 @@ function PositionRow({
                         </span>
                     )}
                 </div>
-            </div>
-        </div>
+            </React.Fragment>
+        </Button>
     );
 }

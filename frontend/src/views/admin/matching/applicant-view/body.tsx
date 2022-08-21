@@ -48,7 +48,6 @@ export function ApplicantViewBody({
                     applicantSummaries={applicantSummaries}
                 />
             )}
-            <div className="applicant-view-filler"></div>
             <div className="applicant-count">{applicantCountString}</div>
         </div>
     );

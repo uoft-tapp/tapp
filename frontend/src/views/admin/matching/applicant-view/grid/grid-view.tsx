@@ -2,7 +2,7 @@ import React from "react";
 import { Position } from "../../../../../api/defs/types";
 import { ApplicantSummary, MatchStatus } from "../../types";
 import { getApplicantMatchForPosition } from "../../utils";
-import { GridItem } from "./grid-item";
+import { ConnectedApplicantPill } from "./grid-item";
 import { matchingStatusToString } from "../";
 import { FaLock } from "react-icons/fa";
 
@@ -55,7 +55,7 @@ export function GridView({
     ];
 
     return (
-        <div>
+        <React.Fragment>
             {statusList.map((status) => {
                 return (
                     <GridSection
@@ -68,7 +68,7 @@ export function GridView({
                     />
                 );
             })}
-        </div>
+        </React.Fragment>
     );
 }
 
@@ -104,7 +104,7 @@ function GridSection({
             <div className="grid-view-list">
                 {applicantSummaries.map((applicantSummary) => {
                     return (
-                        <GridItem
+                        <ConnectedApplicantPill
                             applicantSummary={applicantSummary}
                             position={position}
                             key={applicantSummary.applicant.id}

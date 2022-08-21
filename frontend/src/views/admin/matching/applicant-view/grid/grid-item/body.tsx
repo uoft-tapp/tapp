@@ -9,7 +9,7 @@ import { departmentCodes, programCodes } from "../../../name-maps";
 /**
  * The main body of a grid item, presenting most of the information for an applicant.
  */
-export function GridItemBody({
+export function ApplicantPillMiddle({
     applicantSummary,
     match,
 }: {
@@ -40,9 +40,6 @@ export function GridItemBody({
             ? round(sum(...instructorRatings) / instructorRatings.length, 3)
             : null;
 
-    const isAssigned =
-        match.status === "assigned" || match.status === "staged-assigned";
-
     const deptCode = applicantSummary.application?.department
         ? departmentCodes[applicantSummary.application.department]
         : null;
@@ -52,27 +49,11 @@ export function GridItemBody({
         : null;
 
     return (
-        <div className="applicant-grid-main">
+        <div className="applicant-pill-middle">
             <div className="grid-row">
                 <div className="applicant-name">
                     {`${applicantSummary.applicant.first_name} ${applicantSummary.applicant.last_name}`}
                 </div>
-                {isAssigned && (
-                    <div className="applicant-hours">
-                        ({match.hoursAssigned})
-                    </div>
-                )}
-                {!isAssigned && (
-                    <div
-                        className="icon-container"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }}
-                    >
-                        <ApplicantStar match={match} />
-                    </div>
-                )}
             </div>
             <div className="grid-row">
                 <div
@@ -120,6 +101,41 @@ export function GridItemBody({
                 >
                     {avgInstructorRating || ""}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+export function ApplicantPillRight({
+    applicantSummary,
+    match,
+}: {
+    applicantSummary: ApplicantSummary;
+    match: MatchableAssignment;
+}) {
+    const isAssigned =
+        match.status === "assigned" || match.status === "staged-assigned";
+
+    return (
+        <div className="applicant-pill-right">
+            <div className="grid-row">
+                {isAssigned ? (
+                    <div className="applicant-hours">
+                        ({match.hoursAssigned})
+                    </div>
+                ) : (
+                    <div
+                        className="icon-container"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                    >
+                        <ApplicantStar match={match} />
+                    </div>
+                )}
+            </div>
+            <div className="grid-row">
                 <div
                     className="icon-container"
                     onClick={(e) => {

@@ -6,7 +6,7 @@ import { ApplicantSummary } from "../../../types";
  * A status bar for a grid item that displays information about how many hours have been
  * assigned to an application and how many hours they're owed.
  */
-export function GridItemStatusBar({
+export function ApplicantPillLeft({
     applicantSummary,
 }: {
     applicantSummary: ApplicantSummary;

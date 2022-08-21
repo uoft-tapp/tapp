@@ -111,7 +111,6 @@ export function ImportGuaranteesButton() {
             <Button
                 variant="outline-primary"
                 size="sm"
-                className="footer-button"
                 onClick={() => setAddDialog(true)}
             >
                 Import Sub. Appt. Data

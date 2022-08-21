@@ -138,7 +138,6 @@ export function ImportMatchingDataButton() {
             <Button
                 variant="outline-primary"
                 size="sm"
-                className="footer-button"
                 onClick={() => setAddDialog(true)}
             >
                 Import Data
