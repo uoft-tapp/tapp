@@ -38,7 +38,7 @@ export function ApplicantView({
     }, [filterString, sortList, filterList, positionSummary]);
 
     return (
-        <div className="matching-course-main">
+        <div className="matching-applicant-area">
             <ApplicantViewHeader
                 positionSummary={positionSummary}
                 setFilterString={setFilterString}

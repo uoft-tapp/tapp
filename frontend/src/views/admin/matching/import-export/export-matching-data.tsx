@@ -29,17 +29,8 @@ export function ExportMatchingDataButton() {
     }
 
     return (
-        <Button
-            variant="outline-primary"
-            size="sm"
-            className="footer-button"
-            onClick={onClick}
-        >
-            {updated && (
-                <div className="change-icon">
-                    <BsCircleFill />
-                </div>
-            )}
+        <Button variant="outline-primary" size="sm" onClick={onClick}>
+            {updated && <span className="change-icon">●</span>}
             Export Data
         </Button>
     );

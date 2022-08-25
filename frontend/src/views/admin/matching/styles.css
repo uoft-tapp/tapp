@@ -1,73 +1,62 @@
 .noselect {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
-/* COURSE VIEW CSS */
-.matching-container {
-    min-height: 100%;
+.page-body.matching {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    align-items: stretch;
+    overflow: hidden;
 }
-
 .matching-body {
     display: flex;
-    flex-direction: row;
-    overflow: none;
-    height: 100%;
-    padding-bottom: 35px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.matching-applicant-area {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .matching-footer {
+    /* The footer inherits from .page-actions for the correct color. However, we don't want
+    some of .page-actions's other properties */
+    height: unset;
+    overflow: unset;
+
     display: flex;
     column-gap: 5px;
-    margin-top: -35px;
-    height: 35px;
-}
-
-.footer-button {
-    min-width: 120px;
-    margin-top: 5px;
-    height: 100%;
+    padding: 5px;
 }
 
 .footer-button-separator {
     flex-grow: 1;
 }
 
-.footer-button.finalize {
-}
-
 .change-icon {
     color: red;
-    position: absolute;
-    font-size: x-small;
-    margin-top: 2px;
-    margin-left: -1px;
+    margin-right: 3px;
 }
 
 .position-sidebar {
     min-width: 300px;
-    height: 100%;
-    box-shadow: 5px 0px 5px -5px #b5b5b5;
     display: flex;
     flex-direction: column;
+    flex-grow: 0;
+    flex-basis: 0;
 }
 
 .search-container {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
 }
 
-.position-search > .form-inline {
-    flex-grow: 1;
-}
-
-.position-search > .form-inline > input {
-    width: 100%;
+.position-search {
+    padding: 5px;
 }
 
 .filter-button-container {
@@ -84,53 +73,65 @@
 }
 
 .position-list {
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.position-list-inner {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+
+/*
+ * We use button elements for position-row items so that
+ * keyboard navigation works. However, we want to completely customize
+ * the style of these elements, so we remove all the default button styling.
+ */
+:where(button.position-row) {
+    all: unset;
+}
+
+.position-row:focus {
+    outline: auto;
+}
+.position-row:hover {
+    background-color: #ddd;
 }
 
 .position-row {
     cursor: pointer;
+    position: relative;
     display: flex;
-    align-items: center;
-    height: 35px;
-    margin-right: 15px;
-    margin-bottom: 5px;
     box-shadow: 3px 2px 5px -3px #7d7d7d;
-    transition: height 0.4s ease-out;
+    transition: height 0.4s ease-out, flex-grow 0.4s ease-out;
+    border-color: #d5d5d5;
+    border-left-width: 5px;
+    border-left-style: solid;
+    overflow: hidden;
 }
 
 .position-row.selected {
-    height: 65px;
     border: 2px;
-    border-style: dashed dashed dashed none;
+    border-left: 5px;
+    border-style: dashed dashed dashed solid;
 }
 
-.position-row.selected.empty {
+.position-row.empty {
     border-color: #d70000;
 }
 
-.position-row.selected.under {
+.position-row.under {
     border-color: #ffcc16;
 }
 
-.position-row.selected.matched {
+.position-row.matched {
     border-color: #00c12b;
 }
 
-.position-row.selected.over {
+.position-row.over {
     border-color: #00e5f3;
-}
-
-.position-row.selected > * >.position-row-info {
-    flex-wrap: wrap;
-}
-
-.position-row-body {
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    height: 100%;
-    position: relative;
-    align-items: center;
 }
 
 .position-row-background {
@@ -141,16 +142,16 @@
 }
 
 .position-row-info {
+    padding: 5px 10px;
+    flex-grow: 1;
     display: flex;
     position: relative;
-    width: 100%;
-    z-index: 10;
+    flex-wrap: wrap;
 }
 
 .position-row-detail {
+    /* Force this div to flex-wrap to the next row */
     flex-basis: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
     font-weight: 250;
     font-size: smaller;
     margin-top: 2px;
@@ -176,58 +177,23 @@
     background-color: rgba(255, 204, 22, 0.25);
 }
 
-.matching-course-main {
-    height: 100%;
-    flex-grow: 1;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow: scroll;
-}
-
 #table-view {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #grid-view {
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
-.status-sidebar {
-    width: 5px;
-    height: 100%;
-    background-color: #d5d5d5;
-}
-
-.status-sidebar.empty {
-    background-color: #d70000;
-}
-
-.status-sidebar.under {
-    background-color: #ffcc16;
-}
-
-.status-sidebar.matched {
-    background-color: #00c12b;
-}
-
-.status-sidebar.over {
-    background-color: #00e5f3;
-}
-
-.position-row-info > .position-title {
+.position-row-info .position-title {
     flex-grow: 1;
-    padding-left: 10px;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-.position-row-info > .position-hours-filled {
-    padding-left: 10px;
-    padding-right: 10px;
-    font-weight: 250;
-    opacity: 0.7;
+.position-row-info .position-hours-filled {
+    color: var(--gray);
 }
 
 .container-filler {
@@ -242,39 +208,48 @@
     column-gap: 8px;
 }
 
-.grid-view-section:not(:first-child) {
-    margin-top: 10px;
+:where(button.applicant-pill) {
+    all: unset;
+}
+.applicant-pill:focus {
+    outline: auto;
+}
+.applicant-pill:hover {
+    background-color: #fafafa;
 }
 
-.grid-view-section > h4 {
-    margin-bottom: 4px;
-}
-
-.applicant-grid-item {
+.applicant-pill {
+    padding: 0;
     display: flex;
     width: 170px;
     border-radius: 5px;
     overflow: hidden;
-    align-items: center;
     background-color: #fff;
-    filter: drop-shadow(2px 2px 2px #bbb);
-    margin-bottom: 5px;
     cursor: pointer;
-
     font-size: smaller;
+    box-shadow: 2px 2px 6px #ccc;
 }
-
-.applicant-grid-item > * {
+.applicant-pill-right {
+    margin-left: auto;
     display: flex;
+    flex-direction: column;
+    align-items: end;
+    align-self: center;
+}
+.applicant-pill-middle {
+    padding-left: 4px;
+    padding-bottom: 2px;
+    flex-grow: 1;
+    flex-basis: 0;
+    overflow: hidden;
 }
 
 .applicant-status-sidebar {
+    display: flex;
     width: 30px;
-    height: 100%;
     align-items: center;
     flex-direction: column;
     text-align: center;
-
     color: #fff;
     background-color: #cfcfcf;
 }
@@ -301,17 +276,8 @@
     flex-grow: 1;
 }
 
-.applicant-grid-main:nth-child(1) {
-    margin-top: 3px;
-}
-
-.applicant-grid-main:nth-child(2) {
-    margin-bottom: 3px;
-}
-
 .grid-row {
     display: flex;
-    flex-direction: row;
     column-gap: 5px;
 }
 
@@ -321,35 +287,33 @@
     padding-right: 2px;
     border-radius: 2px;
     text-align: center;
-    font-weight: 500;
     color: #868686;
     background: #eeeeee;
 }
 
 .applicant-name {
-    width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .matching-course-header {
-    padding: 0 3px;
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 10;
+    padding: 5px 10px 0px 10px;
+}
+.matching-course-header h2 {
+    margin-bottom: 0;
 }
 
 .matching-course-body {
-    padding: 0 3px;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    flex-grow: 1;
+    row-gap: 5px;
+    padding: 0px 10px 0px 10px;
 }
-
-.matching-course-body > .filter-table-container {
-    height: 100%;
+.matching-course-body .table {
+    margin-bottom: 0;
 }
 
 .applicant-status-divider {
@@ -393,12 +357,13 @@
 
 .sort-dropdown-container {
     display: flex;
-    column-gap: 1px;
+    gap: 1px;
+    flex-wrap: wrap;
 }
 
 .sort-dropdown-container > * > .dropdown-menu.show {
     max-height: 250px;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-size: smaller;
 }
 
@@ -464,12 +429,9 @@
     cursor: pointer;
 }
 
-.applicant-view-filler {
-    flex-grow: 1;
-}
-
 .applicant-count {
     margin: 5px 0;
     font-size: smaller;
     color: #595959;
+    margin-top: auto;
 }
