@@ -245,12 +245,16 @@ export const matchesSelector = createSelector(
             // Override with official assignments
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
-                matchesByPositionId[assignment.position.id] = {
-                    applicant: applicant,
-                    position: assignment.position,
-                    hoursAssigned: assignment.hours || 0,
-                    status: "assigned",
-                };
+                // Check if offer was rejected/withdrawn:
+                if (assignment.active_offer_status !== "rejected" &&
+                    assignment.active_offer_status !== "withdrawn") {
+                    matchesByPositionId[assignment.position.id] = {
+                        applicant: applicant,
+                        position: assignment.position,
+                        hoursAssigned: assignment.hours || 0,
+                        status: "assigned",
+                    };
+                }
             }
 
             ret = [...ret, ...Object.values(matchesByPositionId)];
