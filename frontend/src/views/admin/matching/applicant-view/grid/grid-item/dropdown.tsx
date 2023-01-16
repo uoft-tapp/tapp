@@ -13,11 +13,13 @@ export function GridItemDropdown({
     applicantSummary,
     setShownApplication,
     setShowChangeHours,
+    setShowNote,
 }: {
     match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
     setShownApplication: (arg0: Application | null) => void;
     setShowChangeHours: (arg0: boolean) => void;
+    setShowNote: (arg0: boolean) => void;
 }) {
     const dispatch = useThunkDispatch();
     const baseMatchValues = React.useMemo(() => {
@@ -96,6 +98,10 @@ export function GridItemDropdown({
             >
                 View application details
             </Dropdown.Item>
+            <Dropdown.Item onClick={() => setShowNote(true)}>
+                View/edit applicant notes
+            </Dropdown.Item>
+
             {canBeAssigned && (
                 <Dropdown.Item onClick={assignToPosition}>
                     Assign to <b>{match.position.position_code}</b> (
