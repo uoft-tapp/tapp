@@ -2,11 +2,13 @@ import React from "react";
 import { Position, Application } from "../../../../../../api/defs/types";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { getApplicantMatchForPosition } from "../../../utils";
-import { AdjustHourModal, ApplicationDetailModal } from "../modals";
 import { GridItemDropdown } from "./dropdown";
 import { ApplicantPillLeft } from "./status-bar";
 import { ApplicantPillMiddle, ApplicantPillRight } from "./body";
-import { ApplicantNoteModal } from "../modals";
+
+import { ApplicantNoteModal } from "../../../modals/applicant-note";
+import { AdjustHourModal } from "../../../modals/adjust-hours";
+import { ApplicationDetailModal } from "../../../modals/application-detail";
 
 import { Dropdown } from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";

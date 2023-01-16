@@ -1,7 +1,7 @@
 import React from "react";
 import { ApplicantSummary } from "../../../types";
 import { RiStickyNoteFill } from "react-icons/ri";
-import { ApplicantNoteModal } from "../modals";
+import { ApplicantNoteModal } from "../../../modals/applicant-note";
 
 /**
  * A button that displays a dialog allowing one to edit an applicant's notes.
