@@ -26,6 +26,7 @@ export function GridView({
             starred: [],
             "staged-assigned": [],
             assigned: [],
+            unassignable: [],
             hidden: [],
         };
 
@@ -51,6 +52,7 @@ export function GridView({
         "staged-assigned",
         "starred",
         "applied",
+        "unassignable",
         "hidden",
     ];
 
@@ -99,6 +101,13 @@ function GridSection({
                         title="These assignments can only be changed through the Assignments &
             Positions > Assignments tab."
                     />
+                )}
+                {header === "Unassignable" && (
+                    <FaLock
+                        className="header-lock"
+                        title="These applicants have an assignment for this position that was previously
+            rejected/withdrawn, and can only be changed through the Assignments & Positions > Assignments tab."
+                        />
                 )}
             </h4>
             <div className="grid-view-list">

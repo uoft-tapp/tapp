@@ -12,6 +12,7 @@ export type RawMatch = {
     stagedHoursAssigned?: number;
     stagedAssigned?: boolean;
     starred?: boolean;
+    unassignable?: boolean;
     hidden?: boolean;
 };
 
@@ -52,5 +53,6 @@ export type MatchStatus =
     | "starred"
     | "staged-assigned"
     | "assigned"
+    | "unassignable"
     | "hidden";
 export type FillStatus = "empty" | "under" | "matched" | "over" | "n/a";

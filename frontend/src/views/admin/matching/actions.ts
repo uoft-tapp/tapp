@@ -245,16 +245,20 @@ export const matchesSelector = createSelector(
             // Override with official assignments
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
-                // Check if offer was rejected/withdrawn:
-                if (assignment.active_offer_status !== "rejected" &&
-                    assignment.active_offer_status !== "withdrawn") {
-                    matchesByPositionId[assignment.position.id] = {
-                        applicant: applicant,
-                        position: assignment.position,
-                        hoursAssigned: assignment.hours || 0,
-                        status: "assigned",
-                    };
+                let hours = assignment.hours || 0;
+                let status: MatchStatus = "assigned";
+
+                if (assignment.active_offer_status === "rejected" || assignment.active_offer_status === "withdrawn") {
+                    status = "unassignable";
+                    hours = 0;
                 }
+
+                matchesByPositionId[assignment.position.id] = {
+                    applicant: applicant,
+                    position: assignment.position,
+                    hoursAssigned: hours,
+                    status: status,
+                };
             }
 
             ret = [...ret, ...Object.values(matchesByPositionId)];
@@ -373,6 +377,7 @@ export const positionSummariesByIdSelector = createSelector(
                     "staged-assigned": [],
                     hidden: [],
                     starred: [],
+                    unassignable: []
                 };
             }
 
@@ -437,6 +442,8 @@ function getMatchStatusFromRawMatch(rawMatch: RawMatch) {
         return "staged-assigned";
     } else if (rawMatch.starred) {
         return "starred";
+    } else if (rawMatch.unassignable) {
+        return "unassignable";
     } else if (rawMatch.hidden) {
         return "hidden";
     } else {
