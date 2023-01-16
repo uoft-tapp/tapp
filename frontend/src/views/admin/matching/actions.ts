@@ -248,7 +248,10 @@ export const matchesSelector = createSelector(
                 let hours = assignment.hours || 0;
                 let status: MatchStatus = "assigned";
 
-                if (assignment.active_offer_status === "rejected" || assignment.active_offer_status === "withdrawn") {
+                if (
+                    assignment.active_offer_status === "rejected" ||
+                    assignment.active_offer_status === "withdrawn"
+                ) {
                     status = "unassignable";
                     hours = 0;
                 }
@@ -377,7 +380,7 @@ export const positionSummariesByIdSelector = createSelector(
                     "staged-assigned": [],
                     hidden: [],
                     starred: [],
-                    unassignable: []
+                    unassignable: [],
                 };
             }
 
