@@ -310,7 +310,7 @@
     flex-direction: column;
     overflow-y: auto;
     flex-grow: 1;
-    row-gap: 5px;
+    row-gap: 15px;
     padding: 0px 10px 0px 10px;
 }
 .matching-course-body .table {
