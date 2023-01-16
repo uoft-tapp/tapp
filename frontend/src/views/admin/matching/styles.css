@@ -368,6 +368,10 @@
     font-size: smaller;
 }
 
+.applicant-pill + .dropdown-menu {
+    font-size: smaller;
+}
+
 .filter-form {
     display: flex;
     flex-wrap: wrap;
@@ -376,11 +380,6 @@
 
 .filter-section-title {
     font-weight: 600;
-}
-
-.applicant-dropdown-menu {
-    background-color: white;
-    font-size: smaller;
 }
 
 .locked-applicant {
