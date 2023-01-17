@@ -10,7 +10,7 @@ import {
     ApplicantNoteModal,
     AdjustHourModal,
     ApplicationDetailModal,
-} from "../../../modals";
+} from "../../.././match-actions";
 
 import { Dropdown } from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";

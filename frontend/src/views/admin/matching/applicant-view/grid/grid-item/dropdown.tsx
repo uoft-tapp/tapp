@@ -2,8 +2,13 @@ import React from "react";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { Application } from "../../../../../../api/defs/types";
 import { Dropdown } from "react-bootstrap";
-import { upsertMatch } from "../../../actions";
-import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
+import {
+    AssignApplicantToPosition,
+    UnassignApplicantFromPosition,
+    SetStarred,
+    SetHiddenFromAllPositions,
+    SetHiddenFromPosition,
+} from "../../../match-actions/modify-match-status";
 
 /**
  * A dropdown list of actions to perform on an applicant/grid item.
@@ -21,7 +26,6 @@ export function GridItemDropdown({
     setShowChangeHours: (arg0: boolean) => void;
     setShowNote: (arg0: boolean) => void;
 }) {
-    const dispatch = useThunkDispatch();
     const baseMatchValues = React.useMemo(() => {
         return {
             positionCode: match.position.position_code,
@@ -37,57 +41,9 @@ export function GridItemDropdown({
     const canBeHidden =
         match.status !== "assigned" && match.status !== "hidden";
 
-    const assignToPosition = React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                ...baseMatchValues,
-                stagedAssigned: true,
-                stagedHoursAssigned: match.position.hours_per_assignment || 0,
-            })
-        );
-    }, [baseMatchValues, match, dispatch]);
-
-    const unassignFromPosition = React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                ...baseMatchValues,
-                stagedAssigned: false,
-                stagedHoursAssigned: 0,
-            })
-        );
-    }, [baseMatchValues, dispatch]);
-
-    const hideFromPosition = React.useCallback(() => {
-        dispatch(upsertMatch({ ...baseMatchValues, hidden: true }));
-    }, [baseMatchValues, dispatch]);
-
-    const unhideFromPosition = React.useCallback(() => {
-        dispatch(upsertMatch({ ...baseMatchValues, hidden: false }));
-    }, [baseMatchValues, dispatch]);
-
-    const hideFromAll = React.useCallback(() => {
-        for (const targetMatch of applicantSummary.matches) {
-            dispatch(
-                upsertMatch({
-                    utorid: match.applicant.utorid,
-                    positionCode: targetMatch.position.position_code,
-                    hidden: true,
-                })
-            );
-        }
-    }, [dispatch, match, applicantSummary.matches]);
-
-    const unhideFromAll = React.useCallback(() => {
-        for (const targetMatch of applicantSummary.matches) {
-            dispatch(
-                upsertMatch({
-                    utorid: match.applicant.utorid,
-                    positionCode: targetMatch.position.position_code,
-                    hidden: false,
-                })
-            );
-        }
-    }, [dispatch, match, applicantSummary.matches]);
+    const canBeStarred =
+        match.status !== "assigned" && match.status !== "starred";
+    const canBeUnstarred = match.status === "starred";
 
     return (
         <>
@@ -103,7 +59,13 @@ export function GridItemDropdown({
             </Dropdown.Item>
 
             {canBeAssigned && (
-                <Dropdown.Item onClick={assignToPosition}>
+                <Dropdown.Item
+                    onClick={AssignApplicantToPosition(
+                        baseMatchValues.positionCode,
+                        baseMatchValues.utorid,
+                        match.position.hours_per_assignment || 0
+                    )}
+                >
                     Assign to <b>{match.position.position_code}</b> (
                     {match.position.hours_per_assignment || 0})
                 </Dropdown.Item>
@@ -113,28 +75,62 @@ export function GridItemDropdown({
                     <Dropdown.Item onClick={() => setShowChangeHours(true)}>
                         Change assigned hours
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={unassignFromPosition}>
+                    <Dropdown.Item
+                        onClick={UnassignApplicantFromPosition(
+                            baseMatchValues.positionCode,
+                            baseMatchValues.utorid
+                        )}
+                    >
                         Unassign from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
                 </>
             )}
+            {canBeStarred && (
+                <Dropdown.Item onClick={SetStarred(match, true)}>
+                    Star for <b>{match.position.position_code}</b>
+                </Dropdown.Item>
+            )}
+            {canBeUnstarred && (
+                <Dropdown.Item onClick={SetStarred(match, false)}>
+                    Unstar from <b>{match.position.position_code}</b>
+                </Dropdown.Item>
+            )}
             {canBeHidden && (
-                <Dropdown.Item onClick={hideFromPosition}>
+                <Dropdown.Item
+                    onClick={SetHiddenFromPosition(
+                        baseMatchValues.positionCode,
+                        baseMatchValues.utorid,
+                        true
+                    )}
+                >
                     Hide from <b>{match.position.position_code}</b>
                 </Dropdown.Item>
             )}
 
             {canBeAssigned && (
-                <Dropdown.Item onClick={hideFromAll}>
+                <Dropdown.Item
+                    onClick={SetHiddenFromAllPositions(applicantSummary, true)}
+                >
                     Hide from all courses
                 </Dropdown.Item>
             )}
             {match.status === "hidden" && (
                 <>
-                    <Dropdown.Item onClick={unhideFromPosition}>
+                    <Dropdown.Item
+                        onClick={SetHiddenFromPosition(
+                            baseMatchValues.positionCode,
+                            baseMatchValues.utorid,
+                            false
+                        )}
+                    >
                         Unhide from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={unhideFromAll}>
+                    <Dropdown.Item
+                        onClick={SetHiddenFromAllPositions(
+                            applicantSummary,
+                            false
+                        )}
+                    >
                         Unhide from all courses
                     </Dropdown.Item>
                 </>
