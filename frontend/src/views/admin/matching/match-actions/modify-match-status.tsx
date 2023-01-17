@@ -3,6 +3,10 @@ import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { upsertMatch } from "../actions";
 import { ApplicantSummary, MatchableAssignment } from "../types";
 
+/**
+ * Update a match to mark an applicant as being staged-assigned to a
+ * position, with `hoursAssigned` number of hours.
+ */
 export function AssignApplicantToPosition(
     positionCode: string,
     utorid: string,
@@ -21,6 +25,9 @@ export function AssignApplicantToPosition(
     }, [positionCode, utorid, hoursAssigned, dispatch]);
 }
 
+/**
+ * Update a match to unassign (staged) an applicant from a position.
+ */
 export function UnassignApplicantFromPosition(
     positionCode: string,
     utorid: string
@@ -38,6 +45,9 @@ export function UnassignApplicantFromPosition(
     }, [positionCode, utorid, dispatch]);
 }
 
+/**
+ * Update the "starred" status of a match to the value of `starred` (bool).
+ */
 export function SetStarred(match: MatchableAssignment, starred: boolean) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
@@ -51,6 +61,9 @@ export function SetStarred(match: MatchableAssignment, starred: boolean) {
     }, [dispatch, match, starred]);
 }
 
+/**
+ * Set a match's "hidden" status for a given applicant and position.
+ */
 export function SetHiddenFromPosition(
     positionCode: string,
     utorid: string,
@@ -68,6 +81,10 @@ export function SetHiddenFromPosition(
     }, [positionCode, utorid, isHidden, dispatch]);
 }
 
+/**
+ * Set the "hidden" status for all matches of an applicant to the value of
+ * `isHidden`, given their applicant summary.
+ */
 export function SetHiddenFromAllPositions(
     applicantSummary: ApplicantSummary,
     isHidden: boolean
