@@ -1,5 +1,4 @@
 import React from "react";
-import { ContentArea } from "../../../components/layout";
 import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
