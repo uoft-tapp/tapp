@@ -7,12 +7,7 @@ import {
     positionsSelector,
     applicantsSelector,
 } from "../../../api/actions";
-import {
-    Assignment,
-    Application,
-    Position,
-    RawAssignment,
-} from "../../../api/defs/types";
+import { Assignment, Application, Position } from "../../../api/defs/types";
 import {
     UPSERT_MATCH,
     BATCH_UPSERT_MATCHES,
