@@ -7,7 +7,12 @@ import {
     positionsSelector,
     applicantsSelector,
 } from "../../../api/actions";
-import { Assignment, Application, Position } from "../../../api/defs/types";
+import {
+    Assignment,
+    Application,
+    Position,
+    RawAssignment,
+} from "../../../api/defs/types";
 import {
     UPSERT_MATCH,
     BATCH_UPSERT_MATCHES,
@@ -245,22 +250,18 @@ export const matchesSelector = createSelector(
             // Override with official assignments
             for (const assignment of assignmentsByApplicantId[applicant.id] ||
                 []) {
-                let hours = assignment.hours || 0;
-                let status: MatchStatus = "assigned";
-
-                if (
-                    assignment.active_offer_status === "rejected" ||
-                    assignment.active_offer_status === "withdrawn"
-                ) {
-                    status = "unassignable";
-                    hours = 0;
-                }
-
                 matchesByPositionId[assignment.position.id] = {
                     applicant: applicant,
                     position: assignment.position,
-                    hoursAssigned: hours,
-                    status: status,
+                    hoursAssigned:
+                        activeOfferStatusToStatus(
+                            assignment.active_offer_status
+                        ) === "unassignable"
+                            ? 0
+                            : assignment.hours,
+                    status: activeOfferStatusToStatus(
+                        assignment.active_offer_status
+                    ),
                 };
             }
 
@@ -270,6 +271,18 @@ export const matchesSelector = createSelector(
         return ret;
     }
 );
+
+/**
+ * Return a MatchStatus ("assigned" or "unassignable") based on an active offer status type.
+ */
+function activeOfferStatusToStatus(active_offer_status: string | null) {
+    switch (active_offer_status) {
+        case "rejected" || "withdrawn":
+            return "unassignable";
+        default:
+            return "assigned";
+    }
+}
 
 export const applicantSummariesSelector = createSelector(
     [
