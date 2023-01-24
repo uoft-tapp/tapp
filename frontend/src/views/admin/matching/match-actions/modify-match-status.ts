@@ -1,13 +1,13 @@
 import React from "react";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import { upsertMatch } from "../actions";
-import { ApplicantSummary, MatchableAssignment } from "../types";
+import { toggleStarred, upsertMatch } from "../actions";
+import { ApplicantSummary } from "../types";
 
 /**
  * Update a match to mark an applicant as being staged-assigned to a
  * position, with `hoursAssigned` number of hours.
  */
-export function AssignApplicantToPosition(
+export function useAssignApplicantToPosition(
     positionCode: string,
     utorid: string,
     hoursAssigned: number
@@ -28,7 +28,7 @@ export function AssignApplicantToPosition(
 /**
  * Update a match to unassign (staged) an applicant from a position.
  */
-export function UnassignApplicantFromPosition(
+export function useUnassignApplicantFromPosition(
     positionCode: string,
     utorid: string
 ) {
@@ -46,19 +46,18 @@ export function UnassignApplicantFromPosition(
 }
 
 /**
- * Update the "starred" status of a match to the value of `starred` (bool).
+ * Toggle the "starred" status of a match.
  */
-export function SetStarred(match: MatchableAssignment, starred: boolean) {
+export function useToggleStarred(positionCode: string, utorid: string) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
         dispatch(
-            upsertMatch({
-                positionCode: match.position.position_code,
-                utorid: match.applicant.utorid,
-                starred: starred,
+            toggleStarred({
+                positionCode: positionCode,
+                utorid: utorid,
             })
         );
-    }, [dispatch, match, starred]);
+    }, [dispatch, positionCode, utorid]);
 }
 
 /**

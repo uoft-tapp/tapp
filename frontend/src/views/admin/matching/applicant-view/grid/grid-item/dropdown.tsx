@@ -3,9 +3,9 @@ import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { Application } from "../../../../../../api/defs/types";
 import { Dropdown } from "react-bootstrap";
 import {
-    AssignApplicantToPosition,
-    UnassignApplicantFromPosition,
-    SetStarred,
+    useAssignApplicantToPosition,
+    useUnassignApplicantFromPosition,
+    useToggleStarred,
     SetHiddenFromAllPositions,
     SetHiddenFromPosition,
 } from "../../../match-actions/modify-match-status";
@@ -43,7 +43,24 @@ export function GridItemDropdown({
 
     const canBeStarred =
         match.status !== "assigned" && match.status !== "starred";
+
     const canBeUnstarred = match.status === "starred";
+
+    const assignApplicant = useAssignApplicantToPosition(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid,
+        match.position.hours_per_assignment || 0
+    );
+
+    const unassignApplicant = useUnassignApplicantFromPosition(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid
+    );
+
+    const toggleStar = useToggleStarred(
+        match.position.position_code,
+        match.applicant.utorid
+    );
 
     return (
         <>
@@ -59,13 +76,7 @@ export function GridItemDropdown({
             </Dropdown.Item>
 
             {canBeAssigned && (
-                <Dropdown.Item
-                    onClick={AssignApplicantToPosition(
-                        baseMatchValues.positionCode,
-                        baseMatchValues.utorid,
-                        match.position.hours_per_assignment || 0
-                    )}
-                >
+                <Dropdown.Item onClick={assignApplicant}>
                     Assign to <b>{match.position.position_code}</b> (
                     {match.position.hours_per_assignment || 0})
                 </Dropdown.Item>
@@ -75,24 +86,15 @@ export function GridItemDropdown({
                     <Dropdown.Item onClick={() => setShowChangeHours(true)}>
                         Change assigned hours
                     </Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={UnassignApplicantFromPosition(
-                            baseMatchValues.positionCode,
-                            baseMatchValues.utorid
-                        )}
-                    >
+                    <Dropdown.Item onClick={unassignApplicant}>
                         Unassign from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
                 </>
             )}
-            {canBeStarred && (
-                <Dropdown.Item onClick={SetStarred(match, true)}>
-                    Star for <b>{match.position.position_code}</b>
-                </Dropdown.Item>
-            )}
-            {canBeUnstarred && (
-                <Dropdown.Item onClick={SetStarred(match, false)}>
-                    Unstar from <b>{match.position.position_code}</b>
+            {(canBeStarred || canBeUnstarred) && (
+                <Dropdown.Item onClick={toggleStar}>
+                    {canBeStarred ? "Star for " : "Unstar from "}
+                    <b>{match.position.position_code}</b>
                 </Dropdown.Item>
             )}
             {canBeHidden && (

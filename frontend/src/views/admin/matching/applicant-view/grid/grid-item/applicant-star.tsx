@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { MatchableAssignment } from "../../../types";
-import { SetStarred } from "../../../match-actions/modify-match-status";
+import { useToggleStarred } from "../../../match-actions/modify-match-status";
 import { BsStarFill } from "react-icons/bs";
 
 /**
@@ -13,7 +13,10 @@ export function ApplicantStar({ match }: { match: MatchableAssignment }) {
             className={classNames("star-icon", {
                 filled: match.status === "starred",
             })}
-            onClick={SetStarred(match, match.status !== "starred")}
+            onClick={useToggleStarred(
+                match.position.position_code,
+                match.applicant.utorid
+            )}
         />
     );
 }
