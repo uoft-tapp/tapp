@@ -6,8 +6,8 @@ import {
     useAssignApplicantToPosition,
     useUnassignApplicantFromPosition,
     useToggleStarred,
-    SetHiddenFromAllPositions,
-    SetHiddenFromPosition,
+    useHideFromAllPositions,
+    useHideFromPosition,
 } from "../../../match-actions/modify-match-status";
 
 /**
@@ -62,6 +62,28 @@ export function GridItemDropdown({
         match.applicant.utorid
     );
 
+    const hideFromAllPositions = useHideFromAllPositions(
+        applicantSummary,
+        true
+    );
+
+    const hideFromPosition = useHideFromPosition(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid,
+        true
+    );
+
+    const unhideFromAllPositions = useHideFromAllPositions(
+        applicantSummary,
+        false
+    );
+
+    const unhideFromPosition = useHideFromPosition(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid,
+        false
+    );
+
     return (
         <>
             <Dropdown.Item
@@ -98,41 +120,21 @@ export function GridItemDropdown({
                 </Dropdown.Item>
             )}
             {canBeHidden && (
-                <Dropdown.Item
-                    onClick={SetHiddenFromPosition(
-                        baseMatchValues.positionCode,
-                        baseMatchValues.utorid,
-                        true
-                    )}
-                >
+                <Dropdown.Item onClick={hideFromPosition}>
                     Hide from <b>{match.position.position_code}</b>
                 </Dropdown.Item>
             )}
-
             {canBeAssigned && (
-                <Dropdown.Item
-                    onClick={SetHiddenFromAllPositions(applicantSummary, true)}
-                >
+                <Dropdown.Item onClick={hideFromAllPositions}>
                     Hide from all courses
                 </Dropdown.Item>
             )}
             {match.status === "hidden" && (
                 <>
-                    <Dropdown.Item
-                        onClick={SetHiddenFromPosition(
-                            baseMatchValues.positionCode,
-                            baseMatchValues.utorid,
-                            false
-                        )}
-                    >
+                    <Dropdown.Item onClick={unhideFromPosition}>
                         Unhide from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={SetHiddenFromAllPositions(
-                            applicantSummary,
-                            false
-                        )}
-                    >
+                    <Dropdown.Item onClick={unhideFromAllPositions}>
                         Unhide from all courses
                     </Dropdown.Item>
                 </>

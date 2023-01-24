@@ -63,7 +63,7 @@ export function useToggleStarred(positionCode: string, utorid: string) {
 /**
  * Set a match's "hidden" status for a given applicant and position.
  */
-export function SetHiddenFromPosition(
+export function useHideFromPosition(
     positionCode: string,
     utorid: string,
     isHidden: boolean
@@ -84,7 +84,7 @@ export function SetHiddenFromPosition(
  * Set the "hidden" status for all matches of an applicant to the value of
  * `isHidden`, given their applicant summary.
  */
-export function SetHiddenFromAllPositions(
+export function useHideFromAllPositions(
     applicantSummary: ApplicantSummary,
     isHidden: boolean
 ) {
