@@ -272,7 +272,8 @@ export const matchesSelector = createSelector(
  */
 function activeOfferStatusToStatus(active_offer_status: string | null) {
     switch (active_offer_status) {
-        case "rejected" || "withdrawn":
+        case "rejected":
+        case "withdrawn":
             return "unassignable";
         default:
             return "assigned";
