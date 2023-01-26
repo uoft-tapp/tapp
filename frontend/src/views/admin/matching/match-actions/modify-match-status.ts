@@ -1,48 +1,26 @@
 import React from "react";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import { toggleStarred, upsertMatch } from "../actions";
+import { toggleStarred, toggleAssigned, upsertMatch } from "../actions";
 import { ApplicantSummary } from "../types";
 
 /**
- * Update a match to mark an applicant as being staged-assigned to a
- * position, with `hoursAssigned` number of hours.
+ * Toggle the "stagedAssigned" status of a match.
  */
-export function useAssignApplicantToPosition(
+export function useToggleAssigned(
     positionCode: string,
     utorid: string,
-    hoursAssigned: number
+    hoursAssigned?: number
 ) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
         dispatch(
-            upsertMatch({
+            toggleAssigned({
                 positionCode: positionCode,
                 utorid: utorid,
-                stagedAssigned: true,
-                stagedHoursAssigned: hoursAssigned,
+                stagedHoursAssigned: hoursAssigned || 0,
             })
         );
     }, [positionCode, utorid, hoursAssigned, dispatch]);
-}
-
-/**
- * Update a match to unassign (staged) an applicant from a position.
- */
-export function useUnassignApplicantFromPosition(
-    positionCode: string,
-    utorid: string
-) {
-    const dispatch = useThunkDispatch();
-    return React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                positionCode: positionCode,
-                utorid: utorid,
-                stagedAssigned: false,
-                stagedHoursAssigned: 0,
-            })
-        );
-    }, [positionCode, utorid, dispatch]);
 }
 
 /**

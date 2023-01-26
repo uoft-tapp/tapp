@@ -3,8 +3,7 @@ import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { Application } from "../../../../../../api/defs/types";
 import { Dropdown } from "react-bootstrap";
 import {
-    useAssignApplicantToPosition,
-    useUnassignApplicantFromPosition,
+    useToggleAssigned,
     useToggleStarred,
     useHideFromAllPositions,
     useHideFromPosition,
@@ -22,9 +21,9 @@ export function GridItemDropdown({
 }: {
     match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
-    setShownApplication: (arg0: Application | null) => void;
-    setShowChangeHours: (arg0: boolean) => void;
-    setShowNote: (arg0: boolean) => void;
+    setShownApplication: (shownApplication: Application | null) => void;
+    setShowChangeHours: (show: boolean) => void;
+    setShowNote: (show: boolean) => void;
 }) {
     const baseMatchValues = React.useMemo(() => {
         return {
@@ -39,22 +38,21 @@ export function GridItemDropdown({
         match.status === "starred";
 
     const canBeHidden =
-        match.status !== "assigned" && match.status !== "hidden";
+        match.status !== "assigned" &&
+        match.status !== "staged-assigned" &&
+        match.status !== "hidden";
 
     const canBeStarred =
-        match.status !== "assigned" && match.status !== "starred";
+        match.status !== "assigned" &&
+        match.status !== "staged-assigned" &&
+        match.status !== "starred";
 
     const canBeUnstarred = match.status === "starred";
 
-    const assignApplicant = useAssignApplicantToPosition(
+    const toggleAssign = useToggleAssigned(
         baseMatchValues.positionCode,
         baseMatchValues.utorid,
         match.position.hours_per_assignment || 0
-    );
-
-    const unassignApplicant = useUnassignApplicantFromPosition(
-        baseMatchValues.positionCode,
-        baseMatchValues.utorid
     );
 
     const toggleStar = useToggleStarred(
@@ -97,19 +95,21 @@ export function GridItemDropdown({
                 View/edit applicant notes
             </Dropdown.Item>
 
-            {canBeAssigned && (
-                <Dropdown.Item onClick={assignApplicant}>
-                    Assign to <b>{match.position.position_code}</b> (
-                    {match.position.hours_per_assignment || 0})
-                </Dropdown.Item>
-            )}
             {match.status === "staged-assigned" && (
                 <>
                     <Dropdown.Item onClick={() => setShowChangeHours(true)}>
                         Change assigned hours
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={unassignApplicant}>
-                        Unassign from <b>{match.position.position_code}</b>
+                </>
+            )}
+            {(canBeAssigned || match.status === "staged-assigned") && (
+                <>
+                    <Dropdown.Item onClick={toggleAssign}>
+                        {canBeAssigned ? "Assign to " : "Unassign from "}
+                        <b>{match.position.position_code}</b>
+                        {canBeAssigned
+                            ? ` (${match.position.hours_per_assignment || 0})`
+                            : ""}
                     </Dropdown.Item>
                 </>
             )}

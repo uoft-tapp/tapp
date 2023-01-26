@@ -9,6 +9,7 @@ import {
     SET_APPLICANT_VIEW_MODE,
     SET_UPDATED,
     TOGGLE_STARRED,
+    TOGGLE_ASSIGNED,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import {
@@ -194,6 +195,67 @@ const matchingDataReducer = createReducer(initialState, {
                             match.hidden
                         ) {
                             return { ...match, starred: !match.starred };
+                        }
+                        return null;
+                    } else {
+                        return match;
+                    }
+                })
+                .filter((match): match is RawMatch => !!match),
+            updated: true,
+        };
+    },
+    [TOGGLE_ASSIGNED]: (state, action) => {
+        // Check if a match with this applicant ID and position ID already exists
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
+
+        // If a match doesn't already exist, this applicant is implied to not yet be assigned:
+        if (!existingMatch) {
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
+                stagedAssigned: true,
+                starred: false,
+                hidden: false,
+            };
+
+            return {
+                ...state,
+                matches: [...state.matches, newMatch],
+                updated: true,
+            };
+        }
+
+        return {
+            ...state,
+            matches: state.matches
+                .map((match) => {
+                    if (
+                        match.utorid === action.payload.utorid &&
+                        match.positionCode === action.payload.positionCode
+                    ) {
+                        // If the applicant is not assigned, assign them:
+                        if (!match.stagedAssigned) {
+                            return {
+                                ...match,
+                                stagedAssigned: true,
+                                stagedHoursAssigned:
+                                    action.payload.stagedHoursAssigned || 0,
+                            };
+                        }
+
+                        // Applicant was previously assigned; check if the match will have any flags set, otherwise mark for deletion:
+                        if (match.starred || match.hidden) {
+                            return {
+                                ...match,
+                                stagedAssigned: false,
+                                stagedHoursAssigned: 0,
+                            };
                         }
                         return null;
                     } else {
