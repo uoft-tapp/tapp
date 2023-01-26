@@ -19,17 +19,14 @@ export function ApplicantNoteModal({
     const dispatch = useThunkDispatch();
     const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note || "");
 
-    const updateApplicantNote = React.useCallback(
-        (note: string) => {
-            dispatch(
-                upsertNote({
-                    utorid: applicantSummary.applicant.utorid,
-                    note: noteTemp,
-                })
-            );
-        },
-        [dispatch, noteTemp, applicantSummary]
-    );
+    const updateApplicantNote = React.useCallback(() => {
+        dispatch(
+            upsertNote({
+                utorid: applicantSummary.applicant.utorid,
+                note: noteTemp,
+            })
+        );
+    }, [dispatch, noteTemp, applicantSummary]);
 
     return (
         <Modal show={show} onHide={() => setShow(false)}>
@@ -60,7 +57,7 @@ export function ApplicantNoteModal({
                 </Button>
                 <Button
                     onClick={() => {
-                        updateApplicantNote(noteTemp);
+                        updateApplicantNote();
                         setShow(false);
                     }}
                     variant="outline-primary"
