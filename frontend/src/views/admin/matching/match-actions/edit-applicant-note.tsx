@@ -14,7 +14,7 @@ export function ApplicantNoteModal({
 }: {
     applicantSummary: ApplicantSummary;
     show: boolean;
-    setShow: (arg0: boolean) => void;
+    setShow: (show: boolean) => void;
 }) {
     const dispatch = useThunkDispatch();
     const [noteTemp, setNoteTemp] = React.useState(applicantSummary.note || "");
