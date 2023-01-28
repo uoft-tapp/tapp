@@ -33,7 +33,9 @@ export function GridItemDropdown({
         match.status === "starred";
 
     const canBeHidden =
-        match.status !== "assigned" && match.status !== "hidden";
+        match.status !== "assigned" &&
+        match.status !== "unassignable" &&
+        match.status !== "hidden";
 
     const assignToPosition = React.useCallback(() => {
         dispatch(

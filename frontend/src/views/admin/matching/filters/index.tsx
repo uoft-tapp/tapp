@@ -6,7 +6,7 @@ export const defaultFilterList: Record<FilterType, any[]> = {
     program: [],
     department: [],
     taPositionPref: [],
-    status: ["hidden"],
+    status: ["unassignable", "hidden"],
     hourFulfillment: [],
 };
 
