@@ -19,7 +19,7 @@ export function ApplicationDetailModal({
 
     return (
         <Modal
-            show={!!application}
+            show={Boolean(application)}
             onHide={() => setShownApplication(null)}
             size="xl"
         >
