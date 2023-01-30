@@ -6,7 +6,7 @@ import {
     useToggleAssigned,
     useToggleStarred,
     useHideFromAllPositions,
-    useHideFromPosition,
+    useToggleHidden,
 } from "../../../match-actions/modify-match-status";
 
 /**
@@ -60,25 +60,18 @@ export function GridItemDropdown({
         match.applicant.utorid
     );
 
+    const toggleHidden = useToggleHidden(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid
+    );
+
     const hideFromAllPositions = useHideFromAllPositions(
         applicantSummary,
         true
     );
 
-    const hideFromPosition = useHideFromPosition(
-        baseMatchValues.positionCode,
-        baseMatchValues.utorid,
-        true
-    );
-
     const unhideFromAllPositions = useHideFromAllPositions(
         applicantSummary,
-        false
-    );
-
-    const unhideFromPosition = useHideFromPosition(
-        baseMatchValues.positionCode,
-        baseMatchValues.utorid,
         false
     );
 
@@ -120,18 +113,18 @@ export function GridItemDropdown({
                 </Dropdown.Item>
             )}
             {canBeHidden && (
-                <Dropdown.Item onClick={hideFromPosition}>
-                    Hide from <b>{match.position.position_code}</b>
-                </Dropdown.Item>
-            )}
-            {canBeAssigned && (
-                <Dropdown.Item onClick={hideFromAllPositions}>
-                    Hide from all courses
-                </Dropdown.Item>
+                <>
+                    <Dropdown.Item onClick={toggleHidden}>
+                        Hide from <b>{match.position.position_code}</b>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={hideFromAllPositions}>
+                        Hide from all courses
+                    </Dropdown.Item>
+                </>
             )}
             {match.status === "hidden" && (
                 <>
-                    <Dropdown.Item onClick={unhideFromPosition}>
+                    <Dropdown.Item onClick={toggleHidden}>
                         Unhide from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
                     <Dropdown.Item onClick={unhideFromAllPositions}>

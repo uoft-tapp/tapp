@@ -10,6 +10,7 @@ import {
     SET_UPDATED,
     TOGGLE_STARRED,
     TOGGLE_ASSIGNED,
+    TOGGLE_HIDDEN,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import {
@@ -255,6 +256,64 @@ const matchingDataReducer = createReducer(initialState, {
                                 ...match,
                                 stagedAssigned: false,
                                 stagedHoursAssigned: 0,
+                            };
+                        }
+                        return null;
+                    } else {
+                        return match;
+                    }
+                })
+                .filter((match): match is RawMatch => !!match),
+            updated: true,
+        };
+    },
+    [TOGGLE_HIDDEN]: (state, action) => {
+        // Check if a match with this applicant ID and position ID already exists
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
+
+        // If a match doesn't already exist, this applicant is implied to not be hidden:
+        if (!existingMatch) {
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
+                stagedAssigned: false,
+                starred: false,
+                hidden: true,
+            };
+
+            return {
+                ...state,
+                matches: [...state.matches, newMatch],
+                updated: true,
+            };
+        }
+
+        return {
+            ...state,
+            matches: state.matches
+                .map((match) => {
+                    if (
+                        match.utorid === action.payload.utorid &&
+                        match.positionCode === action.payload.positionCode
+                    ) {
+                        // If the applicant is not hidden, hide them:
+                        if (!match.hidden) {
+                            return {
+                                ...match,
+                                hidden: true,
+                            };
+                        }
+
+                        // Applicant was previously hidden; check if the match will have any flags set, otherwise mark for deletion:
+                        if (match.starred || match.stagedAssigned) {
+                            return {
+                                ...match,
+                                hidden: false,
                             };
                         }
                         return null;

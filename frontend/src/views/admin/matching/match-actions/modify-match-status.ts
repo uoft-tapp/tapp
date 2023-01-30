@@ -1,6 +1,11 @@
 import React from "react";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import { toggleStarred, toggleAssigned, upsertMatch } from "../actions";
+import {
+    toggleStarred,
+    toggleAssigned,
+    upsertMatch,
+    toggleHidden,
+} from "../actions";
 import { ApplicantSummary } from "../types";
 
 /**
@@ -41,30 +46,25 @@ export function useToggleStarred(positionCode: string, utorid: string) {
 /**
  * Set a match's "hidden" status for a given applicant and position.
  */
-export function useHideFromPosition(
-    positionCode: string,
-    utorid: string,
-    isHidden: boolean
-) {
+export function useToggleHidden(positionCode: string, utorid: string) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
         dispatch(
-            upsertMatch({
+            toggleHidden({
                 positionCode: positionCode,
                 utorid: utorid,
-                hidden: isHidden,
             })
         );
-    }, [positionCode, utorid, isHidden, dispatch]);
+    }, [positionCode, utorid, dispatch]);
 }
 
 /**
  * Set the "hidden" status for all matches of an applicant to the value of
- * `isHidden`, given their applicant summary.
+ * `hide`, given their applicant summary.
  */
 export function useHideFromAllPositions(
     applicantSummary: ApplicantSummary,
-    isHidden: boolean
+    hide: boolean
 ) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
@@ -73,7 +73,7 @@ export function useHideFromAllPositions(
                 upsertMatch({
                     utorid: applicantSummary.applicant.utorid,
                     positionCode: targetMatch.position.position_code,
-                    hidden: isHidden,
+                    hidden: hide,
                 })
             );
         }
@@ -81,6 +81,6 @@ export function useHideFromAllPositions(
         dispatch,
         applicantSummary.matches,
         applicantSummary.applicant.utorid,
-        isHidden,
+        hide,
     ]);
 }
