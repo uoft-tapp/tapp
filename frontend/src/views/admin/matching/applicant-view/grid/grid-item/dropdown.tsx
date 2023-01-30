@@ -49,13 +49,13 @@ export function GridItemDropdown({
 
     const canBeUnstarred = match.status === "starred";
 
-    const toggleAssign = useToggleAssigned(
+    const toggleAssigned = useToggleAssigned(
         baseMatchValues.positionCode,
         baseMatchValues.utorid,
         match.position.hours_per_assignment || 0
     );
 
-    const toggleStar = useToggleStarred(
+    const toggleStarred = useToggleStarred(
         match.position.position_code,
         match.applicant.utorid
     );
@@ -104,7 +104,7 @@ export function GridItemDropdown({
             )}
             {(canBeAssigned || match.status === "staged-assigned") && (
                 <>
-                    <Dropdown.Item onClick={toggleAssign}>
+                    <Dropdown.Item onClick={toggleAssigned}>
                         {canBeAssigned ? "Assign to " : "Unassign from "}
                         <b>{match.position.position_code}</b>
                         {canBeAssigned
@@ -114,7 +114,7 @@ export function GridItemDropdown({
                 </>
             )}
             {(canBeStarred || canBeUnstarred) && (
-                <Dropdown.Item onClick={toggleStar}>
+                <Dropdown.Item onClick={toggleStarred}>
                     {canBeStarred ? "Star for " : "Unstar from "}
                     <b>{match.position.position_code}</b>
                 </Dropdown.Item>

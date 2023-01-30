@@ -8,7 +8,7 @@ import { BsStarFill } from "react-icons/bs";
  * A button for toggling applicant's "starred" status for the currently-selected position.
  */
 export function ApplicantStar({ match }: { match: MatchableAssignment }) {
-    const toggleStar = useToggleStarred(
+    const toggleStarred = useToggleStarred(
         match.position.position_code,
         match.applicant.utorid
     );
@@ -18,7 +18,7 @@ export function ApplicantStar({ match }: { match: MatchableAssignment }) {
             className={classNames("star-icon", {
                 filled: match.status === "starred",
             })}
-            onClick={toggleStar}
+            onClick={toggleStarred}
         />
     );
 }
