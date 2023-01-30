@@ -163,6 +163,10 @@ export function ConnectedAssignmentDetails({
                     </td>
                 </tr>
                 <tr>
+                    <th>Student Number</th>
+                    <td>{assignment.applicant.student_number}</td>
+                </tr>
+                <tr>
                     <th>Total Hours</th>
                     <td>{assignment.hours}</td>
                 </tr>

@@ -26,6 +26,7 @@ export function GridView({
             starred: [],
             "staged-assigned": [],
             assigned: [],
+            unassignable: [],
             hidden: [],
         };
 
@@ -51,6 +52,7 @@ export function GridView({
         "staged-assigned",
         "starred",
         "applied",
+        "unassignable",
         "hidden",
     ];
 
@@ -60,7 +62,7 @@ export function GridView({
                 return (
                     <GridSection
                         key={status}
-                        header={matchingStatusToString[status]}
+                        status={status}
                         applicantSummaries={
                             applicantSummariesByMatchStatus[status]
                         }
@@ -76,11 +78,11 @@ export function GridView({
  * A section/collection of grid items for a specified match status (e.g., applied, staged-assigned).
  */
 function GridSection({
-    header,
+    status,
     applicantSummaries,
     position,
 }: {
-    header: string;
+    status: MatchStatus;
     applicantSummaries: ApplicantSummary[];
     position: Position;
 }) {
@@ -92,12 +94,19 @@ function GridSection({
     return (
         <div className="grid-view-section">
             <h4>
-                {header}
-                {header === "Assigned" && (
+                {matchingStatusToString[status]}
+                {status === "assigned" && (
                     <FaLock
                         className="header-lock"
                         title="These assignments can only be changed through the Assignments &
             Positions > Assignments tab."
+                    />
+                )}
+                {status === "unassignable" && (
+                    <FaLock
+                        className="header-lock"
+                        title="These applicants have an assignment for this position that was previously
+            rejected/withdrawn, and can only be changed through the Assignments & Positions > Assignments tab."
                     />
                 )}
             </h4>
