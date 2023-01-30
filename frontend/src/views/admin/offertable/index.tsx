@@ -193,6 +193,11 @@ export function ConnectedOfferTable({
                 Cell: generateApplicantCell("email"),
             },
             {
+                Header: "Student Number",
+                accessor: "applicant.student_number",
+                Cell: generateApplicantCell("student_number"),
+            },
+            {
                 Header: "Position",
                 accessor: "position.position_code",
             },

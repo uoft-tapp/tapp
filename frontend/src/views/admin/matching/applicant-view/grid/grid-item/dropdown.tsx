@@ -40,6 +40,7 @@ export function GridItemDropdown({
     const canBeHidden =
         match.status !== "assigned" &&
         match.status !== "staged-assigned" &&
+        match.status !== "unassignable" &&
         match.status !== "hidden";
 
     const canBeStarred =

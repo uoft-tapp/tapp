@@ -17,6 +17,7 @@ import {
     AppointmentGuaranteeStatus,
     ApplicantViewMode,
 } from "./types";
+
 export { matchingDataReducer };
 
 export interface MatchingDataState {

@@ -253,8 +253,15 @@ export const matchesSelector = createSelector(
                 matchesByPositionId[assignment.position.id] = {
                     applicant: applicant,
                     position: assignment.position,
-                    hoursAssigned: assignment.hours || 0,
-                    status: "assigned",
+                    hoursAssigned:
+                        activeOfferStatusToStatus(
+                            assignment.active_offer_status
+                        ) === "unassignable"
+                            ? 0
+                            : assignment.hours,
+                    status: activeOfferStatusToStatus(
+                        assignment.active_offer_status
+                    ),
                 };
             }
 
@@ -264,6 +271,19 @@ export const matchesSelector = createSelector(
         return ret;
     }
 );
+
+/**
+ * Return a MatchStatus ("assigned" or "unassignable") based on an active offer status type.
+ */
+function activeOfferStatusToStatus(active_offer_status: string | null) {
+    switch (active_offer_status) {
+        case "rejected":
+        case "withdrawn":
+            return "unassignable";
+        default:
+            return "assigned";
+    }
+}
 
 export const applicantSummariesSelector = createSelector(
     [
@@ -374,6 +394,7 @@ export const positionSummariesByIdSelector = createSelector(
                     "staged-assigned": [],
                     hidden: [],
                     starred: [],
+                    unassignable: [],
                 };
             }
 
@@ -438,6 +459,8 @@ function getMatchStatusFromRawMatch(rawMatch: RawMatch) {
         return "staged-assigned";
     } else if (rawMatch.starred) {
         return "starred";
+    } else if (rawMatch.unassignable) {
+        return "unassignable";
     } else if (rawMatch.hidden) {
         return "hidden";
     } else {

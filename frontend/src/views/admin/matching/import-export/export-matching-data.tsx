@@ -4,7 +4,6 @@ import { matchingDataSelector, updatedSelector } from "../actions";
 import { useSelector } from "react-redux";
 import { setUpdated } from "../actions";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
-import { BsCircleFill } from "react-icons/bs";
 import { Button } from "react-bootstrap";
 
 export function ExportMatchingDataButton() {
