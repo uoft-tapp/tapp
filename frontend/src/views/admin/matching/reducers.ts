@@ -183,26 +183,22 @@ const matchingDataReducer = createReducer(initialState, {
         // Item exists, so we have to update it
         return {
             ...state,
-            matches: state.matches
-                .map((match) => {
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
                     if (
-                        match.utorid === action.payload.utorid &&
-                        match.positionCode === action.payload.positionCode
+                        match.stagedAssigned ||
+                        !match.starred ||
+                        match.hidden
                     ) {
-                        // Check if the match will have any flags set, otherwise mark for deletion:
-                        if (
-                            match.stagedAssigned ||
-                            !match.starred ||
-                            match.hidden
-                        ) {
-                            return { ...match, starred: !match.starred };
-                        }
-                        return null;
-                    } else {
-                        return match;
+                        return [{ ...match, starred: !match.starred }];
                     }
-                })
-                .filter((match): match is RawMatch => !!match),
+                    return [];
+                }
+                return [match];
+            }),
             updated: true,
         };
     },
@@ -221,8 +217,6 @@ const matchingDataReducer = createReducer(initialState, {
                 positionCode: action.payload.positionCode,
                 stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
                 stagedAssigned: true,
-                starred: false,
-                hidden: false,
             };
 
             return {
@@ -234,36 +228,32 @@ const matchingDataReducer = createReducer(initialState, {
 
         return {
             ...state,
-            matches: state.matches
-                .map((match) => {
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
+                    // If the applicant is not assigned, assign them:
                     if (
-                        match.utorid === action.payload.utorid &&
-                        match.positionCode === action.payload.positionCode
+                        match.starred ||
+                        match.hidden ||
+                        !match.stagedAssigned
                     ) {
-                        // If the applicant is not assigned, assign them:
-                        if (!match.stagedAssigned) {
-                            return {
+                        return [
+                            {
                                 ...match,
-                                stagedAssigned: true,
-                                stagedHoursAssigned:
-                                    action.payload.stagedHoursAssigned || 0,
-                            };
-                        }
-
-                        // Applicant was previously assigned; check if the match will have any flags set, otherwise mark for deletion:
-                        if (match.starred || match.hidden) {
-                            return {
-                                ...match,
-                                stagedAssigned: false,
-                                stagedHoursAssigned: 0,
-                            };
-                        }
-                        return null;
-                    } else {
-                        return match;
+                                stagedAssigned: !match.stagedAssigned,
+                                stagedHoursAssigned: !match.stagedAssigned
+                                    ? action.payload.stagedHoursAssigned || 0
+                                    : 0,
+                            },
+                        ];
                     }
-                })
-                .filter((match): match is RawMatch => !!match),
+                    return [];
+                } else {
+                    return [match];
+                }
+            }),
             updated: true,
         };
     },
@@ -280,9 +270,6 @@ const matchingDataReducer = createReducer(initialState, {
             const newMatch: RawMatch = {
                 utorid: action.payload.utorid,
                 positionCode: action.payload.positionCode,
-                stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
-                stagedAssigned: false,
-                starred: false,
                 hidden: true,
             };
 
@@ -295,33 +282,23 @@ const matchingDataReducer = createReducer(initialState, {
 
         return {
             ...state,
-            matches: state.matches
-                .map((match) => {
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
                     if (
-                        match.utorid === action.payload.utorid &&
-                        match.positionCode === action.payload.positionCode
+                        match.starred ||
+                        match.stagedAssigned ||
+                        !match.hidden
                     ) {
-                        // If the applicant is not hidden, hide them:
-                        if (!match.hidden) {
-                            return {
-                                ...match,
-                                hidden: true,
-                            };
-                        }
-
-                        // Applicant was previously hidden; check if the match will have any flags set, otherwise mark for deletion:
-                        if (match.starred || match.stagedAssigned) {
-                            return {
-                                ...match,
-                                hidden: false,
-                            };
-                        }
-                        return null;
-                    } else {
-                        return match;
+                        return [{ ...match, hidden: !match.hidden }];
                     }
-                })
-                .filter((match): match is RawMatch => !!match),
+                    return [];
+                } else {
+                    return [match];
+                }
+            }),
             updated: true,
         };
     },
