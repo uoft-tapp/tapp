@@ -65,15 +65,15 @@ export function GridItemDropdown({
         baseMatchValues.utorid
     );
 
-    const hideFromAllPositions = useHideFromAllPositions(
-        applicantSummary,
-        true
-    );
+    const hideFromAllPositions = useHideFromAllPositions({
+        applicantSummary: applicantSummary,
+        hide: true,
+    });
 
-    const unhideFromAllPositions = useHideFromAllPositions(
-        applicantSummary,
-        false
-    );
+    const unhideFromAllPositions = useHideFromAllPositions({
+        applicantSummary: applicantSummary,
+        hide: false,
+    });
 
     return (
         <>

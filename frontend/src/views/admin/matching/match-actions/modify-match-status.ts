@@ -62,10 +62,13 @@ export function useToggleHidden(positionCode: string, utorid: string) {
  * Set the "hidden" status for all matches of an applicant to the value of
  * `hide`, given their applicant summary.
  */
-export function useHideFromAllPositions(
-    applicantSummary: ApplicantSummary,
-    hide: boolean
-) {
+export function useHideFromAllPositions({
+    applicantSummary,
+    hide,
+}: {
+    applicantSummary: ApplicantSummary;
+    hide: boolean;
+}) {
     const dispatch = useThunkDispatch();
     return React.useCallback(() => {
         for (const targetMatch of applicantSummary.matches) {
