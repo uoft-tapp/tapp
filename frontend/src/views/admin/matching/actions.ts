@@ -18,6 +18,9 @@ import {
     SET_SELECTED_MATCHING_POSITION,
     SET_APPLICANT_VIEW_MODE,
     SET_UPDATED,
+    TOGGLE_STARRED,
+    TOGGLE_ASSIGNED,
+    TOGGLE_HIDDEN,
 } from "./constants";
 import {
     RawMatch,
@@ -59,6 +62,10 @@ export const setApplicantViewMode = actionFactory<ApplicantViewMode>(
 );
 
 export const setUpdated = actionFactory<boolean>(SET_UPDATED);
+
+export const toggleStarred = actionFactory<RawMatch>(TOGGLE_STARRED);
+export const toggleAssigned = actionFactory<RawMatch>(TOGGLE_ASSIGNED);
+export const toggleHidden = actionFactory<RawMatch>(TOGGLE_HIDDEN);
 
 // selectors
 export const matchingDataSelector = (state: RootState) => state.ui.matchingData;

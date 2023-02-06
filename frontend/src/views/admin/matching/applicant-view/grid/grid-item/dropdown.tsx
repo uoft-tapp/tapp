@@ -2,8 +2,12 @@ import React from "react";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { Application } from "../../../../../../api/defs/types";
 import { Dropdown } from "react-bootstrap";
-import { upsertMatch } from "../../../actions";
-import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
+import {
+    useToggleAssigned,
+    useToggleStarred,
+    useHideFromAllPositions,
+    useToggleHidden,
+} from "../../../match-actions/modify-match-status";
 
 /**
  * A dropdown list of actions to perform on an applicant/grid item.
@@ -13,13 +17,14 @@ export function GridItemDropdown({
     applicantSummary,
     setShownApplication,
     setShowChangeHours,
+    setShowNote,
 }: {
     match: MatchableAssignment;
     applicantSummary: ApplicantSummary;
-    setShownApplication: (arg0: Application | null) => void;
-    setShowChangeHours: (arg0: boolean) => void;
+    setShownApplication: (shownApplication: Application | null) => void;
+    setShowChangeHours: (show: boolean) => void;
+    setShowNote: (show: boolean) => void;
 }) {
-    const dispatch = useThunkDispatch();
     const baseMatchValues = React.useMemo(() => {
         return {
             positionCode: match.position.position_code,
@@ -34,60 +39,42 @@ export function GridItemDropdown({
 
     const canBeHidden =
         match.status !== "assigned" &&
+        match.status !== "staged-assigned" &&
         match.status !== "unassignable" &&
         match.status !== "hidden";
 
-    const assignToPosition = React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                ...baseMatchValues,
-                stagedAssigned: true,
-                stagedHoursAssigned: match.position.hours_per_assignment || 0,
-            })
-        );
-    }, [baseMatchValues, match, dispatch]);
+    const canBeStarred =
+        match.status !== "assigned" &&
+        match.status !== "staged-assigned" &&
+        match.status !== "starred";
 
-    const unassignFromPosition = React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                ...baseMatchValues,
-                stagedAssigned: false,
-                stagedHoursAssigned: 0,
-            })
-        );
-    }, [baseMatchValues, dispatch]);
+    const canBeUnstarred = match.status === "starred";
 
-    const hideFromPosition = React.useCallback(() => {
-        dispatch(upsertMatch({ ...baseMatchValues, hidden: true }));
-    }, [baseMatchValues, dispatch]);
+    const toggleAssigned = useToggleAssigned(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid,
+        match.position.hours_per_assignment || 0
+    );
 
-    const unhideFromPosition = React.useCallback(() => {
-        dispatch(upsertMatch({ ...baseMatchValues, hidden: false }));
-    }, [baseMatchValues, dispatch]);
+    const toggleStarred = useToggleStarred(
+        match.position.position_code,
+        match.applicant.utorid
+    );
 
-    const hideFromAll = React.useCallback(() => {
-        for (const targetMatch of applicantSummary.matches) {
-            dispatch(
-                upsertMatch({
-                    utorid: match.applicant.utorid,
-                    positionCode: targetMatch.position.position_code,
-                    hidden: true,
-                })
-            );
-        }
-    }, [dispatch, match, applicantSummary.matches]);
+    const toggleHidden = useToggleHidden(
+        baseMatchValues.positionCode,
+        baseMatchValues.utorid
+    );
 
-    const unhideFromAll = React.useCallback(() => {
-        for (const targetMatch of applicantSummary.matches) {
-            dispatch(
-                upsertMatch({
-                    utorid: match.applicant.utorid,
-                    positionCode: targetMatch.position.position_code,
-                    hidden: false,
-                })
-            );
-        }
-    }, [dispatch, match, applicantSummary.matches]);
+    const hideFromAllPositions = useHideFromAllPositions({
+        applicantSummary: applicantSummary,
+        hide: true,
+    });
+
+    const unhideFromAllPositions = useHideFromAllPositions({
+        applicantSummary: applicantSummary,
+        hide: false,
+    });
 
     return (
         <>
@@ -98,39 +85,50 @@ export function GridItemDropdown({
             >
                 View application details
             </Dropdown.Item>
-            {canBeAssigned && (
-                <Dropdown.Item onClick={assignToPosition}>
-                    Assign to <b>{match.position.position_code}</b> (
-                    {match.position.hours_per_assignment || 0})
-                </Dropdown.Item>
-            )}
+            <Dropdown.Item onClick={() => setShowNote(true)}>
+                View/edit applicant notes
+            </Dropdown.Item>
+
             {match.status === "staged-assigned" && (
                 <>
                     <Dropdown.Item onClick={() => setShowChangeHours(true)}>
                         Change assigned hours
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={unassignFromPosition}>
-                        Unassign from <b>{match.position.position_code}</b>
+                </>
+            )}
+            {(canBeAssigned || match.status === "staged-assigned") && (
+                <>
+                    <Dropdown.Item onClick={toggleAssigned}>
+                        {canBeAssigned ? "Assign to " : "Unassign from "}
+                        <b>{match.position.position_code}</b>
+                        {canBeAssigned
+                            ? ` (${match.position.hours_per_assignment || 0})`
+                            : ""}
                     </Dropdown.Item>
                 </>
             )}
-            {canBeHidden && (
-                <Dropdown.Item onClick={hideFromPosition}>
-                    Hide from <b>{match.position.position_code}</b>
+            {(canBeStarred || canBeUnstarred) && (
+                <Dropdown.Item onClick={toggleStarred}>
+                    {canBeStarred ? "Star for " : "Unstar from "}
+                    <b>{match.position.position_code}</b>
                 </Dropdown.Item>
             )}
-
-            {canBeAssigned && (
-                <Dropdown.Item onClick={hideFromAll}>
-                    Hide from all courses
-                </Dropdown.Item>
+            {canBeHidden && (
+                <>
+                    <Dropdown.Item onClick={toggleHidden}>
+                        Hide from <b>{match.position.position_code}</b>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={hideFromAllPositions}>
+                        Hide from all courses
+                    </Dropdown.Item>
+                </>
             )}
             {match.status === "hidden" && (
                 <>
-                    <Dropdown.Item onClick={unhideFromPosition}>
+                    <Dropdown.Item onClick={toggleHidden}>
                         Unhide from <b>{match.position.position_code}</b>
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={unhideFromAll}>
+                    <Dropdown.Item onClick={unhideFromAllPositions}>
                         Unhide from all courses
                     </Dropdown.Item>
                 </>

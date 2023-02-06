@@ -1,50 +1,8 @@
 import React from "react";
-import { Application } from "../../../../../api/defs/types";
-import { MatchableAssignment } from "../../types";
+import { MatchableAssignment } from "../types";
 import { Modal, Button } from "react-bootstrap";
-import { ApplicationDetails } from "../../../applications/application-details";
-import { upsertMatch } from "../../actions";
-import { useThunkDispatch } from "../../../../../libs/thunk-dispatch";
-
-/**
- * A modal window displaying detailed information about an application.
- */
-export function ApplicationDetailModal({
-    application,
-    setShownApplication,
-}: {
-    application: Application | null;
-    setShownApplication: (application: Application | null) => void;
-}) {
-    if (!application) {
-        return null;
-    }
-
-    return (
-        <Modal
-            show={!!application}
-            onHide={() => setShownApplication(null)}
-            size="xl"
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Application Details</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {application && (
-                    <ApplicationDetails application={application} />
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    onClick={() => setShownApplication(null)}
-                    variant="outline-secondary"
-                >
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
+import { upsertMatch } from "../actions";
+import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 
 /**
  * A modal window allowing users to change the number of hours an applicant

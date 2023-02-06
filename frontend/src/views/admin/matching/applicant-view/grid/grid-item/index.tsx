@@ -2,10 +2,15 @@ import React from "react";
 import { Position, Application } from "../../../../../../api/defs/types";
 import { ApplicantSummary, MatchableAssignment } from "../../../types";
 import { getApplicantMatchForPosition } from "../../../utils";
-import { AdjustHourModal, ApplicationDetailModal } from "../modals";
 import { GridItemDropdown } from "./dropdown";
 import { ApplicantPillLeft } from "./status-bar";
 import { ApplicantPillMiddle, ApplicantPillRight } from "./body";
+
+import {
+    ApplicantNoteModal,
+    AdjustHourModal,
+    ApplicationDetailModal,
+} from "../../../match-actions";
 
 import { Dropdown } from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
@@ -66,6 +71,7 @@ export function ConnectedApplicantPill({
     const [shownApplication, setShownApplication] =
         React.useState<Application | null>(null);
     const [showChangeHours, setShowChangeHours] = React.useState(false);
+    const [showApplicantNote, setShowApplicantNote] = React.useState(false);
 
     const match = getApplicantMatchForPosition(applicantSummary, position);
     const boundApplicantButton = React.useMemo(
@@ -105,6 +111,7 @@ export function ConnectedApplicantPill({
                         applicantSummary={applicantSummary}
                         setShownApplication={setShownApplication}
                         setShowChangeHours={setShowChangeHours}
+                        setShowNote={setShowApplicantNote}
                     />
                 </DropdownMenu>
             </Dropdown>
@@ -116,6 +123,11 @@ export function ConnectedApplicantPill({
                 match={match}
                 show={showChangeHours}
                 setShow={setShowChangeHours}
+            />
+            <ApplicantNoteModal
+                applicantSummary={applicantSummary}
+                show={showApplicantNote}
+                setShow={setShowApplicantNote}
             />
         </>
     );

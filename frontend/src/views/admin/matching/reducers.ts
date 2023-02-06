@@ -8,6 +8,9 @@ import {
     SET_SELECTED_MATCHING_POSITION,
     SET_APPLICANT_VIEW_MODE,
     SET_UPDATED,
+    TOGGLE_STARRED,
+    TOGGLE_ASSIGNED,
+    TOGGLE_HIDDEN,
 } from "./constants";
 import { createReducer } from "redux-create-reducer";
 import {
@@ -154,5 +157,150 @@ const matchingDataReducer = createReducer(initialState, {
     },
     [SET_UPDATED]: (state, action) => {
         return { ...state, updated: action.payload };
+    },
+    [TOGGLE_STARRED]: (state, action) => {
+        // Check if a match with this applicant ID and position ID already exists
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
+
+        // If a match doesn't already exist, this applicant is implied to not yet be starred:
+        if (!existingMatch) {
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                starred: true,
+            };
+
+            return {
+                ...state,
+                matches: [...state.matches, newMatch],
+                updated: true,
+            };
+        }
+
+        // Item exists, so we have to update it
+        return {
+            ...state,
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
+                    if (
+                        match.stagedAssigned ||
+                        !match.starred ||
+                        match.hidden
+                    ) {
+                        return [{ ...match, starred: !match.starred }];
+                    }
+                    return [];
+                }
+                return [match];
+            }),
+            updated: true,
+        };
+    },
+    [TOGGLE_ASSIGNED]: (state, action) => {
+        // Check if a match with this applicant ID and position ID already exists
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
+
+        // If a match doesn't already exist, this applicant is implied to not yet be assigned:
+        if (!existingMatch) {
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                stagedHoursAssigned: action.payload.stagedHoursAssigned || 0,
+                stagedAssigned: true,
+            };
+
+            return {
+                ...state,
+                matches: [...state.matches, newMatch],
+                updated: true,
+            };
+        }
+
+        return {
+            ...state,
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
+                    // If the applicant is not assigned, assign them:
+                    if (
+                        match.starred ||
+                        match.hidden ||
+                        !match.stagedAssigned
+                    ) {
+                        return [
+                            {
+                                ...match,
+                                stagedAssigned: !match.stagedAssigned,
+                                stagedHoursAssigned: !match.stagedAssigned
+                                    ? action.payload.stagedHoursAssigned || 0
+                                    : 0,
+                            },
+                        ];
+                    }
+                    return [];
+                } else {
+                    return [match];
+                }
+            }),
+            updated: true,
+        };
+    },
+    [TOGGLE_HIDDEN]: (state, action) => {
+        // Check if a match with this applicant ID and position ID already exists
+        const existingMatch = state.matches.find(
+            (match) =>
+                match.utorid === action.payload.utorid &&
+                match.positionCode === action.payload.positionCode
+        );
+
+        // If a match doesn't already exist, this applicant is implied to not be hidden:
+        if (!existingMatch) {
+            const newMatch: RawMatch = {
+                utorid: action.payload.utorid,
+                positionCode: action.payload.positionCode,
+                hidden: true,
+            };
+
+            return {
+                ...state,
+                matches: [...state.matches, newMatch],
+                updated: true,
+            };
+        }
+
+        return {
+            ...state,
+            matches: state.matches.flatMap((match) => {
+                if (
+                    match.utorid === action.payload.utorid &&
+                    match.positionCode === action.payload.positionCode
+                ) {
+                    if (
+                        match.starred ||
+                        match.stagedAssigned ||
+                        !match.hidden
+                    ) {
+                        return [{ ...match, hidden: !match.hidden }];
+                    }
+                    return [];
+                } else {
+                    return [match];
+                }
+            }),
+            updated: true,
+        };
     },
 });
