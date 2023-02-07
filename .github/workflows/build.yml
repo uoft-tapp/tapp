@@ -60,6 +60,7 @@ jobs:
     - name: Clean up Docker
       run: docker-compose down
   production-build:
+    if: ${{ github.event.issue.push }}
     needs: [code-formatting, ruby-linting, unit-tests]
     runs-on: ubuntu-latest
     steps:
