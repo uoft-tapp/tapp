@@ -18,24 +18,8 @@ jobs:
       run: npm ci
     - name: Run code formatting tests
       run: ./tests/run-formatting-tests.sh
-  ruby-linting:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-    - name: Build Docker backend
-      run: |
-        cp dev.env .env
-        docker-compose up --build -d backend
-        docker ps -a
     - name: Run Ruby formatting tests
-      run: 
-        ./tests/run-ruby-linting-tests.sh
-    - name: Display Docker logs on failure
-      if: ${{ failure() }}
-      run: docker-compose logs
-    - name: Clean up Docker
-      run: docker-compose down
+      run: ./tests/run-ruby-linting-tests.sh
   unit-tests:
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +32,6 @@ jobs:
         docker ps -a
         docker-compose run backend rake db:create
         docker-compose run backend rake db:migrate
-        sleep 30
     - name: Display Docker logs on failure
       if: ${{ failure() }}
       run: docker-compose logs
@@ -61,7 +44,7 @@ jobs:
       run: docker-compose down
   production-build:
     if: ${{ github.event.issue.push }}
-    needs: [code-formatting, ruby-linting, unit-tests]
+    needs: [code-formatting, unit-tests]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
