@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: TAPP CI
 
 on:
   push:
@@ -7,12 +7,60 @@ on:
     branches: [ "master" ]
 
 jobs:
-
-  build:
-
+  code-formatting:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Checkout repo
+      uses: actions/checkout@v3
+    - name: Set up node
+      uses: actions/setup-node@v3
+    - name: Install npm packages
+      run: npm ci
+    - name: Run code formatting tests
+      run: ./tests/run-formatting-tests.sh
+    - name: Run Ruby formatting tests
+      run: ./tests/run-ruby-linting-tests.sh
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+    - name: Build Docker backend
+      run: |
+        cp dev.env .env
+        docker-compose up --build -d
+        docker ps -a
+        docker-compose run backend rake db:create
+        docker-compose run backend rake db:migrate
+    - name: Display Docker logs on failure
+      if: ${{ failure() }}
+      run: docker-compose logs
+    - name: Run unit tests
+      run: ./tests/run-unit-tests.sh
+    - name: Display Docker logs on failure
+      if: ${{ failure() }}
+      run: docker-compose logs
+    - name: Clean up Docker
+      run: docker-compose down
+  production-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+    - name: Build Docker
+      run: |
+        cp dev.env .env
+        docker-compose up --build -d
+        docker ps -a
+        docker-compose run frontend npm run dev-build
+    - name: Display Docker logs on failure
+      if: ${{ failure() }}
+      run: docker-compose logs
+    - name: Deploy
+      if: ${{ success() && github.event.issue.push }}
+      uses: crazy-max/ghaction-github-pages@v3
+      with:
+        target_branch: gh-pages
+        build_dir: frontend/build
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
