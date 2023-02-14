@@ -43,7 +43,6 @@ jobs:
     - name: Clean up Docker
       run: docker-compose down
   production-build:
-    if: ${{ github.event.issue.push }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
@@ -58,7 +57,7 @@ jobs:
       if: ${{ failure() }}
       run: docker-compose logs
     - name: Deploy
-      if: ${{ success() }}
+      if: ${{ success() && github.event.issue.push }}
       uses: crazy-max/ghaction-github-pages@v3
       with:
         target_branch: gh-pages
