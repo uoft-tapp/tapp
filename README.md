@@ -163,7 +163,7 @@ The first time you run docker, you must build the docker images. First, ensure n
 docker images are running with
 
 ```
-docker-compose down
+docker compose down
 ```
 
 Set up the local environment with
@@ -183,15 +183,15 @@ mkdir backend/public && echo "Please go to localhost:8000 for frontend" > backen
 Finally, we can build the docker images and migrate the database
 
 ```
-docker-compose build
-docker-compose run backend rake db:setup
-docker-compose run backend rake db:migrate
+docker compose build
+docker compose run backend rake db:setup
+docker compose run backend rake db:migrate
 ```
 
 Now you can run the project with
 
 ```
-docker-compose up
+docker compose up
 ```
 
 Access the frontend by navigating to [http://localhost:8000](http://localhost:8000)
@@ -201,11 +201,11 @@ Access the frontend by navigating to [http://localhost:8000](http://localhost:80
 The development environment can be started with
 
 ```
-docker-compose up
+docker compose up
 ```
 
-This is equivalent to the command `docker-compose -f docker-compose.yml -f docker-compose.override.yml up`
-or `docker-compose -f docker-compose.yml -f docker-compose.dev.yml up`
+This is equivalent to the command `docker compose -f docker-compose.yml -f docker-compose.override.yml up`
+or `docker compose -f docker-compose.yml -f docker-compose.dev.yml up`
 since `docker-compose.override.yml` is a symbolic link to `docker-compose.dev.yml`. On Windows, commands in
 this format should be used, since there are no symbolic links.
 
@@ -213,13 +213,13 @@ this format should be used, since there are no symbolic links.
 
 To view the STDOUT from a docker container of a running server, you can invoke
 
-`docker-compose logs -tf <image>`
+`docker compose logs -tf <image>`
 
-To stop everything, use `docker-compose down`.
+To stop everything, use `docker compose down`.
 
 To run the ruby console hooked into the current rails session, run
 
-`docker-compose exec backend rails c`
+`docker compose exec backend rails c`
 
 To manually inspect the binary snapshots in the `pg_dump` folder, run
 
@@ -251,7 +251,7 @@ After this, writes to `pg_data` will happen directly in ram. On OSX, follow the 
 here: https://superuser.com/questions/456803/create-ram-disk-mount-to-specific-folder-in-osx
 
 After mounting `pg_data` on a ram-drive, you'll have to rerun `db:setup` and `db:migrate`. Data
-in the ram-drive (since it's stored outside of docker) will persist after a `docker-compose down`.
+in the ram-drive (since it's stored outside of docker) will persist after a `docker compose down`.
 However, it will not survive a computer reset.
 
 ### Navigating into the containers from the command line
@@ -261,24 +261,26 @@ Currently, we define three services under docker-compose: `frontend`, `backend`,
 line, you can do so by invoking:
 
 ```
-docker-compose exec [service] sh
+docker compose exec [service] sh
 ```
 
-For instance, to interact with the rails app, invoke `docker-compose exec backend sh`.
+For instance, to interact with the rails app, invoke `docker compose exec backend sh`.
 
 #### `docker-compose` basics
 
-`docker-compose` is a program that manages docker containers, allowing multiple containers
+**Note** (2025): The `docker-compose` command has been superseded by the built-in `docker compose` command.
+
+`docker compose` is a program that manages docker containers, allowing multiple containers
 to be automatically started given a list of dependencies. The basic commands are
 
 ```
-docker-compose up
+docker compose up
 ```
 
 and
 
 ```
-docker-compose down
+docker compose down
 ```
 
 which start and stop the images defined in the local `yml` file. Whenever docker starts, it creates
@@ -287,17 +289,17 @@ there will be no persistent data. The workaround is to tell docker that there ar
 in the container that should get passed through to the host's file system (for example, `pg_data`).
 That way, when the docker container writes to that folder, changes can be persisted.
 
-There are two ways to run commands in a container with `docker-compose`: `run` and `exec`. A command like
+There are two ways to run commands in a container with `docker compose`: `run` and `exec`. A command like
 
 ```
-docker-compose run frontend npm test
+docker compose run frontend npm test
 ```
 
 will start a new container for the `frontend` service and execute the command `npm test` in that container.
 In contrast,
 
 ```
-docker-compose exec frontend npm test
+docker compose exec frontend npm test
 ```
 
 will execute the command `npm test` on an **already running** instance of the `frontend` container. Thus,
@@ -316,7 +318,7 @@ rake db:setup
 or from the host environment run
 
 ```
-docker-compose run backend rake db:setup
+docker compose run backend rake db:setup
 ```
 
 This will create your local database, run all migrations and populate the DB
@@ -374,9 +376,9 @@ documentation. Just copy paste the current YAML into the editor to start editing
 ### Gemfile.lock synchronization
 
 To keep the Gemfile.lock synced up with what we have on our host machine, run
-`docker-compose run <image> bundle install` followed by `docker-compose up --build`.
+`docker compose run <image> bundle install` followed by `docker compose up --build`.
 
-Example: `docker-compose run tapp bundle install`.
+Example: `docker compose run tapp bundle install`.
 
 ### Migration modifications
 
@@ -404,9 +406,9 @@ scratch and `rake db:migrate`.
 
 1. Docker believes that a server is already running, and fails to run the backend container.
 
-After running `docker-compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The backend container will fail.
+After running `docker compose up`, you may see a message that reads `A server is already running. Check /app/tmp/pids/server.pid.`. The backend container will fail.
 
-To resolve this issue, halt the docker-compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `backend/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
+To resolve this issue, halt the docker compose command (killing the other containers) with cmd-c/ctrl-c, and delete the file located under the project route at `backend/tmp/pids/server.pid`. You will be able to relaunch the server without issues. This issue normally arises when you kill the running instance of the project without alloting time for a proper teardown.
 
 2. Docker cannot start up a front-end service, complaining that it can't find an image.
 
@@ -415,9 +417,9 @@ deactivated containers, and then removing them with `docker container rm [contai
 
 3. When RE-installing the dev environment, the database fails to setup.
 
-After running `docker-compose run backend rake db:setup` you may see a message that reads `FATAL: role "root" does not exist` or `FATAL: role "tapp" does not exist`.
+After running `docker compose run backend rake db:setup` you may see a message that reads `FATAL: role "root" does not exist` or `FATAL: role "tapp" does not exist`.
 
-To resolve this issue, delete the folder `pg_data` that was created from your previous dev environment installation to allow docker to create this again. Then, you should be able to run `docker-compose run backend rake db:setup`.
+To resolve this issue, delete the folder `pg_data` that was created from your previous dev environment installation to allow docker to create this again. Then, you should be able to run `docker compose run backend rake db:setup`.
 
 4. Travis CI fails to execute a script.
 
@@ -438,7 +440,7 @@ This should resolve the issue
 5. If you want to restart with a clear database run
 
 ```
-docker-compose run backend rake db:drop
+docker compose run backend rake db:drop
 ```
 
 ### Shibboleth
