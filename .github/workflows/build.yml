@@ -28,20 +28,20 @@ jobs:
     - name: Build Docker backend
       run: |
         cp dev.env .env
-        docker-compose up --build -d
+        docker compose up --build -d
         docker ps -a
-        docker-compose run backend rake db:create
-        docker-compose run backend rake db:migrate
+        docker compose run backend rake db:create
+        docker compose run backend rake db:migrate
     - name: Display Docker logs on failure
       if: ${{ failure() }}
-      run: docker-compose logs
+      run: docker compose logs
     - name: Run unit tests
       run: ./tests/run-unit-tests.sh
     - name: Display Docker logs on failure
       if: ${{ failure() }}
-      run: docker-compose logs
+      run: docker compose logs
     - name: Clean up Docker
-      run: docker-compose down
+      run: docker compose down
   production-build:
     runs-on: ubuntu-latest
     steps:
@@ -50,12 +50,12 @@ jobs:
     - name: Build Docker
       run: |
         cp dev.env .env
-        docker-compose up --build -d
+        docker compose up --build -d
         docker ps -a
-        docker-compose run frontend npm run dev-build
+        docker compose run frontend npm run dev-build
     - name: Display Docker logs on failure
       if: ${{ failure() }}
-      run: docker-compose logs
+      run: docker compose logs
     - name: Deploy
       if: ${{ success() && github.event.issue.push }}
       uses: crazy-max/ghaction-github-pages@v3
