@@ -198,7 +198,12 @@ function DdahPreview({ ddah }: { ddah: Ddah }): React.ReactElement {
                 TA: {applicant.first_name} {applicant.last_name}
             </h4>
             <h5>Notes</h5>
-            <p>The departmental standard on turnaround times for all assessments is one (1) week unless otherwise stated below. Turnaround time is counted from the day on which the assessment is made available for grading.</p>
+            <p>
+                The departmental standard on turnaround times for all
+                assessments is one (1) week unless otherwise stated below.
+                Turnaround time is counted from the day on which the assessment
+                is made available for grading.
+            </p>
             <h5>Duties</h5>
             <ul>
                 {duties.map((duty) => {
