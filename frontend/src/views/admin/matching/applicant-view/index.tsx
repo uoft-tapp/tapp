@@ -13,6 +13,7 @@ export const matchingStatusToString: Record<MatchStatus, string> = {
     "staged-assigned": "Assigned (Staged)",
     applied: "Applied",
     starred: "Starred",
+    unassignable: "Unassignable",
     hidden: "Hidden",
 };
 
@@ -38,7 +39,7 @@ export function ApplicantView({
     }, [filterString, sortList, filterList, positionSummary]);
 
     return (
-        <div className="matching-course-main">
+        <div className="matching-applicant-area">
             <ApplicantViewHeader
                 positionSummary={positionSummary}
                 setFilterString={setFilterString}

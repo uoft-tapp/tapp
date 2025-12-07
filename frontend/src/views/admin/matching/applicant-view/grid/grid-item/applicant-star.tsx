@@ -1,31 +1,24 @@
 import React from "react";
 import classNames from "classnames";
 import { MatchableAssignment } from "../../../types";
+import { useToggleStarred } from "../../../match-actions/modify-match-status";
 import { BsStarFill } from "react-icons/bs";
-import { upsertMatch } from "../../../actions";
-import { useThunkDispatch } from "../../../../../../libs/thunk-dispatch";
 
 /**
  * A button for toggling applicant's "starred" status for the currently-selected position.
  */
 export function ApplicantStar({ match }: { match: MatchableAssignment }) {
-    const dispatch = useThunkDispatch();
-    const updateStarred = React.useCallback(() => {
-        dispatch(
-            upsertMatch({
-                positionCode: match.position.position_code,
-                utorid: match.applicant.utorid,
-                starred: match.status !== "starred",
-            })
-        );
-    }, [dispatch, match]);
+    const toggleStarred = useToggleStarred(
+        match.position.position_code,
+        match.applicant.utorid
+    );
 
     return (
         <BsStarFill
             className={classNames("star-icon", {
                 filled: match.status === "starred",
             })}
-            onClick={updateStarred}
+            onClick={toggleStarred}
         />
     );
 }

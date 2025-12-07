@@ -24,7 +24,7 @@ function assignmentToFilename(assignment: Assignment) {
     const fileName = `${assignment.applicant.last_name}, ${assignment.applicant.first_name}_${assignment.position.position_code}.pdf`;
     // Escape characters that are not allowed in a file name
     // Code from https://stackoverflow.com/questions/42210199/remove-illegal-characters-from-a-file-name-but-leave-spaces
-    return fileName.replace(/[/\\?%*:|"<>]/g, '-');
+    return fileName.replace(/[/\\?%*:|"<>]/g, "-");
 }
 
 export function DownloadOfferPdfs({
@@ -74,7 +74,9 @@ export function DownloadOfferPdfs({
                 icon={FaDownload}
                 disabled={!!disabledString}
                 onClick={() => setShowConfirmation(true)}
-                title={"Download PDF copies of selected offers" + disabledString}
+                title={
+                    "Download PDF copies of selected offers" + disabledString
+                }
             >
                 Download PDFs
             </ActionButton>

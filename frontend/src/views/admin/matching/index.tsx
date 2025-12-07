@@ -1,5 +1,4 @@
 import React from "react";
-import { ContentArea } from "../../../components/layout";
 import { useSelector } from "react-redux";
 import { activeSessionSelector, fetchPostings } from "../../../api/actions";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
@@ -45,29 +44,23 @@ export function AdminMatchingView() {
         }, [selectedPositionId, positionSummaries]);
 
     return (
-        <div className="page-body">
-            <ContentArea>
-                <div className="matching-container">
-                    <div className="matching-body">
-                        <PositionList
-                            selectedPositionId={selectedPositionId}
-                            positionSummaries={Object.values(positionSummaries)}
-                        />
-                        {selectedPositionSummary && (
-                            <ApplicantView
-                                positionSummary={selectedPositionSummary}
-                            />
-                        )}
-                    </div>
-                    <div className="matching-footer">
-                        <ImportMatchingDataButton />
-                        <ImportGuaranteesButton />
-                        <ExportMatchingDataButton />
-                        <div className="footer-button-separator" />
-                        <FinalizeChangesButton />
-                    </div>
-                </div>
-            </ContentArea>
+        <div className="page-body matching">
+            <div className="matching-body">
+                <PositionList
+                    selectedPositionId={selectedPositionId}
+                    positionSummaries={Object.values(positionSummaries)}
+                />
+                {selectedPositionSummary && (
+                    <ApplicantView positionSummary={selectedPositionSummary} />
+                )}
+            </div>
+            <div className="matching-footer page-actions">
+                <ImportMatchingDataButton />
+                <ImportGuaranteesButton />
+                <ExportMatchingDataButton />
+                <div className="footer-button-separator" />
+                <FinalizeChangesButton />
+            </div>
         </div>
     );
 }
