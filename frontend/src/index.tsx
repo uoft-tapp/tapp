@@ -8,12 +8,15 @@ import configureStore from "./store";
 
 const { store, persistor } = configureStore();
 
+console.log("Starting app...");
 // In production, we don't want to wrap the app in a dev frame,
 // but we do want to in development
 let DevFrame = function (props: any) {
-    return <React.Fragment>{props.children}</React.Fragment>;
+    return <React.Fragment>XX{props.children}</React.Fragment>;
 };
-if (process.env.REACT_APP_DEV_FEATURES) {
+console.log("WOW!!");
+// console.log("VITE_DEV_FEATURES =", import.meta.env.VITE_DEV_FEATURES);
+if (import.meta.env.VITE_DEV_FEATURES) {
     // We only want to load the dev frame parts if they are needed,
     // so we use React.lazy to load them on demand.
     const FullDevFrame = React.lazy(async () =>
@@ -50,15 +53,3 @@ const render = (Component: React.ElementType) => {
 };
 
 render(DynamicEntryRouter);
-
-// Hot module reloading
-// https://medium.com/@brianhan/hot-reloading-cra-without-eject-b54af352c642
-
-/*eslint-disable */
-if ("hot" in module) {
-    (module as any).hot.accept("./dynamic-entry-router", () => {
-        const NextApp = require("./dynamic-entry-router").default;
-        render(NextApp);
-    });
-}
-/*eslint-enable */

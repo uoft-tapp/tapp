@@ -51,7 +51,7 @@ function toggleMockApi(enableMockAPI: boolean) {
     // in production, ToggleMockApi is a no-op. In development, it actually
     // does something.
     /* eslint-disable */
-    if (enableMockAPI != null && process.env.REACT_APP_DEV_FEATURES) {
+    if (enableMockAPI != null && import.meta.env.VITE_DEV_FEATURES) {
         const mock = require("../mockAPI");
         const mockAPI = mock.mockAPI;
 

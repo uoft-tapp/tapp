@@ -18,14 +18,6 @@ const configureStore = () => {
     );
     const persistor = persistStore(store);
 
-    if (process.env.NODE_ENV !== "production") {
-        if ((module as any).hot) {
-            (module as any).hot.accept("./rootReducer", () => {
-                store.replaceReducer(persistedReducer);
-            });
-        }
-    }
-
     return { store, persistor };
 };
 
