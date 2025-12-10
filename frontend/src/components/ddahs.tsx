@@ -153,7 +153,7 @@ function DutyRow({
                     title="Enter what category these duties fit into"
                     as="select"
                     value={category}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    onChange={(e) => {
                         // A "note" does not have any hours associated with it.
                         const dutyCopy = { ...duty };
                         const newCategory = e.target.value;
@@ -227,12 +227,17 @@ export function DdahEditor(props: {
                 ignoreDiacritics={true}
                 placeholder="Assignment..."
                 multiple
-                labelKey={(option: Assignment) =>
-                    `${option.position.position_code} for ${option.applicant.first_name} ${option.applicant.last_name}`
+                labelKey={
+                    // 2025-12-10 According to the docs this is correct
+                    ((option: Assignment) =>
+                        `${option.position.position_code} for ${option.applicant.first_name} ${option.applicant.last_name}`) as any
                 }
                 selected={ddah.assignment == null ? [] : [ddah.assignment]}
                 options={assignments}
-                onChange={setAssignment}
+                onChange={
+                    // 2025-12-10 According to the docs this is correct
+                    setAssignment as any
+                }
             />
         );
     }

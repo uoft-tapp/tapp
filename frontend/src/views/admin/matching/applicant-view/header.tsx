@@ -68,10 +68,18 @@ function DisplayToggle() {
             defaultValue={applicantViewMode}
             onChange={(e) => dispatch(setApplicantViewMode(e))}
         >
-            <ToggleButton className="no-highlight" value={"grid"}>
+            <ToggleButton
+                id="toggle-FaTh"
+                className="no-highlight"
+                value={"grid"}
+            >
                 <FaTh />
             </ToggleButton>
-            <ToggleButton className="no-highlight" value={"table"}>
+            <ToggleButton
+                id="toggle-FaTable"
+                className="no-highlight"
+                value={"table"}
+            >
                 <FaTable />
             </ToggleButton>
         </ToggleButtonGroup>

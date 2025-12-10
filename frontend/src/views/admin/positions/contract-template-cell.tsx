@@ -112,13 +112,18 @@ function EditContractTemplateDialog({
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Contract Template..."
-                    labelKey={(option) => `${option.template_name}`}
+                    labelKey={
+                        ((option: ContractTemplate) =>
+                            `${option.template_name}`) as any
+                    }
                     selected={fieldVal}
                     options={allContractTemplates}
-                    onChange={(val) =>
-                        setFieldVal([
-                            val[val.length - 1] || position.contract_template,
-                        ])
+                    onChange={
+                        ((val: ContractTemplate[]) =>
+                            setFieldVal([
+                                val[val.length - 1] ||
+                                    position.contract_template,
+                            ])) as any
                     }
                 />{" "}
                 {changeIndicator}

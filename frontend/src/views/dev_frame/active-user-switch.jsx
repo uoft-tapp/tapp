@@ -46,7 +46,7 @@ function ActiveUserButton({
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
-                alignRight
+                align="end"
             >
                 <Dropdown.Toggle split variant="dark">
                     {activeUser.utorid}{" "}

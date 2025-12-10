@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
  * @param {component} props.listRenderer
  * @param {function(list[object], string): list[object]} props.filterFunc
  */
-export function FilteredList<T, R extends React.ReactPropTypes>(
+export function FilteredList<T, R extends React.ComponentProps<any>>(
     props: {
         data: T[];
         filterFunc: (dat: T[], query: string) => T[];

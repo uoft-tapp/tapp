@@ -232,7 +232,7 @@ export function ConnectedViewAssignmentDetailsAction() {
         return aHash === bHash ? 0 : aHash > bHash ? 1 : -1;
     });
 
-    let assignmentDetails: JSX.Element | JSX.Element[] = (
+    let assignmentDetails: React.ReactElement | React.ReactElement[] = (
         <Alert variant="info">
             There are no selected assignments. You must select assignments to
             see their details.

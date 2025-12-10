@@ -27,12 +27,12 @@ const DEFAULT_COLUMNS: (Column<any> & {
     {
         Header: generateHeaderCell("Start"),
         accessor: "start_date",
-        Cell: (row: Cell<Position>) => formatDate(row.value),
+        Cell: ((row: Cell<Position>) => formatDate(row.value)) as any,
     },
     {
         Header: generateHeaderCell("End"),
         accessor: "end_date",
-        Cell: (row: Cell<Position>) => formatDate(row.value),
+        Cell: ((row: Cell<Position>) => formatDate(row.value)) as any,
     },
     {
         Header: generateHeaderCell("Instructors"),
@@ -42,7 +42,7 @@ const DEFAULT_COLUMNS: (Column<any> & {
                 {props.value.map((instructor: Instructor = {} as any) => {
                     const name = `${instructor.first_name} ${instructor.last_name}`;
                     return (
-                        <Badge variant="secondary" className="mr-1" key={name}>
+                        <Badge bg="secondary" className="mr-1" key={name}>
                             {name}
                         </Badge>
                     );

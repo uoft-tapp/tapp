@@ -135,7 +135,8 @@ export function FilterBar({
                 <Badge
                     className="filter-chip"
                     pill
-                    variant="light"
+                    bg="light"
+                    text="dark"
                     key={`${filterString}-${i}`}
                 >
                     {filterString}

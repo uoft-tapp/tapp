@@ -198,7 +198,7 @@ export function ApplicationDetails({
                                                 position_preference.position
                                                     .position_code
                                             }
-                                            variant={
+                                            bg={
                                                 PREFERENCE_LEVEL_TO_VARIANT[
                                                     position_preference
                                                         .preference_level
@@ -257,7 +257,7 @@ export function ApplicationDetails({
                                     )
                                     .map((pref) => (
                                         <li key={pref.position.position_code}>
-                                            <Badge variant="light">
+                                            <Badge bg="light" text="dark">
                                                 {pref.position.position_code}{" "}
                                                 <DisplayRating
                                                     rating={

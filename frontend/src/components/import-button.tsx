@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import {
     Button,
     Modal,
@@ -195,11 +195,13 @@ export function ImportDialog({
                     <Row className="mb-3">
                         <Col>
                             <Form>
-                                <Form.File
-                                    label={fileInputLabel}
-                                    onChange={_onFileChange}
-                                    custom
-                                ></Form.File>
+                                <Form.Group>
+                                    <Form.Label>{fileInputLabel}</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        onChange={_onFileChange}
+                                    />
+                                </Form.Group>
                             </Form>
                         </Col>
                     </Row>

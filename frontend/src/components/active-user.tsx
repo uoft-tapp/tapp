@@ -23,7 +23,7 @@ export function ActiveUserDisplay(props: {
         return activeRole === role;
     };
     return (
-        <Badge>
+        <Badge bg="light" text="dark">
             Login: {activeUser.utorid}
             {" as"}
             <Dropdown
@@ -37,7 +37,7 @@ export function ActiveUserDisplay(props: {
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
-                alignRight
+                align="end"
             >
                 <Dropdown.Toggle split variant="light">
                     {label}

@@ -1,6 +1,5 @@
 /* eslint-env node */
-import XLSX from "xlsx";
-import axios from "axios";
+import * as XLSX from "xlsx";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line

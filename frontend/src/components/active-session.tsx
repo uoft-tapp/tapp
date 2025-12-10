@@ -22,7 +22,7 @@ export function ActiveSessionDisplay(props: {
     }
 
     return (
-        <Badge>
+        <Badge bg="light" text="dark">
             Selected session:
             <Dropdown
                 onSelect={(i) => {

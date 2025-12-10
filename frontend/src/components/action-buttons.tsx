@@ -9,7 +9,7 @@ interface PropsWithChildren {
     children: React.ReactNode;
 }
 interface ActionButtonProps extends PropsWithChildren {
-    icon?: React.ReactNode | Function;
+    icon?: React.ReactNode | React.FC<{}>;
     onClick?: () => any;
     active?: boolean;
     disabled?: any;
@@ -26,7 +26,9 @@ interface ActionMenuButtonProps extends ActionButtonProps {
  * @param {(React.ReactNode | Function)} icon
  * @returns {React.ReactNode}
  */
-function wrapIcon(icon: React.ReactNode | Function): React.ReactNode {
+function wrapIcon(
+    icon: React.FC<{}> | React.ReactNode | null
+): React.ReactNode {
     if (!icon) {
         return icon;
     }

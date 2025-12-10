@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
@@ -14,8 +14,8 @@ console.log("Starting app...");
 let DevFrame = function (props: any) {
     return <React.Fragment>XX{props.children}</React.Fragment>;
 };
-console.log("WOW!!");
-// console.log("VITE_DEV_FEATURES =", import.meta.env.VITE_DEV_FEATURES);
+
+// @ts-ignore
 if (import.meta.env.VITE_DEV_FEATURES) {
     // We only want to load the dev frame parts if they are needed,
     // so we use React.lazy to load them on demand.
@@ -36,7 +36,7 @@ if (import.meta.env.VITE_DEV_FEATURES) {
 }
 
 const render = (Component: React.ElementType) => {
-    return ReactDOM.render(
+    return ReactDOM.createRoot(document.getElementById("root")!).render(
         <HashRouter>
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
@@ -47,8 +47,7 @@ const render = (Component: React.ElementType) => {
                     </DevFrame>
                 </PersistGate>
             </Provider>
-        </HashRouter>,
-        document.getElementById("root")
+        </HashRouter>
     );
 };
 

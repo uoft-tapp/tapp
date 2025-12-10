@@ -49,7 +49,7 @@ export function StatusCell({
 }: {
     row: { original: RowData };
     children?: React.ReactNode;
-}): JSX.Element {
+}): React.ReactElement {
     const original = row.original;
     // If we have a blank ID, we aren't actually a DDAH (we're an assignment
     // without a DDAH), so don't render anything.
@@ -85,7 +85,7 @@ function IssuesCell({
     row,
 }: {
     row: { original: RowData };
-}): JSX.Element | null {
+}): React.ReactElement | null {
     const original = row.original;
     switch (original.issue_code) {
         case "hours_mismatch":
@@ -109,7 +109,7 @@ export function PreviewCell({
 }: {
     row: { original: RowData };
     onClick: Function;
-}): JSX.Element | null {
+}): React.ReactElement | null {
     const original = row.original;
     if (original.id == null) {
         return null;

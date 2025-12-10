@@ -80,11 +80,15 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
                         <Row className="mb-3">
                             <Col>
                                 <Form>
-                                    <Form.File
-                                        label={fileInputLabel}
-                                        onChange={_onFileChange}
-                                        custom
-                                    ></Form.File>
+                                    <Form.Group>
+                                        <Form.Label>
+                                            {fileInputLabel}
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            onChange={_onFileChange}
+                                        ></Form.Control>
+                                    </Form.Group>
                                 </Form>
                             </Col>
                         </Row>
