@@ -7,13 +7,12 @@
     "dependencies": {
         "@types/file-saver": "^2.0.5",
         "@types/fuzzyset": "^1.0.4",
-        "@types/jest": "^26.0.24",
-        "@types/node": "^14.18.22",
-        "@types/react": "^17.0.48",
+        "@types/node": "^25.0.0",
+        "@types/react": "^17.0.90",
         "@types/react-bootstrap-typeahead": "^5.1.8",
         "@types/react-copy-to-clipboard": "^5.0.4",
         "@types/react-custom-scrollbars": "^4.0.10",
-        "@types/react-dom": "^17.0.17",
+        "@types/react-dom": "^17.0.26",
         "@types/react-notification-system-redux": "^1.1.7",
         "@types/react-redux": "^7.1.20",
         "@types/react-router-dom": "^5.3.3",
@@ -68,16 +67,9 @@
             "react-app/jest"
         ]
     },
-    "jest": {
-        "transformIgnorePatterns": [
-            "/node_modules/(?!(node-fetch|fetch-blob))"
-        ]
-    },
     "browserslist": [],
     "devDependencies": {
-        "axios": "^0.21.1",
-        "http-proxy-middleware": "^1.1.0",
         "redux-devtools-extension": "^2.13.9",
-        "typescript-json-schema": "^0.51.0"
+        "typescript-json-schema": "^0.67.1"
     }
 }
