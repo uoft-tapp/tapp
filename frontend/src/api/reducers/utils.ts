@@ -27,7 +27,7 @@ interface _StorePathWithPushToPath extends _StorePath {
 }
 interface TaggedReducer<State, A extends Action = AnyAction>
     extends Reducer<State, A> {
-    _storePath: _StorePathWithPushToPath;
+    _storePath: _StorePath;
 }
 
 interface TaggedReducerWithSelector<State> extends TaggedReducer<State> {
@@ -37,6 +37,16 @@ interface TaggedReducerWithSelector<State> extends TaggedReducer<State> {
 type TaggedReducersMapObject<State, A extends Action = AnyAction> = {
     [K in keyof State & string]: TaggedReducer<State[K], A>;
 };
+
+// XXX (2025-12-11): This function mutates redux state. It is done during setup of the reducers, so it _should_ be okay, but it is a bad thing to do nonetheless.
+/**
+ * Global store of the `_storePath.pushToPath` functions for all reducers.
+ * This should be stored outside of Redux because it is not serializable.
+ */
+const _PUSH_TO_PATH_FUNCTIONS = new Map<
+    number,
+    _StorePathWithPushToPath["pushToPath"]
+>();
 
 /**
  * Either updates the item `modelData`
@@ -121,16 +131,18 @@ export function createReducer<State>(
     handlers: Handlers<State>
 ) {
     const path: (string | number)[] = [];
+    const reducerId = Math.round(Math.random() * 1e12);
     function pushToPath(dir: string | number) {
         path.unshift(dir);
     }
     // Every isolated state should have a unique id, so generate
     // a random one.
-    const _storePath: _StorePathWithPushToPath = {
-        id: Math.random(),
+    const _storePath: _StorePath = {
+        id: reducerId,
         path,
-        pushToPath,
     };
+
+    _PUSH_TO_PATH_FUNCTIONS.set(_storePath.id, pushToPath);
 
     // add _storePath to the initial state and to the
     // new reducer
@@ -225,7 +237,7 @@ export function combineReducers<T extends TaggedReducersMapObject<S>, S>(
     const pushToPathCallbacks: Function[] = [];
     // recursively call all `pushToPath` functions.
     // They have been stored in `pushToPathCallbacks`
-    function pushToPath(dir: string) {
+    function pushToPath(dir: string | number) {
         for (const func of pushToPathCallbacks) {
             func(dir);
         }
@@ -235,13 +247,20 @@ export function combineReducers<T extends TaggedReducersMapObject<S>, S>(
         [keyof T & string, TaggedReducer<T>]
     >) {
         if (reducer._storePath) {
-            reducer._storePath.pushToPath(dir);
-            pushToPathCallbacks.push(reducer._storePath.pushToPath);
+            const _storePath_pushToPath = _PUSH_TO_PATH_FUNCTIONS.get(
+                reducer._storePath.id
+            );
+            if (_storePath_pushToPath) {
+                _storePath_pushToPath(dir);
+                pushToPathCallbacks.push(_storePath_pushToPath);
+            }
         }
     }
 
+    const reducerId = Math.round(Math.random() * 1e12);
+    _PUSH_TO_PATH_FUNCTIONS.set(reducerId, pushToPath);
     const newReducer = _origCombineReducers(model as any);
-    (newReducer as any)._storePath = { pushToPath };
+    (newReducer as any)._storePath = { id: reducerId, pushToPath };
 
     return newReducer as unknown as TaggedReducer<{
         [K in keyof T]: ReturnType<T[K]>;

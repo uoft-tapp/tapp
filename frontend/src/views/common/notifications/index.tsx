@@ -9,5 +9,6 @@ export function ConnectedNotifications() {
     const notifications = useSelector(
         (state: RootState) => state.ui.notifications
     );
-    return <Notifications notifications={notifications} />;
+    return null
+    // return <Notifications notifications={notifications} />;
 }

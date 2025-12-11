@@ -2,17 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
-import { PersistGate } from "redux-persist/integration/react";
 import DynamicEntryRouter from "./dynamic-entry-router";
-import configureStore from "./store";
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./rootReducer";
 
-const { store, persistor } = configureStore();
+const store = configureStore({
+    reducer: rootReducer,
+});
 
 console.log("Starting app...");
 // In production, we don't want to wrap the app in a dev frame,
 // but we do want to in development
 let DevFrame = function (props: any) {
-    return <React.Fragment>XX{props.children}</React.Fragment>;
+    return <React.Fragment>{props.children}</React.Fragment>;
 };
 
 // @ts-ignore
@@ -39,13 +41,11 @@ const render = (Component: React.ElementType) => {
     return ReactDOM.createRoot(document.getElementById("root")!).render(
         <HashRouter>
             <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <DevFrame>
-                        <div id="app-body">
-                            <Component />
-                        </div>
-                    </DevFrame>
-                </PersistGate>
+                <DevFrame>
+                    <div id="app-body">
+                        <Component />
+                    </div>
+                </DevFrame>
             </Provider>
         </HashRouter>
     );
