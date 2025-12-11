@@ -66,7 +66,7 @@ export function StatusCell({ row }: CellProps<Assignment>) {
                 href={formatDownloadUrl(url)}
                 variant="light"
                 size="sm"
-                className="mr-2 py-0"
+                className="me-2 py-0"
                 title="Download offer PDF"
             >
                 <FaSearch />

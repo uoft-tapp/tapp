@@ -132,14 +132,14 @@ function DevFrame(props) {
     return (
         <div id="dev-frame" className="bg-info">
             <div id="dev-frame-header">
-                <Navbar expand variant="dark">
+                <Navbar expand variant="dark" className="px-2">
                     <Navbar.Brand
                         href="#/"
                         title="View TAPP in development mode in a framed window."
                     >
                         Dev Mode
                     </Navbar.Brand>
-                    <Nav className="mr-auto">
+                    <Nav className="me-auto">
                         <BootstrapNavLink to="/api-docs">
                             API Docs
                         </BootstrapNavLink>
@@ -163,14 +163,14 @@ function DevFrame(props) {
                             </React.Suspense>
                         </Route>
                         <Route>
-                            <ErrorBoundary
+                            {/* <ErrorBoundary
                                 FallbackComponent={
                                     "There was an error when rendering. See console for details."
                                 }
                                 onError={console.error}
-                            >
+                            > */}
                                 {props.children}
-                            </ErrorBoundary>
+                            {/* </ErrorBoundary> */}
                         </Route>
                     </Switch>
                 </div>

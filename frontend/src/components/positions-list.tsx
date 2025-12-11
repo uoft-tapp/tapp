@@ -42,7 +42,7 @@ const DEFAULT_COLUMNS: (Column<any> & {
                 {props.value.map((instructor: Instructor = {} as any) => {
                     const name = `${instructor.first_name} ${instructor.last_name}`;
                     return (
-                        <Badge bg="secondary" className="mr-1" key={name}>
+                        <Badge bg="secondary" className="me-1" key={name}>
                             {name}
                         </Badge>
                     );

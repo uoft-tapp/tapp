@@ -14,9 +14,9 @@ export function ActiveUserDisplay(props: {
 
     const roles = activeUser.roles;
     const label = !activeRole ? (
-        <span className="text-secondary mr-2">Select a role</span>
+        <span className="text-secondary me-2">Select a role</span>
     ) : (
-        <span className="text-primary mr-2">{activeRole}</span>
+        <span className="text-primary me-2">{activeRole}</span>
     );
 
     const isActiveRole = (role: UserRole) => {

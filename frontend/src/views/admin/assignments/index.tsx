@@ -95,7 +95,7 @@ export function AdminAssignmentsView() {
 
                 {inProgress ? (
                     <React.Fragment>
-                        <Spinner animation="border" className="mr-2" />
+                        <Spinner animation="border" className="me-2" />
                         In Progress
                     </React.Fragment>
                 ) : (

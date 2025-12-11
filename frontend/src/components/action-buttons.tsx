@@ -36,7 +36,7 @@ function wrapIcon(
         const Icon = icon;
         icon = <Icon />;
     }
-    return <span className="mr-2">{icon}</span>;
+    return <span className="me-2">{icon}</span>;
 }
 
 /**
@@ -93,7 +93,7 @@ export function ActionButton({
     return (
         <Dropdown.Item
             as="button"
-            className={classNames({ active, disabled })}
+            className={classNames({ active, disabled }, "px-2", "p-1")}
             {...rest}
         >
             {iconNode}
@@ -150,7 +150,7 @@ export function ActionMenuButton({
                     className={classNames("dropdown-item", {
                         active,
                         disabled,
-                    })}
+                    }, "ps-2", "p-1")}
                     {...rest}
                 >
                     {iconNode}

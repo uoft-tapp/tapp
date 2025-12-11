@@ -217,7 +217,7 @@ export function ApplicantRatingAndComment({
                         <FaRegComment className="mb-1" /> Edit Comment
                     </Button>
                     <div>
-                        {comment && <b className="mr-2">Comment:</b>}
+                        {comment && <b className="me-2">Comment:</b>}
                         {comment || <i>No Comment</i>}
                     </div>
                 </div>
@@ -263,7 +263,7 @@ function LargeRatingButton({
         activeRating == null ? null : Math.max(Math.min(activeRating, 2), -1);
     return (
         <Button
-            className={`py-0 pl-0 large-rating-button`}
+            className={`py-0 ps-0 large-rating-button`}
             variant={clampedRating === rating ? "primary" : "light"}
             onClick={() => (onClick ? onClick() : undefined)}
         >

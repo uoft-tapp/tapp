@@ -231,9 +231,9 @@ export function ApplicationDetails({
                                     } (${Math.round(document.size / 1024)} kb)`}
                                     size="sm"
                                     variant="light"
-                                    className="mr-2"
+                                    className="me-2"
                                 >
-                                    <FaDownload className="mr-2" />
+                                    <FaDownload className="me-2" />
                                     {document.name}
                                 </Button>
                             ))}

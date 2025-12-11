@@ -35,7 +35,7 @@ export function ApplicantViewHeader({
             <div className="search-container">
                 <div className="form-inline">
                     <input
-                        className="form-control mr-sm-2 search-bar"
+                        className="form-control me-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by name/UTORid..."
                         onChange={(e) => setFilterString(e.target.value)}

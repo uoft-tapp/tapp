@@ -47,7 +47,7 @@ type InitStages =
  *
  * @param {boolean} enableMockAPI
  */
-function toggleMockApi(enableMockAPI: boolean) {
+async function toggleMockApi(enableMockAPI: boolean) {
     // in production, ToggleMockApi is a no-op. In development, it actually
     // does something.
     /* eslint-disable */
@@ -56,7 +56,7 @@ function toggleMockApi(enableMockAPI: boolean) {
         // @ts-ignore
         import.meta.env.VITE_DEV_FEATURES
     ) {
-        const mock = require("../mockAPI");
+        const mock = await import("../mockAPI");
         const mockAPI = mock.mockAPI;
 
         if (enableMockAPI === true) {

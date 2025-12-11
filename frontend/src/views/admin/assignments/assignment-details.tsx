@@ -189,7 +189,7 @@ export function ConnectedAssignmentDetails({
                             <Spinner
                                 animation="border"
                                 size="sm"
-                                className="mr-1"
+                                className="me-1"
                             />
                         )}
                     </td>
@@ -203,7 +203,7 @@ export function ConnectedAssignmentDetails({
                             <Spinner
                                 animation="border"
                                 size="sm"
-                                className="mr-1"
+                                className="me-1"
                             />
                         )}
                     </td>

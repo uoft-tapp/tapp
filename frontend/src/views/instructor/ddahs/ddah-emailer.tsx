@@ -138,7 +138,7 @@ export function DdahEmailModal({
     }
 
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
 
     return (

@@ -97,13 +97,13 @@ export function InstructorApplicationsTable() {
                         <Button
                             variant="info"
                             size="sm"
-                            className="mr-2 py-0"
+                            className="me-2 py-0"
                             title="View the full Application"
                             onClick={() => {
                                 setShownApplicationId(application.id);
                             }}
                         >
-                            <FaSearch className="mr-2" />
+                            <FaSearch className="me-2" />
                             View
                         </Button>
                     </div>
