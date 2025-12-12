@@ -147,10 +147,15 @@ export function ActionMenuButton({
                 })}
             >
                 <button
-                    className={classNames("dropdown-item", {
-                        active,
-                        disabled,
-                    }, "ps-2", "p-1")}
+                    className={classNames(
+                        "dropdown-item",
+                        {
+                            active,
+                            disabled,
+                        },
+                        "ps-2",
+                        "p-1"
+                    )}
                     {...rest}
                 >
                     {iconNode}

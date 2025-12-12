@@ -1,4 +1,4 @@
-import { error } from "react-notification-system-redux";
+import { error } from "../../components/react-notification-system-redux/actions";
 
 // these properties are for `react-notification-system-redux`
 const defaultNotifProps = {

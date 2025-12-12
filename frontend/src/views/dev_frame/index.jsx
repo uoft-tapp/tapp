@@ -163,14 +163,14 @@ function DevFrame(props) {
                             </React.Suspense>
                         </Route>
                         <Route>
-                            {/* <ErrorBoundary
+                            <ErrorBoundary
                                 FallbackComponent={
                                     "There was an error when rendering. See console for details."
                                 }
                                 onError={console.error}
-                            > */}
+                            >
                                 {props.children}
-                            {/* </ErrorBoundary> */}
+                            </ErrorBoundary>
                         </Route>
                     </Switch>
                 </div>
