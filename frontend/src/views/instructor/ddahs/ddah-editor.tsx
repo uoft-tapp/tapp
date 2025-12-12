@@ -99,7 +99,7 @@ function DutyList({
                     onClick={() => onNew && onNew(category)}
                     variant="outline-secondary"
                     size="sm"
-                    className="ml-1"
+                    className="ms-1"
                 >
                     <FaPlus />
                 </Button>
@@ -356,7 +356,7 @@ export function DdahPreviewModal({
                 <h4>Notes</h4>
                 {editing && (
                     <Alert variant="secondary">
-                        <FaInfoCircle className="mr-2" />
+                        <FaInfoCircle className="me-2" />
                         {categoryInformation["note"].helpText}
                     </Alert>
                 )}
@@ -386,7 +386,7 @@ export function DdahPreviewModal({
                         <h6>{categoryInformation[category].title}</h6>
                         {editing && categoryInformation[category].helpText && (
                             <Alert variant="secondary">
-                                <FaInfoCircle className="mr-2" />
+                                <FaInfoCircle className="me-2" />
                                 {categoryInformation[category].helpText}
                             </Alert>
                         )}
@@ -441,7 +441,7 @@ export function DdahPreviewModal({
     }
 
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
     let footer = (
         <React.Fragment>
@@ -449,7 +449,7 @@ export function DdahPreviewModal({
                 Close
             </Button>
             <Button variant="outline-info" onClick={() => setEditing(true)}>
-                <FaEdit className="mr-2" />
+                <FaEdit className="me-2" />
                 Edit
             </Button>
             {url && (
@@ -458,7 +458,7 @@ export function DdahPreviewModal({
                     variant="link"
                     href={formatDownloadUrl(url)}
                 >
-                    <FaDownload className="mr-2" />
+                    <FaDownload className="me-2" />
                     Download PDF
                 </Button>
             )}
@@ -490,7 +490,7 @@ export function DdahPreviewModal({
                         setEditing(false);
                     }}
                 >
-                    {spinner || <FaSave className="mr-2" />}
+                    {spinner || <FaSave className="me-2" />}
                     Save
                 </Button>
             </React.Fragment>

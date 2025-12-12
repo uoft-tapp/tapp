@@ -525,7 +525,7 @@ export function SeedDataMenu({
                     setDropdownVisible(desiredVisibility)
                 }
                 show={dropdownVisible}
-                alignRight
+                align="end"
             >
                 <Dropdown.Toggle split variant="dark">
                     Seed Data{" "}

@@ -40,7 +40,7 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     return (
         <React.Fragment>
             <Alert variant="info">
-                <i className="fa fa-info-circle mr-1" />
+                <i className="fa fa-info-circle me-1" />
                 All pages of this survey are shown together.
             </Alert>
             <Survey.Survey model={survey} />

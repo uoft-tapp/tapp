@@ -1,4 +1,4 @@
-import { reducer as notificationReducer } from "react-notification-system-redux";
+import { reducer as notificationReducer } from "./components/react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
 import { offerTableReducer } from "./views/admin/offertable/reducers";
@@ -62,3 +62,4 @@ const reducer = combineReducers({
 
 export type RootState = ReturnType<typeof reducer>;
 export default reducer;
+export { reducer as rootReducer };

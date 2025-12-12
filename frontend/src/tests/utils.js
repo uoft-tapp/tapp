@@ -1,10 +1,9 @@
 /* eslint-env node */
-import XLSX from "xlsx";
-import axios from "axios";
+import * as XLSX from "xlsx";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line
-const { expect, test, it, describe, beforeAll } = global;
+import { expect, test, it, describe, beforeAll } from "vitest";
 
 // add a custom `.toContainObject` method to `expect()` to see if an array contains
 // an object with matching props. Taken from
@@ -168,6 +167,71 @@ function _ensurePath(path) {
 }
 
 /**
+ * A simple replacement for `axios.get` since it doesn't seem to work with node 25.
+ * `axios.get(url)` requests are met with an error "socket hang up"
+ * @param {*} url
+ */
+export async function axiosGetReplacement(url) {
+    const response = await fetch(url, {
+        headers: { Accept: "application/json" },
+    });
+    let data = null;
+    try {
+        // Determine if response is JSON, text, or binary and parse accordingly
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            data = await response.json();
+        }
+        data = await response.text();
+        if (data == null) {
+            // Binary data should be returned as a raw string
+            data = (await response.arrayBuffer())
+                .map((byte) => String.fromCharCode(byte))
+                .join("");
+        }
+    } catch (err) {
+        // non-JSON response - keep data as null
+    }
+    if (!response.ok) {
+        const msg =
+            (data && data.message) || response.statusText || "Request failed";
+        throw new Error(
+            `Request failed with status ${response.status}: ${msg}`
+        );
+    }
+    return { status: response.status, data };
+}
+
+/**
+ * A simple replacement for `axios.post` since it doesn't seem to work with node 25.
+ * `axios.post(url)` requests are met with an error "socket hang up"
+ */
+export async function axiosPostReplacement(url, body = {}) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        body: JSON.stringify(body),
+    });
+    let data = null;
+    try {
+        data = await response.json();
+    } catch (err) {
+        // non-JSON response - keep data as null
+    }
+    if (!response.ok) {
+        const msg =
+            (data && data.message) || response.statusText || "Request failed";
+        throw new Error(
+            `Request failed with status ${response.status}: ${msg}`
+        );
+    }
+    return { status: response.status, data };
+}
+
+/**
  * Make a GET request to the api route specified by `url`.
  * `url` should *not* be prefixed (e.g., just "/sessions", not "/api/v1/sessions")
  *
@@ -179,11 +243,12 @@ export async function apiGET(url, omitPrefix = false) {
     url = omitPrefix ? URL + _ensurePath(url) : API_URL + _ensurePath(url);
     let resp = null;
     try {
-        resp = await axios.get(url);
+        // use Fetch API and normalize the result to an axios-like response
+        resp = await axiosGetReplacement(url);
     } catch (e) {
         // Modify the error to display some useful information
         throw new Error(
-            `Posting to \`${url}\`\nfailed with error: ${e.message}`
+            `Getting from \`${url}\`\nfailed with error: ${e.message}`
         );
     }
     checkPropTypes(apiResponsePropTypes, resp.data);
@@ -206,7 +271,7 @@ export async function apiPOST(url, body = {}, omitPrefix = false) {
     url = omitPrefix ? URL + _ensurePath(url) : API_URL + _ensurePath(url);
     let resp = null;
     try {
-        resp = await axios.post(url, body);
+        resp = await axiosPostReplacement(url, body);
         checkPropTypes(apiResponsePropTypes, resp.data);
     } catch (e) {
         // Modify the error to display some useful information

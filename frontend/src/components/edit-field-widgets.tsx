@@ -80,7 +80,7 @@ export function EditFieldDialog<T extends string | number | boolean>(
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
 
     const changeIndicator =
@@ -121,7 +121,7 @@ export function EditFieldDialog<T extends string | number | boolean>(
         inputElement = (
             <label htmlFor="edit-dialog-checkbox">
                 <input
-                    className="mr-2"
+                    className="me-2"
                     type="checkbox"
                     id="edit-dialog-checkbox"
                     checked={fieldVal as any}

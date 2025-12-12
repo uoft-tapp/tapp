@@ -124,7 +124,11 @@ function IndeterminateCheckbox({
     return (
         <input
             type="checkbox"
-            ref={(el) => el && (el.indeterminate = indeterminate)}
+            ref={(el) => {
+                if (el) {
+                    el.indeterminate = indeterminate;
+                }
+            }}
             {...rest}
         />
     );

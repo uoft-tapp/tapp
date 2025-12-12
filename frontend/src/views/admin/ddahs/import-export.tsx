@@ -1,7 +1,7 @@
 import React from "react";
 import FileSaver from "file-saver";
 import JSZip from "jszip";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import { applicantsSelector, assignmentsSelector } from "../../../api/actions";
 import { useSelector } from "react-redux";
 import { ExportActionButton } from "../../../components/export-button";

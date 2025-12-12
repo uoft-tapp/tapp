@@ -198,7 +198,7 @@ export function ApplicationDetails({
                                                 position_preference.position
                                                     .position_code
                                             }
-                                            variant={
+                                            bg={
                                                 PREFERENCE_LEVEL_TO_VARIANT[
                                                     position_preference
                                                         .preference_level
@@ -231,9 +231,9 @@ export function ApplicationDetails({
                                     } (${Math.round(document.size / 1024)} kb)`}
                                     size="sm"
                                     variant="light"
-                                    className="mr-2"
+                                    className="me-2"
                                 >
-                                    <FaDownload className="mr-2" />
+                                    <FaDownload className="me-2" />
                                     {document.name}
                                 </Button>
                             ))}
@@ -257,7 +257,7 @@ export function ApplicationDetails({
                                     )
                                     .map((pref) => (
                                         <li key={pref.position.position_code}>
-                                            <Badge variant="light">
+                                            <Badge bg="light" text="dark">
                                                 {pref.position.position_code}{" "}
                                                 <DisplayRating
                                                     rating={

@@ -50,7 +50,7 @@ export function ConnectedExportAssignmentsAction({
     const { selectedAssignmentIds } = useSelector(offerTableSelector);
 
     const setInProgress = React.useCallback(
-        function setInProgress(val) {
+        function setInProgress(val: boolean) {
             if (typeof setExportInProgress === "function") {
                 setExportInProgress(val);
             }

@@ -1,4 +1,4 @@
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 
 export type ExportFormat = "csv" | "json" | "spreadsheet";
 export type ExportFormatters = {

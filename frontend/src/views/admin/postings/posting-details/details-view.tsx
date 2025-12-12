@@ -2,7 +2,7 @@ import React from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Button, Container, Modal, Row, Alert } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { Cell, Column } from "react-table";
+import { Cell, CellProps, Column, Renderer } from "react-table";
 import {
     deletePostingPosition,
     positionsSelector,
@@ -112,8 +112,11 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
         return { postingPositions, tableData, selected };
     }, [posting_id, posting, positions]);
 
-    function generateCell(field: keyof PostingPositionRow, type: EditableType) {
-        return (props: Cell<PostingPositionRow>) => {
+    function generateCell(
+        field: keyof PostingPositionRow,
+        type: EditableType
+    ): Renderer<CellProps<PostingPositionRow>> {
+        return (props: CellProps<PostingPositionRow>) => {
             const row = props.row.original;
             function upsert(partial: Partial<PostingPositionRow>) {
                 let newVal = partial[field];
@@ -190,7 +193,7 @@ export function ConnectedPostingDetailsView({ posting }: { posting: Posting }) {
     );
 
     const updateCustomQuestions = React.useCallback(
-        async (customQuestions) => {
+        async (customQuestions: string) => {
             try {
                 await dispatch(
                     upsertPosting({

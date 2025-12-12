@@ -65,7 +65,7 @@ function EditInstructorsDialog({
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
 
     const changeIndicator =
@@ -106,12 +106,13 @@ function EditInstructorsDialog({
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Instructors..."
-                    labelKey={(option) =>
-                        `${option.first_name} ${option.last_name}`
+                    labelKey={
+                        ((option: Instructor) =>
+                            `${option.first_name} ${option.last_name}`) as any
                     }
                     selected={fieldVal}
                     options={allInstructors}
-                    onChange={setFieldVal}
+                    onChange={setFieldVal as any}
                 />{" "}
                 {changeIndicator}
             </Modal.Body>
@@ -135,7 +136,7 @@ export function EditInstructorsCell({ row }: { row: { original: Position } }) {
             {position.instructors.map((instructor = {} as any) => {
                 const name = `${instructor.first_name} ${instructor.last_name}`;
                 return (
-                    <Badge variant="secondary" className="mr-1" key={name}>
+                    <Badge bg="secondary" className="me-1" key={name}>
                         {name}
                     </Badge>
                 );

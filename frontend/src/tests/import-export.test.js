@@ -10,7 +10,7 @@ import {
     assignmentData,
     ddahData,
 } from "./import-export-data/export-data";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import { importObjectJSONs } from "./import-export-data/import-data";
 import {
     applicantSchema,
