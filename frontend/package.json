@@ -66,7 +66,6 @@
     },
     "browserslist": [],
     "devDependencies": {
-        "redux-devtools-extension": "^2.13.9",
         "typescript-json-schema": "^0.67.1",
         "vite-plugin-checker": "^0.12.0"
     }
