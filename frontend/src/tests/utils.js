@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import PropTypes from "prop-types";
 import { apiPropTypes } from "../api/defs/prop-types";
 // eslint-disable-next-line
-const { expect, test, it, describe, beforeAll } = global;
+import { expect, test, it, describe, beforeAll } from "vitest";
 
 // add a custom `.toContainObject` method to `expect()` to see if an array contains
 // an object with matching props. Taken from
