@@ -30,7 +30,8 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
             object: @assignment,
             condition: proc { @assignment.destroy! },
             error_message:
-                'Could not delete assignment; it may have an associated offer. If so, the assignment can be withdrawn and edited, but not deleted.'
+            'Could not delete assignment; it may have an associated offer. ' \
+            'If so, the assignment can be withdrawn and edited, but not deleted.'
         )
     end
 
