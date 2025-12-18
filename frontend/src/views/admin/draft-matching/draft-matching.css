@@ -1,0 +1,156 @@
+.draft-matching-panel-group {
+    * {
+        box-sizing: border-box;
+    }
+    .resize-handle {
+        width: 3px;
+        background-color: rgb(185, 185, 185);
+        cursor: col-resize;
+    }
+    .panel {
+        overflow: auto;
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .panel.applicants-list {
+        padding: 5px;
+        display: block;
+
+        .applicant-pill {
+            display: inline-flex;
+            margin: 2px;
+            user-select: none;
+        }
+        .applicant-pill:active {
+            outline: 4px solid var(--primary);
+            outline-offset: 0px;
+        }
+    }
+
+    .assignments-table {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        row-gap: 0.5em;
+        /* column-gap: 1em; */
+        margin: 5px;
+        .assignments {
+            padding-left: 1em;
+        }
+        .assignments,
+        .position {
+            padding-top: 0.25em;
+            padding-bottom: 0.25em;
+        }
+
+        .position-row {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            /* border-width: 5px; */
+            /* border-style: solid; */
+        }
+        .position-row.active-position {
+            border-top-width: 5px;
+            border-bottom-width: 5px;
+            border-right-width: 0px;
+            margin-top: -5px;
+            margin-bottom: -5px;
+            border-style: solid;
+        }
+        .position-row-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.1em 0.5em;
+        }
+        .position-row-content:last-child {
+            font-size: 0.9em;
+        }
+        .position-title {
+            max-width: 10em;
+        }
+
+        .active-drag-over {
+            outline: 2px dashed var(--primary);
+        }
+        .drop-here-indicator {
+            opacity: 0.7;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .level {
+            transition: background-color 0.7s;
+        }
+        .level--1 {
+            background-color: gray;
+        }
+        .level-1 {
+            background-color: rgb(85, 142, 58);
+        }
+        .level-2 {
+            background-color: rgb(56, 178, 0);
+        }
+        .level-3 {
+            background-color: rgb(71, 223, 0);
+        }
+    }
+    .applicant-pill.is-dragging {
+        opacity: 0.5;
+    }
+    .applicant-pill {
+        display: inline-flex;
+        width: 200px;
+        gap: 2px;
+        margin: 2px;
+
+        .grid-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .applicant-pill-content {
+            flex-grow: 1;
+            overflow: hidden;
+            .applicant-utorid {
+                overflow: hidden;
+                font-size: smaller;
+            }
+        }
+
+        .applicant-status {
+            background-color: gray;
+            padding: 0 0.4em;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 2.5em;
+
+            /* Draw a division sign */
+            div:last-child {
+                border-top: 1px solid black;
+            }
+        }
+
+        .preference-level {
+            font-weight: bold;
+            text-align: center;
+            width: 2em;
+            color: white;
+
+            &.level--1 {
+                background-color: gray;
+            }
+            &.level-1 {
+                background-color: rgb(85, 142, 58);
+            }
+            &.level-2 {
+                background-color: rgb(56, 178, 0);
+            }
+            &.level-3 {
+                background-color: rgb(71, 223, 0);
+            }
+        }
+    }
+}
