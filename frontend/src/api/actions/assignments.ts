@@ -139,6 +139,26 @@ export const deleteAssignment = validatedApiDispatcher({
     },
 });
 
+export const deleteAssignments = validatedApiDispatcher({
+    name: "deleteAssignments",
+    description: "Delete assignments",
+    onErrorDispatch: (e) => deleteError(e.toString()),
+    dispatcher: (payload: HasId[]) => async (dispatch, getState) => {
+        const role = activeRoleSelector(getState());
+        const deletedAssignments: RawAssignment[] = [];
+        for (const assignment of payload) {
+            const data = await apiPOST(
+                `/${role}/assignments/delete`,
+                prepForApi(assignment)
+            );
+            deletedAssignments.push(data);
+        }
+        for (const assignment of deletedAssignments) {
+            dispatch(deleteOneAssignmentSuccess(assignment));
+        }
+    },
+});
+
 export const exportAssignments = validatedApiDispatcher({
     name: "exportAssignments",
     description: "Export assignments",

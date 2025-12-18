@@ -67,7 +67,7 @@ export function ApplicantPill({
         ", "
     )}\n Medium (+1): ${prefsByLevel[1].join(
         ", "
-    )}\n Ok (0): ${prefsByLevel[0].join(", ")}\n Negative (-1): ${prefsByLevel[
+    )}\n\n Negative (-1): ${prefsByLevel[
         -1
     ].join(", ")}`;
 

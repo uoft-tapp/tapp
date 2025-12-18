@@ -23,6 +23,17 @@ class Api::V1::Admin::AssignmentsController < ApplicationController
         )
     end
 
+    # POST /assignments/delete
+    def delete
+        @assignment = Assignment.find(params[:id])
+        render_on_condition(
+            object: @assignment,
+            condition: proc { @assignment.destroy! },
+            error_message:
+                'Could not delete assignment; it may have an associated offer. If so, the assignment can be withdrawn and edited, but not deleted.'
+        )
+    end
+
     private
 
     def assignment_params

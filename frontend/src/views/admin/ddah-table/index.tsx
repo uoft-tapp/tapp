@@ -508,7 +508,7 @@ export function ConnectedDdahsTable() {
             <AdvancedFilterTable
                 // The ReactTable types are not smart enough to know that you can use a function
                 // for Header, so we will opt out of the type system here.
-                columns={columns as any}
+                columns={columns}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}

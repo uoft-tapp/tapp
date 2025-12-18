@@ -74,6 +74,21 @@ export const draftMatchingSlice = createSlice({
                 );
             });
         },
+        removeDraftAssignments(
+            state,
+            action: PayloadAction<AssignmentDraft[]>
+        ) {
+            const toRemoveKeys = new Set(
+                action.payload.map(
+                    (assignment) =>
+                        `${assignment.position.position_code}|${assignment.applicant.utorid}`
+                )
+            );
+            state.assignments = state.assignments.filter((assignment) => {
+                const key = `${assignment.position.position_code}|${assignment.applicant.utorid}`;
+                return !toRemoveKeys.has(key);
+            });
+        },
         clearDraftAssignments(state) {
             state.assignments = [];
         },
