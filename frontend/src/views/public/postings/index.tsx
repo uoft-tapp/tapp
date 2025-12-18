@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
-import 'survey-core/survey-core.css';
+import "survey-core/survey-core.css";
 import * as Survey from "survey-react-ui";
 import "./survey.css";
 import { Alert, Button, Modal, Spinner } from "react-bootstrap";
@@ -182,19 +182,14 @@ export function PostingView() {
 
     React.useEffect(() => {
         // We only want to add this callback once when the survey is initialized
-        survey.onCompleting.add(
-            (
-                result,
-                options
-            ) => {
-                if (!hasSubmitted) {
-                    options.allow = false;
-                    setSurveyData(result.data);
-                    setSubmitDialogVisible(true);
-                    setTimeout(() => survey.showPreview(), 0);
-                }
+        survey.onCompleting.add((result, options) => {
+            if (!hasSubmitted) {
+                options.allow = false;
+                setSurveyData(result.data);
+                setSubmitDialogVisible(true);
+                setTimeout(() => survey.showPreview(), 0);
             }
-        );
+        });
     }, [survey, setSurveyData, setSubmitDialogVisible, hasSubmitted]);
 
     if (url_token == null) {

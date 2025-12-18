@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
-import 'survey-core/survey-core.css';
+import "survey-core/survey-core.css";
 import * as Survey from "survey-react-ui";
 import { fetchSurvey } from "../../../../api/actions";
 // For some reason, including these styles makes the survey look worse...

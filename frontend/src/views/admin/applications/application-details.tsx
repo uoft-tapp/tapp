@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, Badge, Button, Modal } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 import { Application } from "../../../api/defs/types";
-import 'survey-core/survey-core.css';
+import "survey-core/survey-core.css";
 import * as Survey from "survey-react-ui";
 import "./application-details.css";
 import { formatDateTime } from "../../../libs/utils";
