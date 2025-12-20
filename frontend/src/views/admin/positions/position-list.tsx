@@ -217,7 +217,7 @@ export function ConnectedPositionsList({
             accessor: "contract_template.template_name",
             Cell: EditContractTemplateCell,
         },
-    ];
+    ] as Column<any>[];
 
     return (
         <React.Fragment>

@@ -81,7 +81,7 @@ function TemplatePreviewDialog({
                 </p>
                 {isLoading && (
                     <Alert variant="info">
-                        <Spinner animation="border" className="mr-3" />
+                        <Spinner animation="border" className="me-3" />
                         Loading Template...
                     </Alert>
                 )}
@@ -107,7 +107,7 @@ function TemplatePreviewDialog({
                     onClick={downloadClicked}
                     variant="link"
                 >
-                    <FaDownload className="mr-2" />
+                    <FaDownload className="me-2" />
                     Download Template
                 </Button>
                 <Button variant="secondary" onClick={onClose}>
@@ -144,7 +144,7 @@ export function ConnectedContractTemplateList() {
                 <Button
                     variant="light"
                     size="sm"
-                    className="mr-2 py-0"
+                    className="me-2 py-0"
                     title="Preview Template"
                     onClick={() => previewClicked(template_id)}
                 >

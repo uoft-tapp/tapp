@@ -49,7 +49,7 @@ export function StatusCell({
 }: {
     row: { original: RowData };
     children?: React.ReactNode;
-}): JSX.Element {
+}): React.ReactElement {
     const original = row.original;
     // If we have a blank ID, we aren't actually a DDAH (we're an assignment
     // without a DDAH), so don't render anything.
@@ -85,7 +85,7 @@ function IssuesCell({
     row,
 }: {
     row: { original: RowData };
-}): JSX.Element | null {
+}): React.ReactElement | null {
     const original = row.original;
     switch (original.issue_code) {
         case "hours_mismatch":
@@ -109,7 +109,7 @@ export function PreviewCell({
 }: {
     row: { original: RowData };
     onClick: Function;
-}): JSX.Element | null {
+}): React.ReactElement | null {
     const original = row.original;
     if (original.id == null) {
         return null;
@@ -118,7 +118,7 @@ export function PreviewCell({
         <Button
             variant="light"
             size="sm"
-            className="mr-2 py-0"
+            className="me-2 py-0"
             title="Preview DDAH"
             onClick={() => onClick(original.id)}
         >
@@ -157,7 +157,7 @@ export function DdahPreviewModal({
                     Close
                 </Button>
                 <Button variant="outline-info" onClick={() => onEdit(ddah)}>
-                    <FaEdit className="mr-2" />
+                    <FaEdit className="me-2" />
                     Edit
                 </Button>
                 {url && (
@@ -166,12 +166,12 @@ export function DdahPreviewModal({
                         variant="link"
                         href={formatDownloadUrl(url)}
                     >
-                        <FaDownload className="mr-2" />
+                        <FaDownload className="me-2" />
                         Download DDAH
                     </Button>
                 )}
                 <Button onClick={() => onApprove(ddah)}>
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="me-2" />
                     Approve
                 </Button>
             </Modal.Footer>
@@ -268,7 +268,7 @@ export function ConnectedDdahEditorModal({
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
 
     async function onSave(newDdah: Ddah | null) {
@@ -508,7 +508,7 @@ export function ConnectedDdahsTable() {
             <AdvancedFilterTable
                 // The ReactTable types are not smart enough to know that you can use a function
                 // for Header, so we will opt out of the type system here.
-                columns={columns as any}
+                columns={columns}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}

@@ -80,6 +80,7 @@ Rails
 
                         # Assignments
                         resources :assignments, only: %i[show create] do
+                            collection { post :delete }
                             resources :wage_chunks,
                                       controller: :assignment_wage_chunks,
                                       only: %i[index create]
@@ -193,7 +194,7 @@ Rails
                         resources :postings, only: %i[create show] do
                             collection { post :delete }
 
-                            # XXX For some reasong `index` doesn't work for a `posting_position`, only
+                            # XXX For some reason `index` doesn't work for a `posting_position`, only
                             # `show`. I don't know why...Ideally we should be using `index`.
                             resource :posting_positions, only: %i[show create]
                             resource :survey,

@@ -1,5 +1,5 @@
-import React from "react";
-import { actions } from "react-table";
+import React, { FunctionComponent } from "react";
+import { ColumnInstance, HeaderProps, PluginHook, actions } from "react-table";
 
 // We use react-tables reducer to store data
 actions.setLastSelectedRow = "setLastSelectedRow";
@@ -53,7 +53,8 @@ function insertOrDelete<T>(arr: T[], elm: T, insert: boolean): T[] {
  */
 function computeSelectionState(
     selected: any[],
-    visible: any[]
+    visible: any[],
+    sortedRows: any[]
 ): {
     isAllRowsSelected: boolean;
     isHiddenRowsSelected: boolean;
@@ -124,7 +125,11 @@ function IndeterminateCheckbox({
     return (
         <input
             type="checkbox"
-            ref={(el) => el && (el.indeterminate = indeterminate)}
+            ref={(el) => {
+                if (el) {
+                    el.indeterminate = indeterminate;
+                }
+            }}
             {...rest}
         />
     );
@@ -141,41 +146,42 @@ function IndeterminateCheckbox({
  *     setSelected: Function;
  * }}
  */
-function CheckboxHeader({
-    isAllRowsSelected,
-    isSomeRowsSelected,
-    isHiddenRowsSelected,
-    selected,
-    visible,
-    setSelected,
-}: {
-    isAllRowsSelected: boolean;
-    isSomeRowsSelected: boolean;
-    isHiddenRowsSelected: boolean;
-    selected?: number[];
-    visible?: number[];
-    setSelected: Function;
-}) {
-    return (
-        <IndeterminateCheckbox
-            checked={isAllRowsSelected}
-            indeterminate={
-                isSomeRowsSelected &&
-                (!isAllRowsSelected || isHiddenRowsSelected)
-            }
-            onChange={() => {
-                if (!selected || !setSelected) {
-                    return;
+const CheckboxHeader: FunctionComponent<HeaderProps<any>> =
+    function CheckboxHeader({
+        isAllRowsSelected,
+        isSomeRowsSelected,
+        isHiddenRowsSelected,
+        selected,
+        visible,
+        setSelected,
+    }: {
+        isAllRowsSelected: boolean;
+        isSomeRowsSelected: boolean;
+        isHiddenRowsSelected: boolean;
+        selected?: number[];
+        visible?: number[];
+        setSelected: Function;
+    }) {
+        return (
+            <IndeterminateCheckbox
+                checked={isAllRowsSelected}
+                indeterminate={
+                    isSomeRowsSelected &&
+                    (!isAllRowsSelected || isHiddenRowsSelected)
                 }
-                if (isAllRowsSelected) {
-                    setSelected([]);
-                } else {
-                    setSelected(visible);
-                }
-            }}
-        />
-    );
-}
+                onChange={() => {
+                    if (!selected || !setSelected) {
+                        return;
+                    }
+                    if (isAllRowsSelected) {
+                        setSelected([]);
+                    } else {
+                        setSelected(visible);
+                    }
+                }}
+            />
+        );
+    } as any;
 
 function CheckboxCell({
     row,
@@ -250,18 +256,18 @@ export function generateSelectionHook({
     enabled: boolean;
     selected?: number[];
     setSelected?: Function;
-}) {
+}): PluginHook<any> {
     if (!enabled) {
         return () => {};
     }
 
     // Code modified from useRowSelect example https://react-table.tanstack.com/docs/api/useRowSelect
-    return (hooks: any) => {
+    return (hooks) => {
         const [lastRowSelected, setLastRowSelected] = React.useState<
             number | null
         >(null);
 
-        hooks.visibleColumns.push((columns: any[]) => [
+        hooks.visibleColumns.push((columns) => [
             // Let's make a column for selection
             {
                 id: "selection",
@@ -330,6 +336,17 @@ function useInstanceFactory({
                     row.isSelected = selectedSet.has(id);
                 }
             }
+            // `selected` may contain rows that no longer exist if an action happened while the table was visible. Make sure `selected` only contains rows that are still present.
+            const selectedRecomputed = rows
+                .map((row) => row.isSelected && row.original?.id)
+                .filter((id) => id != null && id !== false);
+            const selectedContainsInvalidRows = !listsEqual(
+                selected,
+                selectedRecomputed
+            );
+            const validatedSelected = selectedContainsInvalidRows
+                ? selectedRecomputed
+                : selected;
 
             const visible: number[] = React.useMemo(
                 () =>
@@ -343,13 +360,17 @@ function useInstanceFactory({
                 isAllRowsSelected,
                 isSomeRowsSelected,
                 isHiddenRowsSelected,
-            } = computeSelectionState(selected, visible);
+            } = computeSelectionState(
+                validatedSelected,
+                visible,
+                instance.rows
+            );
 
             Object.assign(instance, {
                 isAllRowsSelected,
                 isSomeRowsSelected,
                 isHiddenRowsSelected,
-                selected,
+                selected: validatedSelected,
                 visible,
                 setSelected,
                 lastRowSelected,

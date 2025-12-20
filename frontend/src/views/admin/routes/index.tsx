@@ -13,6 +13,7 @@ import { PostingDetails } from "../postings/posting-details";
 import { PostingPreview } from "../postings/posting-preview";
 import { AdminApplicationsView } from "../applications";
 import { AdminMatchingView } from "../matching";
+import { AdminDraftMatchingView } from "../draft-matching";
 
 export function AdminRoutes() {
     return (
@@ -58,6 +59,9 @@ export function AdminRoutes() {
             </Route>
             <Route exact path="/applicants_and_matching/matching">
                 <AdminMatchingView />
+            </Route>
+            <Route exact path="/applicants_and_matching/draft-matching">
+                <AdminDraftMatchingView />
             </Route>
             <Route exact path="/postings">
                 <Redirect to="/postings/overview" />

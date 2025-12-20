@@ -33,7 +33,7 @@ export function AdvancedFilterTable({
     selected,
     setSelected,
 }: {
-    columns: any[];
+    columns: readonly any[];
     data: any[];
     filterable?: boolean | null;
     selected?: any[];
@@ -101,7 +101,13 @@ export function AdvancedFilterTable({
     }
 
     const renderRow = React.useCallback(
-        ({ index, style }) => {
+        ({
+            index,
+            style,
+        }: {
+            index: number;
+            style: React.CSSProperties | undefined;
+        }) => {
             const row = table.rows[index];
             table.prepareRow(row);
             return (
@@ -133,9 +139,11 @@ export function AdvancedFilterTable({
         [table]
     );
 
-    const handleScroll = React.useCallback(
-        ({ target }) => {
-            const { scrollTop, scrollLeft } = target;
+    const handleScroll = React.useCallback<
+        React.UIEventHandler<HTMLDivElement>
+    >(
+        ({ target, currentTarget }) => {
+            const { scrollTop, scrollLeft } = currentTarget;
 
             if (scrollRef.current) {
                 scrollRef.current.scrollTo(scrollTop);

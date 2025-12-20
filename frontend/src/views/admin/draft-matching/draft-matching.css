@@ -1,0 +1,198 @@
+.draft-matching-panel-group {
+    * {
+        box-sizing: border-box;
+    }
+    .resize-handle {
+        width: 3px;
+        background-color: rgb(185, 185, 185);
+        cursor: col-resize;
+    }
+    .panel {
+        overflow: auto;
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+    .panel.applicants-list {
+        padding: 5px;
+        display: block;
+
+        .applicant-pill {
+            display: inline-flex;
+            margin: 2px;
+            user-select: none;
+        }
+        .applicant-pill:active {
+            outline: 4px solid var(--primary);
+            outline-offset: 0px;
+        }
+    }
+
+    .assignments-table {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        row-gap: 0.5em;
+        /* column-gap: 1em; */
+        margin: 5px;
+        .assignments {
+            padding-left: 1em;
+        }
+        .assignments,
+        .position {
+            padding-top: 0.25em;
+            padding-bottom: 0.25em;
+        }
+
+        .position-row {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            /* border-width: 5px; */
+            /* border-style: solid; */
+        }
+        .position-row.active-position::after {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            width: 1em;
+            padding: 0.1em;
+            text-align: center;
+            color: var(--primary);
+            background-color: white; /* fallback */
+            background-color: color-mix(
+                in srgb,
+                var(--primary) 10%,
+                rgba(255, 255, 255) 90%
+            );
+            /* background-color: color-mix(in srgb, var(--primary) 20%, white 80%) / 1.0; */
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .position-row.active-position {
+            padding-left: 1em;
+        }
+        .position-row-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.1em 0.5em;
+        }
+        .position-row-content:last-child {
+            font-size: 0.9em;
+        }
+        .position-title {
+            max-width: 10em;
+        }
+
+        .active-drag-over {
+            outline: 2px dashed var(--primary);
+        }
+        .level {
+            transition: background-color 0.7s;
+        }
+        .level--1 {
+            background-color: gray;
+        }
+        .level-1 {
+            background-color: rgb(85, 142, 58);
+        }
+        .level-2 {
+            background-color: rgb(56, 178, 0);
+        }
+        .level-3 {
+            background-color: rgb(71, 223, 0);
+        }
+    }
+    .applicant-pill.is-dragging {
+        opacity: 0.5;
+    }
+    .applicant-pill {
+        display: inline-flex;
+        width: 200px;
+        gap: 2px;
+        margin: 2px;
+
+        .grid-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .applicant-pill-content {
+            flex-grow: 1;
+            overflow: hidden;
+            .applicant-utorid {
+                overflow: hidden;
+                font-size: smaller;
+            }
+        }
+
+        .applicant-status {
+            background-color: gray;
+            padding: 0 0.4em;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 2.5em;
+
+            /* Draw a division sign */
+            div:last-child {
+                border-top: 1px solid black;
+            }
+        }
+
+        .preference-level {
+            font-weight: bold;
+            text-align: center;
+            min-width: 2.5em;
+            color: white;
+
+            &.level--1 {
+                background-color: gray;
+            }
+            &.level-1 {
+                background-color: rgb(85, 142, 58);
+            }
+            &.level-2 {
+                background-color: rgb(56, 178, 0);
+            }
+            &.level-3 {
+                background-color: rgb(71, 223, 0);
+            }
+        }
+    }
+
+    .drop-here-indicator {
+        display: inline-flex;
+        background-color: rgba(235, 235, 235, 0.7);
+        width: 250px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0.2em;
+        margin-left: 2px;
+
+        &.forbidden {
+            background-color: rgb(194, 0, 0);
+            opacity: 1;
+            color: white;
+        }
+        .forbidden-message {
+            font-weight: bold;
+        }
+        .allow-message {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            .icon,
+            .hours {
+                margin: 0.5em;
+            }
+            .message {
+                flex-grow: 1;
+            }
+        }
+    }
+}

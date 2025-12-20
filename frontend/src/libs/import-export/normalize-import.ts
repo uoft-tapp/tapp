@@ -22,7 +22,7 @@ function parseDate(str: string | number) {
     let date = chrono.parseDate(str);
     // We need to jump through some hoops to remove all the timezone information.
     try {
-        return date.toJSON().replace(/T.*/, "T00:00:00.000Z");
+        return date!.toJSON().replace(/T.*/, "T00:00:00.000Z");
     } catch (e) {
         throw new Error(`Cannot parse "${str}" as date`);
     }

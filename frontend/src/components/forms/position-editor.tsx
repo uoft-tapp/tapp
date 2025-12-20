@@ -108,12 +108,13 @@ export function PositionEditor(props: {
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Instructors..."
-                    labelKey={(option: Instructor) =>
-                        `${option.first_name} ${option.last_name}`
+                    labelKey={
+                        ((option: Instructor) =>
+                            `${option.first_name} ${option.last_name}`) as any
                     }
                     selected={position.instructors}
                     options={instructors}
-                    onChange={setInstructors}
+                    onChange={setInstructors as any}
                 />
             </Form.Group>
             <Form.Group>
@@ -125,10 +126,13 @@ export function PositionEditor(props: {
                     ignoreDiacritics={true}
                     multiple
                     placeholder="Contract template..."
-                    labelKey={(option) => `${option.template_name}`}
+                    labelKey={
+                        ((option: ContractTemplate) =>
+                            `${option.template_name}`) as any
+                    }
                     selected={selectedContractTemplate}
                     options={contractTemplates}
-                    onChange={setContractTemplate}
+                    onChange={setContractTemplate as any}
                 />
             </Form.Group>
             <h3>Ad-related Info</h3>

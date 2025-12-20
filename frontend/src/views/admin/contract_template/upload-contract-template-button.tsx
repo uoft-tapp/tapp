@@ -53,7 +53,7 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
     // When a confirm operation is in progress, a spinner is displayed; otherwise
     // it's hidden
     const spinner = inProgress ? (
-        <Spinner animation="border" size="sm" className="mr-1" />
+        <Spinner animation="border" size="sm" className="me-1" />
     ) : null;
 
     return (
@@ -80,11 +80,15 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
                         <Row className="mb-3">
                             <Col>
                                 <Form>
-                                    <Form.File
-                                        label={fileInputLabel}
-                                        onChange={_onFileChange}
-                                        custom
-                                    ></Form.File>
+                                    <Form.Group>
+                                        <Form.Label>
+                                            {fileInputLabel}
+                                        </Form.Label>
+                                        <Form.Control
+                                            type="file"
+                                            onChange={_onFileChange}
+                                        ></Form.Control>
+                                    </Form.Group>
                                 </Form>
                             </Col>
                         </Row>
@@ -117,7 +121,7 @@ export function ConnectedUploadContractTemplateAction({ disabled = false }) {
                         onClick={onConfirm}
                     >
                         {spinner}
-                        <FaUpload className="mr-2" />
+                        <FaUpload className="me-2" />
                         Upload
                     </Button>
                 </Modal.Footer>

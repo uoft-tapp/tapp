@@ -18,5 +18,5 @@ export function generateHeaderCell(name: string, title?: string) {
     }
     header.toString = () => name;
 
-    return header as () => JSX.Element;
+    return header as () => React.ReactElement;
 }

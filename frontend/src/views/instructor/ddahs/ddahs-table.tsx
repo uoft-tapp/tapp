@@ -40,7 +40,7 @@ export function IssuesCell({
     row,
 }: {
     row: { original: RowData };
-}): JSX.Element | null {
+}): React.ReactElement | null {
     const original = row.original;
     switch (original.issue_code) {
         case "hours_mismatch":
@@ -108,7 +108,7 @@ export function ConnectedDdahsTable({
         row,
     }: {
         row: { original: RowData };
-    }): JSX.Element | null {
+    }): React.ReactElement | null {
         const original = row.original;
         if (original.id != null) {
             const ddah_id = original.id;

@@ -21,6 +21,7 @@
     min-height: 300px;
     display: flex;
     flex-direction: column;
+    border: 1px solid #e5e5e5;
 }
 .filter-table-container .table {
     flex-grow: 1;

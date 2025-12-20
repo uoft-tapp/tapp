@@ -1,0 +1,7 @@
+.warning-toast:hover {
+    box-shadow: 0 0 2px 2px rgba(117, 119, 0, 0.3);
+}
+.warning-toast.active {
+    transform: scale(1.05);
+    box-shadow: 0 0 2px 2px rgba(137, 32, 0, 0.3);
+}

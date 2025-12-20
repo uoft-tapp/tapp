@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { postingsSelector, upsertPosting } from "../../../api/actions";
 import type { Posting } from "../../../api/defs/types";
 import type { EditableType } from "../../../components/editable-cell";
-import type { Cell, Column } from "react-table";
+import type { CellProps, Column, Renderer } from "react-table";
 import { EditableCell } from "../../../components/editable-cell";
 import { AdvancedFilterTable } from "../../../components/filter-table/advanced-filter-table";
 import { generateHeaderCell } from "../../../components/table-utils";
@@ -17,8 +17,11 @@ export function ConnectedPostingsList({ editable = true }) {
     const _upsertPosting = (val: Partial<Posting>) =>
         dispatch(upsertPosting(val));
 
-    function generateCell(field: keyof Posting, type: EditableType) {
-        return (props: Cell<Posting>) => (
+    function generateCell(
+        field: keyof Posting,
+        type: EditableType
+    ): Renderer<CellProps<Posting>> {
+        return (props: CellProps<Posting>) => (
             <EditableCell
                 field={field}
                 upsert={_upsertPosting}
@@ -30,7 +33,9 @@ export function ConnectedPostingsList({ editable = true }) {
     }
 
     // props.original contains the row data for this particular posting
-    function CellDetailsButton({ row }: Cell<Posting>) {
+    const CellDetailsButton = function CellDetailsButton({
+        row,
+    }: CellProps<Posting>) {
         const posting = row?.original || {};
         return (
             <div className="details-button-container">
@@ -42,12 +47,14 @@ export function ConnectedPostingsList({ editable = true }) {
                 </Link>
             </div>
         );
-    }
-    function CellAvailability({ row }: Cell<Posting>) {
+    };
+    const CellAvailability = function CellAvailability({
+        row,
+    }: CellProps<Posting>) {
         const posting = row?.original || {};
         const status = posting.open_status ? "Open" : "Closed";
         return `${status} (${posting.availability})`;
-    }
+    } as Renderer<CellProps<Posting>>;
     const DEFAULT_COLUMNS: (Column<Posting> & {
         className?: string;
         resizable?: boolean;

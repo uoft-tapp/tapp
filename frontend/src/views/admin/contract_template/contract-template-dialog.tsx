@@ -140,7 +140,8 @@ export function ConnectedAddContractTemplateDialog(
     const availableTemplates = useSelector(allContractTemplatesSelector);
     const dispatch = useThunkDispatch();
     const _upsertContractTemplate = React.useCallback(
-        (template) => dispatch(upsertContractTemplate(template)),
+        (template: Partial<ContractTemplate>) =>
+            dispatch(upsertContractTemplate(template)),
         [dispatch]
     );
     const _fetchAllContractTemplates = React.useCallback(

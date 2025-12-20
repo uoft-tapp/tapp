@@ -9,7 +9,7 @@ interface PropsWithChildren {
     children: React.ReactNode;
 }
 interface ActionButtonProps extends PropsWithChildren {
-    icon?: React.ReactNode | Function;
+    icon?: React.ReactNode | React.FC<{}>;
     onClick?: () => any;
     active?: boolean;
     disabled?: any;
@@ -26,7 +26,9 @@ interface ActionMenuButtonProps extends ActionButtonProps {
  * @param {(React.ReactNode | Function)} icon
  * @returns {React.ReactNode}
  */
-function wrapIcon(icon: React.ReactNode | Function): React.ReactNode {
+function wrapIcon(
+    icon: React.FC<{}> | React.ReactNode | null
+): React.ReactNode {
     if (!icon) {
         return icon;
     }
@@ -34,7 +36,7 @@ function wrapIcon(icon: React.ReactNode | Function): React.ReactNode {
         const Icon = icon;
         icon = <Icon />;
     }
-    return <span className="mr-2">{icon}</span>;
+    return <span className="me-2">{icon}</span>;
 }
 
 /**
@@ -91,7 +93,7 @@ export function ActionButton({
     return (
         <Dropdown.Item
             as="button"
-            className={classNames({ active, disabled })}
+            className={classNames({ active, disabled }, "px-2", "p-1")}
             {...rest}
         >
             {iconNode}
@@ -145,10 +147,15 @@ export function ActionMenuButton({
                 })}
             >
                 <button
-                    className={classNames("dropdown-item", {
-                        active,
-                        disabled,
-                    })}
+                    className={classNames(
+                        "dropdown-item",
+                        {
+                            active,
+                            disabled,
+                        },
+                        "ps-2",
+                        "p-1"
+                    )}
                     {...rest}
                 >
                     {iconNode}

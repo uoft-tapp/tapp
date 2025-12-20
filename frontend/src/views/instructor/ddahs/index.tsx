@@ -1,5 +1,5 @@
 import React from "react";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import FileSaver from "file-saver";
 import { useSelector } from "react-redux";
 import {

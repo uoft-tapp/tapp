@@ -492,6 +492,28 @@ export const assignmentsRoutes = {
             summary: "Upsert an assignment",
             returns: docApiPropTypes.assignment,
         }),
+        "/assignments/delete": documentCallback({
+            func: (data, params, body) => {
+                errorUnlessRole(params, "admin");
+                const existingAssignment = new Assignment(data).find(body);
+                if (existingAssignment) {
+                    const activeOffer = new Assignment(data).getActiveOffer(
+                        existingAssignment
+                    );
+                    if (!activeOffer) {
+                        return new Assignment(data).delete(body);
+                    } else {
+                        throw new Error(
+                            `Cannot delete an assignment that has an active offer '${activeOffer.status}'`
+                        );
+                    }
+                }
+                return new Assignment(data);
+            },
+            posts: docApiPropTypes.assignment,
+            summary: "Delete an assignment",
+            returns: docApiPropTypes.assignment,
+        }),
         "/assignments/:assignment_id/wage_chunks": documentCallback({
             func: (data, params, body) => {
                 errorUnlessRole(params, "admin");

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { docApiPropTypes } from "../api/defs/doc-generation";
-import { Form } from "react-bootstrap";
+import { Form, Row } from "react-bootstrap";
 import { DialogRow, fieldEditorFactory } from "./forms/common-controls";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
@@ -86,7 +86,7 @@ export function InstructorEditor(props: {
 
     return (
         <Form>
-            <Form.Row>
+            <Row>
                 <DialogRow>
                     {createFieldEditor("First Name", "first_name")}
                     {createFieldEditor("Last Name", "last_name")}
@@ -95,7 +95,7 @@ export function InstructorEditor(props: {
                     {createFieldEditor("Email", "email")}
                     {createFieldEditor("UTORid", "utorid")}
                 </DialogRow>
-            </Form.Row>
+            </Row>
         </Form>
     );
 }

@@ -88,7 +88,7 @@ function hasSubField<T, M extends string>(
     obj: T,
     key: M
 ): obj is T & HasSubField<M> {
-    return typeof obj === "object" && key in obj;
+    return obj != null && typeof obj === "object" && key in obj;
 }
 
 /**

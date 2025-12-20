@@ -22,7 +22,7 @@ export function SortableHeader<T extends object>({
                     className="column-sort-icon"
                     {...column.getSortByToggleProps()}
                 >
-                    <FaSortAlphaUp className="ml-2 text-secondary" />
+                    <FaSortAlphaUp className="ms-2 text-secondary" />
                 </div>
             );
         } else {
@@ -31,7 +31,7 @@ export function SortableHeader<T extends object>({
                     className="column-sort-icon"
                     {...column.getSortByToggleProps()}
                 >
-                    <FaSortAlphaDown className="ml-2 text-secondary" />
+                    <FaSortAlphaDown className="ms-2 text-secondary" />
                 </div>
             );
         }
@@ -111,7 +111,7 @@ export function FilterBar({
 
     return (
         <div className="filterable-table-filter">
-            <FaSearch className="mr-3" />
+            <FaSearch className="me-3" />
             <input
                 type="text"
                 placeholder="Filter by..."
@@ -135,7 +135,8 @@ export function FilterBar({
                 <Badge
                     className="filter-chip"
                     pill
-                    variant="light"
+                    bg="light"
+                    text="dark"
                     key={`${filterString}-${i}`}
                 >
                     {filterString}
