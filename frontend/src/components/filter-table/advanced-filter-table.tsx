@@ -33,7 +33,7 @@ export function AdvancedFilterTable({
     selected,
     setSelected,
 }: {
-    columns: any[];
+    columns: readonly any[];
     data: any[];
     filterable?: boolean | null;
     selected?: any[];

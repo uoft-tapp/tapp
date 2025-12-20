@@ -4,12 +4,18 @@ import classNames from "classnames";
 import {
     AssignmentDraft,
     activeApplicantUtoridSelector,
+    assignmentKey,
+    draftAssignmentsByKeySelector,
     draftMatchingSlice,
 } from "../state/slice";
 import { PositionLabel } from "./PositionLabel";
 import { ApplicantPill } from "./ApplicantPill";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { useSelector } from "react-redux";
+import {
+    ConnectedDropIndicator,
+    assignmentIsForbidden,
+} from "../drop-indicator";
 
 /**
  * A row of the assignments table.
@@ -44,6 +50,7 @@ export function AssignmentRow({
             : []
         ).map((pref) => [pref.position.position_code, pref.preference_level])
     );
+    const draftAssignmentsByKey = useSelector(draftAssignmentsByKeySelector);
 
     return (
         <React.Fragment key={position.id}>
@@ -98,6 +105,17 @@ export function AssignmentRow({
                         );
                         return;
                     }
+                    // Check to see if it is valid to create an assignment here.
+                    const forbidden = assignmentIsForbidden(
+                        draggedApplicant!,
+                        position,
+                        draftAssignmentsByKey
+                        // existingDraftAssignmentsByKey
+                    );
+                    if (forbidden) {
+                        setUtoridBeingDragged(null);
+                        return;
+                    }
                     // If we are here, construct the new assignment draft to be added.
                     const assignmentDraft: AssignmentDraft = {
                         draft: true,
@@ -128,7 +146,7 @@ export function AssignmentRow({
                     .filter(assignmentShouldBeVisible)
                     .map((assignment) => (
                         <ApplicantPill
-                            key={`${assignment.position.position_code}|${assignment.applicant.utorid}`}
+                            key={assignmentKey(assignment)}
                             applicant={assignment.applicant}
                             assignment={assignment}
                             application={applicationByUtorid.get(
@@ -140,21 +158,10 @@ export function AssignmentRow({
                         />
                     ))}
                 {utoridBeingDragged && draggedApplicant && (
-                    <div className="drop-here-indicator">
-                        {position.position_code}{" "}
-                        {position.hours_per_assignment
-                            ? `(${position.hours_per_assignment} hours)`
-                            : ""}
-                        <div className="applicant-pill">
-                            <div className="applicant-name">
-                                {draggedApplicant.first_name}{" "}
-                                {draggedApplicant.last_name}
-                            </div>
-                            <div className="applicant-utorid">
-                                {draggedApplicant.utorid}
-                            </div>
-                        </div>
-                    </div>
+                    <ConnectedDropIndicator
+                        position={position}
+                        applicant={draggedApplicant}
+                    />
                 )}
             </div>
         </React.Fragment>
@@ -168,6 +175,7 @@ export function AssignmentRow({
 export function assignmentShouldBeVisible(assignment: AssignmentDraft) {
     return !(
         assignment.active_offer_status === "rejected" ||
-        assignment.active_offer_status === "withdrawn"
+        assignment.active_offer_status === "withdrawn" ||
+        assignment.deleted
     );
 }

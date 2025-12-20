@@ -33,6 +33,12 @@ export function PositionLabel({
     );
 
     const hoursFilled = positionSummary.assignments
+        .filter(
+            (a) =>
+                !a.deleted &&
+                a.active_offer_status !== "withdrawn" &&
+                a.active_offer_status !== "rejected"
+        )
         .map((a) => a.hours)
         .reduce((a, b) => a + b, 0);
 

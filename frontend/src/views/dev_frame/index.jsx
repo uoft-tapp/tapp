@@ -23,7 +23,6 @@ import {
 } from "../../api/actions";
 import { ActiveUserButton } from "./active-user-switch";
 import { SeedDataMenu } from "./load-mock-data";
-import { ErrorBoundary } from "react-error-boundary";
 
 // We don't need SwaggerUI all the time, so load it lazily.
 const SwaggerUI = React.lazy(() => import("swagger-ui-react"));
@@ -162,16 +161,7 @@ function DevFrame(props) {
                                 />
                             </React.Suspense>
                         </Route>
-                        <Route>
-                            <ErrorBoundary
-                                FallbackComponent={
-                                    "There was an error when rendering. See console for details."
-                                }
-                                onError={console.error}
-                            >
-                                {props.children}
-                            </ErrorBoundary>
-                        </Route>
+                        <Route>{props.children}</Route>
                     </Switch>
                 </div>
             </div>

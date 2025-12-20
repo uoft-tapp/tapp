@@ -52,12 +52,11 @@ export function DragAndDropInterface() {
         }
         assignmentsByUtorid.get(utorid)!.push(assignment as AssignmentDraft);
     });
-    console.log("assignmentsByUtorid", assignmentsByUtorid);
 
-    console.log("positions", positions);
-    console.log("applicants", applicants);
-    console.log("assignments", assignments);
-    console.log("applications", applications);
+    // console.log("positions", positions);
+    // console.log("applicants", applicants);
+    // console.log("assignments", assignments);
+    // console.log("applications", applications);
 
     return (
         <PanelGroup

@@ -11,6 +11,7 @@ import { CloseButton } from "react-bootstrap";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
+import { assignmentShouldBeVisible } from "./AssignmentRow";
 
 export type AssignmentInfo = {
     hoursAssigned: number;
@@ -34,7 +35,9 @@ export function ApplicantPill({
 }) {
     const dispatch = useThunkDispatch();
     const assignedHours = allAssignments
-        ? allAssignments.reduce((sum, a) => sum + a.hours, 0)
+        ? allAssignments
+              .filter(assignmentShouldBeVisible)
+              .reduce((sum, a) => sum + a.hours, 0)
         : 0;
     const [isDragging, setIsDragging] = React.useState(false);
     // Group preferences by level and then sort by position code.
@@ -115,7 +118,7 @@ export function ApplicantPill({
             </div>
             <div className="applicant-actions">
                 {assignment &&
-                    (!assignment.draft ? (
+                    (!assignment.mutable ? (
                         <BsLock title="This is not a draft assignment. To change this assignment, you must go to the Assignments page and withdraw the assignment." />
                     ) : (
                         <CloseButton
