@@ -14,7 +14,7 @@ import { deleteAssignments, upsertAssignments } from "../../../api/actions";
 import { Assignment } from "../../../api/defs/types";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { generateHeaderCell } from "../../../components/table-utils";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 
 export const finalizeModalColumn = [
     {
@@ -213,9 +213,20 @@ export function FinalizeDraftAssignmentsDialog(props: {
         } finally {
             setInProgress(false);
         }
-
-        // TODO: Implement the finalize logic
     }
+
+    function discardSelectedDraftAssignments() {
+        const selectedAssignments = draftAssignments.filter((a) =>
+            selected.includes(assignmentKey(a))
+        );
+        dispatch(
+            draftMatchingSlice.actions.forceRemoveDraftAssignments(
+                selectedAssignments
+            )
+        );
+        setSelected([]);
+    }
+
     return (
         <Modal show={showFinalizeModal} onHide={props.onHide} size="xl">
             <Modal.Header closeButton>
@@ -248,20 +259,40 @@ export function FinalizeDraftAssignmentsDialog(props: {
                 <Button variant="secondary" onClick={props.onHide}>
                     Cancel
                 </Button>
+                <div className="ms-auto"></div>
+                <Button
+                    variant="success"
+                    onClick={discardSelectedDraftAssignments}
+                    disabled={selected.length === 0 || inProgress}
+                    title="Discard the drafted changes. This removes the changes from the drafting view; it does not make any changes to the database."
+                >
+                    <FaTimes className="me-1" />
+                    Revert and Discard{" "}
+                    {selected.length === 0 ? (
+                        "Select Assignments to Discard"
+                    ) : (
+                        <React.Fragment>
+                            {selected.length} Assignment
+                            {selected.length !== 1 ? "s" : ""}
+                        </React.Fragment>
+                    )}
+                </Button>
                 <Button
                     variant="primary"
                     onClick={finalizeDraftAssignments}
                     disabled={selected.length === 0 || inProgress}
+                    title="Finalize the selected draft assignments by creating assignments in TAPP."
                 >
                     {spinner}
+                    <FaCheck className="me-1" />
                     {selected.length === 0 ? (
                         "Select Assignments to Finalize"
                     ) : (
                         <React.Fragment>
                             Finalize {selected.length} Assignment
+                            {selected.length !== 1 ? "s" : ""}
                         </React.Fragment>
                     )}
-                    {selected.length !== 1 ? "s" : ""}
                 </Button>
             </Modal.Footer>
         </Modal>

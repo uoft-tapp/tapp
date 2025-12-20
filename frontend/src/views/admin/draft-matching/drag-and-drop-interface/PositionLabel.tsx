@@ -9,6 +9,7 @@ import {
 } from "../state/slice";
 import { useSelector } from "react-redux";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
+import { assignmentShouldBeVisible } from "./AssignmentRow";
 
 /**
  * Display information about a position in the list of positions.
@@ -103,7 +104,13 @@ export function PositionLabel({
                         Hours: {positionSummary.position.hours_per_assignment}
                     </div>
                     <div>
-                        Filled: {positionSummary.assignments.length} /{" "}
+                        Filled:{" "}
+                        {
+                            positionSummary.assignments.filter(
+                                assignmentShouldBeVisible
+                            ).length
+                        }{" "}
+                        /{" "}
                         {positionSummary.position.desired_num_assignments ||
                             "?"}
                     </div>
