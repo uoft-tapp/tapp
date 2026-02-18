@@ -76,6 +76,7 @@ export function DragAndDropInterface() {
                             allAssignments={assignmentsByUtorid.get(
                                 applicant.utorid
                             )}
+                            parent={{ source: "applicant-list" }}
                         />
                     ))}
                 </div>

@@ -19,6 +19,14 @@ export type AssignmentInfo = {
     maxHours: number;
 };
 
+export type DropInfo = {
+    parent:
+        | {
+              source: "applicant-list";
+          }
+        | { source: "position-row"; positionCode: string };
+};
+
 /**
  * Display information about an applicant.
  */
@@ -27,11 +35,16 @@ export function ApplicantPill({
     assignment,
     application,
     allAssignments,
+    parent,
 }: {
     applicant: Applicant;
     assignment?: AssignmentDraft;
     application?: Application;
     allAssignments?: AssignmentDraft[];
+    /**
+     * Where the pill is being rendered. This is used to produce different drag-and-drop behaviour depending on where the pill is being dragged from.
+     */
+    parent: DropInfo["parent"];
 }) {
     const dispatch = useThunkDispatch();
     const assignedHours = allAssignments
@@ -86,6 +99,14 @@ export function ApplicantPill({
                 e.dataTransfer.setData(
                     "application/json",
                     JSON.stringify(applicant)
+                );
+                // Set the source of the drag
+                const dropInfo: DropInfo = {
+                    parent,
+                };
+                e.dataTransfer.setData(
+                    "application/x-tapp-data+json",
+                    JSON.stringify(dropInfo)
                 );
 
                 dispatch(

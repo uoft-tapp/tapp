@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../../rootReducer";
-import { Assignment, Position } from "../../../../api/defs/types";
+import { Assignment, MinimalAssignment, Position } from "../../../../api/defs/types";
 import { assignmentsSelector } from "../../../../api/actions";
 
 export interface PositionDraft extends Position {
@@ -9,6 +9,11 @@ export interface PositionDraft extends Position {
      * Whether or not any of the fields of this position have been overridden.
      */
     draft: boolean;
+}
+
+export interface MinimalAssignmentDraft extends MinimalAssignment {
+    draft: boolean;
+    deleted?: boolean;
 }
 
 export interface AssignmentDraft extends Omit<Assignment, "id"> {

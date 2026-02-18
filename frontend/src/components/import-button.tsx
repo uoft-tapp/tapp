@@ -8,6 +8,7 @@ import {
     Container,
     Row,
     Col,
+    ButtonProps,
 } from "react-bootstrap";
 import { ActionButton } from "./action-buttons";
 import { FaUpload } from "react-icons/fa";
@@ -240,7 +241,8 @@ export function ImportButton({
     dialogContent,
     onConfirm,
     setInProgress,
-}: ImportButtonProps & { setInProgress: Function; disabled?: boolean }) {
+    ...rest
+}: ImportButtonProps & { setInProgress: Function; disabled?: boolean } & ButtonProps) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -259,10 +261,13 @@ export function ImportButton({
         await onConfirm(...args);
         setDialogOpen(false);
     }
+    const {children = "Import", ...otherButtonProps} = rest;
 
     return (
         <>
-            <Button onClick={() => setDialogOpen(true)}>Import</Button>
+            <Button onClick={() => setDialogOpen(true)} {...otherButtonProps}>
+                {children}
+            </Button>
             <ImportDialog
                 dialogOpen={dialogOpen}
                 onCancel={onCancel}

@@ -9,7 +9,7 @@ import {
     draftMatchingSlice,
 } from "../state/slice";
 import { PositionLabel } from "./PositionLabel";
-import { ApplicantPill } from "./ApplicantPill";
+import { ApplicantPill, DropInfo } from "./ApplicantPill";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import { useSelector } from "react-redux";
 import {
@@ -105,6 +105,9 @@ export function AssignmentRow({
                         );
                         return;
                     }
+                    const dropInfo: DropInfo = JSON.parse(
+                        e.dataTransfer.getData("application/x-tapp-data+json")
+                    );
                     // Check to see if it is valid to create an assignment here.
                     const forbidden = assignmentIsForbidden(
                         draggedApplicant!,
@@ -138,6 +141,25 @@ export function AssignmentRow({
                         )
                     );
 
+                    // If we were dragged from another row, we should also remove the old draft assignment.
+                    if (dropInfo.parent.source === "position-row") {
+                        const oldPositionCode = dropInfo.parent.positionCode;
+                        const oldAssignments =
+                            assignmentsByPosition.get(oldPositionCode) ?? [];
+                        const assignmentToRemove = oldAssignments.find(
+                            (assignment) =>
+                                assignment.applicant.utorid ===
+                                draggedApplicant!.utorid
+                        );
+                        if (assignmentToRemove) {
+                            dispatch(
+                                draftMatchingSlice.actions.removeDraftAssignment(
+                                    assignmentToRemove
+                                )
+                            );
+                        }
+                    }
+
                     // Clear the drag state.
                     setUtoridBeingDragged(null);
                 }}
@@ -155,6 +177,10 @@ export function AssignmentRow({
                             allAssignments={assignmentsByUtorid.get(
                                 assignment.applicant.utorid
                             )}
+                            parent={{
+                                source: "position-row",
+                                positionCode: position.position_code,
+                            }}
                         />
                     ))}
                 {utoridBeingDragged && draggedApplicant && (

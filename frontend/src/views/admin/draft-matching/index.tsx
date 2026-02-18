@@ -1,10 +1,28 @@
 import { DragAndDropInterface } from "./drag-and-drop-interface";
 
 import "./draft-matching.css";
-import { Button } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 import { BsDownload, BsUpload } from "react-icons/bs";
 import React from "react";
 import { FinalizeDraftAssignmentsButton } from "./FinalizeDraftAssignmentsButton";
+import { useSelector } from "react-redux";
+import {
+    AssignmentDraft,
+    DraftMatchingState,
+    MinimalAssignmentDraft,
+    draftMatchingSlice,
+    selfSelector,
+} from "./state/slice";
+import FileSaver from "file-saver";
+import { prepareMinimal } from "../../../libs/import-export";
+import {
+    activeSessionSelector,
+    applicantsSelector,
+    positionsSelector,
+} from "../../../api/actions";
+import { Assignment } from "../../../api/defs/types";
+import { ImportButton } from "../../../components/import-button";
+import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 /**
  * Matching view for drafting assignments. This is mainly used by the Math department.
@@ -17,7 +35,7 @@ export function AdminDraftMatchingView() {
             </div>
             <div className="matching-footer page-actions">
                 <DownloadDraftAssignmentsButton />
-                <UploadDraftAssignmentsButton />
+                <ImportDraftAssignmentsButton />
                 <div className="footer-button-separator" />
                 <FinalizeDraftAssignmentsButton />
             </div>
@@ -25,23 +43,201 @@ export function AdminDraftMatchingView() {
     );
 }
 
+export type ExportedDraftMatchingAssignmentData = Omit<
+    DraftMatchingState,
+    "activePositionCodes" | "activeApplicantUtorid" | "assignments"
+> & { assignments: MinimalAssignmentDraft[] };
+
 function DownloadDraftAssignmentsButton() {
+    const draftData = useSelector(selfSelector);
+    const activeSession = useSelector(activeSessionSelector);
     return (
         <Button
             variant="outline-primary"
             title="Save draft data for archiving or for reusing later"
+            onClick={() => {
+                const fileName = `export_${new Date().toLocaleDateString(
+                    "en-CA",
+                    {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                    }
+                )}`;
+
+                // Do more or less a straight dump of DraftMatchingState
+                // But we omit the fields
+                //  - activePositionCodes
+                //  - activeApplicantUtorid
+                const {
+                    activePositionCodes,
+                    activeApplicantUtorid,
+                    ...nonMinimalExportData
+                } = draftData;
+                // We need to turn assignments into minimal assignments
+                const { assignments, ...rest } = nonMinimalExportData;
+                const exportData = {
+                    assignments: assignments.map((assignment) => {
+                        return {
+                            ...prepareMinimal.assignment(
+                                assignment as Assignment,
+                                activeSession!
+                            ),
+                            draft: assignment.draft,
+                            deleted: assignment.deleted,
+                        };
+                    }) as MinimalAssignmentDraft[],
+                    ...rest,
+                };
+
+                const file = new File(
+                    [JSON.stringify(exportData, null, 4)],
+                    `${fileName}.json`,
+                    {
+                        type: "application/json",
+                    }
+                );
+                FileSaver.saveAs(file);
+            }}
         >
             <BsDownload /> Export Draft Data
         </Button>
     );
 }
-function UploadDraftAssignmentsButton() {
+function ImportDraftAssignmentsButton() {
+    const dispatch = useThunkDispatch();
+    const applicants = useSelector(applicantsSelector);
+    const allUtorids = React.useMemo(
+        () => new Set(applicants.map((a) => a.utorid)),
+        [applicants]
+    );
+    const positions = useSelector(positionsSelector);
+    const allPositions = React.useMemo(
+        () => new Set(positions.map((p) => p.position_code)),
+        [positions]
+    );
+    const [fileContents, setFileContents] =
+        React.useState<ExportedDraftMatchingAssignmentData | null>(null);
+    const [warnings, setWarnings] = React.useState<React.ReactNode[]>([]);
+
+    React.useEffect(() => {
+        // Check to make sure all utorids and position codes in the file are valid
+        if (!fileContents) {
+            return;
+        }
+        const newWarnings: React.ReactNode[] = [];
+        for (const assignment of fileContents.assignments) {
+            if (!allUtorids.has(assignment.utorid)) {
+                newWarnings.push(
+                    <>
+                        Utorid <code>{assignment.utorid}</code> doesn't
+                        correspond to any applicant (are you in the correct
+                        session?).
+                    </>
+                );
+            }
+            if (!allPositions.has(assignment.position_code)) {
+                newWarnings.push(
+                    <>
+                        Position code <code>{assignment.position_code}</code>{" "}
+                        does not exist in the current session.
+                    </>
+                );
+            }
+        }
+        setWarnings(newWarnings);
+    }, [fileContents, allUtorids, allPositions]);
+
+    console.log("fileContents", fileContents);
+
     return (
-        <Button
+        <ImportButton
+            onFileChange={(content) => {
+                setFileContents(content?.data);
+            }}
+            dialogContent={
+                <div>
+                    {fileContents && (
+                        <Alert variant="info">
+                            Import{" "}
+                            <ul>
+                                <li>
+                                    {fileContents.assignments.length}{" "}
+                                    assignments
+                                </li>
+                                <li>
+                                    A show list of length{" "}
+                                    {fileContents.showList.length}
+                                </li>
+                                <li>
+                                    A hide list of length{" "}
+                                    {fileContents.hideList.length}
+                                </li>
+                            </ul>
+                        </Alert>
+                    )}
+                    {warnings.map((warning, index) => (
+                        <Alert key={index} variant="warning">
+                            {warning}
+                        </Alert>
+                    ))}
+                </div>
+            }
+            onConfirm={() => {
+                // Do the actual importing.
+                if (!fileContents) {
+                    return;
+                }
+                dispatch(
+                    draftMatchingSlice.actions.setShowList(
+                        fileContents.showList
+                    )
+                );
+                dispatch(
+                    draftMatchingSlice.actions.setHideList(
+                        fileContents.hideList
+                    )
+                );
+                for (const assignment of fileContents.assignments) {
+                    if (
+                        !allUtorids.has(assignment.utorid) ||
+                        !allPositions.has(assignment.position_code) ||
+                        !assignment.draft
+                    ) {
+                        continue;
+                    }
+                    if (assignment.deleted) {
+                        console.log("Deleting assignment", assignment);
+                        dispatch(
+                            draftMatchingSlice.actions.removeDraftAssignment({
+                                applicant: { utorid: assignment.utorid } as any,
+                                position: {
+                                    position_code: assignment.position_code,
+                                } as any,
+                                // If there is a deleted draft assignment, that means that it shadows an existing real (non-draft) assignment.
+                                // We force draft to be false so we will delete the real assignment.
+                                draft: false,
+                            } as AssignmentDraft)
+                        );
+                    } else {
+                        dispatch(
+                            draftMatchingSlice.actions.addDraftAssignment({
+                                applicant: { utorid: assignment.utorid } as any,
+                                position: {
+                                    position_code: assignment.position_code,
+                                } as any,
+                                draft: assignment.draft,
+                                hours: assignment.hours,
+                            } as AssignmentDraft)
+                        );
+                    }
+                }
+            }}
+            setInProgress={() => {}}
             variant="outline-primary"
             title="Import data into the drafting interface (e.g., subsequent appointment data or a previous draft)"
         >
             <BsUpload /> Import Draft Data
-        </Button>
+        </ImportButton>
     );
 }
