@@ -118,8 +118,14 @@
             flex-direction: row;
         }
 
+        .applicant-actions {
+            display: flex;
+            align-items: center;
+        }
+
         .applicant-pill-content {
             flex-grow: 1;
+            flex-basis: 0;
             overflow: hidden;
             .applicant-utorid {
                 overflow: hidden;
@@ -139,7 +145,19 @@
             /* Draw a division sign */
             div:last-child {
                 border-top: 1px solid black;
+                font-size: 0.8em;
             }
+        }
+        .hours-under {
+            background-color: rgb(255, 253, 143);
+        }
+        .hours-over {
+            background-color: rgb(194, 0, 0);
+            color: white;
+        }
+        .hours-met {
+            background-color: rgb(56, 178, 0);
+            color: white;
         }
 
         .preference-level {
@@ -193,6 +211,47 @@
             .message {
                 flex-grow: 1;
             }
+        }
+    }
+}
+
+.additional-data-dialog {
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-content {
+        height: 80vh;
+    }
+    .tab-pane:not(.active) {
+        display: none;
+    }
+    .tab-content,
+    .tab-pane {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    .show-hide-lists,
+    .desired-hours-input {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+        gap: 0.4em;
+        min-height: 200px;
+
+        .list {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding: 0.5em;
+        }
+        textarea {
+            flex-grow: 1;
+            width: 100%;
+            font-family: monospace;
         }
     }
 }

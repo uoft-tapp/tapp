@@ -23,6 +23,7 @@ import {
 import { Assignment } from "../../../api/defs/types";
 import { ImportButton } from "../../../components/import-button";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
+import { AdditionalDataButton } from "./set-additional-data-dialog";
 
 /**
  * Matching view for drafting assignments. This is mainly used by the Math department.
@@ -36,6 +37,7 @@ export function AdminDraftMatchingView() {
             <div className="matching-footer page-actions">
                 <DownloadDraftAssignmentsButton />
                 <ImportDraftAssignmentsButton />
+                <AdditionalDataButton />
                 <div className="footer-button-separator" />
                 <FinalizeDraftAssignmentsButton />
             </div>
@@ -162,16 +164,29 @@ function ImportDraftAssignmentsButton() {
                             Import{" "}
                             <ul>
                                 <li>
-                                    {fileContents.assignments.length}{" "}
+                                    <b>{fileContents.assignments.length}</b>{" "}
                                     assignments
                                 </li>
                                 <li>
                                     A show list of length{" "}
-                                    {fileContents.showList.length}
+                                    <b>{fileContents.showList.length}</b>
                                 </li>
                                 <li>
                                     A hide list of length{" "}
-                                    {fileContents.hideList.length}
+                                    <b>{fileContents.hideList.length}</b>
+                                </li>
+                                <li>
+                                    Min/max hour (e.g. subsequent appointments)
+                                    targets for{" "}
+                                    <b>
+                                        {
+                                            Object.keys(
+                                                fileContents.desiredHoursByUtorid ||
+                                                    {}
+                                            ).length
+                                        }
+                                    </b>{" "}
+                                    applicants.
                                 </li>
                             </ul>
                         </Alert>
@@ -190,12 +205,17 @@ function ImportDraftAssignmentsButton() {
                 }
                 dispatch(
                     draftMatchingSlice.actions.setShowList(
-                        fileContents.showList
+                        fileContents.showList || []
                     )
                 );
                 dispatch(
                     draftMatchingSlice.actions.setHideList(
-                        fileContents.hideList
+                        fileContents.hideList || []
+                    )
+                );
+                dispatch(
+                    draftMatchingSlice.actions.setDesiredHoursByUtorid(
+                        fileContents.desiredHoursByUtorid || {}
                     )
                 );
                 for (const assignment of fileContents.assignments) {

@@ -1,7 +1,11 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../../../rootReducer";
-import { Assignment, MinimalAssignment, Position } from "../../../../api/defs/types";
+import {
+    Assignment,
+    MinimalAssignment,
+    Position,
+} from "../../../../api/defs/types";
 import { assignmentsSelector } from "../../../../api/actions";
 
 export interface PositionDraft extends Position {
@@ -46,6 +50,13 @@ export interface DraftMatchingState {
      */
     showList: string[];
     /**
+     * The min/max hours each applicant should be assigned.
+     */
+    desiredHoursByUtorid: Record<
+        string,
+        { minHours: number; maxHours: number }
+    >;
+    /**
      * The draft assignments created by the interface. These are not saved to the backend, but may shadow some assignments that exist in the backend (and are withdrawn/rejected).
      */
     assignments: AssignmentDraft[];
@@ -63,6 +74,7 @@ export interface DraftMatchingState {
 const initialState: DraftMatchingState = {
     hideList: [],
     showList: [],
+    desiredHoursByUtorid: {},
     assignments: [],
     activePositionCodes: [],
     activeApplicantUtorid: null,
@@ -77,6 +89,14 @@ export const draftMatchingSlice = createSlice({
         },
         setShowList(state, action: PayloadAction<string[]>) {
             state.showList = action.payload;
+        },
+        setDesiredHoursByUtorid(
+            state,
+            action: PayloadAction<
+                Record<string, { minHours: number; maxHours: number }>
+            >
+        ) {
+            state.desiredHoursByUtorid = action.payload;
         },
         addDraftAssignment(state, action: PayloadAction<AssignmentDraft>) {
             state.assignments.push(action.payload);
@@ -166,6 +186,21 @@ export const draftMatchingSlice = createSlice({
 export const draftMatchingReducer = draftMatchingSlice.reducer;
 
 export const selfSelector = (state: RootState) => state.ui.draftMatching;
+
+export const showListSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.showList
+);
+
+export const hideListSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.hideList
+);
+
+export const desiredHoursByUtoridSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.desiredHoursByUtorid
+);
 
 export const draftAssignmentsSelector = createSelector(
     [assignmentsSelector, selfSelector],

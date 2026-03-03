@@ -13,10 +13,10 @@ import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { assignmentShouldBeVisible } from "./AssignmentRow";
 
-export type AssignmentInfo = {
-    hoursAssigned: number;
-    minHours: number;
-    maxHours: number;
+export type AdditionalInfo = {
+    annotation?: string;
+    minHours?: number;
+    maxHours?: number;
 };
 
 export type DropInfo = {
@@ -27,6 +27,8 @@ export type DropInfo = {
         | { source: "position-row"; positionCode: string };
 };
 
+type FulfillmentStatus = "under" | "met" | "over" | "unknown";
+
 /**
  * Display information about an applicant.
  */
@@ -35,12 +37,17 @@ export function ApplicantPill({
     assignment,
     application,
     allAssignments,
+    additionalInfo,
     parent,
 }: {
     applicant: Applicant;
     assignment?: AssignmentDraft;
     application?: Application;
     allAssignments?: AssignmentDraft[];
+    /**
+     * Additional info useful for rendering the applicant pill.
+     */
+    additionalInfo: AdditionalInfo;
     /**
      * Where the pill is being rendered. This is used to produce different drag-and-drop behaviour depending on where the pill is being dragged from.
      */
@@ -85,6 +92,22 @@ export function ApplicantPill({
         ", "
     )}\n\n Negative (-1): ${prefsByLevel[-1].join(", ")}`;
 
+    const minHours = additionalInfo?.minHours ?? 0;
+    const maxHours = additionalInfo?.maxHours ?? 0;
+    const fulfillmentStatus: FulfillmentStatus =
+        // If maxHours is 0, this applicant has no restrictions on hours, so they are met if they have any assignment.
+        maxHours === 0 && assignedHours > 0
+            ? "met"
+            : minHours === 0 && assignedHours === 0 // If there is no minimum number of hours, we don't need to assign them anything, so they are "unknown" until we assign some hours.
+            ? "unknown"
+            : assignedHours < minHours
+            ? "under"
+            : assignedHours > maxHours
+            ? "over"
+            : assignedHours >= minHours && assignedHours <= maxHours
+            ? "met"
+            : "unknown";
+
     return (
         <div
             className={classNames("applicant-pill", {
@@ -120,13 +143,24 @@ export function ApplicantPill({
             }}
             title={`${applicant.first_name} ${applicant.last_name} (${
                 applicant.utorid
-            })\nAssigned Hours: ${assignedHours}\nAssigned to: ${JSON.stringify(
+            })\nDesired Hours: ${
+                minHours === maxHours ? minHours : `${minHours}-${maxHours}`
+            }\nAssigned Hours: ${assignedHours}\nAssigned to: ${JSON.stringify(
                 (allAssignments || []).map((a) => a.position.position_code)
             )}\nPreferences:\n${prefsLabel}`}
         >
-            <div className={classNames("applicant-status")}>
+            <div
+                className={classNames(
+                    "applicant-status",
+                    `hours-${fulfillmentStatus}`
+                )}
+            >
                 <div>{assignedHours}</div>
-                <div>{0}</div>
+                <div>
+                    {minHours === maxHours
+                        ? minHours
+                        : `${minHours}-${maxHours}`}
+                </div>
             </div>
             <div className="applicant-pill-content">
                 <div className="grid-row">

@@ -5,6 +5,7 @@ import {
     AssignmentDraft,
     activeApplicantUtoridSelector,
     assignmentKey,
+    desiredHoursByUtoridSelector,
     draftAssignmentsByKeySelector,
     draftMatchingSlice,
 } from "../state/slice";
@@ -39,6 +40,7 @@ export function AssignmentRow({
     const draggedApplicant = applicationByUtorid.get(
         utoridBeingDragged!
     )?.applicant;
+    const desiredHoursByUtorid = useSelector(desiredHoursByUtoridSelector);
 
     const dispatch = useThunkDispatch();
     // This is the utorid being dragged, but it persists even after a drop.
@@ -180,6 +182,16 @@ export function AssignmentRow({
                             parent={{
                                 source: "position-row",
                                 positionCode: position.position_code,
+                            }}
+                            additionalInfo={{
+                                minHours:
+                                    desiredHoursByUtorid[
+                                        assignment.applicant.utorid
+                                    ]?.minHours,
+                                maxHours:
+                                    desiredHoursByUtorid[
+                                        assignment.applicant.utorid
+                                    ]?.maxHours,
                             }}
                         />
                     ))}

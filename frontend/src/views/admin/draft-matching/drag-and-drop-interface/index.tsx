@@ -6,7 +6,13 @@ import {
     positionsSelector,
 } from "../../../../api/actions";
 import React from "react";
-import { AssignmentDraft, draftAssignmentsSelector } from "../state/slice";
+import {
+    AssignmentDraft,
+    desiredHoursByUtoridSelector,
+    draftAssignmentsSelector,
+    hideListSelector,
+    showListSelector,
+} from "../state/slice";
 import { ApplicantPill } from "./ApplicantPill";
 import { AssignmentRow } from "./AssignmentRow";
 import { mergeApplications } from "./mergeApplications";
@@ -14,7 +20,12 @@ import { mergeApplications } from "./mergeApplications";
 export function DragAndDropInterface() {
     const positions = useSelector(positionsSelector);
     const applicants = useSelector(applicantsSelector);
+    const showList = useSelector(showListSelector);
+    const showListSet = React.useMemo(() => new Set(showList), [showList]);
+    const hideList = useSelector(hideListSelector);
+    const hideListSet = React.useMemo(() => new Set(hideList), [hideList]);
     const allUtorids = new Set(applicants.map((a) => a.utorid));
+    const desiredHoursByUtorid = useSelector(desiredHoursByUtoridSelector);
     const applications = useSelector(applicationsSelector);
     const applicationsByUtorid: Map<string, typeof applications> = new Map();
     applications.forEach((application) => {
@@ -66,19 +77,38 @@ export function DragAndDropInterface() {
         >
             <Panel defaultSize={30}>
                 <div className="panel applicants-list">
-                    {applicants.map((applicant) => (
-                        <ApplicantPill
-                            key={applicant.id}
-                            applicant={applicant}
-                            application={applicationByUtorid.get(
-                                applicant.utorid
-                            )}
-                            allAssignments={assignmentsByUtorid.get(
-                                applicant.utorid
-                            )}
-                            parent={{ source: "applicant-list" }}
-                        />
-                    ))}
+                    {applicants
+                        .filter((applicant) => {
+                            // If there is a non-empty show list, only show applicants on the show list.
+                            if (showListSet.size > 0) {
+                                return showListSet.has(applicant.utorid);
+                            }
+                            if (hideListSet.has(applicant.utorid)) {
+                                return false;
+                            }
+                            return true;
+                        })
+                        .map((applicant) => (
+                            <ApplicantPill
+                                key={applicant.id}
+                                applicant={applicant}
+                                application={applicationByUtorid.get(
+                                    applicant.utorid
+                                )}
+                                allAssignments={assignmentsByUtorid.get(
+                                    applicant.utorid
+                                )}
+                                parent={{ source: "applicant-list" }}
+                                additionalInfo={{
+                                    minHours:
+                                        desiredHoursByUtorid[applicant.utorid]
+                                            ?.minHours,
+                                    maxHours:
+                                        desiredHoursByUtorid[applicant.utorid]
+                                            ?.maxHours,
+                                }}
+                            />
+                        ))}
                 </div>
             </Panel>
             <PanelResizeHandle className="resize-handle" />
