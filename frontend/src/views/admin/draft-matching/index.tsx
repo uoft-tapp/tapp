@@ -24,6 +24,7 @@ import { Assignment } from "../../../api/defs/types";
 import { ImportButton } from "../../../components/import-button";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { AdditionalDataButton } from "./set-additional-data-dialog";
+import { importExtraDataThunk } from "./state/thunks";
 
 /**
  * Matching view for drafting assignments. This is mainly used by the Math department.
@@ -198,60 +199,12 @@ function ImportDraftAssignmentsButton() {
                     ))}
                 </div>
             }
-            onConfirm={() => {
+            onConfirm={async () => {
                 // Do the actual importing.
                 if (!fileContents) {
                     return;
                 }
-                dispatch(
-                    draftMatchingSlice.actions.setShowList(
-                        fileContents.showList || []
-                    )
-                );
-                dispatch(
-                    draftMatchingSlice.actions.setHideList(
-                        fileContents.hideList || []
-                    )
-                );
-                dispatch(
-                    draftMatchingSlice.actions.setDesiredHoursByUtorid(
-                        fileContents.desiredHoursByUtorid || {}
-                    )
-                );
-                for (const assignment of fileContents.assignments) {
-                    if (
-                        !allUtorids.has(assignment.utorid) ||
-                        !allPositions.has(assignment.position_code) ||
-                        !assignment.draft
-                    ) {
-                        continue;
-                    }
-                    if (assignment.deleted) {
-                        console.log("Deleting assignment", assignment);
-                        dispatch(
-                            draftMatchingSlice.actions.removeDraftAssignment({
-                                applicant: { utorid: assignment.utorid } as any,
-                                position: {
-                                    position_code: assignment.position_code,
-                                } as any,
-                                // If there is a deleted draft assignment, that means that it shadows an existing real (non-draft) assignment.
-                                // We force draft to be false so we will delete the real assignment.
-                                draft: false,
-                            } as AssignmentDraft)
-                        );
-                    } else {
-                        dispatch(
-                            draftMatchingSlice.actions.addDraftAssignment({
-                                applicant: { utorid: assignment.utorid } as any,
-                                position: {
-                                    position_code: assignment.position_code,
-                                } as any,
-                                draft: assignment.draft,
-                                hours: assignment.hours,
-                            } as AssignmentDraft)
-                        );
-                    }
-                }
+                await dispatch(importExtraDataThunk(fileContents));
             }}
             setInProgress={() => {}}
             variant="outline-primary"

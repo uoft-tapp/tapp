@@ -113,7 +113,7 @@ export function ApplicantPill({
             className={classNames("applicant-pill", {
                 "is-dragging": isDragging,
             })}
-            draggable
+            draggable={assignment ? !!assignment.mutable : true}
             onDragStart={(e) => {
                 setIsDragging(true);
                 // Send the applicant utorid as drag data.

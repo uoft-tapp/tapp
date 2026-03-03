@@ -7,6 +7,7 @@ import {
     Position,
 } from "../../../../api/defs/types";
 import { assignmentsSelector } from "../../../../api/actions";
+import { importExtraDataThunk } from "./thunks";
 
 export interface PositionDraft extends Position {
     /**

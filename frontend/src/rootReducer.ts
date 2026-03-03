@@ -22,6 +22,7 @@ import { instructorUIReducer } from "./views/instructor/store/reducers";
 import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
 import { matchingDataReducer } from "./views/admin/matching/reducers";
 import { draftMatchingReducer } from "./views/admin/draft-matching/state/slice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -65,3 +66,7 @@ const reducer = combineReducers({
 export type RootState = ReturnType<typeof reducer>;
 export default reducer;
 export { reducer as rootReducer };
+export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+    state: RootState;
+    rejectValue: string;
+}>();
