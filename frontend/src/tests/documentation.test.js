@@ -11,7 +11,7 @@ import { mockAPI } from "../api/mockAPI";
 
 const BASE_PATH = "/app/src/api/defs/types/";
 const TYPES_FILE = "raw-types.ts";
-const COMPLIER_OPTIONS = {
+const COMPILER_OPTIONS = {
     strictNullChecks: true,
     // Without this, TJS may error due to incorrect @types/... files. We don't care about those.
     // We only care about the consistency of our internal types.
@@ -19,31 +19,35 @@ const COMPLIER_OPTIONS = {
 };
 
 describe("Documentation tests", () => {
-    it("All attributes from types reported by the backend are included in the typescript types", async () => {
-        const resp = await apiGET("/debug/serializers");
-        expect(resp).toHaveStatus("success");
-        const typesFromBackend = resp.payload;
+    it(
+        "All attributes from types reported by the backend are included in the typescript types",
+        { timeout: 10000 },
+        async () => {
+            const resp = await apiGET("/debug/serializers");
+            expect(resp).toHaveStatus("success");
+            const typesFromBackend = resp.payload;
 
-        // Generate types from the typescript definitions
-        const program = TJS.getProgramFromFiles(
-            [resolve(BASE_PATH + "/" + TYPES_FILE)],
-            COMPLIER_OPTIONS
-        );
+            // Generate types from the typescript definitions
+            const program = TJS.getProgramFromFiles(
+                [resolve(BASE_PATH + "/" + TYPES_FILE)],
+                COMPILER_OPTIONS
+            );
 
-        const schema = TJS.generateSchema(program, "*");
-        const typescriptTypes = schema.definitions || {};
+            const schema = TJS.generateSchema(program, "*");
+            const typescriptTypes = schema.definitions || {};
 
-        for (const type of typesFromBackend) {
-            const { name, attributes } = type;
-            // We expect there to be a Typescript type corresponding to `name` but prefixed with `Raw`.
-            // This type should have the attributes reported by the backend.
-            const typescriptName = `Raw${name}`;
-            expect(typescriptTypes).toContainTypeDescription({
-                name: typescriptName,
-                attributes,
-            });
+            for (const type of typesFromBackend) {
+                const { name, attributes } = type;
+                // We expect there to be a Typescript type corresponding to `name` but prefixed with `Raw`.
+                // This type should have the attributes reported by the backend.
+                const typescriptName = `Raw${name}`;
+                expect(typescriptTypes).toContainTypeDescription({
+                    name: typescriptName,
+                    attributes,
+                });
+            }
         }
-    });
+    );
 
     it("Routes are all documented", async () => {
         const resp = await apiGET("/debug/routes");

@@ -1,4 +1,4 @@
-import { reducer as notificationReducer } from "react-notification-system-redux";
+import { reducer as notificationReducer } from "./components/react-notification-system-redux";
 import { combineReducers } from "./api/reducers/utils";
 import { globalReducer } from "./api/reducers/globals";
 import { offerTableReducer } from "./views/admin/offertable/reducers";
@@ -21,6 +21,8 @@ import { positionsTableReducer } from "./views/admin/positions/reducers";
 import { instructorUIReducer } from "./views/instructor/store/reducers";
 import { instructorPreferencesReducer } from "./api/reducers/instructorPreferences";
 import { matchingDataReducer } from "./views/admin/matching/reducers";
+import { draftMatchingReducer } from "./views/admin/draft-matching/state/slice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // When `combineReducers` is used,
 // every action gets dispatched to every reducer.
@@ -57,8 +59,14 @@ const reducer = combineReducers({
         globals: globalReducer,
         instructor: instructorUIReducer,
         matchingData: matchingDataReducer,
+        draftMatching: draftMatchingReducer,
     }),
 });
 
 export type RootState = ReturnType<typeof reducer>;
 export default reducer;
+export { reducer as rootReducer };
+export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+    state: RootState;
+    rejectValue: string;
+}>();

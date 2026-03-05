@@ -1,8 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { apiGET, apiPOST } from "../../../libs/api-utils";
-import * as Survey from "survey-react";
-//import "survey-react/survey.css";
+import "survey-core/survey-core.css";
+import * as Survey from "survey-react-ui";
 import "./survey.css";
 import { Alert, Button, Modal, Spinner } from "react-bootstrap";
 
@@ -163,11 +163,10 @@ export function PostingView() {
     }, [url_token, setSurveyJson, setSurveyPrefilledData, setApplicationOpen]);
 
     const survey = React.useMemo(() => {
-        Survey.StylesManager.applyTheme("bootstrap");
-        Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
         const survey = new Survey.Model(surveyJson);
         survey.showPreviewBeforeComplete = "showAnsweredQuestions";
         survey.showQuestionNumbers = "off";
+        survey.showProgressBar = "bottom";
 
         // The utorid is auto-filled when the user is actually taking a survey.
         survey.data = surveyData || surveyPrefilledData;
@@ -185,7 +184,7 @@ export function PostingView() {
         // We only want to add this callback once when the survey is initialized
         survey.onCompleting.add((result, options) => {
             if (!hasSubmitted) {
-                options.allowComplete = false;
+                options.allow = false;
                 setSurveyData(result.data);
                 setSubmitDialogVisible(true);
                 setTimeout(() => survey.showPreview(), 0);

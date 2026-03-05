@@ -1,3 +1,7 @@
+:root {
+    --primary: var(--bs-primary);
+}
+
 .template-list .position-type {
     color: blue;
 }
@@ -144,7 +148,7 @@
 .applicant-rating-container.expanded > div:first-child {
     flex-grow: 0;
     flex-shrink: 0;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 }
 .applicant-rating-container.expanded > div:last-child {
     flex-grow: 1;

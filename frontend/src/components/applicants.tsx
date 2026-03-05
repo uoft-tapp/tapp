@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { createDiffColumnsFromColumns } from "./diff-table";
 import { Applicant, MinimalApplicant } from "../api/defs/types";
 import { DiffSpec } from "../libs/diffs";
-import { Form } from "react-bootstrap";
+import { Form, Row } from "react-bootstrap";
 import { DialogRow } from "./forms/common-controls";
 import { AdvancedFilterTable } from "./filter-table/advanced-filter-table";
 
@@ -129,7 +129,7 @@ export function ApplicantEditor(props: {
 
     return (
         <Form>
-            <Form.Row>
+            <Row>
                 <DialogRow>
                     {createFieldEditor("First Name", "first_name")}
                     {createFieldEditor("Last Name", "last_name")}
@@ -142,7 +142,7 @@ export function ApplicantEditor(props: {
                     {createFieldEditor("Student Number", "student_number")}
                     {createFieldEditor("Phone", "phone")}
                 </DialogRow>
-            </Form.Row>
+            </Row>
         </Form>
     );
 }

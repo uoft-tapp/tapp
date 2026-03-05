@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
-import * as Survey from "survey-react";
+import "survey-core/survey-core.css";
+import * as Survey from "survey-react-ui";
 import { fetchSurvey } from "../../../../api/actions";
 // For some reason, including these styles makes the survey look worse...
 //import "survey-react/survey.css";
@@ -23,8 +24,6 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
         fetchResources();
     }, [posting, dispatch]);
 
-    Survey.StylesManager.applyTheme("bootstrap");
-    Survey.defaultBootstrapCss.navigationButton = "btn btn-primary";
     const survey = new Survey.Model(jsonSurvey);
     // When we preview the survey, we want to see all the questions rather than a per-page view.
     survey.questionsOnPageMode = "singlePage";
@@ -40,7 +39,7 @@ export function ConnectedPostingPreviewView({ posting }: { posting: Posting }) {
     return (
         <React.Fragment>
             <Alert variant="info">
-                <i className="fa fa-info-circle mr-1" />
+                <i className="fa fa-info-circle me-1" />
                 All pages of this survey are shown together.
             </Alert>
             <Survey.Survey model={survey} />

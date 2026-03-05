@@ -35,7 +35,7 @@ export function ApplicantViewHeader({
             <div className="search-container">
                 <div className="form-inline">
                     <input
-                        className="form-control mr-sm-2 search-bar"
+                        className="form-control me-sm-2 search-bar"
                         type="text"
                         placeholder="Filter by name/UTORid..."
                         onChange={(e) => setFilterString(e.target.value)}
@@ -68,10 +68,18 @@ function DisplayToggle() {
             defaultValue={applicantViewMode}
             onChange={(e) => dispatch(setApplicantViewMode(e))}
         >
-            <ToggleButton className="no-highlight" value={"grid"}>
+            <ToggleButton
+                id="toggle-FaTh"
+                className="no-highlight"
+                value={"grid"}
+            >
                 <FaTh />
             </ToggleButton>
-            <ToggleButton className="no-highlight" value={"table"}>
+            <ToggleButton
+                id="toggle-FaTable"
+                className="no-highlight"
+                value={"table"}
+            >
                 <FaTable />
             </ToggleButton>
         </ToggleButtonGroup>

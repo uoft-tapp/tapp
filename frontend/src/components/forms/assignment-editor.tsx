@@ -219,8 +219,9 @@ export function AssignmentEditor(props: {
                         ignoreDiacritics={true}
                         placeholder="Position..."
                         multiple
-                        labelKey={(option) =>
-                            `${option.position_code} (${option.position_title})`
+                        labelKey={
+                            ((option: Position) =>
+                                `${option.position_code} (${option.position_title})`) as any
                         }
                         selected={
                             assignment.position.id == null
@@ -228,7 +229,7 @@ export function AssignmentEditor(props: {
                                 : [assignment.position]
                         }
                         options={positions}
-                        onChange={setPosition}
+                        onChange={setPosition as any}
                         disabled={lockPositionAndApplicant}
                     />
                 </React.Fragment>
@@ -239,8 +240,9 @@ export function AssignmentEditor(props: {
                         ignoreDiacritics={true}
                         placeholder="Applicant..."
                         multiple
-                        labelKey={(option) =>
-                            `${option.first_name} ${option.last_name}`
+                        labelKey={
+                            ((option: Applicant) =>
+                                `${option.first_name} ${option.last_name}`) as any
                         }
                         selected={
                             assignment.applicant.id == null
@@ -248,7 +250,7 @@ export function AssignmentEditor(props: {
                                 : [assignment.applicant]
                         }
                         options={applicants}
-                        onChange={setApplicant}
+                        onChange={setApplicant as any}
                         disabled={lockPositionAndApplicant}
                     />
                 </React.Fragment>

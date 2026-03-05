@@ -71,6 +71,12 @@ export const ROUTES = [
                 name: "Matching",
                 description: "Match applicants to positions",
             },
+            {
+                route: "/draft-matching",
+                name: "Draft Matching",
+                description:
+                    "Global overview to help draft assignments to all courses at once",
+            },
         ],
     },
 ];

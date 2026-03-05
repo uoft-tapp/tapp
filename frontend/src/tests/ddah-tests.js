@@ -1,7 +1,13 @@
 /**
  * @jest-environment node
  */
-import { it, expect, beforeAll, addSession } from "./utils";
+import {
+    it,
+    expect,
+    beforeAll,
+    addSession,
+    axiosGetReplacement,
+} from "./utils";
 import { databaseSeeder } from "./setup";
 import axios from "axios";
 
@@ -446,17 +452,19 @@ export function ddahsEmailAndDownloadTests(api) {
     }, 30000);
 
     it("can fetch messages from mailcatcher", async () => {
-        let resp = await axios.get(`${MAILCATCHER_BASE_URL}/messages`);
+        let resp = await axiosGetReplacement(
+            `${MAILCATCHER_BASE_URL}/messages`
+        );
         expect(resp.data.length >= 0).toEqual(true);
         // Clear all the messages from mailcatcher
         await axios.delete(`${MAILCATCHER_BASE_URL}/messages`);
-        resp = await axios.get(`${MAILCATCHER_BASE_URL}/messages`);
+        resp = await axiosGetReplacement(`${MAILCATCHER_BASE_URL}/messages`);
         expect(resp.data.length).toEqual(0);
     });
 
     it("email makes a round trip", async () => {
         const beforeEmails = (
-            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+            await axiosGetReplacement(`${MAILCATCHER_BASE_URL}/messages`)
         ).data;
 
         const newDdah = {
@@ -489,27 +497,23 @@ export function ddahsEmailAndDownloadTests(api) {
         // Wait for mailcatcher to get the email and then search for it.
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const afterEmails = (
-            await axios.get(`${MAILCATCHER_BASE_URL}/messages`)
+            await axiosGetReplacement(`${MAILCATCHER_BASE_URL}/messages`)
         ).data;
 
         expect(afterEmails.length).toBeGreaterThan(beforeEmails.length);
     });
 
     it("can download html and pdf versions of a ddah", async () => {
-        const ddahHtml = (
-            await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}`
-            )
-        ).data;
+        const ddahHtml = await fetch(
+            `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}`
+        ).then((r) => r.text());
 
         expect(ddahHtml).toMatch(/html/);
 
         // Get the PDF version
-        const ddahPdf = (
-            await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}.pdf`
-            )
-        ).data;
+        const ddahPdf = await fetch(
+            `${BACKEND_BASE_URL}/public/ddahs/${ddah.url_token}.pdf`
+        ).then((r) => r.text());
         // All PDF files start with the text "%PDF"
         expect(ddahPdf.slice(0, 4)).toEqual("%PDF");
     });
@@ -571,11 +575,9 @@ export function ddahsEmailAndDownloadTests(api) {
         const resp = await apiPOST(`/admin/ddahs`, ddahWithAllDutyTypes);
         expect(resp).toHaveStatus("success");
 
-        const ddahHtml = (
-            await axios.get(
-                `${BACKEND_BASE_URL}/public/ddahs/${resp.payload.url_token}`
-            )
-        ).data;
+        const ddahHtml = await fetch(
+            `${BACKEND_BASE_URL}/public/ddahs/${resp.payload.url_token}`
+        ).then((r) => r.text());
 
         const expectedStrings = [
             "Unique description - training",

@@ -8,7 +8,7 @@ import { setGlobals, globalsSelector } from "../../api/actions";
  * of the Mock API is included in this component, and this component
  * takes no arguments.
  *
- * This component only renders when `process.env.REACT_APP_DEV_FEATURES` is truthy.
+ * This component only renders when `import.meta.env.VITE_DEV_FEATURES` is truthy.
  *
  * @export
  * @returns {React.ElementType}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Col, FormControlProps } from "react-bootstrap";
+import { Form, Col, FormControlProps, Row } from "react-bootstrap";
 import { EditableType } from "../editable-cell";
 
 /**
@@ -107,16 +107,16 @@ export function DialogRow({
     icon = null,
     colStretch = [],
 }: {
-    children: JSX.Element[] | JSX.Element;
-    icon?: JSX.Element | null;
+    children: React.ReactElement[] | React.ReactElement;
+    icon?: React.ReactElement | null;
     colStretch?: number[];
 }) {
-    let iconNode: JSX.Element | null = null;
+    let iconNode: React.ReactElement | null = null;
     if (icon) {
         iconNode = <div className="input-row-icon">{icon}</div>;
     }
     return (
-        <Form.Row style={{ alignItems: "baseline" }}>
+        <Row style={{ alignItems: "baseline" }}>
             {iconNode}
             {React.Children.map(children, (child, index) => {
                 return (
@@ -130,6 +130,6 @@ export function DialogRow({
                     </Form.Group>
                 );
             })}
-        </Form.Row>
+        </Row>
     );
 }

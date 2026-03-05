@@ -9,7 +9,7 @@ import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 
 interface Conflict {
     delayShow: string;
-    immediateShow: JSX.Element | string;
+    immediateShow: React.ReactElement | string;
 }
 
 function getConflicts(posting: Partial<Posting>, postings: Posting[] = []) {

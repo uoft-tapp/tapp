@@ -66,7 +66,7 @@ export function createDiffCell<T extends object>({
  */
 export function createDiffColumnsFromColumns<T extends object>(
     columns: (Column<T> & { accessor?: string })[]
-) {
+): Column<T>[] {
     return columns.map((column) => {
         const ret = {
             // ReactTable really wants columns to have ids. If a column
@@ -77,6 +77,6 @@ export function createDiffColumnsFromColumns<T extends object>(
             Cell: createDiffCell(column),
         };
         delete ret.accessor;
-        return ret;
+        return ret as Column<T>;
     });
 }
