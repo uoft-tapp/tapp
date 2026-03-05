@@ -5,7 +5,7 @@ import {
     activePositionCodesSelector,
     draftMatchingSlice,
 } from "../state/slice";
-import { BsBuilding, BsBuildingCheck, BsBuildingFill, BsBuildingFillCheck, BsLock } from "react-icons/bs";
+import { BsBuilding, BsBuildingFillCheck, BsLock } from "react-icons/bs";
 import { departmentCodes, programCodes } from "../../matching/name-maps";
 import { CloseButton } from "react-bootstrap";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
