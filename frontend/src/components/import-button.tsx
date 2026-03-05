@@ -242,7 +242,10 @@ export function ImportButton({
     onConfirm,
     setInProgress,
     ...rest
-}: ImportButtonProps & { setInProgress: Function; disabled?: boolean } & ButtonProps) {
+}: ImportButtonProps & {
+    setInProgress: Function;
+    disabled?: boolean;
+} & ButtonProps) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     /**
@@ -261,7 +264,7 @@ export function ImportButton({
         await onConfirm(...args);
         setDialogOpen(false);
     }
-    const {children = "Import", ...otherButtonProps} = rest;
+    const { children = "Import", ...otherButtonProps } = rest;
 
     return (
         <>

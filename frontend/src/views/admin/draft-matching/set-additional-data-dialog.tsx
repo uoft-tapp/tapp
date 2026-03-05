@@ -238,7 +238,7 @@ export function AdditionalDataButton() {
             </Modal>
             <Button
                 variant="outline-secondary"
-                className="mx-2"
+                className="ms-2"
                 onClick={() => setShowDialog(true)}
                 title="Set additional data such as show/hide lists and subsequent appointment data"
             >

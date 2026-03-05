@@ -7,10 +7,8 @@ import React from "react";
 import { FinalizeDraftAssignmentsButton } from "./FinalizeDraftAssignmentsButton";
 import { useSelector } from "react-redux";
 import {
-    AssignmentDraft,
     DraftMatchingState,
     MinimalAssignmentDraft,
-    draftMatchingSlice,
     selfSelector,
 } from "./state/slice";
 import FileSaver from "file-saver";
@@ -25,6 +23,7 @@ import { ImportButton } from "../../../components/import-button";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { AdditionalDataButton } from "./set-additional-data-dialog";
 import { importExtraDataThunk } from "./state/thunks";
+import { AboutDialogButton } from "./about-dialot";
 
 /**
  * Matching view for drafting assignments. This is mainly used by the Math department.
@@ -39,6 +38,7 @@ export function AdminDraftMatchingView() {
                 <DownloadDraftAssignmentsButton />
                 <ImportDraftAssignmentsButton />
                 <AdditionalDataButton />
+                <AboutDialogButton />
                 <div className="footer-button-separator" />
                 <FinalizeDraftAssignmentsButton />
             </div>

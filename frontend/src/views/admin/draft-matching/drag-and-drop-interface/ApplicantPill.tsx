@@ -5,7 +5,7 @@ import {
     activePositionCodesSelector,
     draftMatchingSlice,
 } from "../state/slice";
-import { BsLock } from "react-icons/bs";
+import { BsBuilding, BsBuildingCheck, BsBuildingFill, BsBuildingFillCheck, BsLock } from "react-icons/bs";
 import { departmentCodes, programCodes } from "../../matching/name-maps";
 import { CloseButton } from "react-bootstrap";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
@@ -241,6 +241,14 @@ export function ApplicantPillApplicationDetails({
     if (!application) {
         return null;
     }
+
+    const experience: "dept" | "uni" | "new" =
+        application.previous_department_ta
+            ? "dept"
+            : application.previous_university_ta
+            ? "uni"
+            : "new";
+
     const deptCode = departmentCodes[application.department || "?"] || {
         abbrev: "",
         full: "Unknown Department",
@@ -257,6 +265,26 @@ export function ApplicantPillApplicationDetails({
             <div className="grid-detail-small" title={programCode.full}>
                 {programCode.abbrev}
                 {application.yip}
+            </div>
+            <div
+                className="grid-detail-small"
+                title={
+                    experience === "new"
+                        ? `No prior TA experience`
+                        : `TA has experience as a TA in ${
+                              experience === "dept"
+                                  ? "the department"
+                                  : "a different department"
+                          }`
+                }
+            >
+                {experience === "dept" ? (
+                    <BsBuildingFillCheck />
+                ) : experience === "uni" ? (
+                    <BsBuilding />
+                ) : (
+                    "New"
+                )}
             </div>
             <PreferenceLevelDisplay level={activePreferenceLevel} />
         </div>
