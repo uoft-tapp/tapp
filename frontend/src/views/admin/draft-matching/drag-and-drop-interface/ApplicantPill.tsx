@@ -5,9 +5,14 @@ import {
     activePositionCodesSelector,
     draftMatchingSlice,
 } from "../state/slice";
-import { BsBuilding, BsBuildingFillCheck, BsLock } from "react-icons/bs";
+import {
+    BsBuilding,
+    BsBuildingFillCheck,
+    BsLock,
+    BsPencil,
+} from "react-icons/bs";
 import { departmentCodes, programCodes } from "../../matching/name-maps";
-import { CloseButton } from "react-bootstrap";
+import { Button, CloseButton, Modal } from "react-bootstrap";
 import { useThunkDispatch } from "../../../../libs/thunk-dispatch";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
@@ -54,6 +59,7 @@ export function ApplicantPill({
     parent: DropInfo["parent"];
 }) {
     const dispatch = useThunkDispatch();
+    const [editHoursModalOpen, setEditHoursModalOpen] = React.useState(false);
     const assignedHours = allAssignments
         ? allAssignments
               .filter(assignmentShouldBeVisible)
@@ -176,18 +182,38 @@ export function ApplicantPill({
                     (!assignment.mutable ? (
                         <BsLock title="This is not a draft assignment. To change this assignment, you must go to the Assignments page and withdraw the assignment." />
                     ) : (
-                        <CloseButton
-                            title={`Remove draft assignment`}
-                            onClick={() => {
-                                dispatch(
-                                    draftMatchingSlice.actions.removeDraftAssignment(
-                                        assignment
-                                    )
-                                );
-                            }}
-                        />
+                        <>
+                            <CloseButton
+                                title={`Remove draft assignment`}
+                                onClick={() => {
+                                    dispatch(
+                                        draftMatchingSlice.actions.removeDraftAssignment(
+                                            assignment
+                                        )
+                                    );
+                                }}
+                            />
+                            <Button
+                                variant="light"
+                                size="sm"
+                                className="edit-button"
+                                title="Edit hours for this assignment"
+                                onClick={() => setEditHoursModalOpen(true)}
+                            >
+                                <BsPencil />
+                            </Button>
+                        </>
                     ))}
             </div>
+            {assignment && (
+                <EditAssignmentHoursModal
+                    assignment={assignment}
+                    open={editHoursModalOpen}
+                    onClose={() => {
+                        setEditHoursModalOpen(false);
+                    }}
+                />
+            )}
         </div>
     );
 }
@@ -288,5 +314,71 @@ export function ApplicantPillApplicationDetails({
             </div>
             <PreferenceLevelDisplay level={activePreferenceLevel} />
         </div>
+    );
+}
+
+/**
+ * A dialog to edit the hours of a particular assignment.
+ * @param param0
+ */
+function EditAssignmentHoursModal({
+    assignment,
+    open,
+    onClose,
+}: {
+    assignment: AssignmentDraft;
+    open: boolean;
+    onClose: () => void;
+}) {
+    const dispatch = useThunkDispatch();
+    const originalHours = assignment.hours;
+    const [hours, setHours] = React.useState(originalHours);
+
+    return (
+        // We don't want to clutter up the dom with hundreds of modals, so forgo the animated transition and only show the modal when it's open.
+        open && (
+            <Modal show={open} onHide={onClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Assigned Hours</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="form-group">
+                        <label htmlFor="hours-input">Hours:</label>
+                        <input
+                            id="hours-input"
+                            type="number"
+                            className="form-control"
+                            value={hours}
+                            onChange={(e) => setHours(Number(e.target.value))}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            dispatch(
+                                draftMatchingSlice.actions.removeDraftAssignment(
+                                    assignment
+                                )
+                            );
+                            dispatch(
+                                draftMatchingSlice.actions.addDraftAssignment({
+                                    ...assignment,
+                                    hours,
+                                })
+                            );
+                            onClose();
+                        }}
+                        disabled={hours === originalHours}
+                    >
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
     );
 }
