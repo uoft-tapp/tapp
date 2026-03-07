@@ -333,6 +333,16 @@ function EditAssignmentHoursModal({
     const dispatch = useThunkDispatch();
     const originalHours = assignment.hours;
     const [hours, setHours] = React.useState(originalHours);
+    const onSave = React.useCallback(() => {
+        dispatch(draftMatchingSlice.actions.removeDraftAssignment(assignment));
+        dispatch(
+            draftMatchingSlice.actions.addDraftAssignment({
+                ...assignment,
+                hours,
+            })
+        );
+        onClose();
+    }, [assignment, dispatch, hours, onClose]);
 
     return (
         // We don't want to clutter up the dom with hundreds of modals, so forgo the animated transition and only show the modal when it's open.
@@ -350,6 +360,12 @@ function EditAssignmentHoursModal({
                             className="form-control"
                             value={hours}
                             onChange={(e) => setHours(Number(e.target.value))}
+                            onKeyDown={(e) => {
+                                // Close on Enter
+                                if (e.key === "Enter") {
+                                    onSave();
+                                }
+                            }}
                         />
                     </div>
                 </Modal.Body>
@@ -359,20 +375,7 @@ function EditAssignmentHoursModal({
                     </Button>
                     <Button
                         variant="primary"
-                        onClick={() => {
-                            dispatch(
-                                draftMatchingSlice.actions.removeDraftAssignment(
-                                    assignment
-                                )
-                            );
-                            dispatch(
-                                draftMatchingSlice.actions.addDraftAssignment({
-                                    ...assignment,
-                                    hours,
-                                })
-                            );
-                            onClose();
-                        }}
+                        onClick={onSave}
                         disabled={hours === originalHours}
                     >
                         Save

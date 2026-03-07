@@ -263,14 +263,6 @@ export function AssignmentRow({
                         </div>
                     );
                 })}
-                {utoridBeingDragged &&
-                    draggedApplicant &&
-                    visibleAssignments.length === 0 && (
-                        <ConnectedDropIndicator
-                            position={position}
-                            applicant={draggedApplicant}
-                        />
-                    )}
             </div>
         </React.Fragment>
     );

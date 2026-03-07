@@ -151,8 +151,6 @@ function ImportDraftAssignmentsButton() {
         setWarnings(newWarnings);
     }, [fileContents, allUtorids, allPositions]);
 
-    console.log("fileContents", fileContents);
-
     return (
         <ImportButton
             onFileChange={(content) => {
