@@ -13,7 +13,6 @@ import {
 import { ActionButton } from "./action-buttons";
 import { FaUpload } from "react-icons/fa";
 import { DataFormat } from "../libs/import-export";
-import { flushSync } from "react-dom";
 
 interface ImportButtonProps {
     onFileChange: (file: DataFormat | null) => any;
