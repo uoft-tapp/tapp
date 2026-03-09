@@ -161,7 +161,7 @@ export function ImportDialog({
         }
         setInProgress(true);
         // This is needed to ensure the `inProgress` state gets propagated before the rest of the action runs.
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         // We wrap `onConfirm` in an async function which will automatically
         // convert it to a promise if needed.
         try {
