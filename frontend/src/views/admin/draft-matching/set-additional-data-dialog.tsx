@@ -37,12 +37,7 @@ export function AdditionalDataButton() {
         allData.hideList.join("\n")
     );
     const [desiredHoursText, setDesiredHoursText] = React.useState(
-        Object.entries(allData.desiredHoursByUtorid)
-            .map(
-                ([utorid, hours]) =>
-                    `${utorid}\t${hours.minHours}\t${hours.maxHours}`
-            )
-            .join("\n")
+        desiredHoursJSONToTable(allData.desiredHoursByUtorid)
     );
     const [changes, setChanges] = React.useState({
         showList: false,
@@ -74,22 +69,7 @@ export function AdditionalDataButton() {
         // Prepare sorted arrays from the textarea input
         const newShowList = Array.from(new Set(makeArray(showListText))).sort();
         const newHideList = Array.from(new Set(makeArray(hideListText))).sort();
-        const desiredHoursByUtorid: Record<
-            string,
-            { minHours: number; maxHours: number }
-        > = {};
-        desiredHoursText
-            .split("\n")
-            .map((l) => l.trim())
-            .filter((l) => l)
-            .forEach((line) => {
-                const [utorid, minHoursStr, maxHoursStr] = makeArray(line);
-                const minHours = parseFloat(minHoursStr);
-                const maxHours = parseFloat(maxHoursStr);
-                if (utorid && !isNaN(minHours) && !isNaN(maxHours)) {
-                    desiredHoursByUtorid[utorid] = { minHours, maxHours };
-                }
-            });
+        const desiredHoursByUtorid = desiredHoursTableToJSON(desiredHoursText);
         // Dispatch updates
         dispatch(draftMatchingSlice.actions.setShowList(newShowList));
         dispatch(draftMatchingSlice.actions.setHideList(newHideList));
@@ -101,6 +81,12 @@ export function AdditionalDataButton() {
         // Close dialog
         setShowDialog(false);
     }
+
+    React.useEffect(() => {
+        setDesiredHoursText(
+            desiredHoursJSONToTable(allData.desiredHoursByUtorid)
+        );
+    }, [allData.desiredHoursByUtorid]);
 
     React.useEffect(() => {
         // If the dialog is hidden, reset the text fields.
@@ -126,12 +112,7 @@ export function AdditionalDataButton() {
             Array.from(newHideList).some((s) => !currentHideList.has(s));
         const desiredHoursChanged =
             desiredHoursText !==
-            Object.entries(allData.desiredHoursByUtorid)
-                .map(
-                    ([utorid, hours]) =>
-                        `${utorid}\t${hours.minHours}\t${hours.maxHours}`
-                )
-                .join("\n");
+            desiredHoursJSONToTable(allData.desiredHoursByUtorid);
         setChanges({
             showList: showListChanged,
             hideList: hideListChanged,
@@ -246,4 +227,43 @@ export function AdditionalDataButton() {
             </Button>
         </>
     );
+}
+
+type DesiredHoursRecord = Record<
+    string,
+    { minHours: number; maxHours: number }
+>;
+
+/**
+ * Convert a table `utorid minHours maxHours` into a Javascript object.
+ */
+function desiredHoursTableToJSON(desiredHoursText: string): DesiredHoursRecord {
+    const desiredHoursByUtorid: DesiredHoursRecord = {};
+    desiredHoursText
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => l)
+        .forEach((line) => {
+            const [utorid, minHoursStr, maxHoursStr] = makeArray(line);
+            const minHours = parseFloat(minHoursStr);
+            const maxHours = parseFloat(maxHoursStr);
+            if (utorid && !isNaN(minHours) && !isNaN(maxHours)) {
+                desiredHoursByUtorid[utorid] = { minHours, maxHours };
+            }
+        });
+    return desiredHoursByUtorid;
+}
+
+/**
+ * Convert a Javascript object of the form `Record<utorid, { minHours, maxHours }>` into a table string of the form `utorid minHours maxHours`.
+ */
+function desiredHoursJSONToTable(
+    desiredHoursByUtorid: DesiredHoursRecord
+): string {
+    return Object.entries(desiredHoursByUtorid)
+        .map(
+            ([utorid, hours]) =>
+                `${utorid}\t${hours.minHours}\t${hours.maxHours}`
+        )
+        .join("\n");
 }

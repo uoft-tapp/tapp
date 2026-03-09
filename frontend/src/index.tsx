@@ -5,9 +5,14 @@ import { HashRouter } from "react-router-dom";
 import DynamicEntryRouter from "./dynamic-entry-router";
 import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./rootReducer";
+import { listenToDraftChangesMiddleware } from "./views/admin/draft-matching/state/thunks";
 
 const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().prepend(
+            listenToDraftChangesMiddleware.middleware
+        ),
 });
 
 console.log("Starting app...");

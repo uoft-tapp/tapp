@@ -1,17 +1,24 @@
 import { ExportedDraftMatchingAssignmentData } from "../index";
-import { createAppAsyncThunk } from "../../../../rootReducer";
+import { RootState, createAppAsyncThunk } from "../../../../rootReducer";
 import {
+    activeSessionSelector,
     applicantsSelector,
     assignmentsSelector,
     positionsSelector,
 } from "../../../../api/actions";
 import {
     AssignmentDraft,
+    DraftMatchingState,
     MinimalAssignmentDraft,
     draftMatchingSlice,
+    selfSelector,
 } from "./slice";
 import { apiError } from "../../../../api/actions/errors";
 import { assignmentShouldBeVisible } from "../drag-and-drop-interface/AssignmentRow";
+import { Assignment, Session } from "../../../../api/defs/types";
+import { prepareMinimal } from "../../../../libs/import-export";
+import { createListenerMiddleware } from "@reduxjs/toolkit";
+import { SET_ACTIVE_SESSION } from "../../../../api/constants";
 
 async function waitForMs(timeout: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -27,6 +34,7 @@ export const importExtraDataThunk = createAppAsyncThunk(
         { dispatch, getState }
     ): Promise<void> => {
         try {
+            dispatch(draftMatchingSlice.actions.setLoading(true));
             // Wait to make sure no api interactions are currently happening.
             // We do a polling loop, but if things aren't changing in the api interaction list, we give up in 10 seconds.
             let pollingFrequency = 500;
@@ -204,9 +212,110 @@ export const importExtraDataThunk = createAppAsyncThunk(
             dispatch(
                 apiError("Failed to import draft matching data: " + error)
             );
+        } finally {
+            dispatch(draftMatchingSlice.actions.setLoading(false));
         }
     }
 );
+
+/**
+ * Save the current draft matching data to local storage.
+ */
+export const saveDraftDataToLocalStorageThunk = createAppAsyncThunk(
+    "draftMatching/saveDraftDataToLocalStorage",
+    async (_, { getState }) => {
+        const state = getState();
+        const draftData = selfSelector(state);
+        const activeSession = activeSessionSelector(state);
+        if (!activeSession) {
+            console.error(
+                "Tried to save draft matching data to local storage, but no active session was found."
+            );
+            return;
+        }
+        const exportData = makeExportableData(draftData, activeSession);
+        // Key the export data in local storage to the active session.
+        localStorage.setItem(
+            `draftMatchingData_${activeSession.id}`,
+            JSON.stringify(exportData)
+        );
+    }
+);
+
+/**
+ * Load draft matching data from local storage for the active session, if it exists.
+ */
+export const loadDraftDataFromLocalStorageThunk = createAppAsyncThunk(
+    "draftMatching/loadDraftDataFromLocalStorage",
+    async (_, { dispatch, getState }) => {
+        const state = getState();
+        const activeSession = activeSessionSelector(state);
+        if (!activeSession) {
+            console.error(
+                "Tried to load draft matching data from local storage, but no active session was found."
+            );
+            return;
+        }
+        const savedData = localStorage.getItem(
+            `draftMatchingData_${activeSession.id}`
+        );
+        if (savedData) {
+            try {
+                const parsedData: ExportedDraftMatchingAssignmentData =
+                    JSON.parse(savedData);
+                await dispatch(importExtraDataThunk(parsedData));
+            } catch (error) {
+                console.error(
+                    "Failed to parse draft matching data from local storage:",
+                    error
+                );
+            }
+        }
+    }
+);
+
+export const listenToDraftChangesMiddleware =
+    createListenerMiddleware<RootState>();
+listenToDraftChangesMiddleware.startListening({
+    predicate: (action, currentState, previousState) => {
+        const currentSession = activeSessionSelector(currentState);
+        const previousSession = activeSessionSelector(previousState);
+        // If the session has changed, we want to trigger the listener so we can load the new session's data from local storage.
+        if (currentSession?.id !== previousSession?.id) {
+            return true;
+        }
+        const draftMatchingState = selfSelector(currentState);
+        const previousDraftMatchingState = selfSelector(previousState);
+        // These are the fields we should watch for changes in.
+        return (
+            draftMatchingState.assignments !==
+                previousDraftMatchingState.assignments ||
+            draftMatchingState.desiredHoursByUtorid !==
+                previousDraftMatchingState.desiredHoursByUtorid ||
+            draftMatchingState.showList !==
+                previousDraftMatchingState.showList ||
+            draftMatchingState.hideList !== previousDraftMatchingState.hideList
+        );
+    },
+    effect: async (action, listenerApi) => {
+        listenerApi.cancelActiveListeners();
+
+        if (action.type === SET_ACTIVE_SESSION) {
+            // The active session changed, so we should load data saved for this session if available.
+            console.log(
+                "Active session changed, loading draft matching data from local storage if available..."
+            );
+            await listenerApi.dispatch(loadDraftDataFromLocalStorageThunk());
+            return;
+        }
+
+        // Wait for any changes to settle.
+        await listenerApi.delay(250);
+
+        // Some of our draft matching data changed, so we should save it to local storage.
+        listenerApi.dispatch(saveDraftDataToLocalStorageThunk());
+    },
+});
 
 /**
  * Hash the assignment as `position_code|utorid`.
@@ -252,4 +361,40 @@ function assignmentsToActions(assignments: MinimalAssignmentDraft[]): {
             assignment: updatedAssignment || assignments[0],
         };
     });
+}
+
+/**
+ * Take in `DraftMatchingState` and convert it to a format suitable for exporting/saving. This removes
+ * redundant data and any internally referenced ids.
+ */
+export function makeExportableData(
+    draftData: DraftMatchingState,
+    activeSession: Session
+): ExportedDraftMatchingAssignmentData {
+    // Do more or less a straight dump of DraftMatchingState
+    // But we omit the fields
+    //  - activePositionCodes
+    //  - activeApplicantUtorid
+    const {
+        activePositionCodes,
+        activeApplicantUtorid,
+        ...nonMinimalExportData
+    } = draftData;
+    // We need to turn assignments into minimal assignments
+    const { assignments, ...rest } = nonMinimalExportData;
+    const exportData = {
+        assignments: assignments.map((assignment) => {
+            return {
+                ...prepareMinimal.assignment(
+                    assignment as Assignment,
+                    activeSession
+                ),
+                draft: assignment.draft,
+                deleted: assignment.deleted,
+            };
+        }) as MinimalAssignmentDraft[],
+        ...rest,
+    };
+
+    return exportData;
 }

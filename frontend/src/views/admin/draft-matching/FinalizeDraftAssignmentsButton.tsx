@@ -8,6 +8,7 @@ import {
     draftAssignmentsByKeySelector,
     draftAssignmentsSelector,
     draftMatchingSlice,
+    loadingSelector,
 } from "./state/slice";
 import { NullableAssignment } from "../../../components/forms/assignment-editor";
 import { deleteAssignments, upsertAssignments } from "../../../api/actions";
@@ -56,6 +57,7 @@ type TableRowType = {
 
 export function FinalizeDraftAssignmentsButton() {
     const [showFinalizeModal, setShowFinalizeModal] = React.useState(false);
+    const draftAssignmentsLoading = useSelector(loadingSelector);
 
     return (
         <React.Fragment>
@@ -64,7 +66,12 @@ export function FinalizeDraftAssignmentsButton() {
                 title="Finalize the current draft assignments by sending them to TAPP. Note: assignments made this way will have to be withdrawn before they can be further modified."
                 onClick={() => setShowFinalizeModal(true)}
             >
-                <BsCheck2Square /> Finalize Draft Assignments
+                {draftAssignmentsLoading ? (
+                    <Spinner animation="border" size="sm" className="me-1" />
+                ) : (
+                    <BsCheck2Square className="me-1" />
+                )}
+                Finalize Draft Assignments
             </Button>
             {showFinalizeModal && (
                 <FinalizeDraftAssignmentsDialog

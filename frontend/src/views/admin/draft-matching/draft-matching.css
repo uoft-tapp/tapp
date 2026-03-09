@@ -283,6 +283,7 @@
         }
         textarea {
             flex-grow: 1;
+            tab-size: 12;
             width: 100%;
             font-family: monospace;
         }
