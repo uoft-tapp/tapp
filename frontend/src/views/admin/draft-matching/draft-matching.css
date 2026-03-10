@@ -88,20 +88,38 @@
         .active-drag-over {
             outline: 2px dashed var(--primary);
         }
+        .position,
+        .assignments {
+            --background: white;
+        }
         .level {
             transition: background-color 0.7s;
+            background-color: var(--background);
         }
         .level--1 {
-            background-color: gray;
+            --background: gray;
         }
         .level-1 {
-            background-color: rgb(85, 142, 58);
+            --background: rgb(85, 142, 58);
         }
         .level-2 {
-            background-color: rgb(56, 178, 0);
+            --background: rgb(56, 178, 0);
         }
         .level-3 {
-            background-color: rgb(71, 223, 0);
+            --background: rgb(71, 223, 0);
+        }
+        .level-undefined.already-assigned,
+        .level-0.already-assigned {
+            --background: rgb(238, 238, 238);
+        }
+        .already-assigned {
+            background: repeating-linear-gradient(
+                45deg,
+                var(--background),
+                var(--background) 15px,
+                color-mix(in srgb, var(--background) 50%, white) 15px,
+                color-mix(in srgb, var(--background) 50%, white) 30px
+            );
         }
     }
     .applicant-pill.is-dragging {

@@ -84,13 +84,19 @@ export function AssignmentRow({
         existing.push(assignment);
         assignmentsByHours.set(assignment.hours, existing);
     }
+    const currentlyAssignedToPosition = visibleAssignments
+        .map((assignment) => assignment.applicant.utorid)
+        .includes(activeApplicantUtorid ?? "");
 
     return (
         <React.Fragment key={position.id}>
             <div
-                className={`position level level-${activePreferencesMap.get(
-                    position.position_code
-                )}`}
+                className={classNames(
+                    `position`,
+                    `level`,
+                    `level-${activePreferencesMap.get(position.position_code)}`,
+                    { "already-assigned": currentlyAssignedToPosition }
+                )}
                 key={position.id}
             >
                 <PositionLabel
@@ -107,6 +113,7 @@ export function AssignmentRow({
                     "assignments",
                     "level",
                     `level-${activePreferencesMap.get(position.position_code)}`,
+                    { "already-assigned": currentlyAssignedToPosition },
                     {
                         "active-drag-over": utoridBeingDragged,
                     }

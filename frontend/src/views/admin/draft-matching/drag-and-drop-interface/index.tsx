@@ -17,8 +17,13 @@ import { ApplicantPill } from "./ApplicantPill";
 import { AssignmentRow } from "./AssignmentRow";
 import { mergeApplications } from "./mergeApplications";
 
+const NatSort = Intl.Collator("en", {
+    numeric: true,
+    sensitivity: "base",
+}).compare;
+
 export function DragAndDropInterface() {
-    const positions = useSelector(positionsSelector);
+    const _positions = useSelector(positionsSelector);
     const applicants = useSelector(applicantsSelector);
     const showList = useSelector(showListSelector);
     const showListSet = React.useMemo(() => new Set(showList), [showList]);
@@ -63,6 +68,13 @@ export function DragAndDropInterface() {
         }
         assignmentsByUtorid.get(utorid)!.push(assignment as AssignmentDraft);
     });
+
+    // Natural sort positions by position code
+    const positions = React.useMemo(() => {
+        return [..._positions].sort((a, b) =>
+            NatSort(a.position_code, b.position_code)
+        );
+    }, [_positions]);
 
     // console.log("positions", positions);
     // console.log("applicants", applicants);
