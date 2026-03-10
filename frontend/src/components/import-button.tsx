@@ -154,24 +154,25 @@ export function ImportDialog({
         reader.readAsArrayBuffer(file);
     }
 
-    function _onConfirm() {
+    async function _onConfirm() {
         if (!(onConfirm instanceof Function)) {
             return;
         }
         setInProgress(true);
+        // This is needed to ensure the `inProgress` state gets propagated before the rest of the action runs.
+        await new Promise((resolve) => setTimeout(resolve, 100));
         // We wrap `onConfirm` in an async function which will automatically
         // convert it to a promise if needed.
-        (async () => onConfirm(fileContents))()
-            .then(() => {
-                setInProgress(false);
-            })
-            .catch(console.error)
-            .finally(() => {
-                setInProgress(false);
-                setFileArrayBuffer(null);
-                setFileContents(null);
-                setFileInputLabel(label);
-            });
+        try {
+            await onConfirm(fileContents);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setInProgress(false);
+            setFileArrayBuffer(null);
+            setFileContents(null);
+            setFileInputLabel(label);
+        }
     }
 
     // When a confirm operation is in progress, a spinner is displayed; otherwise

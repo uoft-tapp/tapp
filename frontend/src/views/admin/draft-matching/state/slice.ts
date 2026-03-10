@@ -7,7 +7,6 @@ import {
     Position,
 } from "../../../../api/defs/types";
 import { assignmentsSelector } from "../../../../api/actions";
-import { importExtraDataThunk } from "./thunks";
 
 export interface PositionDraft extends Position {
     /**
@@ -70,6 +69,10 @@ export interface DraftMatchingState {
      * When an applicant is being dragged, their preferences are highlighted. This field contains the utorid of the active applicant.
      */
     activeApplicantUtorid: string | null;
+    /**
+     * Whether or not loading is in progress.
+     */
+    loading: boolean;
 }
 
 const initialState: DraftMatchingState = {
@@ -79,12 +82,16 @@ const initialState: DraftMatchingState = {
     assignments: [],
     activePositionCodes: [],
     activeApplicantUtorid: null,
+    loading: false,
 };
 
 export const draftMatchingSlice = createSlice({
     name: "draftMatching",
     initialState,
     reducers: {
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.loading = action.payload;
+        },
         setHideList(state, action: PayloadAction<string[]>) {
             state.hideList = action.payload;
         },
@@ -276,4 +283,9 @@ export const draftAssignmentsByKeySelector = createSelector(
 
         return map;
     }
+);
+
+export const loadingSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.loading
 );

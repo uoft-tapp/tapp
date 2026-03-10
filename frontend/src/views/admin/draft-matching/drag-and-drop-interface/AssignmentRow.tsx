@@ -37,6 +37,9 @@ export function AssignmentRow({
     const [utoridBeingDragged, setUtoridBeingDragged] = React.useState<
         string | null
     >(null);
+    const [targetHours, setTargetHours] = React.useState<number>(
+        position.hours_per_assignment || 1
+    );
     const draggedApplicant = applicationByUtorid.get(
         utoridBeingDragged!
     )?.applicant;
@@ -53,6 +56,34 @@ export function AssignmentRow({
         ).map((pref) => [pref.position.position_code, pref.preference_level])
     );
     const draftAssignmentsByKey = useSelector(draftAssignmentsByKeySelector);
+    // If there are different numbers of hours for different assignments for this position,
+    // then we actually want to show sub-units labelled with how many hours each assignment has.
+    const visibleAssignments = (
+        assignmentsByPosition.get(position.position_code) ?? []
+    ).filter(assignmentShouldBeVisible);
+    const hoursSubunits = Array.from(
+        new Set([
+            ...visibleAssignments.map((assignment) => assignment.hours),
+            position.hours_per_assignment || 0,
+        ])
+    ).sort(
+        // We sort in ascending order *except* the preferred hours per assignment always comes first.
+        (a, b) =>
+            a === position.hours_per_assignment
+                ? -1
+                : b === position.hours_per_assignment
+                ? 1
+                : a - b
+    );
+    const showHoursSubunits = hoursSubunits.length > 1;
+    const assignmentsByHours = new Map<number, AssignmentDraft[]>(
+        hoursSubunits.map((hours) => [hours, []])
+    );
+    for (const assignment of visibleAssignments) {
+        let existing = assignmentsByHours.get(assignment.hours) || [];
+        existing.push(assignment);
+        assignmentsByHours.set(assignment.hours, existing);
+    }
 
     return (
         <React.Fragment key={position.id}>
@@ -130,7 +161,7 @@ export function AssignmentRow({
                         active_offer_status: null,
                         active_offer_url_token: null,
                         contract_override_pdf: null,
-                        hours: position.hours_per_assignment || 0,
+                        hours: targetHours,
                         note: null,
                         start_date: position.start_date,
                         end_date: position.end_date,
@@ -166,41 +197,72 @@ export function AssignmentRow({
                     setUtoridBeingDragged(null);
                 }}
             >
-                {(assignmentsByPosition.get(position.position_code) ?? [])
-                    .filter(assignmentShouldBeVisible)
-                    .map((assignment) => (
-                        <ApplicantPill
-                            key={assignmentKey(assignment)}
-                            applicant={assignment.applicant}
-                            assignment={assignment}
-                            application={applicationByUtorid.get(
-                                assignment.applicant.utorid
-                            )}
-                            allAssignments={assignmentsByUtorid.get(
-                                assignment.applicant.utorid
-                            )}
-                            parent={{
-                                source: "position-row",
-                                positionCode: position.position_code,
-                            }}
-                            additionalInfo={{
-                                minHours:
-                                    desiredHoursByUtorid[
-                                        assignment.applicant.utorid
-                                    ]?.minHours,
-                                maxHours:
-                                    desiredHoursByUtorid[
-                                        assignment.applicant.utorid
-                                    ]?.maxHours,
-                            }}
-                        />
-                    ))}
-                {utoridBeingDragged && draggedApplicant && (
-                    <ConnectedDropIndicator
-                        position={position}
-                        applicant={draggedApplicant}
-                    />
-                )}
+                {hoursSubunits.map((hours) => {
+                    const pills = assignmentsByHours
+                        .get(hours)!
+                        .map((assignment) => (
+                            <ApplicantPill
+                                key={assignmentKey(assignment)}
+                                applicant={assignment.applicant}
+                                assignment={assignment}
+                                application={applicationByUtorid.get(
+                                    assignment.applicant.utorid
+                                )}
+                                allAssignments={assignmentsByUtorid.get(
+                                    assignment.applicant.utorid
+                                )}
+                                parent={{
+                                    source: "position-row",
+                                    positionCode: position.position_code,
+                                }}
+                                additionalInfo={{
+                                    minHours:
+                                        desiredHoursByUtorid[
+                                            assignment.applicant.utorid
+                                        ]?.minHours,
+                                    maxHours:
+                                        desiredHoursByUtorid[
+                                            assignment.applicant.utorid
+                                        ]?.maxHours,
+                                }}
+                            />
+                        ));
+                    const dropTarget = utoridBeingDragged &&
+                        draggedApplicant &&
+                        targetHours === hours && (
+                            <ConnectedDropIndicator
+                                position={{
+                                    ...position,
+                                    hours_per_assignment: hours,
+                                }}
+                                applicant={draggedApplicant}
+                            />
+                        );
+
+                    if (!showHoursSubunits) {
+                        // We should not show subunits
+                        return (
+                            <>
+                                {pills}
+                                {dropTarget}
+                            </>
+                        );
+                    }
+                    return (
+                        <div
+                            className="row-division"
+                            onDragOver={() => setTargetHours(hours)}
+                        >
+                            <div className="row-division-header">
+                                {hours} hours
+                            </div>
+                            <div className="row-division-body">
+                                {pills}
+                                {dropTarget}
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </React.Fragment>
     );

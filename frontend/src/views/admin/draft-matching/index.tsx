@@ -12,18 +12,16 @@ import {
     selfSelector,
 } from "./state/slice";
 import FileSaver from "file-saver";
-import { prepareMinimal } from "../../../libs/import-export";
 import {
     activeSessionSelector,
     applicantsSelector,
     positionsSelector,
 } from "../../../api/actions";
-import { Assignment } from "../../../api/defs/types";
 import { ImportButton } from "../../../components/import-button";
 import { useThunkDispatch } from "../../../libs/thunk-dispatch";
 import { AdditionalDataButton } from "./set-additional-data-dialog";
-import { importExtraDataThunk } from "./state/thunks";
-import { AboutDialogButton } from "./about-dialot";
+import { importExtraDataThunk, makeExportableData } from "./state/thunks";
+import { AboutDialogButton } from "./about-dialog";
 
 /**
  * Matching view for drafting assignments. This is mainly used by the Math department.
@@ -68,30 +66,10 @@ function DownloadDraftAssignmentsButton() {
                     }
                 )}`;
 
-                // Do more or less a straight dump of DraftMatchingState
-                // But we omit the fields
-                //  - activePositionCodes
-                //  - activeApplicantUtorid
-                const {
-                    activePositionCodes,
-                    activeApplicantUtorid,
-                    ...nonMinimalExportData
-                } = draftData;
-                // We need to turn assignments into minimal assignments
-                const { assignments, ...rest } = nonMinimalExportData;
-                const exportData = {
-                    assignments: assignments.map((assignment) => {
-                        return {
-                            ...prepareMinimal.assignment(
-                                assignment as Assignment,
-                                activeSession!
-                            ),
-                            draft: assignment.draft,
-                            deleted: assignment.deleted,
-                        };
-                    }) as MinimalAssignmentDraft[],
-                    ...rest,
-                };
+                const exportData = makeExportableData(
+                    draftData,
+                    activeSession!
+                );
 
                 const file = new File(
                     [JSON.stringify(exportData, null, 4)],
@@ -151,8 +129,6 @@ function ImportDraftAssignmentsButton() {
         setWarnings(newWarnings);
     }, [fileContents, allUtorids, allPositions]);
 
-    console.log("fileContents", fileContents);
-
     return (
         <ImportButton
             onFileChange={(content) => {
@@ -206,7 +182,7 @@ function ImportDraftAssignmentsButton() {
                 }
                 await dispatch(importExtraDataThunk(fileContents));
             }}
-            setInProgress={() => {}}
+            setInProgress={(progressState: boolean) => {}}
             variant="outline-primary"
             title="Import data into the drafting interface (e.g., subsequent appointment data or a previous draft)"
         >

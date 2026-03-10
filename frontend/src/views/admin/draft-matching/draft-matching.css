@@ -121,6 +121,16 @@
         .applicant-actions {
             display: flex;
             align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            .edit-button {
+                color: gray;
+                padding: 2px;
+                padding-top: 0;
+                padding-bottom: 0;
+                margin-bottom: -4px;
+                /* height: 20px; */
+            }
         }
 
         .applicant-pill-content {
@@ -213,6 +223,29 @@
             }
         }
     }
+
+    .row-division:first-child {
+        flex-grow: 1;
+    }
+    .row-division {
+        padding-left: 1px;
+        padding-right: 1px;
+        display: flex;
+        flex-direction: column;
+    }
+    .row-division:nth-child(2n) {
+        background-color: #1400c812;
+    }
+    .row-division-header {
+        font-size: smaller;
+        text-align: center;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+    }
+    .row-division-body {
+        flex-grow: 1;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 
 .additional-data-dialog {
@@ -250,6 +283,7 @@
         }
         textarea {
             flex-grow: 1;
+            tab-size: 12;
             width: 100%;
             font-family: monospace;
         }
