@@ -16,16 +16,6 @@
     .panel.applicants-list {
         padding: 5px;
         display: block;
-
-        .applicant-pill {
-            display: inline-flex;
-            margin: 2px;
-            user-select: none;
-        }
-        .applicant-pill:active {
-            outline: 4px solid var(--primary);
-            outline-offset: 0px;
-        }
     }
 
     .assignments-table {
@@ -88,20 +78,38 @@
         .active-drag-over {
             outline: 2px dashed var(--primary);
         }
+        .position,
+        .assignments {
+            --background: white;
+        }
         .level {
             transition: background-color 0.7s;
+            background-color: var(--background);
         }
         .level--1 {
-            background-color: gray;
+            --background: gray;
         }
         .level-1 {
-            background-color: rgb(85, 142, 58);
+            --background: rgb(85, 142, 58);
         }
         .level-2 {
-            background-color: rgb(56, 178, 0);
+            --background: rgb(56, 178, 0);
         }
         .level-3 {
-            background-color: rgb(71, 223, 0);
+            --background: rgb(71, 223, 0);
+        }
+        .level-undefined.already-assigned,
+        .level-0.already-assigned {
+            --background: rgb(238, 238, 238);
+        }
+        .already-assigned {
+            background: repeating-linear-gradient(
+                45deg,
+                var(--background),
+                var(--background) 15px,
+                color-mix(in srgb, var(--background) 50%, white) 15px,
+                color-mix(in srgb, var(--background) 50%, white) 30px
+            );
         }
     }
     .applicant-pill.is-dragging {
@@ -109,6 +117,7 @@
     }
     .applicant-pill {
         display: inline-flex;
+        user-select: none;
         width: 200px;
         gap: 2px;
         margin: 2px;
@@ -116,6 +125,11 @@
         .grid-row {
             display: flex;
             flex-direction: row;
+        }
+        &:active,
+        &.active {
+            outline: 4px solid var(--primary);
+            outline-offset: 0px;
         }
 
         .applicant-actions {
@@ -288,4 +302,21 @@
             font-family: monospace;
         }
     }
+}
+
+.filters-dialog-body {
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+
+    .compact-checkbox-options {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 2em;
+    }
+}
+
+.filters-dialog-parent .modal-content {
+    max-height: 90vh;
 }

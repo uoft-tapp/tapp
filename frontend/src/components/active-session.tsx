@@ -10,11 +10,17 @@ export function ActiveSessionDisplay(props: {
     activeSession: Session | null;
     setActiveSession: (session: Session | null) => void;
 }) {
-    const { sessions = [], activeSession, setActiveSession } = props;
+    const { sessions: _sessions = [], activeSession, setActiveSession } = props;
     // keep track of the dropdown visibility so that the filter can be cleared
     // whenever the dropdown is invisible.
     const [dropdownVisible, setDropdownVisible] = React.useState(false);
     const activeSessionId = activeSession ? activeSession.id : null;
+    // Sort sessions in reverse chronological order (most recent first)
+    const sessions = React.useMemo(() => {
+        return [..._sessions].sort((a, b) => {
+            return +new Date(b.start_date) - +new Date(a.start_date);
+        });
+    }, [_sessions]);
 
     let label = <span className="text-secondary me-2">Select a Session</span>;
     if (activeSession != null) {

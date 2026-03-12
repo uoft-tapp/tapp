@@ -44,6 +44,7 @@ export function ApplicantPill({
     allAssignments,
     additionalInfo,
     parent,
+    isActive = false,
 }: {
     applicant: Applicant;
     assignment?: AssignmentDraft;
@@ -57,6 +58,7 @@ export function ApplicantPill({
      * Where the pill is being rendered. This is used to produce different drag-and-drop behaviour depending on where the pill is being dragged from.
      */
     parent: DropInfo["parent"];
+    isActive?: boolean;
 }) {
     const dispatch = useThunkDispatch();
     const [editHoursModalOpen, setEditHoursModalOpen] = React.useState(false);
@@ -118,6 +120,7 @@ export function ApplicantPill({
         <div
             className={classNames("applicant-pill", {
                 "is-dragging": isDragging,
+                active: isActive,
             })}
             draggable={assignment ? !!assignment.mutable : true}
             onDragStart={(e) => {
@@ -146,6 +149,22 @@ export function ApplicantPill({
             }}
             onDragEnd={() => {
                 setIsDragging(false);
+            }}
+            onClick={() => {
+                if (isActive) {
+                    // We are deselecting ourselves
+                    dispatch(
+                        draftMatchingSlice.actions.setActiveApplicantUtorid(
+                            null
+                        )
+                    );
+                } else {
+                    dispatch(
+                        draftMatchingSlice.actions.setActiveApplicantUtorid(
+                            applicant.utorid
+                        )
+                    );
+                }
             }}
             title={`${applicant.first_name} ${applicant.last_name} (${
                 applicant.utorid
@@ -185,7 +204,13 @@ export function ApplicantPill({
                         <>
                             <CloseButton
                                 title={`Remove draft assignment`}
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    dispatch(
+                                        draftMatchingSlice.actions.setActiveApplicantUtorid(
+                                            null
+                                        )
+                                    );
                                     dispatch(
                                         draftMatchingSlice.actions.removeDraftAssignment(
                                             assignment
@@ -198,7 +223,10 @@ export function ApplicantPill({
                                 size="sm"
                                 className="edit-button"
                                 title="Edit hours for this assignment"
-                                onClick={() => setEditHoursModalOpen(true)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditHoursModalOpen(true);
+                                }}
                             >
                                 <BsPencil />
                             </Button>

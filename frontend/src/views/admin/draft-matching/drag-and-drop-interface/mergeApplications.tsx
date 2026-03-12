@@ -1,13 +1,14 @@
-import { Application } from "../../../../api/defs/types";
+import type { Application, Posting } from "../../../../api/defs/types";
+
+export type MergedApplication = Application & { mergedFrom: Posting[] };
 
 /**
  * Take an array of 1 or more applications and return a single "merged" application.
  * @param applications
  */
-
 export function mergeApplications(
     applications: Application[] | undefined
-): Application | undefined {
+): MergedApplication | undefined {
     if (!applications) {
         return undefined;
     }
@@ -15,10 +16,18 @@ export function mergeApplications(
         return undefined;
     }
     if (applications.length === 1) {
-        return applications[0];
+        return {
+            ...applications[0],
+            mergedFrom: applications[0].posting
+                ? [applications[0].posting]
+                : [],
+        };
     }
     // We have two or more applications.
-    const ret = { ...applications[0] };
+    const ret = {
+        ...applications[0],
+        mergedFrom: applications[0].posting ? [applications[0].posting] : [],
+    };
     for (let i = 1; i < applications.length; i++) {
         const app = applications[i];
         // Merge documents
@@ -38,6 +47,9 @@ export function mergeApplications(
             } else {
                 ret.comments = app.comments;
             }
+        }
+        if (app.posting) {
+            ret.mergedFrom.push(app.posting);
         }
     }
     return ret;

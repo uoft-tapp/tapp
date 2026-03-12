@@ -6,26 +6,20 @@ import {
     positionsSelector,
 } from "../../../../api/actions";
 import React from "react";
-import {
-    AssignmentDraft,
-    desiredHoursByUtoridSelector,
-    draftAssignmentsSelector,
-    hideListSelector,
-    showListSelector,
-} from "../state/slice";
-import { ApplicantPill } from "./ApplicantPill";
+import { AssignmentDraft, draftAssignmentsSelector } from "../state/slice";
 import { AssignmentRow } from "./AssignmentRow";
-import { mergeApplications } from "./mergeApplications";
+import { MergedApplication, mergeApplications } from "./mergeApplications";
+import { ApplicantList } from "./ApplicantList";
+
+const NatSort = Intl.Collator("en", {
+    numeric: true,
+    sensitivity: "base",
+}).compare;
 
 export function DragAndDropInterface() {
-    const positions = useSelector(positionsSelector);
+    const _positions = useSelector(positionsSelector);
     const applicants = useSelector(applicantsSelector);
-    const showList = useSelector(showListSelector);
-    const showListSet = React.useMemo(() => new Set(showList), [showList]);
-    const hideList = useSelector(hideListSelector);
-    const hideListSet = React.useMemo(() => new Set(hideList), [hideList]);
     const allUtorids = new Set(applicants.map((a) => a.utorid));
-    const desiredHoursByUtorid = useSelector(desiredHoursByUtoridSelector);
     const applications = useSelector(applicationsSelector);
     const applicationsByUtorid: Map<string, typeof applications> = new Map();
     applications.forEach((application) => {
@@ -37,7 +31,7 @@ export function DragAndDropInterface() {
             .push(application);
     });
     // A version of applicationsByUtorid where each utorid maps to a single merged application.
-    const applicationByUtorid = new Map<string, typeof applications[number]>();
+    const applicationByUtorid = new Map<string, MergedApplication>();
     applicationsByUtorid.forEach((apps, utorid) => {
         if (apps.length === 0) {
             return;
@@ -64,6 +58,13 @@ export function DragAndDropInterface() {
         assignmentsByUtorid.get(utorid)!.push(assignment as AssignmentDraft);
     });
 
+    // Natural sort positions by position code
+    const positions = React.useMemo(() => {
+        return [..._positions].sort((a, b) =>
+            NatSort(a.position_code, b.position_code)
+        );
+    }, [_positions]);
+
     // console.log("positions", positions);
     // console.log("applicants", applicants);
     // console.log("assignments", assignments);
@@ -76,40 +77,11 @@ export function DragAndDropInterface() {
             className="draft-matching-panel-group"
         >
             <Panel defaultSize={30}>
-                <div className="panel applicants-list">
-                    {applicants
-                        .filter((applicant) => {
-                            // If there is a non-empty show list, only show applicants on the show list.
-                            if (showListSet.size > 0) {
-                                return showListSet.has(applicant.utorid);
-                            }
-                            if (hideListSet.has(applicant.utorid)) {
-                                return false;
-                            }
-                            return true;
-                        })
-                        .map((applicant) => (
-                            <ApplicantPill
-                                key={applicant.id}
-                                applicant={applicant}
-                                application={applicationByUtorid.get(
-                                    applicant.utorid
-                                )}
-                                allAssignments={assignmentsByUtorid.get(
-                                    applicant.utorid
-                                )}
-                                parent={{ source: "applicant-list" }}
-                                additionalInfo={{
-                                    minHours:
-                                        desiredHoursByUtorid[applicant.utorid]
-                                            ?.minHours,
-                                    maxHours:
-                                        desiredHoursByUtorid[applicant.utorid]
-                                            ?.maxHours,
-                                }}
-                            />
-                        ))}
-                </div>
+                <ApplicantList
+                    applicants={applicants}
+                    applicationByUtorid={applicationByUtorid}
+                    assignmentsByUtorid={assignmentsByUtorid}
+                />
             </Panel>
             <PanelResizeHandle className="resize-handle" />
             <Panel defaultSize={70} className="panel">

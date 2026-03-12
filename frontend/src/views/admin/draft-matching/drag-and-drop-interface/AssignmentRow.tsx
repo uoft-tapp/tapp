@@ -84,14 +84,19 @@ export function AssignmentRow({
         existing.push(assignment);
         assignmentsByHours.set(assignment.hours, existing);
     }
+    const currentlyAssignedToPosition = visibleAssignments
+        .map((assignment) => assignment.applicant.utorid)
+        .includes(activeApplicantUtorid ?? "");
 
     return (
-        <React.Fragment key={position.id}>
+        <React.Fragment>
             <div
-                className={`position level level-${activePreferencesMap.get(
-                    position.position_code
-                )}`}
-                key={position.id}
+                className={classNames(
+                    `position`,
+                    `level`,
+                    `level-${activePreferencesMap.get(position.position_code)}`,
+                    { "already-assigned": currentlyAssignedToPosition }
+                )}
             >
                 <PositionLabel
                     positionSummary={{
@@ -107,6 +112,7 @@ export function AssignmentRow({
                     "assignments",
                     "level",
                     `level-${activePreferencesMap.get(position.position_code)}`,
+                    { "already-assigned": currentlyAssignedToPosition },
                     {
                         "active-drag-over": utoridBeingDragged,
                     }
@@ -225,6 +231,10 @@ export function AssignmentRow({
                                             assignment.applicant.utorid
                                         ]?.maxHours,
                                 }}
+                                isActive={
+                                    activeApplicantUtorid ===
+                                    assignment.applicant.utorid
+                                }
                             />
                         ));
                     const dropTarget = utoridBeingDragged &&
@@ -236,22 +246,26 @@ export function AssignmentRow({
                                     hours_per_assignment: hours,
                                 }}
                                 applicant={draggedApplicant}
+                                key={"drop-target"}
                             />
                         );
 
                     if (!showHoursSubunits) {
                         // We should not show subunits
                         return (
-                            <>
+                            <React.Fragment
+                                key={`${position.position_code}-assignments`}
+                            >
                                 {pills}
                                 {dropTarget}
-                            </>
+                            </React.Fragment>
                         );
                     }
                     return (
                         <div
                             className="row-division"
                             onDragOver={() => setTargetHours(hours)}
+                            key={`${position.position_code}-hours-${hours}`}
                         >
                             <div className="row-division-header">
                                 {hours} hours
