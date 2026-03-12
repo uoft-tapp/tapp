@@ -231,7 +231,10 @@ export function AssignmentRow({
                                             assignment.applicant.utorid
                                         ]?.maxHours,
                                 }}
-                                isActive={activeApplicantUtorid === assignment.applicant.utorid}
+                                isActive={
+                                    activeApplicantUtorid ===
+                                    assignment.applicant.utorid
+                                }
                             />
                         ));
                     const dropTarget = utoridBeingDragged &&
@@ -250,7 +253,9 @@ export function AssignmentRow({
                     if (!showHoursSubunits) {
                         // We should not show subunits
                         return (
-                            <React.Fragment key={`${position.position_code}-assignments`}>
+                            <React.Fragment
+                                key={`${position.position_code}-assignments`}
+                            >
                                 {pills}
                                 {dropTarget}
                             </React.Fragment>
