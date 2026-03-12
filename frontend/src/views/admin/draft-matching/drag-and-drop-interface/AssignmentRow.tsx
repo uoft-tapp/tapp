@@ -89,7 +89,7 @@ export function AssignmentRow({
         .includes(activeApplicantUtorid ?? "");
 
     return (
-        <React.Fragment key={position.id}>
+        <React.Fragment>
             <div
                 className={classNames(
                     `position`,
@@ -97,7 +97,6 @@ export function AssignmentRow({
                     `level-${activePreferencesMap.get(position.position_code)}`,
                     { "already-assigned": currentlyAssignedToPosition }
                 )}
-                key={position.id}
             >
                 <PositionLabel
                     positionSummary={{
@@ -232,6 +231,7 @@ export function AssignmentRow({
                                             assignment.applicant.utorid
                                         ]?.maxHours,
                                 }}
+                                isActive={activeApplicantUtorid === assignment.applicant.utorid}
                             />
                         ));
                     const dropTarget = utoridBeingDragged &&
@@ -243,22 +243,24 @@ export function AssignmentRow({
                                     hours_per_assignment: hours,
                                 }}
                                 applicant={draggedApplicant}
+                                key={"drop-target"}
                             />
                         );
 
                     if (!showHoursSubunits) {
                         // We should not show subunits
                         return (
-                            <>
+                            <React.Fragment key={`${position.position_code}-assignments`}>
                                 {pills}
                                 {dropTarget}
-                            </>
+                            </React.Fragment>
                         );
                     }
                     return (
                         <div
                             className="row-division"
                             onDragOver={() => setTargetHours(hours)}
+                            key={`${position.position_code}-hours-${hours}`}
                         >
                             <div className="row-division-header">
                                 {hours} hours

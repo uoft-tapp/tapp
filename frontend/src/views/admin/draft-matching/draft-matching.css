@@ -16,16 +16,6 @@
     .panel.applicants-list {
         padding: 5px;
         display: block;
-
-        .applicant-pill {
-            display: inline-flex;
-            margin: 2px;
-            user-select: none;
-        }
-        .applicant-pill:active {
-            outline: 4px solid var(--primary);
-            outline-offset: 0px;
-        }
     }
 
     .assignments-table {
@@ -127,6 +117,7 @@
     }
     .applicant-pill {
         display: inline-flex;
+        user-select: none;
         width: 200px;
         gap: 2px;
         margin: 2px;
@@ -134,6 +125,11 @@
         .grid-row {
             display: flex;
             flex-direction: row;
+        }
+        &:active,
+        &.active {
+            outline: 4px solid var(--primary);
+            outline-offset: 0px;
         }
 
         .applicant-actions {
@@ -306,4 +302,21 @@
             font-family: monospace;
         }
     }
+}
+
+.filters-dialog-body {
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+
+    .compact-checkbox-options {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 2em;
+    }
+}
+
+.filters-dialog-parent .modal-content {
+    max-height: 90vh;
 }
