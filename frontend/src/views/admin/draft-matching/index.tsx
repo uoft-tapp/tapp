@@ -15,6 +15,7 @@ import FileSaver from "file-saver";
 import {
     activeSessionSelector,
     applicantsSelector,
+    fetchPostings,
     positionsSelector,
 } from "../../../api/actions";
 import { ImportButton } from "../../../components/import-button";
@@ -27,6 +28,20 @@ import { AboutDialogButton } from "./about-dialog";
  * Matching view for drafting assignments. This is mainly used by the Math department.
  */
 export function AdminDraftMatchingView() {
+    const dispatch = useThunkDispatch();
+    const activeSession = useSelector(activeSessionSelector);
+    // We don't load postings by default, so we load them dynamically whenever
+    // we view this page.
+    React.useEffect(() => {
+        async function fetchResources() {
+            return await dispatch(fetchPostings());
+        }
+
+        if (activeSession) {
+            fetchResources();
+        }
+    }, [activeSession, dispatch]);
+
     return (
         <div className="page-body matching">
             <div className="matching-body">

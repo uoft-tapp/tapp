@@ -261,6 +261,61 @@ export function AboutDialogButton() {
                                     changed until the contract is withdrawn.
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    {[-1, 0, 1, 2, 3].map((level) => (
+                                        <div
+                                            key={level}
+                                            className="draft-matching-panel-group"
+                                            style={{ display: "inline-block" }}
+                                        >
+                                            <div className="assignments-table">
+                                                <div
+                                                    className={`position level level-${level}`}
+                                                    style={{
+                                                        width: 30,
+                                                        height: 40,
+                                                    }}
+                                                >
+                                                    {level}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </td>
+                                <td>
+                                    Applicant has indicated a preference of
+                                    -1/0/1/2/3 (3 = highest) for this position.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {[-1, 0, 1, 2, 3].map((level) => (
+                                        <div
+                                            key={level}
+                                            className="draft-matching-panel-group"
+                                            style={{ display: "inline-block" }}
+                                        >
+                                            <div className="assignments-table">
+                                                <div
+                                                    className={`position level level-${level} already-assigned`}
+                                                    style={{
+                                                        width: 30,
+                                                        height: 40,
+                                                    }}
+                                                >
+                                                    {level}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </td>
+                                <td>
+                                    Applicant has indicated a preference for
+                                    this position but is <b>already assigned</b>{" "}
+                                    to the position.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </Modal.Body>

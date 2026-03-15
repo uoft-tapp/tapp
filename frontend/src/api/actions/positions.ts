@@ -198,7 +198,7 @@ export const positionsSelector = createSelector(
 
         // Leave all the data alone, except replace the `instructor_ids` list
         // with the full instructor data.
-        return positions.map(
+        return (positions || []).map(
             ({ instructor_ids, contract_template_id, ...rest }) => ({
                 ...rest,
                 // When the instructor list references an instructor that we haven't loaded

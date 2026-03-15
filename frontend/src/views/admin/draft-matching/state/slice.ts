@@ -73,6 +73,17 @@ export interface DraftMatchingState {
      * Whether or not loading is in progress.
      */
     loading: boolean;
+    filters: {
+        hiddenDepartments: string[];
+        hiddenPostings: string[];
+        hiddenPrograms: ("M" | "P" | "U" | "Other")[];
+        hiddenExperienceLevels: (
+            | "department-experience"
+            | "university-experience"
+            | "new-ta"
+        )[];
+        hideMinimumHoursBelow: number;
+    };
 }
 
 const initialState: DraftMatchingState = {
@@ -83,6 +94,13 @@ const initialState: DraftMatchingState = {
     activePositionCodes: [],
     activeApplicantUtorid: null,
     loading: false,
+    filters: {
+        hiddenDepartments: [],
+        hiddenPostings: [],
+        hiddenPrograms: [],
+        hiddenExperienceLevels: [],
+        hideMinimumHoursBelow: 0,
+    },
 };
 
 export const draftMatchingSlice = createSlice({
@@ -188,6 +206,21 @@ export const draftMatchingSlice = createSlice({
         setActiveApplicantUtorid(state, action: PayloadAction<string | null>) {
             state.activeApplicantUtorid = action.payload;
         },
+        clearAllFilters(state) {
+            state.filters = {
+                hiddenDepartments: [],
+                hiddenPostings: [],
+                hiddenPrograms: [],
+                hiddenExperienceLevels: [],
+                hideMinimumHoursBelow: 0,
+            };
+        },
+        /**
+         * Set a subset of the filters. An object containing any number of the filters may be passed in.
+         */
+        setFilter(state, action: PayloadAction<Partial<typeof state.filters>>) {
+            Object.assign(state.filters, action.payload);
+        },
     },
 });
 
@@ -288,4 +321,9 @@ export const draftAssignmentsByKeySelector = createSelector(
 export const loadingSelector = createSelector(
     [selfSelector],
     (draftMatchingState) => draftMatchingState.loading
+);
+
+export const filtersSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.filters
 );
