@@ -126,6 +126,9 @@
             display: flex;
             flex-direction: row;
         }
+        .name-row {
+            align-items: baseline;
+        }
         &:active,
         &.active {
             outline: 4px solid var(--primary);
@@ -154,6 +157,15 @@
             .applicant-utorid {
                 overflow: hidden;
                 font-size: smaller;
+            }
+            .applicant-annotation {
+                font-size: smaller;
+                color: blue;
+                margin-right: -.3em;
+                padding-left: 0.2em;
+                padding-right: 0.2em;
+                border: 1px dashed blue;
+                border-radius: .7em;
             }
         }
 
@@ -266,6 +278,8 @@
     .modal-body {
         display: flex;
         flex-direction: column;
+        overflow-y: auto;
+        min-height: 0;
     }
     .modal-content {
         height: 80vh;
@@ -278,15 +292,39 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        min-height: 0;
     }
     .show-hide-lists,
-    .desired-hours-input {
+    .desired-hours-input,
+    .annotations-input {
         width: 100%;
         flex-grow: 1;
         display: flex;
         flex-direction: row;
         gap: 0.4em;
         min-height: 200px;
+
+        .list {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding: 0.5em;
+        }
+        textarea {
+            flex-grow: 1;
+            tab-size: 12;
+            width: 100%;
+            font-family: monospace;
+        }
+    }
+    .blanket-annotation-lists {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: row;
+        gap: 0.4em;
+        min-height: 150px;
 
         .list {
             flex-grow: 1;

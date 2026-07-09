@@ -5,6 +5,7 @@ import {
     AssignmentDraft,
     DraftMatchingState,
     activeApplicantUtoridSelector,
+    annotationsByUtoridSelector,
     desiredHoursByUtoridSelector,
     filtersSelector,
     hideListSelector,
@@ -61,6 +62,7 @@ export function ApplicantList({
     const hideList = useSelector(hideListSelector);
     const hideListSet = React.useMemo(() => new Set(hideList), [hideList]);
     const desiredHoursByUtorid = useSelector(desiredHoursByUtoridSelector);
+    const annotationsByUtorid = useSelector(annotationsByUtoridSelector);
     const activeApplicantUtorid = useSelector(activeApplicantUtoridSelector);
     const [filterString, setFilterString] = React.useState("");
     const [filtersDialogOpen, setFiltersDialogOpen] = React.useState(false);
@@ -184,6 +186,7 @@ export function ApplicantList({
                             maxHours:
                                 desiredHoursByUtorid[applicant.utorid]
                                     ?.maxHours,
+                            annotation: annotationsByUtorid[applicant.utorid],
                         }}
                     />
                 ))}

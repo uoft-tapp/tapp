@@ -98,6 +98,11 @@ export const importExtraDataThunk = createAppAsyncThunk(
                     fileContents.hideList || []
                 )
             );
+            dispatch(
+                draftMatchingSlice.actions.setAnnotationsByUtorid(
+                    fileContents.annotationsByUtorid || {}
+                )
+            );
 
             // The draft assignments are trickier, since we need to reconstruct full assignment objects before we dispatch them.
             dispatch(draftMatchingSlice.actions.clearDraftAssignments());
@@ -294,7 +299,10 @@ listenToDraftChangesMiddleware.startListening({
                 previousDraftMatchingState.desiredHoursByUtorid ||
             draftMatchingState.showList !==
                 previousDraftMatchingState.showList ||
-            draftMatchingState.hideList !== previousDraftMatchingState.hideList
+            draftMatchingState.hideList !==
+                previousDraftMatchingState.hideList ||
+            draftMatchingState.annotationsByUtorid !==
+                previousDraftMatchingState.annotationsByUtorid
         );
     },
     effect: async (action, listenerApi) => {
