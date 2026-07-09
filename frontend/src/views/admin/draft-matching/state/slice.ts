@@ -40,6 +40,37 @@ export interface AssignmentDraft extends Omit<Assignment, "id"> {
     shadows?: Assignment;
 }
 
+/**
+ * The annotation data tracked for a single applicant (by utorid). Each field is tracked
+ * separately so that the contribution of each source (manual entry vs. F/S term teaching
+ * blanket tags) can be recombined dynamically wherever the annotation is displayed, rather
+ * than being pre-flattened into a single lossy string.
+ */
+export type ApplicantAnnotation = {
+    general?: string;
+    fTermTeaching?: string;
+    sTermTeaching?: string;
+};
+
+/**
+ * Combine the parts of an applicant's annotation into a single display string. This is
+ * computed dynamically (never stored) so the underlying parts always stay distinguishable.
+ */
+export function formatApplicantAnnotation(
+    annotation: ApplicantAnnotation | undefined
+): string {
+    if (!annotation) {
+        return "";
+    }
+    return [
+        annotation.general,
+        annotation.fTermTeaching,
+        annotation.sTermTeaching,
+    ]
+        .filter((part) => part && part.trim().length > 0)
+        .join("");
+}
+
 export interface DraftMatchingState {
     /**
      * List of utorids of applicants to hide.
@@ -56,6 +87,13 @@ export interface DraftMatchingState {
         string,
         { minHours: number; maxHours: number }
     >;
+    /**
+     * Annotations for applicants, keyed by utorid. This is the single source of truth for
+     * annotations displayed on applicant pills. Each applicant's annotation is broken into
+     * parts (general/fTermTeaching/sTermTeaching) that are combined dynamically wherever
+     * they're displayed, rather than being pre-flattened into a single string.
+     */
+    annotationsByUtorid: Record<string, ApplicantAnnotation>;
     /**
      * The draft assignments created by the interface. These are not saved to the backend, but may shadow some assignments that exist in the backend (and are withdrawn/rejected).
      */
@@ -90,6 +128,7 @@ const initialState: DraftMatchingState = {
     hideList: [],
     showList: [],
     desiredHoursByUtorid: {},
+    annotationsByUtorid: {},
     assignments: [],
     activePositionCodes: [],
     activeApplicantUtorid: null,
@@ -123,6 +162,12 @@ export const draftMatchingSlice = createSlice({
             >
         ) {
             state.desiredHoursByUtorid = action.payload;
+        },
+        setAnnotationsByUtorid(
+            state,
+            action: PayloadAction<Record<string, ApplicantAnnotation>>
+        ) {
+            state.annotationsByUtorid = action.payload;
         },
         addDraftAssignment(state, action: PayloadAction<AssignmentDraft>) {
             state.assignments.push(action.payload);
@@ -241,6 +286,11 @@ export const hideListSelector = createSelector(
 export const desiredHoursByUtoridSelector = createSelector(
     [selfSelector],
     (draftMatchingState) => draftMatchingState.desiredHoursByUtorid
+);
+
+export const annotationsByUtoridSelector = createSelector(
+    [selfSelector],
+    (draftMatchingState) => draftMatchingState.annotationsByUtorid
 );
 
 export const draftAssignmentsSelector = createSelector(

@@ -4,6 +4,7 @@ import classNames from "classnames";
 import {
     AssignmentDraft,
     activeApplicantUtoridSelector,
+    annotationsByUtoridSelector,
     assignmentKey,
     desiredHoursByUtoridSelector,
     draftAssignmentsByKeySelector,
@@ -44,6 +45,7 @@ export function AssignmentRow({
         utoridBeingDragged!
     )?.applicant;
     const desiredHoursByUtorid = useSelector(desiredHoursByUtoridSelector);
+    const annotationsByUtorid = useSelector(annotationsByUtoridSelector);
 
     const dispatch = useThunkDispatch();
     // This is the utorid being dragged, but it persists even after a drop.
@@ -230,6 +232,10 @@ export function AssignmentRow({
                                         desiredHoursByUtorid[
                                             assignment.applicant.utorid
                                         ]?.maxHours,
+                                    annotation:
+                                        annotationsByUtorid[
+                                            assignment.applicant.utorid
+                                        ],
                                 }}
                                 isActive={
                                     activeApplicantUtorid ===

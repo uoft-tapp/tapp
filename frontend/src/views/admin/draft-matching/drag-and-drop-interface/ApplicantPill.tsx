@@ -1,9 +1,11 @@
 import { Applicant, Application } from "../../../../api/defs/types";
 import React from "react";
 import {
+    ApplicantAnnotation,
     AssignmentDraft,
     activePositionCodesSelector,
     draftMatchingSlice,
+    formatApplicantAnnotation,
 } from "../state/slice";
 import {
     BsBuilding,
@@ -19,7 +21,7 @@ import { useSelector } from "react-redux";
 import { assignmentShouldBeVisible } from "./AssignmentRow";
 
 export type AdditionalInfo = {
-    annotation?: string;
+    annotation?: ApplicantAnnotation;
     minHours?: number;
     maxHours?: number;
 };
@@ -102,6 +104,9 @@ export function ApplicantPill({
 
     const minHours = additionalInfo?.minHours ?? 0;
     const maxHours = additionalInfo?.maxHours ?? 0;
+    const annotationText = formatApplicantAnnotation(
+        additionalInfo?.annotation
+    );
     const fulfillmentStatus: FulfillmentStatus =
         // If maxHours is 0, this applicant has no restrictions on hours, so they are met if they have any assignment.
         maxHours === 0 && assignedHours > 0
@@ -188,7 +193,12 @@ export function ApplicantPill({
                 </div>
             </div>
             <div className="applicant-pill-content">
-                <div className="grid-row">
+                <div className="grid-row name-row">
+                    {annotationText && (
+                        <div className="applicant-annotation">
+                            {annotationText}
+                        </div>
+                    )}
                     <div className="applicant-name">
                         {applicant.first_name} {applicant.last_name} (
                         {applicant.utorid})
