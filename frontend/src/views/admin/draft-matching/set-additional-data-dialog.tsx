@@ -43,8 +43,9 @@ export function AdditionalDataButton() {
     const [desiredHoursText, setDesiredHoursText] = React.useState(
         desiredHoursJSONToTable(allData.desiredHoursByUtorid)
     );
-    const [generalAnnotationsText, setGeneralAnnotationsText] =
-        React.useState(generalAnnotationsToTable(allData.annotationsByUtorid));
+    const [generalAnnotationsText, setGeneralAnnotationsText] = React.useState(
+        generalAnnotationsToTable(allData.annotationsByUtorid)
+    );
     const [fTermListText, setFTermListText] = React.useState(
         blanketListToText(allData.annotationsByUtorid, "fTermTeaching")
     );
@@ -327,12 +328,12 @@ export function AdditionalDataButton() {
                         <Tab eventKey="annotations" title="Annotations">
                             <p className="mb-0">
                                 Enter short annotation tags for applicants
-                                (shown on their pill in the board, before
-                                their name). Annotations are short tags with
-                                no spaces (e.g. "x" or "*"). If an applicant
-                                has both a manual entry and an F/S term
-                                annotation below, they are combined
-                                dynamically wherever they're displayed.
+                                (shown on their pill in the board, before their
+                                name). Annotations are short tags with no spaces
+                                (e.g. "x" or "*"). If an applicant has both a
+                                manual entry and an F/S term annotation below,
+                                they are combined dynamically wherever they're
+                                displayed.
                             </p>
                             <p className="mt-0.5">
                                 Data should be{" "}
@@ -354,9 +355,9 @@ export function AdditionalDataButton() {
                                 />
                             </div>
                             <p className="mt-2 mb-0">
-                                Applicants teaching in the Fall or Spring
-                                term can be given a blanket annotation below
-                                (e.g. a short tag like "F" or "S").
+                                Applicants teaching in the Fall or Spring term
+                                can be given a blanket annotation below (e.g. a
+                                short tag like "F" or "S").
                             </p>
                             <div className="blanket-annotation-lists">
                                 <div className="list">
@@ -366,9 +367,7 @@ export function AdditionalDataButton() {
                                         className="form-control"
                                         value={fTermBlanketText}
                                         onChange={(e) =>
-                                            setFTermBlanketText(
-                                                e.target.value
-                                            )
+                                            setFTermBlanketText(e.target.value)
                                         }
                                         placeholder="Blanket annotation text"
                                     />
@@ -387,9 +386,7 @@ export function AdditionalDataButton() {
                                         className="form-control"
                                         value={sTermBlanketText}
                                         onChange={(e) =>
-                                            setSTermBlanketText(
-                                                e.target.value
-                                            )
+                                            setSTermBlanketText(e.target.value)
                                         }
                                         placeholder="Blanket annotation text"
                                     />
@@ -572,7 +569,11 @@ function buildAnnotationsByUtorid(
             annotation.sTermTeaching = trimmedSTermText;
         }
         // Only keep utorids that ended up with at least one annotation part set.
-        if (annotation.general || annotation.fTermTeaching || annotation.sTermTeaching) {
+        if (
+            annotation.general ||
+            annotation.fTermTeaching ||
+            annotation.sTermTeaching
+        ) {
             result[utorid] = annotation;
         }
     });
